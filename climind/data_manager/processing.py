@@ -4,6 +4,24 @@ from pathlib import Path
 from climind.definitions import ROOT_DIR
 
 
+def get_function(module_path: str, script_name: str, function_name: str):
+    """
+    For a particular module and script in that module, return the function with
+    a specified name
+
+    :param module_path:
+    :param script_name:
+    :param function_name:
+    :return:
+    """
+
+    ext = '.'.join([module_path, script_name])
+    module = __import__(ext, fromlist=[None])
+    chosen_fn = getattr(module, function_name)
+
+    return chosen_fn
+
+
 class DataSet:
 
     def __init__(self, attributes: dict):
@@ -89,15 +107,23 @@ class DataSet:
         """
         print(f"Downloading {self.attributes['url']}")
 
-        fetcher_name = self.attributes['fetcher']
-        ext = f'climind.fetchers.{fetcher_name}'
-
-        module = __import__(ext, fromlist=[None])
-
-        fetch_fn = getattr(module, 'fetch')
+        fetch_fn = self._get_fetcher()
 
         for url in self.attributes['url']:
             fetch_fn(url, outdir)
+
+    def _get_fetcher(self):
+
+        fetcher_name = self.attributes['fetcher']
+        fetch_fn = get_function('climind.fetchers', fetcher_name, 'fetch')
+
+        return fetch_fn
+
+    def _get_reader(self):
+        reader_name = self.attributes['reader']
+        reader_fn = get_function('climind.readers', reader_name, 'read_ts')
+
+        return reader_fn
 
     def read_dataset(self, outdir: Path):
         """
@@ -113,10 +139,7 @@ class DataSet:
             Object of the appropriate type
         """
         print(f"Reading {self.attributes['name']} using {self.attributes['reader']}")
-        reader_name = self.attributes['reader']
-        ext = f'climind.readers.{reader_name}'
-        module = __import__(ext, fromlist=[None])
-        reader_fn = getattr(module, 'read_ts')
+        reader_fn = self._get_reader()
         return reader_fn(outdir, self.attributes)
 
 
@@ -181,7 +204,7 @@ class DataCollection:
             metadata_schema = json.load(f)
 
         validate(metadata_from_file, schema=metadata_schema)
-        # validate_metadata(metadata_from_file)
+
         return DataCollection(metadata_from_file)
 
     def _rebuild_metadata(self) -> dict:
@@ -195,9 +218,12 @@ class DataCollection:
         rebuilt = self.global_attributes
         rebuilt['datasets'] = []
         for key in self.datasets:
-            rebuilt['datasets'].append(key)
+            for globalkey in self.global_attributes:
+                if globalkey in key.attributes:
+                    key.attributes.pop(globalkey)
+            rebuilt['datasets'].append(key.attributes)
 
-        with open('metadata_schema.json') as f:
+        with open(Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json') as f:
             metadata_schema = json.load(f)
 
         validate(rebuilt, schema=metadata_schema)
@@ -283,6 +309,11 @@ class DataCollection:
 
         return out_collection
 
+    def get_collection_dir(self, data_dir):
+        collection_dir = data_dir / self.global_attributes['name']
+        collection_dir.mkdir(exist_ok=True)
+        return collection_dir
+
     def download(self, data_dir: Path):
         """
         Download all the data sets in the collection
@@ -295,8 +326,7 @@ class DataCollection:
         -------
 
         """
-        collection_dir = data_dir / self.global_attributes['name']
-        collection_dir.mkdir(exist_ok=True)
+        collection_dir = self.get_collection_dir(data_dir)
 
         for key in self.datasets:
             key.download(collection_dir)
@@ -410,7 +440,7 @@ class DataArchive:
         for key in self.collections:
             self.collections[key].download(out_dir)
 
-    def read_datasets(self, out_dir: Path):
+    def read_datasets(self, out_dir: Path) -> list:
         """
         Read all the datasets in the archive
 
