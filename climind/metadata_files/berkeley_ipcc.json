@@ -1,0 +1,25 @@
+{
+  "name": "Berkeley IPCC",
+  "version": "",
+  "variable": "tas",
+  "citation": ["Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469–3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"],
+  "data_citation": [""],
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+	{
+      "url": ["https://dap.ceda.ac.uk/badc/ar6_wg1/data/ch_02/ch2_fig11/v20211207//Figure_2_11c-lower_panel.csv"],
+      "filename": ["Figure_2_11c-lower_panel.csv"],
+      "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1850,
+	  "climatology_end": 1900,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_ipcc_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

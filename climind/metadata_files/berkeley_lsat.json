@@ -1,0 +1,53 @@
+{
+  "name": "Berkeley Earth LSAT",
+  "version": "",
+  "variable": "lsat",
+  "citation": ["Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469–3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"],
+  "data_citation": [""],
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Gridded/Complete_TAVG_LatLong1.nc"],
+	  "filename": [""],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_grid",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Complete_TAVG_complete.txt"],
+      "filename": ["Complete_TAVG_complete.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_berkeley_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Complete_TAVG_complete.txt"],
+      "filename": ["Complete_TAVG_complete.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_berkeley_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

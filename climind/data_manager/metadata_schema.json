@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "metadata_schema.json",
+  "title": "Collection metadata",
+  "description": "A collection of data sets",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Name of the data set",
+      "type": "string"
+    },
+    "version": {
+      "description": "Version number for the data set",
+      "type": "string"
+    },
+    "variable": {
+      "description": "Name of the variable",
+      "type": "string"
+    },
+    "citation": {
+      "description": "List of citations for the papers related to the data in the data collection",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data_citation": {
+      "description": "List of citations for the data in the data collection",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "colour": {
+      "description": "Colour to be used when plotting data from this collection",
+      "type": "string"
+    },
+    "zpos": {
+      "description": "Determines order in which lines are plotted",
+      "type": "integer"
+    },
+    "datasets": {
+      "description": "Dictionary holding metadata for a range of data sets in this collection",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dataset"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "variable",
+    "citation",
+    "data_citation",
+    "colour",
+    "zpos"
+  ],
+  "$defs": {
+    "dataset": {
+      "type": "object",
+      "title": "Dataset metadata",
+      "description": "Metadata for a single data set",
+      "required": [
+        "url",
+        "filename",
+        "type",
+        "time_resolution",
+        "space_resolution",
+        "reader",
+        "fetcher",
+        "climatology_start",
+        "climatology_end",
+        "actual",
+        "derived",
+        "history"
+      ],
+      "properties": {
+        "climatology_start" : {
+          "description": "First year of the baseline",
+          "type": "integer"
+        },
+        "climatology_end" : {
+          "description": "Last year of the baseline",
+          "type": "integer"
+        },
+        "actual": {
+           "description": "Is the data actuals (as in not anomalies)",
+          "type": "boolean"
+        },
+        "url": {
+          "description": "Url of the data set",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filename": {
+          "description": "Filename for the data set",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "description": "Type of data time series or gridded",
+          "enum": ["timeseries", "gridded"]
+        },
+        "time_resolution": {
+          "description": "Time resolution of the data",
+          "enum": ["monthly", "annual"]
+        },
+        "space_resolution": {
+          "description": "Spatial resolution of the data set",
+          "type": "number"
+        },
+        "reader": {
+          "description": "Reader function",
+          "type": "string"
+        },
+        "fetcher": {
+          "description": "Fetcher function",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

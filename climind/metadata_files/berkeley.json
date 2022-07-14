@@ -1,0 +1,53 @@
+{
+  "name": "Berkeley Earth",
+  "version": "",
+  "variable": "tas",
+  "citation": ["Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469–3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"],
+  "data_citation": [""],
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc"],
+	  "filename": ["Land_and_Ocean_LatLong1.nc"],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_grid",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Land_and_Ocean_complete.txt"],
+	  "filename": ["Land_and_Ocean_complete.txt"],
+      "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_berkeley",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Land_and_Ocean_complete.txt"],
+	  "filename": ["Land_and_Ocean_complete.txt"],
+      "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_berkeley",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "CRUTEM5",
+  "version": "5.0.0.0",
+  "variable": "lsat",
+  "citation": ["Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+  "data_citation": [""],
+  "colour": "#444444",
+  "zpos": 99,
+  "datasets": [
+    {
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/grids/CRUTEM.5.0.1.0.anomalies.nc"],
+	  "filename": ["CRUTEM.5.0.1.0.anomalies.nc"],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 5.0,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_grid",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
+	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+      "filename": ["CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
+	               "CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_hadcrut_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
+	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+      "filename": ["CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
+	               "CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_hadcrut_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

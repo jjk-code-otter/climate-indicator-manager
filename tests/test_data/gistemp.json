@@ -1,0 +1,39 @@
+{
+  "name": "GISTEMP",
+  "version": "v4",
+  "variable": "tas",
+  "citation": ["Lenssen et al. 2020"],
+  "data_citation": [""],
+  "colour": "#eeeeee",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
+      "filename": ["gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
+      "type": "gridded",
+      "time_resolution": "monthly",
+      "space_resolution": 1.0,
+      "climatology_start": 1951,
+      "climatology_end": 1980,
+      "actual": false,
+      "derived": false,
+      "history": "",
+      "reader": "reader_iris",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"],
+      "filename": ["GLB.Ts+dSST.csv"],
+      "type": "timeseries",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1951,
+      "climatology_end": 1980,
+      "actual": false,
+      "derived": false,
+      "history": "",
+      "reader": "reader_gistemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

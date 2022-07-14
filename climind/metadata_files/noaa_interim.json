@@ -1,0 +1,39 @@
+{
+  "name": "NOAA Interim",
+  "version": "",
+  "variable": "tas",
+  "citation": ["Vose, R. S., Huang, B., Yin, X., Arndt, D., Easterling, D. R., Lawrimore, J. H., et al. (2021). Implementing full spatial coverage in NOAA’s global temperature analysis. Geophysical Research Letters, 48, e2020GL090873. https://doi.org/10.1029/2020GL090873"],
+  "data_citation": [""],
+  "colour": "#805800",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/interim.2020/temp.ano.merg5.asc"],
+	  "filename": ["temp.ano.merg5.asc"],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 5.0,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_noaa_interm_ascii",
+	  "fetcher": "fetcher_standard_url"
+    },
+	{
+      "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/fig1/fig1.txt"],
+      "filename": ["fig1.txt"],
+      "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_noaa_interim_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

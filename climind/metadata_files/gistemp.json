@@ -1,0 +1,53 @@
+{
+  "name": "GISTEMP",
+  "version": "v4",
+  "variable": "tas",
+  "citation": ["Lenssen, N., G. Schmidt, J. Hansen, M. Menne, A. Persin, R. Ruedy, and D. Zyss, 2019: Improvements in the GISTEMP uncertainty model. J. Geophys. Res. Atmos., 124, no. 12, 6307-6326, doi:10.1029/2018JD029522"],
+  "data_citation": ["GISTEMP Team, 2022: GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies. Dataset accessed 20YY-MM-DD at data.giss.nasa.gov/gistemp/."],
+  "colour": "#56b4e9",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
+	  "filename": ["gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_grid",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"],
+	  "filename": ["GLB.Ts+dSST.csv"],
+      "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_gistemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"],
+	  "filename": ["GLB.Ts+dSST.csv"],
+      "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_gistemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

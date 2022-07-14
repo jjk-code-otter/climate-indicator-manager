@@ -1,0 +1,25 @@
+{
+  "name": "Kadow IPCC",
+  "version": "",
+  "variable": "tas",
+  "citation": ["Kadow et al. Nature"],
+  "data_citation": [""],
+  "colour": "#cc79a7",
+  "zpos": 10,
+  "datasets": [
+	{
+      "url": ["https://dap.ceda.ac.uk/badc/ar6_wg1/data/ch_02/ch2_fig11/v20211207//Figure_2_11c-lower_panel.csv"],
+      "filename": ["Figure_2_11c-lower_panel.csv"],
+      "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_ipcc_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -9,11 +9,12 @@ setup(
     # Needed to actually package something
     packages=['climind'],
     # Needed for dependencies
-    install_requires=[''],
-    # *strongly* suggested for sharing
+    install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
+                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray'],
+    # version number
     version='0.1',
     # The license can be anything you like
-    license='',
+    license='GNU General Public License v3.0',
     description='A python package for managing climate indicator information',
     # We will also need a readme eventually (there will be a warning)
     long_description=open('README.md').read(),
