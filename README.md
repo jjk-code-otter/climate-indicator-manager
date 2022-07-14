@@ -20,4 +20,18 @@ with particular rankings.
 
 Each step in processing is logged and added to the metadata for the dataset so that .
 
-The package also manages the download of gridded data.
+The package also manages the download of gridded data (for the time being).
+
+Running
+=======
+
+The managed data will be stored in a directory specified by the environment variable 
+DATADIR. This is easy to set in linux. In windows, do the following:
+
+1. right click on the Windows icon (bottom left of the screen usually) and select "System"
+2. Click on "Advanced system settings"
+3. Click on "Environment Variables..."
+4. Under "User variables for Username" click "New..."
+5. For "Variable name" type DATADIR
+6. For "Variable value" type the pathname for the directory you want the data to go in.
+
