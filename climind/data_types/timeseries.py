@@ -343,13 +343,13 @@ class TimeSeriesAnnual:
         return moving_average
 
     @log_activity
-    def add_offset(self, offset: int):
+    def add_offset(self, offset: float):
         """
         Add an offset to the data set
 
         Parameters
         ----------
-        offset : int
+        offset : float
             offset to be added to the data set.
 
         Returns

@@ -7,7 +7,8 @@ setup(
     author='John Kennedy',
     author_email='jjk.code.otter@gmail.com',
     # Needed to actually package something
-    packages=['climind'],
+    packages=['climind', 'climind.config', 'climind.data_manager', 'climind.data_types',
+              'climind.fetchers', 'climind.plotters', 'climind.readers'],
     # Needed for dependencies
     install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
                       'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray'],
@@ -18,4 +19,5 @@ setup(
     description='A python package for managing climate indicator information',
     # We will also need a readme eventually (there will be a warning)
     long_description=open('README.md').read(),
+    include_package_data=True,
 )

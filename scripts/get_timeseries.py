@@ -1,7 +1,7 @@
 from pathlib import Path
+import climind.data_manager.processing as dm
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
-import climind.data_manager.processing as dm
 
 if __name__ == "__main__":
     project_dir = DATA_DIR / "ManagedData"

@@ -1,2 +1,4 @@
-include *.json
+include climind/metadata_files/*.json
+include climind/data_manager/metadata_schema.json
+include tests/test_data/*.json
 recursive-include docs *.rst
