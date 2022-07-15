@@ -8,7 +8,7 @@ setup(
     author_email='jjk.code.otter@gmail.com',
     # Needed to actually package something
     packages=['climind', 'climind.config', 'climind.data_manager', 'climind.data_types',
-              'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.utils'],
+              'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats'],
     # Needed for dependencies
     install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
                       'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray'],
