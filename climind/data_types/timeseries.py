@@ -137,10 +137,12 @@ class TimeSeriesMonthly:
         self.metadata['history'].append(f'Rebaselined to {y1}-{y2}')
 
     @log_activity
-    def get_rank_from_year_and_month(self, year: int, month: int) -> int:
+    def get_rank_from_year_and_month(self, year: int, month: int, all=False) -> int:
         """
         Given a year and month, extract the rank of the data for that month. Ties are given the
-        same rank, which is the lowest rank of the group.
+        same rank, which is the lowest rank of the group. Default behaviour is to rank the month
+        against the same month in all other years. Setting all to True as a keyword argument ranks
+        the month against all other months in all other years.
 
         Parameters
         ----------
@@ -148,14 +150,20 @@ class TimeSeriesMonthly:
             Year of year-month pair for which we want the rank
         month : int
             Month of year-month pair for which we want the rank
+        all : bool
+            If set then
 
         Returns
         -------
         int
             Returns the rank of the specified year-month pair as compared to the same month in
-            all other years
+            all other years. If "all" is set then returns rank of the anomaly for a particular year
+            and month ranked against all other years and months.
         """
-        month_select = self.df[self.df['month'] == month]
+        if all:
+            month_select = self.df
+        else:
+            month_select = self.df[self.df['month'] == month]
         ranked = month_select.rank(method='min', ascending=False)
         rank = ranked[month_select['year'] == year]['data']
         return int(rank.iloc[0])

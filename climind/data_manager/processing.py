@@ -310,6 +310,15 @@ class DataCollection:
         return out_collection
 
     def get_collection_dir(self, data_dir):
+        """
+        Get the Path to the directory where the data for this collection are stored.
+        If the directory does not exist, then create it.
+
+        :param data_dir: Path
+            Path to the general data directory for managed data in the project
+        :return:
+            Path to the directory for this DataCollection
+        """
         collection_dir = data_dir / self.global_attributes['name']
         collection_dir.mkdir(exist_ok=True)
         return collection_dir

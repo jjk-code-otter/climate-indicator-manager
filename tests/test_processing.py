@@ -113,6 +113,18 @@ def test_get_reader(mocker):
     assert fetcher == "Match"
 
 
+def test_get_function():
+    """
+    Test that we can recover a specific function from a module and script. We'll use the function
+    we are testing as the test can only exist with the function and so we always know it's there as
+    long as we're testing it.
+    """
+    from climind.data_manager.processing import get_function
+    fn = dm.get_function('climind.data_manager', 'processing', 'get_function')
+
+    assert get_function == fn
+
+
 def simple_return(dummy):
     def fn(a, b):
         return a, b
@@ -211,7 +223,6 @@ def test_datacollection_read(mocker):
 
 
 def test_rebuild_metadata():
-
     dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
     metadata = dc._rebuild_metadata()
 
@@ -220,11 +231,12 @@ def test_rebuild_metadata():
 
     assert metadata == original_metadata
 
+
 def test_get_collection_dir(mocker):
     pass
 
-def test_collection_download(mocker):
 
+def test_collection_download(mocker):
     dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
     m1 = mocker.patch("climind.data_manager.processing.DataCollection.get_collection_dir", return_value='testing')
     m2 = mocker.patch("climind.data_manager.processing.DataSet.download", return_value=None)
