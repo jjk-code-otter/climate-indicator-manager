@@ -132,8 +132,20 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.xlabel('Year')
     plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
 
-    plt.yticks(np.arange(-0.2, 1.4, 0.2))
+    ylims = plt.gca().get_ylim()
+    ylo = 0.2 * (1 + (ylims[0] // 0.2))
+    yhi = 0.2 * (1 + (ylims[1] // 0.2))
+
+    plt.yticks(np.arange(ylo, yhi, 0.2))
+    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
     plt.xticks(np.arange(1860, 2040, 20))
+
+    plt.tick_params(
+        axis='y',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        left=False,  # ticks along the bottom edge are off
+        right=False,  # ticks along the top edge are off
+        labelright=False)
 
     plt.legend()
     # get handles and labels
@@ -141,9 +153,13 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     # specify order of items in legend
     order = np.flip(np.argsort(zords))
     # add legend to plot
-    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order], frameon=False, prop={'size': 20})
+    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
+                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
+                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
     for line in leg.get_lines():
         line.set_linewidth(3.0)
+    for item in leg.legendHandles:
+        item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
