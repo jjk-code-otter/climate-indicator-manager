@@ -99,6 +99,30 @@ class TimeSeriesMonthly:
         return annual_series
 
     @log_activity
+    def make_annual_by_selecting_month(self, month):
+        """
+        Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual value is
+        taken from one of the monthly values specified by the user3
+
+        Returns
+        -------
+        TimeSeriesAnnual
+            Return an annual time series
+        """
+        month_names = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December']
+
+        grouped = self.df[self.df['month'] == month].reset_index()
+        annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
+        annual_series.metadata['history'].append(f'Extracted {month_names[month-1]} from each year')
+
+        # update attributes
+        annual_series.metadata['time_resolution'] = 'annual'
+
+        return annual_series
+
+
+    @log_activity
     def rebaseline(self, y1, y2):
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).

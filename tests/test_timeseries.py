@@ -28,6 +28,27 @@ def simple_monthly():
 
 
 @pytest.fixture
+def monthly_data_is_month():
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    years = []
+    months = []
+    anoms = []
+
+    for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+        years.append(y)
+        months.append(m)
+        anoms.append(float(m))
+
+    return ts.TimeSeriesMonthly(years, months, anoms)
+
+
+@pytest.fixture
 def simple_annual():
     """
     Produces an annual time series from 1850 to 2022.
@@ -72,6 +93,19 @@ def test_make_annual():
     assert a.df['data'][0] == 2.5
     assert a.df['year'][0] == 1999
     assert a.metadata['history'][-1] == 'Calculated annual average'
+
+
+def test_make_annual_by_selecting_month(monthly_data_is_month):
+    a = monthly_data_is_month.make_annual_by_selecting_month(1)
+
+    nyears = 2022 - 1850 + 1
+
+    assert isinstance(a, ts.TimeSeriesAnnual)
+    for i in range(nyears):
+        assert a.df['data'][i] == 1
+    assert a.df['year'][0] == 1850
+    assert len(a.df['data']) == nyears
+    assert a.metadata['history'][-1] == 'Extracted January from each year'
 
 
 def test_rebaseline_monthly(simple_monthly):

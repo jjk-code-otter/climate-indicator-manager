@@ -57,11 +57,14 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
                         all_match_values.append(value)
                         all_match_ranks.append(rank)
 
-        sd = np.std(all_match_values) * 1.645
-        sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
+        if len(all_match_values) > 0:
+            sd = np.std(all_match_values) * 1.645
+            sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
 
-        ofile.write('\n')
-        ofile.write(f'Mean for {match_year}: {np.mean(all_match_values):.2f} +- {sd:.2f} degC '
-                    f'[{np.min(all_match_values):.2f}-{np.max(all_match_values):.2f}]\n')
-        ofile.write(f'Rank between {np.min(all_match_ranks)} and {np.max(all_match_ranks)}\n')
-        ofile.write(f'Based on {len(all_match_values)} data sets.\n')
+            ofile.write('\n')
+            ofile.write(f'Mean for {match_year}: {np.mean(all_match_values):.2f} +- {sd:.2f} degC '
+                        f'[{np.min(all_match_values):.2f}-{np.max(all_match_values):.2f}]\n')
+            ofile.write(f'Rank between {np.min(all_match_ranks)} and {np.max(all_match_ranks)}\n')
+            ofile.write(f'Based on {len(all_match_values)} data sets.\n')
+        else:
+            ofile.write('NO DATA\n')
