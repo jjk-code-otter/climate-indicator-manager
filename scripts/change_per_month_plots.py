@@ -86,3 +86,13 @@ if __name__ == "__main__":
         print(f"Single month ({month_word}) statistics")
         utils.run_the_numbers(anns, final_year, f'{month:02d}_only_stats', report_dir)
 
+        if month == 1:
+            all_datasets = ts_archive.read_datasets(data_dir)
+            m = []
+            for ds in all_datasets:
+                ds.rebaseline(1981, 2010)
+                ds.select_year_range(2010, 2022)
+                m.append(ds)
+            pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
+
+

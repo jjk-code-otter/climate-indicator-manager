@@ -114,13 +114,12 @@ class TimeSeriesMonthly:
 
         grouped = self.df[self.df['month'] == month].reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
-        annual_series.metadata['history'].append(f'Extracted {month_names[month-1]} from each year')
+        annual_series.metadata['history'].append(f'Extracted {month_names[month - 1]} from each year')
 
         # update attributes
         annual_series.metadata['time_resolution'] = 'annual'
 
         return annual_series
-
 
     @log_activity
     def rebaseline(self, y1, y2):
@@ -153,12 +152,19 @@ class TimeSeriesMonthly:
         # subtract climatology
         self.df['data'] = self.df['data'] - self.df['climatology']
 
-        #update attributes
+        # update attributes
         self.metadata['climatology_start'] = y1
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False
 
         self.metadata['history'].append(f'Rebaselined to {y1}-{y2}')
+
+    @log_activity
+    def select_year_range(self, start_year: int, end_year: int):
+        self.df = self.df[self.df['year'] >= start_year]
+        self.df = self.df[self.df['year'] <= end_year]
+        self.df = self.df.reset_index()
+        return self
 
     @log_activity
     def get_rank_from_year_and_month(self, year: int, month: int, all=False) -> int:
@@ -273,7 +279,7 @@ class TimeSeriesAnnual:
         # subtract climatology
         self.df['data'] = self.df['data'] - climatology
 
-        #update attributes
+        # update attributes
         self.metadata['climatology_start'] = y1
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False

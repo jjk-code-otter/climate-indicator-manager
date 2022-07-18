@@ -1,15 +1,17 @@
 from pathlib import Path
 import climind.data_types.timeseries as ts
-
+import copy
 
 def read_ts(out_dir: Path, metadata: dict):
     filename = metadata['filename'][0]
     filename = out_dir / filename
 
+    construction_metadata = copy.deepcopy(metadata)
+
     if metadata['time_resolution'] == 'monthly':
         raise NotImplementedError('No official monthly version')
     elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, metadata)
+        return read_annual_ts(filename, construction_metadata)
     else:
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+
 def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
@@ -434,3 +435,93 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
     plt.close()
     return
 
+
+def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+    sns.set(font='Franklin Gothic Book', rc={
+        'axes.axisbelow': False,
+        'axes.labelsize': 20,
+        'xtick.labelsize': 15,
+        'ytick.labelsize': 15,
+        'axes.edgecolor': 'lightgrey',
+        'axes.facecolor': 'None',
+
+        'axes.grid.axis': 'y',
+        'grid.color': 'lightgrey',
+        'grid.alpha': 0.5,
+
+        'axes.labelcolor': 'dimgrey',
+
+        'axes.spines.left': False,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': 'dimgrey',
+
+        'xtick.bottom': True,
+        'xtick.color': 'dimgrey',
+        'xtick.direction': 'out',
+        'xtick.top': False,
+
+        'ytick.major.width': 0.4,
+        'ytick.color': 'dimgrey',
+        'ytick.direction': 'out',
+        'ytick.left': False,
+        'ytick.right': False})
+
+    zords = []
+    plt.figure(figsize=[16, 9])
+    for i, ds in enumerate(all_datasets):
+        col = ds.metadata['colour']
+        zord = ds.metadata['zpos']
+        zords.append(zord)
+        plt.plot(ds.df['year'] + (ds.df['month'] - 1) / 12., ds.df['data'],
+                 label=ds.metadata['name'], color=col,
+                 zorder=zord)
+    sns.despine(right=True, top=True, left=True)
+
+    plt.xlabel('Year')
+    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+
+    ylims = plt.gca().get_ylim()
+    ylo = 0.2 * (1 + (ylims[0] // 0.2))
+    yhi = 0.2 * (1 + (ylims[1] // 0.2))
+
+    plt.yticks(np.arange(ylo, yhi, 0.2))
+    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
+    plt.xticks(np.arange(2010, 2023, 1))
+
+    plt.tick_params(
+        axis='y',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        left=False,  # ticks along the bottom edge are off
+        right=False,  # ticks along the top edge are off
+        labelright=False)
+
+    plt.legend()
+    # get handles and labels
+    handles, labels = plt.gca().get_legend_handles_labels()
+    # specify order of items in legend
+    order = np.flip(np.argsort(zords))
+    # add legend to plot
+    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
+                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
+                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
+    for line in leg.get_lines():
+        line.set_linewidth(3.0)
+    for item in leg.legendHandles:
+        item.set_visible(False)
+
+    ylim = plt.gca().get_ylim()
+    yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
+
+    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1981-2010 average', fontdict={'fontsize': 30})
+    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.close()
+    return

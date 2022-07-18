@@ -1,6 +1,6 @@
 from pathlib import Path
 import climind.data_types.timeseries as ts
-
+import copy
 
 def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
     """
@@ -29,10 +29,12 @@ def read_ts(out_dir: Path, metadata: dict):
     filename = metadata['filename'][0]
     filename = find_latest(out_dir, filename)
 
+    construction_metadata = copy.deepcopy(metadata)
+
     if metadata['time_resolution'] == 'monthly':
-        return read_monthly_ts(filename, metadata)
+        return read_monthly_ts(filename, construction_metadata)
     elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, metadata)
+        return read_annual_ts(filename, construction_metadata)
     else:
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
