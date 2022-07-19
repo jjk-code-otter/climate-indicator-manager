@@ -492,7 +492,7 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
 
     plt.yticks(np.arange(ylo, yhi, 0.2))
     # plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(2010, 2023, 1))
+    plt.xticks(np.arange(2014, 2023, 1))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
