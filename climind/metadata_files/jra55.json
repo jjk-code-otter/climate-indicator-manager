@@ -9,6 +9,20 @@
   "datasets": [
     {
       "url": [""],
+	  "filename": [""],
+      "type": "gridded",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.25,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": true,
+	  "derived": false,
+	  "history": "",
+      "reader": "reader_jra55",
+	  "fetcher": "fetcher_jra55_grid"
+    },
+    {
+      "url": [""],
 	  "filename": ["JRA-55_tmp2m_global_ts_Clim8110.txt"],
       "type": "timeseries",
 	  "time_resolution": "monthly",

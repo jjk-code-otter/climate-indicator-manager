@@ -9,6 +9,15 @@ __pycache__/
 # Sphinx documentation
 docs/_build/
 
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
 # Distribution / packaging
 .Python
 build/
