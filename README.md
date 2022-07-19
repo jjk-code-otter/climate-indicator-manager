@@ -20,7 +20,18 @@ with particular rankings.
 
 Each step in processing is logged and added to the metadata for the dataset so that .
 
-The package also manages the download of gridded data (for the time being).
+The package also manages the download of gridded data.
+
+Installation
+============
+
+Download the code from the repository using your preferred method.
+
+Navigate to the root directory of the repository and type 
+
+`pip install .`
+
+This should install the package and necessary dependencies.
 
 Running
 =======
@@ -35,3 +46,11 @@ DATADIR. This is easy to set in linux. In windows, do the following:
 5. For "Variable name" type DATADIR
 6. For "Variable value" type the pathname for the directory you want the data to go in.
 
+In addition, if you want to download JRA-55 data, you will need a valid username and password 
+combo for UCAR data download. These values should be stored in a file called .env in the 
+root directory of the repository. It should contain two lines:
+
+```
+UCAR_EMAIL=youremail@domain.com
+UCAR_PSWD=yourpasswordhere
+```

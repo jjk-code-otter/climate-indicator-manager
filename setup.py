@@ -11,7 +11,8 @@ setup(
               'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats'],
     # Needed for dependencies
     install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
-                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray'],
+                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
+                      'python-dotenv'],
     # version number
     version='0.1',
     # The license can be anything you like
