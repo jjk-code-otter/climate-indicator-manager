@@ -45,9 +45,11 @@ class DataSet:
         self.standard_attributes = ['url', 'type', 'reader',
                                     'fetcher']
 
-        for attr in self.standard_attributes:
-            if attr not in attributes:
-                raise KeyError(f"Standard attribute {attr} missing")
+        schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'dataset_schema.json'
+        with open(schema_path) as f:
+            metadata_schema = json.load(f)
+        validate(attributes, metadata_schema)
+
         self.name = ''
         self.attributes = attributes
 

@@ -2,18 +2,33 @@ import pytest
 import json
 from pathlib import Path
 import climind.data_manager.processing as dm
+from jsonschema import ValidationError
 
 
-def test_basic_creation():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
+@pytest.fixture
+def test_attributes():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': '',
                   'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
+                  'fetcher': 'test_fetcher',
+                  'variable': 'ohc'}
 
-    ds = dm.DataSet(attributes)
+    return attributes
 
-    for key in attributes:
-        assert ds.attributes[key] == attributes[key]
+
+def test_basic_creation(test_attributes):
+    ds = dm.DataSet(test_attributes)
+
+    for key in test_attributes:
+        assert ds.attributes[key] == test_attributes[key]
 
 
 def test_missing_standard_attribute():
@@ -21,74 +36,46 @@ def test_missing_standard_attribute():
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher'}
 
-    with pytest.raises(KeyError):
+    with pytest.raises(ValidationError):
         ds = dm.DataSet(attributes)
 
 
-def test_match():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
+def test_match(test_attributes):
+    ds = dm.DataSet(test_attributes)
 
-    ds = dm.DataSet(attributes)
-
-    metadata_to_match_pass = {'url': 'test_url'}
-    metadata_to_match_fail = {'url': 'wrong_url'}
+    metadata_to_match_pass = {'time_resolution': 'monthly'}
+    metadata_to_match_fail = {'time_resolution': 'annual'}
 
     assert ds.match_metadata(metadata_to_match_pass)
     assert not ds.match_metadata(metadata_to_match_fail)
 
 
-def test_match_with_irrelevant_metadata():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
-
-    ds = dm.DataSet(attributes)
+def test_match_with_irrelevant_metadata(test_attributes):
+    ds = dm.DataSet(test_attributes)
 
     metadata_to_match_irrelevant = {'irrelevance': 'meh'}
 
     assert ds.match_metadata(metadata_to_match_irrelevant)
 
 
-def test_match_list():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
+def test_match_list(test_attributes):
+    ds = dm.DataSet(test_attributes)
 
     metadata_to_match_pass = {'variable': ['tas', 'ohc']}
 
     assert ds.match_metadata(metadata_to_match_pass)
 
 
-def test_no_match_list():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
+def test_no_match_list(test_attributes):
+    ds = dm.DataSet(test_attributes)
 
-    ds = dm.DataSet(attributes)
-
-    metadata_to_match_pass = {'variable': ['co2', 'ohc']}
+    metadata_to_match_pass = {'variable': ['co2', 'tas']}
 
     assert not ds.match_metadata(metadata_to_match_pass)
 
 
-def test_get_fetcher(mocker):
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
+def test_get_fetcher(mocker, test_attributes):
+    ds = dm.DataSet(test_attributes)
 
     m = mocker.patch("climind.data_manager.processing.get_function", return_value="Match")
     fetcher = ds._get_fetcher()
@@ -97,14 +84,8 @@ def test_get_fetcher(mocker):
     assert fetcher == "Match"
 
 
-def test_get_reader(mocker):
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
+def test_get_reader(mocker, test_attributes):
+    ds = dm.DataSet(test_attributes)
 
     m = mocker.patch("climind.data_manager.processing.get_function", return_value="Match")
     fetcher = ds._get_reader()
@@ -132,15 +113,9 @@ def simple_return(dummy):
     return fn
 
 
-def test_read(mocker):
-    attributes = {'name': '',
-                  'url': ['test_url'],
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
+def test_read(mocker, test_attributes):
+    test_attributes['name'] = ''
+    ds = dm.DataSet(test_attributes)
 
     m = mocker.patch('climind.data_manager.processing.DataSet._get_reader',
                      new=simple_return)
@@ -148,7 +123,7 @@ def test_read(mocker):
     a, b = ds.read_dataset(Path(''))
 
     assert a == Path('')
-    assert b == attributes
+    assert b == test_attributes
 
 
 # DataCollection tests
