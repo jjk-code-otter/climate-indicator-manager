@@ -1,5 +1,5 @@
 import json
-from jsonschema import validate
+from jsonschema import validate, RefResolver
 from pathlib import Path
 from climind.definitions import ROOT_DIR
 
@@ -200,10 +200,12 @@ class DataCollection:
         with open(filename, 'r') as f:
             metadata_from_file = json.load(f)
 
-        with open(Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json') as f:
+        schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
+        with open(schema_path) as f:
             metadata_schema = json.load(f)
 
-        validate(metadata_from_file, schema=metadata_schema)
+        resolver = RefResolver(schema_path.as_uri(), metadata_schema)
+        validate(metadata_from_file, metadata_schema, resolver=resolver)
 
         return DataCollection(metadata_from_file)
 
@@ -223,10 +225,12 @@ class DataCollection:
                     key.attributes.pop(globalkey)
             rebuilt['datasets'].append(key.attributes)
 
-        with open(Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json') as f:
+        schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
+        with open(schema_path) as f:
             metadata_schema = json.load(f)
 
-        validate(rebuilt, schema=metadata_schema)
+        resolver = RefResolver(schema_path.as_uri(), metadata_schema)
+        validate(rebuilt, metadata_schema, resolver=resolver)
 
         return rebuilt
 

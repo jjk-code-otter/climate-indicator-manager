@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dataset_schema",
+  "title": "Dataset metadata",
+  "description": "Metadata for a single data set",
+  "type": "object",
+  "required": [
+    "url",
+    "filename",
+    "type",
+    "time_resolution",
+    "space_resolution",
+    "reader",
+    "fetcher",
+    "climatology_start",
+    "climatology_end",
+    "actual",
+    "derived",
+    "history"
+  ],
+  "properties": {
+    "climatology_start": {
+      "description": "First year of the baseline",
+      "type": "integer"
+    },
+    "climatology_end": {
+      "description": "Last year of the baseline",
+      "type": "integer"
+    },
+    "actual": {
+      "description": "Is the data actuals (as in not anomalies)",
+      "type": "boolean"
+    },
+    "url": {
+      "description": "Url of the data set",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "filename": {
+      "description": "Filename for the data set",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "type": {
+      "description": "Type of data time series or gridded",
+      "enum": [
+        "timeseries",
+        "gridded"
+      ]
+    },
+    "time_resolution": {
+      "description": "Time resolution of the data",
+      "enum": [
+        "monthly",
+        "annual"
+      ]
+    },
+    "space_resolution": {
+      "description": "Spatial resolution of the data set",
+      "type": "number"
+    },
+    "reader": {
+      "description": "Reader function",
+      "type": "string"
+    },
+    "fetcher": {
+      "description": "Fetcher function",
+      "type": "string"
+    }
+  }
+}
+
