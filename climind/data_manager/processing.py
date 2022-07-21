@@ -57,7 +57,7 @@ class DataSet:
             Dictionary of global attributes inherited from collection
         """
         self.metadata = CombinedMetadata(metadata, global_metadata)
-        self.data = None
+        self.data = []
 
     def __str__(self):
         out_str = f"{self.metadata['name']}\n"
