@@ -1,6 +1,7 @@
 import pandas as pd
 import logging
 import copy
+from climind.data_manager.metadata import DatasetMetadata, CombinedMetadata
 
 
 def log_activity(in_function):
@@ -41,7 +42,7 @@ def log_activity(in_function):
 
 class TimeSeriesMonthly:
 
-    def __init__(self, years, months, data, metadata=None):
+    def __init__(self, years: list, months: list, data: list, metadata=None):
         """
         Monthly time series class
 
@@ -53,8 +54,8 @@ class TimeSeriesMonthly:
             List of months
         data : list
             List of data values
-        metadata : dict
-            Dictionary containing the metadata
+        metadata : DatasetMetadata
+            CombinedMetadata object containing the metadata
 
         Attributes
         ----------
@@ -66,12 +67,9 @@ class TimeSeriesMonthly:
         dico = {'year': years, 'month': months, 'data': data}
         self.df = pd.DataFrame(dico)
         if metadata is None:
-            self.metadata = {"name": ""}
+            self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
-
-        if 'history' not in self.metadata:
-            self.metadata['history'] = []
 
     def __str__(self):
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
@@ -223,12 +221,10 @@ class TimeSeriesAnnual:
         dico = {'year': years, 'data': data}
         self.df = pd.DataFrame(dico)
         if metadata is None:
-            self.metadata = {"name": ""}
+            self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
 
-        if 'history' not in self.metadata:
-            self.metadata['history'] = []
 
     def __str__(self):
         out_str = f'TimeSeriesAnnual: {self.metadata["name"]}'

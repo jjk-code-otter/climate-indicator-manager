@@ -1,6 +1,7 @@
 import json
 from jsonschema import validate, RefResolver
 from pathlib import Path
+from climind.data_manager.metadata import CollectionMetadata, DatasetMetadata, CombinedMetadata
 from climind.definitions import ROOT_DIR
 
 
@@ -9,10 +10,20 @@ def get_function(module_path: str, script_name: str, function_name: str):
     For a particular module and script in that module, return the function with
     a specified name
 
-    :param module_path:
-    :param script_name:
-    :param function_name:
-    :return:
+    Parameters
+    ----------
+    module_path: str
+        The path to the module
+    script_name: str
+        The name of the script
+    function_name: str
+        The name of the function
+
+    Returns
+    -------
+    function
+        Returns the function with the specified function name from the script with
+        the specified script name in the specified module path
     """
 
     ext = '.'.join([module_path, script_name])
@@ -24,76 +35,47 @@ def get_function(module_path: str, script_name: str, function_name: str):
 
 class DataSet:
 
-    def __init__(self, attributes: dict):
+    def __init__(self, metadata: DatasetMetadata, global_metadata: CollectionMetadata):
         """
         A single dataset that may be split across multiple files. For example, monthly global mean
         temperature from Berkeley Earth
 
         Parameters
         ----------
-        attributes : dict
-            Dictionary containing the metadata. It must contain: url, type, reader, fetcher
+        metadata : DatasetMetadata
+            DatasetMetadata containing the dataset metadata.
+        global_metadata : CollectionMetadata
+            CollectionMetadata containing the global metadata
 
         Attributes
         ----------
         name : str
             Name of the data set
-        attributes : dict
+        metadata : dict
             Dictionary of attributes
+        global_metadata : dict
+            Dictionary of global attributes inherited from collection
         """
-
-        self.standard_attributes = ['url', 'type', 'reader',
-                                    'fetcher']
-
-        schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'dataset_schema.json'
-        with open(schema_path) as f:
-            metadata_schema = json.load(f)
-        validate(attributes, metadata_schema)
-
-        self.name = ''
-        self.attributes = attributes
+        self.metadata = CombinedMetadata(metadata, global_metadata)
+        self.data = None
 
     def __str__(self):
-        out_str = f'{self.name}\n'
-        for attr in self.attributes:
-            out_str += f'{attr}: {self.attributes[attr]}\n'
+        out_str = f"{self.metadata['name']}\n"
+        out_str += str(self.metadata)
 
         return out_str
 
     def match_metadata(self, metadata_to_match: dict) -> bool:
         """
         Check if DataSet attributes match contents of dictionary, metadata_to_match.
-        Only items that are in the attributes are checked
+        Only items that are in the attributes are checked.
 
         Parameters
         ----------
         metadata_to_match : dict
+            Dictionary of key-value or key-list pairs to match.
         """
-        match = True
-
-        for key in metadata_to_match:
-
-            if key in self.attributes:
-
-                mtm = metadata_to_match[key]
-                att = self.attributes[key]
-
-                if isinstance(mtm, list):
-                    # go through list, if any item matches then that counts
-                    # as a match
-                    this_match = False
-                    for item in mtm:
-                        if item == att:
-                            this_match = True
-
-                    if not this_match:
-                        match = False
-
-                else:
-                    if mtm != att:
-                        match = False
-
-        return match
+        return self.metadata.match_metadata(metadata_to_match)
 
     def download(self, outdir: Path):
         """
@@ -107,22 +89,39 @@ class DataSet:
         -------
 
         """
-        print(f"Downloading {self.attributes['url']}")
 
         fetch_fn = self._get_fetcher()
 
-        for url in self.attributes['url']:
+        for url in self.metadata['url']:
+            print(f"Downloading {url}")
             fetch_fn(url, outdir)
 
     def _get_fetcher(self):
+        """
+        Get the fetcher function for this dataset. This is the function
+        specified in the dataset metadata which downloads the datasets files
 
-        fetcher_name = self.attributes['fetcher']
+        Returns
+        -------
+        function
+            Function that will, given appropriate inputs, download the dataset files
+        """
+        fetcher_name = self.metadata['fetcher']
         fetch_fn = get_function('climind.fetchers', fetcher_name, 'fetch')
 
         return fetch_fn
 
     def _get_reader(self):
-        reader_name = self.attributes['reader']
+        """
+        Get the reader function for this dataset. This is the function
+        specified in the dataset metadata which reads in the dataset and converts
+        it to an appropriate internal representation.
+
+        Returns
+        -------
+        function
+        """
+        reader_name = self.metadata['reader']
         reader_fn = get_function('climind.readers', reader_name, 'read_ts')
 
         return reader_fn
@@ -140,9 +139,9 @@ class DataSet:
         -------
             Object of the appropriate type
         """
-        print(f"Reading {self.attributes['name']} using {self.attributes['reader']}")
+        print(f"Reading using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        return reader_fn(outdir, self.attributes)
+        return reader_fn(outdir, self.metadata)
 
 
 class DataCollection:
@@ -160,25 +159,28 @@ class DataCollection:
 
         Attributes
         ----------
-        global_attributes : dict
-            Dictionary containing the attributes that apply to all DataSets in the DataCollection
-        datasets : dict
-            Dictionary containing all the DataSets
+        global_attributes : CollectionMetadata
+            Metadata containing the attributes that apply to all DataSets in the DataCollection
+        datasets : list
+            List containing all the DataSets
         """
-        self.global_attributes = {}
+        global_attributes = {}
         self.datasets = []
 
         # copy all metadata except datasets into global attributes
         for key in metadata:
             if key != 'datasets':
-                self.global_attributes[key] = metadata[key]
+                global_attributes[key] = metadata[key]
 
-            else:
+        self.global_attributes = CollectionMetadata(global_attributes)
+
+        for key in metadata:
+            if key == 'datasets':
                 # for each dataset in the datasets section create a DataSet
                 for item in metadata['datasets']:
                     # Combine global metadata with individual dataset metadata
-                    all_metadata = {**self.global_attributes, **item}
-                    self.add_dataset(DataSet(all_metadata))
+                    dataset_metadata = DatasetMetadata(item)
+                    self.add_dataset(DataSet(dataset_metadata, self.global_attributes))
 
     def __str__(self):
         out_str = f"{self.global_attributes['name']} " \
@@ -219,18 +221,14 @@ class DataCollection:
         -------
         dict
         """
-        rebuilt = self.global_attributes
+        rebuilt = self.global_attributes.metadata
         rebuilt['datasets'] = []
         for key in self.datasets:
-            for globalkey in self.global_attributes:
-                if globalkey in key.attributes:
-                    key.attributes.pop(globalkey)
-            rebuilt['datasets'].append(key.attributes)
+            rebuilt['datasets'].append(key.metadata.dataset.metadata)
 
         schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
         with open(schema_path) as f:
             metadata_schema = json.load(f)
-
         resolver = RefResolver(schema_path.as_uri(), metadata_schema)
         validate(rebuilt, metadata_schema, resolver=resolver)
 
@@ -281,33 +279,16 @@ class DataCollection:
         -------
         DataCollection
         """
-        for key in metadata_to_match:
-            if key in self.global_attributes:
+        if not self.global_attributes.match_metadata(metadata_to_match):
+            return None
 
-                mtm = metadata_to_match[key]
-                att = self.global_attributes[key]
-
-                if isinstance(mtm, list):
-                    this_match = False
-                    for item in mtm:
-                        if item == att:
-                            this_match = True
-                    if not this_match:
-                        return None
-
-                else:
-
-                    if mtm != att:
-                        return None
-
-        out_collection = DataCollection({})
-        out_collection.global_attributes = self.global_attributes
+        out_collection = DataCollection(self.global_attributes.metadata)
 
         at_least_one_match = False
 
-        for key in self.datasets:
-            if key.match_metadata(metadata_to_match):
-                out_collection.add_dataset(key)
+        for ds in self.datasets:
+            if ds.match_metadata(metadata_to_match):
+                out_collection.add_dataset(ds)
                 at_least_one_match = True
 
         if not at_least_one_match:
@@ -315,7 +296,7 @@ class DataCollection:
 
         return out_collection
 
-    def get_collection_dir(self, data_dir):
+    def get_collection_dir(self, data_dir: Path):
         """
         Get the Path to the directory where the data for this collection are stored.
         If the directory does not exist, then create it.

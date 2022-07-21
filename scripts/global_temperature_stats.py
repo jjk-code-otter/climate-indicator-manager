@@ -35,7 +35,7 @@ def run_the_numbers(datasets: list, match_year: int):
     # Table summary of all data sets
     out_line = 'Year '
     for ds in datasets:
-        out_line += f"{ds.metadata['name']:10.10} "
+        out_line += f"{ds.dataset_metadata['name']:10.10} "
     print(out_line)
     for year in range(match_year - 12, match_year + 1):
 
