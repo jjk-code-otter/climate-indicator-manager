@@ -1,94 +1,112 @@
 import pytest
 import json
 from pathlib import Path
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata
 import climind.data_manager.processing as dm
 
+from climind.definitions import ROOT_DIR
 
-def test_basic_creation():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
+
+@pytest.fixture
+def test_attributes():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': '',
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher',
+                  'variable': 'ohc'}
+
+    return attributes
+
+
+@pytest.fixture
+def test_dataset():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': '',
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher'}
 
-    ds = dm.DataSet(attributes)
+    global_attributes = {'name': '',
+                         'version': '',
+                         'variable': 'ohc',
+                         'citation': [''],
+                         'data_citation': [''],
+                         'colour': '',
+                         'zpos': 99}
 
-    for key in attributes:
-        assert ds.attributes[key] == attributes[key]
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
 
-
-def test_missing_standard_attribute():
-    attributes = {'url': 'test_url',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
-
-    with pytest.raises(KeyError):
-        ds = dm.DataSet(attributes)
-
-
-def test_match():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
-
-    ds = dm.DataSet(attributes)
-
-    metadata_to_match_pass = {'url': 'test_url'}
-    metadata_to_match_fail = {'url': 'wrong_url'}
-
-    assert ds.match_metadata(metadata_to_match_pass)
-    assert not ds.match_metadata(metadata_to_match_fail)
+    return dm.DataSet(dataset_metadata, collection_metadata)
 
 
-def test_match_with_irrelevant_metadata():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
+@pytest.fixture
+def test_collection_metadata():
+    global_attributes = {'name': '',
+                         'version': '',
+                         'variable': '',
+                         'citation': [''],
+                         'data_citation': [''],
+                         'colour': '',
+                         'zpos': 99}
 
-    ds = dm.DataSet(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
 
+    return collection_metadata
+
+
+def test_basic_creation(test_attributes, test_dataset):
+    ds = test_dataset
+
+    for key in test_attributes:
+        assert ds.metadata[key] == test_attributes[key]
+
+
+def test_dataset_to_str(test_dataset):
+    test_string = str(test_dataset)
+    assert isinstance(test_string, str)
+
+
+def test_match(test_dataset):
+    metadata_to_match_pass = {'time_resolution': 'monthly'}
+    metadata_to_match_fail = {'time_resolution': 'annual'}
+
+    assert test_dataset.match_metadata(metadata_to_match_pass)
+    assert not test_dataset.match_metadata(metadata_to_match_fail)
+
+
+def test_match_with_irrelevant_metadata(test_dataset):
     metadata_to_match_irrelevant = {'irrelevance': 'meh'}
+    assert test_dataset.match_metadata(metadata_to_match_irrelevant)
 
-    assert ds.match_metadata(metadata_to_match_irrelevant)
 
-
-def test_match_list():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
-
+def test_match_list(test_dataset):
     metadata_to_match_pass = {'variable': ['tas', 'ohc']}
-
-    assert ds.match_metadata(metadata_to_match_pass)
-
-
-def test_no_match_list():
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
-
-    metadata_to_match_pass = {'variable': ['co2', 'ohc']}
-
-    assert not ds.match_metadata(metadata_to_match_pass)
+    assert test_dataset.match_metadata(metadata_to_match_pass)
 
 
-def test_get_fetcher(mocker):
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
+def test_no_match_list(test_dataset):
+    metadata_to_match_pass = {'variable': ['co2', 'tas']}
+    assert not test_dataset.match_metadata(metadata_to_match_pass)
 
-    ds = dm.DataSet(attributes)
+
+def test_get_fetcher(mocker, test_dataset):
+    ds = test_dataset
 
     m = mocker.patch("climind.data_manager.processing.get_function", return_value="Match")
     fetcher = ds._get_fetcher()
@@ -97,14 +115,20 @@ def test_get_fetcher(mocker):
     assert fetcher == "Match"
 
 
-def test_get_reader(mocker):
-    attributes = {'url': 'test_url',
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
+def test_download(mocker, test_dataset):
+    def _two_input_function(a, b):
+        assert a == 'test_url'
+        assert b == Path('')
+        return
 
-    ds = dm.DataSet(attributes)
+    m = mocker.patch("climind.data_manager.processing.DataSet._get_fetcher",
+                     return_value=_two_input_function)
+
+    test_dataset.download(Path(''))
+
+
+def test_get_reader(mocker, test_attributes):
+    ds = dm.DataSet(test_attributes, {})
 
     m = mocker.patch("climind.data_manager.processing.get_function", return_value="Match")
     fetcher = ds._get_reader()
@@ -132,15 +156,8 @@ def simple_return(dummy):
     return fn
 
 
-def test_read(mocker):
-    attributes = {'name': '',
-                  'url': ['test_url'],
-                  'type': 'test_type',
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher',
-                  'variable': 'tas'}
-
-    ds = dm.DataSet(attributes)
+def test_read(mocker, test_dataset, test_attributes):
+    ds = test_dataset
 
     m = mocker.patch('climind.data_manager.processing.DataSet._get_reader',
                      new=simple_return)
@@ -148,7 +165,8 @@ def test_read(mocker):
     a, b = ds.read_dataset(Path(''))
 
     assert a == Path('')
-    assert b == attributes
+    for key in test_attributes:
+        assert b[key] == test_attributes[key]
 
 
 # DataCollection tests
@@ -160,12 +178,18 @@ def test_creation_from_file():
     assert dc.global_attributes['name'] == 'HadCRUT5'
 
 
+def test_data_collection_to_string():
+    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    test_string = str(dc)
+    assert isinstance(test_string, str)
+
+
 def test_select():
     dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
     subdc = dc.match_metadata({'type': 'gridded'})
 
     for dataset in subdc.datasets:
-        assert dataset.attributes['type'] == 'gridded'
+        assert dataset.metadata['type'] == 'gridded'
 
 
 def test_select_global_from_list():
@@ -173,7 +197,7 @@ def test_select_global_from_list():
     subdc = dc.match_metadata({'version': ['5.0.1.0', '5.0.2.0']})
 
     for dataset in subdc.datasets:
-        assert dataset.attributes['version'] == '5.0.1.0'
+        assert dataset.metadata['version'] == '5.0.1.0'
 
 
 def test_select_global_from_list_no_match():
@@ -202,8 +226,8 @@ def test_select_no_match_in_global():
     assert subdc is None
 
 
-def test_creation_from_empty_dict():
-    dc = dm.DataCollection({})
+def test_creation_from_dict_no_data_set(test_collection_metadata):
+    dc = dm.DataCollection(test_collection_metadata.metadata)
     assert isinstance(dc, dm.DataCollection)
 
 
@@ -232,8 +256,29 @@ def test_rebuild_metadata():
     assert metadata == original_metadata
 
 
-def test_get_collection_dir(mocker):
-    pass
+def test_get_collection_dir(tmp_path):
+    """Use the tmp_path fixture to create the collection dir"""
+    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    test_dir = dc.get_collection_dir(tmp_path)
+    assert test_dir == Path(tmp_path / 'HadCRUT5')
+    assert test_dir.exists()
+
+
+def test_to_file(tmp_path):
+    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc.to_file(tmp_path / 'test.json')
+
+    # Check file exists
+    assert (tmp_path / 'test.json').exists()
+
+    with open(Path('test_data/hadcrut5.json'), 'r') as f:
+        original = json.load(f)
+
+    with open(tmp_path / 'test.json', 'r') as f:
+        written_and_read = json.load(f)
+
+    # Check that written metadata is identical to original metadata
+    assert original == written_and_read
 
 
 def test_collection_download(mocker):
@@ -260,10 +305,13 @@ def test_creation_from_directory():
 def test_select_from_archive():
     metadata_dir = Path('test_data')
     da = dm.DataArchive.from_directory(metadata_dir)
-
     selected_da = da.select({'type': 'gridded'})
 
-    msg = str(selected_da)
+    assert len(da.collections['HadCRUT5'].datasets) == 2
+    assert len(selected_da.collections['HadCRUT5'].datasets) == 1
+
+    assert len(da.collections['GISTEMP'].datasets) == 2
+    assert len(selected_da.collections['GISTEMP'].datasets) == 1
 
 
 def test_archive_read(mocker):
@@ -278,6 +326,12 @@ def test_archive_read(mocker):
     assert len(datasets) == 2
     assert datasets[0] == 'test'
     assert datasets[1] == 'test'
+
+
+def test_archive_to_string(mocker):
+    metadata_dir = Path('test_data')
+    da = dm.DataArchive.from_directory(metadata_dir)
+    assert isinstance(str(da), str)
 
 
 def test_archive_download(mocker):

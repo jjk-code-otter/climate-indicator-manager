@@ -14,8 +14,7 @@ def filename_from_url(url: str) -> str:
 
 
 def fetch(url: str, outdir: Path):
-
-    for year, month in itertools.product(range(1854,2023), range(1,13)):
+    for year, month in itertools.product(range(1854, 2023), range(1, 13)):
 
         filled_url = url.replace('*', f'{year}{month:02d}')
 

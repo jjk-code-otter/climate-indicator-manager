@@ -237,3 +237,11 @@ def test_select_year_range(simple_annual):
     assert isinstance(chomp, ts.TimeSeriesAnnual)
     assert chomp.df['year'][0] == 1999
     assert chomp.df['year'][2011 - 1999] == 2011
+
+
+def test_select_year_range_monthly(simple_monthly):
+    chomp = simple_monthly.select_year_range(1999, 2011)
+
+    assert isinstance(chomp, ts.TimeSeriesMonthly)
+    assert chomp.df['year'][0] == 1999
+    assert chomp.df['year'][12 * (2011 - 1999)] == 2011
