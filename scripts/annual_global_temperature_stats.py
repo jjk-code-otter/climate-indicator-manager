@@ -22,6 +22,7 @@ if __name__ == "__main__":
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"
+    fdata_dir = project_dir / "Formatted_Data"
     figure_dir = project_dir / 'Figures'
     log_dir = project_dir / 'Logs'
     report_dir = project_dir / 'Reports'
@@ -67,12 +68,14 @@ if __name__ == "__main__":
         annual.add_offset(0.69)
         annual.select_year_range(1850, final_year)
         anns.append(annual)
+        annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
 
     for ds in ann_datasets:
         ds.rebaseline(1981, 2010)
         ds.add_offset(0.69)
         ds.select_year_range(1850, final_year)
         anns.append(ds)
+        ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")
 
     lsat_anns = []
     for ds in lsat_datasets:

@@ -57,7 +57,7 @@ class DataSet:
             Dictionary of global attributes inherited from collection
         """
         self.metadata = CombinedMetadata(metadata, global_metadata)
-        self.data = []
+        self.data = None
 
     def __str__(self):
         out_str = f"{self.metadata['name']}\n"
@@ -141,7 +141,8 @@ class DataSet:
         """
         print(f"Reading using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        return reader_fn(outdir, self.metadata)
+        self.data = reader_fn(outdir, self.metadata)
+        return self.data
 
 
 class DataCollection:
