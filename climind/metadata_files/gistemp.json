@@ -19,7 +19,7 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": "",
-      "reader": "reader_grid",
+      "reader": "reader_gistemp_ts",
 	  "fetcher": "fetcher_standard_url"
     },
     {

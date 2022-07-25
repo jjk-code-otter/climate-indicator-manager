@@ -10,8 +10,8 @@
   "datasets": [
     {
       "url": [""],
-	  "filename": [""],
-      "type": "gridded",
+	  "filename": ["era5_2m_tas_1991.nc"],
+      "type": "gridded_ignore",
 	  "time_resolution": "monthly",
 	  "space_resolution": 0.25,
 	  "climatology_start": 1981,
@@ -19,7 +19,7 @@
 	  "actual": true,
 	  "derived": false,
 	  "history": "",
-      "reader": "reader_grid",
+      "reader": "reader_era5",
 	  "fetcher": "fetcher_cds"
     },
     {

@@ -29,31 +29,8 @@ def read_monthly_grid(filename: str, metadata):
 
 
 def read_monthly_ts(filename: str, metadata: dict):
-    years = []
-    months = []
-    anomalies = []
-
-    with open(filename, 'r') as f:
-        f.readline()
-        for line in f:
-            columns = line.split(',')
-            year = columns[0][0:4]
-            month = columns[0][5:7]
-
-            years.append(int(year))
-            months.append(int(month))
-            if columns[1] != '':
-                anomalies.append(float(columns[1]))
-            else:
-                anomalies.append(np.nan)
-
-    metadata['history'] = [f'Time series created from file {filename}']
-
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    raise NotImplementedError
 
 
 def read_annual_ts(filename: str, metadata: dict):
-    monthly = read_monthly_ts(filename, metadata)
-    annual = monthly.make_annual()
-
-    return annual
+    raise NotImplementedError

@@ -11,7 +11,7 @@
   "datasets": [
     {
       "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/gridded/NOAAGlobalTemp_v.*.nc"],
-	  "filename": ["NOAAGlobalTemp_v.*.nc"],
+	  "filename": ["NOAAGlobalTemp_v*.nc"],
       "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
@@ -20,7 +20,7 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": "",
-      "reader": "reader_grid",
+      "reader": "reader_noaaglobaltemp",
 	  "fetcher": "fetcher_noaaglobaltemp"
     },
     {

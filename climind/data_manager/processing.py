@@ -139,7 +139,7 @@ class DataSet:
         -------
             Object of the appropriate type
         """
-        print(f"Reading using {self.metadata['reader']}")
+        print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
         reader_fn = self._get_reader()
         self.data = reader_fn(outdir, self.metadata)
         return self.data
@@ -328,6 +328,24 @@ class DataCollection:
         for key in self.datasets:
             key.download(collection_dir)
 
+    def specify(self, metadata_to_add: dict):
+        """
+        Add metadata to the collection metadata
+
+        Parameters
+        ----------
+        metadata_to_add: dict
+            Dictionary of metadata to add
+        Returns
+        -------
+        None
+        """
+        for key in metadata_to_add:
+            if key not in self.global_attributes:
+                self.global_attributes[key] = metadata_to_add[key]
+            else:
+                print(f'Key {key} already exists in Collection metadata')
+
     def read_datasets(self, out_dir: Path) -> list:
         """
         Read all the datasets in the DataCollection
@@ -436,6 +454,21 @@ class DataArchive:
         """
         for key in self.collections:
             self.collections[key].download(out_dir)
+
+    def specify(self, metadata_to_add: dict):
+        """
+        Add metadata to every collection in an archive
+
+        Parameters
+        ----------
+        metadata_to_add
+
+        Returns
+        -------
+        None
+        """
+        for key in self.collections:
+            self.collections[key].specify(metadata_to_add)
 
     def read_datasets(self, out_dir: Path) -> list:
         """
