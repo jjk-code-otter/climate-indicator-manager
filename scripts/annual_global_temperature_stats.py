@@ -66,6 +66,7 @@ if __name__ == "__main__":
         ds.rebaseline(1981, 2010)
         annual = ds.make_annual()
         annual.add_offset(0.69)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         anns.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
@@ -73,6 +74,7 @@ if __name__ == "__main__":
     for ds in ann_datasets:
         ds.rebaseline(1981, 2010)
         ds.add_offset(0.69)
+        ds.manually_set_baseline(1850, 1900)
         ds.select_year_range(1850, final_year)
         anns.append(ds)
         ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")

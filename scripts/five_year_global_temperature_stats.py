@@ -56,6 +56,7 @@ if __name__ == "__main__":
         ds.rebaseline(1981, 2010)
         annual = ds.make_annual()
         annual.add_offset(0.69)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         anns.append(annual)
 

@@ -123,6 +123,28 @@ class TimeSeriesMonthly:
         return annual_series
 
     @log_activity
+    def manually_set_baseline(self, y1: int, y2: int):
+        """
+        Manually set baseline.
+
+        Parameters
+        ----------
+        y1: int
+            Start of baseline period
+        y2: int
+            End of baseline period
+
+        Returns
+        -------
+        None
+        """
+        # update attributes
+        self.metadata['climatology_start'] = y1
+        self.metadata['climatology_end'] = y2
+        self.metadata['actual'] = False
+        self.metadata['history'].append(f'Manually changed baseline to {y1}-{y2}')
+
+    @log_activity
     def rebaseline(self, y1, y2):
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
@@ -205,7 +227,7 @@ class TimeSeriesMonthly:
         climind_version = pkg_resources.get_distribution("climind").version
         time_units = 'days since 1800-01-01 00:00:00.0'
 
-        self.df['time'] = pd.to_datetime(self.df.year.astype(str)+self.df.month.astype(str), format='%Y%m')
+        self.df['time'] = pd.to_datetime(self.df.year.astype(str) + self.df.month.astype(str), format='%Y%m')
         dates = cf.date2num(self.df['time'].tolist(),
                             units=time_units,
                             has_year_zero=False,
@@ -261,6 +283,7 @@ class TimeSeriesMonthly:
 
         pass
 
+
 class TimeSeriesAnnual:
 
     def __init__(self, years: list, data: list, metadata=None):
@@ -312,6 +335,28 @@ class TimeSeriesAnnual:
         years = df['year'].tolist()
         data = df['data'].tolist()
         return TimeSeriesAnnual(years, data, metadata)
+
+    @log_activity
+    def manually_set_baseline(self, y1: int, y2: int):
+        """
+        Manually set baseline.
+
+        Parameters
+        ----------
+        y1: int
+            Start of baseline period
+        y2: int
+            End of baseline period
+
+        Returns
+        -------
+        None
+        """
+        # update attributes
+        self.metadata['climatology_start'] = y1
+        self.metadata['climatology_end'] = y2
+        self.metadata['actual'] = False
+        self.metadata['history'].append(f'Manually changed baseline to {y1}-{y2}')
 
     @log_activity
     def rebaseline(self, y1: int, y2: int):
@@ -516,7 +561,6 @@ class TimeSeriesAnnual:
             f.write(f"rights,G,TBD\n")
             f.write(f"comments,G,Data produced by climind version {climind_version}\n")
             f.write(f"comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv")
-
 
             f.write(f"long_name,time,time,{time_units}\n")
             f.write(f"type,time,int\n")
