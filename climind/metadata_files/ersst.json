@@ -2,6 +2,7 @@
   "name": "ERSST",
   "version": "v5.0.0",
   "variable": "sst",
+  "units": "degC",
   "citation": [""],
   "data_citation": [""],
   "colour": "#e69f00",

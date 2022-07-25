@@ -2,6 +2,7 @@
   "name": "Kadow IPCC",
   "version": "",
   "variable": "tas",
+  "units": "degC",
   "citation": ["Kadow et al. Nature"],
   "data_citation": [""],
   "colour": "#cc79a7",
