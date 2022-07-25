@@ -4,6 +4,7 @@ Each month (jan, feb .. .dec) is treated separately to show how trend vs variabi
 through the year. It also makes plots of these data in a variety of styles.
 """
 import logging
+from pathlib import Path
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -25,7 +26,8 @@ if __name__ == "__main__":
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
 
-    logging.basicConfig(filename=log_dir / 'plot_monthly_indicators.log',
+    script = Path(__file__).stem
+    logging.basicConfig(filename=log_dir / f'{script}.log',
                         filemode='w', level=logging.INFO)
 
     # Read in the whole archive then select the various subsets needed here

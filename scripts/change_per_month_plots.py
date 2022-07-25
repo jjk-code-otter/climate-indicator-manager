@@ -29,7 +29,8 @@ if __name__ == "__main__":
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
 
-    logging.basicConfig(filename=log_dir / 'example.log',
+    script = Path(__file__).stem
+    logging.basicConfig(filename=log_dir / f'{script}.log',
                         filemode='w', level=logging.INFO)
 
     for month in range(1, 13):
