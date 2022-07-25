@@ -2,6 +2,7 @@
   "name": "NOAA Interim IPCC",
   "version": "",
   "variable": "tas",
+  "units": "degC",
   "citation": ["Vose et al."],
   "data_citation": [""],
   "colour": "#f0e442",

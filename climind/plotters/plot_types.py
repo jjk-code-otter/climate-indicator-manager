@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+FANCY_UNITS = {"degC": "$\!^\circ\!$C", "zJ": "zJ"}
+
 
 def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
@@ -56,8 +58,11 @@ def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
     plt.xlim(1845, 2025)
     plt.ylim(-0.4, 1.4)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     plt.yticks(np.arange(-0.2, 1.4, 0.2))
     plt.xticks(np.arange(1860, 2040, 20))
@@ -130,8 +135,11 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
     sns.despine(right=True, top=True, left=True)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     ylims = plt.gca().get_ylim()
     ylo = 0.2 * (1 + (ylims[0] // 0.2))
@@ -219,8 +227,11 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
     sns.despine(right=True, top=True, left=True)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     ylims = plt.gca().get_ylim()
     ylo = 0.2 * (1 + (ylims[0] // 0.2))
@@ -316,8 +327,11 @@ def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
 
     sns.despine(right=True, top=True, left=True)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     ylims = plt.gca().get_ylim()
     ylo = 0.2 * (1 + (ylims[0] // 0.2))
@@ -408,8 +422,11 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
     sns.despine(right=True, top=True)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     plt.yticks(np.arange(-0.2, 1.4, 0.2))
     plt.xticks(np.arange(1860, 2040, 20))
@@ -483,8 +500,11 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
                  zorder=zord)
     sns.despine(right=True, top=True, left=True)
 
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel('$\!^\circ\!$C', rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     ylims = plt.gca().get_ylim()
     ylo = 0.2 * (1 + (ylims[0] // 0.2))

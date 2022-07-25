@@ -2,6 +2,7 @@
   "name": "CLSAT unreconstructed",
   "version": "2.0",
   "variable": "lsat",
+  "units": "degC",
   "citation": ["Sun Wenbin; Qingxiang, Li (2021): China global Land Surface Air Temperature 2.0 during 1850-2020. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16968334.v4 "],
   "data_citation": ["https://doi.org/10.6084/m9.figshare.16968334.v4"],
   "colour": "#e69f00",

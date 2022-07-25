@@ -34,14 +34,6 @@ if __name__ == "__main__":
     archive = dm.DataArchive.from_directory(metadata_dir)
 
     # some global temperature data sets are annual only, others are monthly so need to read these separately
-    ann_archive = archive.select({'variable': 'tas',
-                                  'type': 'timeseries',
-                                  'time_resolution': 'annual',
-                                  'name': [  # 'NOAA Interim',
-                                      'Kadow IPCC',
-                                      # 'Berkeley IPCC',
-                                      'NOAA Interim IPCC']})
-
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly'})
@@ -55,7 +47,6 @@ if __name__ == "__main__":
                                    'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
-    ann_datasets = ann_archive.read_datasets(data_dir)
 
     lsat_datasets = lsat_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
@@ -67,12 +58,6 @@ if __name__ == "__main__":
         annual.add_offset(0.69)
         annual.select_year_range(1850, final_year)
         anns.append(annual)
-
-    for ds in ann_datasets:
-        ds.rebaseline(1981, 2010)
-        ds.add_offset(0.69)
-        ds.select_year_range(1850, final_year)
-        anns.append(ds)
 
     lsat_anns = []
     for ds in lsat_datasets:
