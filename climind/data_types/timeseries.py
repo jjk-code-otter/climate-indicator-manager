@@ -57,7 +57,7 @@ class TimeSeriesMonthly:
             List of months
         data : list
             List of data values
-        metadata : DatasetMetadata
+        metadata : CombinedMetadata
             CombinedMetadata object containing the metadata
 
         Attributes
@@ -272,7 +272,7 @@ class TimeSeriesAnnual:
             List of years
         data : list
             List of data values
-        metadata : dict
+        metadata : CombinedMetadata
             Dictionary containing the metadata
 
         Attributes

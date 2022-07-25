@@ -504,15 +504,21 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     if plot_units in FANCY_UNITS:
         plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=0, labelpad=23)
 
     ylims = plt.gca().get_ylim()
-    ylo = 0.2 * (1 + (ylims[0] // 0.2))
-    yhi = 0.2 * (1 + (ylims[1] // 0.2))
+    if ds.metadata['variable'] in ['tas', 'lsat', 'sst']:
+        ylo = 0.2 * (1 + (ylims[0] // 0.2))
+        yhi = 0.2 * (1 + (ylims[1] // 0.2))
+        plt.yticks(np.arange(ylo, yhi, 0.2))
+        plt.xticks(np.arange(2014, 2023, 1))
+    elif ds.metadata['variable'] == 'co2':
+        ylo = 10. * (1 + (ylims[0] // 10.))
+        yhi = 10. * (1 + (ylims[1] // 10.))
+        plt.yticks(np.arange(ylo, yhi, 10.))
+        plt.xticks(np.arange(1980, 2023, 10))
 
-    plt.yticks(np.arange(ylo, yhi, 0.2))
     # plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(2014, 2023, 1))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
@@ -538,7 +544,13 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1981-2010 average', fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename)
