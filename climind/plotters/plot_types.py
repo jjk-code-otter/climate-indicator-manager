@@ -80,7 +80,13 @@ def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1850-1900 average', fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename, transparent=True)
@@ -173,7 +179,13 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1850-1900 average', fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename)
@@ -265,7 +277,13 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1850-1900 average', fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename)
@@ -274,7 +292,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     return
 
 
-def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str, climtitle: str):
+def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -365,7 +383,13 @@ def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, climtitle, fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename)
@@ -444,7 +468,13 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
 
-    plt.text(plt.gca().get_xlim()[0], yloc, 'Compared to 1850-1900 average', fontdict={'fontsize': 30})
+    if ds.metadata['actual']:
+        subtitle = ''
+    else:
+        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+                   f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename)
