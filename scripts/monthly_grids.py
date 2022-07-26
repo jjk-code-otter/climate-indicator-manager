@@ -31,10 +31,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'gridded',
-                                 'time_resolution': 'monthly'})
+                                 'time_resolution': 'monthly',
+                                 'name': 'NOAAGlobalTemp'})
 
-    ts_archive.specify({'target_resolution': 5})
-
-    all_datasets = ts_archive.read_datasets(data_dir)
-
-    pass
+    all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=5)

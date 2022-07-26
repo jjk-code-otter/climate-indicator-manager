@@ -1,6 +1,75 @@
+import itertools
 import xarray as xa
+import numpy as np
 import logging
 from climind.data_manager.metadata import CombinedMetadata
+
+
+def get_1d_transfer(zero_point_original, grid_space_original,
+                    zero_point_target, grid_space_target, index_in_original):
+    """
+    Find the overlapping grid spacings for a new grid based on an index in the old grid
+    
+    Parameters
+    ----------
+    zero_point_original
+    grid_space_original
+    zero_point_target
+    grid_space_target
+    index_in_original
+
+    Returns
+    -------
+
+    """
+    Llon = zero_point_target + index_in_original * grid_space_target
+    Hlon = zero_point_target + (index_in_original + 1) * grid_space_target
+
+    mlon_lo = (Llon - zero_point_original) / grid_space_original
+    mlon_hi = (Hlon - zero_point_original) / grid_space_original
+
+    lonindexlo = int(np.floor(mlon_lo))
+    lonindexhi = int(np.floor(mlon_hi))
+
+    final_cell = (Hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
+
+    if final_cell == 0:
+        lonindexhi -= 1
+        final_cell = (Hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
+
+    nlonsteps = lonindexhi - lonindexlo + 1
+
+    transfer_lon = np.zeros((nlonsteps)) + 1.0
+    if nlonsteps == 1:
+        transfer_lon[0] = grid_space_target/grid_space_original
+    else:
+        transfer_lon[0] = ((zero_point_original + (lonindexlo + 1) * grid_space_original) - Llon) / grid_space_original
+        transfer_lon[nlonsteps - 1] = final_cell
+
+    return transfer_lon, nlonsteps, lonindexlo, lonindexhi
+
+
+def simple_regrid(ingrid, lon0, lat0, dx, target_dy):
+    nlat = int(180 / target_dy)
+    nlon = int(360 / target_dy)
+    outgrid = np.zeros((nlat, nlon))
+
+    for xlon, ylat in itertools.product(range(nlon), range(nlat)):
+        # Longitudes
+        y0 = -180.0
+        transfer_lon, nlonsteps, lolon, hilon = get_1d_transfer(lon0, dx, y0, target_dy, xlon)
+        # Latitudes
+        y0 = -90.0
+        transfer_lat, nlatsteps, lolat, hilat = get_1d_transfer(lat0, dx, y0, target_dy, ylat)
+
+        transfer_lon = np.repeat(np.reshape(transfer_lon, (1, nlonsteps)), nlatsteps, 0)
+        transfer_lat = np.repeat(np.reshape(transfer_lat, (nlatsteps, 1)), nlonsteps, 1)
+
+        transfer = transfer_lat * transfer_lon
+
+        outgrid[ylat, xlon] = np.sum(ingrid[lolat:hilat+1, lolon:hilon+1] * transfer)/np.sum(transfer)
+
+    return outgrid
 
 
 def make_xarray(target_grid, times, latitudes, longitudes):
@@ -44,11 +113,12 @@ def log_activity(in_function):
 
     Parameters
     ----------
-    in_function: The function to be decorated
+    in_function: function
+        The function to be decorated
 
     Returns
     -------
-
+    function
     """
 
     def wrapper(*args, **kwargs):

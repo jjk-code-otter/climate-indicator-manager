@@ -281,8 +281,6 @@ class TimeSeriesMonthly:
                                    columns=['time', 'year', 'month', 'data']))
             f.write("end data\n")
 
-        pass
-
 
 class TimeSeriesAnnual:
 
@@ -581,5 +579,3 @@ class TimeSeriesAnnual:
                                    header=False,
                                    columns=['time', 'year', 'data']))
             f.write("end data\n")
-
-        pass

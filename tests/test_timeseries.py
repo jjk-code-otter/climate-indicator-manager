@@ -3,6 +3,7 @@ import numpy as np
 import json
 import itertools
 from pathlib import Path
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 import climind.data_types.timeseries as ts
 
 
@@ -118,12 +119,25 @@ def test_rebaseline_monthly(simple_monthly):
     assert simple_monthly.metadata['history'][-1] == 'Rebaselined to 1961-1961'
 
 
+def test_manual_baseline_monthly(simple_monthly):
+    simple_monthly.manually_set_baseline(2001, 2030)
+
+    assert simple_monthly.metadata['climatology_start'] == 2001
+    assert simple_monthly.metadata['climatology_end'] == 2030
+
+
 def test_rebaseline_annual(simple_monthly):
     annual = simple_monthly.make_annual()
     annual.rebaseline(1981, 2010)
     assert annual.df['data'][0] == (1850 - (1981 + 2010) / 2.)
     assert annual.metadata['history'][-2] == 'Calculated annual average'
     assert annual.metadata['history'][-1] == 'Rebaselined to 1981-2010'
+
+
+def test_manual_baseline_annual(simple_annual):
+    simple_annual.manually_set_baseline(2001, 2030)
+    assert simple_annual.metadata['climatology_start'] == 2001
+    assert simple_annual.metadata['climatology_end'] == 2030
 
 
 def test_multiple_steps(simple_monthly):
@@ -245,3 +259,53 @@ def test_select_year_range_monthly(simple_monthly):
     assert isinstance(chomp, ts.TimeSeriesMonthly)
     assert chomp.df['year'][0] == 1999
     assert chomp.df['year'][12 * (2011 - 1999)] == 2011
+
+
+@pytest.fixture
+def test_metadata():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': [],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'}
+
+    global_attributes = {'name': '',
+                         'version': '',
+                         'variable': 'ohc',
+                         'units': 'zJ',
+                         'citation': [''],
+                         'data_citation': [''],
+                         'colour': '',
+                         'zpos': 99}
+
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
+
+    return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+def test_write_csv_monthly(simple_monthly, test_metadata, tmpdir):
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_monthly.write_csv(test_filename)
+
+    assert test_filename.exists()
+
+
+def test_write_csv_annual(simple_annual, test_metadata, tmpdir):
+    simple_annual.metadata = test_metadata
+    simple_annual.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_annual.write_csv(test_filename)
+
+    assert test_filename.exists()
+
+    pass

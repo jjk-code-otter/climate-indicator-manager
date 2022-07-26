@@ -4,9 +4,10 @@ import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
 import numpy as np
 import copy
+import itertools
 
 
-def read_ts(out_dir: Path, metadata: dict):
+def read_ts(out_dir: Path, metadata: dict, **kwargs):
     filename = out_dir / metadata['filename'][0]
 
     construction_metadata = copy.deepcopy(metadata)
@@ -20,11 +21,36 @@ def read_ts(out_dir: Path, metadata: dict):
             raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
     elif metadata['type'] == 'gridded':
-        return read_monthly_grid(filename, construction_metadata)
+        print(kwargs)
+        if 'grid_resolution' in kwargs:
+            if kwargs['grid_resolution'] == 5:
+                return read_monthly_grid(filename, construction_metadata)
+            if kwargs['grid_resolution'] == 1:
+                return read_monthly_1x1_grid(filename, construction_metadata)
+        else:
+            return read_monthly_grid(filename, construction_metadata)
 
 
 def read_monthly_grid(filename: str, metadata):
     df = xa.open_dataset(filename)
+    return gd.GridMonthly(df, metadata)
+
+
+def read_monthly_1x1_grid(filename: str, metadata):
+    df = xa.open_dataset(filename)
+    # regrid to 1x1
+    ntime = df.tas_mean.shape[0]
+
+    grid = np.zeros((ntime, 180, 360))
+    lats = np.arange(-89.5, 90.5, 1.0)
+    lons = np.arange(-179.5, 180.5, 1.0)
+
+    # Copy 5-degree grid cell value into all one degree cells
+    grid = np.repeat(df.tas_mean, 5, 1)
+    grid = np.repeat(grid, 5, 2)
+
+    df = gd.make_xarray(grid, df.time.data, lats, lons)
+
     return gd.GridMonthly(df, metadata)
 
 
