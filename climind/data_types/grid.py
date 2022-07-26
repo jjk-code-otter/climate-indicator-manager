@@ -22,20 +22,20 @@ def get_1d_transfer(zero_point_original, grid_space_original,
     -------
 
     """
-    Llon = zero_point_target + index_in_original * grid_space_target
-    Hlon = zero_point_target + (index_in_original + 1) * grid_space_target
+    llon = zero_point_target + index_in_original * grid_space_target
+    hlon = zero_point_target + (index_in_original + 1) * grid_space_target
 
-    mlon_lo = (Llon - zero_point_original) / grid_space_original
-    mlon_hi = (Hlon - zero_point_original) / grid_space_original
+    mlon_lo = (llon - zero_point_original) / grid_space_original
+    mlon_hi = (hlon - zero_point_original) / grid_space_original
 
     lonindexlo = int(np.floor(mlon_lo))
     lonindexhi = int(np.floor(mlon_hi))
 
-    final_cell = (Hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
+    final_cell = (hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
 
     if final_cell == 0:
         lonindexhi -= 1
-        final_cell = (Hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
+        final_cell = (hlon - (zero_point_original + lonindexhi * grid_space_original)) / grid_space_original
 
     nlonsteps = lonindexhi - lonindexlo + 1
 
@@ -43,7 +43,7 @@ def get_1d_transfer(zero_point_original, grid_space_original,
     if nlonsteps == 1:
         transfer_lon[0] = grid_space_target/grid_space_original
     else:
-        transfer_lon[0] = ((zero_point_original + (lonindexlo + 1) * grid_space_original) - Llon) / grid_space_original
+        transfer_lon[0] = ((zero_point_original + (lonindexlo + 1) * grid_space_original) - llon) / grid_space_original
         transfer_lon[nlonsteps - 1] = final_cell
 
     return transfer_lon, nlonsteps, lonindexlo, lonindexhi

@@ -2,14 +2,47 @@ import pytest
 import numpy as np
 import climind.data_types.grid as gd
 from xarray import Dataset
+from unittest.mock import call
 
 
-def test_log_activity():
+@pytest.fixture
+def annual_grid():
+    test_grid = np.zeros((12, 36, 72))
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = np.arange(1., 13., 1.0)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_annual = gd.GridAnnual(test_ds, {'name': 'test_name'})
+
+    return test_grid_annual
+
+
+def test_log_activity(mocker):
     def mini():
         return ''
 
+    m = mocker.patch('logging.info')
     fn = gd.log_activity(mini)
     assert fn() == ''
+    m.assert_called_once_with('Running: mini')
+
+
+def test_log_with_args(mocker, annual_grid):
+    def mini(arg1, kw=''):
+        return ''
+
+    m = mocker.patch('logging.info')
+    fn = gd.log_activity(mini)
+    assert fn(annual_grid, kw='test') == ''
+
+    calls = [call('Running: mini'),
+             call('on test_name'),
+             call('With arguments:'),
+             call('And keyword arguments:')]
+
+    m.assert_has_calls(calls, any_order=True)
 
 
 def test_1d_transfer_1_25offset_to_5():
