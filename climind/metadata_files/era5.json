@@ -10,15 +10,15 @@
   "datasets": [
     {
       "url": [""],
-	  "filename": ["era5_2m_tas_1991.nc"],
-      "type": "gridded_ignore",
+	  "filename": ["era5_2m_tas_YYYY.nc"],
+      "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 0.25,
 	  "climatology_start": 1981,
 	  "climatology_end": 2010,
 	  "actual": true,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_era5",
 	  "fetcher": "fetcher_cds"
     },
@@ -32,7 +32,7 @@
 	  "climatology_end": 2020,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_era5",
 	  "fetcher": "fetcher_url_with_backsearch"
     },
@@ -46,7 +46,7 @@
 	  "climatology_end": 2020,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_era5",
 	  "fetcher": "fetcher_url_with_backsearch"
     }

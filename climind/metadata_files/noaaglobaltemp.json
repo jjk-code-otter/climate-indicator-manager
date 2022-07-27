@@ -19,7 +19,7 @@
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_noaaglobaltemp",
 	  "fetcher": "fetcher_noaaglobaltemp"
     },
@@ -34,7 +34,7 @@
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_noaaglobaltemp",
 	  "fetcher": "fetcher_noaaglobaltemp"
     },
@@ -49,7 +49,7 @@
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_noaaglobaltemp",
 	  "fetcher": "fetcher_noaaglobaltemp"
     }

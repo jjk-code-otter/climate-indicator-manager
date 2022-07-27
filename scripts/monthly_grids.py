@@ -1,10 +1,8 @@
 from pathlib import Path
-import numpy as np
 import logging
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
-import climind.stats.utils as utils
 
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
@@ -32,6 +30,14 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'gridded',
                                  'time_resolution': 'monthly',
-                                 'name': 'NOAAGlobalTemp'})
+                                 'name': ['HadCRUT5',
+                                          'GISTEMP',
+                                          'ERA5',
+                                          'NOAAGlobalTemp',
+                                          'Berkeley Earth']})
 
     all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=5)
+
+    for ds in all_datasets:
+        ds.rebaseline(1981, 2010)
+        pt.nice_map(ds.df, figure_dir / f"{ds.metadata['name']}", ds.metadata['name'])

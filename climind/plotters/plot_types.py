@@ -1,4 +1,6 @@
 from pathlib import Path
+import cartopy.crs as ccrs
+from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -587,3 +589,58 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.close()
     return
+
+
+def quick_and_dirty_map(dataset, image_filename):
+    plt.figure()
+    proj = ccrs.PlateCarree()
+    p = dataset.tas_mean[-1].plot(transform=proj, robust=True,
+                                  subplot_kws={'projection': proj},
+                                  levels=[-3, -2, -1, 0, 1, 2, 3])
+    p.axes.coastlines()
+    plt.title(f'')
+    plt.savefig(image_filename, bbox_inches='tight')
+    plt.close()
+
+    return
+
+
+def nice_map(dataset, image_filename, title, var='tas_mean'):
+    # This is a pain, but we need to do some magic to convince cartopy that the data
+    # are continuous across the dateline
+    data = dataset[var]
+    lon = dataset.coords['longitude']
+    lon_idx = data.dims.index('longitude')
+    wrap_data, wrap_lon = add_cyclic_point(data.values, coord=lon, axis=lon_idx)
+
+    plt.figure(figsize=(16, 9))
+    proj = ccrs.EqualEarth(central_longitude=0)
+
+    wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+
+    wmo_levels = [-10, -5, -3, -2, -1,    -0.5, 0, 0.5,    1, 2, 3, 5, 10]
+    wmo_levels = [-5,  -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+
+    fig = plt.figure(figsize=(16, 9))
+    ax = fig.add_subplot(111, projection=proj, aspect='auto')
+    p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
+                    transform=ccrs.PlateCarree(), robust=True,
+                    levels=wmo_levels,
+                    colors=wmo_cols, add_colorbar=False
+                    )
+
+    cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
+
+    cbar.ax.tick_params(labelsize=15)
+    cbar.set_ticks(wmo_levels)
+    cbar.set_ticklabels(wmo_levels)
+    cbar.set_label('Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
+
+    p.axes.coastlines()
+    p.axes.set_global()
+
+    plt.title(f'{title}', pad=20, fontdict={'fontsize': 20})
+    plt.savefig(f'{image_filename}.png')
+    plt.savefig(f'{image_filename}.pdf')
+    plt.close()

@@ -1,5 +1,4 @@
 from pathlib import Path
-import itertools
 import xarray as xa
 import pandas as pd
 import numpy as np
@@ -7,9 +6,10 @@ import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
 import copy
 
+from climind.data_manager.metadata import CombinedMetadata
 
-def read_ts(out_dir: Path, metadata: dict, **kwargs):
-    url = metadata['url'][0]
+
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename = out_dir / metadata['filename'][0]
 
     construction_metadata = copy.deepcopy(metadata)
@@ -75,7 +75,7 @@ def read_monthly_5x5_grid(filename: str, metadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
@@ -97,7 +97,7 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

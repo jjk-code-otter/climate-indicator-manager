@@ -1,11 +1,14 @@
+import itertools
 from pathlib import Path
 import xarray as xa
+import numpy as np
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 import copy
+from climind.data_manager.metadata import CombinedMetadata
 
 
-def read_ts(out_dir: Path, metadata: dict):
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename = out_dir / metadata['filename'][0]
     construction_metadata = copy.deepcopy(metadata)
     if metadata['type'] == 'timeseries':
@@ -16,15 +19,108 @@ def read_ts(out_dir: Path, metadata: dict):
         else:
             raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
     elif metadata['type'] == 'gridded':
-        return read_monthly_grid(filename, construction_metadata)
+        if 'grid_resolution' in kwargs:
+            if kwargs['grid_resolution'] == 5:
+                return read_monthly_5x5_grid(filename, construction_metadata)
+            if kwargs['grid_resolution'] == 1:
+                return read_monthly_1x1_grid(filename, construction_metadata)
+        else:
+            return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_grid(filename: str, metadata):
+def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
+    """
+    Convert 2x2 grid to 1x1 grid by copying 2x2 value into all 4 1x1 grid cells it
+    contains
+
+    Parameters
+    ----------
+    filename
+    metadata
+
+    Returns
+    -------
+
+    """
+    gistemp = xa.open_dataset(filename)
+    number_of_months = len(gistemp.time.data)
+    target_grid = np.zeros((number_of_months, 180, 360))
+
+    for m, xx, yy in itertools.product(range(number_of_months), range(180), range(90)):
+        selection = gistemp.tempanomaly.data[m, yy, xx]
+        target_grid[m, yy * 2:(yy + 1) * 2, xx * 2:(xx + 1) * 2] = selection
+
+    latitudes = np.linspace(-89.5, 89.5, 180)
+    longitudes = np.linspace(-179.5, 179.5, 360)
+    times = gistemp.time.data
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
+
+
+def read_monthly_5x5_grid(filename: str, metadata: CombinedMetadata):
+    gistemp = xa.open_dataset(filename)
+    number_of_months = len(gistemp.time.data)
+    target_grid = np.zeros((number_of_months, 36, 72))
+
+    for m in range(number_of_months):
+        print(f'month: {m}')
+        for xx in range(72):
+            for yy in range(36):
+
+                transfer = np.zeros((3, 3)) + 1.0
+
+                if xx % 2 == 0:
+                    transfer[:, 2] = transfer[:, 2] * 0.5
+                    lox = int(5 * (xx / 2))
+                    hix = lox + 2
+                else:
+                    transfer[:, 0] = transfer[:, 0] * 0.5
+                    lox = int(5 * ((xx - 1) / 2) + 2)
+                    hix = lox + 2
+
+                if yy % 2 == 0:
+                    transfer[2, :] = transfer[2, :] * 0.5
+                    loy = int(5 * (yy / 2))
+                    hiy = loy + 2
+                else:
+                    transfer[0, :] = transfer[0, :] * 0.5
+                    loy = int(5 * ((yy - 1) / 2) + 2)
+                    hiy = loy + 2
+
+                selection = gistemp.tempanomaly.data[m, loy:hiy + 1, lox:hix + 1]
+                index = (~np.isnan(selection))
+                if np.count_nonzero(index) > 0:
+                    weighted = transfer[index] * selection[index]
+                    grid_mean = np.sum(weighted) / np.sum(transfer[index])
+                else:
+                    grid_mean = np.nan
+                target_grid[m, yy, xx] = grid_mean
+
+    latitudes = np.linspace(-87.5, 87.5, 36)
+    longitudes = np.linspace(-177.5, 177.5, 72)
+    times = gistemp.time.data
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
+
+
+def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
@@ -45,5 +141,5 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
-    pass
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
+    raise NotImplementedError

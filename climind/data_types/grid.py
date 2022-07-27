@@ -41,7 +41,7 @@ def get_1d_transfer(zero_point_original, grid_space_original,
 
     transfer_lon = np.zeros((nlonsteps)) + 1.0
     if nlonsteps == 1:
-        transfer_lon[0] = grid_space_target/grid_space_original
+        transfer_lon[0] = grid_space_target / grid_space_original
     else:
         transfer_lon[0] = ((zero_point_original + (lonindexlo + 1) * grid_space_original) - llon) / grid_space_original
         transfer_lon[nlonsteps - 1] = final_cell
@@ -67,7 +67,7 @@ def simple_regrid(ingrid, lon0, lat0, dx, target_dy):
 
         transfer = transfer_lat * transfer_lon
 
-        outgrid[ylat, xlon] = np.sum(ingrid[lolat:hilat+1, lolon:hilon+1] * transfer)/np.sum(transfer)
+        outgrid[ylat, xlon] = np.sum(ingrid[lolat:hilat + 1, lolon:hilon + 1] * transfer) / np.sum(transfer)
 
     return outgrid
 
@@ -161,6 +161,39 @@ class GridMonthly:
             self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
+
+    def rebaseline(self, y1: int, y2: int):
+
+        dsg = self.df.groupby('time.month')
+        gb = self.df.sel(time=slice(f'{y1}-01-01', f'{y2}-12-31')).groupby('time.month')
+        clim = gb.mean(dim='time')
+        anom = dsg - clim
+
+        self.df = anom
+
+        self.metadata['climatology_start'] = y1
+        self.metadata['climatology_end'] = y2
+        self.metadata['actual'] = False
+        self.update_history(f'Rebaselined to {y1}-{y2}')
+
+        return anom
+
+        pass
+
+    def update_history(self, message: str):
+        """
+        Update the history metadata
+
+        Parameters
+        ----------
+        message : str
+            Message to be added to history
+
+        Returns
+        -------
+        None
+        """
+        self.metadata['history'].append(message)
 
 
 class GridAnnual:

@@ -4,10 +4,10 @@ import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
 import numpy as np
 import copy
-import itertools
+from climind.data_manager.metadata import CombinedMetadata
 
 
-def read_ts(out_dir: Path, metadata: dict, **kwargs):
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename = out_dir / metadata['filename'][0]
 
     construction_metadata = copy.deepcopy(metadata)
@@ -31,17 +31,14 @@ def read_ts(out_dir: Path, metadata: dict, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_grid(filename: str, metadata):
+def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_1x1_grid(filename: str, metadata):
+def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
     # regrid to 1x1
-    ntime = df.tas_mean.shape[0]
-
-    grid = np.zeros((ntime, 180, 360))
     lats = np.arange(-89.5, 90.5, 1.0)
     lons = np.arange(-179.5, 180.5, 1.0)
 
@@ -54,7 +51,7 @@ def read_monthly_1x1_grid(filename: str, metadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
@@ -78,7 +75,7 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 
