@@ -1,8 +1,14 @@
 from pathlib import Path
+import itertools
+import xarray as xa
+import numpy as np
+import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 import copy
+from climind.data_manager.metadata import CombinedMetadata
 
-def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
+
+def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
     """
     Find the most recent file that matches
 
@@ -25,22 +31,169 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
     return out_filename
 
 
-def read_ts(out_dir: Path, metadata: dict):
-    url = metadata['url'][0]
-    filename_with_wildcards = metadata['filename'][0]
-    filename = find_latest(out_dir, filename_with_wildcards)
-
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     construction_metadata = copy.deepcopy(metadata)
+    if metadata['type'] == 'timeseries':
+        filename_with_wildcards = metadata['filename'][0]
+        filename = find_latest(out_dir, filename_with_wildcards)
 
-    if metadata['time_resolution'] == 'monthly':
-        return read_monthly_ts(filename, construction_metadata)
-    elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, construction_metadata)
-    else:
-        raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+        if metadata['time_resolution'] == 'monthly':
+            return read_monthly_ts(filename, construction_metadata)
+        elif metadata['time_resolution'] == 'annual':
+            return read_annual_ts(filename, construction_metadata)
+        else:
+            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+
+    elif metadata['type'] == 'gridded':
+
+        filename = out_dir / metadata['filename'][0]
+
+        if 'grid_resolution' in kwargs:
+            if kwargs['grid_resolution'] == 5:
+                return read_monthly_5x5_grid(filename, construction_metadata)
+            if kwargs['grid_resolution'] == 1:
+                return read_monthly_1x1_grid(filename, construction_metadata)
+        else:
+            return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_5x5_grid(filename, metadata):
+    combo = read_grid(filename)
+
+    number_of_months = combo.t2m.data.shape[0]
+
+    # transfer matrix for regridding, there are 20 quarter degree grid
+    # cells in a 5 degree grid cell, however, the ERA5 grid is offset half a
+    # grid cell because the first grid cell centre is at the North Pole and
+    # the last is at the South Pole
+    transfer = np.zeros((21, 21)) + 1
+    transfer[0, :] = transfer[0, :] * 0.5
+    transfer[20, :] = transfer[20, :] * 0.5
+    transfer[:, 0] = transfer[:, 0] * 0.5
+    transfer[:, 20] = transfer[:, 20] * 0.5
+
+    transfer_sum = np.sum(transfer)
+
+    enlarged_array = np.zeros((721, 1441))
+
+    target_grid = np.zeros((number_of_months, 36, 72))
+
+    for m in range(number_of_months):
+
+        if len(combo.t2m.data.shape) == 3:
+            enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :]
+            enlarged_array[:, 1440] = combo.t2m.data[m, :, 0]
+        else:
+            if np.isnan(combo.t2m.data[m, 0, 0, 0]):
+                enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :, 1]
+                enlarged_array[:, 1440] = combo.t2m.data[m, :, 0, 1]
+            else:
+                enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :, 0]
+                enlarged_array[:, 1440] = combo.t2m.data[m, :, 0, 0]
+
+        for xx, yy in itertools.product(range(72), range(36)):
+            lox = xx * 20
+            hix = (xx + 1) * 20
+            loy = yy * 20
+            hiy = (yy + 1) * 20
+            weighted = transfer * enlarged_array[loy:hiy + 1, lox:hix + 1]
+            grid_mean = np.sum(weighted) / transfer_sum
+            target_grid[m, yy, xx] = grid_mean
+
+    # flip and shift target_grid to match HadCRUT-like coords lat -90 to 90 and lon -180 to 180
+    target_grid = np.flip(target_grid, 1)
+    target_grid = np.roll(target_grid, 36, 2)
+
+    latitudes = np.linspace(-87.5, 87.5, 36)
+    longitudes = np.linspace(-177.5, 177.5, 72)
+    times = combo.time.data
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
+
+
+def read_monthly_1x1_grid(filename, metadata):
+    combo = read_grid(filename)
+
+    number_of_months = combo.t2m.data.shape[0]
+
+    # transfer matrix for regridding, there are 4 quarter degree grid
+    # cells in a 1 degree grid cell, however, the ERA5 grid is offset half a
+    # grid cell because the first grid cell centre is at the North Pole and
+    # the last is at the South Pole
+    transfer = np.zeros((5, 5)) + 1
+    transfer[0, :] = transfer[0, :] * 0.5
+    transfer[4, :] = transfer[4, :] * 0.5
+    transfer[:, 0] = transfer[:, 0] * 0.5
+    transfer[:, 4] = transfer[:, 4] * 0.5
+
+    transfer_sum = np.sum(transfer)
+
+    enlarged_array = np.zeros((721, 1441))
+
+    target_grid = np.zeros((number_of_months, 180, 360))
+
+    for m in range(number_of_months):
+
+        if len(combo.t2m.data.shape) == 3:
+            enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :]
+            enlarged_array[:, 1440] = combo.t2m.data[m, :, 0]
+        else:
+            if np.isnan(combo.t2m.data[m, 0, 0, 0]):
+                enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :, 1]
+                enlarged_array[:, 1440] = combo.t2m.data[m, :, 0, 1]
+            else:
+                enlarged_array[:, 0:1440] = combo.t2m.data[m, :, :, 0]
+                enlarged_array[:, 1440] = combo.t2m.data[m, :, 0, 0]
+
+        for xx, yy in itertools.product(range(360), range(180)):
+            lox = xx * 4
+            hix = (xx + 1) * 4
+            loy = yy * 4
+            hiy = (yy + 1) * 4
+            weighted = transfer * enlarged_array[loy:hiy + 1, lox:hix + 1]
+            grid_mean = np.sum(weighted) / transfer_sum
+            target_grid[m, yy, xx] = grid_mean
+
+    # flip and shift target_grid to match HadCRUT-like coords lat -90 to 90 and lon -180 to 180
+    target_grid = np.flip(target_grid, 1)
+    target_grid = np.roll(target_grid, 180, 2)
+
+    latitudes = np.linspace(-89.5, 89.5, 180)
+    longitudes = np.linspace(-179.5, 179.5, 360)
+    times = combo.time.data
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
+
+
+def read_monthly_grid(filename: str, metadata):
+    combo = read_grid(filename)
+    return gd.GridMonthly(combo, metadata)
+
+
+def read_grid(filename: str):
+    dataset_list = []
+    for year in range(1979, 2030):
+        print(year)
+        filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
+        if filled_filename.exists():
+            dataset_list.append(xa.open_dataset(filled_filename))
+    combo = xa.concat(dataset_list, dim='time')
+    return combo
+
+
+def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
@@ -63,7 +216,7 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata):
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

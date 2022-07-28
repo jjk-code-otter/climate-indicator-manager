@@ -18,8 +18,8 @@
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
-      "reader": "reader_grid",
+	  "history": [],
+      "reader": "reader_clsat",
 	  "fetcher": "fetcher_standard_url"
     }
   ]

@@ -47,9 +47,13 @@
     },
     "type": {
       "description": "Type of data time series or gridded",
-      "enum": [
-        "timeseries",
-        "gridded"
+      "anyOf": [
+        {
+          "type": "string", "pattern": ".ignore"
+        },
+        {
+          "type": "string", "enum": ["timeseries", "gridded"]
+        }
       ]
     },
     "time_resolution": {

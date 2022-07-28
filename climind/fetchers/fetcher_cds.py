@@ -26,11 +26,13 @@ def pick_months(year: int, now: datetime):
             '07', '08', '09',
             '10', '11', '12',
         ]
-    else:
+    elif year == now.year:
         months_to_download = []
         for m in range(1, now.month):
             if (m < now.month - 1) or (m == now.month - 1 and now.day > 6):
                 months_to_download.append(f'{m:02d}')
+    else:
+        months_to_download = []
 
     return months_to_download
 

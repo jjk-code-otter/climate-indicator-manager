@@ -11,14 +11,14 @@
     {
       "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/interim.2020/temp.ano.merg5.asc"],
 	  "filename": ["temp.ano.merg5.asc"],
-      "type": "gridded",
+      "type": "gridded_ignore",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
 	  "climatology_start": 1961,
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_noaa_interm_ascii",
 	  "fetcher": "fetcher_standard_url"
     },
@@ -32,7 +32,7 @@
 	  "climatology_end": 1990,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_noaa_interim_ts",
 	  "fetcher": "fetcher_standard_url"
     }

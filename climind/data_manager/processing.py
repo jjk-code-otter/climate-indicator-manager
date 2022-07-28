@@ -126,7 +126,7 @@ class DataSet:
 
         return reader_fn
 
-    def read_dataset(self, outdir: Path):
+    def read_dataset(self, outdir: Path, **kwargs):
         """
         Read in the dataset and output an object of the appropriate type.
 
@@ -139,9 +139,9 @@ class DataSet:
         -------
             Object of the appropriate type
         """
-        print(f"Reading using {self.metadata['reader']}")
+        print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        self.data = reader_fn(outdir, self.metadata)
+        self.data = reader_fn(outdir, self.metadata, **kwargs)
         return self.data
 
 
@@ -328,7 +328,7 @@ class DataCollection:
         for key in self.datasets:
             key.download(collection_dir)
 
-    def read_datasets(self, out_dir: Path) -> list:
+    def read_datasets(self, out_dir: Path, **kwargs) -> list:
         """
         Read all the datasets in the DataCollection
 
@@ -347,7 +347,7 @@ class DataCollection:
         all_datasets = []
 
         for key in self.datasets:
-            all_datasets.append(key.read_dataset(collection_dir))
+            all_datasets.append(key.read_dataset(collection_dir, **kwargs))
 
         return all_datasets
 
@@ -437,7 +437,7 @@ class DataArchive:
         for key in self.collections:
             self.collections[key].download(out_dir)
 
-    def read_datasets(self, out_dir: Path) -> list:
+    def read_datasets(self, out_dir: Path, **kwargs) -> list:
         """
         Read all the datasets in the archive
 
@@ -452,7 +452,7 @@ class DataArchive:
         all_datasets = []
 
         for key in self.collections:
-            these_datasets = self.collections[key].read_datasets(out_dir)
+            these_datasets = self.collections[key].read_datasets(out_dir, **kwargs)
             for ds in these_datasets:
                 all_datasets.append(ds)
 

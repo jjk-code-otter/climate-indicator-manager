@@ -9,8 +9,8 @@
   "zpos": 1,
   "datasets": [
     {
-      "url": [""],
-	  "filename": [""],
+      "url": ["", ""],
+	  "filename": ["anl_surf125.011_tmp.YYYY01_YYYY12", "anl_surf125.YYYYMMMM"],
       "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.25,
@@ -18,7 +18,7 @@
 	  "climatology_end": 2010,
 	  "actual": true,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_jra55",
 	  "fetcher": "fetcher_jra55_grid"
     },
@@ -32,7 +32,7 @@
 	  "climatology_end": 2010,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_jra55",
 	  "fetcher": "fetcher_no_url"
     },
@@ -46,7 +46,7 @@
 	  "climatology_end": 2010,
 	  "actual": false,
 	  "derived": false,
-	  "history": "",
+	  "history": [],
       "reader": "reader_jra55",
 	  "fetcher": "fetcher_no_url"
     }
