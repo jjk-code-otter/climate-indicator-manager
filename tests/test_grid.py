@@ -1,8 +1,54 @@
 import pytest
 import numpy as np
+import pandas as pd
 import climind.data_types.grid as gd
 from xarray import Dataset
 from unittest.mock import call
+
+
+@pytest.fixture
+def monthly_grid():
+    nmonths = 12 * (1 + 2022 - 1850)
+
+    test_grid = np.zeros((nmonths, 36, 72))
+    lo = 12 * (1981 - 1850)
+    hi = 12 * (2011 - 1850)
+    test_grid[lo:hi, :, :] = 1.0
+
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=nmonths)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
+                                                 'history': [],
+                                                 'climatology_start': 1961,
+                                                 'climatology_end': 1990})
+    return test_grid_monthly
+
+
+def test_rebaseline(monthly_grid):
+    monthly_grid.rebaseline(1981, 2010)
+
+    assert monthly_grid.metadata['climatology_start'] == 1981
+    assert monthly_grid.metadata['climatology_end'] == 2010
+    assert monthly_grid.metadata['history'][0] == 'Rebaselined to 1981-2010'
+
+    # anomalies are -1 outside climatology
+    for month in range(12):
+        assert monthly_grid.df.tas_mean.data[month, 0, 0] == -1.0
+    # and anomalies are 0 inside climatology
+    for month in range(12):
+        month0 = 12 * (1981 - 1850)
+        assert monthly_grid.df.tas_mean.data[month0 + month, 0, 0] == 0.0
+
+
+def test_update_history(monthly_grid):
+    monthly_grid.update_history('test message #1')
+    monthly_grid.update_history('test message #2')
+    assert len(monthly_grid.metadata['history']) == 2
+    assert monthly_grid.metadata['history'][0] == 'test message #1'
+    assert monthly_grid.metadata['history'][-1] == 'test message #2'
 
 
 @pytest.fixture
