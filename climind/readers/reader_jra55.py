@@ -121,8 +121,7 @@ def read_monthly_5x5_grid(filename: list, metadata: CombinedMetadata):
 
 
 def read_monthly_1x1_grid(filename: list, metadata: CombinedMetadata):
-    ds = read_grid(filename)
-    return gd.GridMonthly(ds, metadata)
+    raise NotImplementedError
 
 
 def read_monthly_ts(filename: str, metadata: CombinedMetadata):
