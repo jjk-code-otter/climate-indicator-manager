@@ -2,8 +2,9 @@ import itertools
 import xarray as xa
 import numpy as np
 import logging
+import regionmask
 from climind.data_manager.metadata import CombinedMetadata
-
+import climind.data_types.timeseries as ts
 
 def get_1d_transfer(zero_point_original, grid_space_original,
                     zero_point_target, grid_space_target, index_in_original):
@@ -179,6 +180,24 @@ class GridMonthly:
         return anom
 
         pass
+
+    def calculate_regional_average(self, regions, region_number):
+        mask = regionmask.mask_3D_geopandas(regions,
+                                            self.df.longitude,
+                                            self.df.latitude)
+        r1 = mask.sel(region=region_number)
+        selected_variable = self.df.tas_mean.where(r1)
+
+        weights = np.cos(np.deg2rad(selected_variable.latitude))
+        regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
+
+        years = regional_ts.time.dt.year.data.tolist()
+        months = regional_ts.time.dt.month.data.tolist()
+        data = regional_ts.values.tolist()
+
+        out_series = ts.TimeSeriesMonthly(years, months, data, self.metadata)
+
+        return out_series
 
     def update_history(self, message: str):
         """

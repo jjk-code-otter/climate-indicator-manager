@@ -1,5 +1,7 @@
 from pathlib import Path
 import logging
+import geopandas as gp
+import regionmask
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -14,6 +16,7 @@ if __name__ == "__main__":
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"
+    shape_dir = project_dir / "Shape_Files"
     fdata_dir = project_dir / "Formatted_Data"
     figure_dir = project_dir / 'Figures'
     log_dir = project_dir / 'Logs'
@@ -23,6 +26,9 @@ if __name__ == "__main__":
     script = Path(__file__).stem
     logging.basicConfig(filename=log_dir / f'{script}.log',
                         filemode='w', level=logging.INFO)
+
+    continents = gp.read_file(shape_dir / 'WMO_RAs.shp')
+    print(continents)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
@@ -39,6 +45,13 @@ if __name__ == "__main__":
 
     all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=5)
 
+    all_ts = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
+        ts = ds.calculate_regional_average(continents, 5)
+        ts = ts.make_annual()
+        all_ts.append(ts)
         pt.nice_map(ds.df, figure_dir / f"{ds.metadata['name']}", ds.metadata['name'])
+
+pt.neat_plot(figure_dir, all_ts, 'regional.png', '')
+pass
