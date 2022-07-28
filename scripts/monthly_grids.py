@@ -34,7 +34,8 @@ if __name__ == "__main__":
                                           'GISTEMP',
                                           'ERA5',
                                           'NOAAGlobalTemp',
-                                          'Berkeley Earth']})
+                                          'Berkeley Earth',
+                                          'JRA-55']})
 
     all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=5)
 

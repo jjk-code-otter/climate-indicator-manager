@@ -627,7 +627,8 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
                     transform=ccrs.PlateCarree(), robust=True,
                     levels=wmo_levels,
-                    colors=wmo_cols, add_colorbar=False
+                    colors=wmo_cols, add_colorbar=False,
+                    extend='both'
                     )
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)

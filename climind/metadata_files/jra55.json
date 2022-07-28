@@ -9,9 +9,9 @@
   "zpos": 1,
   "datasets": [
     {
-      "url": [""],
-	  "filename": [""],
-      "type": "gridded_ignore",
+      "url": ["", ""],
+	  "filename": ["anl_surf125.011_tmp.YYYY01_YYYY12", "anl_surf125.YYYYMMMM"],
+      "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.25,
 	  "climatology_start": 1981,
