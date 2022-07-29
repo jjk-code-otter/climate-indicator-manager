@@ -251,9 +251,13 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     ylo = 0.2 * (1 + (ylims[0] // 0.2))
     yhi = 0.2 * (1 + (ylims[1] // 0.2))
 
+    xlims = plt.gca().get_xlim()
+    xlo = 20 * (1 + (xlims[0] // 20))
+    xhi = 20 * (1 + (xlims[1] // 20))
+
     plt.yticks(np.arange(ylo, yhi, 0.2))
     # plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(1860, 2040, 20))
+    plt.xticks(np.arange(xlo, xhi, 20))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
