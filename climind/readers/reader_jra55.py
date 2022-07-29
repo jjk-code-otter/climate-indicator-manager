@@ -37,25 +37,26 @@ def read_grid(filename: list):
     dataset_list = []
 
     for year in range(1958, 2020):
-        print(year)
 
         filled_filename = str(filename[0]).replace('YYYY', f'{year}')
         filled_filename = Path(filled_filename)
 
         if not filled_filename.exists():
-            print(f'File {filled_filename} not available for {year}')
+            pass
+            #print(f'File {filled_filename} not available for {year}')
         else:
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.rename({'t2m': 'tas_mean'})
             dataset_list.append(field)
 
     for year, month in itertools.product(range(2020, 2050), range(1, 13)):
-        print(year, month)
+
         filled_filename = str(filename[1]).replace('YYYY', f'{year}')
         filled_filename = Path(filled_filename.replace('MMMM', f'{month:02d}'))
 
         if not filled_filename.exists():
-            print(f'File {filled_filename} not available for {year} {month:02d}')
+            pass
+            #print(f'File {filled_filename} not available for {year} {month:02d}')
         else:
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.expand_dims('time')
@@ -121,7 +122,37 @@ def read_monthly_5x5_grid(filename: list, metadata: CombinedMetadata):
 
 
 def read_monthly_1x1_grid(filename: list, metadata: CombinedMetadata):
-    raise NotImplementedError
+    ds = read_grid(filename)
+
+    jra55_125 = ds.tas_mean
+    ntime = jra55_125.shape[0]
+
+    target_grid = np.zeros((ntime, 180, 360))
+
+    for month in range(ntime):
+        enlarged_array = np.zeros((145, 289))
+        enlarged_array[:, 0:288] = jra55_125[month, :, :]
+        enlarged_array[:, 288] = jra55_125[month, :, 0]
+
+        regridded = gd.simple_regrid(enlarged_array, -180. - 1.25/2., -90. - 1.25 / 2., 1.25, 1.0)
+
+        target_grid[month, :, :] = regridded[:, :]
+
+    # flip and shift target_grid to match HadCRUT-like coords lat -90 to 90 and lon -180 to 180
+    target_grid = np.flip(target_grid, 1)
+    target_grid = np.roll(target_grid, 180, 2)
+
+    latitudes = np.linspace(-89.5, 89.5, 180)
+    longitudes = np.linspace(-179.5, 179.5, 360)
+    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=ntime)
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
 
 
 def read_monthly_ts(filename: str, metadata: CombinedMetadata):

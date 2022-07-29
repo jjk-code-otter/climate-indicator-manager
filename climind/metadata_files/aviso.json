@@ -1,0 +1,26 @@
+{
+  "name": "AVISO",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Legeais, J.-F., Ablain, M., Zawadzki, L., Zuo, H., Johannessen, J. A., Scharffenberg, M. G., Fenoglio-Marc, L., Fernandes, M. J., Andersen, O. B., Rudenko, S., Cipollini, P., Quartly, G. D., Passaro, M., Cazenave, A., and Benveniste, J. (2018). An improved and homogeneous altimeter sea level record from the ESA Climate Change Initiative. Earth System Science Data, 10, 281-301. DOI: 10.5194/essd-10-281-2018"],
+  "data_citation": [""],
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["GMSL_Aviso_Merged_NRTJ3_Ablain_drift_corrected_ts.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_aviso",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}
