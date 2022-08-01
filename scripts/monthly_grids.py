@@ -54,11 +54,15 @@ if __name__ == "__main__":
 
     all_ts = []
     all_ts_sub = []
+    all_monthly_ts = []
+    all_monthly_ts_sub = []
 
     for region in range(6):
         all_ts.append([])
+        all_monthly_ts.append([])
     for region in range(6):
         all_ts_sub.append([])
+        all_monthly_ts_sub.append([])
 
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
@@ -66,15 +70,17 @@ if __name__ == "__main__":
 
         for region in range(6):
             ts = ds.calculate_regional_average(continents, region)
-            ts = ts.make_annual()
-            ts.select_year_range(1900, 2021)
-            all_ts[region].append(ts)
+            ats = ts.make_annual()
+            ats.select_year_range(1900, 2021)
+            all_monthly_ts[region].append(ts)
+            all_ts[region].append(ats)
 
         for i, region in enumerate([0, 1, 2, 6, 7, 8]):
             ts = ds.calculate_regional_average(subregions, region)
-            ts = ts.make_annual()
-            ts.select_year_range(1900, 2021)
-            all_ts_sub[i].append(ts)
+            ats = ts.make_annual()
+            ats.select_year_range(1900, 2021)
+            all_monthly_ts_sub[i].append(ts)
+            all_ts_sub[i].append(ats)
 
     region_names = ['Africa', 'Asia', 'South America',
                     'North America', 'South-West Pacific', 'Europe']
@@ -84,6 +90,10 @@ if __name__ == "__main__":
                      all_ts[region],
                      f'regional_RA{region + 1}.png',
                      f'WMO RA{region + 1} - {region_names[region]}')
+        for ts in all_ts[region]:
+            ts.write_csv(DATA_DIR / 'New folder' / f"new_{region_names[region]}_{ts.metadata['name']}.csv")
+        for ts in all_monthly_ts[region]:
+            ts.write_csv(DATA_DIR / 'New folder' / f"new_monthly_{region_names[region]}_{ts.metadata['name']}.csv")
 
     sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
                         'Eastern Africa', 'Southern Africa', 'Indian Ocean']
@@ -93,3 +103,7 @@ if __name__ == "__main__":
                      all_ts_sub[i],
                      f'subregional_{i + 1}.png',
                      f'WMO RA{i + 1} - {sub_region_names[i]}')
+        for ts in all_ts_sub[i]:
+            ts.write_csv(DATA_DIR / 'New folder' / f"new_{sub_region_names[i]}_{ts.metadata['name']}.csv")
+        for ts in all_monthly_ts_sub[i]:
+            ts.write_csv(DATA_DIR / 'New folder' / f"new_monthly_{sub_region_names[i]}_{ts.metadata['name']}.csv")
