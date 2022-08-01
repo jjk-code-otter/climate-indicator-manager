@@ -251,3 +251,51 @@ def test_make_gridannual():
     test_grid_annual = gd.GridAnnual(test_ds, None)
     assert isinstance(test_grid_annual, gd.GridAnnual)
     assert 'name' in test_grid_annual.metadata
+
+
+from shapely.geometry import Polygon
+import geopandas as gp
+
+
+def test_calculate_regional_average():
+    data_dictionary = {
+        'region': [
+            'world',
+            'nh',
+            'sh'
+        ],
+        'geometry': [
+            Polygon([(-180, -90), (-180, 90), (180, 90), (180, -90), (-180, -90)]),
+            Polygon([(-180, 0), (180, 0), (180, 90), (-180, 90), (-180, 0)]),
+            Polygon([(-180, -90), (180, -90), (180, 0), (-180, 0), (-180, -90)])
+        ]
+    }
+    whole_world = gp.GeoDataFrame(data_dictionary, geometry=data_dictionary['geometry'], crs="EPSG:4326")
+
+    test_grid = np.zeros((12, 36, 72))
+
+    test_grid[:, 0:18, :] = -1.0
+    test_grid[:, 18:, :] = 1.0
+
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_monthly = gd.GridMonthly(test_ds, {})
+
+    ts = test_grid_monthly.calculate_regional_average(whole_world, 0, land_only=False)
+    assert ts.df['data'][0] == pytest.approx(0.0, 0.000001)
+
+    ts = test_grid_monthly.calculate_regional_average(whole_world, 1, land_only=False)
+    assert ts.df['data'][0] == pytest.approx(1.0, 0.000001)
+
+    ts = test_grid_monthly.calculate_regional_average(whole_world, 2, land_only=False)
+    assert ts.df['data'][0] == pytest.approx(-1.0, 0.000001)
+
+    test_grid[:, :, :] = 1.0
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_grid_monthly = gd.GridMonthly(test_ds, {})
+    ts = test_grid_monthly.calculate_regional_average(whole_world, 0, land_only=True)
+    assert ts.df['data'][0] == pytest.approx(1.0, 0.000001)

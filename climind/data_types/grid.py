@@ -183,7 +183,7 @@ class GridMonthly:
     def calculate_regional_average(self, regions, region_number, land_only=True):
         mask = regionmask.mask_3D_geopandas(regions,
                                             self.df.longitude,
-                                            self.df.latitude)
+                                            self.df.latitude, drop=False, overlap=True)
         r1 = mask.sel(region=region_number)
         selected_variable = self.df.tas_mean.where(r1)
 
