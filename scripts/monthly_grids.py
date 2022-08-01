@@ -1,7 +1,6 @@
 from pathlib import Path
 import logging
 import geopandas as gp
-import regionmask
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
