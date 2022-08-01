@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    ts_archive = archive.select({'variable': 'co2',
+    ts_archive = archive.select({'variable': 'sealevel',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly'})
     all_datasets = ts_archive.read_datasets(data_dir)
@@ -42,6 +42,6 @@ if __name__ == "__main__":
     for ds in all_datasets:
         ds.select_year_range(1980, 2022)
         m.append(ds)
-    pt.monthly_plot(figure_dir, m, f'co2_monthly.png', 'Monthly atmospheric concentration of CO$_2$ (ppm)')
+    pt.monthly_plot(figure_dir, m, f'sealevel_monthly.png', 'Monthly sea level (mm)')
 
 

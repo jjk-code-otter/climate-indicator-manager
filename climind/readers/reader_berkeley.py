@@ -32,8 +32,39 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 
 def read_monthly_grid(filename: str, metadata):
+    """
+    Although Berkeley Earth is 1x1 already, the time dimension is extremely non-standard.
+    In order to get consistency with the other data sets regridded to 1x1, the data is copied
+    into a consistent xarray Dataset.
+
+    Parameters
+    ----------
+    filename: str
+        Filename of the netcdf grid
+    metadata: CombinedMetadata
+        CombinedMetadata object holding the dataset metadata.
+
+    Returns
+    -------
+    GridMonthly
+    """
     df = xa.open_dataset(filename)
-    return gd.GridMonthly(df, metadata)
+    number_of_months = len(df.time.data)
+
+    latitudes = np.linspace(-89.5, 89.5, 180)
+    longitudes = np.linspace(-179.5, 179.5, 360)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
+
+    target_grid = np.zeros((number_of_months, 180, 360))
+    target_grid[:, :, :] = df.temperature.data[:, :, :]
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    # update encoding
+    for key in ds.data_vars:
+        ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    return gd.GridMonthly(ds, metadata)
 
 
 def read_monthly_5x5_grid(filename: str, metadata):

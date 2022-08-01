@@ -49,11 +49,14 @@ def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     """
     gistemp = xa.open_dataset(filename)
     number_of_months = len(gistemp.time.data)
-    target_grid = np.zeros((number_of_months, 180, 360))
+#    target_grid = np.zeros((number_of_months, 180, 360))
 
-    for m, xx, yy in itertools.product(range(number_of_months), range(180), range(90)):
-        selection = gistemp.tempanomaly.data[m, yy, xx]
-        target_grid[m, yy * 2:(yy + 1) * 2, xx * 2:(xx + 1) * 2] = selection
+    target_grid = np.repeat(gistemp.tempanomaly, 2, 1)
+    target_grid = np.repeat(target_grid, 2, 2)
+
+#    for m, xx, yy in itertools.product(range(number_of_months), range(180), range(90)):
+#        selection = gistemp.tempanomaly.data[m, yy, xx]
+#        target_grid[m, yy * 2:(yy + 1) * 2, xx * 2:(xx + 1) * 2] = selection
 
     latitudes = np.linspace(-89.5, 89.5, 180)
     longitudes = np.linspace(-179.5, 179.5, 360)
