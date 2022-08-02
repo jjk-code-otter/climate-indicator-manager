@@ -1,18 +1,12 @@
-import os
 from pathlib import Path
-from urllib.parse import urlparse
 import requests
 import shutil
 
-
-def filename_from_url(url: str) -> str:
-    parsed_url = urlparse(url)
-    filename = os.path.basename(parsed_url.path)
-
-    return filename
+from climind.fetchers.fetcher_utils import filename_from_url
 
 
 def fetch(url: str, outdir: Path):
+
     filename = filename_from_url(url)
     out_path = outdir / filename
 

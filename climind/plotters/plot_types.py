@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-FANCY_UNITS = {"degC": "$\!^\circ\!$C", "zJ": "zJ"}
+FANCY_UNITS = {"degC": "$\!^\circ\!$C",
+               "zJ": "zJ",
+               "millionkm2": "million km$^2$"}
 
 
 def set_lo_hi_ticks(limits, spacing):
@@ -158,7 +160,7 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         col = ds.metadata['colour']
-        if col == '#444444':
+        if col == 'dimgrey':
             col = '#eeeeee'
         zord = ds.metadata['zpos']
         zords.append(zord)

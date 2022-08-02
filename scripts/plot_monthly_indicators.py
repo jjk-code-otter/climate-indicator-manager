@@ -37,13 +37,13 @@ if __name__ == "__main__":
             {'variable': 'mhw',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Marine heat wave (% area)'
+            'Marine heat wave (% global ocean area)'
         ],
         'mcs': [
             {'variable': 'mcs',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Marine cold spell (% area)'
+            'Marine cold spell (% global ocean area)'
         ],
         'sealevel': [
             {'variable': 'sealevel',
@@ -56,6 +56,20 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'monthly'},
             'Atmospheric concentration of Carbon Dioxide'
+        ],
+        'arctic_ice': [
+            {'variable': 'arctic_ice',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Arctic sea-ice extent'
+
+        ],
+        'antarctic_ice': [
+            {'variable': 'antarctic_ice',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Antarctic sea-ice extent'
+
         ]
     }
 
@@ -72,6 +86,8 @@ if __name__ == "__main__":
         m = []
         for ds in all_datasets:
             # ds.select_year_range(1980, 2022)
+            if variable in ['arctic_ice', 'antarctic_ice']:
+                ds.rebaseline(1981, 2010)
             m.append(ds)
         if time_resolution == 'monthly':
             pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)

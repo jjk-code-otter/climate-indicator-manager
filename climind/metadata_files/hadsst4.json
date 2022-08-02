@@ -5,7 +5,7 @@
   "units": "degC",
   "citation": ["Kennedy, J. J., Rayner, N. A., Atkinson, C. P., and Killick, R. E. (2019). An ensemble data set of sea-surface temperature change from 1850: the Met Office Hadley Centre HadSST.4.0.0.0 data set. Journal of Geophysical Research: Atmospheres, 124. https://doi.org/10.1029/2018JD029867"],
   "data_citation": [""],
-  "colour": "#444444",
+  "colour": "dimgrey",
   "zpos": 99,
   "datasets": [
     {
