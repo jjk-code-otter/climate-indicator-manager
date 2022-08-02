@@ -1,0 +1,40 @@
+{
+  "name": "WDCGG N2O",
+  "version": "",
+  "variable": "n2o",
+  "units": "ppb",
+  "citation": ["WMO Greenhouse Gas Bulletin, No.17, 2021. 25 October 2021 ISSN 2078-0796"],
+  "data_citation": [""],
+  "colour": "#d55e00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2021/n2o_monthly_20211025.csv"],
+      "filename": ["n2o_monthly_20211025.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2021/n2o_annual_20211025.csv"],
+      "filename": ["n2o_annual_20211025.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

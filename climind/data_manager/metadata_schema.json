@@ -19,7 +19,10 @@
     },
     "units": {
       "description": "Units of the variable",
-      "enum": ["1","degC", "zJ", "ppm", "mm", "%", "millionkm2"]
+      "enum": [
+        "1","degC", "zJ", "ppm", "ppb",
+        "mm", "%", "millionkm2"
+      ]
     },
     "citation": {
       "description": "List of citations for the papers related to the data in the data collection",

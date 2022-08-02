@@ -57,6 +57,18 @@ if __name__ == "__main__":
              'time_resolution': 'monthly'},
             'Atmospheric concentration of Carbon Dioxide'
         ],
+        'ch4': [
+            {'variable': 'ch4',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Atmospheric concentration of Methane'
+        ],
+        'n2o': [
+            {'variable': 'n2o',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Atmospheric concentration of Nitrous Oxide'
+        ],
         'arctic_ice': [
             {'variable': 'arctic_ice',
              'type': 'timeseries',
