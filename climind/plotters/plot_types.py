@@ -8,6 +8,28 @@ import numpy as np
 FANCY_UNITS = {"degC": "$\!^\circ\!$C", "zJ": "zJ"}
 
 
+def set_lo_hi_ticks(limits, spacing):
+    """
+    Given axis limits and a preferred spacing, calculate new high and low values and a set of ticks
+
+    Parameters
+    ----------
+    limits: list
+        the lower and upper limits of the current axis
+    spacing: float
+        The preferred tick spacing
+
+    Returns
+    -------
+
+    """
+    lo = spacing * (1 + (limits[0] // spacing))
+    hi = spacing * (1 + (limits[1] // spacing))
+    ticks = np.arange(lo, hi, spacing)
+
+    return lo, hi, ticks
+
+
 def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
@@ -248,22 +270,20 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     ylims = plt.gca().get_ylim()
-    ylo = 0.2 * (1 + (ylims[0] // 0.2))
-    yhi = 0.2 * (1 + (ylims[1] // 0.2))
-    yticks = np.arange(ylo, yhi, 0.2)
-
+    ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
     if len(yticks) > 10:
-        ylo = 0.5 * (1 + (ylims[0] // 0.5))
-        yhi = 0.5 * (1 + (ylims[1] // 0.5))
-        yticks = np.arange(ylo, yhi, 0.5)
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
+
+    if ds.metadata['variable'] in ['mhw', 'mcs']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 
     xlims = plt.gca().get_xlim()
-    xlo = 20 * (1 + (xlims[0] // 20))
-    xhi = 20 * (1 + (xlims[1] // 20))
+    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
+    if len(xticks) < 3:
+        xlo, xhi, xticks = set_lo_hi_ticks(xlims, 10.)
 
     plt.yticks(yticks)
-    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(xlo, xhi, 20))
+    plt.xticks(xticks)
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
@@ -629,8 +649,8 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                 '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
 
-    wmo_levels = [-10, -5, -3, -2, -1,    -0.5, 0, 0.5,    1, 2, 3, 5, 10]
-    wmo_levels = [-5,  -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    wmo_levels = [-10, -5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5, 10]
+    wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')

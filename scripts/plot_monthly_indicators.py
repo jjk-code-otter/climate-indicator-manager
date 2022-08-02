@@ -12,7 +12,6 @@ import climind.plotters.plot_types as pt
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-
 if __name__ == "__main__":
 
     final_year = 2022
@@ -33,15 +32,48 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    ts_archive = archive.select({'variable': 'sealevel',
-                                 'type': 'timeseries',
-                                 'time_resolution': 'monthly'})
-    all_datasets = ts_archive.read_datasets(data_dir)
+    holdall = {
+        'mhw': [
+            {'variable': 'mhw',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Marine heat wave (% area)'
+        ],
+        'mcs': [
+            {'variable': 'mcs',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Marine cold spell (% area)'
+        ],
+        'sealevel': [
+            {'variable': 'sealevel',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Sea level (mm)'
+        ],
+        'co2': [
+            {'variable': 'co2',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Atmospheric concentration of Carbon Dioxide'
+        ]
+    }
 
-    m = []
-    for ds in all_datasets:
-        ds.select_year_range(1980, 2022)
-        m.append(ds)
-    pt.monthly_plot(figure_dir, m, f'sealevel_monthly.png', 'Monthly sea level (mm)')
+    for combo in holdall:
 
+        selection_metadata = holdall[combo][0]
+        variable = selection_metadata['variable']
+        plot_title = holdall[combo][1]
+        time_resolution = selection_metadata['time_resolution']
 
+        ts_archive = archive.select(selection_metadata)
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        m = []
+        for ds in all_datasets:
+            # ds.select_year_range(1980, 2022)
+            m.append(ds)
+        if time_resolution == 'monthly':
+            pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)
+        else:
+            pt.neat_plot(figure_dir, m, f'{variable}_annual.png', plot_title)

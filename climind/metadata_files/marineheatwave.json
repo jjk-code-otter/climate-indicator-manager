@@ -1,0 +1,26 @@
+{
+  "name": "MHW",
+  "version": "",
+  "variable": "mhw",
+  "units": "%",
+  "citation": [""],
+  "data_citation": [""],
+  "colour": "#444444",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://raw.githubusercontent.com/robwschlegel/MHWapp/master/data/annual_summary/OISST_cat_daily_1982-2011_total.csv"],
+      "filename": ["OISST_cat_daily_1982-2011_total.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mhw_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
