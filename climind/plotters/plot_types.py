@@ -276,6 +276,9 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
 
+    if ds.metadata['variable'] == 'ohc':
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
+
     if ds.metadata['variable'] in ['mhw', 'mcs']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 

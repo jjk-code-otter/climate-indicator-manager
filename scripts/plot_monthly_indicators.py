@@ -33,6 +33,12 @@ if __name__ == "__main__":
     archive = dm.DataArchive.from_directory(metadata_dir)
 
     holdall = {
+        'ohc': [
+            {'variable': 'ohc',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Ocean heat content'
+        ],
         'mhw': [
             {'variable': 'mhw',
              'type': 'timeseries',
@@ -98,7 +104,7 @@ if __name__ == "__main__":
         m = []
         for ds in all_datasets:
             # ds.select_year_range(1980, 2022)
-            if variable in ['arctic_ice', 'antarctic_ice']:
+            if variable in ['arctic_ice', 'antarctic_ice', 'ohc']:
                 ds.rebaseline(1981, 2010)
             m.append(ds)
         if time_resolution == 'monthly':
