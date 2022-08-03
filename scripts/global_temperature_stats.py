@@ -2,7 +2,6 @@
 This script calculates various statistics of global mean temperatures using annual, five-year and ten-year
 averages. It also makes plots of these data in a variety of styles.
 """
-from pathlib import Path
 import numpy as np
 import logging
 
@@ -147,8 +146,8 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
-    pt.neat_plot(figure_dir, anns, 'annual.png', 'Global Mean Temperature Difference ($\degree$C)')
-    pt.dark_plot(figure_dir, anns, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, anns, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.dark_plot(figure_dir, anns, 'annualdark.png', r'Global Mean Temperature Difference ($\degree$C)')
 
     print()
     print("SINGLES")
@@ -177,18 +176,18 @@ if __name__ == "__main__":
         lsat_tens.append(ds.running_mean(10))
         lsat_dtens.append(ds.running_mean(10).select_decade())
 
-    pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', '10-year Global Mean SST Difference ($\degree$C))')
-    pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', '10-year Global Mean LSAT Difference ($\degree$C))')
-    pt.neat_plot(figure_dir, tens, 'ten.png', '10-year Global Mean Temperature Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', r'10-year Global Mean SST Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', r'10-year Global Mean LSAT Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, tens, 'ten.png', r'10-year Global Mean Temperature Difference ($\degree$C))')
 
     pt.decade_plot(figure_dir, sst_dtens, 'dten_sst.png',
-                   '10-year Global Mean SST Difference ($\degree$C))')
+                   r'10-year Global Mean SST Difference ($\degree$C))')
     pt.decade_plot(figure_dir, lsat_dtens, 'dten_lsat.png',
-                   '10-year Global Mean LSAT Difference ($\degree$C))')
+                   r'10-year Global Mean LSAT Difference ($\degree$C))')
     pt.decade_plot(figure_dir, dtens, 'dten.png',
-                   '10-year Global Mean Temperature Difference ($\degree$C))')
+                   r'10-year Global Mean Temperature Difference ($\degree$C))')
 
-    pt.neat_plot(figure_dir, fives, 'five.png', '5-year Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, fives, 'five.png', r'5-year Global Mean Temperature Difference ($\degree$C)')
 
     #    print()
     #    print("FIVES")

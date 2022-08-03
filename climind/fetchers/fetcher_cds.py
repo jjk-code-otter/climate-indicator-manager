@@ -37,25 +37,27 @@ def pick_months(year: int, now: datetime):
     return months_to_download
 
 
-def fetch_year(outdir: Path, year: int):
+def fetch_year(out_dir: Path, year: int):
     """
     Fetch a specified year of data and write it to the outdir. If the year is
     incomplete, only recover available months.
 
     Parameters
     ----------
-    outdir directory to which the data will be written
-    year the year of data we want
+    out_dir: Path
+        directory to which the data will be written
+    year: int
+        the year of data we want
 
     Returns
     -------
-
+    None
     """
-    outputfile = outdir / f'era5_2m_tas_{year}.nc'
+    output_file = out_dir / f'era5_2m_tas_{year}.nc'
 
     now = datetime.now()
 
-    if outputfile.exists() and year != now.year:
+    if output_file.exists() and year != now.year:
         print(f'File for {year} already exists, not downloading')
         return
 
@@ -66,7 +68,7 @@ def fetch_year(outdir: Path, year: int):
         return
 
     print(f'Downloading file for {year}')
-    print(str(outputfile))
+    print(str(output_file))
     c = cdsapi.Client()
 
     c.retrieve(
@@ -79,9 +81,9 @@ def fetch_year(outdir: Path, year: int):
             'time': '00:00',
             'format': 'netcdf',
         },
-        str(outputfile))
+        str(output_file))
 
 
-def fetch(url: str, outdir: Path):
+def fetch(_, outdir: Path):
     for year in range(1979, 2023):
         fetch_year(outdir, year)

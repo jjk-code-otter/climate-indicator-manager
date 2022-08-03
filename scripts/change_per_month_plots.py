@@ -4,7 +4,6 @@ Each month (jan, feb .. .dec) is treated separately to show how trend vs variabi
 through the year. It also makes plots of these data in a variety of styles.
 """
 from pathlib import Path
-import numpy as np
 import logging
 import calendar
 
@@ -14,7 +13,6 @@ import climind.stats.utils as utils
 
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
-
 
 if __name__ == "__main__":
 
@@ -80,8 +78,10 @@ if __name__ == "__main__":
 
         pt.neat_plot(figure_dir, sst_anns, f'sst_{month:02d}_only.png', f'Global mean SST for {month_word}')
 
-        pt.neat_plot(figure_dir, anns, f'{month:02d}_only.png', f'Global Mean Temperature for {month_word} ($\degree$C)')
-        pt.dark_plot(figure_dir, anns, f'dark_{month:02d}_only.png', f'Global Mean Temperature for {month_word} ($\degree$C)')
+        pt.neat_plot(figure_dir, anns, f'{month:02d}_only.png',
+                     f'Global Mean Temperature for {month_word} ($\degree$C)')
+        pt.dark_plot(figure_dir, anns, f'dark_{month:02d}_only.png',
+                     f'Global Mean Temperature for {month_word} ($\degree$C)')
 
         print()
         print(f"Single month ({month_word}) statistics")
@@ -95,5 +95,3 @@ if __name__ == "__main__":
                 ds.select_year_range(2014, 2022)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
-
-

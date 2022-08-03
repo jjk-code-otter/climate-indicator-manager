@@ -1,7 +1,5 @@
 from pathlib import Path
-import xarray as xa
 import climind.data_types.timeseries as ts
-import climind.data_types.grid as gd
 import numpy as np
 import copy
 from climind.data_manager.metadata import CombinedMetadata
@@ -29,6 +27,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
                 raise NotImplementedError
         else:
             raise NotImplementedError
+
 
 def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []

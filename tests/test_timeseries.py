@@ -18,14 +18,14 @@ def simple_monthly():
     """
     years = []
     months = []
-    anoms = []
+    anomalies = []
 
     for y, m in itertools.product(range(1850, 2023), range(1, 13)):
         years.append(y)
         months.append(m)
-        anoms.append(float(y))
+        anomalies.append(float(y))
 
-    return ts.TimeSeriesMonthly(years, months, anoms)
+    return ts.TimeSeriesMonthly(years, months, anomalies)
 
 
 @pytest.fixture
@@ -39,14 +39,14 @@ def monthly_data_is_month():
     """
     years = []
     months = []
-    anoms = []
+    anomalies = []
 
     for y, m in itertools.product(range(1850, 2023), range(1, 13)):
         years.append(y)
         months.append(m)
-        anoms.append(float(m))
+        anomalies.append(float(m))
 
-    return ts.TimeSeriesMonthly(years, months, anoms)
+    return ts.TimeSeriesMonthly(years, months, anomalies)
 
 
 @pytest.fixture
@@ -99,13 +99,13 @@ def test_make_annual():
 def test_make_annual_by_selecting_month(monthly_data_is_month):
     a = monthly_data_is_month.make_annual_by_selecting_month(1)
 
-    nyears = 2022 - 1850 + 1
+    number_of_years = 2022 - 1850 + 1
 
     assert isinstance(a, ts.TimeSeriesAnnual)
-    for i in range(nyears):
+    for i in range(number_of_years):
         assert a.df['data'][i] == 1
     assert a.df['year'][0] == 1850
-    assert len(a.df['data']) == nyears
+    assert len(a.df['data']) == number_of_years
     assert a.metadata['history'][-1] == 'Extracted January from each year'
 
 
@@ -201,7 +201,7 @@ def test_ranking_monthly(simple_monthly):
 
 def test_ranking_monthly_with_all_keyword(simple_monthly):
     for i in range(21):
-        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12, all=True)
+        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12, versus_all_months=True)
         assert rank == 12 * i + 1
 
 

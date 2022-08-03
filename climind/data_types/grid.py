@@ -76,7 +76,7 @@ def simple_regrid(ingrid, lon0, lat0, dx, target_dy):
 
 def make_xarray(target_grid, times, latitudes, longitudes):
     """
-    Make an xarray Dataset for a regular lat-lon grid from a numpy grid (ntime, nlat, nlon),
+    Make a xarray Dataset for a regular lat-lon grid from a numpy grid (ntime, nlat, nlon),
     and arrays of time (ntime), latitude (nlat) and longitude (nlon).
 
     Parameters
@@ -199,7 +199,7 @@ class GridMonthly:
     def calculate_regional_average(self, regions, region_number, land_only=True):
         """
         Calculate a regional average from the grid. The region is specified by a geopandas
-        Geodataframe and the index (region_number) of the chosen shape. By default the output
+        Geodataframe and the index (region_number) of the chosen shape. By default, the output
         is masked to land areas only, this can be switched off by setting land_only to False.
 
         Parameters

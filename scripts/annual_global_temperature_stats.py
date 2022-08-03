@@ -3,7 +3,6 @@ This script calculates various statistics of global mean temperatures using annu
 averages. It also makes plots of these data in a variety of styles.
 """
 from pathlib import Path
-import numpy as np
 import logging
 
 import climind.data_manager.processing as dm
@@ -62,14 +61,14 @@ if __name__ == "__main__":
     lsat_datasets = lsat_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
 
-    anns = []
+    all_annual_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
         annual = ds.make_annual()
         annual.add_offset(0.69)
         annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
-        anns.append(annual)
+        all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
 
     for ds in ann_datasets:
@@ -77,7 +76,7 @@ if __name__ == "__main__":
         ds.add_offset(0.69)
         ds.manually_set_baseline(1850, 1900)
         ds.select_year_range(1850, final_year)
-        anns.append(ds)
+        all_annual_datasets.append(ds)
         ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")
 
     lsat_anns = []
@@ -98,10 +97,10 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
-    pt.neat_plot(figure_dir, anns, 'annual.png', 'Global Mean Temperature Difference ($\degree$C)')
-    pt.dark_plot(figure_dir, anns, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', 'Global Mean Temperature Difference ($\degree$C)')
+    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
     print()
     print("Single year statistics")
-    utils.run_the_numbers(anns, final_year, 'annual_stats', report_dir)
+    utils.run_the_numbers(all_annual_datasets, final_year, 'annual_stats', report_dir)
 

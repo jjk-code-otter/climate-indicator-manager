@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-FANCY_UNITS = {"degC": "$\!^\circ\!$C",
+FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "zJ": "zJ",
                "millionkm2": "million km$^2$"}
 
@@ -74,7 +74,7 @@ def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
-        col = ds.metadata['colour']
+        # col = ds.metadata['colour']
         col = cols[i]
         zord = ds.metadata['zpos']
         zords.append(zord)
@@ -664,7 +664,7 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                 '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
 
-    wmo_levels = [-10, -5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5, 10]
+    # wmo_levels = [-10, -5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5, 10]
     wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
 
     fig = plt.figure(figsize=(16, 9))
@@ -681,7 +681,7 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     cbar.ax.tick_params(labelsize=15)
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
-    cbar.set_label('Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
+    cbar.set_label(r'Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
 
     p.axes.coastlines()
     p.axes.set_global()
@@ -696,4 +696,4 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
     selection = dataset.df.sel(time=slice(f'{year}-{month:02d}-01',
                                           f'{year}-{month:02d}-28'))
 
-    nice_map(selection, image_filename, title, var='tas_mean')
+    nice_map(selection, image_filename, title, var=var)

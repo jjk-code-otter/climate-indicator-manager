@@ -29,7 +29,6 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
 
 
 def read_ts(out_dir: Path, metadata: dict, **kwargs):
-    url = metadata['url'][0]
     filename_with_wildcards = metadata['filename'][0]
     filename = find_latest(out_dir, filename_with_wildcards)
 
@@ -81,9 +80,6 @@ def read_monthly_1x1_grid(filename: str, metadata):
     df = read_monthly_grid(filename, metadata)
     df = df.df
     # regrid to 1x1
-    ntime = df.tas_mean.shape[0]
-
-    grid = np.zeros((ntime, 180, 360))
     lats = np.arange(-89.5, 90.5, 1.0)
     lons = np.arange(-179.5, 180.5, 1.0)
 

@@ -1,9 +1,6 @@
 from pathlib import Path
-import xarray as xa
 import pandas as pd
-import numpy as np
 import climind.data_types.timeseries as ts
-import climind.data_types.grid as gd
 import copy
 
 from climind.data_manager.metadata import CombinedMetadata
@@ -27,7 +24,6 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
-    months = []
     anomalies = []
 
     with open(filename, 'r') as f:
@@ -37,11 +33,11 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
             columns = line.split()
 
             # This is "decimal year" which we convert in a rough and ready way
-            y = float(columns[0])
-            yint = int(y)
-            diny = 1 + int(365. * (y - yint))
+            decimal_year = float(columns[0])
+            year_int = int(decimal_year)
+            diny = 1 + int(365. * (decimal_year - year_int))
 
-            years.append(f'{yint} {diny:03d}')
+            years.append(f'{year_int} {diny:03d}')
             anomalies.append(float(columns[1]))
 
     dates = pd.to_datetime(years, format='%Y %j')

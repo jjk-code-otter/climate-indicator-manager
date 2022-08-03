@@ -30,7 +30,10 @@ def test_collection_attributes():
                   "variable": "tas",
                   "units": "degC",
                   "citation": [
-                      "Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+                      f"Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, "
+                      f"R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated "
+                      f"assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. "
+                      f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
                   "data_citation": [""],
                   "colour": "#444444",
                   "zpos": 99}
@@ -49,7 +52,7 @@ def test_base_metadata_set_and_get():
 def test_base_metadata_get_missing_key():
     bm = BaseMetadata({'flash': 'aha'})
     with pytest.raises(KeyError):
-        value = bm['nonexistentkey']
+        _ = bm['nonexistent key']
 
 
 def test_print_base_metadata():
@@ -67,7 +70,7 @@ def test_missing_standard_attribute_in_dataset():
                   'fetcher': 'test_fetcher'}
 
     with pytest.raises(ValidationError):
-        ds = DatasetMetadata(attributes)
+        _ = DatasetMetadata(attributes)
 
 
 def test_match(test_dataset_attributes):
@@ -112,7 +115,7 @@ def test_collection(test_collection_attributes):
 def test_collection_validation_fail(test_collection_attributes):
     test_collection_attributes['zpos'] = ''
     with pytest.raises(ValidationError):
-        ds = CollectionMetadata(test_collection_attributes)
+        _ = CollectionMetadata(test_collection_attributes)
 
 
 def test_combined(test_dataset_attributes, test_collection_attributes):
@@ -124,13 +127,15 @@ def test_combined(test_dataset_attributes, test_collection_attributes):
     assert combo['reader'] == test_dataset_attributes['reader']
     assert combo['variable'] == test_collection_attributes['variable']
 
-def test_comboined_missing_key_raises_error(test_dataset_attributes, test_collection_attributes):
+
+def test_combined_missing_key_raises_error(test_dataset_attributes, test_collection_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
     col = CollectionMetadata(test_collection_attributes)
     combo = CombinedMetadata(ds, col)
 
     with pytest.raises(KeyError):
-        value = combo['dingo_kidneys']
+        _ = combo['dingo_kidneys']
+
 
 def test_combined_setter(test_dataset_attributes, test_collection_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
@@ -155,6 +160,7 @@ def test_combined_setter_propagates_to_components(test_dataset_attributes, test_
     assert ds['reader'] == 'different_reader'
     assert col['colour'] == '#333333'
 
+
 def test_combined_setter_missing_key_raises_error(test_dataset_attributes, test_collection_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
     col = CollectionMetadata(test_collection_attributes)
@@ -162,6 +168,7 @@ def test_combined_setter_missing_key_raises_error(test_dataset_attributes, test_
 
     with pytest.raises(KeyError):
         combo['glitz'] = 'razzledazzle'
+
 
 def test_combined_contains(test_dataset_attributes, test_collection_attributes):
     ds = DatasetMetadata(test_dataset_attributes)

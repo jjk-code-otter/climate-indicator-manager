@@ -13,7 +13,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata):
     if metadata['time_resolution'] == 'monthly':
         return read_monthly_ts(filename, construction_metadata)
     elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, construction_metadata)
+        raise NotImplementedError
     else:
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
@@ -42,7 +42,3 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     metadata['history'] = [f'Time series created from file {filename}']
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
-
-
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
-    raise NotImplementedError

@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 def filename_from_url(url: str) -> str:
     """
-    Given a url, return the filename or an empty string if there is no filename
+    Given an url, return the filename or an empty string if there is no filename
 
     Parameters
     ----------

@@ -6,21 +6,19 @@ import pandas as pd
 import climind.data_types.grid as gd
 from xarray import Dataset
 from unittest.mock import call
-from shapely.geometry import Polygon
-import geopandas as gp
 
 
 @pytest.fixture
 def monthly_grid_2():
-    nmonths = 12 * (1 + 2022 - 1850)
+    number_of_months = 12 * (1 + 2022 - 1850)
 
-    test_grid = np.zeros((nmonths, 36, 72))
-    for i in range(nmonths):
+    test_grid = np.zeros((number_of_months, 36, 72))
+    for i in range(number_of_months):
         test_grid[i, :, :] = (i % 12) + 1.0
 
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=nmonths)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
     test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
@@ -32,16 +30,16 @@ def monthly_grid_2():
 
 @pytest.fixture
 def monthly_grid():
-    nmonths = 12 * (1 + 2022 - 1850)
+    number_of_months = 12 * (1 + 2022 - 1850)
 
-    test_grid = np.zeros((nmonths, 36, 72))
+    test_grid = np.zeros((number_of_months, 36, 72))
     lo = 12 * (1981 - 1850)
     hi = 12 * (2011 - 1850)
     test_grid[lo:hi, :, :] = 1.0
 
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=nmonths)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
     test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
@@ -133,8 +131,8 @@ def test_1d_transfer_1_25offset_to_5():
 
     for index in range(36):
 
-        transfer, nsteps, loind, hiind = gd.get_1d_transfer(original_x0, original_dx,
-                                                            new_x0, new_dx, index)
+        transfer, number_of_steps, low_index, high_index = gd.get_1d_transfer(original_x0, original_dx,
+                                                                              new_x0, new_dx, index)
 
         lo = ((new_x0 + index * new_dx) - original_x0) // original_dx
         hi = ((new_x0 + (index + 1) * new_dx) - original_x0) // original_dx
@@ -142,9 +140,9 @@ def test_1d_transfer_1_25offset_to_5():
         assert len(transfer) == 5
         for i in transfer:
             assert i == 1.0 or i == 0.5
-        assert nsteps == 5
-        assert loind == lo
-        assert hiind == hi
+        assert number_of_steps == 5
+        assert low_index == lo
+        assert high_index == hi
 
 
 def test_1d_transfer_1_25offset_to_1():
@@ -156,8 +154,8 @@ def test_1d_transfer_1_25offset_to_1():
 
     for index in range(180):
 
-        transfer, nsteps, loind, hiind = gd.get_1d_transfer(original_x0, original_dx,
-                                                            new_x0, new_dx, index)
+        transfer, number_of_steps, low_index, high_index = gd.get_1d_transfer(original_x0, original_dx,
+                                                                              new_x0, new_dx, index)
 
         if index == 0:
             assert transfer[0] == 0.5
@@ -178,15 +176,15 @@ def test_1d_transfer_1_to_5():
 
     for index in range(36):
 
-        transfer, nsteps, loind, hiind = gd.get_1d_transfer(original_x0, original_dx,
+        transfer, number_of_steps, low_index, high_index = gd.get_1d_transfer(original_x0, original_dx,
                                                             new_x0, new_dx, index)
 
         assert len(transfer) == 5
         for i in transfer:
             assert i == 1.0
-        assert nsteps == 5
-        assert loind == index * 5
-        assert hiind == (index + 1) * 5 - 1
+        assert number_of_steps == 5
+        assert low_index == index * 5
+        assert high_index == (index + 1) * 5 - 1
 
     original_x0 = -180.0
     original_dx = 1.0
@@ -196,15 +194,15 @@ def test_1d_transfer_1_to_5():
 
     for index in range(72):
 
-        transfer, nsteps, loind, hiind = gd.get_1d_transfer(original_x0, original_dx,
+        transfer, number_of_steps, low_index, high_index = gd.get_1d_transfer(original_x0, original_dx,
                                                             new_x0, new_dx, index)
 
         assert len(transfer) == 5
         for i in transfer:
             assert i == 1.0
-        assert nsteps == 5
-        assert loind == index * 5
-        assert hiind == (index + 1) * 5 - 1
+        assert number_of_steps == 5
+        assert low_index == index * 5
+        assert high_index == (index + 1) * 5 - 1
 
 
 def test_1d_transfer_5_to_5():
@@ -215,15 +213,15 @@ def test_1d_transfer_5_to_5():
     new_dx = 5.0
 
     for index in range(72):
-        transfer, nsteps, loind, hiind = gd.get_1d_transfer(original_x0, original_dx,
+        transfer, number_of_steps, low_index, high_index = gd.get_1d_transfer(original_x0, original_dx,
                                                             new_x0, new_dx, index)
 
         assert len(transfer) == 1
         for i in transfer:
             assert i == 1.0
-        assert nsteps == 1
-        assert loind == index
-        assert hiind == index
+        assert number_of_steps == 1
+        assert low_index == index
+        assert high_index == index
 
 
 def test_simple_regrid():
@@ -254,7 +252,7 @@ def test_make_grid():
     assert isinstance(test_ds, Dataset)
 
 
-def test_make_gridmonthly():
+def test_make_grid_monthly():
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
@@ -270,7 +268,7 @@ def test_make_gridmonthly():
     assert 'name' in test_grid_monthly.metadata
 
 
-def test_make_gridannual():
+def test_make_grid_annual():
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)

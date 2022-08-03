@@ -77,13 +77,13 @@ class DataSet:
         """
         return self.metadata.match_metadata(metadata_to_match)
 
-    def download(self, outdir: Path):
+    def download(self, out_dir: Path):
         """
         Download the data set using its "fetcher"
 
         Parameters
         ----------
-        outdir : Path
+        out_dir : Path
             Directory to which the data set will be downloaded
         Returns
         -------
@@ -94,7 +94,7 @@ class DataSet:
 
         for url in self.metadata['url']:
             print(f"Downloading {url}")
-            fetch_fn(url, outdir)
+            fetch_fn(url, out_dir)
 
     def _get_fetcher(self):
         """
@@ -126,13 +126,13 @@ class DataSet:
 
         return reader_fn
 
-    def read_dataset(self, outdir: Path, **kwargs):
+    def read_dataset(self, out_dir: Path, **kwargs):
         """
         Read in the dataset and output an object of the appropriate type.
 
         Parameters
         ----------
-        outdir : Path
+        out_dir : Path
             Directory in which the data are to be found (dictated by the Collection)
 
         Returns
@@ -141,7 +141,7 @@ class DataSet:
         """
         print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        self.data = reader_fn(outdir, self.metadata, **kwargs)
+        self.data = reader_fn(out_dir, self.metadata, **kwargs)
         return self.data
 
 
@@ -302,9 +302,14 @@ class DataCollection:
         Get the Path to the directory where the data for this collection are stored.
         If the directory does not exist, then create it.
 
-        :param data_dir: Path
+        Parameters
+        ----------
+        data_dir: Path
             Path to the general data directory for managed data in the project
-        :return:
+
+        Returns
+        --------
+        Path
             Path to the directory for this DataCollection
         """
         collection_dir = data_dir / self.global_attributes['name']

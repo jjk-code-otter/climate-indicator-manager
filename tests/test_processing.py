@@ -142,7 +142,7 @@ def test_get_reader(mocker, test_attributes):
 def test_get_function():
     """
     Test that we can recover a specific function from a module and script. We'll use the function
-    we are testing as the test can only exist with the function and so we always know it's there as
+    we are testing as the test can only exist with the function, so we always know it's there as
     long as we're testing it.
     """
     from climind.data_manager.processing import get_function
@@ -187,57 +187,57 @@ def test_data_collection_to_string():
 
 
 def test_select():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'type': 'gridded'})
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'type': 'gridded'})
 
-    for dataset in subdc.datasets:
+    for dataset in sub_data_collection.datasets:
         assert dataset.metadata['type'] == 'gridded'
 
 
 def test_select_global_from_list():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'version': ['5.0.1.0', '5.0.2.0']})
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'version': ['5.0.1.0', '5.0.2.0']})
 
-    for dataset in subdc.datasets:
+    for dataset in sub_data_collection.datasets:
         assert dataset.metadata['version'] == '5.0.1.0'
 
 
 def test_select_global_from_list_no_match():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'version': ['5.0.3.0', '5.0.2.0']})
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'version': ['5.0.3.0', '5.0.2.0']})
 
-    assert subdc is None
+    assert sub_data_collection is None
 
 
 def test_select_without_a_match():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'type': 'renault'})
-    assert subdc is None
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'type': 'renault'})
+    assert sub_data_collection is None
 
 
 def test_select_match_global_but_not_dataset():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'variable': 'tas',
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'variable': 'tas',
                                'type': 'renault'})
-    assert subdc is None
+    assert sub_data_collection is None
 
 
 def test_select_no_match_in_global():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
-    subdc = dc.match_metadata({'variable': 'mslp'})
-    assert subdc is None
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    sub_data_collection = data_collection.match_metadata({'variable': 'mslp'})
+    assert sub_data_collection is None
 
 
 def test_creation_from_dict_no_data_set(test_collection_metadata):
-    dc = dm.DataCollection(test_collection_metadata.metadata)
-    assert isinstance(dc, dm.DataCollection)
+    data_collection = dm.DataCollection(test_collection_metadata.metadata)
+    assert isinstance(data_collection, dm.DataCollection)
 
 
-def test_datacollection_read(mocker):
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+def test_data_collection_read(mocker):
+    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
     m = mocker.patch("climind.data_manager.processing.DataSet.read_dataset", return_value="test")
 
-    datasets = dc.read_datasets(Path(''))
+    datasets = data_collection.read_datasets(Path(''))
 
     assert m.call_args_list[0][0][0] == Path('HadCRUT5')
     assert m.call_args_list[1][0][0] == Path('HadCRUT5')

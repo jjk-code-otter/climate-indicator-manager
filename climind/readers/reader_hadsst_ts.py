@@ -2,6 +2,7 @@ from pathlib import Path
 import climind.data_types.timeseries as ts
 import copy
 
+
 def read_ts(out_dir: Path, metadata: dict):
     filename = out_dir / metadata['filename'][0]
 

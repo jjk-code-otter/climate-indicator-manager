@@ -2,6 +2,7 @@ from pathlib import Path
 import climind.data_types.timeseries as ts
 import copy
 
+
 def read_ts(out_dir: Path, metadata: dict):
     filename = metadata['filename'][0]
     filename = out_dir / filename
@@ -14,11 +15,6 @@ def read_ts(out_dir: Path, metadata: dict):
         return read_annual_ts(filename, construction_metadata)
     else:
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-
-
-def read_monthly_ts(filename: str, metadata: dict):
-
-    raise NotImplementedError
 
 
 def read_annual_ts(filename: str, metadata: dict):
@@ -36,7 +32,7 @@ def read_annual_ts(filename: str, metadata: dict):
     elif name == 'NOAA Interim IPCC':
         col = 2
     else:
-        raise KeyError(f'Oh honey, what you doin  here? {name}')
+        raise KeyError(f"Oh honey, what you doin'  here? {name}")
 
     with open(filename, 'r') as f:
         f.readline()

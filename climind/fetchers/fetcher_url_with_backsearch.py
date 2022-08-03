@@ -5,6 +5,7 @@ import requests
 import shutil
 from datetime import datetime
 
+
 def filename_from_url(url: str) -> str:
     parsed_url = urlparse(url)
     filename = os.path.basename(parsed_url.path)
@@ -13,7 +14,6 @@ def filename_from_url(url: str) -> str:
 
 
 def fetch(url: str, outdir: Path):
-
     now = datetime.now()
     y = now.year
     m = now.month
@@ -43,4 +43,3 @@ def fetch(url: str, outdir: Path):
         if m == 0:
             y -= 1
             m = 12
-

@@ -43,7 +43,7 @@ def read_grid(filename: list):
 
         if not filled_filename.exists():
             pass
-            #print(f'File {filled_filename} not available for {year}')
+            # print(f'File {filled_filename} not available for {year}')
         else:
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.rename({'t2m': 'tas_mean'})
@@ -56,7 +56,7 @@ def read_grid(filename: list):
 
         if not filled_filename.exists():
             pass
-            #print(f'File {filled_filename} not available for {year} {month:02d}')
+            # print(f'File {filled_filename} not available for {year} {month:02d}')
         else:
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.expand_dims('time')
@@ -76,9 +76,9 @@ def read_monthly_5x5_grid(filename: list, metadata: CombinedMetadata):
     ds = read_grid(filename)
 
     jra55_125 = ds.tas_mean
-    ntime = jra55_125.shape[0]
+    number_of_months = jra55_125.shape[0]
 
-    target_grid = np.zeros((ntime, 36, 72))
+    target_grid = np.zeros((number_of_months, 36, 72))
 
     transfer = np.zeros((5, 5)) + 1.0
     transfer[0, :] = transfer[0, :] * 0.5
@@ -88,7 +88,7 @@ def read_monthly_5x5_grid(filename: list, metadata: CombinedMetadata):
 
     transfer_sum = np.sum(transfer)
 
-    for month in range(ntime):
+    for month in range(number_of_months):
 
         enlarged_array = np.zeros((145, 289))
         enlarged_array[:, 0:288] = jra55_125[month, :, :]
@@ -110,7 +110,7 @@ def read_monthly_5x5_grid(filename: list, metadata: CombinedMetadata):
 
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=ntime)
+    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=number_of_months)
 
     ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
 
@@ -125,16 +125,16 @@ def read_monthly_1x1_grid(filename: list, metadata: CombinedMetadata):
     ds = read_grid(filename)
 
     jra55_125 = ds.tas_mean
-    ntime = jra55_125.shape[0]
+    number_of_months = jra55_125.shape[0]
 
-    target_grid = np.zeros((ntime, 180, 360))
+    target_grid = np.zeros((number_of_months, 180, 360))
 
-    for month in range(ntime):
+    for month in range(number_of_months):
         enlarged_array = np.zeros((145, 289))
         enlarged_array[:, 0:288] = jra55_125[month, :, :]
         enlarged_array[:, 288] = jra55_125[month, :, 0]
 
-        regridded = gd.simple_regrid(enlarged_array, -180. - 1.25/2., -90. - 1.25 / 2., 1.25, 1.0)
+        regridded = gd.simple_regrid(enlarged_array, -180. - 1.25 / 2., -90. - 1.25 / 2., 1.25, 1.0)
 
         target_grid[month, :, :] = regridded[:, :]
 
@@ -144,7 +144,7 @@ def read_monthly_1x1_grid(filename: list, metadata: CombinedMetadata):
 
     latitudes = np.linspace(-89.5, 89.5, 180)
     longitudes = np.linspace(-179.5, 179.5, 360)
-    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=ntime)
+    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=number_of_months)
 
     ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
 

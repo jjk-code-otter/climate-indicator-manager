@@ -22,7 +22,7 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
 
     """
 
-    with open(output_dir / f'{title}_{match_year}.txt', 'w') as ofile:
+    with open(output_dir / f'{title}_{match_year}.txt', 'w') as output_file:
 
         all_match_values = []
         all_match_ranks = []
@@ -31,7 +31,7 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
         out_line = 'Year '
         for ds in datasets:
             out_line += f"{ds.metadata['name']:10.10} "
-        ofile.write(f'{out_line}\n')
+        output_file.write(f'{out_line}\n')
 
         for year in range(match_year - 12, match_year + 1):
 
@@ -43,7 +43,7 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
                     out_line += f'{value:.2f} ({rank:2d})  '
                 else:
                     out_line += f'_.__ (__)  '
-            ofile.write(f'{out_line}\n')
+            output_file.write(f'{out_line}\n')
 
         # data set by dataset summary
         for ds in datasets:
@@ -61,10 +61,10 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
             sd = np.std(all_match_values) * 1.645
             sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
 
-            ofile.write('\n')
-            ofile.write(f'Mean for {match_year}: {np.mean(all_match_values):.2f} +- {sd:.2f} degC '
+            output_file.write('\n')
+            output_file.write(f'Mean for {match_year}: {np.mean(all_match_values):.2f} +- {sd:.2f} degC '
                         f'[{np.min(all_match_values):.2f}-{np.max(all_match_values):.2f}]\n')
-            ofile.write(f'Rank between {np.min(all_match_ranks)} and {np.max(all_match_ranks)}\n')
-            ofile.write(f'Based on {len(all_match_values)} data sets.\n')
+            output_file.write(f'Rank between {np.min(all_match_ranks)} and {np.max(all_match_ranks)}\n')
+            output_file.write(f'Based on {len(all_match_values)} data sets.\n')
         else:
-            ofile.write('NO DATA\n')
+            output_file.write('NO DATA\n')

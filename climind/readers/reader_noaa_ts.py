@@ -2,6 +2,7 @@ from pathlib import Path
 import climind.data_types.timeseries as ts
 import copy
 
+
 def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
     """
     Find the most recent file that matches

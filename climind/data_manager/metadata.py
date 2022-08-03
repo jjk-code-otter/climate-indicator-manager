@@ -143,7 +143,7 @@ class CombinedMetadata:
         test1 = self.collection.match_metadata(metadata_to_match)
         test2 = self.dataset.match_metadata(metadata_to_match)
 
-        if (test1 and test2):
+        if test1 and test2:
             return True
         else:
             return False

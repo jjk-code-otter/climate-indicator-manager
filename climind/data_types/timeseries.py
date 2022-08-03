@@ -4,7 +4,7 @@ import copy
 import pkg_resources
 from datetime import datetime
 import cftime as cf
-from climind.data_manager.metadata import DatasetMetadata, CombinedMetadata
+from climind.data_manager.metadata import CombinedMetadata
 
 
 def log_activity(in_function):
@@ -190,7 +190,7 @@ class TimeSeriesMonthly:
         return self
 
     @log_activity
-    def get_rank_from_year_and_month(self, year: int, month: int, all=False) -> int:
+    def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> int:
         """
         Given a year and month, extract the rank of the data for that month. Ties are given the
         same rank, which is the lowest rank of the group. Default behaviour is to rank the month
@@ -203,17 +203,17 @@ class TimeSeriesMonthly:
             Year of year-month pair for which we want the rank
         month : int
             Month of year-month pair for which we want the rank
-        all : bool
-            If set then
+        versus_all_months : bool
+            If set then the ranking is done for the monthly value relative to all other months.
 
         Returns
         -------
         int
             Returns the rank of the specified year-month pair as compared to the same month in
-            all other years. If "all" is set then returns rank of the anomaly for a particular year
+            all other years. If "versus_all_months" is set then returns rank of the anomaly for a particular year
             and month ranked against all other years and months.
         """
-        if all:
+        if versus_all_months:
             month_select = self.df
         else:
             month_select = self.df[self.df['month'] == month]

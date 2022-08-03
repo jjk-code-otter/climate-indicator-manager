@@ -3,7 +3,6 @@ This script calculates various statistics of global mean temperatures using annu
 averages. It also makes plots of these data in a variety of styles.
 """
 from pathlib import Path
-import numpy as np
 import logging
 
 import climind.data_manager.processing as dm
@@ -80,7 +79,7 @@ if __name__ == "__main__":
     for ds in anns:
         fives.append(ds.running_mean(5))
 
-    pt.neat_plot(figure_dir, fives, 'five.png', '5-year Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, fives, 'five.png', r'5-year Global Mean Temperature Difference ($\degree$C)')
 
     print()
     print("Five-year stats")

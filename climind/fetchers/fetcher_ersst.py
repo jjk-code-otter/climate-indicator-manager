@@ -5,13 +5,13 @@ import shutil
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, out_dir: Path):
     for year, month in itertools.product(range(1854, 2023), range(1, 13)):
 
         filled_url = url.replace('*', f'{year}{month:02d}')
 
         filename = filename_from_url(filled_url)
-        out_path = outdir / filename
+        out_path = out_dir / filename
 
         if not out_path.exists():
 

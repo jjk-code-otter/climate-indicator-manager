@@ -17,10 +17,6 @@ def read_ts(out_dir: Path, metadata: dict):
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
 
-def read_monthly_ts(filename: str, metadata: dict):
-    raise NotImplementedError
-
-
 def read_annual_ts(filename: str, metadata: dict):
     years = []
     data = []
@@ -42,7 +38,7 @@ def read_annual_ts(filename: str, metadata: dict):
 
             if columns[1] == 'IV Extreme':
                 year = columns[0]
-                years.append(int(columns[0]))
+                years.append(int(year))
                 data.append(prop_area)
 
     metadata['history'] = [f'Time series created from file {filename}']

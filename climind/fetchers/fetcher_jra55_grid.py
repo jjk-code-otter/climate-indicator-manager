@@ -1,4 +1,3 @@
-import argparse
 import itertools
 from pathlib import Path
 import sys
@@ -8,24 +7,24 @@ from dotenv import load_dotenv
 from climind.config.config import DATA_DIR
 
 
-def check_file_status(filepath, filesize):
+def check_file_status(file_path, file_size):
     sys.stdout.write('\r')
     sys.stdout.flush()
-    size = int(os.stat(filepath).st_size)
-    percent_complete = (size / filesize) * 100
+    size = int(os.stat(file_path).st_size)
+    percent_complete = (size / file_size) * 100
     sys.stdout.write('%.3f %s' % (percent_complete, '% Completed'))
     sys.stdout.flush()
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, out_dir: Path):
     load_dotenv()
 
     email = os.getenv('UCAR_EMAIL')
-    pswd = os.getenv('UCAR_PSWD')
+    password = os.getenv('UCAR_PSWD')
 
     url = 'https://rda.ucar.edu/cgi-bin/login'
 
-    values = {'email': email, 'passwd': pswd, 'action': 'login'}
+    values = {'email': email, 'passwd': password, 'action': 'login'}
     # Authenticate
     ret = requests.post(url, data=values)
     if ret.status_code != 200:
@@ -34,14 +33,14 @@ def fetch(url: str, outdir: Path):
         exit(1)
 
     # Real time
-    dspath = 'https://rda.ucar.edu/data/ds628.9/'
+    web_path = 'https://rda.ucar.edu/data/ds628.9/'
 
     filelist = []
     for year, month in itertools.product(range(2020, 2023), range(1, 13)):
         filelist.append(f'anl_surf125/{year}{month:02d}/anl_surf125.{year}{month:02d}')
 
     for file in filelist:
-        filename = dspath + file
+        filename = web_path + file
         file_base = os.path.basename(file)
         file_base = DATA_DIR / "ManagedData" / "Data" / "JRA-55" / file_base
 
@@ -52,27 +51,27 @@ def fetch(url: str, outdir: Path):
             req = requests.get(filename, cookies=ret.cookies, allow_redirects=True, stream=True)
 
             if req.status_code != 404:
-                filesize = int(req.headers['Content-length'])
+                file_size = int(req.headers['Content-length'])
                 with open(file_base, 'wb') as outfile:
                     chunk_size = 1048576
                     for chunk in req.iter_content(chunk_size=chunk_size):
                         outfile.write(chunk)
-                        if chunk_size < filesize:
-                            check_file_status(file_base, filesize)
-                check_file_status(file_base, filesize)
+                        if chunk_size < file_size:
+                            check_file_status(file_base, file_size)
+                check_file_status(file_base, file_size)
                 print()
             else:
                 print("404 returned for ", file_base)
 
     # Non-realtime
-    dspath = 'https://rda.ucar.edu/data/ds628.1/'
+    web_path = 'https://rda.ucar.edu/data/ds628.1/'
 
     filelist = []
     for year in range(1958, 2021):
         filelist.append(f'anl_surf125/{year}/anl_surf125.011_tmp.{year}01_{year}12')
 
     for file in filelist:
-        filename = dspath + file
+        filename = web_path + file
         file_base = os.path.basename(file)
         file_base = DATA_DIR / "ManagedData" / "Data" / "JRA-55" / file_base
 
@@ -83,14 +82,14 @@ def fetch(url: str, outdir: Path):
             req = requests.get(filename, cookies=ret.cookies, allow_redirects=True, stream=True)
 
             if req.status_code != 404:
-                filesize = int(req.headers['Content-length'])
+                file_size = int(req.headers['Content-length'])
                 with open(file_base, 'wb') as outfile:
                     chunk_size = 1048576
                     for chunk in req.iter_content(chunk_size=chunk_size):
                         outfile.write(chunk)
-                        if chunk_size < filesize:
-                            check_file_status(file_base, filesize)
-                check_file_status(file_base, filesize)
+                        if chunk_size < file_size:
+                            check_file_status(file_base, file_size)
+                check_file_status(file_base, file_size)
                 print()
             else:
                 print("404 returned for ", file_base)

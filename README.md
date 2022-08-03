@@ -39,7 +39,7 @@ Running
 The managed data will be stored in a directory specified by the environment variable 
 DATADIR. This is easy to set in linux. In windows, do the following:
 
-1. right click on the Windows icon (bottom left of the screen usually) and select "System"
+1. right-click on the Windows icon (bottom left of the screen usually) and select "System"
 2. Click on "Advanced system settings"
 3. Click on "Environment Variables..."
 4. Under "User variables for Username" click "New..."
