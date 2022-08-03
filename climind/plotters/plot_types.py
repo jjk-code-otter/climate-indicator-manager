@@ -32,7 +32,7 @@ def set_lo_hi_ticks(limits, spacing):
     return lo, hi, ticks
 
 
-def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -79,6 +79,8 @@ def darker_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+    ds = all_datasets[-1]
+
     sns.despine(right=True, top=True, left=True)
 
     plt.xlim(1845, 2025)
@@ -165,6 +167,8 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+    ds = all_datasets[-1]
+
     sns.despine(right=True, top=True, left=True)
 
     plot_units = ds.metadata['units']
@@ -263,6 +267,8 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+    ds = all_datasets[-1]
+
     sns.despine(right=True, top=True, left=True)
 
     plot_units = ds.metadata['units']
@@ -379,7 +385,7 @@ def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
                      [ds.df['data'][j], ds.df['data'][j]], color=col, zorder=zord)
 
         pass
-
+    ds = all_datasets[-1]
     sns.despine(right=True, top=True, left=True)
 
     plot_units = ds.metadata['units']
@@ -481,6 +487,8 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+    ds = all_datasets[-1]
+
     sns.despine(right=True, top=True)
 
     plot_units = ds.metadata['units']
@@ -565,6 +573,8 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
         plt.plot(ds.df['year'] + (ds.df['month'] - 1) / 12., ds.df['data'],
                  label=ds.metadata['name'], color=col,
                  zorder=zord)
+    ds = all_datasets[-1]
+
     sns.despine(right=True, top=True, left=True)
 
     plot_units = ds.metadata['units']
@@ -680,3 +690,10 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     plt.savefig(f'{image_filename}.png')
     plt.savefig(f'{image_filename}.pdf')
     plt.close()
+
+
+def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var='tas_mean'):
+    selection = dataset.df.sel(time=slice(f'{year}-{month:02d}-01',
+                                          f'{year}-{month:02d}-28'))
+
+    nice_map(selection, image_filename, title, var='tas_mean')
