@@ -180,7 +180,43 @@ class GridMonthly:
 
         return anom
 
+    def make_annual(self):
+        """
+        Calculate an annual average from a monthly grid
+
+        Returns
+        -------
+        GridAnnual
+            Return annual average of the grid
+        """
+        dsg = self.df.groupby('time.year').mean(dim='time')
+
+        annual = GridAnnual(dsg, self.metadata)
+        annual.update_history('Calculated annual average')
+
+        return annual
+
     def calculate_regional_average(self, regions, region_number, land_only=True):
+        """
+        Calculate a regional average from the grid. The region is specified by a geopandas
+        Geodataframe and the index (region_number) of the chosen shape. By default the output
+        is masked to land areas only, this can be switched off by setting land_only to False.
+
+        Parameters
+        ----------
+        regions: Geodataframe
+            geopandas Geodataframe specifying the region to be average over
+        region_number: int
+            the index of the particular region in the Geodataframe
+        land_only: bool
+            By defauly output is masked to land areas only, to calculate a full area average set
+            land_only to False
+
+        Returns
+        -------
+        ts.TimeSeriesMonthly
+            Returns time series of area averages.
+        """
         mask = regionmask.mask_3D_geopandas(regions,
                                             self.df.longitude,
                                             self.df.latitude, drop=False, overlap=True)
@@ -193,13 +229,14 @@ class GridMonthly:
             land_mask = land_mask.sel(region=0)
             selected_variable = selected_variable.where(land_mask)
 
-        #import matplotlib.pyplot as plt
-        #selected_variable[-1].plot()
-        #plt.show()
+        # import matplotlib.pyplot as plt
+        # selected_variable[-1].plot()
+        # plt.show()
 
         weights = np.cos(np.deg2rad(selected_variable.latitude))
         regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
 
+        # It's such a struggle extracting time information from these blasted xarrays
         years = regional_ts.time.dt.year.data.tolist()
         months = regional_ts.time.dt.month.data.tolist()
         data = regional_ts.values.tolist()
@@ -242,3 +279,18 @@ class GridAnnual:
             self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
+
+    def update_history(self, message: str):
+        """
+        Update the history metadata
+
+        Parameters
+        ----------
+        message : str
+            Message to be added to history
+
+        Returns
+        -------
+        None
+        """
+        self.metadata['history'].append(message)
