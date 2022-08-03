@@ -45,14 +45,16 @@ def dir_and_filename_from_url(url: str):
 
 def url_from_filename(url: str, filename: str):
     """
-    Given a url and filename, replace the filename in the URL with the input filename
+    Given an url and filename, replace the filename in the URL with the input filename
 
     Parameters
     ----------
     url : str
     filename : str
 
-    Returns : str
+    Returns
+    -------
+    str
     -------
 
     """

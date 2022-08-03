@@ -182,14 +182,11 @@ if __name__ == "__main__":
     pt.neat_plot(figure_dir, tens, 'ten.png', '10-year Global Mean Temperature Difference ($\degree$C))')
 
     pt.decade_plot(figure_dir, sst_dtens, 'dten_sst.png',
-                   '10-year Global Mean SST Difference ($\degree$C))',
-                   'Compared to 1981-2010 average')
+                   '10-year Global Mean SST Difference ($\degree$C))')
     pt.decade_plot(figure_dir, lsat_dtens, 'dten_lsat.png',
-                   '10-year Global Mean LSAT Difference ($\degree$C))',
-                   'Compared to 1981-2010 average')
+                   '10-year Global Mean LSAT Difference ($\degree$C))')
     pt.decade_plot(figure_dir, dtens, 'dten.png',
-                   '10-year Global Mean Temperature Difference ($\degree$C))',
-                   'Compared to 1850-1900 average')
+                   '10-year Global Mean Temperature Difference ($\degree$C))')
 
     pt.neat_plot(figure_dir, fives, 'five.png', '5-year Global Mean Temperature Difference ($\degree$C)')
 

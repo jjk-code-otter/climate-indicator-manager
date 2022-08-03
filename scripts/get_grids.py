@@ -1,4 +1,3 @@
-from pathlib import Path
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 import climind.data_manager.processing as dm

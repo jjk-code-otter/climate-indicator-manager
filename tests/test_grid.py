@@ -4,6 +4,8 @@ import pandas as pd
 import climind.data_types.grid as gd
 from xarray import Dataset
 from unittest.mock import call
+from shapely.geometry import Polygon
+import geopandas as gp
 
 
 @pytest.fixture
@@ -253,10 +255,6 @@ def test_make_gridannual():
     assert 'name' in test_grid_annual.metadata
 
 
-from shapely.geometry import Polygon
-import geopandas as gp
-
-
 @pytest.fixture
 def shapes():
     data_dictionary = {
@@ -276,8 +274,8 @@ def shapes():
                                   crs="EPSG:4326")
     return whole_world
 
-def test_calculate_regional_average(shapes):
 
+def test_calculate_regional_average(shapes):
     test_grid = np.zeros((12, 36, 72))
 
     test_grid[:, 0:18, :] = -1.0
@@ -312,7 +310,6 @@ def test_calculate_regional_average(shapes):
 
 
 def test_calculate_non_uniform_regional_average(shapes):
-
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
@@ -320,7 +317,7 @@ def test_calculate_non_uniform_regional_average(shapes):
     # area average is then easy to calculate
     sum_of_weights = 0.0
     for i in range(36):
-        test_grid[:, i, :] = 1./np.cos(np.deg2rad(lats[i]))
+        test_grid[:, i, :] = 1. / np.cos(np.deg2rad(lats[i]))
         sum_of_weights += np.cos(np.deg2rad(lats[i]))
 
     times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
@@ -329,12 +326,12 @@ def test_calculate_non_uniform_regional_average(shapes):
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 0, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 1, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 2, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)

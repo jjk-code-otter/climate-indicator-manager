@@ -12,7 +12,8 @@ setup(
     # Needed for dependencies
     install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
                       'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
-                      'python-dotenv', 'regionmask', 'geopandas'],
+                      'python-dotenv', 'regionmask', 'geopandas', 'shapely',
+                      'cdsapi', 'cartopy', 'cftime'],
     # version number
     version='0.1',
     # The license can be anything you like
