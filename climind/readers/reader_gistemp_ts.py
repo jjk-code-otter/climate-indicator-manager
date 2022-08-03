@@ -30,6 +30,9 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
+    df = df.rename({'tempanomaly': 'tas_mean',
+                    'lat': 'latitude',
+                    'lon': 'longitude'})
     return gd.GridMonthly(df, metadata)
 
 

@@ -1,9 +1,31 @@
 import pytest
+from shapely.geometry import Polygon
+import geopandas as gp
 import numpy as np
 import pandas as pd
 import climind.data_types.grid as gd
 from xarray import Dataset
 from unittest.mock import call
+
+
+@pytest.fixture
+def monthly_grid_2():
+    nmonths = 12 * (1 + 2022 - 1850)
+
+    test_grid = np.zeros((nmonths, 36, 72))
+    for i in range(nmonths):
+        test_grid[i, :, :] = (i % 12) + 1.0
+
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=nmonths)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
+                                                 'history': [],
+                                                 'climatology_start': 1961,
+                                                 'climatology_end': 1990})
+    return test_grid_monthly
 
 
 @pytest.fixture
@@ -41,6 +63,15 @@ def test_rebaseline(monthly_grid):
     for month in range(12):
         month0 = 12 * (1981 - 1850)
         assert monthly_grid.df.tas_mean.data[month0 + month, 0, 0] == 0.0
+
+
+def test_make_annual(monthly_grid_2):
+    annual = monthly_grid_2.make_annual()
+
+    assert isinstance(annual, gd.GridAnnual)
+    assert annual.df.tas_mean.shape[0] == monthly_grid_2.df.tas_mean.shape[0] / 12
+    assert annual.df.tas_mean.values[0, 0, 0] == np.mean(range(1, 13))
+    assert annual.metadata['history'][-1] == 'Calculated annual average'
 
 
 def test_update_history(monthly_grid):
@@ -253,10 +284,6 @@ def test_make_gridannual():
     assert 'name' in test_grid_annual.metadata
 
 
-from shapely.geometry import Polygon
-import geopandas as gp
-
-
 @pytest.fixture
 def shapes():
     data_dictionary = {
@@ -276,8 +303,8 @@ def shapes():
                                   crs="EPSG:4326")
     return whole_world
 
-def test_calculate_regional_average(shapes):
 
+def test_calculate_regional_average(shapes):
     test_grid = np.zeros((12, 36, 72))
 
     test_grid[:, 0:18, :] = -1.0
@@ -312,7 +339,6 @@ def test_calculate_regional_average(shapes):
 
 
 def test_calculate_non_uniform_regional_average(shapes):
-
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
@@ -320,7 +346,7 @@ def test_calculate_non_uniform_regional_average(shapes):
     # area average is then easy to calculate
     sum_of_weights = 0.0
     for i in range(36):
-        test_grid[:, i, :] = 1./np.cos(np.deg2rad(lats[i]))
+        test_grid[:, i, :] = 1. / np.cos(np.deg2rad(lats[i]))
         sum_of_weights += np.cos(np.deg2rad(lats[i]))
 
     times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
@@ -329,12 +355,12 @@ def test_calculate_non_uniform_regional_average(shapes):
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 0, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 1, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)
 
     ts = test_grid_monthly.calculate_regional_average(shapes, 2, land_only=False)
     for i in range(12):
-        assert ts.df['data'][i] == pytest.approx(36./sum_of_weights, 0.000001)
+        assert ts.df['data'][i] == pytest.approx(36. / sum_of_weights, 0.000001)

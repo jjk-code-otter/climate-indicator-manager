@@ -59,7 +59,6 @@ def read_monthly_grid(filename: str, metadata):
     target_grid = np.zeros((number_of_months, 36, 72))
 
     for m in range(number_of_months):
-        print(f'month: {m}')
         target_grid[m, :, :] = df.anom.data[m, 0, :, :]
 
     # shift longitudes to match HadCRUT convention of -180 to 180
