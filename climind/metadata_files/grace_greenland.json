@@ -3,7 +3,7 @@
   "version": "",
   "variable": "greenland",
   "units": "Gt",
-  "citation": [""],
+  "citation": [" Wiese, D. N., D.-N. Yuan, C. Boening, F. W. Landerer, and M. M. Watkins (2019) JPL GRACE and GRACE-FO Mascon Ocean, Ice, and Hydrology Equivalent Water Height RL06M CRI Filtered Version 2.0, Ver. 2.0, PO.DAAC, CA, USA. Dataset accessed [YYYY-MM-DD] at http://dx.doi.org/10.5067/TEMSC-3MJ62."],
   "data_citation": [""],
   "colour": "#56b4e9",
   "zpos": 10,
