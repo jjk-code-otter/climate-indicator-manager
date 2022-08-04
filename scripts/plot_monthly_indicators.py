@@ -88,6 +88,21 @@ if __name__ == "__main__":
              'time_resolution': 'monthly'},
             'Antarctic sea-ice extent'
 
+        ],
+        'greenland': [
+            {'variable': 'greenland',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Greenland mass balance'
+        ]
+    }
+
+    holdall = {
+        'antarctica': [
+            {'variable': 'antarctica',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Antarctic mass balance'
         ]
     }
 

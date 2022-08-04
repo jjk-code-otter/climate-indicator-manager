@@ -288,6 +288,9 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     if ds.metadata['variable'] in ['mhw', 'mcs']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 
+    if ds.metadata['variable'] in ['greenland']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.)
+
     xlims = plt.gca().get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
     if len(xticks) < 3:

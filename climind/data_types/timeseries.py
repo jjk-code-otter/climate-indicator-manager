@@ -79,7 +79,7 @@ class TimeSeriesMonthly:
         return out_str
 
     @log_activity
-    def make_annual(self):
+    def make_annual(self, cumulative=False):
         """
         Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual average is
         calculated from the mean of monthly values
@@ -89,7 +89,10 @@ class TimeSeriesMonthly:
         TimeSeriesAnnual
             Return an annual time series
         """
-        grouped = self.df.groupby(['year'])['data'].mean().reset_index()
+        if cumulative:
+            grouped = self.df.groupby(['year'])['data'].sum().reset_index()
+        else:
+            grouped = self.df.groupby(['year'])['data'].mean().reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
         annual_series.metadata['history'].append('Calculated annual average')
 
