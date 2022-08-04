@@ -94,6 +94,12 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'monthly'},
             'Greenland mass balance'
+        ],
+        'antarctica': [
+            {'variable': 'antarctica',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Antarctic mass balance'
         ]
     }
 
