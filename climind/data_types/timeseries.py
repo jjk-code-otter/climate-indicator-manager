@@ -185,6 +185,66 @@ class TimeSeriesMonthly:
 
         self.metadata['history'].append(f'Rebaselined to {y1}-{y2}')
 
+    def get_value(self, year: int, month: int):
+        """
+        Get the current value for a particular year and month
+
+        Parameters
+        ----------
+        year: int
+            Year requested
+        month: int
+            Month requested/
+
+        Returns
+        -------
+        float
+            Value for that year and month
+        """
+
+        selection = self.df[(self.df['year'] == year) & (self.df['month'] == month)]
+        if len(selection) == 0:
+            out_value =  None
+        elif len(selection) == 1:
+            out_value = selection['data'].values[0]
+        else:
+            raise KeyError(f"Selection is not unique {year} {month}")
+
+        return out_value
+
+    def add_offset(self, offset: float):
+        """
+        Add an offset to the whole data series
+
+        Parameters
+        ----------
+        offset: float
+
+        Returns
+        -------
+        None
+        """
+        self.df['data'] = self.df['data'] + offset
+
+    def zero_on_month(self, year: int, month: int):
+        """
+        Zero data set on the value for a single month in a single year
+
+        Parameters
+        ----------
+        year: int
+            Year required
+        month: int
+            Month required
+
+        Returns
+        -------
+        None
+        """
+
+        zero_value = -1 * self.get_value(year, month)
+        self.add_offset(zero_value)
+
     @log_activity
     def select_year_range(self, start_year: int, end_year: int):
         self.df = self.df[self.df['year'] >= start_year]

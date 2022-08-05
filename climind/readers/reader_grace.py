@@ -31,6 +31,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     else:
         first_diff = False
 
+    dates = []
     years = []
     months = []
     data = []
@@ -43,11 +44,18 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
             columns = line.split()
             decimal_year = float(columns[0])
             year_int = int(decimal_year)
+            diny = 1 + int(365. * (decimal_year - year_int))
             month = int(np.rint(12. * (decimal_year - year_int) + 1.0))
+
+            dates.append(f'{year_int} {diny:03d}')
 
             years.append(year_int)
             months.append(month)
             data.append(float(columns[1]))
+
+    dates = pd.to_datetime(dates, format='%Y %j')
+    years2 = dates.year.tolist()
+    months2 = dates.month.tolist()
 
     dico = {'year': years, 'month': months, 'data': data}
     df = pd.DataFrame(dico)
@@ -58,7 +66,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
 
     metadata['history'] = [f'Time series created from file {filename}']
 
-    return ts.TimeSeriesMonthly(years, months, data, metadata=metadata)
+    return ts.TimeSeriesMonthly(years2, months2, data, metadata=metadata)
 
 
 def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):

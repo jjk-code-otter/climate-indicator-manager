@@ -64,6 +64,11 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
 
 
 def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
+    if 'first_difference' in kwargs:
+        first_diff = kwargs['first_difference']
+    else:
+        first_diff = False
+
     years = []
     mass_balance = []
 
@@ -73,6 +78,9 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
             columns = line.split(',')
             years.append(int(columns[0]))
             mass_balance.append(float(columns[1]))
+
+#    if not first_diff:
+ #       df =
 
     metadata['history'] = [f'Time series created from file {filename}']
     return ts.TimeSeriesAnnual(years, mass_balance, metadata=metadata)

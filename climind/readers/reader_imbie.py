@@ -32,7 +32,8 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
         first_diff = False
 
     df = pd.read_excel(filename)
-    df = df.rename(columns={'Rate of ice sheet mass change (Gt/yr)': 'data'})
+    df = df.rename(columns={'Rate of ice sheet mass change (Gt/yr)': 'data',
+                            'Cumulative ice sheet mass change (Gt)': 'cumulative_data'})
 
     # Clip out missing data, which constitute quite a lof the of series
     df = df[~np.isnan(df['data'])]
@@ -46,10 +47,10 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
 
     df['data'] = df['data'] / 12.
 
-    if not first_diff:
-        df['data'] = df.cumsum()['data']
-
     mass_balance = df['data'].tolist()
+
+    if not first_diff:
+        mass_balance = df['cumulative_data'].tolist()
 
     metadata['history'] = [f'Time series created from file {filename}']
 
