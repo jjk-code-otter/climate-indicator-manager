@@ -96,6 +96,16 @@ def test_make_annual():
     assert a.metadata['history'][-1] == 'Calculated annual average'
 
 
+def test_make_annual_cumulative():
+    """Create annual series from monthly series and check history is updated"""
+    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
+    a = f.make_annual(cumulative=True)
+    assert isinstance(a, ts.TimeSeriesAnnual)
+    assert a.df['data'][0] == 5.0
+    assert a.df['year'][0] == 1999
+    assert a.metadata['history'][-1] == 'Calculated annual average'
+
+
 def test_make_annual_by_selecting_month(monthly_data_is_month):
     a = monthly_data_is_month.make_annual_by_selecting_month(1)
 
@@ -125,6 +135,36 @@ def test_manual_baseline_monthly(simple_monthly):
     assert simple_monthly.metadata['climatology_start'] == 2001
     assert simple_monthly.metadata['climatology_end'] == 2030
 
+
+def test_get_value_monthly(simple_monthly):
+    for y in range(1850, 2023):
+        for m in range(1, 13):
+            assert simple_monthly.get_value(y, m) == y
+
+
+def test_get_value_monthly_non_existent_month(simple_monthly):
+    assert simple_monthly.get_value(2072, 3) is None
+
+
+def test_get_value_monthly_with_duplicate_raises_key_error(simple_monthly):
+    simple_monthly.df['month'][1] = 1
+    with pytest.raises(KeyError):
+        _ = simple_monthly.get_value(1850, 1)
+
+
+def test_add_offset_monthly(simple_monthly):
+    simple_monthly.add_offset(0.3)
+    for i in range(len(simple_monthly.df)):
+        assert simple_monthly.df['data'][i] == simple_monthly.df['year'][i] + 0.3
+
+
+def test_zero_on_month(simple_monthly):
+    simple_monthly.zero_on_month(1870, 3)
+    for i in range(len(simple_monthly.df)):
+        assert simple_monthly.df['data'][i] == simple_monthly.df['year'][i] - 1870.
+
+
+# Annual tests
 
 def test_rebaseline_annual(simple_monthly):
     annual = simple_monthly.make_annual()
