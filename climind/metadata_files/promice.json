@@ -1,0 +1,42 @@
+{
+  "name": "PROMICE",
+  "version": "",
+  "variable": "greenland",
+  "units": "Gt",
+  "citation": ["Mankoff, K. D., Fettweis, X., Langen, P. L., Stendel, M., Kjeldsen, K. K., Karlsson, N. B., Noël, B., van den Broeke, M. R., Solgaard, A., Colgan, W., Box, J. E., Simonsen, S. B., King, M. D., Ahlstrøm, A. P., Andersen, S. B., and Fausto, R. S.: Greenland ice sheet mass balance from 1840 through next week, Earth Syst. Sci. Data, 13, 5001–5025, https://doi.org/10.5194/essd-13-5001-2021, 2021. doi: 10.5194/essd-13-5001-2021"],
+  "data_citation": ["https://doi.org/10.22008/FK2/OHI23Z"],
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://dataverse.geus.dk/api/access/datafile/35563"],
+      "filename": ["35563"],
+      "notes": "Filename should be MB_SMB_D_BMB.csv",
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_promice",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://dataverse.geus.dk/api/access/datafile/35467"],
+      "filename": ["35467"],
+      "notes": "Filename should be MB_SMB_D_BMB_ann.csv",
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_promice",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -35,6 +35,7 @@ if __name__ == "__main__":
     ]
 
     for name in names:
+        print(name)
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'gridded',
                                      'time_resolution': 'monthly',

@@ -79,7 +79,7 @@ class TimeSeriesMonthly:
         return out_str
 
     @log_activity
-    def make_annual(self):
+    def make_annual(self, cumulative=False):
         """
         Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual average is
         calculated from the mean of monthly values
@@ -89,7 +89,10 @@ class TimeSeriesMonthly:
         TimeSeriesAnnual
             Return an annual time series
         """
-        grouped = self.df.groupby(['year'])['data'].mean().reset_index()
+        if cumulative:
+            grouped = self.df.groupby(['year'])['data'].sum().reset_index()
+        else:
+            grouped = self.df.groupby(['year'])['data'].mean().reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
         annual_series.metadata['history'].append('Calculated annual average')
 
@@ -181,6 +184,66 @@ class TimeSeriesMonthly:
         self.metadata['actual'] = False
 
         self.metadata['history'].append(f'Rebaselined to {y1}-{y2}')
+
+    def get_value(self, year: int, month: int):
+        """
+        Get the current value for a particular year and month
+
+        Parameters
+        ----------
+        year: int
+            Year requested
+        month: int
+            Month requested/
+
+        Returns
+        -------
+        float
+            Value for that year and month
+        """
+
+        selection = self.df[(self.df['year'] == year) & (self.df['month'] == month)]
+        if len(selection) == 0:
+            out_value =  None
+        elif len(selection) == 1:
+            out_value = selection['data'].values[0]
+        else:
+            raise KeyError(f"Selection is not unique {year} {month}")
+
+        return out_value
+
+    def add_offset(self, offset: float):
+        """
+        Add an offset to the whole data series
+
+        Parameters
+        ----------
+        offset: float
+
+        Returns
+        -------
+        None
+        """
+        self.df['data'] = self.df['data'] + offset
+
+    def zero_on_month(self, year: int, month: int):
+        """
+        Zero data set on the value for a single month in a single year
+
+        Parameters
+        ----------
+        year: int
+            Year required
+        month: int
+            Month required
+
+        Returns
+        -------
+        None
+        """
+
+        zero_value = -1 * self.get_value(year, month)
+        self.add_offset(zero_value)
 
     @log_activity
     def select_year_range(self, start_year: int, end_year: int):

@@ -88,6 +88,18 @@ if __name__ == "__main__":
              'time_resolution': 'monthly'},
             'Antarctic sea-ice extent'
 
+        ],
+        'greenland': [
+            {'variable': 'greenland',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Greenland mass balance'
+        ],
+        'antarctica': [
+            {'variable': 'antarctica',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'Antarctic mass balance'
         ]
     }
 
@@ -106,6 +118,10 @@ if __name__ == "__main__":
             # ds.select_year_range(1980, 2022)
             if variable in ['arctic_ice', 'antarctic_ice', 'ohc']:
                 ds.rebaseline(1981, 2010)
+            if variable in ['antarctica']:
+                ds.zero_on_month(2005, 6)
+            if variable in ['greenland']:
+                ds.zero_on_month(2005, 7)
             m.append(ds)
         if time_resolution == 'monthly':
             pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)

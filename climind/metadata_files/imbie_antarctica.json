@@ -1,0 +1,40 @@
+{
+  "name": "IMBIE Antarctica",
+  "version": "",
+  "variable": "antarctica",
+  "units": "Gt",
+  "citation": [""],
+  "data_citation": [""],
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["http://imbie.org/data-files/imbie_dataset-2018_07_23.xlsx"],
+      "filename": ["imbie_dataset-2018_07_23.xlsx"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_imbie_antarctica",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://imbie.org/data-files/imbie_dataset-2018_07_23.xlsx"],
+      "filename": ["imbie_dataset-2018_07_23.xlsx"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_imbie_antarctica",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

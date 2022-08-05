@@ -1,0 +1,40 @@
+{
+  "name": "IMBIE Greenland",
+  "version": "",
+  "variable": "greenland",
+  "units": "Gt",
+  "citation": [""],
+  "data_citation": [""],
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["http://imbie.org/wp-content/uploads/2012/11/imbie_dataset_greenland_dynamics-2020_02_28.xlsx"],
+      "filename": ["imbie_dataset_greenland_dynamics-2020_02_28.xlsx"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_imbie",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://imbie.org/wp-content/uploads/2012/11/imbie_dataset_greenland_dynamics-2020_02_28.xlsx"],
+      "filename": ["imbie_dataset_greenland_dynamics-2020_02_28.xlsx"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_imbie",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
