@@ -13,16 +13,21 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
     if metadata['type'] == 'timeseries':
         if metadata['time_resolution'] == 'monthly':
-            return read_monthly_ts(filename, construction_metadata)
+            return read_monthly_ts(filename, construction_metadata, **kwargs)
         elif metadata['time_resolution'] == 'annual':
-            return read_annual_ts(filename, construction_metadata)
+            return read_annual_ts(filename, construction_metadata, **kwargs)
         else:
             raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
     elif metadata['type'] == 'gridded':
         raise NotImplementedError
 
 
-def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
+def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
+    if 'first_difference' in kwargs:
+        first_diff = kwargs['first_difference']
+    else:
+        first_diff = False
+
     dates = []
     mass_balance = []
 
@@ -45,16 +50,20 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     mdf_month = df.groupby(['year', 'month'])['month'].mean()
     mdf_data = df.groupby(['year', 'month'])['data'].sum()
 
+    if not first_diff:
+        mdf_data = mdf_data.cumsum()
+
     years = mdf_year.values.tolist()
     months = mdf_month.values.tolist()
     mass_balance = mdf_data.values.tolist()
+
 
     metadata['history'] = [f'Time series created from file {filename}']
 
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     years = []
     mass_balance = []
 

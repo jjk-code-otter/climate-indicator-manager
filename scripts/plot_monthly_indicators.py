@@ -103,14 +103,14 @@ if __name__ == "__main__":
         ]
     }
 
-    holdall = {
-        'antarctica': [
-            {'variable': 'antarctica',
-             'type': 'timeseries',
-             'time_resolution': 'monthly'},
-            'Antarctic mass balance'
-        ]
-    }
+#    holdall = {
+#        'antarctica': [
+#            {'variable': 'antarctica',
+#             'type': 'timeseries',
+#             'time_resolution': 'monthly'},
+#            'Antarctic mass balance'
+#        ]
+#    }
 
     for combo in holdall:
 
@@ -127,6 +127,8 @@ if __name__ == "__main__":
             # ds.select_year_range(1980, 2022)
             if variable in ['arctic_ice', 'antarctic_ice', 'ohc']:
                 ds.rebaseline(1981, 2010)
+            if variable in ['antarctica', 'greenland']:
+                ds.rebaseline(2003, 2010)
             m.append(ds)
         if time_resolution == 'monthly':
             pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)
