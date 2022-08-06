@@ -32,3 +32,12 @@ def test_url_from_filename():
     url = 'http://www.doesntexist.boom/directory/filename.txt'
     fixed_url = utils.url_from_filename(url, 'new_filename.txt')
     assert fixed_url == 'http://www.doesntexist.boom/directory/new_filename.txt'
+
+
+def test_get_ftp_host_and_directory():
+    url = 'fpt://the.host.name/directory0/directory1/directory2/filename.txt'
+    host, working_directory = utils.get_ftp_host_and_directory_from_url(url)
+
+    assert host == 'the.host.name'
+    for i in range(3):
+        assert working_directory[i] == f'directory{i}'

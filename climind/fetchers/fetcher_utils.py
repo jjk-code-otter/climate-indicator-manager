@@ -87,7 +87,7 @@ def get_ftp_host_and_directory_from_url(url):
     working_directory = parsed_url.path
 
     working_directory = working_directory.split('/')
-    working_directory = working_directory[0:-1]
+    working_directory = working_directory[1:-1]
 
     host = parsed_url.hostname
 
