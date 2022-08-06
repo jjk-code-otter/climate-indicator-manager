@@ -7,7 +7,8 @@ import numpy as np
 
 FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "zJ": "zJ",
-               "millionkm2": "million km$^2$"}
+               "millionkm2": "million km$^2$",
+               "ph": "pH"}
 
 
 def set_lo_hi_ticks(limits, spacing):
@@ -284,6 +285,9 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
 
     if ds.metadata['variable'] == 'ohc':
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
+
+    if ds.metadata['variable'] == 'ph':
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.01)
 
     if ds.metadata['variable'] in ['mhw', 'mcs']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
