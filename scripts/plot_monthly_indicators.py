@@ -100,6 +100,12 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'monthly'},
             'Antarctic mass balance'
+        ],
+        'ph': [
+            {'variable': 'ph',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Ocean pH'
         ]
     }
 

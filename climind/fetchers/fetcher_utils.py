@@ -63,3 +63,32 @@ def url_from_filename(url: str, filename: str):
     path = f'{dirname}/{filename}'
     outurl = parsed_url._replace(path=path).geturl()
     return outurl
+
+
+def get_ftp_host_and_directory_from_url(url):
+    """
+    From a url, extract the host name and the directory, the directory being
+    broken down into a list of subdirectories
+
+    Parameters
+    ----------
+    url: str
+        URL to extract information from
+
+    Returns
+    -------
+    str
+        The host name
+    list
+        A list of directories
+    """
+    parsed_url = urlparse(url)
+
+    working_directory = parsed_url.path
+
+    working_directory = working_directory.split('/')
+    working_directory = working_directory[0:-1]
+
+    host = parsed_url.hostname
+
+    return host, working_directory
