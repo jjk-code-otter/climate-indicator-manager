@@ -1,0 +1,41 @@
+{
+  "name": "Manua Loa",
+  "version": "",
+  "variable": "co2",
+  "units": "ppm",
+  "citation": ["Keeling, C. D., Bacastow, R. B., Bainbridge, A. E., Ekdahl, C. A., Guenther, P. R., Waterman, L. S. and Chin, J. F. (1976), Atmospheric carbon dioxide variations at Mauna Loa Observatory, Hawaii. Tellus, 28: 538-551. doi:10.1111/j.2153-3490.1976.tb00701.x"],
+  "data_citation": [""],
+  "acknowledgement": "Dr. Pieter Tans, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends/) and Dr. Ralph Keeling, Scripps Institution of Oceanography (scrippsco2.ucsd.edu/).",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt"],
+      "filename": ["co2_mm_mlo.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_ftp"
+    },
+    {
+      "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_annmean_mlo.txt"],
+      "filename": ["co2_annmean_mlo.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_ftp"
+    }
+  ]
+}
