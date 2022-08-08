@@ -106,6 +106,12 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'annual'},
             'Ocean pH'
+        ],
+        'glacier': [
+            {'variable': 'glacier',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Glacier mass balance'
         ]
     }
 
