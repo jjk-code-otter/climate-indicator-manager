@@ -1,0 +1,26 @@
+{
+  "name": "WGMS",
+  "version": "",
+  "variable": "glacier",
+  "units": "mwe",
+  "citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
+  "data_citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["http://wgms.ch/data/faq/mb_ref.csv"],
+      "filename": ["mb_ref.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wgms",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
