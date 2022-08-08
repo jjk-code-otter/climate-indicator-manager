@@ -317,9 +317,14 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     # specify order of items in legend
     order = np.flip(np.argsort(zords))
     # add legend to plot
+    loc = "upper left"
+    bbox_to_anchor = (0.02, 0.96)
+    if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
+        loc = "upper right"
+        bbox_to_anchor = (0.96, 0.96)
     leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
                      frameon=False, prop={'size': 20}, labelcolor='linecolor',
-                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
+                     handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
     for item in leg.legendHandles:
@@ -619,9 +624,14 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     # specify order of items in legend
     order = np.flip(np.argsort(zords))
     # add legend to plot
+    loc = "upper left"
+    bbox_to_anchor = (0.02, 0.96)
+    if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
+        loc = "upper right"
+        bbox_to_anchor = (0.96, 0.96)
     leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
                      frameon=False, prop={'size': 20}, labelcolor='linecolor',
-                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
+                     handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
     for item in leg.legendHandles:
