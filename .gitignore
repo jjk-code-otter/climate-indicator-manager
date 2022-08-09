@@ -10,7 +10,7 @@ __pycache__/
 docs/_build/
 
 # Environments
-.env
+climind/fetchers/.env
 .venv
 env/
 venv/

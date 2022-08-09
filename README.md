@@ -46,11 +46,29 @@ DATADIR. This is easy to set in linux. In windows, do the following:
 5. For "Variable name" type DATADIR
 6. For "Variable value" type the pathname for the directory you want the data to go in.
 
-In addition, if you want to download JRA-55 data, you will need a valid username and password 
-combo for UCAR data download. These values should be stored in a file called .env in the 
-root directory of the repository. It should contain two lines:
+In addition, if you want to download JRA-55 data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a 
+valid username and password combo for each of these services. These values should be stored in a file called .env 
+in the `fetchers` directory of the repository. It should contain two lines for each of the 
+data services:
 
 ```
 UCAR_EMAIL=youremail@domain.com
 UCAR_PSWD=yourpasswordhere
+PODAAC_PSWD=anotherpasswordhere
+PODAAC_USER=anotherusernamehere
+CMEMS_USER=athirdusername
+CMEMS_PSWD=yetanotherpassword
 ```
+
+All three of these services are free to register, but you will have to set up the credentials online.
+
+
+Downloading data
+================
+
+There are two main scripts for downloading data in the scripts directory. `get_timeseries.py` will 
+download the data which are in the form of time series. `get_grids.py` will download the gridded data.
+The volume of gridded data is considerably larger than the volume of time series data. The gridded data 
+are used to calculate custom area averages (such as the WMO Regional Association averages) and for plotting 
+maps of the data. The key global indicators are all time series.
+
