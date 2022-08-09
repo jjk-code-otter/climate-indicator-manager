@@ -9,8 +9,8 @@
   "zpos": 10,
   "datasets": [
      {
-      "url": ["https://dataverse.geus.dk/api/access/datafile/35563"],
-      "filename": ["35563"],
+      "url": ["https://dataverse.geus.dk/api/access/datafile/"],
+      "filename": ["MB_SMB_D_BMB.csv"],
       "notes": "Filename should be MB_SMB_D_BMB.csv",
 	  "type": "timeseries",
 	  "time_resolution": "monthly",
@@ -21,11 +21,11 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_promice",
-	  "fetcher": "fetcher_standard_url"
+	  "fetcher": "fetcher_promice"
     },
     {
-      "url": ["https://dataverse.geus.dk/api/access/datafile/35467"],
-      "filename": ["35467"],
+      "url": ["https://dataverse.geus.dk/api/access/datafile/"],
+      "filename": ["MB_SMB_D_BMB_ann.csv"],
       "notes": "Filename should be MB_SMB_D_BMB_ann.csv",
 	  "type": "timeseries",
 	  "time_resolution": "annual",
@@ -36,7 +36,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_promice",
-	  "fetcher": "fetcher_standard_url"
+	  "fetcher": "fetcher_promice"
     }
   ]
 }
