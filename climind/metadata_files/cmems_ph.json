@@ -3,7 +3,7 @@
   "version": "",
   "variable": "ph",
   "units": "ph",
-  "citation": ["https://doi.org/10.48670/moi-00224"],
+  "citation": ["Gehlen M., Thi Tuyet Trang Chau, Anna Conchon, Anna Denvil-Sommer, Frédéric Chevallier, Mathieu Vrac, Carlos Mejia (2020). Ocean acidification. In: Copernicus Marine Service Ocean State Report, Issue 4, Journal of Operational Oceanography, 13:sup1, s88–s91; DOI: 10.1080/1755876X.2020.1785097"],
   "data_citation": ["https://doi.org/10.48670/moi-00224"],
   "colour": "#cc79a7",
   "zpos": 10,
