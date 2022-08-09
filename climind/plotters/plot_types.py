@@ -716,3 +716,108 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
                                           f'{year}-{month:02d}-28'))
 
     nice_map(selection, image_filename, title, var=var)
+
+
+def marine_heatwave_plot(out_dir: Path, mhw: list, mcs: list, image_filename: str):
+    sns.set(font='Franklin Gothic Book', rc={
+        'axes.axisbelow': False,
+        'axes.labelsize': 20,
+        'xtick.labelsize': 15,
+        'ytick.labelsize': 15,
+        'axes.edgecolor': 'lightgrey',
+        'axes.facecolor': 'None',
+
+        'axes.grid.axis': 'y',
+        'grid.color': 'lightgrey',
+        'grid.alpha': 0.5,
+
+        'axes.labelcolor': 'dimgrey',
+
+        'axes.spines.left': False,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': 'dimgrey',
+
+        'xtick.bottom': True,
+        'xtick.color': 'dimgrey',
+        'xtick.direction': 'out',
+        'xtick.top': False,
+
+        'ytick.major.width': 0.4,
+        'ytick.color': 'dimgrey',
+        'ytick.direction': 'out',
+        'ytick.left': False,
+        'ytick.right': False})
+
+    zords = []
+    plt.figure(figsize=[16, 9])
+    for i, ds in enumerate(mcs):
+        col = ds.metadata['colour']
+        zord = ds.metadata['zpos']
+        zords.append(zord)
+        plt.plot(ds.df['year'], ds.df['data'], label='Marine cold spells', color=col, zorder=zord, linewidth=3)
+    for i, ds in enumerate(mhw):
+        col = ds.metadata['colour']
+        zord = ds.metadata['zpos']
+        zords.append(zord)
+        plt.plot(ds.df['year'], ds.df['data'], label='Marine heatwaves', color=col, zorder=zord, linewidth=3)
+    ds = mcs[-1]
+
+    sns.despine(right=True, top=True, left=True)
+
+    plot_units = '%'
+    plt.xlabel('Year')
+    plt.ylabel(plot_units, rotation=0, labelpad=10)
+
+    plt.gca().set_ylim(0, 65)
+    yticks = np.arange(0, 65, 10)
+
+    xlims = plt.gca().get_xlim()
+    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    plt.tick_params(
+        axis='y',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        left=False,  # ticks along the bottom edge are off
+        right=False,  # ticks along the top edge are off
+        labelright=False)
+
+    plt.legend()
+    # get handles and labels
+    handles, labels = plt.gca().get_legend_handles_labels()
+    # specify order of items in legend
+    order = np.flip(np.argsort(zords))
+    # add legend to plot
+    loc = "upper left"
+    bbox_to_anchor = (0.02, 0.96)
+
+    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
+                     frameon=False, prop={'size': 30}, labelcolor='linecolor',
+                     handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
+    for line in leg.get_lines():
+        line.set_linewidth(3.0)
+    for item in leg.legendHandles:
+        item.set_visible(False)
+
+    ylim = plt.gca().get_ylim()
+    yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
+
+    title = 'Area affected by marine heatwaves and cold spells'
+    subtitle = '% of ocean area affected, 1982-2021'
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
+    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+    plt.close()
+    return
