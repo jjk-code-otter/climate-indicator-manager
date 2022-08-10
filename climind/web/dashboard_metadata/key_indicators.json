@@ -1,0 +1,116 @@
+{
+  "name": "Key Indicators",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Key Climate Indicators",
+      "template": "front_page",
+      "indicators": [
+        "co2",
+        "tas",
+        "ohc",
+        "sea_level",
+        "arctic_ice",
+        "greenland"
+      ],
+      "links": [
+        "greenhouse_gases",
+        "global_mean_temperature",
+        "ocean_heat_content",
+        "sea_level",
+        "sea_ice_extent",
+        "glaciers_and_ice_sheets"
+      ]
+    },
+    {
+      "id": "greenhouse_gases",
+      "name": "Greenhouse gases",
+      "template": "topic_page",
+      "indicators": [
+        "co2",
+        "ch4",
+        "n2o"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "global_mean_temperature",
+      "name": "Global mean temperature",
+      "template": "topic_page",
+      "indicators": [
+        "tas",
+        "lsat",
+        "sst"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "ocean_heat_content",
+      "name": "Ocean Heat Content",
+      "template": "topic_page",
+      "indicators": [
+        "ohc",
+        "sst",
+        "sealevel"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "sea_level",
+      "name": "Sea Level",
+      "template": "topic_page",
+      "indicators": [
+        "sealevel",
+        "ohc",
+        "sst"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "sea_ice_extent",
+      "name": "Sea ice extent",
+      "template": "topic_page",
+      "indicators": [
+        "arctic_ice",
+        "antarctic_ice",
+        "sst"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "glaciers_and_ice_sheets",
+      "name": "Glaciers and Ice Sheets",
+      "template": "topic_page",
+      "indicators": [
+        "glacier",
+        "greenland",
+        "antarctica"
+      ],
+      "links": [
+        null,
+        null,
+        null
+      ]
+    }
+  ]
+}
