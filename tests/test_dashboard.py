@@ -43,7 +43,3 @@ def test_dashboard_from_json(tmpdir):
     assert isinstance(dash, Dashboard)
 
     assert len(dash.pages) == 6 + 1
-
-    dash.build(Path(tmpdir))
-
-    assert (tmpdir / 'dashboard.html').exists()

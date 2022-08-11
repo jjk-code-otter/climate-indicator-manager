@@ -79,12 +79,6 @@ class Page:
         template = env.get_template(f"{self['template']}.html.jinja")
         with open(build_dir / f"{self['id']}.html", 'w') as out_file:
             out_file.write(template.render(cards=self['cards'], page_meta=self))
-            print(template.render(cards=self['cards'], page_meta=self))
-
-        # generate formatted data
-
-        #
-        pass
 
 
 class Dashboard:
