@@ -52,7 +52,8 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     if not first_diff:
         mass_balance = df['cumulative_data'].tolist()
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 

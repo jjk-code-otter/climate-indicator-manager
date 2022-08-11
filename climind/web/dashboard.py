@@ -3,6 +3,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import climind.plotters.plot_types as pt
+import climind.data_types.timeseries as ts
 from climind.data_manager.processing import DataArchive
 from climind.definitions import ROOT_DIR
 from climind.config.config import DATA_DIR
@@ -31,40 +32,54 @@ class Page:
         print(f"Building {self.metadata['id']} using template {self.metadata['template']}")
 
         for card in self['cards']:
+
             indicator = card['indicators']
             link_to = card['link_to']
             plot_type = card['plot']
+            processing = card['processing']
 
+            # Select and load data sets in archive
             selection_metadata = {
                 'type': 'timeseries',
                 'variable': indicator,
                 'time_resolution': plot_type
             }
-
             selected = archive.select(selection_metadata)
             selected_datasets = selected.read_datasets(DATA_DIR)
-            if plot_type == 'monthly':
-                figure_name = f'{indicator}_monthly.png'
-                pt.monthly_plot(figure_dir, selected_datasets, figure_name, link_to)
-            else:
-                figure_name = f'{indicator}_annual.png'
-                pt.neat_plot(figure_dir, selected_datasets, figure_name, link_to)
 
+            # Apply processing steps to each dataset
+            processed_datasets = []
+            for ds in selected_datasets:
+                for step in processing:
+                    method = step['method']
+                    arguments = step['args']
+                    output = getattr(ds, method)(*arguments)
+                    if output is not None:
+                        ds = output
+                processed_datasets.append(ds)
+
+            # Plot the output and add figure name to card
+            figure_name = f'{indicator}.png'
+            plot_function = card['plotting']['function']
+            plot_title = card['plotting']['title']
+            getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title)
             card['figure_name'] = figure_name
+
+            for ds in processed_datasets:
+                csv_filename = f"{indicator}_{ds.metadata['name']}.csv"
+                ds.write_csv(formatted_data_dir / csv_filename)
+
+            card['csv_name'] = csv_filename
 
         # populate template to make webpage
         env = Environment(
             loader=FileSystemLoader(ROOT_DIR / "climind" / "web" / "jinja_templates"),
             autoescape=select_autoescape()
         )
-
         template = env.get_template(f"{self['template']}.html.jinja")
-
         with open(build_dir / f"{self['id']}.html", 'w') as out_file:
             out_file.write(template.render(cards=self['cards'], page_meta=self))
             print(template.render(cards=self['cards'], page_meta=self))
-
-        # generate images
 
         # generate formatted data
 

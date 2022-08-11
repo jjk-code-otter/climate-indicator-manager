@@ -135,7 +135,8 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
                     months.append(int(i))
                     anomalies.append(float(columns[i]))
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
@@ -153,6 +154,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
                 years.append(int(columns[0]))
                 anomalies.append(float(columns[13]))
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)

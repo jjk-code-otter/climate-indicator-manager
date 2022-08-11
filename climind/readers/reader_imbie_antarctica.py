@@ -51,7 +51,8 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
 
     mass_balance = df['data'].tolist()
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 

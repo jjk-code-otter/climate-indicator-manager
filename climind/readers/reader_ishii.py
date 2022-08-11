@@ -45,6 +45,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
             else:
                 anomalies.append(np.nan)
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)
