@@ -5,111 +5,73 @@
       "id": "dashboard",
       "name": "Key Climate Indicators",
       "template": "front_page",
-      "indicators": [
-        "co2",
-        "tas",
-        "ohc",
-        "sea_level",
-        "arctic_ice",
-        "greenland"
-      ],
-      "links": [
-        "greenhouse_gases",
-        "global_mean_temperature",
-        "ocean_heat_content",
-        "sea_level",
-        "sea_ice_extent",
-        "glaciers_and_ice_sheets"
+      "cards":[
+        {"indicators": "co2", "link_to": "greenhouse_gases", "plot": "monthly", "title": "Greenhouse gases" },
+        {"indicators": "tas", "link_to": "global_mean_temperature", "plot": "annual", "title": "Global temperature" },
+        {"indicators": "ohc", "link_to": "ocean_heat_content", "plot": "annual", "title": "Ocean heat" },
+        {"indicators": "sealevel", "link_to": "sea_level", "plot": "monthly", "title": "Sea level" },
+        {"indicators": "arctic_ice", "link_to": "sea_ice_extent", "plot": "monthly", "title": "Sea ice" },
+        {"indicators": "greenland", "link_to": "glaciers_and_ice_sheets", "plot": "monthly", "title":"Glaciers and ice sheets" }
       ]
     },
     {
       "id": "greenhouse_gases",
       "name": "Greenhouse gases",
       "template": "topic_page",
-      "indicators": [
-        "co2",
-        "ch4",
-        "n2o"
-      ],
-      "links": [
-        null,
-        null,
-        null
-      ]
+      "cards": [
+        {"indicators": "co2", "link_to":  null, "plot": "monthly", "title": "Carbon dioxide CO<sub>2</sub>"},
+        {"indicators": "ch4", "link_to":  null, "plot": "monthly", "title": "Methane CH<sub>4</sub>"},
+        {"indicators": "n2o", "link_to":  null, "plot": "monthly", "title": "Nitrous Oxide N<sub>2</sub>"}
+        ]
     },
     {
       "id": "global_mean_temperature",
       "name": "Global mean temperature",
       "template": "topic_page",
-      "indicators": [
-        "tas",
-        "lsat",
-        "sst"
-      ],
-      "links": [
-        null,
-        null,
-        null
+      "cards": [
+        {"indicators": "tas", "link_to":  null, "plot": "annual", "title": "Global mean temperature"},
+        {"indicators": "lsat", "link_to":  null, "plot": "annual", "title": "Land air temperature"},
+        {"indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature"}
       ]
     },
     {
       "id": "ocean_heat_content",
       "name": "Ocean Heat Content",
       "template": "topic_page",
-      "indicators": [
-        "ohc",
-        "sst",
-        "sealevel"
-      ],
-      "links": [
-        null,
-        null,
-        null
+      "cards": [
+        {"indicators": "ohc", "link_to":  null, "plot": "annual", "title": "Ocean heat content"},
+        {"indicators": "ph", "link_to":  null, "plot": "annual", "title": "Ocean pH"},
+        {"indicators": "sealevel", "link_to":  null, "plot": "monthly", "title": "Sea level"}
       ]
     },
     {
       "id": "sea_level",
       "name": "Sea Level",
       "template": "topic_page",
-      "indicators": [
-        "sealevel",
-        "ohc",
-        "sst"
-      ],
-      "links": [
-        null,
-        null,
-        null
+      "cards": [
+        {"indicators": "sealevel", "link_to":  null, "plot": "monthly", "title": "Sea level"},
+        {"indicators": "ohc", "link_to":  null, "plot": "annual", "title": "Ocean heat content"},
+        {"indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature"}
       ]
     },
     {
       "id": "sea_ice_extent",
       "name": "Sea ice extent",
       "template": "topic_page",
-      "indicators": [
-        "arctic_ice",
-        "antarctic_ice",
-        "sst"
-      ],
-      "links": [
-        null,
-        null,
-        null
+      "cards": [
+        {"indicators": "arctic_ice", "link_to":  null, "plot": "monthly", "title": "Arctic sea ice"},
+        {"indicators": "antarctic_ice", "link_to":  null, "plot": "monthly", "title": "Antarctic sea ice"},
+        {"indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature"}
       ]
     },
     {
       "id": "glaciers_and_ice_sheets",
       "name": "Glaciers and Ice Sheets",
       "template": "topic_page",
-      "indicators": [
-        "glacier",
-        "greenland",
-        "antarctica"
-      ],
-      "links": [
-        null,
-        null,
-        null
+       "cards": [
+        {"indicators": "glacier", "link_to":  null, "plot": "annual", "title": "Glacier mass balance"},
+        {"indicators": "greenland", "link_to":  null, "plot": "monthly", "title": "Greenland ice sheet"},
+        {"indicators": "antarctica", "link_to":  null, "plot": "monthly", "title": "Antarctic ice sheet"}
       ]
     }
   ]

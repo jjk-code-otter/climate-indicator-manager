@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from climind.definitions import ROOT_DIR
+from climind.definitions import ROOT_DIR, METADATA_DIR
 from climind.web.dashboard import Page, Dashboard
 
 
@@ -38,10 +38,12 @@ def test_dashboard_from_json(tmpdir):
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators.json'
     assert json_file.exists()
 
-    dash = Dashboard.from_json(json_file)
+    dash = Dashboard.from_json(json_file, METADATA_DIR)
 
     assert isinstance(dash, Dashboard)
 
     assert len(dash.pages) == 6 + 1
 
-    dash.build(tmpdir)
+    dash.build(Path(tmpdir))
+
+    assert (tmpdir / 'dashboard.html').exists()

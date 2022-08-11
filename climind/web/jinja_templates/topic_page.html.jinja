@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ page_meta.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-padding-32 w3-sand">
+
+    <div class="w3-container " style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom">
+            <h1>{{ page_meta.name }}</h1>
+        </div>
+    </div>
+
+    <div class="w3-row-padding" style="margin:0 -16px">
+
+        {% for item in cards %}
+        <div class="w3-third">
+
+            <div class="w3-card w3-container w3-white w3-margin-bottom">
+                <h3>{{ item.title }}</h3>
+                <p>
+                    <img src="figures/{{ item.figure_name }}" width=100%>
+                </p>
+                <p>
+                    Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a> -
+                    <a href="figures/{{ item.figure_name|replace('png','pdf') }} target="_blank" aria-label=""">pdf</a> -
+                    <a href="figures/{{ item.figure_name|replace('png','svg') }} target="_blank" aria-label=""">svg</a>
+                    <br>
+                    Formatted: data csv - netcdf
+                    <br>
+                    {% if item.link_to is not none %}
+                    <a href="{{ item.link_to  }}.html">Read more</a>
+                    {% endif %}
+                </p>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+</body>
+</html>
