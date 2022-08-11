@@ -8,6 +8,6 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
-    ts_archive = archive.select({'type': 'timeseries'})
+    ts_archive = archive.select({'type': 'timeseries', 'variable': 'n2o'})
 
     ts_archive.download(data_dir)

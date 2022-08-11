@@ -2,6 +2,7 @@ from pathlib import Path
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
+from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
 
@@ -268,7 +269,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord, linewidth=3)
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
@@ -277,7 +278,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     if plot_units in FANCY_UNITS:
         plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
+    plt.ylabel(plot_units, rotation=90, labelpad=10)
 
     ylims = plt.gca().get_ylim()
     ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
@@ -342,7 +343,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
-    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
@@ -595,7 +596,7 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     if plot_units in FANCY_UNITS:
         plot_units = FANCY_UNITS[plot_units]
     plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=23)
+    plt.ylabel(plot_units, rotation=90, labelpad=23)
 
     ylims = plt.gca().get_ylim()
     if ds.metadata['variable'] in ['tas', 'lsat', 'sst']:
@@ -607,7 +608,7 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
         ylo = 10. * (1 + (ylims[0] // 10.))
         yhi = 10. * (1 + (ylims[1] // 10.))
         plt.yticks(np.arange(ylo, yhi, 10.))
-        plt.xticks(np.arange(1980, 2023, 10))
+        plt.xticks(np.arange(1950, 2023, 10))
 
     # plt.yticks(np.arange(-0.2, 1.4, 0.2))
 
@@ -649,14 +650,14 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
-    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
     return
 
 
-def marine_heatwave_plot(out_dir: Path, mhw: list, mcs: list, image_filename: str):
+def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -691,6 +692,14 @@ def marine_heatwave_plot(out_dir: Path, mhw: list, mcs: list, image_filename: st
         'ytick.direction': 'out',
         'ytick.left': False,
         'ytick.right': False})
+
+    mcs = []
+    mhw = []
+    for ds in all_datasets:
+        if ds.metadata['variable'] == 'mcs':
+            mcs.append(ds)
+        if ds.metadata['variable'] == 'mhw':
+            mhw.append(ds)
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -754,14 +763,14 @@ def marine_heatwave_plot(out_dir: Path, mhw: list, mcs: list, image_filename: st
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
-    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
     return
 
 
-def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str):
+def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -864,7 +873,117 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str):
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
-    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+    plt.close()
+    return
+
+
+def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+    sns.set(font='Franklin Gothic Book', rc={
+        'axes.axisbelow': False,
+        'axes.labelsize': 20,
+        'xtick.labelsize': 15,
+        'ytick.labelsize': 15,
+        'axes.edgecolor': 'lightgrey',
+        'axes.facecolor': 'None',
+
+        'axes.grid.axis': 'y',
+        'grid.color': 'lightgrey',
+        'grid.alpha': 0.5,
+
+        'axes.labelcolor': 'dimgrey',
+
+        'axes.spines.left': False,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': 'dimgrey',
+
+        'xtick.bottom': True,
+        'xtick.color': 'dimgrey',
+        'xtick.direction': 'out',
+        'xtick.top': False,
+
+        'ytick.major.width': 0.4,
+        'ytick.color': 'dimgrey',
+        'ytick.direction': 'out',
+        'ytick.left': False,
+        'ytick.right': False})
+
+    february_colors = ['#e69f00', '#d55e00']
+    september_colors = ['#56b4e9', '#009e73']
+
+    zords = []
+    plt.figure(figsize=[16, 9])
+    for i, ds in enumerate(all_datasets):
+        subds = ds.make_annual_by_selecting_month(2)
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} February",
+                 color=february_colors[i], linewidth=3)
+
+    for i, ds in enumerate(all_datasets):
+        subds = ds.make_annual_by_selecting_month(9)
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} September",
+                 color=september_colors[i], linewidth=3)
+
+    ds = all_datasets[-1]
+
+    sns.despine(right=True, top=True, left=True)
+
+    plot_units = ds.metadata['units']
+    if plot_units in FANCY_UNITS:
+        plot_units = FANCY_UNITS[plot_units]
+    plt.xlabel('Year')
+    plt.ylabel(plot_units, rotation=90, labelpad=10)
+
+    ylims = plt.gca().get_ylim()
+    ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
+    if len(yticks) > 10:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
+
+    xlims = plt.gca().get_xlim()
+    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    plt.tick_params(
+        axis='y',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        left=False,  # ticks along the bottom edge are off
+        right=False,  # ticks along the top edge are off
+        labelright=False)
+
+    plt.legend()
+    # get handles and labels
+    handles, labels = plt.gca().get_legend_handles_labels()
+    # add legend to plot
+    loc = "upper left"
+    bbox_to_anchor = (0.05, 0.96)
+    leg = plt.legend(handles, labels,
+                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
+                     handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
+    for line in leg.get_lines():
+        line.set_linewidth(3.0)
+    for item in leg.legendHandles:
+        item.set_visible(False)
+
+    ylim = plt.gca().get_ylim()
+    yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
+
+    title = f'Antarctic sea-ice extent ({plot_units})'
+    subtitle = f"Difference from {ds.metadata['climatology_start']}-" \
+               f"{ds.metadata['climatology_end']} average"
+
+    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
+    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()

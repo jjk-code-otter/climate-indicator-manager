@@ -1,0 +1,27 @@
+{
+  "name": "Kennaook Cape Grim CH4",
+  "version": "",
+  "variable": "ch4",
+  "units": "ppb",
+  "citation": [""],
+  "data_citation": [""],
+  "acknowledgement": "https://www.csiro.au/greenhouse-gases/ Data measured at the Kennaook / Cape Grim Baseline Air Pollution Station (KCGBAPS), located near the north-west tip of Tasmania, Australia. KCGBAPS is funded and managed by the Australian Bureau of Meteorology, and the scientific program is jointly supervised with CSIRO Oceans & Atmosphere",
+  "colour": "#56b4e9",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CH4_data_download.csv"],
+      "filename": ["CapeGrim_CH4_data_download.csv"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_kennaook",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

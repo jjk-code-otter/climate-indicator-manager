@@ -1,0 +1,30 @@
+{
+  "name": "GML N2O",
+  "version": "",
+  "variable": "n2o",
+  "units": "ppb",
+  "citation": [
+    "Hall , B.D., G.S. Dutton, and J.W. Elkins (2007), The NOAA nitrous oxide standard scale for atmospheric observations, J. Geophys. Res., 112, D09305, doi:10.1029/2006JD007954.",
+    "Elkins, J.W, and G.S. Dutton (2009), Nitrous oxide and sulfur hexafluoride [in 'State of the Climate in 2008']. Bull. Amer. Meteor. Soc, 90 S38-S39."
+  ],
+  "data_citation": ["Data obtained from https://gml.noaa.gov/hats/combined/N2O.html"],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://gml.noaa.gov/aftp/data/hats/n2o/combined/GML_global_N2O.txt"],
+      "filename": ["GML_global_N2O.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gml",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -20,7 +20,7 @@
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
         },
         {
-          "indicators": "ohc", "link_to": "ocean_heat_content", "plot": "annual", "title": "Ocean heat",
+          "indicators": "ohc", "link_to": "ocean_heat_content", "plot": "annual", "title": "Ocean Indicators",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
@@ -32,7 +32,7 @@
         {
           "indicators": "arctic_ice", "link_to": "sea_ice_extent", "plot": "monthly", "title": "Sea ice",
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
-          "plotting": {"function": "monthly_plot", "title": "Arctic sea-ice extent"}
+          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
           "indicators": "greenland", "link_to": "glaciers_and_ice_sheets", "plot": "monthly", "title":"Glaciers and ice sheets",
@@ -90,7 +90,7 @@
     },
     {
       "id": "ocean_heat_content",
-      "name": "Ocean Heat Content",
+      "name": "Ocean Indicators",
       "template": "topic_page",
       "cards": [
         {
@@ -107,6 +107,11 @@
           "indicators": "sealevel", "link_to":  null, "plot": "monthly", "title": "Sea level",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
+        },
+        {
+          "indicators": ["mhw", "mcs"], "link_to":  null, "plot": "annual", "title": "Marine heat waves",
+          "processing": [],
+          "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
         }
       ]
     },
@@ -140,12 +145,12 @@
         {
           "indicators": "arctic_ice", "link_to":  null, "plot": "monthly", "title": "Arctic sea ice",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
-          "plotting": {"function": "monthly_plot", "title": "Arctic sea-ice extent"}
+          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
           "indicators": "antarctic_ice", "link_to":  null, "plot": "monthly", "title": "Antarctic sea ice",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
-          "plotting": {"function": "monthly_plot", "title": "Antarctic sea-ice extent"}
+          "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
         },
         {
           "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
