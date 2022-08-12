@@ -59,6 +59,7 @@
         "aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
       ],
       "type": "timeseries",
+      "long_name": "Global mean land temperature",
       "time_resolution": "monthly",
       "space_resolution": 999,
       "climatology_start": 1961,
@@ -79,6 +80,7 @@
         "aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
       ],
       "type": "timeseries",
+      "long_name": "Global mean land temperature",
       "time_resolution": "annual",
       "space_resolution": 999,
       "climatology_start": 1961,

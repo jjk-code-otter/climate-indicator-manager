@@ -70,8 +70,9 @@ class Page:
             figure_name = f"{card['title']}.png".replace(" ", "_")
             plot_function = card['plotting']['function']
             plot_title = card['plotting']['title']
-            getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title)
+            caption = getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title)
             card['figure_name'] = figure_name
+            card['caption'] = caption
 
             zipfile_name = f"{card['title']}_data_files.zip".replace(" ", "_")
             with ZipFile(formatted_data_dir / zipfile_name, 'w') as zip_archive:

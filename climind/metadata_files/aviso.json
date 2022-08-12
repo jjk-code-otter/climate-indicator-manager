@@ -13,6 +13,7 @@
       "url": [""],
       "filename": ["GMSL_Aviso_Merged_NRTJ3_Ablain_drift_corrected_ts.txt"],
 	  "type": "timeseries",
+      "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",
 	  "space_resolution": 999,
 	  "climatology_start": 1993,

@@ -27,6 +27,7 @@
       "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/fig1/fig1.txt"],
       "filename": ["fig1.txt"],
       "type": "timeseries",
+      "long_name": "Global mean temperature",
 	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

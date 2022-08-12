@@ -13,6 +13,7 @@
       "url": ["https://www.data.jma.go.jp/gmd/kaiyou/data/english/ohc/ohc_global_1955.txt"],
       "filename": ["ohc_global_1955.txt"],
 	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
 	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,
