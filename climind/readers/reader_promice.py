@@ -50,6 +50,9 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     mdf_month = df.groupby(['year', 'month'])['month'].mean()
     mdf_data = df.groupby(['year', 'month'])['data'].sum()
 
+    mdf_year = mdf_year.astype(int)
+    mdf_month = mdf_month.astype(int)
+
     if not first_diff:
         mdf_data = mdf_data.cumsum()
 
@@ -57,8 +60,8 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     months = mdf_month.values.tolist()
     mass_balance = mdf_data.values.tolist()
 
-
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 
@@ -79,8 +82,10 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
             years.append(int(columns[0]))
             mass_balance.append(float(columns[1]))
 
-#    if not first_diff:
- #       df =
+    #    if not first_diff:
+    #       df =
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+
     return ts.TimeSeriesAnnual(years, mass_balance, metadata=metadata)

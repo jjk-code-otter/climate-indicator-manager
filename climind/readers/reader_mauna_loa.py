@@ -28,17 +28,17 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(53):
-            f.readline()
         for line in f:
-            columns = line.split()
-            year = columns[0]
-            month = columns[1]
-            years.append(int(year))
-            months.append(int(month))
-            anomalies.append(float(columns[3]))
+            if line[0] != '#':
+                columns = line.split()
+                year = columns[0]
+                month = columns[1]
+                years.append(int(year))
+                months.append(int(month))
+                anomalies.append(float(columns[3]))
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
@@ -48,14 +48,14 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(57):
-            f.readline()
         for line in f:
-            columns = line.split()
-            year = columns[0]
-            years.append(int(year))
-            anomalies.append(float(columns[1]))
+            if line[0] != '#':
+                columns = line.split()
+                year = columns[0]
+                years.append(int(year))
+                anomalies.append(float(columns[1]))
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)

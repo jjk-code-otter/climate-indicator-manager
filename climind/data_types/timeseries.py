@@ -290,7 +290,8 @@ class TimeSeriesMonthly:
         climind_version = pkg_resources.get_distribution("climind").version
         time_units = 'days since 1800-01-01 00:00:00.0'
 
-        self.df['time'] = pd.to_datetime(self.df.year.astype(str) + self.df.month.astype(str), format='%Y%m')
+        time_str = self.df.year.astype(str) + self.df.month.astype(str)
+        self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
         dates = cf.date2num(self.df['time'].tolist(),
                             units=time_units,
                             has_year_zero=False,

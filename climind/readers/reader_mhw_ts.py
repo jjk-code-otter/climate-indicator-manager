@@ -41,6 +41,7 @@ def read_annual_ts(filename: str, metadata: dict):
                 years.append(int(year))
                 data.append(prop_area)
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesAnnual(years, data, metadata=metadata)

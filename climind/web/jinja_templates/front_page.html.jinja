@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ page_meta.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<style>
+h1, h2, h3, h4, h5, h6 {
+		font-weight: 600;
+	}
+h3 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+p {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+.button_link {
+  background-color: #777777;
+  color: white;
+  padding: 14px 25px;
+  margin-bottom: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+</style>
+<body>
+
+<div class="w3-container w3-padding-32 w3-light-grey">
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>{{ page_meta.name }}</h1>
+        </div>
+    </div>
+
+    <div class="w3-row-padding" style="margin:0 -16px">
+
+        {% for item in cards %}
+        <div class="w3-third">
+
+            <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+                <p>
+                    <img src="figures/{{ item.figure_name }}" width=100%>
+                </p>
+                <h3>{{ item.title }}</h3>
+                <p>
+                    Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a>-<a
+                        href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank" aria-label="">pdf</a>-<a
+                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a>
+                    Formatted data: <a href="formatted_data/{{ item.csv_name }}">csv</a>-netcdf
+                </p>
+                <p>
+                    <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Read more</a>
+                </p>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "NOAA CH4",
+  "version": "",
+  "variable": "ch4",
+  "units": "ppm",
+  "citation": ["Dlugokencky, E. J., L. P. Steele, P. M. Lang, and K. A. Masarie (1994), The growth rate and distribution of atmospheric methane, J. Geophys. Res., 99, 17,021– 17,043, doi:10.1029/94JD01245."],
+  "data_citation": ["Ed Dlugokencky, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends_ch4/)"],
+  "acknowledgement": "Ed Dlugokencky, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends_ch4/)",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_mm_gl.txt"],
+      "filename": ["ch4_mm_gl.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_ftp"
+    },
+    {
+      "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_annmean_gl.txt"],
+      "filename": ["ch4_annmean_gl.txt"],
+	  "type": "timeseries",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_ftp"
+    }
+  ]
+}

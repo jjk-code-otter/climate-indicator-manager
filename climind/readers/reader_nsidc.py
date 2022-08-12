@@ -49,6 +49,7 @@ def read_monthly_ts(filenames: list, metadata: CombinedMetadata):
     years = [x for _, x in sorted(zip(time, years))]
     months = [x for _, x in sorted(zip(time, months))]
 
-    metadata['history'] = [f'Time series created from file {filenames}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)

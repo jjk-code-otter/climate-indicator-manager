@@ -51,10 +51,14 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     mdf2 = df.groupby(['year', 'month'])['data'].mean()
     mdf3 = df.groupby(['year', 'month'])['month'].mean()
 
+    mdf1 = mdf1.astype(int)
+    mdf3 = mdf3.astype(int)
+
     years = mdf1.values.tolist()
     months = mdf3.values.tolist()
     anomalies = mdf2.values.tolist()
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)

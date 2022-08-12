@@ -33,10 +33,8 @@ if __name__ == "__main__":
     archive = dm.DataArchive.from_directory(metadata_dir)
 
 
-    mhw_archive = archive.select({'variable': 'mhw'})
-    mcs_archive = archive.select({'variable': 'mcs'})
+    mhw_archive = archive.select({'variable': ['mhw', 'mcs']})
 
     mhw = mhw_archive.read_datasets(data_dir)
-    mcs = mcs_archive.read_datasets(data_dir)
 
-    pt.marine_heatwave_plot(figure_dir, mhw, mcs, 'marine_heatwave.png')
+    pt.marine_heatwave_plot(figure_dir, mhw, 'marine_heatwave.png', '')

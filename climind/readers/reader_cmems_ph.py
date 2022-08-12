@@ -35,5 +35,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     data = df.ph.values.tolist()
     years = df.time.dt.year.data.tolist()
 
-    metadata['history'] = [f'Time series created from file {filename}']
+    metadata['history'] = [f"Time series created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+
     return ts.TimeSeriesAnnual(years, data, metadata=metadata)
