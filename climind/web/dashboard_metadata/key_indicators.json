@@ -9,7 +9,7 @@
         {
           "indicators": "co2", "link_to": "greenhouse_gases", "plot": "monthly", "title": "Greenhouse gases",
           "processing": [],
-          "plotting": {"function": "monthly_plot", "title": "Atmospheric CO2 concentration"}
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
           "indicators": "tas", "link_to": "global_mean_temperature", "plot": "monthly", "title": "Global temperature",
