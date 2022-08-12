@@ -5,6 +5,7 @@
   "units": "degC",
   "citation": ["Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
   "data_citation": [""],
+  "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "colour": "dimgrey",
   "zpos": 99,
   "datasets": [

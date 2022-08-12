@@ -3,12 +3,9 @@
   "version": "v5.0.0",
   "variable": "lsat",
   "units": "degC",
-  "citation": [
-    "Menne, M. J., C. N. Williams, B.E. Gleason, J. J Rennie, and J. H. Lawrimore, 2018: The Global Historical Climatology Network Monthly Temperature Dataset, Version 4. J. Climate, in press. https://doi.org/10.1175/JCLI-D-18-0094.1"
-  ],
-  "data_citation": [
-    ""
-  ],
+  "citation": ["Menne, M. J., C. N. Williams, B.E. Gleason, J. J Rennie, and J. H. Lawrimore, 2018: The Global Historical Climatology Network Monthly Temperature Dataset, Version 4. J. Climate, in press. https://doi.org/10.1175/JCLI-D-18-0094.1"],
+  "data_citation": [""],
+  "acknowledgement": "",
   "colour": "#e69f00",
   "zpos": 10,
   "datasets": [

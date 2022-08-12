@@ -5,6 +5,7 @@
   "units": "degC",
   "citation": ["Kadow et al. Nature"],
   "data_citation": [""],
+  "acknowledgement": "",
   "colour": "#cc79a7",
   "zpos": 10,
   "datasets": [

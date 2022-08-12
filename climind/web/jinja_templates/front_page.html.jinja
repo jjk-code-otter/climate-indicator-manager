@@ -33,6 +33,13 @@ p {
   border-radius: 5px;
 }
 
+
+
+
+
+
+
+
 </style>
 <body>
 
@@ -53,7 +60,7 @@ p {
                 <p>
                     <img src="figures/{{ item.figure_name }}" width=100%>
                 </p>
-                <h3>{{ item.title }}</h3>
+                <h3>{{ item.title|title }}</h3>
                 <p>
                     Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a>-<a
                         href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank" aria-label="">pdf</a>-<a
@@ -61,7 +68,9 @@ p {
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}">csv</a>-netcdf
                 </p>
                 <p>
+                    {% if item.link_to is not none %}
                     <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Read more</a>
+                    {% endif %}
                 </p>
             </div>
 
@@ -69,6 +78,42 @@ p {
         {% endfor %}
 
     </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>Dataset details</h1>
+        </div>
+    </div>
+
+    {% for item in cards %}
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h2>{{ item.title }}</h2>
+
+            {% for ds in item.dataset_metadata %}
+            <h3>{{ ds.name }}</h3>
+            <p>
+                {% for this_url in ds.url %}
+                <a href="{{ this_url }}">Original data file (external link)</a>
+                {% endfor %}
+            </p>
+            {% if ds.citation %}
+            <p>
+                Citation{% if ds.citation|length > 1 %}s{% endif %}: {{ ds.citation|join(',<br>') }}
+            </p>
+            {% endif %}
+            {% if ds.data_citation %}
+            <p>
+                Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
+            </p>
+            {% endif %}
+            <p>Acknowledgement: {{ ds.acknowledgement }}</p>
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endfor %}
+
 </div>
 
 </body>
