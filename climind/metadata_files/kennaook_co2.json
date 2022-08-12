@@ -13,6 +13,7 @@
       "url": ["https://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CO2_data_download.csv"],
       "filename": ["CapeGrim_CO2_data_download.csv"],
 	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of carbon dioxide",
 	  "time_resolution": "monthly",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

@@ -13,6 +13,7 @@
       "url": ["https://dap.ceda.ac.uk/badc/ar6_wg1/data/ch_02/ch2_fig11/v20211207//Figure_2_11c-lower_panel.csv"],
       "filename": ["Figure_2_11c-lower_panel.csv"],
       "type": "timeseries",
+      "long_name": "Global mean temperature",
 	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

@@ -13,6 +13,7 @@
       "url": ["http://wgms.ch/data/faq/mb_ref.csv"],
       "filename": ["mb_ref.csv"],
 	  "type": "timeseries",
+      "long_name": "Mountain glacier cumulative mass balance",
 	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

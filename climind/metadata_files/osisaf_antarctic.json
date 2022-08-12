@@ -13,6 +13,7 @@
       "url": ["ftp://osisaf.met.no/prod_test/ice/index/v2p1/sh/osisaf_sh_sie_monthly.txt"],
       "filename": ["osisaf_sh_sie_monthly.txt"],
 	  "type": "timeseries",
+      "long_name": "Antarctic sea-ice extent",
 	  "time_resolution": "monthly",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

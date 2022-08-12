@@ -36,6 +36,7 @@
                    "S_11_extent_v3.0.csv",
                    "S_12_extent_v3.0.csv"],
 	  "type": "timeseries",
+      "long_name": "Antarctic sea-ice extent",
 	  "time_resolution": "monthly",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

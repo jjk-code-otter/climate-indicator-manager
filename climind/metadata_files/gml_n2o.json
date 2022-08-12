@@ -16,6 +16,7 @@
       "url": ["https://gml.noaa.gov/aftp/data/hats/n2o/combined/GML_global_N2O.txt"],
       "filename": ["GML_global_N2O.txt"],
 	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of nitrous oxide",
 	  "time_resolution": "monthly",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,

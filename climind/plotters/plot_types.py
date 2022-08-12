@@ -35,6 +35,57 @@ def set_lo_hi_ticks(limits, spacing):
     return lo, hi, ticks
 
 
+def get_first_and_last_years(all_datasets):
+    """
+    Extract the first and last years from a list of data sets
+    Parameters
+    ----------
+    all_datasets
+
+    Returns
+    -------
+    int, int
+        First and last years
+    """
+    first_years = []
+    last_years = []
+    for ds in all_datasets:
+        first_years.append(ds.df['year'].tolist()[0])
+        last_years.append(ds.df['year'].tolist()[-1])
+    first_year = np.min(first_years)
+    last_year = np.max(last_years)
+
+    return first_year, last_year
+
+
+def caption_builder(all_datasets):
+    first_year, last_year = get_first_and_last_years(all_datasets)
+
+    ds = all_datasets[-1]
+
+    number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+                      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
+
+    caption = f"{ds.metadata['time_resolution']} {ds.metadata['long_name']} ({ds.metadata['units']}"
+    if not ds.metadata['actual']:
+        caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
+    caption += ") "
+    caption += f" from {first_year}-{last_year}. "
+    if len(all_datasets) > 1:
+        caption += f"Data are from the following {number_to_word[len(all_datasets)]} data sets: "
+    else:
+        caption += f"Data are from "
+
+    dataset_names_for_caption = []
+    for ds in all_datasets:
+        dataset_names_for_caption.append(f"{ds.metadata['name']}")
+
+    caption += ', '.join(dataset_names_for_caption)
+    caption += '.'
+
+    return caption
+
+
 def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
@@ -227,7 +278,26 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     return
 
 
-def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+    """
+    Create the standard annual plot
+
+    Parameters
+    ----------
+    out_dir: Path
+        Directory to which the figure will be written
+    all_datasets: list
+        list of datasets to be plotted
+    image_filename: str
+        filename for the figure. Must end in .png
+    title: str
+        title for the plot
+
+    Returns
+    -------
+    str
+        Caption for the figure is returned
+    """
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -262,6 +332,8 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         'ytick.direction': 'out',
         'ytick.left': False,
         'ytick.right': False})
+
+    caption = caption_builder(all_datasets)
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -347,7 +419,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return
+    return caption
 
 
 def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
@@ -543,7 +615,7 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
     return
 
 
-def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -578,6 +650,8 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
         'ytick.direction': 'out',
         'ytick.left': False,
         'ytick.right': False})
+
+    caption = caption_builder(all_datasets)
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -654,10 +728,10 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return
+    return caption
 
 
-def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -767,10 +841,10 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str,
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return
+    return "Marine heatwave and coldspell plot"
 
 
-def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -877,10 +951,10 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, 
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return
+    return "Arctic ice extent plot"
 
 
-def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -987,7 +1061,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: st
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return
+    return "Antarctic sea ice extent plot"
 
 
 def quick_and_dirty_map(dataset, image_filename):

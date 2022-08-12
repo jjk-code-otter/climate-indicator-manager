@@ -325,13 +325,13 @@ class TimeSeriesMonthly:
             f.write(f"long_name,time,time,{time_units}\n")
             f.write(f"type,time,int\n")
 
-            f.write(f"long_name,year,year,0\n")
+            f.write(f"long_name,year,year,1\n")
             f.write(f"type,year,int\n")
 
-            f.write(f"long_name,month,month,0\n")
+            f.write(f"long_name,month,month,1\n")
             f.write(f"type,month,int\n")
 
-            f.write(f"long_name,data,{self.metadata['variable']},K\n")
+            f.write(f"long_name,data,{self.metadata['variable']},{self.metadata['units']}\n")
             f.write(f"type,data,float\n")
 
             f.write(f"coordinate_variable,time,t\n")
@@ -627,10 +627,10 @@ class TimeSeriesAnnual:
             f.write(f"long_name,time,time,{time_units}\n")
             f.write(f"type,time,int\n")
 
-            f.write(f"long_name,year,year,0\n")
+            f.write(f"long_name,year,year,1\n")
             f.write(f"type,year,int\n")
 
-            f.write(f"long_name,data,{self.metadata['variable']},K\n")
+            f.write(f"long_name,data,{self.metadata['variable']},{self.metadata['units']}\n")
             f.write(f"type,data,float\n")
 
             f.write(f"coordinate_variable,time,t\n")

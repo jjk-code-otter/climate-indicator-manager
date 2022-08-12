@@ -13,6 +13,7 @@
       "url": ["https://raw.githubusercontent.com/robwschlegel/MHWapp/master/data/annual_summary/OISST_cat_daily_1982-2011_total.csv"],
       "filename": ["OISST_cat_daily_1982-2011_total.csv"],
 	  "type": "timeseries",
+      "long_name": "Global ocean area affected by marine heatwaves",
 	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1981,
