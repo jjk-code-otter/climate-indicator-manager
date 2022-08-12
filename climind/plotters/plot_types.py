@@ -841,7 +841,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str,
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Marine heatwave and coldspell plot"
+    return "Figure showing the percentage of ocean area affected by marine heatwaves and marine cold spells each year since 1982"
 
 
 def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
@@ -951,7 +951,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, 
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Arctic ice extent plot"
+    return "Arctic sea ice extent (shown as differences from the 1981-2010 average) from 1979 to present. Two " \
+           "months are shown - March and September - at the annual maximum and minimum extents respectively."
 
 
 def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
@@ -1061,7 +1062,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: st
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Antarctic sea ice extent plot"
+    return "Antarctic sea ice extent (shown as differences from the 1981-2010 average) from 1979 to present. Two " \
+           "months are shown - September and February - at the annual maximum and minimum extents respectively."
 
 
 def quick_and_dirty_map(dataset, image_filename):
