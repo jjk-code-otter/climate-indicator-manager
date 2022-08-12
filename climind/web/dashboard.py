@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
+from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import climind.plotters.plot_types as pt
-import climind.data_types.timeseries as ts
 from climind.data_manager.processing import DataArchive
 from climind.definitions import ROOT_DIR
 from climind.config.config import DATA_DIR
@@ -59,17 +59,20 @@ class Page:
                 processed_datasets.append(ds)
 
             # Plot the output and add figure name to card
-            figure_name = f'{indicator}.png'
+            figure_name = f"{card['title']}.png".replace(" ", "_")
             plot_function = card['plotting']['function']
             plot_title = card['plotting']['title']
             getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title)
             card['figure_name'] = figure_name
 
-            for ds in processed_datasets:
-                csv_filename = f"{indicator}_{ds.metadata['name']}.csv"
-                ds.write_csv(formatted_data_dir / csv_filename)
+            zipfile_name = f"{card['title']}_data_files.zip".replace(" ", "_")
+            with ZipFile(formatted_data_dir / zipfile_name, 'w') as zip_archive:
+                for ds in processed_datasets:
+                    csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
+                    ds.write_csv(formatted_data_dir / csv_filename)
+                    zip_archive.write(formatted_data_dir / csv_filename, arcname=csv_filename)
 
-            card['csv_name'] = csv_filename
+            card['csv_name'] = zipfile_name
 
         # populate template to make webpage
         env = Environment(

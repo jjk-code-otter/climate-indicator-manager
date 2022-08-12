@@ -47,17 +47,17 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "co2", "link_to":  null, "plot": "monthly", "title": "Carbon dioxide CO<sub>2</sub>",
+          "indicators": "co2", "link_to":  null, "plot": "monthly", "title": "Carbon dioxide",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
-          "indicators": "ch4", "link_to":  null, "plot": "monthly", "title": "Methane CH<sub>4</sub>",
+          "indicators": "ch4", "link_to":  null, "plot": "monthly", "title": "Methane",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
         },
         {
-          "indicators": "n2o", "link_to":  null, "plot": "monthly", "title": "Nitrous Oxide N<sub>2</sub>",
+          "indicators": "n2o", "link_to":  null, "plot": "monthly", "title": "Nitrous Oxide",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         }
