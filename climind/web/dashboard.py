@@ -49,6 +49,7 @@ class Page:
 
             # Apply processing steps to each dataset
             processed_datasets = []
+            pro_metadata = []
             for ds in selected_datasets:
                 for step in processing:
                     method = step['method']
@@ -57,6 +58,13 @@ class Page:
                     if output is not None:
                         ds = output
                 processed_datasets.append(ds)
+                pro_metadata.append({'name': ds.metadata['name'],
+                                     'url': ds.metadata['url'],
+                                     'citation': ds.metadata['citation'],
+                                     'data_citation': ds.metadata['data_citation'],
+                                     'acknowledgement': ds.metadata['acknowledgement']})
+
+            card['dataset_metadata'] = pro_metadata
 
             # Plot the output and add figure name to card
             figure_name = f"{card['title']}.png".replace(" ", "_")

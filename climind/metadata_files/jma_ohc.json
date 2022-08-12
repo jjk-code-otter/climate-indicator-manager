@@ -5,6 +5,7 @@
   "units": "zJ",
   "citation": ["Ishii, M., Y. Fukuda, H. Hirahara, S. Yasui, T. Suzuki, and K. Sato, 2017: Accuracy of Global Upper Ocean Heat Content Estimation Expected from Present Observational Data Sets. SOLA, Vol. 13, 163 – 167, doi:10.2151/sola.2017-030."],
   "data_citation": [""],
+  "acknowledgement": "",
   "colour": "#d55e00",
   "zpos": 10,
   "datasets": [

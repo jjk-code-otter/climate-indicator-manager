@@ -5,6 +5,7 @@
   "units": "degC",
   "citation": ["Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469–3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"],
   "data_citation": [""],
+  "acknowledgement": "",
   "colour": "#009e73",
   "zpos": 10,
   "datasets": [

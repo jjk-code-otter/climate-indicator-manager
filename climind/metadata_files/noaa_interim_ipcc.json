@@ -5,6 +5,7 @@
   "units": "degC",
   "citation": ["Vose et al."],
   "data_citation": [""],
+  "acknowledgement": "",
   "colour": "#f0e442",
   "zpos": 10,
   "datasets": [
