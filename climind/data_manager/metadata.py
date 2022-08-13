@@ -147,3 +147,17 @@ class CombinedMetadata:
             return True
         else:
             return False
+
+    def write_metadata(self, filename):
+
+        rebuilt = self.collection.metadata
+        rebuilt['datasets'] = [self.dataset.metadata]
+
+        schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
+        with open(schema_path) as f:
+            metadata_schema = json.load(f)
+        resolver = RefResolver(schema_path.as_uri(), metadata_schema)
+        validate(rebuilt, metadata_schema, resolver=resolver)
+
+        with open(filename, 'w') as out_json:
+            json.dump(rebuilt, out_json, indent=4)

@@ -37,17 +37,21 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    names = ['HadCRUT5',
-             'GISTEMP',
-             'ERA5',
-             'NOAAGlobalTemp',
-             'Berkeley Earth',
-             'JRA-55']
+    datasets_to_use = ['HadCRUT5',
+                       'GISTEMP',
+                       'ERA5',
+                       'NOAAGlobalTemp',
+                       'Berkeley Earth',
+                       'JRA-55']
 
-    ts_archive = archive.select({'variable': 'tas',
-                                 'type': 'gridded',
-                                 'time_resolution': 'monthly',
-                                 'name': names[:]})
+    ts_archive = archive.select(
+        {
+            'variable': 'tas',
+            'type': 'gridded',
+            'time_resolution': 'monthly',
+            'name': datasets_to_use
+        }
+    )
 
     all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=1)
 
