@@ -1,3 +1,4 @@
+import copy
 import itertools
 import xarray as xa
 import numpy as np
@@ -229,10 +230,6 @@ class GridMonthly:
             land_mask = land_mask.sel(region=0)
             selected_variable = selected_variable.where(land_mask)
 
-        # import matplotlib.pyplot as plt
-        # selected_variable[-1].plot()
-        # plt.show()
-
         weights = np.cos(np.deg2rad(selected_variable.latitude))
         regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
 
@@ -241,7 +238,10 @@ class GridMonthly:
         months = regional_ts.time.dt.month.data.tolist()
         data = regional_ts.values.tolist()
 
-        out_series = ts.TimeSeriesMonthly(years, months, data, self.metadata)
+        timeseries_metadata = copy.deepcopy(self.metadata)
+        timeseries_metadata['type'] = 'timeseries'
+        timeseries_metadata['history'].append('Calculated area-average')
+        out_series = ts.TimeSeriesMonthly(years, months, data, timeseries_metadata)
 
         return out_series
 

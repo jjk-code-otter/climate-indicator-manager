@@ -1,5 +1,6 @@
 {
   "name": "NOAA LSAT",
+  "display_name": "GHCNv4",
   "version": "v5.0.0",
   "variable": "lsat",
   "units": "degC",

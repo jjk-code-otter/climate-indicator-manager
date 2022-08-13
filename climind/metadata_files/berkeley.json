@@ -1,5 +1,6 @@
 {
   "name": "Berkeley Earth",
+  "display_name": "Berkeley Earth",
   "version": "",
   "variable": "tas",
   "units": "degC",
@@ -13,6 +14,7 @@
       "url": ["http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc"],
 	  "filename": ["Land_and_Ocean_LatLong1.nc"],
       "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.0,
 	  "climatology_start": 1951,

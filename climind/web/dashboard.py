@@ -22,7 +22,7 @@ class Page:
     def __setitem__(self, key, value):
         self.metadata[key] = value
 
-    def build(self, build_dir: Path, archive: DataArchive):
+    def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
         figure_dir = build_dir / 'figures'
         figure_dir.mkdir(exist_ok=True)
 
@@ -45,7 +45,7 @@ class Page:
                 'time_resolution': plot_type
             }
             selected = archive.select(selection_metadata)
-            selected_datasets = selected.read_datasets(DATA_DIR)
+            selected_datasets = selected.read_datasets(data_dir)
 
             # Apply processing steps to each dataset
             processed_datasets = []
@@ -106,6 +106,7 @@ class Dashboard:
         """
         self.metadata = metadata
         self.archive = archive
+        self.data_dir = DATA_DIR
 
         self.pages = []
 
@@ -135,4 +136,4 @@ class Dashboard:
         None
         """
         for page in self.pages:
-            page.build(build_dir, self.archive)
+            page.build(build_dir, self.data_dir, self.archive)

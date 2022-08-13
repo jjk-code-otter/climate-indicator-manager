@@ -114,6 +114,10 @@ def read_monthly_5x5_grid(filename, metadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+    metadata['history'].append("Regridded to 5 degree latitude-longitude resolution")
+
     return gd.GridMonthly(ds, metadata)
 
 
@@ -174,22 +178,28 @@ def read_monthly_1x1_grid(filename, metadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+    metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
+
     return gd.GridMonthly(ds, metadata)
 
 
 def read_monthly_grid(filename: str, metadata):
     combo = read_grid(filename)
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(combo, metadata)
 
 
 def read_grid(filename: str):
     dataset_list = []
     for year in range(1979, 2030):
-        print(year)
         filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
         if filled_filename.exists():
             dataset_list.append(xa.open_dataset(filled_filename))
     combo = xa.concat(dataset_list, dim='time')
+
     return combo
 
 

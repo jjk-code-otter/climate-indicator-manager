@@ -1,5 +1,6 @@
 {
   "name": "GML N2O",
+  "display_name": "Global Monitoring Laboratory, NOAA",
   "version": "",
   "variable": "n2o",
   "units": "ppb",

@@ -1,5 +1,6 @@
 {
   "name": "CLSAT unreconstructed",
+  "display_name": "CLSAT unreconstructed",
   "version": "2.0",
   "variable": "lsat",
   "units": "degC",

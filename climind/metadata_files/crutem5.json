@@ -1,5 +1,6 @@
 {
   "name": "CRUTEM5",
+  "display_name": "CRUTEM5",
   "version": "5.0.0.0",
   "variable": "lsat",
   "units": "degC",

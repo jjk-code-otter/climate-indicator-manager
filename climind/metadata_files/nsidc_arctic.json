@@ -1,5 +1,6 @@
 {
   "name": "NSIDC",
+  "display_name": "NSIDC",
   "version": "3.0",
   "variable": "arctic_ice",
   "units": "millionkm2",

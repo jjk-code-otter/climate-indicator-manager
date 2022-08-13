@@ -73,6 +73,9 @@ def read_monthly_grid(filename: str, metadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+
     return gd.GridMonthly(ds, metadata)
 
 
@@ -88,6 +91,10 @@ def read_monthly_1x1_grid(filename: str, metadata):
     grid = np.repeat(grid, 5, 2)
 
     df = gd.make_xarray(grid, df.time.data, lats, lons)
+
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+    metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(df, metadata)
 

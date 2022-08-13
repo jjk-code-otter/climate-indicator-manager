@@ -1,5 +1,6 @@
 {
   "name": "AVISO",
+  "display_name": "AVISO",
   "version": "",
   "variable": "sealevel",
   "units": "mm",

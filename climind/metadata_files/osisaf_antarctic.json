@@ -1,5 +1,6 @@
 {
   "name": "OSI SAF SH",
+  "display_name": "OSI SAF",
   "version": "2.1",
   "variable": "antarctic_ice",
   "units": "millionkm2",

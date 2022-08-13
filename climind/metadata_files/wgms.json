@@ -1,5 +1,6 @@
 {
   "name": "WGMS",
+  "display_name": "World Glacier Monitoring Service",
   "version": "",
   "variable": "glacier",
   "units": "mwe",

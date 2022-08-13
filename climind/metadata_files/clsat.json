@@ -1,5 +1,6 @@
 {
   "name": "CLSAT",
+  "display_name": "CLSAT",
   "version": "2.0",
   "variable": "lsat",
   "units": "degC",

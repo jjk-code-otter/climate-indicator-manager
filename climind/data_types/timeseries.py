@@ -204,7 +204,7 @@ class TimeSeriesMonthly:
 
         selection = self.df[(self.df['year'] == year) & (self.df['month'] == month)]
         if len(selection) == 0:
-            out_value =  None
+            out_value = None
         elif len(selection) == 1:
             out_value = selection['data'].values[0]
         else:
@@ -284,7 +284,15 @@ class TimeSeriesMonthly:
         rank = ranked[month_select['year'] == year]['data']
         return int(rank.iloc[0])
 
-    def write_csv(self, filename):
+    def write_csv(self, filename, metadata_filename=None):
+
+        if metadata_filename is not None:
+            self.metadata['filename'] = [str(filename.name)]
+            self.metadata['url'] = [""]
+            self.metadata['reader'] = "reader_badc_csv"
+            self.metadata['fetcher'] = "fetcher_no_url"
+            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
+            self.metadata.write_metadata(metadata_filename)
 
         now = datetime.today()
         climind_version = pkg_resources.get_distribution("climind").version
@@ -587,7 +595,15 @@ class TimeSeriesAnnual:
         """
         self.metadata['history'].append(message)
 
-    def write_csv(self, filename):
+    def write_csv(self, filename, metadata_filename=None):
+
+        if metadata_filename is not None:
+            self.metadata['filename'] = [str(filename.name)]
+            self.metadata['url'] = [""]
+            self.metadata['reader'] = "reader_badc_csv"
+            self.metadata['fetcher'] = "fetcher_no_url"
+            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
+            self.metadata.write_metadata(metadata_filename)
 
         now = datetime.today()
         climind_version = pkg_resources.get_distribution("climind").version

@@ -1,5 +1,6 @@
 {
   "name": "MCS",
+  "display_name": "Marine cold spells",
   "version": "",
   "variable": "mcs",
   "units": "%",

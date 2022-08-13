@@ -1,5 +1,6 @@
 {
   "name": "Berkeley Earth LSAT",
+  "display_name": "Berkeley Earth",
   "version": "",
   "variable": "lsat",
   "units": "degC",

@@ -1,5 +1,6 @@
 {
   "name": "GISTEMP",
+  "display_name": "GISTEMP",
   "version": "v4",
   "variable": "tas",
   "units": "degC",
@@ -13,6 +14,7 @@
       "url": ["https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
 	  "filename": ["gistemp1200_GHCNv4_ERSSTv5.nc.gz"],
       "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.0,
 	  "climatology_start": 1951,

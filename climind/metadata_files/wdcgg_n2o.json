@@ -1,5 +1,6 @@
 {
   "name": "WDCGG N2O",
+  "display_name": "WDCGG",
   "version": "",
   "variable": "n2o",
   "units": "ppb",

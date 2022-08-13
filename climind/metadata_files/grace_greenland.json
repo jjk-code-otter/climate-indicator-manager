@@ -1,5 +1,6 @@
 {
   "name": "GRACE Greenland",
+  "display_name": "GRACE",
   "version": "",
   "variable": "greenland",
   "units": "Gt",

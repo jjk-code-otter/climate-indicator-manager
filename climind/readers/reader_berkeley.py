@@ -64,6 +64,9 @@ def read_monthly_grid(filename: str, metadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+
     return gd.GridMonthly(ds, metadata)
 
 
@@ -102,6 +105,10 @@ def read_monthly_5x5_grid(filename: str, metadata):
     # update encoding
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
+
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+    metadata['history'].append("Regridded to 5 degree latitude-longitude resolution")
 
     return gd.GridMonthly(ds, metadata)
 

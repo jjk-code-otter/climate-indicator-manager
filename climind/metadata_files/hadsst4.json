@@ -1,5 +1,6 @@
 {
   "name": "HadSST4",
+  "display_name": "HadSST4",
   "version": "4.0.1.0",
   "variable": "sst",
   "units": "degC",

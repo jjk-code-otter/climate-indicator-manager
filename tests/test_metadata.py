@@ -1,6 +1,8 @@
 import pytest
-from jsonschema import ValidationError
-
+import json
+from pathlib import Path
+from jsonschema import ValidationError, validate, RefResolver
+from climind.definitions import ROOT_DIR
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, BaseMetadata, CombinedMetadata
 
 
@@ -179,3 +181,23 @@ def test_combined_contains(test_dataset_attributes, test_collection_attributes):
     assert 'colour' in combo
 
     assert 'glitz' not in combo
+
+
+def test_combined_write(test_dataset_attributes, test_collection_attributes, tmpdir):
+    ds = DatasetMetadata(test_dataset_attributes)
+    col = CollectionMetadata(test_collection_attributes)
+    combo = CombinedMetadata(ds, col)
+    print(tmpdir)
+    json_file = Path(tmpdir) / 'test.json'
+    combo.write_metadata(json_file)
+
+    assert json_file.exists()
+
+    with open(json_file, 'r') as test_file:
+        read_in_json = json.load(test_file)
+
+    schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
+    with open(schema_path) as f:
+        metadata_schema = json.load(f)
+    resolver = RefResolver(schema_path.as_uri(), metadata_schema)
+    validate(read_in_json, metadata_schema, resolver=resolver)
