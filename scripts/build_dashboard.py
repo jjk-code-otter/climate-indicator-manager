@@ -11,3 +11,10 @@ if __name__ == "__main__":
     dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir))
+
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'ocean_indicators.json'
+    dash = Dashboard.from_json(json_file, METADATA_DIR)
+
+    dash_dir = DATA_DIR / 'ManagedData' / 'OceanDashboard'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir))
