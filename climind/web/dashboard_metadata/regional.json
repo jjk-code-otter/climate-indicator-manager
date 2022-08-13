@@ -1,0 +1,144 @@
+{
+  "name": "Regional Temperature Indicators",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Regional Temperature Indicators",
+      "template": "front_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_1", "link_to": "wmo_ra_i", "plot": "annual", "title": "WMO RA I Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+        },
+        {
+          "indicators": "wmo_ra_2", "link_to": "wmo_ra_ii", "plot": "annual", "title": "WMO RA II Asia",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+        },
+        {
+          "indicators": "wmo_ra_3", "link_to": "wmo_ra_iii", "plot": "annual", "title": "WMO RA III South America",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+        },
+        {
+          "indicators": "wmo_ra_4", "link_to": "wmo_ra_iv", "plot": "annual", "title": "WMO RA IV North America",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+        },
+        {
+          "indicators": "wmo_ra_5", "link_to": "wmo_ra_v", "plot": "annual", "title": "WMO RA V Southwest Pacific",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+        },
+        {
+          "indicators": "wmo_ra_6", "link_to": "wmo_ra_vi", "plot": "annual", "title": "WMO RA VI Europe",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_i",
+      "name": "Africa",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_1", "link_to":  null, "plot": "annual", "title": "WMO RA I Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+        },
+        {
+          "indicators": "africa_subregion_1", "link_to":  null, "plot": "annual", "title": "North Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "North Africa"}
+        },
+        {
+          "indicators": "africa_subregion_2", "link_to":  null, "plot": "annual", "title": "West Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "West Africa"}
+        },
+        {
+          "indicators": "africa_subregion_3", "link_to":  null, "plot": "annual", "title": "Central Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Central Africa"}
+        },
+        {
+          "indicators": "africa_subregion_4", "link_to":  null, "plot": "annual", "title": "Eastern Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Eastern Africa"}
+        },
+        {
+          "indicators": "africa_subregion_5", "link_to":  null, "plot": "annual", "title": "Southern Africa",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Southern Africa"}
+        },
+        {
+          "indicators": "africa_subregion_6", "link_to":  null, "plot": "annual", "title": "Indian Ocean",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Indian Ocean"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_ii",
+      "name": "Asia",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_2", "link_to":  null, "plot": "annual", "title": "WMO RA II Asia",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_iii",
+      "name": "South America",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_3", "link_to":  null, "plot": "annual", "title": "WMO RA III South America",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_iv",
+      "name": "North America, Central America and the Caribbean",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_4", "link_to":  null, "plot": "annual", "title": "WMO RA IV North America",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_v",
+      "name": "Southwest Pacific",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_5", "link_to":  null, "plot": "annual", "title": "WMO RA V Southwest Pacific",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+        }
+      ]
+    },
+    {
+      "id": "wmo_ra_vi",
+      "name": "Europe",
+      "template": "topic_page",
+      "cards": [
+        {
+          "indicators": "wmo_ra_6", "link_to":  null, "plot": "annual", "title": "WMO RA VI Europe",
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "name": "GRACE Antarctica",
+  "display_name": "GRACE",
   "version": "",
   "variable": "antarctica",
   "units": "Gt",

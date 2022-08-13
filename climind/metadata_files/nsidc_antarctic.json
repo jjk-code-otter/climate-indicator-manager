@@ -1,5 +1,6 @@
 {
   "name": "NSIDC SH",
+  "display_name": "NSIDC",
   "version": "3.0",
   "variable": "antarctic_ice",
   "units": "millionkm2",

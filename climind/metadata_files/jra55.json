@@ -1,5 +1,6 @@
 {
   "name": "JRA-55",
+  "display_name": "JRA-55",
   "version": "",
   "variable": "tas",
   "units": "degC",
@@ -13,6 +14,7 @@
       "url": ["", ""],
 	  "filename": ["anl_surf125.011_tmp.YYYY01_YYYY12", "anl_surf125.YYYYMMMM"],
       "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.25,
 	  "climatology_start": 1981,

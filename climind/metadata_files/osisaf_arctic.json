@@ -1,5 +1,6 @@
 {
   "name": "OSI SAF",
+  "display_name": "OSI SAF",
   "version": "2.1",
   "variable": "arctic_ice",
   "units": "millionkm2",

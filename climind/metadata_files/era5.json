@@ -1,5 +1,6 @@
 {
   "name": "ERA5",
+  "display_name": "ERA5",
   "version": "",
   "variable": "tas",
   "units": "degC",
@@ -13,6 +14,7 @@
       "url": [""],
 	  "filename": ["era5_2m_tas_YYYY.nc"],
       "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 0.25,
 	  "climatology_start": 1981,

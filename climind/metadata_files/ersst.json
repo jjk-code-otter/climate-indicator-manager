@@ -1,5 +1,6 @@
 {
   "name": "ERSST",
+  "display_name": "ERSST",
   "version": "v5.0.0",
   "variable": "sst",
   "units": "degC",

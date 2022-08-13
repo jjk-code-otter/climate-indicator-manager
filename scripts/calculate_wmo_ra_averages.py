@@ -14,6 +14,11 @@ if __name__ == "__main__":
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
 
+    regional_data_dir = project_dir / "RegionalData"
+    regional_data_dir.mkdir(exist_ok=True)
+    regional_metadata_dir = project_dir / "RegionalMetadata"
+    regional_metadata_dir.mkdir(exist_ok=True)
+
     data_dir = project_dir / "Data"
     shape_dir = project_dir / "Shape_Files"
     fdata_dir = project_dir / "Formatted_Data"
@@ -26,87 +31,79 @@ if __name__ == "__main__":
     logging.basicConfig(filename=log_dir / f'{script}.log',
                         filemode='w', level=logging.INFO)
 
+    # Prepare the shape files
     continents = gp.read_file(shape_dir / 'WMO_RAs.shp')
     continents = continents.rename(columns={'Region': 'region'})
     print(continents)
 
+    # Read in African subregions and select only the first of each subregion using iloc
     subregions = gp.read_file(shape_dir / 'Africa_subregion.shp')
     subregions = subregions.rename(columns={'subregion': 'region'})
+    subregions = subregions.iloc[[0, 1, 2, 6, 7, 8]]
+    subregions = subregions.reset_index()
     print(subregions)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['HadCRUT5',
-                       'GISTEMP',
-                       'ERA5',
-                       'NOAAGlobalTemp',
-                       'Berkeley Earth',
-                       'JRA-55']
+    datasets_to_use = ['HadCRUT5', 'GISTEMP', 'ERA5', 'NOAAGlobalTemp', 'Berkeley Earth', 'JRA-55']
 
     ts_archive = archive.select(
         {
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': datasets_to_use
+            'name': datasets_to_use[0:5]
         }
     )
 
     all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=1)
 
-    all_ts = []
-    all_ts_sub = []
-    all_monthly_ts = []
-    all_monthly_ts_sub = []
-
-    for region in range(6):
-        all_ts.append([])
-        all_monthly_ts.append([])
-    for region in range(6):
-        all_ts_sub.append([])
-        all_monthly_ts_sub.append([])
-
+    # start processing
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
         pt.nice_map(ds.df, figure_dir / f"{ds.metadata['name']}", ds.metadata['name'])
 
+        region_names = ['Africa', 'Asia', 'South America',
+                        'North America', 'South-West Pacific', 'Europe']
         for region in range(6):
-            ts = ds.calculate_regional_average(continents, region)
-            ats = ts.make_annual()
-            ats.select_year_range(1900, 2021)
-            all_monthly_ts[region].append(ts)
-            all_ts[region].append(ats)
+            monthly_time_series = ds.calculate_regional_average(continents, region)
+            annual_time_series = monthly_time_series.make_annual()
+            annual_time_series.select_year_range(1900, 2021)
 
-        for i, region in enumerate([0, 1, 2, 6, 7, 8]):
-            ts = ds.calculate_regional_average(subregions, region)
-            ats = ts.make_annual()
-            ats.select_year_range(1900, 2021)
-            all_monthly_ts_sub[i].append(ts)
-            all_ts_sub[i].append(ats)
+            wmo_ra = region + 1
+            annual_time_series.metadata['name'] = f"wmo_ra_{wmo_ra}_{annual_time_series.metadata['name']}"
+            dataset_name = annual_time_series.metadata['name']
 
-    region_names = ['Africa', 'Asia', 'South America',
-                    'North America', 'South-West Pacific', 'Europe']
-    for region in range(6):
-        print(region_names[region], continents.region[region])
-        pt.neat_plot(figure_dir / 'Regional',
-                     all_ts[region],
-                     f'regional_RA{region + 1}.png',
-                     f'WMO RA{region + 1} - {region_names[region]}')
-        for ts in all_ts[region]:
-            ts.write_csv(DATA_DIR / 'New folder' / f"new_{region_names[region]}_{ts.metadata['name']}.csv")
-        for ts in all_monthly_ts[region]:
-            ts.write_csv(DATA_DIR / 'New folder' / f"new_monthly_{region_names[region]}_{ts.metadata['name']}.csv")
+            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
 
-    sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
-                        'Eastern Africa', 'Southern Africa', 'Indian Ocean']
-    for i, region in enumerate([0, 1, 2, 6, 7, 8]):
-        print(sub_region_names[i], subregions.region[region])
-        pt.neat_plot(figure_dir / 'Regional',
-                     all_ts_sub[i],
-                     f'subregional_{i + 1}.png',
-                     f'WMO RA{i + 1} - {sub_region_names[i]}')
-        for ts in all_ts_sub[i]:
-            ts.write_csv(DATA_DIR / 'New folder' / f"new_{sub_region_names[i]}_{ts.metadata['name']}.csv")
-        for ts in all_monthly_ts_sub[i]:
-            ts.write_csv(DATA_DIR / 'New folder' / f"new_monthly_{sub_region_names[i]}_{ts.metadata['name']}.csv")
+            filename = f"{dataset_name}.csv"
+            metadata_filename = f"{dataset_name}.json"
+
+            annual_time_series.metadata['variable'] = f'wmo_ra_{wmo_ra}'
+            annual_time_series.metadata['long_name'] = f'Regional mean temperature for WMO RA {region+1} {region_names[region]}'
+
+            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
+                                         metadata_filename=regional_metadata_dir / metadata_filename)
+
+        sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
+                            'Eastern Africa', 'Southern Africa', 'Indian Ocean']
+        for region in range(6):
+            monthly_time_series = ds.calculate_regional_average(subregions, region)
+            annual_time_series = monthly_time_series.make_annual()
+            annual_time_series.select_year_range(1900, 2021)
+
+            wmo_subregion = region + 1
+            annual_time_series.metadata['name'] = f"africa_subregion_{wmo_subregion}_{annual_time_series.metadata['name']}"
+            dataset_name = annual_time_series.metadata['name']
+
+            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
+
+            filename = f"{dataset_name}.csv"
+            metadata_filename = f"{dataset_name}.json"
+
+            annual_time_series.metadata['variable'] = f'africa_subregion_{wmo_subregion}'
+            annual_time_series.metadata['long_name'] = f'Regional mean temperature for {sub_region_names[region]}'
+
+            annual_time_series.write_csv(regional_data_dir/ dataset_name / filename,
+                                         metadata_filename=regional_metadata_dir / metadata_filename)

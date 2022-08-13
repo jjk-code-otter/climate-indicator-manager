@@ -1,5 +1,6 @@
 {
   "name": "Kadow IPCC",
+  "display_name": "Kadow et al.",
   "version": "",
   "variable": "tas",
   "units": "degC",

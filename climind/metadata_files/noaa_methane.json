@@ -1,5 +1,6 @@
 {
   "name": "NOAA CH4",
+  "display_name": "NOAA",
   "version": "",
   "variable": "ch4",
   "units": "ppm",

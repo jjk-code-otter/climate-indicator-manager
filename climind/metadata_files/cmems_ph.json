@@ -1,5 +1,6 @@
 {
   "name": "CMEMS",
+  "display_name": "CMEMS",
   "version": "",
   "variable": "ph",
   "units": "ph",

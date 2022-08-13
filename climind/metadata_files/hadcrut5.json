@@ -1,5 +1,6 @@
 {
   "name": "HadCRUT5",
+  "display_name": "HadCRUT5",
   "version": "5.0.1.0",
   "variable": "tas",
   "units": "degC",
@@ -13,6 +14,7 @@
       "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
 	  "filename": ["HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
       "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
 	  "climatology_start": 1961,

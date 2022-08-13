@@ -1,5 +1,6 @@
 {
   "name": "Berkeley IPCC",
+  "display_name": "Berkeley IPCC",
   "version": "",
   "variable": "tas",
   "units": "degC",

@@ -71,7 +71,7 @@ def caption_builder(all_datasets):
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
     caption += f" from {first_year}-{last_year}. "
-    if len(all_datasets) > 1:
+    if 1 < len(all_datasets) < 17:
         caption += f"Data are from the following {number_to_word[len(all_datasets)]} data sets: "
     else:
         caption += f"Data are from "
@@ -341,7 +341,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord, linewidth=3)
+        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['display_name'], color=col, zorder=zord, linewidth=3)
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
@@ -464,7 +464,7 @@ def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord,
+        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['display_name'], color=col, zorder=zord,
                  alpha=0.0)
 
         for j in range(len(ds.df['year'])):
@@ -573,7 +573,7 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
+        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['display_name'], color=col, zorder=zord)
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True)
@@ -660,7 +660,7 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'] + (ds.df['month'] - 1) / 12., ds.df['data'],
-                 label=ds.metadata['name'], color=col,
+                 label=ds.metadata['display_name'], color=col,
                  zorder=zord)
     ds = all_datasets[-1]
 

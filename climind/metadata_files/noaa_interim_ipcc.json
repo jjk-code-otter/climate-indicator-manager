@@ -1,5 +1,6 @@
 {
   "name": "NOAA Interim IPCC",
+  "display_name": "NOAA Interim IPCC",
   "version": "",
   "variable": "tas",
   "units": "degC",
