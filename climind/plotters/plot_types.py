@@ -15,91 +15,23 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
+
+from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
+    caption_builder
 
 FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "zJ": "zJ",
                "millionkm2": "million km$^2$",
                "ph": "pH",
                "mwe": "m.w.e"}
-
-
-def set_lo_hi_ticks(limits, spacing):
-    """
-    Given axis limits and a preferred spacing, calculate new high and low values and a set of ticks
-
-    Parameters
-    ----------
-    limits: list
-        the lower and upper limits of the current axis
-    spacing: float
-        The preferred tick spacing
-
-    Returns
-    -------
-
-    """
-    lo = spacing * (1 + (limits[0] // spacing))
-    hi = spacing * (1 + (limits[1] // spacing))
-    ticks = np.arange(lo, hi, spacing)
-
-    return lo, hi, ticks
-
-
-def get_first_and_last_years(all_datasets):
-    """
-    Extract the first and last years from a list of data sets
-    Parameters
-    ----------
-    all_datasets
-
-    Returns
-    -------
-    int, int
-        First and last years
-    """
-    first_years = []
-    last_years = []
-    for ds in all_datasets:
-        first_years.append(ds.df['year'].tolist()[0])
-        last_years.append(ds.df['year'].tolist()[-1])
-    first_year = np.min(first_years)
-    last_year = np.max(last_years)
-
-    return first_year, last_year
-
-
-def caption_builder(all_datasets):
-    first_year, last_year = get_first_and_last_years(all_datasets)
-
-    ds = all_datasets[-1]
-
-    number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-                      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
-
-    caption = f"{ds.metadata['time_resolution']} {ds.metadata['long_name']} ({ds.metadata['units']}"
-    if not ds.metadata['actual']:
-        caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
-    caption += ") "
-    caption += f" from {first_year}-{last_year}. "
-    if 1 < len(all_datasets) < 17:
-        caption += f"Data are from the following {number_to_word[len(all_datasets)]} data sets: "
-    else:
-        caption += f"Data are from "
-
-    dataset_names_for_caption = []
-    for ds in all_datasets:
-        dataset_names_for_caption.append(f"{ds.metadata['name']}")
-
-    caption += ', '.join(dataset_names_for_caption)
-    caption += '.'
-
-    return caption
 
 
 def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
@@ -747,7 +679,7 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     return caption
 
 
-def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -803,7 +735,6 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str,
         zord = ds.metadata['zpos']
         zords.append(zord)
         plt.plot(ds.df['year'], ds.df['data'], label='Marine heatwaves', color=col, zorder=zord, linewidth=3)
-    ds = mcs[-1]
 
     sns.despine(right=True, top=True, left=True)
 
@@ -857,10 +788,11 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str,
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Figure showing the percentage of ocean area affected by marine heatwaves and marine cold spells each year since 1982"
+    return f"Figure showing the percentage of ocean area affected by " \
+           f"marine heatwaves and marine cold spells each year since 1982"
 
 
-def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -899,7 +831,6 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, 
     march_colors = ['#56b4e9', '#009e73']
     september_colors = ['#e69f00', '#d55e00']
 
-    zords = []
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(3)
@@ -971,7 +902,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, 
            "months are shown - March and September - at the annual maximum and minimum extents respectively."
 
 
-def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -1010,7 +941,6 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: st
     february_colors = ['#e69f00', '#d55e00']
     september_colors = ['#56b4e9', '#009e73']
 
-    zords = []
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(2)
@@ -1082,6 +1012,150 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: st
            "months are shown - September and February - at the annual maximum and minimum extents respectively."
 
 
+def trends_plot(out_dir: Path, in_all_datasets: list, image_filename: str, title: str, order: list = []) -> str:
+    caption = 'Trend plot'
+
+    equivalence = {
+        'tas': 'Globe',
+        'wmo_ra_1': 'Africa',
+        'wmo_ra_2': 'Asia',
+        'wmo_ra_3': 'South America',
+        'wmo_ra_4': 'North America',
+        'wmo_ra_5': 'Southwest Pacific',
+        'wmo_ra_6': 'Europe',
+        'africa_subregion_1': 'North Africa',
+        'africa_subregion_2': 'West Africa',
+        'africa_subregion_3': 'Central Africa',
+        'africa_subregion_4': 'Eastern Africa',
+        'africa_subregion_5': 'Southern Africa',
+        'africa_subregion_6': 'Indian Ocean',
+    }
+
+    # get list of all unique variables
+    variables = []
+    superset = []
+    names = []
+    for ds in in_all_datasets:
+        if ds.metadata['variable'] not in variables:
+            variables.append(ds.metadata['variable'])
+            superset.append([])
+            names.append(equivalence[ds.metadata['variable']])
+
+    # build a list of lists, one for each unique variable
+    for ds in in_all_datasets:
+        i = variables.index(ds.metadata['variable'])
+        superset[i].append(ds)
+
+    colours = ['#f33d3d', '#ffd465', '#9dd742',
+               '#84d1cd', '#848dd1', '#cf84d1', '#b4b4b4']
+    sns.set(font='Franklin Gothic Book', rc={
+        'axes.axisbelow': False,
+        'axes.labelsize': 25,
+        'xtick.labelsize': 15,
+        'ytick.labelsize': 25,
+        'axes.edgecolor': 'lightgrey',
+        'axes.facecolor': 'None',
+
+        'grid.alpha': 0.0,
+
+        'axes.labelcolor': 'dimgrey',
+
+        'axes.spines.left': True,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+        'axes.spines.bottom': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': 'dimgrey',
+
+        'xtick.bottom': False,
+        'xtick.top': False,
+        'xtick.labelbottom': False,
+
+        'ytick.major.width': 0.4,
+        'ytick.color': 'dimgrey',
+        'ytick.direction': 'out',
+        'ytick.left': False,
+        'ytick.right': False})
+
+    plt.figure(figsize=[16, 9])
+
+    plt.plot([1901, 2022], [0., 0.], color='lightgrey')
+
+    # switch variable that alternates the drawing of a grey background on the trend plots
+    grey_background = True
+
+    for start_end in [[1901, 1930],
+                      [1931, 1960],
+                      [1961, 1990],
+                      [1991, 2021]]:
+
+        y1 = start_end[0]
+        y2 = start_end[1]
+
+        if grey_background:
+            grey_background = False
+            rect = patches.Rectangle((y1, -0.2), y2 - y1 + 1, 1.2, color='#eeeeee')
+            plt.gca().add_patch(rect)
+        else:
+            grey_background = True
+
+        # calculate trend for each data set
+        for i in range(7):
+
+            pos_ind = variables.index(order[i])
+            all_datasets = superset[pos_ind]
+
+#        for pos_ind, all_datasets in enumerate(superset):
+
+            mean_trend, min_trend, max_trend = calculate_trends(all_datasets, y1, y2)
+            min_rank, max_rank = calculate_ranks(all_datasets, 2021)
+            mean_value, min_value, max_value = calculate_values(all_datasets, 2021)
+
+            print(f'{names[pos_ind]}  2021 {mean_value:.2f} ({min_value:.2f}-{max_value:.2f}), '
+                  f'rank: {min_rank}-{max_rank}')
+            print(f'{start_end[0]}-{start_end[1]} {mean_trend:.2f} ({min_trend:.2f}-{max_trend:.2f})')
+
+            interset_delta = 0.4
+            width = (30. - 2 * interset_delta) / 7.
+            rect_xstart = y1 + interset_delta + (width * i)
+            mid_point = rect_xstart + width / 2.
+            delta = 0.3
+            section_mid_point = (y2 + y1) / 2.
+
+            plt.text(section_mid_point, -0.25, f'Trends', fontsize=25, ha='center')
+            plt.text(section_mid_point, -0.30, f'{y1}-{y2}', fontsize=25, ha='center')
+
+            # plot a coloured bar
+            rect = patches.Rectangle((rect_xstart + delta, 0), width - 2 * delta, mean_trend,
+                                     linewidth=0, edgecolor=None, facecolor=colours[i])
+            plt.gca().add_patch(rect)
+            plt.plot([mid_point, mid_point], [min_trend, max_trend], color='black')
+
+    for i in range(7):
+        name_index = variables.index(order[i])
+#    for name_index, name in enumerate(names):
+        name = names[name_index]
+        plt.text(1902, 0.55 - name_index * 0.05, name, fontsize=25, ha='left', color=colours[i])
+
+        # plot the uncertainty range
+    plt.ylabel(r'Trend ($\!^\circ\!$C/decade)', labelpad=5)
+    plt.yticks(np.arange(-0.2, 0.8, 0.2))
+    plt.gca().set_ylim(-0.2, 0.6)
+
+    plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
+
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+    plt.close()
+
+    return caption
+
+
 def quick_and_dirty_map(dataset, image_filename):
     plt.figure()
     proj = ccrs.PlateCarree()
@@ -1143,5 +1217,3 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
                                           f'{year}-{month:02d}-28'))
 
     nice_map(selection, image_filename, title, var=var)
-
-
