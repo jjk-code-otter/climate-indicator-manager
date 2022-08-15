@@ -1,3 +1,19 @@
+#  Climate indicator manager - a package for managing and building climate indicator dashboards.
+#  Copyright (c) 2022 John Kennedy
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from pathlib import Path
 import logging
 import geopandas as gp
@@ -81,7 +97,8 @@ if __name__ == "__main__":
             metadata_filename = f"{dataset_name}.json"
 
             annual_time_series.metadata['variable'] = f'wmo_ra_{wmo_ra}'
-            annual_time_series.metadata['long_name'] = f'Regional mean temperature for WMO RA {region+1} {region_names[region]}'
+            annual_time_series.metadata[
+                'long_name'] = f'Regional mean temperature for WMO RA {region + 1} {region_names[region]}'
 
             annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
                                          metadata_filename=regional_metadata_dir / metadata_filename)
@@ -94,7 +111,8 @@ if __name__ == "__main__":
             annual_time_series.select_year_range(1900, 2021)
 
             wmo_subregion = region + 1
-            annual_time_series.metadata['name'] = f"africa_subregion_{wmo_subregion}_{annual_time_series.metadata['name']}"
+            annual_time_series.metadata[
+                'name'] = f"africa_subregion_{wmo_subregion}_{annual_time_series.metadata['name']}"
             dataset_name = annual_time_series.metadata['name']
 
             (regional_data_dir / dataset_name).mkdir(exist_ok=True)
@@ -105,5 +123,5 @@ if __name__ == "__main__":
             annual_time_series.metadata['variable'] = f'africa_subregion_{wmo_subregion}'
             annual_time_series.metadata['long_name'] = f'Regional mean temperature for {sub_region_names[region]}'
 
-            annual_time_series.write_csv(regional_data_dir/ dataset_name / filename,
+            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
                                          metadata_filename=regional_metadata_dir / metadata_filename)
