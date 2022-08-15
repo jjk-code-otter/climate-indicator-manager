@@ -36,7 +36,7 @@ def calculate_trends(all_datasets: list, y1: int, y2: int) -> Tuple[float, float
     Returns
     -------
     Tuple[float, float, float]
-        returns the mean trend, minimum trend and maximum trend from the input datasets
+        returns the mean trend, minimum trend and maximum trend from the input datasets in units/decade
     """
     all_trends = []
 
@@ -80,8 +80,10 @@ def calculate_ranks(all_datasets: list, y1: int) -> Tuple[float, float]:
             rank = None
         else:
             rank = int(subrank.iloc[0])
+            all_ranks.append(rank)
 
-        all_ranks.append(rank)
+    if len(all_ranks) == 0:
+        raise ValueError("Year not found in any data set")
 
     # calculate the mean trend and max and min trends
     max_rank = np.max(all_ranks)
