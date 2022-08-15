@@ -43,9 +43,8 @@
 	  "fetcher": "fetcher_noaaglobaltemp"
     },
     {
-      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.mon.land_ocean.90S.90N.*.asc",		         		  
-	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.land_ocean.90S.90N.*.asc"],
-      "filename": ["aravg.mon.land_ocean.90S.90N.*.asc", "aravg.ann.land_ocean.90S.90N.*.asc"],
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.land_ocean.90S.90N.*.asc"],
+      "filename": ["aravg.ann.land_ocean.90S.90N.*.asc"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",

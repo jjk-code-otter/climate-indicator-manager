@@ -77,6 +77,26 @@
           "indicators": "africa_subregion_6", "link_to":  null, "plot": "annual", "title": "Indian Ocean",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Indian Ocean"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        },
+        {
+          "indicators": ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
+            "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
+          "link_to":  null, "plot": "annual", "title": "Regional trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Regional trends",
+            "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
+                                  "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
+          }
         }
       ]
     },
@@ -89,6 +109,15 @@
           "indicators": "wmo_ra_2", "link_to":  null, "plot": "annual", "title": "WMO RA II Asia",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
         }
       ]
     },
@@ -101,6 +130,15 @@
           "indicators": "wmo_ra_3", "link_to":  null, "plot": "annual", "title": "WMO RA III South America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
         }
       ]
     },
@@ -113,6 +151,15 @@
           "indicators": "wmo_ra_4", "link_to":  null, "plot": "annual", "title": "WMO RA IV North America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
         }
       ]
     },
@@ -125,6 +172,15 @@
           "indicators": "wmo_ra_5", "link_to":  null, "plot": "annual", "title": "WMO RA V Southwest Pacific",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
         }
       ]
     },
@@ -137,6 +193,15 @@
           "indicators": "wmo_ra_6", "link_to":  null, "plot": "annual", "title": "WMO RA VI Europe",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        },
+        {
+          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
         }
       ]
     }
