@@ -15,10 +15,12 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+from typing import Union
 from pathlib import Path
 from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+import climind.data_types.timeseries as ts
 import climind.plotters.plot_types as pt
 from climind.data_manager.processing import DataArchive
 from climind.definitions import ROOT_DIR
@@ -27,9 +29,181 @@ from climind.config.config import DATA_DIR
 DATA_DIR = DATA_DIR / "ManagedData" / "Data"
 
 
-class Page:
+def process_single_dataset(ds: Union[ts.TimeSeriesAnnual, ts.TimeSeriesMonthly],
+                           processing_steps: list):
+    """
+    Process the input data set using the methods and arguments provided in a list of processing steps.
+    Each processing step is a dictionary containing a 'method' and an 'arguments' entry.
 
+    Parameters
+    ----------
+    ds: ts.TimeSeriesAnnual or ts.TimeSeriesMonthly
+        Data set to be processed
+    processing_steps: list
+        list of steps. Each step must be a dictionary containing a 'method' entry that corresponds to
+        the name of a method in the timeseries class and a 'arguments' entry which contains a list
+        of arguments for that method
+
+    Returns
+    -------
+    ts.TimeSeriesAnnual or ts.TimeSeriesMonthly
+    """
+    for step in processing_steps:
+        method = step['method']
+        arguments = step['args']
+        output = getattr(ds, method)(*arguments)
+        if output is not None:
+            ds = output
+    return ds
+
+
+class Card:
+
+    def __init__(self, card_metadata):
+        """
+        A card is a single panel in a dashboard web page. The Card class manages the metadata
+        associated with the card, and generates the files that are associated with it. These
+        include the figure (in multiple formats) and the data files (in a zip archive)
+
+        Parameters
+        ----------
+        card_metadata: dict
+            dictionary containing the metadata for the card
+        """
+        self.metadata = card_metadata
+        self.datasets = []
+
+    def __getitem__(self, key):
+        return self.metadata[key]
+
+    def __setitem__(self, key, value):
+        self.metadata[key] = value
+
+    def process_card(self, data_dir, figure_dir, formatted_data_dir, archive):
+        self.select_and_read_data(data_dir, archive)
+        self.process_datasets()
+        self.plot(figure_dir)
+        self.make_zip_file(formatted_data_dir)
+
+    def select_and_read_data(self, data_dir, archive):
+        """
+        Using the specified data archive, select the appropriate subset of data as specified in the card
+        metadata and read in the data sets from the data_dir directory
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory in which the data are to be found
+        archive: DataArchive
+            Archive of data used to select and populate the data sets
+
+        Returns
+        -------
+        None
+        """
+        selection_metadata = {
+            'type': 'timeseries',
+            'variable': self['indicators'],
+            'time_resolution': self['plot']
+        }
+        selected = archive.select(selection_metadata)
+        self.datasets = selected.read_datasets(data_dir)
+
+    def process_datasets(self):
+        """
+        Run the processing specified in the card metadata on each of the data sets.
+
+        Returns
+        -------
+        None
+        """
+        processed_datasets = []
+        pro_metadata = []
+        for ds in self.datasets:
+            ds = process_single_dataset(ds, self['processing'])
+            processed_datasets.append(ds)
+            pro_metadata.append({'name': ds.metadata['name'],
+                                 'url': ds.metadata['url'],
+                                 'citation': ds.metadata['citation'],
+                                 'data_citation': ds.metadata['data_citation'],
+                                 'acknowledgement': ds.metadata['acknowledgement']})
+
+        self.datasets = processed_datasets
+        self['dataset_metadata'] = pro_metadata
+
+    def plot(self, figure_dir):
+        """
+        Plot the figure specified in the card metadata, output to the figure_dir directory
+
+        Parameters
+        ----------
+        figure_dir: Path
+            Path of the directory to which the figure should be written
+
+        Returns
+        -------
+        None
+        """
+        # Plot the output and add figure name to card
+        figure_name = f"{self['title']}.png".replace(" ", "_")
+        plot_function = self['plotting']['function']
+        plot_title = self['plotting']['title']
+
+        if 'kwargs' in self['plotting']:
+            kwargs = self['plotting']['kwargs']
+            caption = getattr(pt, plot_function)(figure_dir, self.datasets, figure_name, plot_title, **kwargs)
+        else:
+            caption = getattr(pt, plot_function)(figure_dir, self.datasets, figure_name, plot_title)
+
+        self['figure_name'] = figure_name
+        self['caption'] = caption
+
+    def make_csv_files(self, formatted_data_dir):
+        csv_paths = []
+        for ds in self.datasets:
+            csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
+            csv_path = formatted_data_dir / csv_filename
+            ds.write_csv(csv_path)
+            csv_paths.append(csv_path)
+
+        return csv_paths
+
+    def make_zip_file(self, formatted_data_dir):
+        """
+        Create a formatted data file for each data set and zip these into a zip file
+
+        Parameters
+        ----------
+        formatted_data_dir: Path
+            Path of the directory to which the zip file and data files should be written
+
+        Returns
+        -------
+        None
+        """
+        csv_paths = self.make_csv_files(formatted_data_dir)
+
+        zipfile_name = f"{self['title']}_data_files.zip".replace(" ", "_")
+        with ZipFile(formatted_data_dir / zipfile_name, 'w') as zip_archive:
+            for csv_path in csv_paths:
+                csv_filename = csv_path.name
+                zip_archive.write(csv_path, arcname=csv_filename)
+                csv_path.unlink()
+
+        self['csv_name'] = zipfile_name
+
+
+class Page:
     def __init__(self, metadata: dict):
+        """
+        A Page from a dashboard. A page contains multiple Cards, which are used to render a
+        jinja2 template.
+
+        Parameters
+        ----------
+        metadata: dict
+            Dictionary containing the page metadata
+        """
         self.metadata = metadata
 
     def __getitem__(self, key):
@@ -37,6 +211,33 @@ class Page:
 
     def __setitem__(self, key, value):
         self.metadata[key] = value
+
+    def _process_cards(self, data_dir, figure_dir, formatted_data_dir, archive):
+        """
+        Process each of the cards on the page
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory containing the data
+        figure_dir: Path
+            Path of directory to which figures will be written
+        formatted_data_dir: Path
+            Path of directory to which formatted data will be written
+        archive: DataArchive
+            Archive which contains all the metadata for this selection
+
+        Returns
+        -------
+        list
+            List of the processed Cards
+        """
+        processed_cards = []
+        for card_metadata in self['cards']:
+            this_card = Card(card_metadata)
+            this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
+            processed_cards.append(this_card)
+        return processed_cards
 
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
         figure_dir = build_dir / 'figures'
@@ -47,62 +248,7 @@ class Page:
 
         print(f"Building {self.metadata['id']} using template {self.metadata['template']}")
 
-        for card in self['cards']:
-
-            indicator = card['indicators']
-            link_to = card['link_to']
-            plot_type = card['plot']
-            processing = card['processing']
-
-            # Select and load data sets in archive
-            selection_metadata = {
-                'type': 'timeseries',
-                'variable': indicator,
-                'time_resolution': plot_type
-            }
-            selected = archive.select(selection_metadata)
-            selected_datasets = selected.read_datasets(data_dir)
-
-            # Apply processing steps to each dataset
-            processed_datasets = []
-            pro_metadata = []
-            for ds in selected_datasets:
-                for step in processing:
-                    method = step['method']
-                    arguments = step['args']
-                    output = getattr(ds, method)(*arguments)
-                    if output is not None:
-                        ds = output
-                processed_datasets.append(ds)
-                pro_metadata.append({'name': ds.metadata['name'],
-                                     'url': ds.metadata['url'],
-                                     'citation': ds.metadata['citation'],
-                                     'data_citation': ds.metadata['data_citation'],
-                                     'acknowledgement': ds.metadata['acknowledgement']})
-
-            card['dataset_metadata'] = pro_metadata
-
-            # Plot the output and add figure name to card
-            figure_name = f"{card['title']}.png".replace(" ", "_")
-            plot_function = card['plotting']['function']
-            plot_title = card['plotting']['title']
-            if 'kwargs' in card['plotting']:
-                kwargs = card['plotting']['kwargs']
-                caption = getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title, **kwargs)
-            else:
-                caption = getattr(pt, plot_function)(figure_dir, processed_datasets, figure_name, plot_title)
-
-            card['figure_name'] = figure_name
-            card['caption'] = caption
-
-            zipfile_name = f"{card['title']}_data_files.zip".replace(" ", "_")
-            with ZipFile(formatted_data_dir / zipfile_name, 'w') as zip_archive:
-                for ds in processed_datasets:
-                    csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
-                    ds.write_csv(formatted_data_dir / csv_filename)
-                    zip_archive.write(formatted_data_dir / csv_filename, arcname=csv_filename)
-
-            card['csv_name'] = zipfile_name
+        processed_cards = self._process_cards(data_dir, figure_dir, formatted_data_dir, archive)
 
         # populate template to make webpage
         env = Environment(
@@ -111,7 +257,7 @@ class Page:
         )
         template = env.get_template(f"{self['template']}.html.jinja")
         with open(build_dir / f"{self['id']}.html", 'w') as out_file:
-            out_file.write(template.render(cards=self['cards'], page_meta=self))
+            out_file.write(template.render(cards=processed_cards, page_meta=self))
 
 
 class Dashboard:
@@ -122,8 +268,10 @@ class Dashboard:
 
         Parameters
         ----------
-        metadata
-        archive
+        metadata: dict
+            Dictionary containing the dashboard metadata
+        archive: DataArchive
+            Data archive that will be used to populate the dashboard
         """
         self.metadata = metadata
         self.archive = archive
@@ -138,9 +286,7 @@ class Dashboard:
     def from_json(json_file: Path, archive_dir: Path):
         with open(json_file) as f:
             metadata = json.load(f)
-
         archive = DataArchive.from_directory(archive_dir)
-
         return Dashboard(metadata, archive)
 
     def build(self, build_dir: Path):
