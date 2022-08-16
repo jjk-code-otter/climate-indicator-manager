@@ -22,6 +22,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import climind.data_types.timeseries as ts
 import climind.plotters.plot_types as pt
+import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
 from climind.definitions import ROOT_DIR
 from climind.config.config import DATA_DIR
@@ -55,6 +56,90 @@ def process_single_dataset(ds: Union[ts.TimeSeriesAnnual, ts.TimeSeriesMonthly],
         if output is not None:
             ds = output
     return ds
+
+
+class Paragraph:
+
+    def __init__(self, paragraph_metadata):
+        self.metadata = paragraph_metadata
+        self.datasets = []
+
+    def __getitem__(self, key):
+        return self.metadata[key]
+
+    def __setitem__(self, key, value):
+        self.metadata[key] = value
+
+    def process_paragraph(self, data_dir, archive):
+        self.select_and_read_data(data_dir, archive)
+        self.process_datasets()
+        self.render()
+
+    def select_and_read_data(self, data_dir, archive):
+        """
+        Using the specified data archive, select the appropriate subset of data as specified in the card
+        metadata and read in the data sets from the data_dir directory
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory in which the data are to be found
+        archive: DataArchive
+            Archive of data used to select and populate the data sets
+
+        Returns
+        -------
+        None
+        """
+        selection_metadata = {
+            'type': 'timeseries',
+            'variable': self['variable'],
+            'time_resolution': self['time_resolution']
+        }
+        selected = archive.select(selection_metadata)
+        self.datasets = selected.read_datasets(data_dir)
+
+    def process_datasets(self):
+        """
+        Run the processing specified in the paragraph metadata on each of the data sets.
+
+        Returns
+        -------
+        None
+        """
+        processed_datasets = []
+        pro_metadata = []
+        for ds in self.datasets:
+            ds = process_single_dataset(ds, self['processing'])
+            processed_datasets.append(ds)
+
+        self.datasets = processed_datasets
+        self['dataset_metadata'] = ds.metadata
+
+    def render(self, year=2021):
+        """
+        Write out the paragraph specified in the paragraph metadata
+
+        Parameters
+        ----------
+        figure_dir: Path
+            Path of the directory to which the figure should be written
+
+        Returns
+        -------
+        None
+        """
+        # Plot the output and add figure name to card
+        paragraph_function = self['writing']['function']
+
+        if 'kwargs' in self['writing']:
+            kwargs = self['writing']['kwargs']
+            paragraph_text = getattr(pa, paragraph_function)(self.datasets, year, **kwargs)
+        else:
+
+            paragraph_text = getattr(pa, paragraph_function)(self.datasets, year)
+
+        self['text'] = paragraph_text
 
 
 class Card:
@@ -239,6 +324,29 @@ class Page:
             processed_cards.append(this_card)
         return processed_cards
 
+    def _process_paragraphs(self, data_dir, archive):
+        """
+        Process each of the paragraphs on the page
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory containing the data
+        archive: DataArchive
+            Archive which contains all the metadata for this selection
+
+        Returns
+        -------
+        list
+            List of the processed Cards
+        """
+        processed_paragraphs = []
+        for paragraph_metadata in self['paragraphs']:
+            this_paragraph = Paragraph(paragraph_metadata)
+            this_paragraph.process_paragraph(data_dir, archive)
+            processed_paragraphs.append(this_paragraph)
+        return processed_paragraphs
+
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
         figure_dir = build_dir / 'figures'
         figure_dir.mkdir(exist_ok=True)
@@ -249,6 +357,7 @@ class Page:
         print(f"Building {self.metadata['id']} using template {self.metadata['template']}")
 
         processed_cards = self._process_cards(data_dir, figure_dir, formatted_data_dir, archive)
+        processed_paragraphs = self._process_paragraphs(data_dir, archive)
 
         # populate template to make webpage
         env = Environment(
@@ -257,7 +366,9 @@ class Page:
         )
         template = env.get_template(f"{self['template']}.html.jinja")
         with open(build_dir / f"{self['id']}.html", 'w') as out_file:
-            out_file.write(template.render(cards=processed_cards, page_meta=self))
+            out_file.write(template.render(cards=processed_cards,
+                                           paragraphs=processed_paragraphs,
+                                           page_meta=self))
 
 
 class Dashboard:

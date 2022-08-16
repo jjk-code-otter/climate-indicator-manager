@@ -32,6 +32,7 @@ p {
   display: inline-block;
   border-radius: 5px;
 }
+
 </style>
 <body>
 
@@ -70,6 +71,24 @@ p {
         {% endfor %}
 
     </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>Key messages</h1>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            {% for item in paragraphs %}
+            <h3>{{ item.dataset_metadata.long_name }}</h3>
+            <p>
+                {{ item.text }}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">

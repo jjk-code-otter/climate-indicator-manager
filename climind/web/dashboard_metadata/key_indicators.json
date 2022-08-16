@@ -15,6 +15,7 @@
           "indicators": "tas", "link_to": "global_mean_temperature", "plot": "monthly", "title": "Global temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2021]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
@@ -39,6 +40,22 @@
           "processing": [{"method":  "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "tas", "time_resolution": "monthly",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "co2", "time_resolution": "monthly",
+          "processing": [],
+          "writing": {"function": "max_monthly_value"}
+        }
       ]
     },
     {
@@ -61,6 +78,13 @@
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "co2", "time_resolution": "monthly",
+          "processing": [],
+          "writing": {"function": "max_monthly_value"}
+        }
       ]
     },
     {
@@ -72,6 +96,7 @@
           "indicators": "tas", "link_to":  null, "plot": "monthly", "title": "Global mean temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2021]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
@@ -85,6 +110,27 @@
           "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "tas", "time_resolution": "monthly",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "sst", "time_resolution": "annual",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "lsat", "time_resolution": "annual",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
         }
       ]
     },
@@ -113,6 +159,13 @@
           "processing": [],
           "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "ohc", "time_resolution": "annual",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     },
     {
@@ -135,6 +188,13 @@
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "sealevel", "time_resolution": "monthly",
+          "processing": [],
+          "writing": {"function": "max_monthly_value"}
+        }
       ]
     },
     {
@@ -156,6 +216,13 @@
           "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "arctic_ice", "time_resolution": "monthly",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "arctic_ice_blurb"}
         }
       ]
     },
@@ -181,6 +248,13 @@
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
 
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "glacier", "time_resolution": "annual",
+          "processing": [],
+          "writing": {"function": "glacier_blurb"}
         }
       ]
     }

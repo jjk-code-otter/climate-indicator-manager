@@ -297,8 +297,12 @@ class TimeSeriesMonthly:
         else:
             month_select = self.df[self.df['month'] == month]
         ranked = month_select.rank(method='min', ascending=False)
-        rank = ranked[month_select['year'] == year]['data']
-        return int(rank.iloc[0])
+        rank = ranked[(month_select['year'] == year) & (month_select['month'] == month)]['data']
+
+        if len(rank) > 0:
+            return int(rank.iloc[0])
+        else:
+            return None
 
     def write_csv(self, filename, metadata_filename=None):
 
