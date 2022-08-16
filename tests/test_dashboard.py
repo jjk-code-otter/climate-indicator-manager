@@ -20,6 +20,7 @@ from unittest.mock import call
 from pathlib import Path
 from zipfile import is_zipfile
 from climind.definitions import ROOT_DIR, METADATA_DIR
+import climind.data_manager.processing as dm
 import climind.web.dashboard as db
 
 
@@ -29,6 +30,17 @@ def card_metadata():
         "indicators": "ohc", "link_to": None, "plot": "annual", "title": "Ocean Indicators",
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
+
+    }
+    return metadata
+
+
+@pytest.fixture
+def tas_card_metadata():
+    metadata = {
+        "indicators": "tas", "link_to": None, "plot": "monthly", "title": "GMT",
+        "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+        "plotting": {"function": "neat_plot", "title": "GMT"}
 
     }
     return metadata
@@ -45,6 +57,27 @@ def page_metadata():
         "links": ["greenhouse_gases", "global_mean_temperature",
                   "ocean_heat_content", "sea_level",
                   "sea_ice_extent", "glaciers_and_ice_sheets"]
+    }
+    return metadata
+
+
+@pytest.fixture
+def tas_page_metadata():
+    metadata = {
+        "id": "test_dashboard",
+        "name": "Key Climate Indicators",
+        "template": "front_page",
+        "cards": [
+            {
+                "indicators": "tas", "link_to": "global_mean_temperature", "plot": "monthly",
+                "title": "Global temperature",
+                "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                               {"method": "make_annual", "args": []},
+                               {"method": "add_offset", "args": [0.69]},
+                               {"method": "manually_set_baseline", "args": [1850, 1900]}],
+                "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+            }
+        ]
     }
     return metadata
 
@@ -211,6 +244,22 @@ def test_process_card(mocker, card_metadata):
     mock_plot.assert_called_with('figure_dir')
     mock_make_zip.assert_called_with('formatted_data_dir')
 
+
+def test_select_and_read_data(mocker, tas_card_metadata):
+    card = db.Card(tas_card_metadata)
+    metadata_dir = Path('test_data')
+
+    m2 = mocker.patch('climind.data_manager.processing.DataArchive.read_datasets', return_value=[])
+
+    da = dm.DataArchive.from_directory(metadata_dir)
+
+    card.select_and_read_data('data_dir', da)
+
+    m2.assert_called_with('data_dir')
+
+    assert card.datasets == []
+
+
 # testing pages
 
 def test_page_creation(page_metadata):
@@ -220,12 +269,31 @@ def test_page_creation(page_metadata):
 
 def test_page_get_item(page_metadata):
     page = db.Page(page_metadata)
-
     assert page['id'] == 'dashboard'
-
     page['id'] = 'somethingelse'
-
     assert page['id'] == 'somethingelse'
+
+
+def test_process_cards(mocker, tas_page_metadata):
+    page = db.Page(tas_page_metadata)
+
+    m = mocker.patch('climind.web.dashboard.Card.process_card')
+
+    processed_cards = page._process_cards('data_dir', 'figure_dir', 'formatted_data_dir', 'archive')
+
+    assert m.call_count == 1
+    m.assert_called_with('data_dir', 'figure_dir', 'formatted_data_dir', 'archive')
+
+
+def test_page_build_creates_directories_and_webpage(tmpdir, mocker, tas_page_metadata):
+    page = db.Page(tas_page_metadata)
+
+    m1 = mocker.patch('climind.web.dashboard.Page._process_cards', return_value=[])
+    page.build(Path(tmpdir), Path(tmpdir), 'archive')
+
+    assert (Path(tmpdir) / 'figures').exists()
+    assert (Path(tmpdir) / 'formatted_data').exists()
+    assert (Path(tmpdir) / 'test_dashboard.html')
 
 
 # testing dashboards

@@ -212,6 +212,33 @@ class Page:
     def __setitem__(self, key, value):
         self.metadata[key] = value
 
+    def _process_cards(self, data_dir, figure_dir, formatted_data_dir, archive):
+        """
+        Process each of the cards on the page
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory containing the data
+        figure_dir: Path
+            Path of directory to which figures will be written
+        formatted_data_dir: Path
+            Path of directory to which formatted data will be written
+        archive: DataArchive
+            Archive which contains all the metadata for this selection
+
+        Returns
+        -------
+        list
+            List of the processed Cards
+        """
+        processed_cards = []
+        for card_metadata in self['cards']:
+            this_card = Card(card_metadata)
+            this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
+            processed_cards.append(this_card)
+        return processed_cards
+
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
         figure_dir = build_dir / 'figures'
         figure_dir.mkdir(exist_ok=True)
@@ -221,12 +248,7 @@ class Page:
 
         print(f"Building {self.metadata['id']} using template {self.metadata['template']}")
 
-        processed_cards = []
-
-        for card_metadata in self['cards']:
-            this_card = Card(card_metadata)
-            this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
-            processed_cards.append(this_card)
+        processed_cards = self._process_cards(data_dir, figure_dir, formatted_data_dir, archive)
 
         # populate template to make webpage
         env = Environment(
