@@ -145,6 +145,26 @@ def test_rebaseline_monthly(simple_monthly):
     assert simple_monthly.metadata['history'][-1] == 'Rebaselined to 1961-1961'
 
 
+def test_select_year_range_subset(simple_monthly):
+    test_ts = simple_monthly.select_year_range(1903, 1981)
+    assert test_ts.df['year'][0] == 1903
+    assert test_ts.df['year'][len(test_ts.df) - 1] == 1981
+
+
+def test_select_year_range_finish_after(simple_monthly):
+    test_ts = simple_monthly.select_year_range(1903, 2099)
+    assert test_ts.df['year'][0] == 1903
+    assert test_ts.df['year'][len(test_ts.df) - 1] == 2022
+
+
+def test_select_year_range_start_before(simple_monthly):
+    test_ts = simple_monthly.select_year_range(1755, 1981)
+    assert test_ts.df['year'][0] == 1850
+    assert test_ts.df['year'][len(test_ts.df) - 1] == 1981
+
+
+# Annual
+
 def test_manual_baseline_monthly(simple_monthly):
     simple_monthly.manually_set_baseline(2001, 2030)
 
@@ -255,6 +275,10 @@ def test_ranking_monthly(simple_monthly):
         assert rank == i + 1
 
 
+def test_ranking_monthly_with_non_existent_date_returns_none(simple_monthly):
+    assert simple_monthly.get_rank_from_year_and_month(2099, 3) is None
+
+
 def test_ranking_monthly_with_all_keyword(simple_monthly):
     for i in range(21):
         rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12, versus_all_months=True)
@@ -301,7 +325,7 @@ def test_select_decade_nonzero_end(simple_annual):
     assert simple_decade.metadata['history'] != ''
 
 
-def test_select_year_range(simple_annual):
+def test_select_year_range_annual(simple_annual):
     chomp = simple_annual.select_year_range(1999, 2011)
 
     assert isinstance(chomp, ts.TimeSeriesAnnual)
@@ -356,6 +380,17 @@ def test_write_csv_monthly(simple_monthly, test_metadata, tmpdir):
     assert test_filename.exists()
 
 
+def test_write_csv_monthly_with_metadata(simple_monthly, test_metadata, tmpdir):
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    test_metadata_filename = Path(tmpdir) / 'test_metadata.json'
+    simple_monthly.write_csv(test_filename, metadata_filename=test_metadata_filename)
+
+    assert test_filename.exists()
+    assert test_metadata_filename.exists()
+
+
 def test_write_csv_annual(simple_annual, test_metadata, tmpdir):
     simple_annual.metadata = test_metadata
     simple_annual.manually_set_baseline(1901, 2000)
@@ -364,4 +399,13 @@ def test_write_csv_annual(simple_annual, test_metadata, tmpdir):
 
     assert test_filename.exists()
 
-    pass
+
+def test_write_csv_annual_with_metadata(simple_annual, test_metadata, tmpdir):
+    simple_annual.metadata = test_metadata
+    simple_annual.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    test_metadata_filename = Path(tmpdir) / 'test_metadata.json'
+    simple_annual.write_csv(test_filename, metadata_filename=test_metadata_filename)
+
+    assert test_filename.exists()
+    assert test_metadata_filename.exists()

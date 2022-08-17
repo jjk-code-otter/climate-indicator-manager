@@ -304,13 +304,6 @@ class TimeSeriesMonthly:
         else:
             return None
 
-    @log_activity
-    def select_year_range(self, start_year: int, end_year: int):
-        self.df = self.df[self.df['year'] >= start_year]
-        self.df = self.df[self.df['year'] <= end_year]
-        self.df = self.df.reset_index()
-        return self
-
     def write_csv(self, filename, metadata_filename=None):
 
         if metadata_filename is not None:
