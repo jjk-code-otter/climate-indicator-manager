@@ -77,7 +77,8 @@ def tas_page_metadata():
                                {"method": "manually_set_baseline", "args": [1850, 1900]}],
                 "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
             }
-        ]
+        ],
+        "paragraphs": []
     }
     return metadata
 
