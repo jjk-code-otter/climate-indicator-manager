@@ -34,7 +34,6 @@ p {
 }
 
 
-
 </style>
 <body>
 
@@ -57,15 +56,17 @@ p {
                 </p>
                 <h3>{{ item.title }}</h3>
                 <p>
+                    <div style="float: left;">
                     Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a>-<a
                         href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank" aria-label="">pdf</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a>
+                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a><br>
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}">csv</a>-netcdf
-                </p>
-                <p>
+                </div>
+                <div style="float: right;">
                     {% if item.link_to is not none %}
                     <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Read more</a>
                     {% endif %}
+                </div>
                 </p>
             </div>
 
@@ -73,6 +74,24 @@ p {
         {% endfor %}
 
     </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>Key messages</h1>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            {% for item in paragraphs %}
+            <h3>{{ item.dataset_metadata.long_name }}</h3>
+            <p>
+                {{ item.text }}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">

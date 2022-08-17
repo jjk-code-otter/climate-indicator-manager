@@ -36,6 +36,38 @@
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_1", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "wmo_ra_2", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "wmo_ra_3", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "wmo_ra_4", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "wmo_ra_5", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "wmo_ra_6", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     },
     {
@@ -98,6 +130,43 @@
                                   "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
           }
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_1", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_1", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_2", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_3", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_4", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_5", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "africa_subregion_6", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     },
     {
@@ -118,6 +187,13 @@
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_2", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
         }
       ]
     },
@@ -140,6 +216,13 @@
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_3", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     },
     {
@@ -160,6 +243,13 @@
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_4", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
         }
       ]
     },
@@ -182,6 +272,13 @@
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_5", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     },
     {
@@ -202,6 +299,13 @@
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
+        }
+      ],
+      "paragraphs": [
+        {
+          "variable": "wmo_ra_6", "time_resolution": "annual",
+          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "writing": {"function": "anomaly_and_rank"}
         }
       ]
     }
