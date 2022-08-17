@@ -1,0 +1,37 @@
+Conventions,G,BADC-CSV,1
+title,G,{{ metadata.long_name }}
+last_revised_date,G,{{ now.year  }}-{{ "{:02d}".format(now.month) }}-{{ "{:02d}".format(now.day) }}
+date_valid,G,{{ now.year  }}-{{ "{:02d}".format(now.month) }}-{{ "{:02d}".format(now.day) }}
+feature_type,G,area average
+creator,G,WMO
+source,G,Produced by climind version {{ climind_version }}
+observation_station,G,derived data
+location,G,90.,-180.,-90.,180.
+activity,G,WMO
+{% for history_element in metadata.history -%}
+history,G,"{{ history_element }}"
+{%- endfor %}
+{% for citation in metadata.citation -%}
+reference,G,"{{ citation }}"
+{%- endfor %}
+rights,G,TBD
+comments,G,Data produced by climind version {{ climind_version }}
+comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv
+long_name,time,time,{{ time_units }}
+type,time,int
+long_name,year,year,1
+type,year,int
+{% if monthly -%}
+long_name,month,month,1
+type,month,int
+{% endif -%}
+long_name,data,{{ metadata.variable }},{{ metadata.units }}
+type,data,float
+coordinate_variable,time,t
+data
+{% if monthly -%}
+time,year,month,data
+{%- else -%}
+time,year,data
+{%- endif %}
+
