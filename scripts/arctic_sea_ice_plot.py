@@ -59,4 +59,4 @@ if __name__ == "__main__":
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
 
-    pt.arctic_sea_ice_plot(figure_dir, all_datasets, 'arctic_ice_extent.png')
+    pt.arctic_sea_ice_plot(figure_dir, all_datasets, 'arctic_ice_extent.png', '')

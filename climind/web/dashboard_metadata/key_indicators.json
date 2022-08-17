@@ -7,12 +7,12 @@
       "template": "front_page",
       "cards": [
         {
-          "indicators": "co2", "link_to": "greenhouse_gases", "plot": "monthly", "title": "Greenhouse gases",
+          "variable": "co2", "link_to": "greenhouse_gases", "time_resolution": "monthly", "title": "Greenhouse gases",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
-          "indicators": "tas", "link_to": "global_mean_temperature", "plot": "monthly", "title": "Global temperature",
+          "variable": "tas", "link_to": "global_mean_temperature", "time_resolution": "monthly", "title": "Global temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2021]},
@@ -21,22 +21,22 @@
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
         },
         {
-          "indicators": "ohc", "link_to": "ocean_heat_content", "plot": "annual", "title": "Ocean Indicators",
+          "variable": "ohc", "link_to": "ocean_heat_content", "time_resolution": "annual", "title": "Ocean Indicators",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
-          "indicators": "sealevel", "link_to": "sea_level", "plot": "monthly", "title": "Sea level",
+          "variable": "sealevel", "link_to": "sea_level", "time_resolution": "monthly", "title": "Sea level",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
         },
         {
-          "indicators": "arctic_ice", "link_to": "sea_ice_extent", "plot": "monthly", "title": "Sea ice",
+          "variable": "arctic_ice", "link_to": "sea_ice_extent", "time_resolution": "monthly", "title": "Sea ice",
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
-          "indicators": "greenland", "link_to": "glaciers_and_ice_sheets", "plot": "monthly", "title":"Glaciers and ice sheets",
+          "variable": "greenland", "link_to": "glaciers_and_ice_sheets", "time_resolution": "monthly", "title":"Glaciers and ice sheets",
           "processing": [{"method":  "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
         }
@@ -75,17 +75,17 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "co2", "link_to":  null, "plot": "monthly", "title": "Carbon dioxide",
+          "variable": "co2", "link_to":  null, "time_resolution": "monthly", "title": "Carbon dioxide",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
-          "indicators": "ch4", "link_to":  null, "plot": "monthly", "title": "Methane",
+          "variable": "ch4", "link_to":  null, "time_resolution": "monthly", "title": "Methane",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
         },
         {
-          "indicators": "n2o", "link_to":  null, "plot": "monthly", "title": "Nitrous Oxide",
+          "variable": "n2o", "link_to":  null, "time_resolution": "monthly", "title": "Nitrous Oxide",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         }
@@ -114,7 +114,7 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "tas", "link_to":  null, "plot": "monthly", "title": "Global mean temperature",
+          "variable": "tas", "link_to":  null, "time_resolution": "monthly", "title": "Global mean temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2021]},
@@ -123,12 +123,12 @@
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
         },
         {
-          "indicators": "lsat", "link_to":  null, "plot": "annual", "title": "Land air temperature",
+          "variable": "lsat", "link_to":  null, "time_resolution": "annual", "title": "Land air temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global land temperature"}
         },
         {
-          "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
+          "variable": "sst", "link_to":  null, "time_resolution": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
@@ -161,22 +161,22 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "ohc", "link_to":  null, "plot": "annual", "title": "Ocean heat content",
+          "variable": "ohc", "link_to":  null, "time_resolution": "annual", "title": "Ocean heat content",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
-          "indicators": "ph", "link_to":  null, "plot": "annual", "title": "Ocean pH",
+          "variable": "ph", "link_to":  null, "time_resolution": "annual", "title": "Ocean pH",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Ocean pH"}
         },
         {
-          "indicators": "sealevel", "link_to":  null, "plot": "monthly", "title": "Sea level",
+          "variable": "sealevel", "link_to":  null, "time_resolution": "monthly", "title": "Sea level",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
         },
         {
-          "indicators": ["mhw", "mcs"], "link_to":  null, "plot": "annual", "title": "Marine heat waves",
+          "variable": ["mhw", "mcs"], "link_to":  null, "time_resolution": "annual", "title": "Marine heat waves",
           "processing": [],
           "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
         }
@@ -195,17 +195,17 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "sealevel", "link_to":  null, "plot": "monthly", "title": "Sea level",
+          "variable": "sealevel", "link_to":  null, "time_resolution": "monthly", "title": "Sea level",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
         },
         {
-          "indicators": "ohc", "link_to":  null, "plot": "annual", "title": "Ocean heat content",
+          "variable": "ohc", "link_to":  null, "time_resolution": "annual", "title": "Ocean heat content",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
-          "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
+          "variable": "sst", "link_to":  null, "time_resolution": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
@@ -224,17 +224,17 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "arctic_ice", "link_to":  null, "plot": "monthly", "title": "Arctic sea ice",
+          "variable": "arctic_ice", "link_to":  null, "time_resolution": "monthly", "title": "Arctic sea ice",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
-          "indicators": "antarctic_ice", "link_to":  null, "plot": "monthly", "title": "Antarctic sea ice",
+          "variable": "antarctic_ice", "link_to":  null, "time_resolution": "monthly", "title": "Antarctic sea ice",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
         },
         {
-          "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
+          "variable": "sst", "link_to":  null, "time_resolution": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
@@ -253,19 +253,19 @@
       "template": "topic_page",
        "cards": [
         {
-          "indicators": "glacier", "link_to":  null, "plot": "annual", "title": "Glacier mass balance",
+          "variable": "glacier", "link_to":  null, "time_resolution": "annual", "title": "Glacier mass balance",
           "processing":  [],
           "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
 
         },
         {
-          "indicators": "greenland", "link_to":  null, "plot": "monthly", "title": "Greenland ice sheet",
+          "variable": "greenland", "link_to":  null, "time_resolution": "monthly", "title": "Greenland ice sheet",
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
 
         },
         {
-          "indicators": "antarctica", "link_to":  null, "plot": "monthly", "title": "Antarctic ice sheet",
+          "variable": "antarctica", "link_to":  null, "time_resolution": "monthly", "title": "Antarctic ice sheet",
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
 

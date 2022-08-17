@@ -37,6 +37,8 @@ def dataset_name_list(all_datasets):
 
     if len(names) == 1:
         name_list = f"{names[0]}"
+    elif len(names) == 2:
+        name_list = f"{names[0]} and {names[1]}"
     else:
         name_list = f"{', '.join(names[0:-1])}, and {names[-1]}"
 
@@ -82,6 +84,7 @@ def max_monthly_value(all_datasets, year):
     for ds in all_datasets:
         min_rank = 9999
         min_rank_month = 99
+        min_value = -99
         for month in range(1, 13):
             rank = ds.get_rank_from_year_and_month(year, month, versus_all_months=True)
             if rank is not None and rank < min_rank:
@@ -147,8 +150,8 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     last_positive = 1900
     for ds in all_datasets:
         first_year = ds.df['year'][0]
-        for check_year in range(first_year+1, year + 1):
-            value1 = ds.get_value_from_year(check_year-1)
+        for check_year in range(first_year + 1, year + 1):
+            value1 = ds.get_value_from_year(check_year - 1)
             value2 = ds.get_value_from_year(check_year)
             diff = value2 - value1
             if diff >= 0.0:

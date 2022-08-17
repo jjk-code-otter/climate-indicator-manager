@@ -7,32 +7,32 @@
       "template": "front_page",
       "cards": [
         {
-          "indicators": "ohc", "link_to": null, "plot": "annual", "title": "Ocean Indicators",
+          "variable": "ohc", "link_to": null, "time_resolution": "annual", "title": "Ocean Indicators",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
-          "indicators": "sealevel", "link_to": null, "plot": "monthly", "title": "Sea level",
+          "variable": "sealevel", "link_to": null, "time_resolution": "monthly", "title": "Sea level",
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
         },
         {
-          "indicators": "arctic_ice", "link_to": null, "plot": "monthly", "title": "Sea ice",
+          "variable": "arctic_ice", "link_to": null, "time_resolution": "monthly", "title": "Sea ice",
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
-          "indicators": "ph", "link_to":  null, "plot": "annual", "title": "Ocean pH",
+          "variable": "ph", "link_to":  null, "time_resolution": "annual", "title": "Ocean pH",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Ocean pH"}
         },
         {
-          "indicators": ["mhw", "mcs"], "link_to":  null, "plot": "annual", "title": "Marine heat waves",
+          "variable": ["mhw", "mcs"], "link_to":  null, "time_resolution": "annual", "title": "Marine heat waves",
           "processing": [],
           "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
         },
         {
-          "indicators": "sst", "link_to":  null, "plot": "annual", "title": "Sea-surface temperature",
+          "variable": "sst", "link_to":  null, "time_resolution": "annual", "title": "Sea-surface temperature",
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }

@@ -49,7 +49,6 @@ def fetch(url: str, outdir: Path):
     filename = outdir / filename
 
     if req.status_code != 404:
-        file_size = int(req.headers['Content-length'])
         with open(filename, 'wb') as outfile:
             chunk_size = 1048576
             for chunk in req.iter_content(chunk_size=chunk_size):

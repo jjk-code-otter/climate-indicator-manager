@@ -16,6 +16,7 @@
 
 from pathlib import Path
 import climind.data_types.timeseries as ts
+from climind.data_manager.metadata import CombinedMetadata
 import copy
 
 
@@ -42,7 +43,7 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
     return out_filename
 
 
-def read_ts(out_dir: Path, metadata: dict):
+def read_ts(out_dir: Path, metadata: CombinedMetadata):
     filename = metadata['filename'][0]
     filename = find_latest(out_dir, filename)
 
@@ -56,7 +57,7 @@ def read_ts(out_dir: Path, metadata: dict):
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
@@ -78,7 +79,7 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

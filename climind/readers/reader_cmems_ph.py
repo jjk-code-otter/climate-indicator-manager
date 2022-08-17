@@ -16,10 +16,7 @@
 
 from pathlib import Path
 import xarray as xa
-import pandas as pd
-import numpy as np
 import climind.data_types.timeseries as ts
-import climind.data_types.grid as gd
 import copy
 
 from climind.data_manager.metadata import CombinedMetadata
