@@ -16,7 +16,6 @@
 
 from pathlib import Path
 import climind.data_types.timeseries as ts
-import numpy as np
 import copy
 from climind.data_manager.metadata import CombinedMetadata
 

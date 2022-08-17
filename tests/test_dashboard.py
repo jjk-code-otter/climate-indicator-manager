@@ -27,7 +27,7 @@ import climind.web.dashboard as db
 @pytest.fixture
 def card_metadata():
     metadata = {
-        "indicators": "ohc", "link_to": None, "plot": "annual", "title": "Ocean Indicators",
+        "variable": "ohc", "link_to": None, "time_resolution": "annual", "title": "Ocean Indicators",
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
 
@@ -38,7 +38,7 @@ def card_metadata():
 @pytest.fixture
 def tas_card_metadata():
     metadata = {
-        "indicators": "tas", "link_to": None, "plot": "monthly", "title": "GMT",
+        "variable": "tas", "link_to": None, "time_resolution": "monthly", "title": "GMT",
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "plotting": {"function": "neat_plot", "title": "GMT"}
 
@@ -69,7 +69,7 @@ def tas_page_metadata():
         "template": "front_page",
         "cards": [
             {
-                "indicators": "tas", "link_to": "global_mean_temperature", "plot": "monthly",
+                "variable": "tas", "link_to": "global_mean_temperature", "time_resolution": "monthly",
                 "title": "Global temperature",
                 "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                                {"method": "make_annual", "args": []},
@@ -78,7 +78,23 @@ def tas_page_metadata():
                 "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
             }
         ],
-        "paragraphs": []
+        "paragraphs": [
+            {
+                "variable": "arctic_ice", "time_resolution": "monthly",
+                "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+                "writing": {"function": "arctic_ice_paragraph"}
+            }
+        ]
+    }
+    return metadata
+
+
+@pytest.fixture
+def test_paragraph_metadata():
+    metadata = {
+        "variable": "arctic_ice", "time_resolution": "monthly",
+        "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+        "writing": {"function": "arctic_ice_paragraph"}
     }
     return metadata
 
@@ -117,6 +133,74 @@ def test_process_single_dataset_with_output(mocker):
     ds.this_method.assert_called_once_with(*processing_steps[0]['args'])
 
 
+def test_paragraph_creation(test_paragraph_metadata):
+    paragraph = db.Paragraph(test_paragraph_metadata)
+    assert isinstance(paragraph, db.Paragraph)
+
+
+def test_paragraph_get_and_set(test_paragraph_metadata):
+    paragraph = db.Card(test_paragraph_metadata)
+    assert paragraph['variable'] == 'arctic_ice'
+    test_indicator = 'test_indicator'
+    paragraph['variable'] = test_indicator
+    assert paragraph['variable'] == test_indicator
+
+
+def test_process_datasets_para(mocker, test_paragraph_metadata):
+    paragraph = db.Paragraph(test_paragraph_metadata)
+    tiny1 = Tiny({'name': 'first', 'url': 'first_url', 'citation': 'first et al.',
+                  'data_citation': 'doi, first', 'acknowledgement': 'First, thanks'})
+    tiny2 = Tiny({'name': 'second', 'url': 'second_url', 'citation': 'second et al.',
+                  'data_citation': 'doi, second', 'acknowledgement': 'Second, thanks'})
+    paragraph.datasets = [tiny1, tiny2]
+
+    m = mocker.patch("climind.web.dashboard.process_single_dataset", wraps=in_and_out)
+
+    paragraph.process_datasets()
+
+    calls = [call(tiny1, test_paragraph_metadata['processing']),
+             call(tiny2, test_paragraph_metadata['processing'])]
+    m.assert_has_calls(calls, any_order=True)
+
+    assert len(paragraph.datasets) == 2
+    assert paragraph['dataset_metadata']['name'] == 'first'
+    assert paragraph['dataset_metadata']['url'] == 'first_url'
+
+
+def test_render_paragraph(mocker, test_paragraph_metadata):
+    paragraph = db.Paragraph(test_paragraph_metadata)
+    _ = mocker.patch('climind.stats.paragraphs.arctic_ice_paragraph', wraps=simple_responder)
+    paragraph.render(year=2021)
+    assert paragraph['text'] == [[], 2021]
+
+
+def test_render_paragraph_with_kwargs(mocker, test_paragraph_metadata):
+    paragraph = db.Paragraph(test_paragraph_metadata)
+    _ = mocker.patch('climind.stats.paragraphs.arctic_ice_paragraph', wraps=simple_responder)
+    paragraph['writing']['kwargs'] = {'test_kwarg': 'your_message_here'}
+    paragraph.render(year=2021)
+    assert paragraph['text'] == [[], 2021, 'your_message_here']
+
+
+def test_process_paragraph(mocker, test_paragraph_metadata):
+    """
+    This function is kind of a shopping list, so essentially the test is to go through
+    the items that are needed in today's shop, mock them and make sure they are all called
+    with the right inputs
+    """
+    paragraph = db.Paragraph(test_paragraph_metadata)
+
+    mock_select_and_read = mocker.patch('climind.web.dashboard.Paragraph.select_and_read_data')
+    mock_process_datasets = mocker.patch('climind.web.dashboard.Paragraph.process_datasets')
+    mock_render = mocker.patch('climind.web.dashboard.Paragraph.render')
+
+    paragraph.process_paragraph('data_dir', 'archive')
+
+    mock_select_and_read.assert_called_with('data_dir', 'archive')
+    mock_process_datasets.assert_called_once()
+    mock_render.assert_called_once()
+
+
 def test_card_creation(card_metadata):
     card = db.Card(card_metadata)
     assert isinstance(card, db.Card)
@@ -124,10 +208,10 @@ def test_card_creation(card_metadata):
 
 def test_card_get_and_set(card_metadata):
     card = db.Card(card_metadata)
-    assert card['indicators'] == 'ohc'
+    assert card['variable'] == 'ohc'
     test_indicator = 'test_indicator'
-    card['indicators'] = test_indicator
-    assert card['indicators'] == test_indicator
+    card['variable'] = test_indicator
+    assert card['variable'] == test_indicator
 
 
 def simple_responder(*args, **kwargs):
@@ -142,14 +226,14 @@ def simple_responder(*args, **kwargs):
 
 def test_card_plot(mocker, card_metadata):
     card = db.Card(card_metadata)
-    m = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
+    _ = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
     card.plot(Path(""))
     assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", "Ocean heat content"]
 
 
 def test_card_plot_with_kwargs(mocker, card_metadata):
     card = db.Card(card_metadata)
-    m = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
+    _ = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
     card['plotting']['kwargs'] = {'test_kwarg': 'your_message_here'}
     card.plot(Path(""))
     assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", "Ocean heat content", 'your_message_here']
@@ -180,7 +264,7 @@ def test_make_zip_file(tmpdir, mocker, card_metadata):
         csv_paths.append(csv_path)
 
     # set up mocker to return paths to fake csv files when asked to make csv files
-    m = mocker.patch('climind.web.dashboard.Card.make_csv_files', return_value=csv_paths)
+    _ = mocker.patch('climind.web.dashboard.Card.make_csv_files', return_value=csv_paths)
 
     # makes the card and use it to create a zipfile
     card = db.Card(card_metadata)
@@ -204,7 +288,7 @@ def in_and_out(first, _):
     return first
 
 
-def test_process_datasets(tmpdir, mocker, card_metadata):
+def test_process_datasets(mocker, card_metadata):
     card = db.Card(card_metadata)
     tiny1 = Tiny({'name': 'first', 'url': 'first_url', 'citation': 'first et al.',
                   'data_citation': 'doi, first', 'acknowledgement': 'First, thanks'})
@@ -254,9 +338,9 @@ def test_select_and_read_data(mocker, tas_card_metadata):
 
     da = dm.DataArchive.from_directory(metadata_dir)
 
-    card.select_and_read_data('data_dir', da)
+    card.select_and_read_data(Path('data_dir'), da)
 
-    m2.assert_called_with('data_dir')
+    m2.assert_called_with(Path('data_dir'))
 
     assert card.datasets == []
 
@@ -280,16 +364,34 @@ def test_process_cards(mocker, tas_page_metadata):
 
     m = mocker.patch('climind.web.dashboard.Card.process_card')
 
-    processed_cards = page._process_cards('data_dir', 'figure_dir', 'formatted_data_dir', 'archive')
+    data_dir = Path('data_dir')
+    figure_dir = Path('figure_dir')
+    formatted_data_dir = Path('formatted_data_dir')
+
+    _ = page._process_cards(data_dir, figure_dir, formatted_data_dir, 'archive')
 
     assert m.call_count == 1
-    m.assert_called_with('data_dir', 'figure_dir', 'formatted_data_dir', 'archive')
+    m.assert_called_with(data_dir, figure_dir, formatted_data_dir, 'archive')
+
+
+def test_process_paragraphs(mocker, tas_page_metadata):
+    page = db.Page(tas_page_metadata)
+
+    m = mocker.patch('climind.web.dashboard.Paragraph.process_paragraph')
+
+    data_dir = Path('data_dir')
+
+    _ = page._process_paragraphs(data_dir, 'archive')
+
+    assert m.call_count == 1
+    m.assert_called_with(data_dir, 'archive')
 
 
 def test_page_build_creates_directories_and_webpage(tmpdir, mocker, tas_page_metadata):
     page = db.Page(tas_page_metadata)
 
-    m1 = mocker.patch('climind.web.dashboard.Page._process_cards', return_value=[])
+    _ = mocker.patch('climind.web.dashboard.Page._process_cards', return_value=[])
+    _ = mocker.patch('climind.web.dashboard.Page._process_paragraphs', return_value=[])
     page.build(Path(tmpdir), Path(tmpdir), 'archive')
 
     assert (Path(tmpdir) / 'figures').exists()
@@ -299,7 +401,7 @@ def test_page_build_creates_directories_and_webpage(tmpdir, mocker, tas_page_met
 
 # testing dashboards
 
-def test_dashboard_from_json(tmpdir):
+def test_dashboard_from_json():
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators.json'
     assert json_file.exists()
 

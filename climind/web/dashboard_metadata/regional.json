@@ -7,32 +7,32 @@
       "template": "front_page",
       "cards": [
         {
-          "indicators": "wmo_ra_1", "link_to": "wmo_ra_i", "plot": "annual", "title": "WMO RA I Africa",
+          "variable": "wmo_ra_1", "link_to": "wmo_ra_i", "time_resolution": "annual", "title": "WMO RA I Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
         },
         {
-          "indicators": "wmo_ra_2", "link_to": "wmo_ra_ii", "plot": "annual", "title": "WMO RA II Asia",
+          "variable": "wmo_ra_2", "link_to": "wmo_ra_ii", "time_resolution": "annual", "title": "WMO RA II Asia",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
         },
         {
-          "indicators": "wmo_ra_3", "link_to": "wmo_ra_iii", "plot": "annual", "title": "WMO RA III South America",
+          "variable": "wmo_ra_3", "link_to": "wmo_ra_iii", "time_resolution": "annual", "title": "WMO RA III South America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
         },
         {
-          "indicators": "wmo_ra_4", "link_to": "wmo_ra_iv", "plot": "annual", "title": "WMO RA IV North America",
+          "variable": "wmo_ra_4", "link_to": "wmo_ra_iv", "time_resolution": "annual", "title": "WMO RA IV North America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
         },
         {
-          "indicators": "wmo_ra_5", "link_to": "wmo_ra_v", "plot": "annual", "title": "WMO RA V Southwest Pacific",
+          "variable": "wmo_ra_5", "link_to": "wmo_ra_v", "time_resolution": "annual", "title": "WMO RA V Southwest Pacific",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
         },
         {
-          "indicators": "wmo_ra_6", "link_to": "wmo_ra_vi", "plot": "annual", "title": "WMO RA VI Europe",
+          "variable": "wmo_ra_6", "link_to": "wmo_ra_vi", "time_resolution": "annual", "title": "WMO RA VI Europe",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
         }
@@ -76,43 +76,43 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_1", "link_to":  null, "plot": "annual", "title": "WMO RA I Africa",
+          "variable": "wmo_ra_1", "link_to":  null, "time_resolution": "annual", "title": "WMO RA I Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
         },
         {
-          "indicators": "africa_subregion_1", "link_to":  null, "plot": "annual", "title": "North Africa",
+          "variable": "africa_subregion_1", "link_to":  null, "time_resolution": "annual", "title": "North Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "North Africa"}
         },
         {
-          "indicators": "africa_subregion_2", "link_to":  null, "plot": "annual", "title": "West Africa",
+          "variable": "africa_subregion_2", "link_to":  null, "time_resolution": "annual", "title": "West Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "West Africa"}
         },
         {
-          "indicators": "africa_subregion_3", "link_to":  null, "plot": "annual", "title": "Central Africa",
+          "variable": "africa_subregion_3", "link_to":  null, "time_resolution": "annual", "title": "Central Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Central Africa"}
         },
         {
-          "indicators": "africa_subregion_4", "link_to":  null, "plot": "annual", "title": "Eastern Africa",
+          "variable": "africa_subregion_4", "link_to":  null, "time_resolution": "annual", "title": "Eastern Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Eastern Africa"}
         },
         {
-          "indicators": "africa_subregion_5", "link_to":  null, "plot": "annual", "title": "Southern Africa",
+          "variable": "africa_subregion_5", "link_to":  null, "time_resolution": "annual", "title": "Southern Africa",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Southern Africa"}
         },
         {
-          "indicators": "africa_subregion_6", "link_to":  null, "plot": "annual", "title": "Indian Ocean",
+          "variable": "africa_subregion_6", "link_to":  null, "time_resolution": "annual", "title": "Indian Ocean",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Indian Ocean"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -120,9 +120,9 @@
           }
         },
         {
-          "indicators": ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
+          "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
             "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
-          "link_to":  null, "plot": "annual", "title": "Regional trends",
+          "link_to":  null, "time_resolution": "annual", "title": "Regional trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Regional trends",
@@ -175,13 +175,13 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_2", "link_to":  null, "plot": "annual", "title": "WMO RA II Asia",
+          "variable": "wmo_ra_2", "link_to":  null, "time_resolution": "annual", "title": "WMO RA II Asia",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -203,13 +203,13 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_3", "link_to":  null, "plot": "annual", "title": "WMO RA III South America",
+          "variable": "wmo_ra_3", "link_to":  null, "time_resolution": "annual", "title": "WMO RA III South America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -231,13 +231,13 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_4", "link_to":  null, "plot": "annual", "title": "WMO RA IV North America",
+          "variable": "wmo_ra_4", "link_to":  null, "time_resolution": "annual", "title": "WMO RA IV North America",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -259,13 +259,13 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_5", "link_to":  null, "plot": "annual", "title": "WMO RA V Southwest Pacific",
+          "variable": "wmo_ra_5", "link_to":  null, "time_resolution": "annual", "title": "WMO RA V Southwest Pacific",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -287,13 +287,13 @@
       "template": "topic_page",
       "cards": [
         {
-          "indicators": "wmo_ra_6", "link_to":  null, "plot": "annual", "title": "WMO RA VI Europe",
+          "variable": "wmo_ra_6", "link_to":  null, "time_resolution": "annual", "title": "WMO RA VI Europe",
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
         },
         {
-          "indicators": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-          "link_to":  null, "plot": "annual", "title": "Continental trends",
+          "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+          "link_to":  null, "time_resolution": "annual", "title": "Continental trends",
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",

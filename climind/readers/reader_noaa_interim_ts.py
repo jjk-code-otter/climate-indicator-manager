@@ -16,10 +16,11 @@
 
 from pathlib import Path
 import climind.data_types.timeseries as ts
+from climind.data_manager.metadata import CombinedMetadata
 import copy
 
 
-def read_ts(out_dir: Path, metadata: dict):
+def read_ts(out_dir: Path, metadata: CombinedMetadata):
     filename = metadata['filename'][0]
     filename = out_dir / filename
 
@@ -33,7 +34,7 @@ def read_ts(out_dir: Path, metadata: dict):
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
     years = []
     anomalies = []
 

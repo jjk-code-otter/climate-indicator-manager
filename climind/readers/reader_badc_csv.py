@@ -15,9 +15,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import xarray as xa
-import numpy as np
-import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 import copy
 from climind.data_manager.metadata import CombinedMetadata

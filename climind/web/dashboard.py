@@ -15,12 +15,12 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-from typing import Union
+from typing import Union, List
 from pathlib import Path
 from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-import climind.data_types.timeseries as ts
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 import climind.plotters.plot_types as pt
 import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
@@ -30,15 +30,15 @@ from climind.config.config import DATA_DIR
 DATA_DIR = DATA_DIR / "ManagedData" / "Data"
 
 
-def process_single_dataset(ds: Union[ts.TimeSeriesAnnual, ts.TimeSeriesMonthly],
-                           processing_steps: list):
+def process_single_dataset(ds: Union[TimeSeriesAnnual, TimeSeriesMonthly],
+                           processing_steps: list) -> Union[TimeSeriesAnnual, TimeSeriesMonthly]:
     """
     Process the input data set using the methods and arguments provided in a list of processing steps.
     Each processing step is a dictionary containing a 'method' and an 'arguments' entry.
 
     Parameters
     ----------
-    ds: ts.TimeSeriesAnnual or ts.TimeSeriesMonthly
+    ds: TimeSeriesAnnual or TimeSeriesMonthly
         Data set to be processed
     processing_steps: list
         list of steps. Each step must be a dictionary containing a 'method' entry that corresponds to
@@ -47,7 +47,7 @@ def process_single_dataset(ds: Union[ts.TimeSeriesAnnual, ts.TimeSeriesMonthly],
 
     Returns
     -------
-    ts.TimeSeriesAnnual or ts.TimeSeriesMonthly
+    Union[TimeSeriesAnnual, TimeSeriesMonthly]
     """
     for step in processing_steps:
         method = step['method']
@@ -58,10 +58,10 @@ def process_single_dataset(ds: Union[ts.TimeSeriesAnnual, ts.TimeSeriesMonthly],
     return ds
 
 
-class Paragraph:
+class WebComponent:
 
-    def __init__(self, paragraph_metadata):
-        self.metadata = paragraph_metadata
+    def __init__(self, component_metadata: dict):
+        self.metadata = component_metadata
         self.datasets = []
 
     def __getitem__(self, key):
@@ -70,12 +70,7 @@ class Paragraph:
     def __setitem__(self, key, value):
         self.metadata[key] = value
 
-    def process_paragraph(self, data_dir, archive):
-        self.select_and_read_data(data_dir, archive)
-        self.process_datasets()
-        self.render()
-
-    def select_and_read_data(self, data_dir, archive):
+    def select_and_read_data(self, data_dir: Path, archive: DataArchive):
         """
         Using the specified data archive, select the appropriate subset of data as specified in the card
         metadata and read in the data sets from the data_dir directory
@@ -101,7 +96,8 @@ class Paragraph:
 
     def process_datasets(self):
         """
-        Run the processing specified in the paragraph metadata on each of the data sets.
+        Apply the processing steps specified in the 'processing' section of the metadata file to
+        all the data sets.
 
         Returns
         -------
@@ -113,11 +109,46 @@ class Paragraph:
             processed_datasets.append(ds)
 
         self.datasets = processed_datasets
-        self['dataset_metadata'] = ds.metadata
 
-    def render(self, year=2021):
+
+class Paragraph(WebComponent):
+
+    def __init__(self, paragraph_metadata: dict):
+        super().__init__(paragraph_metadata)
+
+    def process_paragraph(self, data_dir: Path, archive: DataArchive):
         """
-        Write out the paragraph specified in the paragraph metadata
+        Process and ultimately render the Paragraph object
+
+        Parameters
+        ----------
+        data_dir: Path
+            Path of the directory containing the data
+        archive: DataArchive
+            DataArchive object with the metadata describing all the datasets
+
+        Returns
+        -------
+
+        """
+        self.select_and_read_data(data_dir, archive)
+        self.process_datasets()
+        self.render()
+
+    def process_datasets(self):
+        """
+        Run the processing specified in the paragraph metadata on each of the data sets.
+
+        Returns
+        -------
+        None
+        """
+        super().process_datasets()
+        self['dataset_metadata'] = self.datasets[0].metadata
+
+    def render(self, year: int = 2021):
+        """
+        Render out the text of the paragraph specified in the paragraph metadata.
 
         Parameters
         ----------
@@ -140,9 +171,9 @@ class Paragraph:
         self['text'] = paragraph_text
 
 
-class Card:
+class Card(WebComponent):
 
-    def __init__(self, card_metadata):
+    def __init__(self, card_metadata: dict):
         """
         A card is a single panel in a dashboard web page. The Card class manages the metadata
         associated with the card, and generates the files that are associated with it. These
@@ -153,44 +184,31 @@ class Card:
         card_metadata: dict
             dictionary containing the metadata for the card
         """
-        self.metadata = card_metadata
-        self.datasets = []
+        super().__init__(card_metadata)
 
-    def __getitem__(self, key):
-        return self.metadata[key]
-
-    def __setitem__(self, key, value):
-        self.metadata[key] = value
-
-    def process_card(self, data_dir, figure_dir, formatted_data_dir, archive):
-        self.select_and_read_data(data_dir, archive)
-        self.process_datasets()
-        self.plot(figure_dir)
-        self.make_zip_file(formatted_data_dir)
-
-    def select_and_read_data(self, data_dir, archive):
+    def process_card(self, data_dir: Path, figure_dir: Path, formatted_data_dir: Path, archive: DataArchive):
         """
-        Using the specified data archive, select the appropriate subset of data as specified in the card
-        metadata and read in the data sets from the data_dir directory
+        Process the datasets, plot them and write out the data based on the metadata in the Card
 
         Parameters
         ----------
         data_dir: Path
-            Path of the directory in which the data are to be found
+            Path of the directory in which the data are found.
+        figure_dir: Path
+            Path of the directory to which the figures will be written.
+        formatted_data_dir: Path
+            Path of the directory to which the formatted data will be written.
         archive: DataArchive
-            Archive of data used to select and populate the data sets
+            DataArchive object containing the descriptive metadata.
 
         Returns
         -------
         None
         """
-        selection_metadata = {
-            'type': 'timeseries',
-            'variable': self['indicators'],
-            'time_resolution': self['plot']
-        }
-        selected = archive.select(selection_metadata)
-        self.datasets = selected.read_datasets(data_dir)
+        self.select_and_read_data(data_dir, archive)
+        self.process_datasets()
+        self.plot(figure_dir)
+        self.make_zip_file(formatted_data_dir)
 
     def process_datasets(self):
         """
@@ -200,18 +218,15 @@ class Card:
         -------
         None
         """
-        processed_datasets = []
+        super().process_datasets()
         pro_metadata = []
         for ds in self.datasets:
-            ds = process_single_dataset(ds, self['processing'])
-            processed_datasets.append(ds)
             pro_metadata.append({'name': ds.metadata['name'],
                                  'url': ds.metadata['url'],
                                  'citation': ds.metadata['citation'],
                                  'data_citation': ds.metadata['data_citation'],
                                  'acknowledgement': ds.metadata['acknowledgement']})
 
-        self.datasets = processed_datasets
         self['dataset_metadata'] = pro_metadata
 
     def plot(self, figure_dir):
@@ -241,7 +256,20 @@ class Card:
         self['figure_name'] = figure_name
         self['caption'] = caption
 
-    def make_csv_files(self, formatted_data_dir):
+    def make_csv_files(self, formatted_data_dir: Path) -> List[Path]:
+        """
+        Make a csv file in the standard format for each data set in the Card.
+
+        Parameters
+        ----------
+        formatted_data_dir: Path
+            Path of the directory to which the csv files will be written
+
+        Returns
+        -------
+        List[Path]
+            List containing a Path for each csv file written
+        """
         csv_paths = []
         for ds in self.datasets:
             csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
@@ -251,7 +279,7 @@ class Card:
 
         return csv_paths
 
-    def make_zip_file(self, formatted_data_dir):
+    def make_zip_file(self, formatted_data_dir: Path):
         """
         Create a formatted data file for each data set and zip these into a zip file
 
@@ -295,7 +323,7 @@ class Page:
     def __setitem__(self, key, value):
         self.metadata[key] = value
 
-    def _process_cards(self, data_dir, figure_dir, formatted_data_dir, archive):
+    def _process_cards(self, data_dir: Path, figure_dir: Path, formatted_data_dir: Path, archive: DataArchive):
         """
         Process each of the cards on the page
 
@@ -322,7 +350,7 @@ class Page:
             processed_cards.append(this_card)
         return processed_cards
 
-    def _process_paragraphs(self, data_dir, archive):
+    def _process_paragraphs(self, data_dir: Path, archive: DataArchive) -> List[Paragraph]:
         """
         Process each of the paragraphs on the page
 
@@ -335,7 +363,7 @@ class Page:
 
         Returns
         -------
-        list
+        List[Paragraph]
             List of the processed Cards
         """
         processed_paragraphs = []
@@ -346,6 +374,23 @@ class Page:
         return processed_paragraphs
 
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
+        """
+        Build the Page, processing all the Card and Paragraph objects, then populating the template
+        to generate a webpage, figures and formatted data.
+
+        Parameters
+        ----------
+        build_dir: Path
+            Path of the directory to which the html, figures and data will be written
+        data_dir: Path
+            Path of the directory where the data are to be found.
+        archive: DataArchive
+            DataArchive containing the metadata for the datasets
+
+        Returns
+        -------
+        None
+        """
         figure_dir = build_dir / 'figures'
         figure_dir.mkdir(exist_ok=True)
 
@@ -392,7 +437,21 @@ class Dashboard:
             self.pages.append(Page(page_metadata))
 
     @staticmethod
-    def from_json(json_file: Path, archive_dir: Path):
+    def from_json(json_file: Path, archive_dir: Path) -> Dashboard:
+        """
+        Create a Dashboard from a json file and directory containing dataset metadata
+
+        Parameters
+        ----------
+        json_file: Path
+            Path to the json file
+        archive_dir: Path
+            Path of the directory which contains the dataset metadata
+
+        Returns
+        -------
+        Dashboard
+        """
         with open(json_file) as f:
             metadata = json.load(f)
         archive = DataArchive.from_directory(archive_dir)

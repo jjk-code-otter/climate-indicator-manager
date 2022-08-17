@@ -19,6 +19,7 @@ import xarray as xa
 import numpy as np
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
+from climind.data_manager.metadata import CombinedMetadata
 import copy
 
 
@@ -44,7 +45,7 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
     return out_filename
 
 
-def read_ts(out_dir: Path, metadata: dict, **kwargs):
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename_with_wildcards = metadata['filename'][0]
     filename = find_latest(out_dir, filename_with_wildcards)
 
@@ -67,7 +68,7 @@ def read_ts(out_dir: Path, metadata: dict, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_grid(filename: str, metadata):
+def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
 
     number_of_months = len(df.time.data)
@@ -95,7 +96,7 @@ def read_monthly_grid(filename: str, metadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename: str, metadata):
+def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     df = read_monthly_grid(filename, metadata)
     df = df.df
     # regrid to 1x1
@@ -115,7 +116,7 @@ def read_monthly_1x1_grid(filename: str, metadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: dict):
+def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     """
     Read in monthly file
 
@@ -146,7 +147,7 @@ def read_monthly_ts(filename: str, metadata: dict):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: dict):
+def read_annual_ts(filename: str, metadata: CombinedMetadata):
     """
     Read in annual file
 
