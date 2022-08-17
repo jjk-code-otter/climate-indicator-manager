@@ -18,9 +18,11 @@ import pandas as pd
 import logging
 import copy
 import pkg_resources
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
 import cftime as cf
 from climind.data_manager.metadata import CombinedMetadata
+from climind.definitions import ROOT_DIR
 
 
 def log_activity(in_function):
@@ -304,6 +306,15 @@ class TimeSeriesMonthly:
         else:
             return None
 
+    def generate_dates(self, time_units):
+        time_str = self.df.year.astype(str) + self.df.month.astype(str)
+        self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
+        dates = cf.date2num(self.df['time'].tolist(),
+                            units=time_units,
+                            has_year_zero=False,
+                            calendar='standard')
+        return dates
+
     def write_csv(self, filename, metadata_filename=None):
 
         if metadata_filename is not None:
@@ -316,56 +327,22 @@ class TimeSeriesMonthly:
 
         now = datetime.today()
         climind_version = pkg_resources.get_distribution("climind").version
-        time_units = 'days since 1800-01-01 00:00:00.0'
 
-        time_str = self.df.year.astype(str) + self.df.month.astype(str)
-        self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
-        dates = cf.date2num(self.df['time'].tolist(),
-                            units=time_units,
-                            has_year_zero=False,
-                            calendar='standard')
-        self.df['time'] = dates
+        time_units = 'days since 1800-01-01 00:00:00.0'
+        self.df['time'] = self.generate_dates(time_units)
+
+        # populate template to make webpage
+        env = Environment(
+            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
+            autoescape=select_autoescape()
+        )
+        template = env.get_template("badc_boilerplate.jinja2")
+
+        rendered = template.render(now=now, climind_version=climind_version,
+                                   metadata=self.metadata, monthly=True)
 
         with open(filename, 'w') as f:
-            f.write("Conventions,G,BADC-CSV,1\n")
-
-            f.write("title,G,Global mean temperature\n")
-            f.write(f"last_revised_date,G,{now.year}-{now.month:02d}-{now.day:02d}\n")
-            f.write(f"date_valid,G,{now.year}-{now.month:02d}-{now.day:02d}\n")
-
-            f.write(f"feature_type,G,area average\n")
-            f.write(f"creator,G,WMO\n")
-            f.write(f"source,G,Produced by climind version {climind_version}\n")
-            f.write(f"observation_station,G,derived data\n")
-            f.write(f"location,G,90.,-180.,-90.,180.\n")
-            f.write(f"activity,G,WMO\n")
-
-            for history_element in self.metadata['history']:
-                f.write(f'history,G,"{history_element}"\n')
-
-            for citation in self.metadata['citation']:
-                f.write(f'reference,G,"{citation}"\n')
-
-            f.write(f"rights,G,TBD\n")
-            f.write(f"comments,G,Data produced by climind version {climind_version}\n")
-            f.write(f"comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv")
-
-            f.write(f"long_name,time,time,{time_units}\n")
-            f.write(f"type,time,int\n")
-
-            f.write(f"long_name,year,year,1\n")
-            f.write(f"type,year,int\n")
-
-            f.write(f"long_name,month,month,1\n")
-            f.write(f"type,month,int\n")
-
-            f.write(f"long_name,data,{self.metadata['variable']},{self.metadata['units']}\n")
-            f.write(f"type,data,float\n")
-
-            f.write(f"coordinate_variable,time,t\n")
-
-            f.write("data\n")
-            f.write("time,year,month,data\n")
+            f.write(rendered)
             f.write(self.df.to_csv(index=False,
                                    line_terminator='\n',
                                    float_format='%.4f',
@@ -615,6 +592,14 @@ class TimeSeriesAnnual:
         """
         self.metadata['history'].append(message)
 
+    def generate_dates(self, time_units):
+        self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
+        dates = cf.date2num(self.df['time'].tolist(),
+                            units=time_units,
+                            has_year_zero=False,
+                            calendar='standard')
+        return dates
+
     def write_csv(self, filename, metadata_filename=None):
 
         if metadata_filename is not None:
@@ -627,52 +612,22 @@ class TimeSeriesAnnual:
 
         now = datetime.today()
         climind_version = pkg_resources.get_distribution("climind").version
-        time_units = 'days since 1800-01-01 00:00:00.0'
 
-        self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
-        dates = cf.date2num(self.df['time'].tolist(),
-                            units=time_units,
-                            has_year_zero=False,
-                            calendar='standard')
-        self.df['time'] = dates
+        time_units = 'days since 1800-01-01 00:00:00.0'
+        self.df['time'] = self.generate_dates(time_units)
+
+        # populate template to make webpage
+        env = Environment(
+            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
+            autoescape=select_autoescape()
+        )
+        template = env.get_template("badc_boilerplate.jinja2")
+
+        rendered = template.render(now=now, climind_version=climind_version,
+                                   metadata=self.metadata, monthly=False)
 
         with open(filename, 'w') as f:
-            f.write("Conventions,G,BADC-CSV,1\n")
-
-            f.write("title,G,Global mean temperature\n")
-            f.write(f"last_revised_date,G,{now.year}-{now.month:02d}-{now.day:02d}\n")
-            f.write(f"date_valid,G,{now.year}-{now.month:02d}-{now.day:02d}\n")
-
-            f.write(f"feature_type,G,area average\n")
-            f.write(f"creator,G,WMO\n")
-            f.write(f"source,G,Produced by climind version {climind_version}\n")
-            f.write(f"observation_station,G,derived data\n")
-            f.write(f"location,G,90.,-180.,-90.,180.\n")
-            f.write(f"activity,G,WMO\n")
-
-            for history_element in self.metadata['history']:
-                f.write(f'history,G,"{history_element}"\n')
-
-            for citation in self.metadata['citation']:
-                f.write(f'reference,G,"{citation}"\n')
-
-            f.write(f"rights,G,TBD\n")
-            f.write(f"comments,G,Data produced by climind version {climind_version}\n")
-            f.write(f"comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv")
-
-            f.write(f"long_name,time,time,{time_units}\n")
-            f.write(f"type,time,int\n")
-
-            f.write(f"long_name,year,year,1\n")
-            f.write(f"type,year,int\n")
-
-            f.write(f"long_name,data,{self.metadata['variable']},{self.metadata['units']}\n")
-            f.write(f"type,data,float\n")
-
-            f.write(f"coordinate_variable,time,t\n")
-
-            f.write("data\n")
-            f.write("time,year,data\n")
+            f.write(rendered)
             f.write(self.df.to_csv(index=False,
                                    line_terminator='\n',
                                    float_format='%.4f',

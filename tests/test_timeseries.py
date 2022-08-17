@@ -346,6 +346,7 @@ def test_metadata():
     attributes = {'url': ['test_url'],
                   'filename': ['test_filename'],
                   'type': 'gridded',
+                  'long_name': 'Ocean heat content',
                   'time_resolution': 'monthly',
                   'space_resolution': 999,
                   'climatology_start': 1961,
@@ -380,6 +381,19 @@ def test_write_csv_monthly(simple_monthly, test_metadata, tmpdir):
     assert test_filename.exists()
 
 
+def test_write_csv_monthly_no_runon_line(simple_monthly, test_metadata, tmpdir):
+    """ make your bugs into tests - make sure there are no missing lines or run-on lines """
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_monthly.write_csv(test_filename)
+
+    with open(test_filename, 'r') as f:
+        for line in f:
+            assert line != 'type,month,intlong_name,data,ohc,zJ\n'
+            assert line != '\n'
+
+
 def test_write_csv_monthly_with_metadata(simple_monthly, test_metadata, tmpdir):
     simple_monthly.metadata = test_metadata
     simple_monthly.manually_set_baseline(1901, 2000)
@@ -398,6 +412,17 @@ def test_write_csv_annual(simple_annual, test_metadata, tmpdir):
     simple_annual.write_csv(test_filename)
 
     assert test_filename.exists()
+
+
+def test_write_csv_annual_no_blank_lines(simple_annual, test_metadata, tmpdir):
+    simple_annual.metadata = test_metadata
+    simple_annual.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_annual.write_csv(test_filename)
+
+    with open(test_filename, 'r') as f:
+        for line in f:
+            assert line != '\n'
 
 
 def test_write_csv_annual_with_metadata(simple_annual, test_metadata, tmpdir):
