@@ -108,7 +108,6 @@ class Paragraph:
         None
         """
         processed_datasets = []
-        pro_metadata = []
         for ds in self.datasets:
             ds = process_single_dataset(ds, self['processing'])
             processed_datasets.append(ds)
@@ -122,8 +121,8 @@ class Paragraph:
 
         Parameters
         ----------
-        figure_dir: Path
-            Path of the directory to which the figure should be written
+        year: int
+            Year which is the focus of the paragraph.
 
         Returns
         -------
@@ -136,7 +135,6 @@ class Paragraph:
             kwargs = self['writing']['kwargs']
             paragraph_text = getattr(pa, paragraph_function)(self.datasets, year, **kwargs)
         else:
-
             paragraph_text = getattr(pa, paragraph_function)(self.datasets, year)
 
         self['text'] = paragraph_text
