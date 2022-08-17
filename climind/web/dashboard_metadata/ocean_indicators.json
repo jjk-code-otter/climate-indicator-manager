@@ -36,6 +36,28 @@
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
+      ],
+      "paragraphs": [
+        {
+          "variable": "ohc", "time_resolution": "annual",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "variable": "sealevel", "time_resolution": "monthly",
+          "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
+          "writing": {"function": "max_monthly_value"}
+        },
+        {
+          "variable": "arctic_ice", "time_resolution": "monthly",
+          "processing": [],
+          "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "variable": "sst", "time_resolution": "annual",
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        }
       ]
     }
   ]

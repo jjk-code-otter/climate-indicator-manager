@@ -34,10 +34,6 @@ p {
 }
 
 
-
-
-
-
 </style>
 <body>
 
@@ -60,15 +56,17 @@ p {
                 </p>
                 <h3>{{ item.title }}</h3>
                 <p>
+                    <div style="float: left;">
                     Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a>-<a
                         href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank" aria-label="">pdf</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a>
+                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a><br>
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}">csv</a>-netcdf
-                </p>
-                <p>
+                </div>
+                <div style="float: right;">
                     {% if item.link_to is not none %}
                     <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Read more</a>
                     {% endif %}
+                </div>
                 </p>
             </div>
 

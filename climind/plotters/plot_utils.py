@@ -55,7 +55,7 @@ def calculate_trends(all_datasets: list, y1: int, y2: int) -> Tuple[float, float
     return mean_trend, min_trend, max_trend
 
 
-def calculate_ranks(all_datasets: list, y1: int) -> Tuple[float, float]:
+def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tuple[float, float]:
     """
     given a set of data sets, return the min and max ranks from the data sets.
 
@@ -65,6 +65,8 @@ def calculate_ranks(all_datasets: list, y1: int) -> Tuple[float, float]:
         list of data sets
     y1 : int
         year to calculate trends for
+    ascending: bool
+        Set to true to rank low (1st) to high (nth) rather than high (1st) to low (nth)
 
     Returns
     -------
@@ -74,7 +76,7 @@ def calculate_ranks(all_datasets: list, y1: int) -> Tuple[float, float]:
     all_ranks = []
 
     for ds in all_datasets:
-        ranked = ds.df.rank(method='min', ascending=False)
+        ranked = ds.df.rank(method='min', ascending=ascending)
         subrank = ranked[ds.df['year'] == y1]['data']
         if len(subrank) == 0:
             rank = None
