@@ -72,71 +72,6 @@ STANDARD_PARAMETER_SET = {
 }
 
 
-def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    this_parameter_set = STANDARD_PARAMETER_SET
-    this_parameter_set['axes.edgecolor'] = '#6b001d'
-    this_parameter_set['grid.color'] = '#6b001d'
-    this_parameter_set['axes.labelcolor'] = '#6b001d'
-    this_parameter_set['figure.facecolor'] = 'black'
-    this_parameter_set['text.color'] = '#6b001d'
-    this_parameter_set['xtick.color'] = '#6b001d'
-    this_parameter_set['ytick.color'] = '#6b001d'
-
-    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
-
-    zords = []
-
-    cols = ['#4a0014', '#6e001e', '#9c022c', '#bf0034', '#f70043', '#ff2b65', '#abcdef']
-
-    plt.figure(figsize=[16, 9])
-    for i, ds in enumerate(all_datasets):
-        col = cols[i]
-        zord = ds.metadata['zpos']
-        zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
-    ds = all_datasets[-1]
-
-    sns.despine(right=True, top=True, left=True)
-
-    plt.xlim(1845, 2025)
-    plt.ylim(-0.4, 1.4)
-
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
-
-    plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(1860, 2040, 20))
-
-    plt.legend()
-    # get handles and labels
-    handles, labels = plt.gca().get_legend_handles_labels()
-    # specify order of items in legend
-    order = np.flip(np.argsort(zords))
-    # add legend to plot
-    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order], frameon=False, prop={'size': 20})
-    for line in leg.get_lines():
-        line.set_linewidth(3.0)
-
-    ylim = plt.gca().get_ylim()
-    yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
-
-    if ds.metadata['actual']:
-        subtitle = ''
-    else:
-        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
-                   f"{ds.metadata['climatology_end']} average"
-
-    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
-
-    plt.savefig(out_dir / image_filename, transparent=True)
-    plt.close()
-    return
-
-
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     this_parameter_set = STANDARD_PARAMETER_SET
     this_parameter_set['grid.color'] = 'dimgrey',
@@ -209,7 +144,7 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.close()
-    return
+    return ''
 
 
 def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
