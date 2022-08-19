@@ -228,7 +228,7 @@ def test_card_plot(mocker, card_metadata):
     card = db.Card(card_metadata)
     _ = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
     card.plot(Path(""))
-    assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", "Ocean heat content"]
+    assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", card_metadata['plotting']['title']]
 
 
 def test_card_plot_with_kwargs(mocker, card_metadata):
@@ -236,7 +236,8 @@ def test_card_plot_with_kwargs(mocker, card_metadata):
     _ = mocker.patch('climind.plotters.plot_types.neat_plot', wraps=simple_responder)
     card['plotting']['kwargs'] = {'test_kwarg': 'your_message_here'}
     card.plot(Path(""))
-    assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", "Ocean heat content", 'your_message_here']
+    assert card['caption'] == [Path(""), [], "Ocean_Indicators.png", card_metadata['plotting']['title'],
+                               'your_message_here']
 
 
 def test_card_csv_write(mocker, card_metadata):

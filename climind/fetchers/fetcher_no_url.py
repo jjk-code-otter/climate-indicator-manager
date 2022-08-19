@@ -21,5 +21,3 @@ def fetch(url, out_dir):
 
     if url != '':
         print(f"Requested {url} but nothing is being downloaded to {out_dir}")
-
-    return

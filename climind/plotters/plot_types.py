@@ -78,7 +78,6 @@ def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
-        # col = ds.metadata['colour']
         col = cols[i]
         zord = ds.metadata['zpos']
         zords.append(zord)
@@ -186,7 +185,6 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     yhi = 0.2 * (1 + (ylims[1] // 0.2))
 
     plt.yticks(np.arange(ylo, yhi, 0.2))
-    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
     plt.xticks(np.arange(1860, 2040, 20))
 
     plt.tick_params(
@@ -443,7 +441,6 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
             plt.plot([ds.df['year'][j] - 9, ds.df['year'][j]],
                      [ds.df['data'][j], ds.df['data'][j]], color=col, zorder=zord)
 
-        pass
     ds = all_datasets[-1]
     sns.despine(right=True, top=True, left=True)
 
@@ -458,7 +455,6 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     yhi = 0.2 * (1 + (ylims[1] // 0.2))
 
     plt.yticks(np.arange(ylo, yhi, 0.2))
-    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
     plt.xticks(np.arange(1860, 2040, 20))
 
     plt.tick_params(
@@ -531,13 +527,6 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
         'ytick.direction': 'out',
         'ytick.left': True,
         'ytick.right': False})
-
-    #    colours = ["#444444",
-    #               "#e69f00",
-    #               "#56b4e9",
-    #               "#009e73",
-    #               "#d55e00",
-    #               "#0072b2"]
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -674,8 +663,6 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
         yhi = 10. * (1 + (ylims[1] // 10.))
         plt.yticks(np.arange(ylo, yhi, 10.))
         plt.xticks(np.arange(1950, 2023, 10))
-
-    # plt.yticks(np.arange(-0.2, 1.4, 0.2))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
@@ -1229,8 +1216,6 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             pos_ind = variables.index(order[i])
             all_datasets = superset[pos_ind]
 
-            #        for pos_ind, all_datasets in enumerate(superset):
-
             mean_trend, min_trend, max_trend = calculate_trends(all_datasets, y1, y2)
             min_rank, max_rank = calculate_ranks(all_datasets, 2021)
             mean_value, min_value, max_value = calculate_values(all_datasets, 2021)
@@ -1257,7 +1242,6 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
 
     for i in range(7):
         name_index = variables.index(order[i])
-        #    for name_index, name in enumerate(names):
         name = names[name_index]
         plt.text(1902, 0.55 - name_index * 0.05, name, fontsize=25, ha='left', color=colours[i])
 
@@ -1287,8 +1271,6 @@ def quick_and_dirty_map(dataset, image_filename):
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
 
-    return
-
 
 def nice_map(dataset, image_filename, title, var='tas_mean'):
     # This is a pain, but we need to do some magic to convince cartopy that the data
@@ -1304,7 +1286,6 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                 '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
 
-    # wmo_levels = [-10, -5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5, 10]
     wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
 
     fig = plt.figure(figsize=(16, 9))

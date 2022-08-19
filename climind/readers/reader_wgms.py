@@ -44,8 +44,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata, **kwargs):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(1):
-            f.readline()
+        f.readline()
         for line in f:
             columns = line.split(',')
             year = columns[0]

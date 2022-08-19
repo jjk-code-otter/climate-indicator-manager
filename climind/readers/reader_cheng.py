@@ -51,7 +51,7 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(18):
+        for _ in range(18):
             f.readline()
         for line in f:
             columns = line.split()

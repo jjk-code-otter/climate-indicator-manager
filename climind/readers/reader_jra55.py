@@ -57,10 +57,7 @@ def read_grid(filename: list):
         filled_filename = str(filename[0]).replace('YYYY', f'{year}')
         filled_filename = Path(filled_filename)
 
-        if not filled_filename.exists():
-            pass
-            # print(f'File {filled_filename} not available for {year}')
-        else:
+        if filled_filename.exists():
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.rename({'t2m': 'tas_mean'})
             dataset_list.append(field)
@@ -70,10 +67,7 @@ def read_grid(filename: list):
         filled_filename = str(filename[1]).replace('YYYY', f'{year}')
         filled_filename = Path(filled_filename.replace('MMMM', f'{month:02d}'))
 
-        if not filled_filename.exists():
-            pass
-            # print(f'File {filled_filename} not available for {year} {month:02d}')
-        else:
+        if filled_filename.exists():
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.expand_dims('time')
             field = field.rename({'t2m': 'tas_mean'})
