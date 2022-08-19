@@ -307,7 +307,7 @@ class TimeSeriesMonthly:
         else:
             return None
 
-    def generate_dates(self, time_units):
+    def generate_dates(self, time_units: str):
         time_str = self.df.year.astype(str) + self.df.month.astype(str)
         self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
         dates = cf.date2num(self.df['time'].tolist(),
