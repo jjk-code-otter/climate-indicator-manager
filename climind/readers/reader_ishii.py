@@ -50,7 +50,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(8):
+        for _ in range(8):
             f.readline()
         for line in f:
             columns = line.split()

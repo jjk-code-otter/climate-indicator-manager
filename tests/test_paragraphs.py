@@ -189,7 +189,7 @@ def test_anomaly_and_rank_multiple_datasets(simple_annual, simple_annual_descend
 
 def test_anomaly_and_rank_no_dataset_raises():
     with pytest.raises(RuntimeError):
-        test_text = pg.anomaly_and_rank([], 2022)
+        _ = pg.anomaly_and_rank([], 2022)
 
 
 def test_monthly_value(simple_monthly):
@@ -206,7 +206,7 @@ def test_monthly_value(simple_monthly):
 
 def test_monthly_value_no_dataset_raises():
     with pytest.raises(RuntimeError):
-        test_text = pg.max_monthly_value([], 2022)
+        _ = pg.max_monthly_value([], 2022)
 
 
 def test_arctic_ice_paragraph(simple_monthly):
@@ -221,7 +221,7 @@ def test_arctic_ice_paragraph(simple_monthly):
 
 def test_arctic_ice_paragraph_no_dataset_raises():
     with pytest.raises(RuntimeError):
-        test_text = pg.arctic_ice_paragraph([], 2022)
+        _ = pg.arctic_ice_paragraph([], 2022)
 
 
 def test_glacier(simple_annual):
@@ -238,4 +238,4 @@ def test_glacier(simple_annual):
 
 def test_glacier_no_dataset_raises():
     with pytest.raises(RuntimeError):
-        test_text = pg.glacier_paragraph([], 2022)
+        _ = pg.glacier_paragraph([], 2022)

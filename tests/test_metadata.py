@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 from jsonschema import ValidationError, validate, RefResolver
 from climind.definitions import ROOT_DIR
-from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, BaseMetadata, CombinedMetadata
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, BaseMetadata, CombinedMetadata, list_match
 
 
 @pytest.fixture
@@ -57,6 +57,12 @@ def test_collection_attributes():
                   "zpos": 99}
 
     return attributes
+
+
+def test_list_match():
+    assert list_match(['match', 'not match'], 'match')
+    assert list_match(['match', 'match'], 'match')
+    assert not list_match(['not match', 'not match'], 'match')
 
 
 def test_base_metadata_set_and_get():

@@ -53,7 +53,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     data = []
 
     with open(filename, 'r') as in_file:
-        for i in range(31):
+        for _ in range(31):
             in_file.readline()
 
         for line in in_file:

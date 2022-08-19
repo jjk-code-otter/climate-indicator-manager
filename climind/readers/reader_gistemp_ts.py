@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import itertools
 import xarray as xa
 import numpy as np
 import climind.data_types.grid as gd
@@ -22,6 +23,43 @@ import climind.data_types.timeseries as ts
 import copy
 from climind.data_manager.metadata import CombinedMetadata
 
+
+def build_transfer(xx: int, yy: int):
+    """
+    Build the transfer matrix for this 5x5 grid cell
+
+    Parameters
+    ----------
+    xx: int
+        Longitudinal index of grid cell in range 0, 71
+    yy: int
+        Latitudinal index of grid cell in range 0, 35
+
+    Returns
+    -------
+
+    """
+    transfer = np.zeros((3, 3)) + 1.0
+
+    if xx % 2 == 0:
+        transfer[:, 2] = transfer[:, 2] * 0.5
+        lox = int(5 * (xx / 2))
+        hix = lox + 2
+    else:
+        transfer[:, 0] = transfer[:, 0] * 0.5
+        lox = int(5 * ((xx - 1) / 2) + 2)
+        hix = lox + 2
+
+    if yy % 2 == 0:
+        transfer[2, :] = transfer[2, :] * 0.5
+        loy = int(5 * (yy / 2))
+        hiy = loy + 2
+    else:
+        transfer[0, :] = transfer[0, :] * 0.5
+        loy = int(5 * ((yy - 1) / 2) + 2)
+        hiy = loy + 2
+
+    return transfer, lox, hix, loy, hiy
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename = out_dir / metadata['filename'][0]
@@ -94,39 +132,16 @@ def read_monthly_5x5_grid(filename: str, metadata: CombinedMetadata):
     number_of_months = len(gistemp.time.data)
     target_grid = np.zeros((number_of_months, 36, 72))
 
-    for m in range(number_of_months):
-        print(f'month: {m}')
-        for xx in range(72):
-            for yy in range(36):
-
-                transfer = np.zeros((3, 3)) + 1.0
-
-                if xx % 2 == 0:
-                    transfer[:, 2] = transfer[:, 2] * 0.5
-                    lox = int(5 * (xx / 2))
-                    hix = lox + 2
-                else:
-                    transfer[:, 0] = transfer[:, 0] * 0.5
-                    lox = int(5 * ((xx - 1) / 2) + 2)
-                    hix = lox + 2
-
-                if yy % 2 == 0:
-                    transfer[2, :] = transfer[2, :] * 0.5
-                    loy = int(5 * (yy / 2))
-                    hiy = loy + 2
-                else:
-                    transfer[0, :] = transfer[0, :] * 0.5
-                    loy = int(5 * ((yy - 1) / 2) + 2)
-                    hiy = loy + 2
-
-                selection = gistemp.tempanomaly.data[m, loy:hiy + 1, lox:hix + 1]
-                index = (~np.isnan(selection))
-                if np.count_nonzero(index) > 0:
-                    weighted = transfer[index] * selection[index]
-                    grid_mean = np.sum(weighted) / np.sum(transfer[index])
-                else:
-                    grid_mean = np.nan
-                target_grid[m, yy, xx] = grid_mean
+    for m, xx, yy in itertools.product(range(number_of_months), range(72), range(36)):
+        transfer, lox, hix, loy, hiy = build_transfer(xx, yy)
+        selection = gistemp.tempanomaly.data[m, loy:hiy + 1, lox:hix + 1]
+        index = (~np.isnan(selection))
+        if np.count_nonzero(index) > 0:
+            weighted = transfer[index] * selection[index]
+            grid_mean = np.sum(weighted) / np.sum(transfer[index])
+        else:
+            grid_mean = np.nan
+        target_grid[m, yy, xx] = grid_mean
 
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
@@ -151,7 +166,7 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(2):
+        for _ in range(2):
             f.readline()
         for line in f:
             columns = line.split(',')
@@ -172,7 +187,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     anomalies = []
 
     with open(filename, 'r') as f:
-        for i in range(2):
+        for _ in range(2):
             f.readline()
         for line in f:
             columns = line.split(',')

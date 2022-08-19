@@ -22,6 +22,7 @@ import climind.data_manager.processing as dm
 
 from climind.definitions import ROOT_DIR
 
+HADCRUT5_PATH = 'test_data/hadcrut5.json'
 
 @pytest.fixture
 def test_attributes():
@@ -190,20 +191,20 @@ def test_read(mocker, test_dataset, test_attributes):
 # DataCollection tests
 
 def test_creation_from_file():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     assert isinstance(dc, dm.DataCollection)
 
     assert dc.global_attributes['name'] == 'HadCRUT5'
 
 
 def test_data_collection_to_string():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     test_string = str(dc)
     assert isinstance(test_string, str)
 
 
 def test_select():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'type': 'gridded'})
 
     for dataset in sub_data_collection.datasets:
@@ -211,7 +212,7 @@ def test_select():
 
 
 def test_select_global_from_list():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'version': ['5.0.1.0', '5.0.2.0']})
 
     for dataset in sub_data_collection.datasets:
@@ -219,27 +220,27 @@ def test_select_global_from_list():
 
 
 def test_select_global_from_list_no_match():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'version': ['5.0.3.0', '5.0.2.0']})
 
     assert sub_data_collection is None
 
 
 def test_select_without_a_match():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'type': 'renault'})
     assert sub_data_collection is None
 
 
 def test_select_match_global_but_not_dataset():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'variable': 'tas',
                                'type': 'renault'})
     assert sub_data_collection is None
 
 
 def test_select_no_match_in_global():
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'variable': 'mslp'})
     assert sub_data_collection is None
 
@@ -250,7 +251,7 @@ def test_creation_from_dict_no_data_set(test_collection_metadata):
 
 
 def test_data_collection_read(mocker):
-    data_collection = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     m = mocker.patch("climind.data_manager.processing.DataSet.read_dataset", return_value="test")
 
     datasets = data_collection.read_datasets(Path(''))
@@ -265,10 +266,10 @@ def test_data_collection_read(mocker):
 
 
 def test_rebuild_metadata():
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     metadata = dc._rebuild_metadata()
 
-    with open(Path('test_data/hadcrut5.json'), 'r') as f:
+    with open(Path(HADCRUT5_PATH), 'r') as f:
         original_metadata = json.load(f)
 
     assert metadata == original_metadata
@@ -276,20 +277,20 @@ def test_rebuild_metadata():
 
 def test_get_collection_dir(tmp_path):
     """Use the tmp_path fixture to create the collection dir"""
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     test_dir = dc.get_collection_dir(tmp_path)
     assert test_dir == Path(tmp_path / 'HadCRUT5')
     assert test_dir.exists()
 
 
 def test_to_file(tmp_path):
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     dc.to_file(tmp_path / 'test.json')
 
     # Check file exists
     assert (tmp_path / 'test.json').exists()
 
-    with open(Path('test_data/hadcrut5.json'), 'r') as f:
+    with open(Path(HADCRUT5_PATH), 'r') as f:
         original = json.load(f)
 
     with open(tmp_path / 'test.json', 'r') as f:
@@ -300,7 +301,7 @@ def test_to_file(tmp_path):
 
 
 def test_collection_download(mocker):
-    dc = dm.DataCollection.from_file(Path('test_data/hadcrut5.json'))
+    dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     m1 = mocker.patch("climind.data_manager.processing.DataCollection.get_collection_dir", return_value='testing')
     m2 = mocker.patch("climind.data_manager.processing.DataSet.download", return_value=None)
     dc.download(Path(''))

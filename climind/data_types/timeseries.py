@@ -13,6 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from typing import Optional
 
 import pandas as pd
 import logging
@@ -271,7 +272,7 @@ class TimeSeriesMonthly:
         return self
 
     @log_activity
-    def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> int:
+    def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
         """
         Given a year and month, extract the rank of the data for that month. Ties are given the
         same rank, which is the lowest rank of the group. Default behaviour is to rank the month
@@ -458,7 +459,7 @@ class TimeSeriesAnnual:
         self.update_history(f'Rebaselined to {y1}-{y2}')
 
     @log_activity
-    def get_rank_from_year(self, year: int) -> int:
+    def get_rank_from_year(self, year: int) -> Optional[int]:
         """
         Given a year, extract the rank of the data for that year. Ties are given the
         same rank, which is the lowest rank of the group.
@@ -480,7 +481,7 @@ class TimeSeriesAnnual:
         return int(rank.iloc[0])
 
     @log_activity
-    def get_value_from_year(self, year: int) -> float:
+    def get_value_from_year(self, year: int) -> Optional[float]:
         """
         Get the data value for a specified year.
 

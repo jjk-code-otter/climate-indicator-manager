@@ -29,14 +29,14 @@ def filename_from_url(url: str) -> str:
     return filename
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, out_dir: Path):
     now = datetime.now()
     y = now.year
     m = now.month
 
     nsteps = 24
 
-    for i in range(1, nsteps + 1):
+    for _ in range(1, nsteps + 1):
 
         filled_url = url.replace('YYYY', f'{y}')
         filled_url = filled_url.replace('MMMM', f'{m:02d}')
@@ -45,7 +45,7 @@ def fetch(url: str, outdir: Path):
         print(filled_url)
 
         filename = filename_from_url(filled_url)
-        out_path = outdir / filename
+        out_path = out_dir / filename
 
         print(out_path)
 

@@ -20,6 +20,25 @@ from jsonschema import validate, RefResolver
 from climind.definitions import ROOT_DIR
 
 
+def list_match(list_to_match: list, attribute) -> bool:
+    """
+    If att matches any item in mtm return True, otherwise False
+
+    Parameters
+    ----------
+    list_to_match: list
+        List of metadata to match
+    attribute:
+        attribute to check against
+
+    Returns
+    -------
+    bool
+        Set to True if attribute matches element in list_to_match, False otherwise
+    """
+    return attribute in list_to_match
+
+
 class BaseMetadata:
     """
     Simple class to store metadata and find matches
@@ -69,25 +88,18 @@ class BaseMetadata:
         """
         match = True
 
-        for key in metadata_to_match:
-            if key in self.metadata:
+        common_keys = metadata_to_match.keys() & self.metadata.keys()
+        for key in common_keys:
 
-                mtm = metadata_to_match[key]
-                att = self.metadata[key]
+            mtm = metadata_to_match[key]
+            att = self.metadata[key]
 
-                if isinstance(mtm, list):
-                    # go through list, if any item matches then that counts as a match
-                    this_match = False
-                    for item in mtm:
-                        if item == att:
-                            this_match = True
-
-                    if not this_match:
-                        match = False
-
-                else:
-                    if mtm != att:
-                        match = False
+            if isinstance(mtm, list):
+                if not list_match(mtm, att):
+                    match = False
+            else:
+                if mtm != att:
+                    match = False
 
         return match
 

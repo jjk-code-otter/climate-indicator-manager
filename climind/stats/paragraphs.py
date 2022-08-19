@@ -121,13 +121,11 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     """
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
-    ds = all_datasets[0]
 
     min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
-    ds = all_datasets[0]
-    units = fancy_html_units(ds.metadata['units'])
+    units = fancy_html_units(all_datasets[0].metadata['units'])
 
     out_text = f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
                f'on record. The mean value for {year} was ' \
@@ -157,7 +155,6 @@ def max_monthly_value(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
     """
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
-    ds = all_datasets[0]
 
     all_ranks = []
     all_ranks_months = []
@@ -177,7 +174,7 @@ def max_monthly_value(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
             all_ranks_months.append(min_rank_month)
             all_values.append(min_value)
 
-    units = fancy_html_units(ds.metadata['units'])
+    units = fancy_html_units(all_datasets[0].metadata['units'])
 
     month_names = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
@@ -206,14 +203,13 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
     if len(all_datasets) == 0:
         raise RuntimeError('No datasets provided')
 
-    ds = all_datasets[0]
     march = []
     september = []
     for ds in all_datasets:
         march.append(ds.make_annual_by_selecting_month(3))
         september.append(ds.make_annual_by_selecting_month(9))
 
-    units = fancy_html_units(ds.metadata['units'])
+    units = fancy_html_units(all_datasets[0].metadata['units'])
 
     min_march_rank, max_march_rank = pu.calculate_ranks(march, year, ascending=True)
     mean_march_value, min_march_value, max_march_value = pu.calculate_values(march, year)
@@ -248,7 +244,6 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     """
     if len(all_datasets) == 0:
         raise RuntimeError('No datasets provided')
-    ds = all_datasets[0]
 
     counter = 0
     last_positive = -999
@@ -264,10 +259,10 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
             else:
                 counter += 1
 
-    units = fancy_html_units(ds.metadata['units'])
+    units = fancy_html_units(all_datasets[0].metadata['units'])
 
     out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance ' \
                f'since {last_positive + 1}. ' \
-               f'Cumulative glacier loss since 1970 is {ds.get_value_from_year(year):.1f}{units}.'
+               f'Cumulative glacier loss since 1970 is {all_datasets[0].get_value_from_year(year):.1f}{units}.'
 
     return out_text
