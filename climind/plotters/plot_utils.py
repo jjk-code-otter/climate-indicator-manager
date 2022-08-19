@@ -14,9 +14,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Tuple
+from typing import Tuple, Union, List
 import numpy as np
 from numpy import ndarray
+
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 
 
 def calculate_trends(all_datasets: list, y1: int, y2: int) -> Tuple[float, float, float]:
@@ -146,16 +148,16 @@ def set_lo_hi_ticks(limits: list, spacing: float) -> Tuple[float, float, ndarray
     return lo, hi, ticks
 
 
-def get_first_and_last_years(all_datasets):
+def get_first_and_last_years(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> Tuple[int, int]:
     """
     Extract the first and last years from a list of data sets
     Parameters
     ----------
-    all_datasets
-
+    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]])
+        List containing the data sets for which we want the first and last years
     Returns
     -------
-    int, int
+    Tuple[int, int]
         First and last years
     """
     first_years = []
@@ -169,7 +171,19 @@ def get_first_and_last_years(all_datasets):
     return first_year, last_year
 
 
-def caption_builder(all_datasets):
+def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> str:
+    """
+    Write a caption for the standard time series plots.
+
+    Parameters
+    ----------
+    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]
+        List of datasets used in the plot
+    Returns
+    -------
+    str
+        Caption for the collection of data sets
+    """
     first_year, last_year = get_first_and_last_years(all_datasets)
 
     ds = all_datasets[-1]

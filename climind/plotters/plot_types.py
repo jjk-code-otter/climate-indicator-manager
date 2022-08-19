@@ -23,7 +23,9 @@ import matplotlib.patches as patches
 from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
+from typing import List
 
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder
 
@@ -226,7 +228,8 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     return
 
 
-def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
+              image_filename: str, title: str) -> str:
     """
     Create the standard annual plot
 
@@ -234,7 +237,7 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     ----------
     out_dir: Path
         Directory to which the figure will be written
-    all_datasets: list
+    all_datasets: List[TimeSeriesAnnual]
         list of datasets to be plotted
     image_filename: str
         filename for the figure. Must end in .png
@@ -370,7 +373,28 @@ def neat_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     return caption
 
 
-def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filename: str, title: str) -> str:
+    """
+    Decadal plot
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path of the directory to which the image will be written
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be plotted.
+    image_filename: str
+        Name for the image file, should end in .png
+    title: str
+        Title for the image, will appear at the top of the figure
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
+    caption = ""
+
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -473,7 +497,7 @@ def decade_plot(out_dir: Path, all_datasets: list, image_filename: str, title: s
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.close()
-    return
+    return caption
 
 
 def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: str):
@@ -563,7 +587,26 @@ def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: st
     return
 
 
-def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str) -> str:
+def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str) -> str:
+    """
+    Create the standard monthly plot
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path of directory to which the image will be written
+    all_datasets: List[TimeSeriesMonthly]
+        List of datasets to plot
+    image_filename: str
+        File name for the image
+    title: str
+        Title which will appear at the top of the figure.
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -679,7 +722,25 @@ def monthly_plot(out_dir: Path, all_datasets: list, image_filename: str, title: 
     return caption
 
 
-def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
+def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filename: str, _) -> str:
+    """
+    Marine heatwave and coldspell plot, which shows the ocean area affected by marine heatwaves and coldspells
+    annually since the early 1980s
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path of the directory to which the image will be written
+    all_datasets: List[TimeSeriesAnnual]
+        List of data sets to plot
+    image_filename: str
+        File name for the image, should end in .png
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -792,7 +853,24 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: list, image_filename: str,
            f"marine heatwaves and marine cold spells each year since 1982"
 
 
-def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
+def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, _) -> str:
+    """
+    Generate figure showing the March and September sea ice extent anomalies for the input datasets.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Directory to which the image will be written
+    all_datasets: List[TimeSeriesMonthly]
+        List of data sets to be plotted
+    image_filename: str
+        File name for the image, should end in .png.
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -902,7 +980,24 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, 
            "months are shown - March and September - at the annual maximum and minimum extents respectively."
 
 
-def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: str, _) -> str:
+def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, _) -> str:
+    """
+    Generate figure showing the February and September Antarctic sea ice extent anomalies for the input datasets.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Directory to which the image will be written
+    all_datasets: List[TimeSeriesMonthly]
+        List of data sets to be plotted
+    image_filename: str
+        File name for the image, should end in .png.
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
     sns.set(font='Franklin Gothic Book', rc={
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -1012,8 +1107,34 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: list, image_filename: st
            "months are shown - September and February - at the annual maximum and minimum extents respectively."
 
 
-def trends_plot(out_dir: Path, in_all_datasets: list, image_filename: str, title: str, order: list = []) -> str:
-    caption = 'Trend plot'
+def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
+                image_filename: str, title: str, order: list = []) -> str:
+    """
+    Trend figure which shows the mean and range of the trends from the input data sets over four 30-year periods:
+    1901-1930, 1931-1960, 1961-1990 and 1991-present. This is set up to work with WMO RA and Africa Subregion
+    timeseries.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path of the directory to which the figure will be written
+    in_all_datasets: List[TimeSeriesAnnual]
+        List of data sets to be plotted
+    image_filename: str
+        File name for the output figure
+    title: str
+        Title of the figure, appears at the top of the figure
+    order: list
+        The order in which the variables will be plotted, from left to right, in each sub-block
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
+    caption = f'Figure shows the trends for four sub=periods (1901-1930, 1931-1960, 1961-1990 and 1991-present. ' \
+              f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
+              f'of different estimates.'
 
     equivalence = {
         'tas': 'Globe',
@@ -1105,11 +1226,10 @@ def trends_plot(out_dir: Path, in_all_datasets: list, image_filename: str, title
 
         # calculate trend for each data set
         for i in range(7):
-
             pos_ind = variables.index(order[i])
             all_datasets = superset[pos_ind]
 
-#        for pos_ind, all_datasets in enumerate(superset):
+            #        for pos_ind, all_datasets in enumerate(superset):
 
             mean_trend, min_trend, max_trend = calculate_trends(all_datasets, y1, y2)
             min_rank, max_rank = calculate_ranks(all_datasets, 2021)
@@ -1137,7 +1257,7 @@ def trends_plot(out_dir: Path, in_all_datasets: list, image_filename: str, title
 
     for i in range(7):
         name_index = variables.index(order[i])
-#    for name_index, name in enumerate(names):
+        #    for name_index, name in enumerate(names):
         name = names[name_index]
         plt.text(1902, 0.55 - name_index * 0.05, name, fontsize=25, ha='left', color=colours[i])
 
