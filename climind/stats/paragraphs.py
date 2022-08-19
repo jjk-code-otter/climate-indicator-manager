@@ -21,7 +21,23 @@ from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 ordinal = lambda n: "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10::4])
 
 
-def rank_ranges(low, high):
+def rank_ranges(low: int, high: int) -> str:
+    """
+    Given an upper and lower limit on the rank, return a string which describes the range. e.g. 'the 2nd' or
+    'between the 4th and 8th'.
+
+    Parameters
+    ----------
+    low: int
+        Lower of the two ranks.
+    high: int
+        Higher of the two ranks.
+
+    Returns
+    -------
+    str
+        Short string which describes the range. e.g. 'the 2nd' or 'between the 4th and 8th' or similar.
+    """
     if low == high:
         return f"the {ordinal(low)}"
     elif low < high:
@@ -30,7 +46,20 @@ def rank_ranges(low, high):
         return f"between the {ordinal(high)} and {ordinal(low)}"
 
 
-def dataset_name_list(all_datasets):
+def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> str:
+    """
+    Given a list of dataset, return a comma-and-and separated list of the names.
+
+    Parameters
+    ----------
+    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]
+        List of data sets whose names you want in a list
+
+    Returns
+    -------
+    str
+        A list of the dataset names separated by commas and, where appropriate, 'and'
+    """
     names = []
     for ds in all_datasets:
         names.append(ds.metadata['display_name'])
@@ -45,7 +74,20 @@ def dataset_name_list(all_datasets):
     return name_list
 
 
-def fancy_html_units(units):
+def fancy_html_units(units: str) -> str:
+    """
+    Convert plain text units into html fancy units, which use subscripts and special characters to render.
+
+    Parameters
+    ----------
+    units: str
+        Units to be rendered into fancy units
+
+    Returns
+    -------
+    str
+        Units in fancy html form, or unchanged.
+    """
     equivalence = {
         "degC": "&deg;C",
         "millionkm2": "million km<sup>2</sup>",
@@ -61,7 +103,26 @@ def fancy_html_units(units):
     return fancy
 
 
-def anomaly_and_rank(all_datasets, year):
+def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
+    as well as saying how many data sets and which datasets were used.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be used to derive the ranks and values
+    year: int
+        Year for which the paragraph should be generated.
+    Returns
+    -------
+    str
+
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+    ds = all_datasets[0]
+
     min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
@@ -77,7 +138,27 @@ def anomaly_and_rank(all_datasets, year):
     return out_text
 
 
-def max_monthly_value(all_datasets, year):
+def max_monthly_value(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+    """
+    Find the highest monthly data value within the chosen year and return a paragraph, as a string, which gives the
+    value and rank for that month.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesMonthly]
+        List of datasets to be used in the evaluation
+    year: int
+        Year to be analysed
+
+    Returns
+    -------
+    str
+        Short paragraph of text
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+    ds = all_datasets[0]
+
     all_ranks = []
     all_ranks_months = []
     all_values = []
@@ -106,7 +187,26 @@ def max_monthly_value(all_datasets, year):
     return out_text
 
 
-def arctic_ice_paragraph(all_datasets, year):
+def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+    """
+    Generate a paragraph of some standard stats for the Arctic sea ice: rank and value for max and min extents in the
+    year (March and September).
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesMonthly]
+        List of datasets on which the assessment will be based
+    year: int
+        Chosen year to focus on
+    Returns
+    -------
+    str
+        Paragraph of text
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError('No datasets provided')
+
+    ds = all_datasets[0]
     march = []
     september = []
     for ds in all_datasets:
@@ -144,10 +244,14 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
 
     Returns
     -------
-
+    str
     """
+    if len(all_datasets) == 0:
+        raise RuntimeError('No datasets provided')
+    ds = all_datasets[0]
+
     counter = 0
-    last_positive = 1900
+    last_positive = -999
     for ds in all_datasets:
         first_year = ds.df['year'][0]
         for check_year in range(first_year + 1, year + 1):
@@ -162,7 +266,8 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
 
     units = fancy_html_units(ds.metadata['units'])
 
-    out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance since {last_positive + 1}.' \
-               f' Cumulative glacier loss since 1976 is {ds.get_value_from_year(year):.1f}{units}.'
+    out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance ' \
+               f'since {last_positive + 1}. ' \
+               f'Cumulative glacier loss since 1970 is {ds.get_value_from_year(year):.1f}{units}.'
 
     return out_text
