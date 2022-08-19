@@ -57,7 +57,7 @@ def calculate_trends(all_datasets: list, y1: int, y2: int) -> Tuple[float, float
     return mean_trend, min_trend, max_trend
 
 
-def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tuple[float, float]:
+def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tuple[int, int]:
     """
     given a set of data sets, return the min and max ranks from the data sets.
 
@@ -93,7 +93,7 @@ def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tup
     max_rank = np.max(all_ranks)
     min_rank = np.min(all_ranks)
 
-    return min_rank, max_rank
+    return int(min_rank), int(max_rank)
 
 
 def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:

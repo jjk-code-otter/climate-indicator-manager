@@ -16,9 +16,12 @@
 
 from pathlib import Path
 import numpy as np
+from typing import List, Union
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 
 
-def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Path):
+def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
+                    match_year: int, title: str, output_dir: Path):
     """
     Given a list of datasets calculate various statistics relating to ranking and values
 
@@ -35,7 +38,7 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
 
     Returns
     -------
-
+    None
     """
 
     with open(output_dir / f'{title}_{match_year}.txt', 'w') as output_file:
@@ -79,7 +82,7 @@ def run_the_numbers(datasets: list, match_year: int, title: str, output_dir: Pat
 
             output_file.write('\n')
             output_file.write(f'Mean for {match_year}: {np.mean(all_match_values):.2f} +- {sd:.2f} degC '
-                        f'[{np.min(all_match_values):.2f}-{np.max(all_match_values):.2f}]\n')
+                              f'[{np.min(all_match_values):.2f}-{np.max(all_match_values):.2f}]\n')
             output_file.write(f'Rank between {np.min(all_match_ranks)} and {np.max(all_match_ranks)}\n')
             output_file.write(f'Based on {len(all_match_values)} data sets.\n')
         else:

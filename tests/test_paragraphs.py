@@ -15,7 +15,48 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
+import itertools
+import climind.data_types.timeseries as ts
 import climind.stats.paragraphs as pg
+
+
+@pytest.fixture
+def simple_monthly():
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    years = []
+    months = []
+    anomalies = []
+
+    for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+        years.append(y)
+        months.append(m)
+        anomalies.append(float(y))
+
+    return ts.TimeSeriesMonthly(years, months, anomalies)
+
+
+@pytest.fixture
+def simple_annual():
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    years = []
+    anoms = []
+
+    for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y) / 1000.)
+
+    return ts.TimeSeriesAnnual(years, anoms)
 
 
 def test_rank_ranges():
@@ -29,6 +70,8 @@ def test_rank_ranges():
     assert test_text == 'the 3rd'
 
 
+# Just need a little class that can return some simple values when asked as
+# a stand in for the TimeSeriesMonthly, TimeSeriesAnnual classes
 class Tiny:
     def __init__(self, number):
         self.metadata = {'display_name': f'{number}'}
