@@ -258,7 +258,8 @@ class Card(WebComponent):
 
     def make_csv_files(self, formatted_data_dir: Path) -> List[Path]:
         """
-        Make a csv file in the standard format for each data set in the Card.
+        Make a csv file in the standard format for each data set in the Card and return a list of all then names
+        of the csv files.
 
         Parameters
         ----------
@@ -281,7 +282,8 @@ class Card(WebComponent):
 
     def make_zip_file(self, formatted_data_dir: Path):
         """
-        Create a formatted data file for each data set and zip these into a zip file
+        Create a formatted data file for each data set and zip these into a zip file. Adds a metadata element
+        'csv_name' with the names of the zip file once it is created.
 
         Parameters
         ----------
@@ -323,7 +325,8 @@ class Page:
     def __setitem__(self, key, value):
         self.metadata[key] = value
 
-    def _process_cards(self, data_dir: Path, figure_dir: Path, formatted_data_dir: Path, archive: DataArchive):
+    def _process_cards(self, data_dir: Path, figure_dir: Path,
+                       formatted_data_dir: Path, archive: DataArchive) -> List[Card]:
         """
         Process each of the cards on the page
 
@@ -340,7 +343,7 @@ class Page:
 
         Returns
         -------
-        list
+        List[Card]
             List of the processed Cards
         """
         processed_cards = []
