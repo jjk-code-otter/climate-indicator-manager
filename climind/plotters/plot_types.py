@@ -35,42 +35,54 @@ FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "ph": "pH",
                "mwe": "m.w.e"}
 
+STANDARD_PARAMETER_SET = {
+    'axes.axisbelow': False,
+    'axes.labelsize': 20,
+    'xtick.labelsize': 15,
+    'ytick.labelsize': 15,
+    'axes.edgecolor': 'lightgrey',
+    'axes.facecolor': 'None',
+
+    'axes.grid.axis': 'y',
+    'grid.color': 'lightgrey',
+    'grid.alpha': 0.5,
+
+    'axes.labelcolor': 'dimgrey',
+
+    'axes.spines.left': False,
+    'axes.spines.right': False,
+    'axes.spines.top': False,
+
+    'figure.facecolor': 'white',
+    'lines.solid_capstyle': 'round',
+    'patch.edgecolor': 'w',
+    'patch.force_edgecolor': True,
+    'text.color': 'dimgrey',
+
+    'xtick.bottom': True,
+    'xtick.color': 'dimgrey',
+    'xtick.direction': 'out',
+    'xtick.top': False,
+
+    'ytick.major.width': 0.4,
+    'ytick.color': 'dimgrey',
+    'ytick.direction': 'out',
+    'ytick.left': False,
+    'ytick.right': False
+}
+
 
 def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': '#6b001d',
-        'axes.facecolor': 'None',
+    this_parameter_set = STANDARD_PARAMETER_SET
+    this_parameter_set['axes.edgecolor'] = '#6b001d'
+    this_parameter_set['grid.color'] = '#6b001d'
+    this_parameter_set['axes.labelcolor'] = '#6b001d'
+    this_parameter_set['figure.facecolor'] = 'black'
+    this_parameter_set['text.color'] = '#6b001d'
+    this_parameter_set['xtick.color'] = '#6b001d'
+    this_parameter_set['ytick.color'] = '#6b001d'
 
-        'axes.grid.axis': 'y',
-        'grid.color': '#6b001d',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': '#6b001d',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'black',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': '#6b001d',
-
-        'xtick.bottom': True,
-        'xtick.color': '#6b001d',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': '#6b001d',
-        'ytick.direction': 'out',
-        'ytick.left': True,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
 
     zords = []
 
@@ -126,40 +138,14 @@ def pink_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
 
 
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
+    this_parameter_set = STANDARD_PARAMETER_SET
+    this_parameter_set['grid.color'] = 'dimgrey',
+    this_parameter_set['figure.facecolor'] = 'black',
+    this_parameter_set['text.color'] = 'lightgrey',
+    this_parameter_set['xtick.color'] = 'lightgrey',
+    this_parameter_set['ytick.color'] = 'lightgrey',
 
-        'axes.grid.axis': 'y',
-        'grid.color': 'dimgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'lightgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'black',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'lightgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'lightgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'lightgrey',
-        'ytick.direction': 'out',
-        'ytick.left': True,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -247,40 +233,7 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure is returned
     """
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     caption = caption_builder(all_datasets)
 
@@ -393,40 +346,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     """
     caption = ""
 
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     zords = []
     plt.figure(figsize=[16, 9])
@@ -496,86 +416,6 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     return caption
 
 
-def neat_plot2(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid': False,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': True,
-        'ytick.right': False})
-
-    zords = []
-    plt.figure(figsize=[16, 9])
-    for i, ds in enumerate(all_datasets):
-        col = ds.metadata['colour']
-        zord = ds.metadata['zpos']
-        zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['display_name'], color=col, zorder=zord)
-    ds = all_datasets[-1]
-
-    sns.despine(right=True, top=True)
-
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
-
-    plt.yticks(np.arange(-0.2, 1.4, 0.2))
-    plt.xticks(np.arange(1860, 2040, 20))
-
-    plt.legend()
-    # get handles and labels
-    handles, labels = plt.gca().get_legend_handles_labels()
-    # specify order of items in legend
-    order = np.flip(np.argsort(zords))
-    # add legend to plot
-    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order], frameon=False, prop={'size': 20})
-    for line in leg.get_lines():
-        line.set_linewidth(3.0)
-
-    ylim = plt.gca().get_ylim()
-    yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
-
-    if ds.metadata['actual']:
-        subtitle = ''
-    else:
-        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
-                   f"{ds.metadata['climatology_end']} average"
-
-    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
-
-    plt.savefig(out_dir / image_filename)
-    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
-    plt.close()
-    return
-
-
 def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str) -> str:
     """
     Create the standard monthly plot
@@ -596,40 +436,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
     str
         Caption for the figure
     """
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     caption = caption_builder(all_datasets)
 
@@ -728,40 +535,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     str
         Caption for the figure
     """
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     mcs = []
     mhw = []
@@ -858,40 +632,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     str
         Caption for the figure
     """
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     march_colors = ['#56b4e9', '#009e73']
     september_colors = ['#e69f00', '#d55e00']
@@ -985,40 +726,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     str
         Caption for the figure
     """
-    sns.set(font='Franklin Gothic Book', rc={
-        'axes.axisbelow': False,
-        'axes.labelsize': 20,
-        'xtick.labelsize': 15,
-        'ytick.labelsize': 15,
-        'axes.edgecolor': 'lightgrey',
-        'axes.facecolor': 'None',
-
-        'axes.grid.axis': 'y',
-        'grid.color': 'lightgrey',
-        'grid.alpha': 0.5,
-
-        'axes.labelcolor': 'dimgrey',
-
-        'axes.spines.left': False,
-        'axes.spines.right': False,
-        'axes.spines.top': False,
-
-        'figure.facecolor': 'white',
-        'lines.solid_capstyle': 'round',
-        'patch.edgecolor': 'w',
-        'patch.force_edgecolor': True,
-        'text.color': 'dimgrey',
-
-        'xtick.bottom': True,
-        'xtick.color': 'dimgrey',
-        'xtick.direction': 'out',
-        'xtick.top': False,
-
-        'ytick.major.width': 0.4,
-        'ytick.color': 'dimgrey',
-        'ytick.direction': 'out',
-        'ytick.left': False,
-        'ytick.right': False})
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     february_colors = ['#e69f00', '#d55e00']
     september_colors = ['#56b4e9', '#009e73']
