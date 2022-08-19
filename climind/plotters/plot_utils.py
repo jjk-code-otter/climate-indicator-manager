@@ -21,7 +21,7 @@ from numpy import ndarray
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 
 
-def calculate_trends(all_datasets: list, y1: int, y2: int) -> Tuple[float, float, float]:
+def calculate_trends(all_datasets: List[TimeSeriesAnnual], y1: int, y2: int) -> Tuple[float, float, float]:
     """
     given a set of data sets, return the mean, min and max trends from the data sets calculated
     using OLS between the chosen years.

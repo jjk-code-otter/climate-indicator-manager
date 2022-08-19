@@ -119,6 +119,10 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     str
 
     """
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+    ds = all_datasets[0]
+
     min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
@@ -247,7 +251,7 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     ds = all_datasets[0]
 
     counter = 0
-    last_positive = 1900
+    last_positive = -999
     for ds in all_datasets:
         first_year = ds.df['year'][0]
         for check_year in range(first_year + 1, year + 1):
@@ -262,7 +266,8 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
 
     units = fancy_html_units(ds.metadata['units'])
 
-    out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance since {last_positive + 1}.' \
-               f' Cumulative glacier loss since 1976 is {ds.get_value_from_year(year):.1f}{units}.'
+    out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance ' \
+               f'since {last_positive + 1}. ' \
+               f'Cumulative glacier loss since 1970 is {ds.get_value_from_year(year):.1f}{units}.'
 
     return out_text

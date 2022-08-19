@@ -16,12 +16,52 @@
 
 import pytest
 import itertools
+import numpy as np
 import climind.data_types.timeseries as ts
 import climind.stats.paragraphs as pg
+from climind.data_manager.metadata import CombinedMetadata, CollectionMetadata, DatasetMetadata
 
 
 @pytest.fixture
-def simple_monthly():
+def test_dataset_attributes():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': [],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'
+                  }
+
+    return attributes
+
+
+@pytest.fixture
+def test_collection_attributes():
+    attributes = {"name": "HadCRUT5",
+                  "display_name": "HadCRUT5",
+                  "version": "5.0.1.0",
+                  "variable": "tas",
+                  "units": "degC",
+                  "citation": [
+                      f"Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, "
+                      f"R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated "
+                      f"assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. "
+                      f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+                  "data_citation": [""],
+                  "colour": "#444444",
+                  "zpos": 99}
+
+    return attributes
+
+
+@pytest.fixture
+def simple_monthly(test_dataset_attributes, test_collection_attributes):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
     which the month falls
@@ -29,6 +69,8 @@ def simple_monthly():
     -------
 
     """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes))
     years = []
     months = []
     anomalies = []
@@ -38,25 +80,43 @@ def simple_monthly():
         months.append(m)
         anomalies.append(float(y))
 
-    return ts.TimeSeriesMonthly(years, months, anomalies)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata)
 
 
 @pytest.fixture
-def simple_annual():
+def simple_annual(test_dataset_attributes, test_collection_attributes):
     """
     Produces an annual time series from 1850 to 2022.
     Returns
     -------
 
     """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes))
     years = []
     anoms = []
-
     for y in range(1850, 2023):
         years.append(y)
         anoms.append(float(y) / 1000.)
+    return ts.TimeSeriesAnnual(years, anoms, metadata)
 
-    return ts.TimeSeriesAnnual(years, anoms)
+
+@pytest.fixture
+def simple_annual_descending(test_dataset_attributes, test_collection_attributes):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes))
+    years = []
+    anoms = []
+    for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(2022 - y) / 1000.)
+    return ts.TimeSeriesAnnual(years, anoms, metadata)
 
 
 def test_rank_ranges():
@@ -100,3 +160,82 @@ def test_dataset_name_list():
 def test_fancy_units():
     assert pg.fancy_html_units('degC') == '&deg;C'
     assert pg.fancy_html_units('numpty') == 'numpty'
+
+
+def test_anomaly_and_rank(simple_annual):
+    test_text = pg.anomaly_and_rank([simple_annual], 2022)
+
+    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The mean value for 2022 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+    test_text = pg.anomaly_and_rank([simple_annual], 2021)
+
+    assert 'The year 2021 was ranked the 2nd highest' in test_text
+    assert 'The mean value for 2021 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+
+def test_anomaly_and_rank_multiple_datasets(simple_annual, simple_annual_descending):
+    test_text = pg.anomaly_and_rank([simple_annual, simple_annual_descending], 2022)
+
+    assert 'The year 2022 was ranked between the 1st and 173rd highest' in test_text
+    assert 'The mean value for 2022 was 1.01&deg;C' in test_text
+    assert '(0.00-2.02&deg;C depending' in test_text
+    assert '2 data sets were used in this assessment: HadCRUT5 and HadCRUT5' in test_text
+
+
+def test_anomaly_and_rank_no_dataset_raises():
+    with pytest.raises(RuntimeError):
+        test_text = pg.anomaly_and_rank([], 2022)
+
+
+def test_monthly_value(simple_monthly):
+    test_text = pg.max_monthly_value([simple_monthly], 2022)
+
+    assert 'was the 1st highest' in test_text
+    assert 'at 2022.0&deg;C.' in test_text
+
+    test_text = pg.max_monthly_value([simple_monthly], 2021)
+
+    assert 'was the 13th highest' in test_text
+    assert 'at 2021.0&deg;C.' in test_text
+
+
+def test_monthly_value_no_dataset_raises():
+    with pytest.raises(RuntimeError):
+        test_text = pg.max_monthly_value([], 2022)
+
+
+def test_arctic_ice_paragraph(simple_monthly):
+    test_text = pg.arctic_ice_paragraph([simple_monthly], 2022)
+
+    assert 'in March 2022 was between 2022.00 and 2022.00&deg;C.' in test_text
+    assert 'was the 173rd lowest' in test_text
+    assert 'In September the extent was between 2022.00 and 2022.00&deg;C' in test_text
+    assert 'This was the 173rd lowest' in test_text
+    assert 'Data sets used were: HadCRUT5.'
+
+
+def test_arctic_ice_paragraph_no_dataset_raises():
+    with pytest.raises(RuntimeError):
+        test_text = pg.arctic_ice_paragraph([], 2022)
+
+
+def test_glacier(simple_annual):
+    dummy_data = 172. - np.array(range(173))
+    dummy_data[0] = dummy_data[1] - 0.5
+    simple_annual.df['data'] = dummy_data
+
+    test_text = pg.glacier_paragraph([simple_annual], 2022)
+
+    assert '171st consecutive year' in test_text
+    assert 'since 1852' in test_text
+    assert 'Cumulative glacier loss since 1970 is 0.0&deg;C'
+
+
+def test_glacier_no_dataset_raises():
+    with pytest.raises(RuntimeError):
+        test_text = pg.glacier_paragraph([], 2022)
