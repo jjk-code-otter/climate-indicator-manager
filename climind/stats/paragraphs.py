@@ -301,7 +301,7 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     if last_year == 9999:
         raise RuntimeError("No greenhouse gas data sets found")
 
-    if tb['co2'][0] == 1 and tb['co2'][0] == 1 and tb['co2'][0] == 1:
+    if tb['co2'][0] == 1 and tb['ch4'][0] == 1 and tb['n2o'][0] == 1:
         out_text = f"In {last_year}, greenhouse gas mole fractions reached new highs, " \
                    f"with globally averaged surface mole fractions of " \
                    f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} &plusmn; 0.2 parts per million (ppm), " \
