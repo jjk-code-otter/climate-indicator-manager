@@ -71,7 +71,7 @@ def get_files(filelist, web_path, ret):
             download_file(filename, file_base, ret)
 
 
-def fetch(url: str, out_dir: Path):
+def fetch(_, out_dir: Path):
     load_dotenv()
 
     email = os.getenv('UCAR_EMAIL')
