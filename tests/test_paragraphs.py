@@ -307,7 +307,8 @@ def test_greenhouse_gas_paragraph_no_wdcgg_datasets(mocker):
         _ = pg.co2_paragraph(all_datasets, 2021)
 
 
-def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker):
+@pytest.fixture
+def prepared_datasets(mocker):
     all_datasets = []
 
     for variable in ['co2', 'ch4', 'n2o']:
@@ -321,6 +322,9 @@ def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker):
 
         all_datasets.append(m)
 
+    return all_datasets
+
+def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker, prepared_datasets):
     m = mocker.MagicMock()
     m.metadata = {}
     m.metadata['display_name'] = 'AnotherCentre'
@@ -329,9 +333,9 @@ def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker):
     m.get_rank_from_year.return_value = 2
     m.get_value_from_year.side_effect = [4.0, 5.0]
 
-    all_datasets.append(m)
+    prepared_datasets.append(m)
 
-    test_text = pg.co2_paragraph(all_datasets, 2021)
+    test_text = pg.co2_paragraph(prepared_datasets, 2021)
 
     assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
     assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
@@ -341,20 +345,7 @@ def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker):
     assert 'Real-time data from specific locations' not in test_text
 
 
-def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker):
-    all_datasets = []
-
-    for variable in ['co2', 'ch4', 'n2o']:
-        m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'WDCGG'
-        m.metadata['variable'] = variable
-        m.get_first_and_last_year.return_value = (1980, 2020)
-        m.get_rank_from_year.return_value = 1
-        m.get_value_from_year.return_value = 765.432
-
-        all_datasets.append(m)
-
+def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker, prepared_datasets):
     m = mocker.MagicMock()
     m.metadata = {}
     m.metadata['display_name'] = 'AnotherCentre'
@@ -363,9 +354,9 @@ def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker):
     m.get_rank_from_year.return_value = 1
     m.get_value_from_year.side_effect = [6.0, 5.0]
 
-    all_datasets.append(m)
+    prepared_datasets.append(m)
 
-    test_text = pg.co2_paragraph(all_datasets, 2021)
+    test_text = pg.co2_paragraph(prepared_datasets, 2021)
 
     assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
     assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
