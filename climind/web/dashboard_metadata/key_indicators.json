@@ -82,38 +82,28 @@
       "cards": [
         {
           "link_to":  null, "title": "Carbon dioxide",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
           "link_to":  null, "title": "Methane",
-          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": "WDCGG CH4"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
         },
         {
           "link_to":  null, "title": "Nitrous Oxide",
-          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         }
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
           "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "max_monthly_value"}
-        },
-        {
-          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "max_monthly_value"}
-        },
-        {
-          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "max_monthly_value"}
+          "writing": {"function": "co2_paragraph"}
         }
       ]
     },

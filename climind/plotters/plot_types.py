@@ -404,7 +404,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
         ylo = 10. * (1 + (ylims[0] // 10.))
         yhi = 10. * (1 + (ylims[1] // 10.))
         plt.yticks(np.arange(ylo, yhi, 10.))
-        plt.xticks(np.arange(1950, 2023, 10))
+        plt.xticks(np.arange(1980, 2023, 10))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
