@@ -27,10 +27,10 @@ import climind.web.dashboard as db
 @pytest.fixture
 def card_metadata():
     metadata = {
-        "variable": "ohc", "link_to": None, "time_resolution": "annual", "title": "Ocean Indicators",
+        "link_to": None, "title": "Ocean Indicators",
+        "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
-
     }
     return metadata
 
@@ -38,10 +38,10 @@ def card_metadata():
 @pytest.fixture
 def tas_card_metadata():
     metadata = {
-        "variable": "tas", "link_to": None, "time_resolution": "monthly", "title": "GMT",
+        "link_to": None, "title": "GMT",
+        "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "plotting": {"function": "neat_plot", "title": "GMT"}
-
     }
     return metadata
 
@@ -69,8 +69,9 @@ def tas_page_metadata():
         "template": "front_page",
         "cards": [
             {
-                "variable": "tas", "link_to": "global_mean_temperature", "time_resolution": "monthly",
+                "link_to": "global_mean_temperature",
                 "title": "Global temperature",
+                "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
                 "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                                {"method": "make_annual", "args": []},
                                {"method": "add_offset", "args": [0.69]},
@@ -80,7 +81,7 @@ def tas_page_metadata():
         ],
         "paragraphs": [
             {
-                "variable": "arctic_ice", "time_resolution": "monthly",
+                "selecting": {"variable": "arctic_ice", "time_resolution": "monthly"},
                 "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
                 "writing": {"function": "arctic_ice_paragraph"}
             }
@@ -92,7 +93,7 @@ def tas_page_metadata():
 @pytest.fixture
 def test_paragraph_metadata():
     metadata = {
-        "variable": "arctic_ice", "time_resolution": "monthly",
+        "selecting": {"variable": "arctic_ice", "time_resolution": "monthly"},
         "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
         "writing": {"function": "arctic_ice_paragraph"}
     }
@@ -140,10 +141,10 @@ def test_paragraph_creation(test_paragraph_metadata):
 
 def test_paragraph_get_and_set(test_paragraph_metadata):
     paragraph = db.Card(test_paragraph_metadata)
-    assert paragraph['variable'] == 'arctic_ice'
+    assert paragraph['selecting']['variable'] == 'arctic_ice'
     test_indicator = 'test_indicator'
-    paragraph['variable'] = test_indicator
-    assert paragraph['variable'] == test_indicator
+    paragraph['selecting']['variable'] = test_indicator
+    assert paragraph['selecting']['variable'] == test_indicator
 
 
 def test_process_datasets_para(mocker, test_paragraph_metadata):
@@ -208,10 +209,10 @@ def test_card_creation(card_metadata):
 
 def test_card_get_and_set(card_metadata):
     card = db.Card(card_metadata)
-    assert card['variable'] == 'ohc'
+    assert card['selecting']['variable'] == 'ohc'
     test_indicator = 'test_indicator'
-    card['variable'] = test_indicator
-    assert card['variable'] == test_indicator
+    card['selecting']['variable'] = test_indicator
+    assert card['selecting']['variable'] == test_indicator
 
 
 def simple_responder(*args, **kwargs):

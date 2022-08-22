@@ -285,6 +285,18 @@ def test_ranking_monthly_with_all_keyword(simple_monthly):
         assert rank == 12 * i + 1
 
 
+def test_get_year_range_monthly(simple_monthly):
+    first_year, last_year = simple_monthly.get_first_and_last_year()
+    assert first_year == 1850
+    assert last_year == 2022
+
+
+def test_get_year_range_annual(simple_annual):
+    first_year, last_year = simple_annual.get_first_and_last_year()
+    assert first_year == 1850
+    assert last_year == 2022
+
+
 def test_rolling_average(simple_annual):
     ma = simple_annual.running_mean(10)
 

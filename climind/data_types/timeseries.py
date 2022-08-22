@@ -13,7 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from typing import Optional
+from typing import Optional, Tuple
 
 import pandas as pd
 import logging
@@ -351,6 +351,18 @@ class TimeSeriesMonthly:
                                    columns=['time', 'year', 'month', 'data']))
             f.write("end data\n")
 
+    def get_first_and_last_year(self) -> Tuple[int, int]:
+        """
+        Get the first and last year in the series
+
+        Returns
+        -------
+        Tuple[int, int]
+            first and last year
+        """
+        first_year = self.df['year'].tolist()[0]
+        last_year = self.df['year'].tolist()[-1]
+        return first_year, last_year
 
 class TimeSeriesAnnual:
 
@@ -635,3 +647,16 @@ class TimeSeriesAnnual:
                                    header=False,
                                    columns=['time', 'year', 'data']))
             f.write("end data\n")
+
+    def get_first_and_last_year(self) -> Tuple[int, int]:
+        """
+        Get the first and last year in the series
+
+        Returns
+        -------
+        Tuple[int, int]
+            first and last year
+        """
+        first_year = self.df['year'].tolist()[0]
+        last_year = self.df['year'].tolist()[-1]
+        return first_year, last_year

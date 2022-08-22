@@ -7,54 +7,60 @@
       "template": "front_page",
       "cards": [
         {
-          "variable": "ohc", "link_to": null, "time_resolution": "annual", "title": "Ocean Indicators",
+          "link_to": null, "title": "Ocean Indicators",
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
-          "variable": "sealevel", "link_to": null, "time_resolution": "monthly", "title": "Sea level",
+          "link_to": null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
         },
         {
-          "variable": "arctic_ice", "link_to": null, "time_resolution": "monthly", "title": "Sea ice",
+          "link_to": null, "title": "Sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
-          "variable": "ph", "link_to":  null, "time_resolution": "annual", "title": "Ocean pH",
+          "link_to":  null, "title": "Ocean pH",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Ocean pH"}
         },
         {
-          "variable": ["mhw", "mcs"], "link_to":  null, "time_resolution": "annual", "title": "Marine heat waves",
+          "link_to":  null, "title": "Marine heat waves",
+          "selecting": {"type": "timeseries", "variable": ["mhw", "mcs"], "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
         },
         {
-          "variable": "sst", "link_to":  null, "time_resolution": "annual", "title": "Sea-surface temperature",
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
       ],
       "paragraphs": [
         {
-          "variable": "ohc", "time_resolution": "annual",
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "variable": "sealevel", "time_resolution": "monthly",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
           "writing": {"function": "max_monthly_value"}
         },
         {
-          "variable": "arctic_ice", "time_resolution": "monthly",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
           "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
         },
         {
-          "variable": "sst", "time_resolution": "annual",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
           "writing": {"function": "anomaly_and_rank"}
         }
