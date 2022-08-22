@@ -8,7 +8,7 @@
       "cards": [
         {
           "link_to": "greenhouse_gases", "title": "Greenhouse gases",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
@@ -64,9 +64,9 @@
           "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
           "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "max_monthly_value"}
+          "writing": {"function": "co2_paragraph"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},

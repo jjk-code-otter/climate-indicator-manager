@@ -266,3 +266,80 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
                f'Cumulative glacier loss since 1970 is {all_datasets[0].get_value_from_year(year):.1f}{units}.'
 
     return out_text
+
+
+def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+    Generate a paragraph of some standard stats for greenhouse gases
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets on which the assessment will be based
+    year: int
+        Chosen year to focus on
+    Returns
+    -------
+    str
+        Paragraph of text
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError('No datasets provided')
+
+    tb = {}
+    cl = {'co2': 277.3, 'ch4': 721.0, 'n2o': 270.9}
+
+    last_year = 9999
+    for ds in all_datasets:
+        if ds.metadata['display_name'] == 'WDCGG':
+            variable = ds.metadata['variable']
+            first_year, last_year = ds.get_first_and_last_year()
+            rank = ds.get_rank_from_year(last_year)
+            value = ds.get_value_from_year(last_year)
+            tb[variable] = [rank, value]
+
+    if last_year == 9999:
+        raise RuntimeError("No greenhouse gas data sets found")
+
+    if tb['co2'][0] == 1 and tb['co2'][0] == 1 and tb['co2'][0] == 1:
+        out_text = f"In {last_year}, greenhouse gas mole fractions reached new highs, " \
+                   f"with globally averaged surface mole fractions of " \
+                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} &plusmn; 0.2 parts per million (ppm), " \
+                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} &plusmn; 2 parts per billion (ppb) and " \
+                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} &plusmn; 0.1 ppb, respectively " \
+                   f"{100. * tb['co2'][1] / cl['co2']:.0f}%, " \
+                   f"{100. * tb['ch4'][1] / cl['ch4']:.0f}% and " \
+                   f"{100. * tb['n2o'][1] / cl['n2o']:.0f}% of pre-industrial (1750) levels."
+
+    else:
+        out_text = f"In {last_year}, globally averaged greenhouse gas mole fractions were: " \
+                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} &plusmn; 0.2 parts per million (ppm), " \
+                   f"{tb['co2'][0]} highest on record, " \
+                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} &plusmn; 2 parts per billion (ppb)," \
+                   f"{tb['ch4'][0]} highest on record, and " \
+                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} &plusmn; 0.1 ppb, " \
+                   f"{tb['n2o'][0]} highest on record, respectively " \
+                   f"{100. * tb['co2'][1] / cl['co2']:.0f}%, " \
+                   f"{100. * tb['ch4'][1] / cl['ch4']:.0f}% and " \
+                   f"{100. * tb['n2o'][1] / cl['n2o']:.0f}% of pre-industrial (1750) levels"
+
+    if last_year < year:
+
+        all_highest = True
+        upupup = True
+        for ds in all_datasets:
+            if ds.metadata['display_name'] != 'WDCGG':
+                rank = ds.get_rank_from_year(year)
+                value = ds.get_value_from_year(year) - ds.get_value_from_year(last_year)
+                if rank != 1:
+                    all_highest = False
+                if value <= 0:
+                    upupup = False
+
+        if upupup and all_highest:
+            out_text = out_text + f' Real-time data from specific locations, including Mauna Loa (Hawaii) and ' \
+                                  f'Kennaook/Cape Grim (Tasmania) indicate that levels of ' \
+                                  f'CO<sub>2</sub>, CH<sub>4</sub> and N<sub>2</sub>O continued to ' \
+                                  f'increase in {year}.'
+
+    return out_text
