@@ -86,11 +86,7 @@ class WebComponent:
         -------
         None
         """
-        selection_metadata = {
-            'type': 'timeseries',
-            'variable': self['variable'],
-            'time_resolution': self['time_resolution']
-        }
+        selection_metadata = self['selecting']
         selected = archive.select(selection_metadata)
         self.datasets = selected.read_datasets(data_dir)
 
