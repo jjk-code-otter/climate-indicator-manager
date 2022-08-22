@@ -20,31 +20,32 @@ import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
 import numpy as np
 import copy
+from climind.readers.generic_reader import read_ts
 from climind.data_manager.metadata import CombinedMetadata
 
 
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    filename = out_dir / metadata['filename'][0]
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['type'] == 'timeseries':
-        if metadata['time_resolution'] == 'monthly':
-            return read_monthly_ts(filename, construction_metadata)
-        elif metadata['time_resolution'] == 'annual':
-            return read_annual_ts(filename, construction_metadata)
-        else:
-            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-
-    elif metadata['type'] == 'gridded':
-        print(kwargs)
-        if 'grid_resolution' in kwargs:
-            if kwargs['grid_resolution'] == 5:
-                return read_monthly_grid(filename, construction_metadata)
-            if kwargs['grid_resolution'] == 1:
-                return read_monthly_1x1_grid(filename, construction_metadata)
-        else:
-            return read_monthly_grid(filename, construction_metadata)
+# def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
+#     filename = out_dir / metadata['filename'][0]
+#
+#     construction_metadata = copy.deepcopy(metadata)
+#
+#     if metadata['type'] == 'timeseries':
+#         if metadata['time_resolution'] == 'monthly':
+#             return read_monthly_ts(filename, construction_metadata)
+#         elif metadata['time_resolution'] == 'annual':
+#             return read_annual_ts(filename, construction_metadata)
+#         else:
+#             raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+#
+#     elif metadata['type'] == 'gridded':
+#         print(kwargs)
+#         if 'grid_resolution' in kwargs:
+#             if kwargs['grid_resolution'] == 5:
+#                 return read_monthly_grid(filename, construction_metadata)
+#             if kwargs['grid_resolution'] == 1:
+#                 return read_monthly_1x1_grid(filename, construction_metadata)
+#         else:
+#             return read_monthly_grid(filename, construction_metadata)
 
 
 def read_monthly_grid(filename: str, metadata: CombinedMetadata):
@@ -52,6 +53,10 @@ def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(df, metadata)
+
+
+def read_monthly_5x5_grid(filename: str, metadata: CombinedMetadata):
+    return read_monthly_grid(filename, CombinedMetadata)
 
 
 def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
