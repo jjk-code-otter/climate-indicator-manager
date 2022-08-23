@@ -15,11 +15,27 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import Union, Optional
 import copy
 from climind.data_manager.metadata import CombinedMetadata
+from climind.data_types.timeseries import TimeSeriesAnnual, TimeSeriesMonthly
+from climind.data_types.grid import GridMonthly
 
 
-def get_reader_script_name(metadata, **kwargs):
+def get_reader_script_name(metadata: Union[CombinedMetadata, dict], **kwargs) -> Optional[str]:
+    """
+    Get the name of the reader function for the provided metadata combination
+
+    Parameters
+    ----------
+    metadata: Union[CombinedMetadata, dict]
+        contains the metadata required to chose the reader script
+    kwargs:
+
+    Returns
+    -------
+    str
+    """
     chosen_reader_script = None
 
     if metadata['type'] == 'timeseries':
@@ -42,10 +58,48 @@ def get_reader_script_name(metadata, **kwargs):
     return chosen_reader_script
 
 
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    script_name = metadata['reader']
-    ext = '.'.join(['climind.readers', script_name])
+def get_module(package_name: str, script_name: str):
+    """
+    Get the module from the package name and the script name
+
+    Parameters
+    ----------
+    package_name: str
+        String containing the package path as a dot separated string
+    script_name: str
+        Name of the script to import
+
+    Returns
+    -------
+    The imported module
+    """
+    ext = '.'.join([package_name, script_name])
     module = __import__(ext, fromlist=[None])
+    return module
+
+
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs) -> Union[
+    TimeSeriesMonthly, TimeSeriesAnnual, GridMonthly]:
+    """
+    Generic reader for the data sets. This works out which reader is needed, imports and runs it.
+    If a particular reader is not available (e.g. because the data is only a timeseries and not a grid)
+    then it raises a not implemented error.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path of the directory in which the data are to be found
+    metadata: CombinedMetadata
+        Metadata describing the required dataset
+    kwargs: dict
+        Optional arguments as required for particular data sets
+
+    Returns
+    -------
+
+    """
+    script_name = metadata['reader']
+    module = get_module('climind.readers', script_name)
 
     filename = []
     for name in metadata['filename']:
