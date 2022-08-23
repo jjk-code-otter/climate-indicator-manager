@@ -15,47 +15,31 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import List
 import xarray as xa
+import numpy as np
+
 import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
-import numpy as np
-import copy
+
 from climind.data_manager.metadata import CombinedMetadata
 
-
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    filename = out_dir / metadata['filename'][0]
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['type'] == 'timeseries':
-        if metadata['time_resolution'] == 'monthly':
-            return read_monthly_ts(filename, construction_metadata)
-        elif metadata['time_resolution'] == 'annual':
-            return read_annual_ts(filename, construction_metadata)
-        else:
-            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-
-    elif metadata['type'] == 'gridded':
-        print(kwargs)
-        if 'grid_resolution' in kwargs:
-            if kwargs['grid_resolution'] == 5:
-                return read_monthly_grid(filename, construction_metadata)
-            if kwargs['grid_resolution'] == 1:
-                return read_monthly_1x1_grid(filename, construction_metadata)
-        else:
-            return read_monthly_grid(filename, construction_metadata)
+from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_grid(filename: str, metadata: CombinedMetadata):
-    df = xa.open_dataset(filename)
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
+    df = xa.open_dataset(filename[0])
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
-    df = xa.open_dataset(filename)
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
+    return read_monthly_grid(filename, metadata)
+
+
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
+    df = xa.open_dataset(filename[0])
     # regrid to 1x1
     lats = np.arange(-89.5, 90.5, 1.0)
     lons = np.arange(-179.5, 180.5, 1.0)
@@ -73,12 +57,12 @@ def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
 
-    with open(filename, 'r') as f:
+    with open(filename[0], 'r') as f:
         f.readline()
         for line in f:
             columns = line.split(',')
@@ -98,7 +82,7 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

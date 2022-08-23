@@ -15,28 +15,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import climind.data_types.timeseries as ts
+from typing import List
 import numpy as np
-import copy
+
+import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
 
-
-def read_ts(out_dir: Path, metadata: CombinedMetadata):
-    filenames = []
-    for filename in metadata['filename']:
-        filenames.append(out_dir / filename)
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['time_resolution'] == 'monthly':
-        return read_monthly_ts(filenames, construction_metadata)
-    elif metadata['time_resolution'] == 'annual':
-        raise NotImplementedError
-    else:
-        raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filenames: list, metadata: CombinedMetadata):
+def read_monthly_ts(filenames: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []

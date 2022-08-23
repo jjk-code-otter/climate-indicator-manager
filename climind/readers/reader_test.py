@@ -14,15 +14,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
-import xarray as xa
-from typing import List
-
-import climind.data_types.grid as gd
-
-from climind.readers.generic_reader import read_ts
+def read_monthly_ts(filename, metadata, **kwargs):
+    return 'monthly_ts'
 
 
-def read_monthly_grid(filename: List[Path], metadata):
-    df = xa.open_dataset(filename[0])
-    return gd.GridMonthly(df, metadata)
+def read_annual_ts(filename, metadata, **kwargs):
+    return 'annual_ts'
+
+
+def read_monthly_grid(filename, metadata, **kwargs):
+    return 'monthly_grid'
+
+
+def read_monthly_1x1_grid(filename, metadata, **kwargs):
+    return 'monthly_1x1_grid'

@@ -18,10 +18,14 @@ from pathlib import Path
 import itertools
 import xarray as xa
 import numpy as np
+from typing import List
+
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
-import copy
+
 from climind.data_manager.metadata import CombinedMetadata
+
+from climind.readers.generic_reader import read_ts
 
 
 def build_transfer(xx: int, yy: int):
@@ -61,28 +65,9 @@ def build_transfer(xx: int, yy: int):
 
     return transfer, lox, hix, loy, hiy
 
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    filename = out_dir / metadata['filename'][0]
-    construction_metadata = copy.deepcopy(metadata)
-    if metadata['type'] == 'timeseries':
-        if metadata['time_resolution'] == 'monthly':
-            return read_monthly_ts(filename, construction_metadata)
-        elif metadata['time_resolution'] == 'annual':
-            return read_annual_ts(filename, construction_metadata)
-        else:
-            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-    elif metadata['type'] == 'gridded':
-        if 'grid_resolution' in kwargs:
-            if kwargs['grid_resolution'] == 5:
-                return read_monthly_5x5_grid(filename, construction_metadata)
-            if kwargs['grid_resolution'] == 1:
-                return read_monthly_1x1_grid(filename, construction_metadata)
-        else:
-            return read_monthly_grid(filename, construction_metadata)
 
-
-def read_monthly_grid(filename: str, metadata: CombinedMetadata):
-    df = xa.open_dataset(filename)
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
+    df = xa.open_dataset(filename[0])
     df = df.rename({'tempanomaly': 'tas_mean',
                     'lat': 'latitude',
                     'lon': 'longitude'})
@@ -91,7 +76,7 @@ def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
     """
     Convert 2x2 grid to 1x1 grid by copying 2x2 value into all 4 1x1 grid cells it
     contains
@@ -105,7 +90,7 @@ def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     -------
 
     """
-    gistemp = xa.open_dataset(filename)
+    gistemp = xa.open_dataset(filename[0])
 
     target_grid = np.repeat(gistemp.tempanomaly, 2, 1)
     target_grid = np.repeat(target_grid, 2, 2)
@@ -127,8 +112,8 @@ def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_5x5_grid(filename: str, metadata: CombinedMetadata):
-    gistemp = xa.open_dataset(filename)
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
+    gistemp = xa.open_dataset(filename[0])
     number_of_months = len(gistemp.time.data)
     target_grid = np.zeros((number_of_months, 36, 72))
 
@@ -160,12 +145,12 @@ def read_monthly_5x5_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
 
-    with open(filename, 'r') as f:
+    with open(filename[0], 'r') as f:
         for _ in range(2):
             f.readline()
         for line in f:
@@ -182,11 +167,11 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     anomalies = []
 
-    with open(filename, 'r') as f:
+    with open(filename[0], 'r') as f:
         for _ in range(2):
             f.readline()
         for line in f:
