@@ -49,7 +49,6 @@ def test_get_module():
 
 @pytest.fixture
 def generic_metadata():
-
     metadata = {
         'name': 'test_name',
         'filename': ['one'],
@@ -57,8 +56,8 @@ def generic_metadata():
         'time_resolution': 'monthly',
         'reader': 'reader_test'
     }
-
     return metadata
+
 
 def test_read_ts_monthly_ts(generic_metadata):
     result = read_ts(Path(''), generic_metadata)
