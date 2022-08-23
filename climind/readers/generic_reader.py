@@ -47,7 +47,10 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     ext = '.'.join(['climind.readers', script_name])
     module = __import__(ext, fromlist=[None])
 
-    filename = out_dir / metadata['filename'][0]
+    filename = []
+    for name in metadata['filename']:
+        filename.append(out_dir / name)
+
     construction_metadata = copy.deepcopy(metadata)
 
     chosen_reader_script = get_reader_script_name(metadata, **kwargs)
@@ -56,6 +59,6 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
         raise RuntimeError("Reader does not exist for this combination of metadata")
 
     if hasattr(module, chosen_reader_script):
-        return getattr(module, chosen_reader_script)(filename, construction_metadata)
+        return getattr(module, chosen_reader_script)(filename, construction_metadata, **kwargs)
     else:
         raise NotImplementedError(f"Reader {chosen_reader_script} not implemented for this data set {metadata['name']}")

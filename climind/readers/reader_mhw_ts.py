@@ -15,26 +15,15 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import List
+
 import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
-import copy
+
+from climind.readers.generic_reader import read_ts
 
 
-def read_ts(out_dir: Path, metadata: CombinedMetadata):
-    filename = metadata['filename'][0]
-    filename = out_dir / filename
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['time_resolution'] == 'monthly':
-        raise NotImplementedError('No official monthly version')
-    elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, construction_metadata)
-    else:
-        raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-
-
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     data = []
     # Data sample
@@ -43,7 +32,7 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     # 1982,II Strong,1612165,901094650.2339222,2.3326,1.7627,184324,105015229.43934757,0.2667,0.2054
     # 1982,III Severe,147165,71382498.9825604,0.2129,0.1396,36762,21933262.28947978,0.0532,0.0429
     # 1982,IV Extreme,31823,11445828.214065524,0.046,0.0224,8620,4150179.8327680673,0.0125,0.0081
-    with open(filename, 'r') as f:
+    with open(filename[0], 'r') as f:
         f.readline()
         for line in f:
             columns = line.split(',')

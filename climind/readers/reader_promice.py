@@ -15,30 +15,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import List
 import pandas as pd
-import climind.data_types.timeseries as ts
-import copy
 
+import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
 
-
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    filename = out_dir / metadata['filename'][0]
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['type'] == 'timeseries':
-        if metadata['time_resolution'] == 'monthly':
-            return read_monthly_ts(filename, construction_metadata, **kwargs)
-        elif metadata['time_resolution'] == 'annual':
-            return read_annual_ts(filename, construction_metadata, **kwargs)
-        else:
-            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
-    elif metadata['type'] == 'gridded':
-        raise NotImplementedError
+from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     if 'first_difference' in kwargs:
         first_diff = kwargs['first_difference']
     else:
@@ -47,7 +33,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     dates = []
     mass_balance = []
 
-    with open(filename, 'r') as in_file:
+    with open(filename[0], 'r') as in_file:
         in_file.readline()
         for line in in_file:
             if int(line[0:4]) > 1985:
@@ -82,7 +68,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     if 'first_difference' in kwargs:
         first_diff = kwargs['first_difference']
     else:
@@ -91,15 +77,12 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata, **kwargs):
     years = []
     mass_balance = []
 
-    with open(filename, 'r') as in_file:
+    with open(filename[0], 'r') as in_file:
         in_file.readline()
         for line in in_file:
             columns = line.split(',')
             years.append(int(columns[0]))
             mass_balance.append(float(columns[1]))
-
-    #    if not first_diff:
-    #       df =
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]

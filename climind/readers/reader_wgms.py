@@ -15,26 +15,15 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import List
+
 import climind.data_types.timeseries as ts
-import copy
 from climind.data_manager.metadata import CombinedMetadata
 
-
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
-    filename = out_dir / metadata['filename'][0]
-
-    construction_metadata = copy.deepcopy(metadata)
-
-    if metadata['time_resolution'] == 'monthly':
-        raise NotImplementedError
-    elif metadata['time_resolution'] == 'annual':
-        return read_annual_ts(filename, construction_metadata, **kwargs)
-    else:
-        raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+from climind.readers.generic_reader import read_ts
 
 
-def read_annual_ts(filename: str, metadata: CombinedMetadata, **kwargs):
-
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     if 'first_difference' in kwargs:
         first_diff = kwargs['first_difference']
     else:
@@ -43,16 +32,16 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata, **kwargs):
     years = []
     anomalies = []
 
-    with open(filename, 'r') as f:
+    with open(filename[0], 'r') as f:
         f.readline()
         for line in f:
             columns = line.split(',')
             year = columns[0]
 
             if first_diff:
-                data = float(columns[2])/1000.
+                data = float(columns[2]) / 1000.
             else:
-                data = float(columns[3])/1000.
+                data = float(columns[3]) / 1000.
 
             years.append(int(year))
             anomalies.append(data)
