@@ -129,9 +129,53 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
     out_text = f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
                f'on record. The mean value for {year} was ' \
-               f'{mean_anomaly:.2f}{units} ' \
-               f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
-               f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
+               f'{mean_anomaly:.2f}{units} '
+
+    if not all_datasets[0].metadata['actual']:
+        clim_start = all_datasets[0].metadata['climatology_start']
+        clim_end = all_datasets[0].metadata['climatology_end']
+        out_text += f"relative to the {clim_start}-{clim_end} average "
+
+    out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
+                f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
+
+    return out_text
+
+
+def anomaly_and_rank_plus_new_base(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
+    as well as saying how many data sets and which datasets were used. Then it adds the anomalies relative to
+    the 1961-1990 baseline, with information about the number of datasets.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be used to derive the ranks and values
+    year: int
+        Year for which the paragraph should be generated.
+    Returns
+    -------
+    str
+
+    """
+    out_text = anomaly_and_rank(all_datasets, year)
+
+    processed_data = []
+    for ds in all_datasets:
+        first_year, last_year = ds.get_first_and_last_year()
+        if first_year <= 1961:
+            ds.rebaseline(1961, 1990)
+            processed_data.append(ds)
+
+    min_rank, max_rank = pu.calculate_ranks(processed_data, year)
+    mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(processed_data, year)
+    units = fancy_html_units(all_datasets[0].metadata['units'])
+
+    out_text += f' Relative to a 1961-1990 baseline, the mean value for {year} was ' \
+                f'{mean_anomaly:.2f}{units} ' \
+                f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
+                f'{len(processed_data)} data sets were used in the assessment relative to 1961-1990.'
 
     return out_text
 

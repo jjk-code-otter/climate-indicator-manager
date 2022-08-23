@@ -178,6 +178,13 @@ def test_anomaly_and_rank(simple_annual):
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
 
 
+def test_anomaly_and_rank_plus_new_base(simple_annual):
+    test_text = pg.anomaly_and_rank_plus_new_base([simple_annual], 2022)
+    assert 'Relative to a 1961-1990' in test_text
+    test_text = pg.anomaly_and_rank_plus_new_base([simple_annual], 2021)
+    assert 'Relative to a 1961-1990' in test_text
+
+
 def test_anomaly_and_rank_multiple_datasets(simple_annual, simple_annual_descending):
     test_text = pg.anomaly_and_rank([simple_annual, simple_annual_descending], 2022)
 
@@ -323,6 +330,7 @@ def prepared_datasets(mocker):
         all_datasets.append(m)
 
     return all_datasets
+
 
 def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker, prepared_datasets):
     m = mocker.MagicMock()
