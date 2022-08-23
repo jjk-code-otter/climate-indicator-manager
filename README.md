@@ -164,6 +164,34 @@ inputs and maintains transparency of the system. The "reader" and "fetcher" spec
 
 More complicated examples can be found in the repository.
 
+* `name` - this is a unique name for this particular collection
+* `display_name` - name used to label datasets in this collection in figure legends.
+* `version` - latest version number for the data set
+* `variable` - variable name. `tas` is global surface temperature.
+* `units` - units used for this variable. 
+* `citation` - a list of citations for papers describing the data set.
+* `data_citation` - a list of data citations for the data itself (if such exists).
+* `acknowledgement` - many dataset providers request a particular acknowledgement when the data are used.
+* `colour` - python colour name or hexadecimal RGB triple, used to represent data from this collection in line graphs
+* `zpos` - used to force ordering of lines in plots. Lines with higher zpos values will be drawn over lines with lower zpos values.
+
+The dataset section consists of a lits of dataset metadata:
+
+* `url` - a list of URLs for the files.
+* `filename` - a list of the filenames which will be associated with the data set. For example, NSIDC Arctic ice extent has 12 files, one for each month of the year.
+* `type` - type of the data, either `timeseries` or `gridded`.
+* `long_name` - long descriptive name used in figure captions and other automatically generated text.
+* `time_resolution` - either `monthly` or `annual`
+* `space_resolution` - for `gridded` data sets this specifies the grid resolution in degrees. Set to 999 for time series data.
+* `climatology_start` - first year of the climatology period of the data in the data set.
+* `climatology_end` - last year of the climatology period of the data in the data set.
+* `actual` - set to True if the file contains actual values, set to False for anomalies.
+* `derived` - set to False. During processing, this flag is set to True to indicate that the original data have been further processed within the dashboard software.
+* `history` - a list which will hold the details of processing steps
+* `reader` - the name of a script in the `climind/readers` directory which will read the data described in the dataset metadata.
+* `fetcher` - the name of a script in the `climind/fetchers` direcotyr which will download the data described in the dataset metadata.
+
+
 Adding a new variable
 =====================
 
