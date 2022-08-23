@@ -129,9 +129,15 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
     out_text = f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
                f'on record. The mean value for {year} was ' \
-               f'{mean_anomaly:.2f}{units} ' \
-               f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
-               f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
+               f'{mean_anomaly:.2f}{units} '
+
+    if not all_datasets[0].metadata['actual']:
+        clim_start = all_datasets[0].metadata['climatology_start']
+        clim_end = all_datasets[0].metadata['climatology_end']
+        out_text += f"relative to the {clim_start}-{clim_end} average "
+
+    out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
+                f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
 
     return out_text
 
