@@ -258,3 +258,9 @@ dash.build(Path(dash_dir))
 ```
 
 The `json_file` is the dashboard metadata file. The `dash_dir` is the directory where you want to build the dashboard. `dash.build()` builds the dashboard.
+
+Calculating regional averages
+=============================
+
+Regional averages are calculated using `calculate_wmo_ra_averages.py`. This generates a large number of files containing regional averages based 
+on the gridded temperature data sets. This takes rather a long time to run.
