@@ -408,4 +408,4 @@ def tests_marine_heatwave_paragraph(prepared_mhw_datasets):
 
 def tests_marine_heatwave_no_input_paragraph():
     with pytest.raises(RuntimeError):
-        test_text = pg.marine_heatwave_and_cold_spell_paragraph([], 2021)
+        _ = pg.marine_heatwave_and_cold_spell_paragraph([], 2021)
