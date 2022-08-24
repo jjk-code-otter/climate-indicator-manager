@@ -1,0 +1,57 @@
+{
+  "name": "Cryosphere Indicators",
+  "pages": [
+    {
+      "id": "cryo",
+      "name": "Cryosphere Indicators",
+      "template": "front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Arctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Glacier mass balance",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing":  [],
+          "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
+
+        },
+        {
+          "link_to":  null, "title": "Greenland ice sheet",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+
+        },
+        {
+          "link_to":  null, "title": "Antarctic ice sheet",
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly"},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
+          "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "glacier_paragraph"}
+        }
+      ]
+    }
+  ]
+}
