@@ -372,3 +372,40 @@ def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker, prepar
     assert 'In 2020, greenhouse gas mole fractions reached new highs,' in test_text
 
     assert 'Real-time data from specific locations' in test_text
+
+
+@pytest.fixture
+def prepared_mhw_datasets(mocker):
+    all_datasets = []
+
+    for variable in ['mhw', 'mcs']:
+        m = mocker.MagicMock()
+        m.metadata = {}
+        m.metadata['display_name'] = 'OISST'
+        m.metadata['variable'] = variable
+        m.get_value_from_year.side_effect = [33.3, 79.8]
+        m.get_rank_from_year.return_value = 3
+        m.get_year_from_rank.return_value = [2011]
+
+        all_datasets.append(m)
+
+    return all_datasets
+
+
+def tests_marine_heatwave_paragraph(prepared_mhw_datasets):
+    test_text = pg.marine_heatwave_and_cold_spell_paragraph(prepared_mhw_datasets[0:1], 2021)
+
+    assert 'In 2021, 33.3%' in test_text
+    assert 'The 3rd highest on record' in test_text
+    assert '79.8% in 2011.' in test_text
+
+    test_text = pg.marine_heatwave_and_cold_spell_paragraph(prepared_mhw_datasets[1:], 2021)
+
+    assert '33.3%' in test_text
+    assert 'The 3rd highest on record' in test_text
+    assert '79.8% in 2011.' in test_text
+
+
+def tests_marine_heatwave_no_input_paragraph():
+    with pytest.raises(RuntimeError):
+        _ = pg.marine_heatwave_and_cold_spell_paragraph([], 2021)

@@ -387,3 +387,48 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
                                   f'increase in {year}.'
 
     return out_text
+
+
+def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    out_text = ''
+
+    mhw_area = None
+    mhw_rank = None
+    mhw_max_area = None
+    mhw_max_year = None
+    mcs_area = None
+    mcs_rank = None
+    mcs_max_area = None
+    mcs_max_year = None
+
+    mhw_check = False
+    mcs_check = False
+
+    for ds in all_datasets:
+        # get the % area of marine heatwaves
+        if ds.metadata['variable'] == 'mhw':
+            mhw_check = True
+            mhw_area = ds.get_value_from_year(year)
+            mhw_rank = ds.get_rank_from_year(year)
+            mhw_max_year = ds.get_year_from_rank(1)[0]
+            mhw_max_area = ds.get_value_from_year(mhw_max_year)
+        if ds.metadata['variable'] == 'mcs':
+            mcs_check = True
+            mcs_area = ds.get_value_from_year(year)
+            mcs_rank = ds.get_rank_from_year(year)
+            mcs_max_year = ds.get_year_from_rank(1)[0]
+            mcs_max_area = ds.get_value_from_year(mcs_max_year)
+
+    if mhw_check:
+        out_text = f"In {year}, {mhw_area:.1f}% of the ocean was affected by at least one marine heatwave. " \
+                   f"The {ordinal(mhw_rank)} highest on record. " \
+                   f"The highest ocean area affected in any year was {mhw_max_area:.1f}% in {mhw_max_year}. "
+    if mcs_check:
+        out_text = f"The area of the ocean affected by at least one marine cold spells was {mcs_area:.1f}%. " \
+                   f"The {ordinal(mcs_rank)} highest on record. " \
+                   f"The highest area affected in any year by marine cold spells was {mcs_max_area:.1f}% in {mcs_max_year}."
+
+    if not mcs_check and not mhw_check:
+        raise RuntimeError("One of MHW or MCS data not found in the data set list")
+
+    return out_text

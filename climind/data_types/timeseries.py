@@ -13,7 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 import pandas as pd
 import logging
@@ -513,7 +513,7 @@ class TimeSeriesAnnual:
         return val.iloc[0]
 
     @log_activity
-    def get_year_from_rank(self, rank: int) -> list:
+    def get_year_from_rank(self, rank: int) -> List[int]:
         """
         Given a particular rank, extract a list of years which match that rank.
         Returns a list because years can (theoretically) be tied with each other. Rank
@@ -530,8 +530,8 @@ class TimeSeriesAnnual:
             List of years that have the specified rank
         """
         ranked = self.df.rank(method='min', ascending=False)
-        years = self.df[ranked['data'] == rank]['year']
-        return years.tolist()
+        years = self.df[ranked['data'] == rank]['year'].tolist()
+        return years
 
     @log_activity
     def running_mean(self, run_length: int):
