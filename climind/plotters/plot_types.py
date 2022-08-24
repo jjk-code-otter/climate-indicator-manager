@@ -63,6 +63,7 @@ STANDARD_PARAMETER_SET = {
     'xtick.color': 'dimgrey',
     'xtick.direction': 'out',
     'xtick.top': False,
+    'xtick.labelbottom': True,
 
     'ytick.major.width': 0.4,
     'ytick.color': 'dimgrey',
