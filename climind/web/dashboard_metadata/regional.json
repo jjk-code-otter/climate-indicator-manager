@@ -140,8 +140,7 @@
           "link_to":  null, "title": "Regional trends",
           "selecting": {
             "type": "timeseries",
-            "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
-            "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
+            "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3", "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
             "time_resolution": "annual"
           },
           "processing": [],
