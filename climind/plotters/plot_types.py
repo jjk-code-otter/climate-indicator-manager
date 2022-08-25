@@ -152,7 +152,7 @@ def set_yaxis(axis, dataset):
     return ylo, yhi, yticks
 
 
-def set_xaxis(axis, dataset):
+def set_xaxis(axis):
     xlims = axis.get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
     if len(xticks) < 3:
@@ -220,7 +220,7 @@ def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str
     add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -266,7 +266,7 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
     add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -322,7 +322,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -399,7 +399,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
     add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -551,7 +551,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     plot_units = add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
