@@ -164,13 +164,13 @@ def test_set_xaxis(mocker):
 
     mock_axis.get_xlim.return_value = [1849, 2023]
     ds = Tiny('ph')
-    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis, ds)
+    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis)
     assert test_lo == pytest.approx(1860, 6)
     assert test_hi == pytest.approx(2020, 6)
     assert len(test_ticks) == 9
 
     mock_axis.get_xlim.return_value = [1989, 2023]
-    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis, ds)
+    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis)
     assert test_lo == pytest.approx(1990, 6)
     assert test_hi == pytest.approx(2020, 6)
     assert len(test_ticks) == 4
