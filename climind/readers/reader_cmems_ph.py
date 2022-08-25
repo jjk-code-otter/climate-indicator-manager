@@ -46,9 +46,10 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
 
     data = df.ph.values.tolist()
+    uncertainty = df.ph_uncertainty.data.tolist()
     years = df.time.dt.year.data.tolist()
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesAnnual(years, data, metadata=metadata)
+    return ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)

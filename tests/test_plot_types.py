@@ -16,9 +16,12 @@
 
 import pytest
 
+import matplotlib.pyplot as plt
+
 import climind.data_types.timeseries as ts
 
 import climind.plotters.plot_utils as pu
+import climind.plotters.plot_types as pt
 
 
 @pytest.fixture
@@ -118,3 +121,71 @@ def test_caption(simple_annual_datasets):
 
     assert 'Data are from dataset1' in caption
 
+
+class Tiny:
+    def __init__(self, variable):
+        self.metadata = {'variable': variable}
+
+
+def test_set_yaxis(mocker):
+    mock_axis = mocker.MagicMock()
+
+    mock_axis.get_ylim.return_value = [8.04, 8.15]
+    ds = Tiny('ph')
+    test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(8.04, 6)
+    assert test_hi == pytest.approx(8.15, 6)
+    assert len(test_ticks) == 12
+
+    mock_axis.get_ylim.return_value = [-11., 14.]
+    ds = Tiny('ohc')
+    test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(-10, 6)
+    assert test_hi == pytest.approx(15, 6)
+    assert len(test_ticks) == 5
+
+    mock_axis.get_ylim.return_value = [-5., 75.]
+    ds = Tiny('mhw')
+    test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(0.0, 6)
+    assert test_hi == pytest.approx(80., 6)
+    assert len(test_ticks) == 8
+
+    mock_axis.get_ylim.return_value = [-1230., 3279.]
+    ds = Tiny('greenland')
+    test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(-1000., 6)
+    assert test_hi == pytest.approx(3000., 6)
+    assert len(test_ticks) == 5
+
+
+def test_set_xaxis(mocker):
+    mock_axis = mocker.MagicMock()
+
+    mock_axis.get_xlim.return_value = [1849, 2023]
+    ds = Tiny('ph')
+    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(1860, 6)
+    assert test_hi == pytest.approx(2020, 6)
+    assert len(test_ticks) == 9
+
+    mock_axis.get_xlim.return_value = [1989, 2023]
+    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(1990, 6)
+    assert test_hi == pytest.approx(2020, 6)
+    assert len(test_ticks) == 4
+
+
+def test_add_labels(mocker):
+
+    plt.figure()
+    dataset = Tiny('ohc')
+    dataset.metadata['units'] = 'degC'
+    pt.add_labels(plt.gca(), dataset)
+    assert plt.gca().get_xlabel() == 'Year'
+    assert plt.gca().get_ylabel() == r"$\!^\circ\!$C"
+
+    dataset.metadata['units'] = 'empty'
+    pt.add_labels(plt.gca(), dataset)
+    assert plt.gca().get_xlabel() == 'Year'
+    assert plt.gca().get_ylabel() == r"empty"

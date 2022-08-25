@@ -23,7 +23,7 @@ import matplotlib.patches as patches
 from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
-from typing import List
+from typing import List, Union
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
@@ -73,148 +73,95 @@ STANDARD_PARAMETER_SET = {
 }
 
 
-def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    this_parameter_set = STANDARD_PARAMETER_SET
-    this_parameter_set['grid.color'] = 'dimgrey',
-    this_parameter_set['figure.facecolor'] = 'black',
-    this_parameter_set['text.color'] = 'lightgrey',
-    this_parameter_set['xtick.color'] = 'lightgrey',
-    this_parameter_set['ytick.color'] = 'lightgrey',
-
-    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
-
-    zords = []
-    plt.figure(figsize=[16, 9])
-    for i, ds in enumerate(all_datasets):
-        col = ds.metadata['colour']
-        if col == 'dimgrey':
-            col = '#eeeeee'
-        zord = ds.metadata['zpos']
-        zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['name'], color=col, zorder=zord)
-    ds = all_datasets[-1]
-
-    sns.despine(right=True, top=True, left=True)
-
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
-
-    ylims = plt.gca().get_ylim()
-    ylo = 0.2 * (1 + (ylims[0] // 0.2))
-    yhi = 0.2 * (1 + (ylims[1] // 0.2))
-
-    plt.yticks(np.arange(ylo, yhi, 0.2))
-    plt.xticks(np.arange(1860, 2040, 20))
-
-    plt.tick_params(
-        axis='y',  # changes apply to the x-axis
-        which='both',  # both major and minor ticks are affected
-        left=False,  # ticks along the bottom edge are off
-        right=False,  # ticks along the top edge are off
-        labelright=False)
-
-    plt.legend()
-    # get handles and labels
-    handles, labels = plt.gca().get_legend_handles_labels()
-    # specify order of items in legend
-    order = np.flip(np.argsort(zords))
-    # add legend to plot
-    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
-                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
-                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
-    for line in leg.get_lines():
-        line.set_linewidth(3.0)
-    for item in leg.legendHandles:
-        item.set_visible(False)
-
-    ylim = plt.gca().get_ylim()
-    yloc = ylim[1] + 0.02 * (ylim[1] - ylim[0])
-
-    if ds.metadata['actual']:
-        subtitle = ''
-    else:
-        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
-                   f"{ds.metadata['climatology_end']} average"
-
-    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
-
-    plt.savefig(out_dir / image_filename)
-    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
-    plt.close()
-    return ''
-
-
-def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
-              image_filename: str, title: str) -> str:
+def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]],
+                  dark: bool = False) -> List[int]:
     """
-    Create the standard annual plot
+    Given a list of data sets, plot each one on the provided axis.
 
     Parameters
     ----------
-    out_dir: Path
-        Directory to which the figure will be written
+    axis: Matplotlib axis
+        Set of Matplotlib axes for plotting on
     all_datasets: List[TimeSeriesAnnual]
-        list of datasets to be plotted
-    image_filename: str
-        filename for the figure. Must end in .png
-    title: str
-        title for the plot
+        list of data sets to be plotted on the axes
 
     Returns
     -------
-    str
-        Caption for the figure is returned
+    List[int]
+        List of the zorder of the plotted data sets
     """
-    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-
-    caption = caption_builder(all_datasets)
-
     zords = []
-    plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         col = ds.metadata['colour']
+        if col == 'dimgrey' and dark:
+            col = '#eeeeee'
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=ds.metadata['display_name'], color=col, zorder=zord, linewidth=3)
-    ds = all_datasets[-1]
 
-    sns.despine(right=True, top=True, left=True)
+        if isinstance(ds, TimeSeriesAnnual):
+            x_values = ds.df['year']
+            linewidth = 3
+        elif isinstance(ds, TimeSeriesMonthly):
+            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12.
+            linewidth = 1
+        else:
+            raise TypeError('Wrong kind of object')
 
-    plot_units = ds.metadata['units']
+        axis.plot(x_values, ds.df['data'], label=ds.metadata['display_name'],
+                  color=col, zorder=zord, linewidth=linewidth)
+
+        if 'uncertainty' in ds.df.columns:
+            axis.fill_between(x_values,
+                              ds.df['data'] + ds.df['uncertainty'],
+                              ds.df['data'] - ds.df['uncertainty'],
+                              color=col, alpha=0.1)
+
+    return zords
+
+
+def add_labels(axis, dataset):
+    plot_units = dataset.metadata['units']
     if plot_units in FANCY_UNITS:
         plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=90, labelpad=10)
+    axis.set_xlabel('Year')
+    axis.set_ylabel(plot_units, rotation=90, labelpad=10)
+    return plot_units
 
-    ylims = plt.gca().get_ylim()
+
+def set_yaxis(axis, dataset):
+    ylims = axis.get_ylim()
     ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
 
-    if ds.metadata['variable'] in ['ohc', 'glacier']:
+    if dataset.metadata['variable'] in ['ohc', 'glacier', 'n2o']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
-    if ds.metadata['variable'] == 'ph':
+    if dataset.metadata['variable'] == 'ph':
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.01)
 
-    if ds.metadata['variable'] in ['mhw', 'mcs']:
+    if dataset.metadata['variable'] in ['mhw', 'mcs', 'co2', 'ch4', 'sealevel']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 
-    if ds.metadata['variable'] in ['greenland']:
+    if dataset.metadata['variable'] in ['ch4']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.)
 
-    xlims = plt.gca().get_xlim()
+    if dataset.metadata['variable'] in ['greenland', 'antarctica']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1000.)
+
+    return ylo, yhi, yticks
+
+
+def set_xaxis(axis, dataset):
+    xlims = axis.get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
     if len(xticks) < 3:
         xlo, xhi, xticks = set_lo_hi_ticks(xlims, 10.)
 
-    plt.yticks(yticks)
-    plt.xticks(xticks)
+    return xlo, xhi, xticks
 
+
+def after_plot(zords, ds, title):
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
         which='both',  # both major and minor ticks are affected
@@ -252,6 +199,78 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
 
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+
+
+def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+    this_parameter_set = STANDARD_PARAMETER_SET
+    this_parameter_set['grid.color'] = 'dimgrey',
+    this_parameter_set['figure.facecolor'] = 'black',
+    this_parameter_set['text.color'] = 'lightgrey',
+    this_parameter_set['xtick.color'] = 'lightgrey',
+    this_parameter_set['ytick.color'] = 'lightgrey',
+
+    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
+
+    plt.figure(figsize=[16, 9])
+    zords = add_data_sets(plt.gca(), all_datasets, dark=True)
+    ds = all_datasets[-1]
+
+    sns.despine(right=True, top=True, left=True)
+
+    add_labels(plt.gca(), ds)
+
+    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    after_plot(zords, ds, title)
+
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.close()
+    return ''
+
+
+def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
+              image_filename: str, title: str) -> str:
+    """
+    Create the standard annual plot
+
+    Parameters
+    ----------
+    out_dir: Path
+        Directory to which the figure will be written
+    all_datasets: List[TimeSeriesAnnual]
+        list of datasets to be plotted
+    image_filename: str
+        filename for the figure. Must end in .png
+    title: str
+        title for the plot
+
+    Returns
+    -------
+    str
+        Caption for the figure is returned
+    """
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    caption = caption_builder(all_datasets)
+
+    plt.figure(figsize=[16, 9])
+    zords = add_data_sets(plt.gca(), all_datasets)
+    ds = all_datasets[-1]
+
+    sns.despine(right=True, top=True, left=True)
+
+    add_labels(plt.gca(), ds)
+
+    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    after_plot(zords, ds, title)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -300,18 +319,24 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     ds = all_datasets[-1]
     sns.despine(right=True, top=True, left=True)
 
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=0, labelpad=10)
+    add_labels(plt.gca(), ds)
 
-    ylims = plt.gca().get_ylim()
-    ylo = 0.2 * (1 + (ylims[0] // 0.2))
-    yhi = 0.2 * (1 + (ylims[1] // 0.2))
+    # plot_units = ds.metadata['units']
+    # if plot_units in FANCY_UNITS:
+    #     plot_units = FANCY_UNITS[plot_units]
+    # plt.xlabel('Year')
+    # plt.ylabel(plot_units, rotation=0, labelpad=10)
 
-    plt.yticks(np.arange(ylo, yhi, 0.2))
-    plt.xticks(np.arange(1860, 2040, 20))
+    # ylims = plt.gca().get_ylim()
+    # ylo = 0.2 * (1 + (ylims[0] // 0.2))
+    # yhi = 0.2 * (1 + (ylims[1] // 0.2))
+    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    # plt.yticks(np.arange(ylo, yhi, 0.2))
+    # plt.xticks(np.arange(1860, 2040, 20))
 
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
@@ -376,74 +401,59 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
 
     caption = caption_builder(all_datasets)
 
-    zords = []
     plt.figure(figsize=[16, 9])
-    for i, ds in enumerate(all_datasets):
-        col = ds.metadata['colour']
-        zord = ds.metadata['zpos']
-        zords.append(zord)
-        plt.plot(ds.df['year'] + (ds.df['month'] - 1) / 12., ds.df['data'],
-                 label=ds.metadata['display_name'], color=col,
-                 zorder=zord)
+    zords = add_data_sets(plt.gca(), all_datasets)
+
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
 
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=90, labelpad=23)
+    add_labels(plt.gca(), ds)
 
-    ylims = plt.gca().get_ylim()
-    if ds.metadata['variable'] in ['tas', 'lsat', 'sst']:
-        ylo = 0.2 * (1 + (ylims[0] // 0.2))
-        yhi = 0.2 * (1 + (ylims[1] // 0.2))
-        plt.yticks(np.arange(ylo, yhi, 0.2))
-        plt.xticks(np.arange(2014, 2023, 1))
-    elif ds.metadata['variable'] == 'co2':
-        ylo = 10. * (1 + (ylims[0] // 10.))
-        yhi = 10. * (1 + (ylims[1] // 10.))
-        plt.yticks(np.arange(ylo, yhi, 10.))
-        plt.xticks(np.arange(1980, 2023, 10))
+    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
+    plt.yticks(yticks)
+    plt.xticks(xticks)
 
-    plt.tick_params(
-        axis='y',  # changes apply to the x-axis
-        which='both',  # both major and minor ticks are affected
-        left=False,  # ticks along the bottom edge are off
-        right=False,  # ticks along the top edge are off
-        labelright=False)
+    after_plot(zords, ds, title)
 
-    plt.legend()
-    # get handles and labels
-    handles, labels = plt.gca().get_legend_handles_labels()
-    # specify order of items in legend
-    order = np.flip(np.argsort(zords))
-    # add legend to plot
-    loc = "upper left"
-    bbox_to_anchor = (0.02, 0.96)
-    if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
-        loc = "upper right"
-        bbox_to_anchor = (0.96, 0.96)
-    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
-                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
-                     handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
-    for line in leg.get_lines():
-        line.set_linewidth(3.0)
-    for item in leg.legendHandles:
-        item.set_visible(False)
-
-    ylim = plt.gca().get_ylim()
-    yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
-
-    if ds.metadata['actual']:
-        subtitle = ''
-    else:
-        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
-                   f"{ds.metadata['climatology_end']} average"
-
-    plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+    # plt.tick_params(
+    #     axis='y',  # changes apply to the x-axis
+    #     which='both',  # both major and minor ticks are affected
+    #     left=False,  # ticks along the bottom edge are off
+    #     right=False,  # ticks along the top edge are off
+    #     labelright=False)
+    #
+    # plt.legend()
+    # # get handles and labels
+    # handles, labels = plt.gca().get_legend_handles_labels()
+    # # specify order of items in legend
+    # order = np.flip(np.argsort(zords))
+    # # add legend to plot
+    # loc = "upper left"
+    # bbox_to_anchor = (0.02, 0.96)
+    # if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
+    #     loc = "upper right"
+    #     bbox_to_anchor = (0.96, 0.96)
+    # leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
+    #                  frameon=False, prop={'size': 20}, labelcolor='linecolor',
+    #                  handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
+    # for line in leg.get_lines():
+    #     line.set_linewidth(3.0)
+    # for item in leg.legendHandles:
+    #     item.set_visible(False)
+    #
+    # ylim = plt.gca().get_ylim()
+    # yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
+    #
+    # if ds.metadata['actual']:
+    #     subtitle = ''
+    # else:
+    #     subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
+    #                f"{ds.metadata['climatology_end']} average"
+    #
+    # plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
+    # plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -588,20 +598,10 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     sns.despine(right=True, top=True, left=True)
 
-    plot_units = ds.metadata['units']
-    if plot_units in FANCY_UNITS:
-        plot_units = FANCY_UNITS[plot_units]
-    plt.xlabel('Year')
-    plt.ylabel(plot_units, rotation=90, labelpad=10)
+    plot_units = add_labels(plt.gca(), ds)
 
-    ylims = plt.gca().get_ylim()
-    ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
-    if len(yticks) > 10:
-        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
-
-    xlims = plt.gca().get_xlim()
-    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
-
+    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    xlo, xhi, xticks = set_xaxis(plt.gca(), ds)
     plt.yticks(yticks)
     plt.xticks(xticks)
 

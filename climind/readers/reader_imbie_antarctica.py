@@ -32,7 +32,8 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
         first_diff = False
 
     df = pd.read_excel(filename[0])
-    df = df.rename(columns={'Cumulative ice mass change (Gt)': 'data'})
+    df = df.rename(columns={'Cumulative ice mass change (Gt)': 'data',
+                            'Cumulative ice mass change uncertainty (Gt)': 'uncertainty'})
 
     # Clip out missing data, which constitute quite a lof the of series
     df = df[~np.isnan(df['data'])]
@@ -50,11 +51,12 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
         df['data'] = df.cumsum()['data']
 
     mass_balance = df['data'].tolist()
+    uncertainty = df['uncertainty'].tolist()
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata, uncertainty=uncertainty)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):

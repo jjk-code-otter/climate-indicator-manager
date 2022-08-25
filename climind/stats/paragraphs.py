@@ -340,7 +340,8 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
             first_year, last_year = ds.get_first_and_last_year()
             rank = ds.get_rank_from_year(last_year)
             value = ds.get_value_from_year(last_year)
-            tb[variable] = [rank, value]
+            uncertainty = ds.get_uncertainty_from_year(last_year)
+            tb[variable] = [rank, value, uncertainty]
 
     if last_year == 9999:
         raise RuntimeError("No greenhouse gas data sets found")
@@ -348,20 +349,26 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     if tb['co2'][0] == 1 and tb['ch4'][0] == 1 and tb['n2o'][0] == 1:
         out_text = f"In {last_year}, greenhouse gas mole fractions reached new highs, " \
                    f"with globally averaged surface mole fractions of " \
-                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} &plusmn; 0.2 parts per million (ppm), " \
-                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} &plusmn; 2 parts per billion (ppb) and " \
-                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} &plusmn; 0.1 ppb, respectively " \
+                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} " \
+                   f"&plusmn; {tb['co2'][2]:.1f} parts per million (ppm), " \
+                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} " \
+                   f"&plusmn; {tb['ch4'][2]:.0f} parts per billion (ppb) and " \
+                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} " \
+                   f"&plusmn; {tb['n2o'][2]:.1f} ppb, respectively " \
                    f"{100. * tb['co2'][1] / cl['co2']:.0f}%, " \
                    f"{100. * tb['ch4'][1] / cl['ch4']:.0f}% and " \
                    f"{100. * tb['n2o'][1] / cl['n2o']:.0f}% of pre-industrial (1750) levels."
 
     else:
         out_text = f"In {last_year}, globally averaged greenhouse gas mole fractions were: " \
-                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} &plusmn; 0.2 parts per million (ppm), " \
+                   f"carbon dioxide (CO<sub>2</sub>) at {tb['co2'][1]:.1f} " \
+                   f"&plusmn; {tb['co2'][2]:.1f} parts per million (ppm), " \
                    f"{tb['co2'][0]} highest on record, " \
-                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} &plusmn; 2 parts per billion (ppb)," \
+                   f"methane (CH<sub>4</sub>) at {tb['ch4'][1]:.0f} " \
+                   f"&plusmn; {tb['ch4'][2]:.0f} parts per billion (ppb)," \
                    f"{tb['ch4'][0]} highest on record, and " \
-                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} &plusmn; 0.1 ppb, " \
+                   f"nitrous oxide (N<sub>2</sub>O) at {tb['n2o'][1]:.1f} " \
+                   f"&plusmn; {tb['n2o'][2]:.1f} ppb, " \
                    f"{tb['n2o'][0]} highest on record, respectively " \
                    f"{100. * tb['co2'][1] / cl['co2']:.0f}%, " \
                    f"{100. * tb['ch4'][1] / cl['ch4']:.0f}% and " \

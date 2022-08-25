@@ -38,6 +38,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     dates = []
     years = []
     months = []
+    uncertainties = []
     data = []
 
     with open(filename[0], 'r') as in_file:
@@ -56,6 +57,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
             years.append(year_int)
             months.append(month)
             data.append(float(columns[1]))
+            uncertainties.append(float(columns[2]))
 
     dates = pd.to_datetime(dates, format='%Y %j')
     years2 = dates.year.tolist()
@@ -71,7 +73,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years2, months2, data, metadata=metadata)
+    return ts.TimeSeriesMonthly(years2, months2, data, metadata=metadata, uncertainty=uncertainties)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):

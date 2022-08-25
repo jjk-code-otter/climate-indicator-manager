@@ -61,6 +61,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
+    uncertainty = []
 
     with open(filename[0], 'r') as f:
         f.readline()
@@ -73,13 +74,15 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
             months.append(int(month))
             if columns[1] != '':
                 anomalies.append(float(columns[1]))
+                uncertainty.append((float(columns[3])-float(columns[2]))/2.)
             else:
                 anomalies.append(np.nan)
+                uncertainty.append(np.nan)
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainty)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
