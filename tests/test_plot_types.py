@@ -77,7 +77,7 @@ def test_calculate_ranks(simple_annual_datasets):
 
 def test_calculate_ranks_missing_year(simple_annual_datasets):
     with pytest.raises(ValueError):
-        min_rank, max_rank = pu.calculate_ranks(simple_annual_datasets, 2029)
+        _, _ = pu.calculate_ranks(simple_annual_datasets, 2029)
 
 
 def test_calculate_values(simple_annual_datasets):
@@ -163,7 +163,6 @@ def test_set_xaxis(mocker):
     mock_axis = mocker.MagicMock()
 
     mock_axis.get_xlim.return_value = [1849, 2023]
-    ds = Tiny('ph')
     test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis)
     assert test_lo == pytest.approx(1860, 6)
     assert test_hi == pytest.approx(2020, 6)
@@ -176,7 +175,7 @@ def test_set_xaxis(mocker):
     assert len(test_ticks) == 4
 
 
-def test_add_labels(mocker):
+def test_add_labels():
 
     plt.figure()
     dataset = Tiny('ohc')
