@@ -13,8 +13,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from typing import Optional, Tuple, List
 
+from typing import Optional, Tuple, List
 import pandas as pd
 import logging
 import copy
@@ -64,7 +64,8 @@ def log_activity(in_function):
 
 class TimeSeriesMonthly:
 
-    def __init__(self, years: list, months: list, data: list, metadata=None):
+    def __init__(self, years: list, months: list, data: list, metadata: CombinedMetadata = None,
+                 uncertainty: Optional[list] = None):
         """
         Monthly time series class
 
@@ -78,6 +79,7 @@ class TimeSeriesMonthly:
             List of data values
         metadata : CombinedMetadata
             CombinedMetadata object containing the metadata
+        uncertainty: Optional[list]
 
         Attributes
         ----------
@@ -87,21 +89,29 @@ class TimeSeriesMonthly:
             Dictionary containing metadata. The only guaranteed entry is "history"
         """
         dico = {'year': years, 'month': months, 'data': data}
+        if uncertainty is not None:
+            dico['uncertainty'] = uncertainty
+
         self.df = pd.DataFrame(dico)
         if metadata is None:
             self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
 
-    def __str__(self):
+    def __str__(self) -> str:
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
         return out_str
 
     @log_activity
-    def make_annual(self, cumulative=False):
+    def make_annual(self, cumulative: bool = False):
         """
         Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual average is
         calculated from the mean of monthly values
+
+        Parameters
+        ----------
+        cumulative : bool
+            Set to true to sum rather than average the monthly values to get the annual value.
 
         Returns
         -------
@@ -226,6 +236,35 @@ class TimeSeriesMonthly:
             out_value = None
         elif len(selection) == 1:
             out_value = selection['data'].values[0]
+        else:
+            raise KeyError(f"Selection is not unique {year} {month}")
+
+        return out_value
+
+    def get_uncertainty(self, year: int, month: int) -> Optional[float]:
+        """
+        Get the current uncertainty for a particular year and month
+
+        Parameters
+        ----------
+        year: int
+            Year requested
+        month: int
+            Month requested/
+
+        Returns
+        -------
+        float
+            Value for that year and month or None if it doesn't exist
+        """
+
+        if 'uncertainty' not in self.df.columns:
+            return None
+        selection = self.df[(self.df['year'] == year) & (self.df['month'] == month)]
+        if len(selection) == 0:
+            out_value = None
+        elif len(selection) == 1:
+            out_value = selection['uncertainty'].values[0]
         else:
             raise KeyError(f"Selection is not unique {year} {month}")
 
@@ -364,9 +403,10 @@ class TimeSeriesMonthly:
         last_year = self.df['year'].tolist()[-1]
         return first_year, last_year
 
+
 class TimeSeriesAnnual:
 
-    def __init__(self, years: list, data: list, metadata=None):
+    def __init__(self, years: list, data: list, metadata=None, uncertainty: Optional[list] = None):
         """
 
         Parameters
@@ -386,6 +426,8 @@ class TimeSeriesAnnual:
             Dictionary containing the metadata. The only guaranteed entry is 'history'
         """
         dico = {'year': years, 'data': data}
+        if uncertainty is not None:
+            dico['uncertainty'] = uncertainty
         self.df = pd.DataFrame(dico)
         if metadata is None:
             self.metadata = {"name": "", "history": []}
@@ -397,7 +439,7 @@ class TimeSeriesAnnual:
         return out_str
 
     @staticmethod
-    def make_from_df(df: pd.DataFrame, metadata: dict):
+    def make_from_df(df: pd.DataFrame, metadata: CombinedMetadata):
         """
         Create a TimeSeriesAnnual from a pandas data frame.
 
@@ -414,7 +456,11 @@ class TimeSeriesAnnual:
         """
         years = df['year'].tolist()
         data = df['data'].tolist()
-        return TimeSeriesAnnual(years, data, metadata)
+        if 'uncertainty' in df.columns:
+            uncertainty = df['uncertainty'].tolist()
+            return TimeSeriesAnnual(years, data, metadata, uncertainty=uncertainty)
+        else:
+            return TimeSeriesAnnual(years, data, metadata)
 
     @log_activity
     def manually_set_baseline(self, y1: int, y2: int):
@@ -508,6 +554,28 @@ class TimeSeriesAnnual:
             Or None if year is not in the data set
         """
         val = self.df[self.df['year'] == year]['data']
+        if len(val) == 0:
+            return None
+        return val.iloc[0]
+
+    @log_activity
+    def get_uncertainty_from_year(self, year: int) -> Optional[float]:
+        """
+        Get the data value for a specified year.
+
+        Parameters
+        ----------
+        year : int
+            Year for which a value is desired
+
+        Returns
+        -------
+        float
+            Or None if year is not in the data set
+        """
+        if 'uncertainty' not in self.df.columns:
+            return None
+        val = self.df[self.df['year'] == year]['uncertainty']
         if len(val) == 0:
             return None
         return val.iloc[0]

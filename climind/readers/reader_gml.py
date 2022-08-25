@@ -28,6 +28,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
+    uncertainty = []
 
     with open(filename[0], 'r') as f:
         for line in f:
@@ -38,8 +39,9 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
                 years.append(int(year))
                 months.append(int(month))
                 anomalies.append(float(columns[6]))
+                uncertainty.append(float(columns[7]))
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainty)

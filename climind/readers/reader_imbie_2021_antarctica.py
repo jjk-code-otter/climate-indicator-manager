@@ -19,7 +19,6 @@ import numpy as np
 from typing import List
 
 import climind.data_types.timeseries as ts
-import copy
 
 from climind.data_manager.metadata import CombinedMetadata
 
@@ -39,6 +38,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
         years = []
         months = []
         mass_balance = []
+        uncertainty = []
 
         for line in in_file:
             columns = line.split(',')
@@ -49,17 +49,20 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
 
             if not first_diff:
                 data = float(columns[3])
+                unc = float(columns[4])
             else:
                 data = float(columns[1])
+                unc = float(columns[2])
 
             years.append(year_int)
             months.append(month)
             mass_balance.append(data)
+            uncertainty.append(unc)
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata, uncertainty=uncertainty)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):

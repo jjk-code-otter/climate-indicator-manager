@@ -133,6 +133,7 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
+    uncertainties = []
 
     with open(filename, 'r') as f:
         for line in f:
@@ -140,11 +141,12 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
             years.append(int(columns[0]))
             months.append(int(columns[1]))
             anomalies.append(float(columns[2]))
+            uncertainties.append(np.sqrt(float(columns[3])))
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
 
 def read_annual_ts(filename: str, metadata: CombinedMetadata):
@@ -163,14 +165,16 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
     """
     years = []
     anomalies = []
+    uncertainties = []
 
     with open(filename, 'r') as f:
         for line in f:
             columns = line.split()
             years.append(int(columns[0]))
             anomalies.append(float(columns[1]))
+            uncertainties.append(np.sqrt(float(columns[2])))
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)
+    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata, uncertainty=uncertainties)

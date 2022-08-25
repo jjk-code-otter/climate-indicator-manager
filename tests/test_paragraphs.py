@@ -259,14 +259,15 @@ def test_greenhouse_gas_paragraph_all_record(mocker):
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 1
         m.get_value_from_year.return_value = 765.432
+        m.get_uncertainty_from_year.return_value = 2.1
 
         all_datasets.append(m)
 
     test_text = pg.co2_paragraph(all_datasets, 2021)
 
-    assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
+    assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 2.1' in test_text
     assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
-    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.1' in test_text
+    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 2.1' in test_text
     assert 'In 2020, greenhouse gas mole fractions reached new highs,' in test_text
 
 
@@ -281,15 +282,16 @@ def test_greenhouse_gas_paragraph_not_all_record(mocker):
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 2
         m.get_value_from_year.return_value = 765.432
+        m.get_uncertainty_from_year.return_value = 3.3
 
         all_datasets.append(m)
 
     test_text = pg.co2_paragraph(all_datasets, 2021)
 
     assert 'In 2020, globally averaged greenhouse gas mole fractions were' in test_text
-    assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
-    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
-    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.1' in test_text
+    assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 3.3' in test_text
+    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 3' in test_text
+    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 3.3' in test_text
 
 
 def test_greenhouse_gas_paragraph_no_datasets(mocker):
@@ -326,6 +328,7 @@ def prepared_datasets(mocker):
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 1
         m.get_value_from_year.return_value = 765.432
+        m.get_uncertainty_from_year.return_value = 0.2
 
         all_datasets.append(m)
 
@@ -340,14 +343,15 @@ def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker, prepared
     m.get_first_and_last_year.return_value = (1980, 2020)
     m.get_rank_from_year.return_value = 2
     m.get_value_from_year.side_effect = [4.0, 5.0]
+    m.get_uncertainty_from_year.return_value = 0.2
 
     prepared_datasets.append(m)
 
     test_text = pg.co2_paragraph(prepared_datasets, 2021)
 
     assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
-    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
-    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.1' in test_text
+    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 0' in test_text
+    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.2' in test_text
     assert 'In 2020, greenhouse gas mole fractions reached new highs,' in test_text
 
     assert 'Real-time data from specific locations' not in test_text
@@ -361,14 +365,15 @@ def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker, prepar
     m.get_first_and_last_year.return_value = (1980, 2020)
     m.get_rank_from_year.return_value = 1
     m.get_value_from_year.side_effect = [6.0, 5.0]
+    m.get_uncertainty_from_year.return_value = 0.2
 
     prepared_datasets.append(m)
 
     test_text = pg.co2_paragraph(prepared_datasets, 2021)
 
     assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 0.2' in test_text
-    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
-    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.1' in test_text
+    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 0' in test_text
+    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 0.2' in test_text
     assert 'In 2020, greenhouse gas mole fractions reached new highs,' in test_text
 
     assert 'Real-time data from specific locations' in test_text

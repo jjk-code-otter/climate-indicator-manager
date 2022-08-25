@@ -45,6 +45,30 @@ def simple_monthly():
 
 
 @pytest.fixture
+def uncertainty_monthly():
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    years = []
+    months = []
+    anomalies = []
+    uncertainties = []
+
+    for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+        years.append(y)
+        months.append(m)
+        anomalies.append(float(y))
+        uncertainties.append(0.3)
+
+    return ts.TimeSeriesMonthly(years, months, anomalies,
+                                metadata=None, uncertainty=uncertainties)
+
+
+@pytest.fixture
 def monthly_data_is_month():
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
@@ -83,6 +107,26 @@ def simple_annual():
     return ts.TimeSeriesAnnual(years, anoms)
 
 
+@pytest.fixture
+def uncertainty_annual():
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    years = []
+    anoms = []
+    uncertainties = []
+
+    for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y) / 1000.)
+        uncertainties.append(0.77)
+
+    return ts.TimeSeriesAnnual(years, anoms, metadata=None, uncertainty=uncertainties)
+
+
 def test_creation_monthly():
     f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
 
@@ -100,6 +144,11 @@ def test_creation_monthly_with_metadata():
     assert isinstance(f, ts.TimeSeriesMonthly)
     assert f.metadata['space_resolution'] == 999
     assert f.df['year'][0] == 1999
+
+
+def test_creation_monthly_with_uncertainty(uncertainty_monthly):
+    assert 'uncertainty' in uncertainty_monthly.df.columns
+    assert uncertainty_monthly.df['uncertainty'][0] == 0.3
 
 
 def test_make_annual():
@@ -163,8 +212,6 @@ def test_select_year_range_start_before(simple_monthly):
     assert test_ts.df['year'][len(test_ts.df) - 1] == 1981
 
 
-# Annual
-
 def test_manual_baseline_monthly(simple_monthly):
     simple_monthly.manually_set_baseline(2001, 2030)
 
@@ -178,14 +225,31 @@ def test_get_value_monthly(simple_monthly):
             assert simple_monthly.get_value(y, m) == y
 
 
-def test_get_value_monthly_non_existent_month(simple_monthly):
+def test_get_uncertainty_monthly(uncertainty_monthly):
+    for y in range(1850, 2023):
+        for m in range(1, 13):
+            assert uncertainty_monthly.get_uncertainty(y, m) == 0.3
+
+
+def test_get_uncertainty_monthly_no_uncertainty_in_ts(simple_monthly):
+    for y in range(1850, 2023):
+        for m in range(1, 13):
+            assert simple_monthly.get_uncertainty(y, m) is None
+
+
+def test_get_value_monthly_non_existent_month(simple_monthly, uncertainty_monthly):
     assert simple_monthly.get_value(2072, 3) is None
+    assert uncertainty_monthly.get_uncertainty(2072, 3) is None
 
 
-def test_get_value_monthly_with_duplicate_raises_key_error(simple_monthly):
+def test_get_value_monthly_with_duplicate_raises_key_error(simple_monthly, uncertainty_monthly):
     simple_monthly.df['month'][1] = 1
     with pytest.raises(KeyError):
         _ = simple_monthly.get_value(1850, 1)
+
+    uncertainty_monthly.df['month'][1] = 1
+    with pytest.raises(KeyError):
+        _ = uncertainty_monthly.get_uncertainty(1850, 1)
 
 
 def test_add_offset_monthly(simple_monthly):
@@ -201,6 +265,18 @@ def test_zero_on_month(simple_monthly):
 
 
 # Annual tests
+
+def test_make_from_df(uncertainty_annual):
+    annual = ts.TimeSeriesAnnual.make_from_df(uncertainty_annual.df, uncertainty_annual.metadata)
+    assert isinstance(annual, ts.TimeSeriesAnnual)
+    assert 'uncertainty' in annual.df.columns
+    assert annual.df['uncertainty'][0] == 0.77
+
+
+def test_annual_with_uncertainty(uncertainty_annual):
+    assert 'uncertainty' in uncertainty_annual.df.columns
+    assert uncertainty_annual.df['uncertainty'][0] == 0.77
+
 
 def test_rebaseline_annual(simple_monthly):
     annual = simple_monthly.make_annual()
@@ -230,8 +306,23 @@ def test_get_value_from_year(simple_annual):
     assert val == 2022 / 1000.
 
 
+def test_get_uncertainty_from_year(uncertainty_annual):
+    val = uncertainty_annual.get_uncertainty_from_year(2022)
+    assert val == 0.77
+
+
+def test_get_uncertainty_from_ts_with_no_uncertainty(simple_annual):
+    val = simple_annual.get_uncertainty_from_year(2022)
+    assert val is None
+
+
 def test_get_value_from_year_no_match(simple_annual):
     val = simple_annual.get_value_from_year(2055)
+    assert val is None
+
+
+def test_get_uncertainty_from_year_no_match(uncertainty_annual):
+    val = uncertainty_annual.get_uncertainty_from_year(2055)
     assert val is None
 
 
