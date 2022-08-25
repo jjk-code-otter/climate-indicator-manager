@@ -13,7 +13,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import copy
 
+import numpy as np
 import climind.plotters.plot_utils as pu
 from typing import Union, List
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
@@ -430,5 +432,40 @@ def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual
 
     if not mcs_check and not mhw_check:
         raise RuntimeError("One of MHW or MCS data not found in the data set list")
+
+    return out_text
+
+
+def greenland_ice_sheet(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+    summary = []
+    for ds in all_datasets:
+        this_year = ds.get_value(year, 8)
+        last_year = ds.get_value(year - 1, 8)
+        if this_year is not None and last_year is not None:
+            this_difference = this_year - last_year
+            ds_copy = copy.deepcopy(ds)
+            subset = ds_copy.select_year_range(2005, year - 1)
+            comparison_set = []
+            for y in range(2006, year):
+                temp_this_year = subset.get_value(y, 8)
+                temp_last_year = subset.get_value(y - 1, 8)
+                # need to catch nones because of the gap in GRACE/GRACE-FO
+                if temp_this_year is not None and temp_last_year is not None:
+                    temp_difference = temp_this_year - temp_last_year
+                    comparison_set.append(temp_difference)
+
+            mean_change = np.mean(comparison_set)
+            summary.append([ds.metadata['display_name'], this_difference, mean_change])
+
+    out_text = f"There are {len(summary)} data sets of Greenland mass balance. "
+    for entry in summary:
+        out_text += f"In the {entry[0]} data set, the mass change between 1 September {year - 1} and " \
+                    f"31 August {year} was {entry[1]:.2f}Gt, which is "
+        if entry[2] > entry[1] and entry[1] < 0:
+            out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+        elif entry[2] < entry[1] and entry[1] < 0:
+            out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+        elif entry[1] > 0:
+            pass
 
     return out_text

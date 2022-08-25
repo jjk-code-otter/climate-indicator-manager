@@ -218,6 +218,7 @@ class Card(WebComponent):
         pro_metadata = []
         for ds in self.datasets:
             pro_metadata.append({'name': ds.metadata['name'],
+                                 'display_name': ds.metadata['display_name'],
                                  'url': ds.metadata['url'],
                                  'citation': ds.metadata['citation'],
                                  'data_citation': ds.metadata['data_citation'],

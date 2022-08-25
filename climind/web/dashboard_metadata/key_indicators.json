@@ -307,6 +307,11 @@
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing": [],
           "writing": {"function": "glacier_paragraph"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "processing": [],
+          "writing": {"function": "greenland_ice_sheet"}
         }
       ]
     }
