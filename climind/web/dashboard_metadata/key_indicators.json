@@ -4,6 +4,7 @@
     {
       "id": "dashboard",
       "name": "Key Climate Indicators",
+      "descriptor": "key_indicator.html",
       "template": "front_page",
       "cards": [
         {
@@ -78,6 +79,7 @@
     {
       "id": "greenhouse_gases",
       "name": "Greenhouse gases",
+      "descriptor": "greenhouse_gases.html",
       "template": "topic_page",
       "cards": [
         {
@@ -110,6 +112,7 @@
     {
       "id": "global_mean_temperature",
       "name": "Global mean temperature",
+      "descriptor": "global_temperature.html",
       "template": "topic_page",
       "cards": [
         {
@@ -160,6 +163,7 @@
     {
       "id": "ocean_heat_content",
       "name": "Ocean Indicators",
+      "descriptor": "ocean_indicators.html",
       "template": "topic_page",
       "cards": [
         {
@@ -214,6 +218,7 @@
     {
       "id": "sea_level",
       "name": "Sea Level",
+      "descriptor": "ocean_indicators.html",
       "template": "topic_page",
       "cards": [
         {
@@ -246,6 +251,7 @@
     {
       "id": "sea_ice_extent",
       "name": "Sea ice extent",
+      "descriptor": "sea_ice_extent.html",
       "template": "topic_page",
       "cards": [
         {
@@ -278,8 +284,9 @@
     {
       "id": "glaciers_and_ice_sheets",
       "name": "Glaciers and Ice Sheets",
+      "descriptor": "glaciers_and_ice_sheets.html",
       "template": "topic_page",
-       "cards": [
+      "cards": [
         {
           "link_to":  null, "title": "Glacier mass balance",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},

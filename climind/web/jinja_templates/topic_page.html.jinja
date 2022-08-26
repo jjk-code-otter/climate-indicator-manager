@@ -33,6 +33,7 @@ p {
   border-radius: 5px;
 }
 
+
 </style>
 <body>
 
@@ -71,6 +72,20 @@ p {
         {% endfor %}
 
     </div>
+
+    {% if page_meta.descriptor %}
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>Introduction</h1>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            {% include page_meta.descriptor %}
+        </div>
+    </div>
+    {% endif %}
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
