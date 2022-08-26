@@ -116,7 +116,8 @@ def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
 
     for ds in all_datasets:
         value = ds.df[ds.df['year'] == y1]['data']
-        all_ranks.append(value.values[0])
+        if len(value) > 0:
+            all_ranks.append(value.values[0])
 
     # calculate the mean trend and max and min trends
     mean_rank = float(np.mean(all_ranks))

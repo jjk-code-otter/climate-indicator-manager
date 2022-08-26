@@ -78,5 +78,5 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     monthly = read_monthly_ts(filename, metadata, **kwargs)
-    annual = monthly.make_annual(cumulative=True)
+    annual = monthly.make_annual_by_selecting_month(8)
     return annual

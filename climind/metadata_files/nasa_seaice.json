@@ -1,0 +1,33 @@
+{
+  "name": "NASA GSFC",
+  "display_name": "NASA Cavalieri et al.",
+  "version": "",
+  "variable": "arctic_ice_ignore",
+  "units": "millionkm2",
+  "citation": ["Cavalieri, D. J., C. L. Parkinson, P. Gloersen, J. C. Comiso, and H. J. Zwally, 1999: Deriving long-term time series of sea ice cover from satellite passive-microwave multisensor data sets, Journal of Geophysical Research, 104(C7), 15,803-15,814.",
+               "Cavalieri, D. J., C. L. Parkinson, N. DiGirolamo, and A. Ivanoff, Intersensor calibration between F13 SSMI and F17 SSMIS for global sea ice data records, IEEE Geosci. Remote Sensing Letters, 9 (2), 233-236, 10.1109/LGRS.2011.2166754, March 2012.",
+               "Cavalieri, D. J., and C. L. Parkinson, 2012: Arctic sea ice variability and trends, 1979-2010, The Cryosphere, 6, 881-889, doi:10.5194/tc-6-881-2012.",
+               "Parkinson, C. L., D. J. Cavalieri, P. Gloersen, H. J. Zwally, and J. C. Comiso, 1999: Arctic sea ice extents, areas, and trends, 1978-1996, Journal of Geophysical Research, 104(C9), 20,837-20,856."
+  ],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://earth.gsfc.nasa.gov/sites/default/files/neptune/files/NH_IceExt_Monthly_1978-2017.txt"],
+      "filename": ["NH_IceExt_Monthly_1978-2017.txt"],
+	  "type": "timeseries",
+      "long_name": "Arctic sea-ice extent",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gsfc",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

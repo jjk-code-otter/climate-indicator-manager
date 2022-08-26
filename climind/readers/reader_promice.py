@@ -84,6 +84,14 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
             years.append(int(columns[0]))
             mass_balance.append(float(columns[1]))
 
+    if not first_diff:
+        dico = {'year': years, 'data': mass_balance}
+        df = pd.DataFrame(dico)
+        mdf_year = df['year'].astype(int)
+        mdf_data = df['data'].cumsum()
+        years = mdf_year.values.tolist()
+        mass_balance = mdf_data.values.tolist()
+
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
