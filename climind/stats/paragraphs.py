@@ -443,7 +443,7 @@ def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual
     return out_text
 
 
-def greenland_ice_sheet(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+def greenland_ice_sheet_monthly(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
     summary = []
     for ds in all_datasets:
         this_year = ds.get_value(year, 8)
@@ -474,5 +474,40 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesMonthly], year: int) -> str
             out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
         elif entry[1] > 0:
             pass
+
+    return out_text
+
+
+def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    summary = []
+    for ds in all_datasets:
+        this_year = ds.get_value_from_year(year)
+        last_year = ds.get_value_from_year(year - 1)
+        if this_year is not None and last_year is not None:
+            this_difference = this_year - last_year
+            ds_copy = copy.deepcopy(ds)
+            subset = ds_copy.select_year_range(2005, year - 1)
+            comparison_set = []
+            for y in range(2006, year):
+                temp_this_year = subset.get_value_from_year(y)
+                temp_last_year = subset.get_value_from_year(y - 1)
+                # need to catch nones because of the gap in GRACE/GRACE-FO
+                if temp_this_year is not None and temp_last_year is not None:
+                    temp_difference = temp_this_year - temp_last_year
+                    comparison_set.append(temp_difference)
+
+            mean_change = np.mean(comparison_set)
+            summary.append([ds.metadata['display_name'], this_difference, mean_change])
+
+    out_text = f"There are {len(summary)} data sets of Greenland mass balance. "
+    for entry in summary:
+        out_text += f"In the {entry[0]} data set, the mass change {year - 1} and " \
+                    f" {year} was {entry[1]:.2f}Gt, which is "
+        if entry[2] > entry[1] and entry[1] < 0:
+            out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+        elif entry[2] < entry[1] and entry[1] < 0:
+            out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+        elif entry[1] > 0:
+            out_text += f" {year} saw an increase in the mass of Greenland ice."
 
     return out_text

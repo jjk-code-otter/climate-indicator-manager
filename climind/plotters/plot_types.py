@@ -530,8 +530,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
-    march_colors = ['#56b4e9', '#009e73']
-    september_colors = ['#e69f00', '#d55e00']
+    march_colors = ['#56b4e9', '#009e73', '#000000']
+    september_colors = ['#e69f00', '#d55e00', '#000000']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
