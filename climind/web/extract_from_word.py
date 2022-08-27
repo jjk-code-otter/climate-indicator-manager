@@ -76,8 +76,7 @@ def split_document(document_name):
                 text_to_append = text_to_append.replace(f'|{index}|', link)
             text_to_append = f"<p>\n{text_to_append}\n</p>\n"
 
-            text_to_append = text_to_append.replace('°', '&deg;')
-            text_to_append = text_to_append.replace('–', '-')
+            text_to_append = clean_awkward_characters(text_to_append)
 
             new_block.append(text_to_append)
 
@@ -90,6 +89,37 @@ def split_document(document_name):
         file_name = Path("jinja_templates") / f"{heading.lower().replace(' ', '_')}.html"
         with open(file_name, 'w') as out_file:
             out_file.write(text)
+
+
+def clean_awkward_characters(in_text: str) -> str:
+    """
+    Clean a string of odd characters or otherwise inelegant combinations
+
+    Parameters
+    ----------
+    in_text: str
+        String to be cleaned
+
+    Returns
+    -------
+    str
+        Cleaned string
+    """
+    switcheroo = {
+        "°": "&deg;",
+        "–": "-",
+        "CO2": "CO<sub>2</sub>",
+        "CH4": "CH<sub>4</sub>",
+        "N2O": "N<sub>2</sub>O",
+        "km2": "km<sup>2</sup>",
+        "mm/yr": "mm.yr<sup>-1</sup>"
+    }
+
+    out_text = in_text
+    for char in switcheroo:
+        out_text = out_text.replace(char, switcheroo[char])
+
+    return out_text
 
 
 if __name__ == '__main__':
