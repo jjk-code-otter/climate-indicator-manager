@@ -14,6 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import unicodedata
 from pathlib import Path
 from docx import Document
 from docx.text.paragraph import Paragraph
@@ -112,7 +113,8 @@ def clean_awkward_characters(in_text: str) -> str:
         "CH4": "CH<sub>4</sub>",
         "N2O": "N<sub>2</sub>O",
         "km2": "km<sup>2</sup>",
-        "mm/yr": "mm.yr<sup>-1</sup>"
+        "mm/yr": "mm.yr<sup>-1</sup>",
+        "’": "'"
     }
 
     out_text = in_text
