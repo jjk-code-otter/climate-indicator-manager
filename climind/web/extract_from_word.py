@@ -60,7 +60,7 @@ def split_document(document_name):
             link_text = inner_run.text
             rId = link.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
             link_url = document._part.rels[rId]._target
-            paragraph_links.append(f'<a href="{link_url}" target="_blank">{link_text}</a>')
+            paragraph_links.append(f'<a href="{link_url}" target="_blank"  rel="noopener">{link_text}</a>')
 
         if paragraph.style.name == "Heading 1":
             headings.append(paragraph.text)
