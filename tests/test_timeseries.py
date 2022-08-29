@@ -158,7 +158,7 @@ def test_make_annual():
     assert isinstance(a, ts.TimeSeriesAnnual)
     assert a.df['data'][0] == 2.5
     assert a.df['year'][0] == 1999
-    assert a.metadata['history'][-1] == 'Calculated annual average'
+    assert 'Calculated annual average' in a.metadata['history'][-1]
 
 
 def test_make_annual_cumulative():
@@ -168,7 +168,7 @@ def test_make_annual_cumulative():
     assert isinstance(a, ts.TimeSeriesAnnual)
     assert a.df['data'][0] == 5.0
     assert a.df['year'][0] == 1999
-    assert a.metadata['history'][-1] == 'Calculated annual average'
+    assert 'Calculated annual value' in a.metadata['history'][-1]
 
 
 def test_make_annual_by_selecting_month(monthly_data_is_month):
@@ -181,7 +181,7 @@ def test_make_annual_by_selecting_month(monthly_data_is_month):
         assert a.df['data'][i] == 1
     assert a.df['year'][0] == 1850
     assert len(a.df['data']) == number_of_years
-    assert a.metadata['history'][-1] == 'Extracted January from each year'
+    assert a.metadata['history'][-1] == 'Calculated annual series by extracting January from each year'
 
 
 def test_rebaseline_monthly(simple_monthly):
@@ -191,7 +191,7 @@ def test_rebaseline_monthly(simple_monthly):
     for m in range(1, 13):
         assert simple_monthly.df[(simple_monthly.df['year'] == 1850) &
                                  (simple_monthly.df['month'] == m)]['data'][m - 1] == 1850 - 1961
-    assert simple_monthly.metadata['history'][-1] == 'Rebaselined to 1961-1961'
+    assert 'Rebaselined to 1961-1961' in simple_monthly.metadata['history'][-1]
 
 
 def test_select_year_range_subset(simple_monthly):
@@ -282,8 +282,8 @@ def test_rebaseline_annual(simple_monthly):
     annual = simple_monthly.make_annual()
     annual.rebaseline(1981, 2010)
     assert annual.df['data'][0] == (1850 - (1981 + 2010) / 2.)
-    assert annual.metadata['history'][-2] == 'Calculated annual average'
-    assert annual.metadata['history'][-1] == 'Rebaselined to 1981-2010'
+    assert 'Calculated annual average' in annual.metadata['history'][-2]
+    assert 'Rebaselined to 1981-2010' in annual.metadata['history'][-1]
 
 
 def test_manual_baseline_annual(simple_annual):
@@ -297,8 +297,8 @@ def test_multiple_steps(simple_monthly):
     simple_monthly.rebaseline(1961, 1990)
     annual = simple_monthly.make_annual()
 
-    assert annual.metadata['history'][-1] == 'Calculated annual average'
-    assert annual.metadata['history'][-2] == 'Rebaselined to 1961-1990'
+    assert 'Calculated annual average' in annual.metadata['history'][-1]
+    assert 'Rebaselined to 1961-1990' in annual.metadata['history'][-2]
 
 
 def test_get_value_from_year(simple_annual):

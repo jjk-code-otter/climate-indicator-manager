@@ -293,9 +293,9 @@ def in_and_out(first, _):
 def test_process_datasets(mocker, card_metadata):
     card = db.Card(card_metadata)
     tiny1 = Tiny({'name': 'first', 'display_name': 'first', 'url': 'first_url', 'citation': 'first et al.',
-                  'data_citation': 'doi, first', 'acknowledgement': 'First, thanks'})
+                  'data_citation': 'doi, first', 'acknowledgement': 'First, thanks', 'history': ['first thing']})
     tiny2 = Tiny({'name': 'second', 'display_name': 'second', 'url': 'second_url', 'citation': 'second et al.',
-                  'data_citation': 'doi, second', 'acknowledgement': 'Second, thanks'})
+                  'data_citation': 'doi, second', 'acknowledgement': 'Second, thanks', 'history': ['second thing']})
     card.datasets = [tiny1, tiny2]
 
     m = mocker.patch("climind.web.dashboard.process_single_dataset", wraps=in_and_out)
