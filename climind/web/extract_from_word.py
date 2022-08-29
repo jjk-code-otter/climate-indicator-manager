@@ -114,7 +114,9 @@ def clean_awkward_characters(in_text: str) -> str:
         "N2O": "N<sub>2</sub>O",
         "km2": "km<sup>2</sup>",
         "mm/yr": "mm.yr<sup>-1</sup>",
-        "’": "'"
+        "’": "'",
+        '“': '"',
+        '”': '"'
     }
 
     out_text = in_text

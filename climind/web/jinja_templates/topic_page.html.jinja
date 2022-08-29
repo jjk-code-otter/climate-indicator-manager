@@ -116,6 +116,14 @@ p {
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
             <h2>{{ item.title }}</h2>
 
+            {% if item.selecting.variable is string %}
+                {% include item.selecting.variable + '.html' ignore missing %}
+            {% else %}
+                {% for var in item.selecting.variable %}
+                    {% include var + '.html' ignore missing  %}
+                {% endfor %}
+            {% endif %}
+
             {% for ds in item.dataset_metadata %}
             <h3>{{ ds.display_name }}</h3>
             <p>
