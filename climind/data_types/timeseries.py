@@ -102,6 +102,21 @@ class TimeSeriesMonthly:
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
         return out_str
 
+    def update_history(self, message: str):
+        """
+        Update the history metadata
+
+        Parameters
+        ----------
+        message : str
+            Message to be added to history
+
+        Returns
+        -------
+        None
+        """
+        self.metadata['history'].append(message)
+
     @log_activity
     def make_annual(self, cumulative: bool = False):
         """
@@ -123,7 +138,11 @@ class TimeSeriesMonthly:
         else:
             grouped = self.df.groupby(['year'])['data'].mean().reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
-        annual_series.metadata['history'].append('Calculated annual average')
+
+        if cumulative:
+            annual_series.update_history('Calculated annual value from monthly values by summing')
+        else:
+            annual_series.update_history('Calculated annual average from monthly averages using arithmetic mean')
 
         # update attributes
         annual_series.metadata['time_resolution'] = 'annual'
@@ -147,7 +166,9 @@ class TimeSeriesMonthly:
 
         grouped = self.df[self.df['month'] == month].reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
-        annual_series.metadata['history'].append(f'Extracted {month_names[month - 1]} from each year')
+        annual_series.metadata['history'].append(
+            f'Calculated annual series by extracting {month_names[month - 1]} from each year'
+        )
 
         # update attributes
         annual_series.metadata['time_resolution'] = 'annual'
@@ -174,7 +195,7 @@ class TimeSeriesMonthly:
         self.metadata['climatology_start'] = y1
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False
-        self.metadata['history'].append(f'Manually changed baseline to {y1}-{y2}')
+        self.update_history(f'Manually changed baseline to {y1}-{y2}')
 
     @log_activity
     def rebaseline(self, y1, y2):
@@ -212,7 +233,9 @@ class TimeSeriesMonthly:
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False
 
-        self.metadata['history'].append(f'Rebaselined to {y1}-{y2}')
+        self.update_history(
+            f'Rebaselined to {y1}-{y2} by subtracting mean over the climatology period for each month separately'
+        )
 
     def get_value(self, year: int, month: int):
         """
@@ -283,6 +306,7 @@ class TimeSeriesMonthly:
         None
         """
         self.df['data'] = self.df['data'] + offset
+        self.update_history(f'Added offset of {offset}')
 
     def zero_on_month(self, year: int, month: int):
         """
@@ -299,8 +323,11 @@ class TimeSeriesMonthly:
         -------
         None
         """
+        month_names = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December']
 
         zero_value = -1 * self.get_value(year, month)
+        self.update_history(f'Zeroed series on {month_names[month - 1]} {year} by adding offset (see next entry)')
         self.add_offset(zero_value)
 
     @log_activity
@@ -308,6 +335,7 @@ class TimeSeriesMonthly:
         self.df = self.df[self.df['year'] >= start_year]
         self.df = self.df[self.df['year'] <= end_year]
         self.df = self.df.reset_index()
+        self.update_history(f'Selected year range {start_year} to {end_year}.')
         return self
 
     @log_activity
@@ -514,7 +542,7 @@ class TimeSeriesAnnual:
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False
 
-        self.update_history(f'Rebaselined to {y1}-{y2}')
+        self.update_history(f'Rebaselined to {y1}-{y2} by subtracting mean for that period')
 
     @log_activity
     def get_rank_from_year(self, year: int) -> Optional[int]:
@@ -656,6 +684,7 @@ class TimeSeriesAnnual:
         self.df = self.df[self.df['year'] >= start_year]
         self.df = self.df[self.df['year'] <= end_year]
         self.df = self.df.reset_index()
+        self.update_history(f'Selected year range {start_year} to {end_year}')
         return self
 
     def update_history(self, message: str):
@@ -688,7 +717,7 @@ class TimeSeriesAnnual:
             self.metadata['url'] = [""]
             self.metadata['reader'] = "reader_badc_csv"
             self.metadata['fetcher'] = "fetcher_no_url"
-            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
+            self.update_history(f"Wrote to file {str(filename.name)}")
             self.metadata.write_metadata(metadata_filename)
 
         now = datetime.today()
