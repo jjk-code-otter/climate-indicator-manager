@@ -60,6 +60,38 @@ def test_set_lo_hi_ticks(limit_1, limit_2, spacing, expected_lo, expected_hi):
     assert hi == pytest.approx(expected_hi)
 
 
+@pytest.fixture
+def complex_annual_datasets():
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    all_datasets = []
+    for i in range(5):
+        years = []
+        anoms = []
+        for y in range(1850, 2023):
+            years.append(y)
+            anom = 0.05
+            if y == 2022 - i:
+                anom = 0.10
+            anoms.append(anom)
+
+        all_datasets.append(ts.TimeSeriesAnnual(years, anoms))
+
+    return all_datasets
+
+
+def test_calculate_highest_year_and_values(complex_annual_datasets):
+    uniques, values = pu.calculate_highest_year_and_values(complex_annual_datasets)
+
+    assert uniques == [2018, 2019, 2020, 2021, 2022]
+    for entry in values:
+        assert entry == [0.05, 0.10]
+
+
 def test_trend(simple_annual_datasets):
     mean_trend, min_trend, max_trend = pu.calculate_trends(simple_annual_datasets, 1850, 2022)
 
@@ -176,7 +208,6 @@ def test_set_xaxis(mocker):
 
 
 def test_add_labels():
-
     plt.figure()
     dataset = Tiny('ohc')
     dataset.metadata['units'] = 'degC'

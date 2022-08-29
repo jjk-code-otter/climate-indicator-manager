@@ -127,6 +127,25 @@ def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
     return mean_rank, min_rank, max_rank
 
 
+def calculate_highest_year_and_values(all_datasets: List[TimeSeriesAnnual]):
+
+    all_highest_years = []
+    all_highest_values = []
+    for ds in all_datasets:
+        highest_year = ds.get_year_from_rank(1)
+        for year in highest_year:
+            all_highest_years.append(year)
+
+    # Get the unique highest years
+    unique_highest_years = list(set(all_highest_years))
+
+    for high_year in unique_highest_years:
+        mean_anomaly, min_anomaly, max_anomaly = calculate_values(all_datasets, high_year)
+        all_highest_values.append([min_anomaly, max_anomaly])
+
+    return unique_highest_years, all_highest_values
+
+
 def set_lo_hi_ticks(limits: list, spacing: float) -> Tuple[float, float, ndarray]:
     """
     Given axis limits and a preferred spacing, calculate new high and low values and a set of ticks
