@@ -210,7 +210,7 @@
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
-          "writing": {"function": "max_monthly_value"}
+          "writing": {"function": "long_term_trend_paragraph"}
         }
 
       ]
@@ -244,7 +244,7 @@
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
-          "writing": {"function": "max_monthly_value"}
+          "writing": {"function": "long_term_trend_paragraph"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
@@ -281,7 +281,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
         }
       ]

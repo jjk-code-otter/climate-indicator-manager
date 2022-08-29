@@ -48,6 +48,16 @@ def rank_ranges(low: int, high: int) -> str:
         return f"between the {ordinal(high)} and {ordinal(low)}"
 
 
+def nice_list(names):
+    if len(names) == 1:
+        name_list = f"{names[0]}"
+    elif len(names) == 2:
+        name_list = f"{names[0]} and {names[1]}"
+    else:
+        name_list = f"{', '.join(names[0:-1])}, and {names[-1]}"
+    return name_list
+
+
 def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> str:
     """
     Given a list of dataset, return a comma-and-and separated list of the names.
@@ -66,14 +76,7 @@ def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     for ds in all_datasets:
         names.append(ds.metadata['display_name'])
 
-    if len(names) == 1:
-        name_list = f"{names[0]}"
-    elif len(names) == 2:
-        name_list = f"{names[0]} and {names[1]}"
-    else:
-        name_list = f"{', '.join(names[0:-1])}, and {names[-1]}"
-
-    return name_list
+    return nice_list(names)
 
 
 def fancy_html_units(units: str) -> str:
@@ -105,22 +108,7 @@ def fancy_html_units(units: str) -> str:
     return fancy
 
 
-def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
-    """
-    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
-    as well as saying how many data sets and which datasets were used.
-
-    Parameters
-    ----------
-    all_datasets: List[TimeSeriesAnnual]
-        List of datasets to be used to derive the ranks and values
-    year: int
-        Year for which the paragraph should be generated.
-    Returns
-    -------
-    str
-
-    """
+def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
 
@@ -144,6 +132,64 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
+def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+
+    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    units = fancy_html_units(all_datasets[0].metadata['units'])
+    out_text = ''
+
+    # If this is the highest year in all data sets, leave the text as is
+    if max_rank == 1 and min_rank == 1:
+        return out_text
+
+    # if this is highest year in some data sets, but not all
+    elif min_rank == 1 and max_rank != 1:
+        highest_years, highest_values = pu.calculate_highest_year_and_values(all_datasets)
+        highest_years = [str(x) for x in highest_years]
+        out_text += f'{year} is joint highest on record together with {nice_list(highest_years)}.'
+
+    # if this is highest year in no data sets
+    elif min_rank > 1:
+        highest_years, highest_values = pu.calculate_highest_year_and_values(all_datasets)
+
+        if len(highest_years) == 1:
+            out_text += f'The highest year on record was {highest_years[0]} with a value ' \
+                        f'between {highest_values[0][0]:.2f} and {highest_values[0][1]:.2f} {units}.'
+        if len(highest_years) > 1:
+            highest_year_entry = []
+            for i, high_year in enumerate(highest_years):
+                highest_year_entry.append(f'{high_year} ({highest_values[i][0]:.2f}-{highest_values[i][1]:.2f}{units})')
+            out_text += f'The highest year on record was one of {nice_list(highest_year_entry)}.'
+
+    return out_text
+
+
+def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
+    as well as saying how many data sets and which datasets were used.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be used to derive the ranks and values
+    year: int
+        Year for which the paragraph should be generated.
+    Returns
+    -------
+    str
+
+    """
+    out_text = basic_anomaly_and_rank(all_datasets, year)
+    out_text += compare_to_highest_anomaly_and_rank(all_datasets, year)
+    out_text += "</p><p>"
+    out_text += basic_anomaly_and_rank(all_datasets, year - 1)
+
+    return out_text
+
+
 def anomaly_and_rank_plus_new_base(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     """
     Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
@@ -161,7 +207,7 @@ def anomaly_and_rank_plus_new_base(all_datasets: List[TimeSeriesAnnual], year: i
     str
 
     """
-    out_text = anomaly_and_rank(all_datasets, year)
+    out_text = basic_anomaly_and_rank(all_datasets, year)
 
     processed_data = []
     for ds in all_datasets:
@@ -504,10 +550,30 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
         out_text += f"In the {entry[0]} data set, the mass change {year - 1} and " \
                     f" {year} was {entry[1]:.2f}Gt, which is "
         if entry[2] > entry[1] and entry[1] < 0:
-            out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+            out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt/year. "
         elif entry[2] < entry[1] and entry[1] < 0:
-            out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+            out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt/year. "
         elif entry[1] > 0:
             out_text += f" {year} saw an increase in the mass of Greenland ice."
+
+    return out_text
+
+
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    all_trends = []
+    out_text = ""
+    for ds in all_datasets:
+        times = ds.df['year'] + (ds.df['month'] - 1) / 12.
+        data = ds.df['data']
+
+        result = np.polyfit(times, data, 1)
+        trend = result[0]
+        all_trends.append(trend)
+
+        first_year, last_year = ds.get_first_and_last_year()
+
+        units = fancy_html_units(ds.metadata['units'])
+        out_text += f"The rate of change in the {ds.metadata['display_name']} data set is {trend:.1f} {units}/yr " \
+                    f"between {first_year} and {last_year}."
 
     return out_text
