@@ -281,7 +281,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
         }
       ]
