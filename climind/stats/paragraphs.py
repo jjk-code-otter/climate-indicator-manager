@@ -108,22 +108,7 @@ def fancy_html_units(units: str) -> str:
     return fancy
 
 
-def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
-    """
-    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
-    as well as saying how many data sets and which datasets were used.
-
-    Parameters
-    ----------
-    all_datasets: List[TimeSeriesAnnual]
-        List of datasets to be used to derive the ranks and values
-    year: int
-        Year for which the paragraph should be generated.
-    Returns
-    -------
-    str
-
-    """
+def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
 
@@ -143,6 +128,17 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
     out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
                 f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
+
+    return out_text
+
+
+def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+
+    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    units = fancy_html_units(all_datasets[0].metadata['units'])
+    out_text = ''
 
     # If this is the highest year in all data sets, leave the text as is
     if max_rank == 1 and min_rank == 1:
@@ -167,7 +163,29 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
                 highest_year_entry.append(f'{high_year} ({highest_values[i][0]:.2f}-{highest_values[i][1]:.2f}{units})')
             out_text += f'The highest year on record was one of {nice_list(highest_year_entry)}.'
 
+    return out_text
 
+
+def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
+    as well as saying how many data sets and which datasets were used.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be used to derive the ranks and values
+    year: int
+        Year for which the paragraph should be generated.
+    Returns
+    -------
+    str
+
+    """
+    out_text = basic_anomaly_and_rank(all_datasets, year)
+    out_text += compare_to_highest_anomaly_and_rank(all_datasets, year)
+    out_text += "</p><p>"
+    out_text += basic_anomaly_and_rank(all_datasets, year - 1)
 
     return out_text
 
@@ -189,7 +207,7 @@ def anomaly_and_rank_plus_new_base(all_datasets: List[TimeSeriesAnnual], year: i
     str
 
     """
-    out_text = anomaly_and_rank(all_datasets, year)
+    out_text = basic_anomaly_and_rank(all_datasets, year)
 
     processed_data = []
     for ds in all_datasets:
