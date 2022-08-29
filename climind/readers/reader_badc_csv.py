@@ -29,10 +29,13 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     months = []
     anomalies = []
+    prehistory = []
 
     with open(filename[0], 'r') as f:
         while True:
             line = f.readline()
+            if line.startswith('history'):
+                prehistory.append(line[10:-1])
             if "time,year,month,data" in line:
                 break
 
@@ -45,8 +48,9 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
             else:
                 break
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata['history'] = prehistory
+    metadata['history'].append(f"Time series created from file {metadata['filename']} "
+                               f"downloaded from {metadata['url']}")
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
@@ -54,10 +58,13 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
     years = []
     anomalies = []
+    prehistory = []
 
     with open(filename[0], 'r') as f:
         while True:
             line = f.readline()
+            if line.startswith('history'):
+                prehistory.append(line[10:-1])
             if "time,year,data" in line:
                 break
 
@@ -69,7 +76,10 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
             else:
                 break
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata['history'] = prehistory
+    metadata['history'].append(
+        f"Time series created from file {metadata['filename']} "
+        f"downloaded from {metadata['url']}"
+    )
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)
