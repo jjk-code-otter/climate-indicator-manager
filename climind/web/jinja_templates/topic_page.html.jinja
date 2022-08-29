@@ -33,6 +33,7 @@ p {
   border-radius: 5px;
 }
 
+
 </style>
 <body>
 
@@ -72,6 +73,20 @@ p {
 
     </div>
 
+    {% if page_meta.descriptor %}
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>Introduction</h1>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            {% include page_meta.descriptor %}
+        </div>
+    </div>
+    {% endif %}
+
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
             <h1>Key messages</h1>
@@ -100,6 +115,14 @@ p {
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
             <h2>{{ item.title }}</h2>
+
+            {% if item.selecting.variable is string %}
+                {% include item.selecting.variable + '.html' ignore missing %}
+            {% else %}
+                {% for var in item.selecting.variable %}
+                    {% include var + '.html' ignore missing  %}
+                {% endfor %}
+            {% endif %}
 
             {% for ds in item.dataset_metadata %}
             <h3>{{ ds.display_name }}</h3>
