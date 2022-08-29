@@ -511,3 +511,23 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
             out_text += f" {year} saw an increase in the mass of Greenland ice."
 
     return out_text
+
+
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    all_trends = []
+    out_text = ""
+    for ds in all_datasets:
+        times = ds.df['year'] + (ds.df['month'] - 1) / 12.
+        data = ds.df['data']
+
+        result = np.polyfit(times, data, 1)
+        trend = result[0]
+        all_trends.append(trend)
+
+        first_year, last_year = ds.get_first_and_last_year()
+
+        units = fancy_html_units(ds.metadata['units'])
+        out_text += f"The rate of change in the {ds.metadata['display_name']} data set is {trend:.1f} {units}/yr " \
+                    f"between {first_year} and {last_year}."
+
+    return out_text
