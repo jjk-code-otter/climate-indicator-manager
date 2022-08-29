@@ -34,6 +34,13 @@ p {
 }
 
 
+
+
+
+
+
+
+
 </style>
 <body>
 
@@ -76,74 +83,88 @@ p {
     {% if page_meta.descriptor %}
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            <h1>Introduction</h1>
+            <div class="w3-content">
+                <h1>Introduction</h1>
+            </div>
         </div>
     </div>
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            {% include page_meta.descriptor %}
+            <div class="w3-content">
+                {% include page_meta.descriptor %}
+            </div>
         </div>
     </div>
     {% endif %}
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            <h1>Key messages</h1>
+            <div class="w3-content">
+                <h1>Key messages</h1>
+            </div>
         </div>
     </div>
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            {% for item in paragraphs %}
-            <h3>{{ item.dataset_metadata.long_name }}</h3>
-            <p>
-                {{ item.text }}
-            </p>
-            {% endfor %}
+            <div class="w3-content">
+
+                {% for item in paragraphs %}
+                <h3>{{ item.dataset_metadata.long_name }}</h3>
+                <p>
+                    {{ item.text }}
+                </p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            <h1>Dataset details</h1>
+            <div class="w3-content">
+                <h1>Dataset details</h1>
+            </div>
         </div>
     </div>
 
     {% for item in cards %}
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
-            <h2>{{ item.title }}</h2>
+            <div class="w3-content">
 
-            {% if item.selecting.variable is string %}
+                <h2>{{ item.title }}</h2>
+
+                {% if item.selecting.variable is string %}
                 {% include item.selecting.variable + '.html' ignore missing %}
-            {% else %}
+                {% else %}
                 {% for var in item.selecting.variable %}
-                    {% include var + '.html' ignore missing  %}
+                {% include var + '.html' ignore missing %}
                 {% endfor %}
-            {% endif %}
+                {% endif %}
 
-            {% for ds in item.dataset_metadata %}
-            <h3>{{ ds.display_name }}</h3>
-            <p>
-                {% for this_url in ds.url %}
-                <a href="{{ this_url }}">Original data file (external link)</a>
+                {% for ds in item.dataset_metadata %}
+                <h3>{{ ds.display_name }}</h3>
+                <p>
+                    {% for this_url in ds.url %}
+                    <a href="{{ this_url }}">Original data file (external link)</a>
+                    {% endfor %}
+                </p>
+                {% if ds.citation %}
+                <p>
+                    Citation{% if ds.citation|length > 1 %}s{% endif %}: {{ ds.citation|join(',<br>') }}
+                </p>
+                {% endif %}
+                {% if ds.data_citation %}
+                <p>
+                    Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
+                </p>
+                {% endif %}
+                <p>Acknowledgement: {{ ds.acknowledgement }}</p>
                 {% endfor %}
-            </p>
-            {% if ds.citation %}
-            <p>
-                Citation{% if ds.citation|length > 1 %}s{% endif %}: {{ ds.citation|join(',<br>') }}
-            </p>
-            {% endif %}
-            {% if ds.data_citation %}
-            <p>
-                Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
-            </p>
-            {% endif %}
-            <p>Acknowledgement: {{ ds.acknowledgement }}</p>
-            {% endfor %}
 
+            </div>
         </div>
     </div>
     {% endfor %}
