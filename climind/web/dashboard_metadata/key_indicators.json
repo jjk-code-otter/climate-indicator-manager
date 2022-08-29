@@ -33,7 +33,7 @@
           "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [],
-          "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
+          "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
         },
         {
           "link_to": "sea_ice_extent", "title": "Sea ice",
@@ -225,7 +225,7 @@
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
           "processing": [],
-          "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
+          "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
         },
         {
           "link_to":  null, "title": "Ocean heat content",
