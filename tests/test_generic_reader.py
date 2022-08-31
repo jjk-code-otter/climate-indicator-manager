@@ -49,21 +49,13 @@ def test_get_module():
 
 @pytest.fixture
 def generic_metadata():
-    dataset_metadata = {
-        'name': 'test_name',
-        'filename': ['one'],
-        'type': 'timeseries',
-        'time_resolution': 'monthly',
-        'reader': 'reader_test'
-    }
     collection = DataCollection.from_file(Path('test_data') / 'hadcrut5.json')
     return collection.datasets[1].metadata
 
 
-def test_read_ts_monthly_ts(mocker, generic_metadata):
+def test_read_ts_monthly_ts(generic_metadata):
     generic_metadata['reader'] = 'reader_test'
     generic_metadata['time_resolution'] = 'monthly'
-    m = mocker.patch('climind.readers.generic_reader.get_last_modified_time', return_value='')
     result = read_ts(Path(''), generic_metadata)
     assert result == 'monthly_ts'
 
