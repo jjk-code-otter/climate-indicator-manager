@@ -50,8 +50,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
 
     df = gd.make_xarray(grid, df.time.data, lats, lons)
 
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
     metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(df, metadata)
@@ -79,8 +78,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
                 anomalies.append(np.nan)
                 uncertainty.append(np.nan)
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainty)
 

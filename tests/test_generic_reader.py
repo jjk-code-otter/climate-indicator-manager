@@ -17,7 +17,7 @@
 import pytest
 from pathlib import Path
 from climind.readers.generic_reader import read_ts, get_reader_script_name, get_module
-
+from climind.data_manager.processing import DataCollection
 
 def test_get_reader_script_name():
     metadata = {'type': 'timeseries', 'time_resolution': 'monthly'}
@@ -49,34 +49,41 @@ def test_get_module():
 
 @pytest.fixture
 def generic_metadata():
-    metadata = {
+    dataset_metadata = {
         'name': 'test_name',
         'filename': ['one'],
         'type': 'timeseries',
         'time_resolution': 'monthly',
         'reader': 'reader_test'
     }
-    return metadata
+    collection = DataCollection.from_file(Path('test_data') / 'hadcrut5.json')
+    return collection.datasets[1].metadata
 
 
-def test_read_ts_monthly_ts(generic_metadata):
+def test_read_ts_monthly_ts(mocker, generic_metadata):
+    generic_metadata['reader'] = 'reader_test'
+    generic_metadata['time_resolution'] = 'monthly'
+    m = mocker.patch('climind.readers.generic_reader.get_last_modified_time', return_value='')
     result = read_ts(Path(''), generic_metadata)
     assert result == 'monthly_ts'
 
 
 def test_read_ts_annual_ts(generic_metadata):
-    generic_metadata['time_resolution'] = 'annual'
+    generic_metadata['reader'] = 'reader_test'
     result = read_ts(Path(''), generic_metadata)
     assert result == 'annual_ts'
 
 
 def test_read_ts_monthly_grid(generic_metadata):
+    generic_metadata['reader'] = 'reader_test'
     generic_metadata['type'] = 'gridded'
+    generic_metadata['time_resolution'] = 'monthly'
     result = read_ts(Path(''), generic_metadata)
     assert result == 'monthly_grid'
 
 
 def test_read_ts_monthly_1x1_grid(generic_metadata):
+    generic_metadata['reader'] = 'reader_test'
     generic_metadata['type'] = 'gridded'
     kwargs = {'grid_resolution': 1}
     result = read_ts(Path(''), generic_metadata, **kwargs)
@@ -84,6 +91,7 @@ def test_read_ts_monthly_1x1_grid(generic_metadata):
 
 
 def test_read_ts_monthly_5x5_grid(generic_metadata):
+    generic_metadata['reader'] = 'reader_test'
     generic_metadata['type'] = 'gridded'
     kwargs = {'grid_resolution': 5}
     with pytest.raises(NotImplementedError):

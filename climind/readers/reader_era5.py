@@ -22,6 +22,7 @@ import numpy as np
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 import copy
+from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
 
 
@@ -85,6 +86,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     if metadata['type'] == 'timeseries':
         filename_with_wildcards = metadata['filename'][0]
         filename = find_latest(out_dir, filename_with_wildcards)
+        construction_metadata.dataset['last_modified'] = [get_last_modified_time(filename)]
 
         if metadata['time_resolution'] == 'monthly':
             return read_monthly_ts(filename, construction_metadata)
@@ -275,8 +277,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url
 
-    metadata['history'] = [f"Time series created from file {selected_file} "
-                           f"downloaded from {selected_url}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 

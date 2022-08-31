@@ -49,7 +49,6 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
             else:
                 anomalies.append(data / 1e6)
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)

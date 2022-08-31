@@ -70,8 +70,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
         df['data'] = df.diff()['data']
         data = df['data'].values.tolist()
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years2, months2, data, metadata=metadata, uncertainty=uncertainties)
 
