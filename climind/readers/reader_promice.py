@@ -62,8 +62,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     months = mdf_month.values.tolist()
     mass_balance = mdf_data.values.tolist()
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata)
 
@@ -92,7 +91,6 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
         years = mdf_year.values.tolist()
         mass_balance = mdf_data.values.tolist()
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesAnnual(years, mass_balance, metadata=metadata)

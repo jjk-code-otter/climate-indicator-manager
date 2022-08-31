@@ -40,7 +40,6 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
             years.append(int(year))
             anomalies.append(float(columns[1]))
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)

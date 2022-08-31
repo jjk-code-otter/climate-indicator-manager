@@ -21,6 +21,7 @@ from typing import Tuple
 
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
+from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
 import copy
 
@@ -77,7 +78,10 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename_with_wildcards = metadata['filename'][0]
     filename = find_latest(out_dir, filename_with_wildcards)
 
+    last_modified = get_last_modified_time(filename)
+
     construction_metadata = copy.deepcopy(metadata)
+    construction_metadata.dataset['last_modified'] = [last_modified]
 
     if metadata['type'] == 'timeseries':
         if metadata['time_resolution'] == 'monthly':
@@ -118,8 +122,7 @@ def read_monthly_grid(filename: Path, metadata: CombinedMetadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return gd.GridMonthly(ds, metadata)
 
@@ -137,8 +140,7 @@ def read_monthly_1x1_grid(filename: Path, metadata: CombinedMetadata):
 
     df = gd.make_xarray(grid, df.time.data, lats, lons)
 
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
     metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(df, metadata)
@@ -176,8 +178,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url
 
-    metadata['history'] = [f"Time series created from file {selected_file} "
-                           f"downloaded from {selected_url}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
@@ -207,15 +208,11 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata):
             anomalies.append(float(columns[1]))
             uncertainties.append(np.sqrt(float(columns[2])))
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
-
     selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url
 
-    metadata['history'] = [f"Time series created from file {selected_file} "
-                           f"downloaded from {selected_url}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata, uncertainty=uncertainties)

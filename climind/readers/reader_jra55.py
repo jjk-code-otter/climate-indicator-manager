@@ -58,8 +58,7 @@ def read_grid(filename: List[Path]):
 
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
     ds = read_grid(filename)
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
     return gd.GridMonthly(ds, metadata)
 
 
@@ -109,8 +108,7 @@ def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
     metadata['history'].append("Regridded to 5 degree latitude-longitude resolution")
 
     return gd.GridMonthly(ds, metadata)
@@ -147,8 +145,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
     for key in ds.data_vars:
         ds[key].encoding.update({'zlib': True, '_FillValue': -1e30})
 
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
     metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(ds, metadata)
@@ -169,8 +166,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
             months.append(int(month))
             anomalies.append(float(columns[1]))
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 

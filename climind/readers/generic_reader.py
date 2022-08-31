@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from datetime import datetime
 from typing import Union, Optional
 import copy
 from climind.data_manager.metadata import CombinedMetadata
@@ -77,6 +78,26 @@ def get_module(package_name: str, script_name: str):
     module = __import__(ext, fromlist=[None])
     return module
 
+def get_last_modified_time(file: Path) -> Optional[str]:
+    """
+    Get update time of file if it exists, else None
+    Parameters
+    ----------
+    file: Path
+        File path
+
+    Returns
+    -------
+    Optional[str]
+        string containing last updated time for the file or None if it does not exist
+    """
+    last_updated = None
+    if file.exists():
+        last_updated = file.stat().st_mtime
+        last_updated = datetime.fromtimestamp(last_updated).strftime("%Y-%m-%d %H:%M:%S")
+
+    return last_updated
+
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs) -> Union[
     TimeSeriesMonthly, TimeSeriesAnnual, GridMonthly]:
@@ -102,10 +123,14 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs) -> Union[
     module = get_module('climind.readers', script_name)
 
     filename = []
+    last_modified_times = []
     for name in metadata['filename']:
-        filename.append(out_dir / name)
+        file = out_dir / name
+        filename.append(file)
+        last_modified_times.append(get_last_modified_time(file))
 
     construction_metadata = copy.deepcopy(metadata)
+    construction_metadata.dataset['last_modified'] = last_modified_times
 
     chosen_reader_script = get_reader_script_name(metadata, **kwargs)
 

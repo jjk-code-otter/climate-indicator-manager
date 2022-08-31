@@ -103,6 +103,31 @@ class BaseMetadata:
 
         return match
 
+    def fill_string(self, string_to_replace:str, replacement:str):
+        """
+        Replace string_to_replace with the replacement value in all elements
+
+        Parameters
+        ----------
+        string_to_replace: str
+            string to be replaced in metadata elements
+        replacement: str
+            replacement string
+        Returns
+        -------
+        None
+        """
+        for key in self.metadata:
+            item = self.metadata[key]
+            if isinstance(item, str):
+                item = item.replace(string_to_replace, replacement)
+                self.metadata[key] = item
+            elif isinstance(item, list):
+                replacement_list = []
+                for entry in item:
+                    entry = entry.replace(string_to_replace, replacement)
+                    replacement_list.append(entry)
+                self.metadata[key] = replacement_list
 
 class CollectionMetadata(BaseMetadata):
 
@@ -125,6 +150,20 @@ class DatasetMetadata(BaseMetadata):
         validate(metadata, metadata_schema)
 
         super().__init__(metadata)
+
+    def creation_message(self):
+        """
+        Add creation message to the history
+
+        Returns
+        -------
+
+        """
+        download_message = f"Data set created from file {self.metadata['filename']} " \
+                           f"downloaded from {self.metadata['url']} " \
+                           f"at {self.metadata['last_modified']}"
+
+        self.metadata['history'].append(download_message)
 
 
 class CombinedMetadata:
@@ -189,3 +228,17 @@ class CombinedMetadata:
 
         with open(filename, 'w') as out_json:
             json.dump(rebuilt, out_json, indent=4)
+
+    def creation_message(self):
+        self.dataset.creation_message()
+        last_modified = self['last_modified'][0]
+        self.dataset.fill_string('AAAA', last_modified)
+        self.collection.fill_string('AAAA', last_modified)
+
+        last_year = last_modified[0:4]
+        self.dataset.fill_string('YYYY', last_year)
+        self.collection.fill_string('YYYY', last_year)
+
+        version = self['version']
+        self.dataset.fill_string('VVVV', version)
+        self.collection.fill_string('VVVV', version)
