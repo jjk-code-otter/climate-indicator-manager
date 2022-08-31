@@ -41,6 +41,7 @@ p {
 
 
 
+
 </style>
 <body>
 
@@ -162,7 +163,12 @@ p {
                 </p>
                 {% endif %}
                 <p>Acknowledgement: {{ ds.acknowledgement }}</p>
-                <p>Processing: {{ ds.history }}</p>
+                <p>Processing:</p>
+                <ul>
+                    {% for step in ds.history %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ul>
                 {% endfor %}
 
             </div>

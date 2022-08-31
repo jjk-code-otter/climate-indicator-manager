@@ -225,7 +225,7 @@ class Card(WebComponent):
                     'citation': ds.metadata['citation'],
                     'data_citation': ds.metadata['data_citation'],
                     'acknowledgement': ds.metadata['acknowledgement'],
-                    'history': ': '.join(ds.metadata['history'])
+                    'history': ds.metadata['history']
                 }
             )
 
