@@ -153,16 +153,22 @@ p {
                     {% endfor %}
                 </p>
                 {% if ds.citation %}
+                {% if ds.citation.0 != '' %}
                 <p>
                     Citation{% if ds.citation|length > 1 %}s{% endif %}: {{ ds.citation|join(',<br>') }}
                 </p>
                 {% endif %}
+                {% endif %}
                 {% if ds.data_citation %}
+                {% if ds.data_citation.0 != '' %}
                 <p>
                     Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
                 </p>
                 {% endif %}
+                {% endif %}
+                {% if ds.acknowledgement %}
                 <p>Acknowledgement: {{ ds.acknowledgement }}</p>
+                {% endif %}
                 <p>Processing:</p>
                 <ul>
                     {% for step in ds.history %}
