@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from typing import Tuple
 import itertools
 import xarray as xa
 import numpy as np
@@ -45,6 +46,38 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
     list_of_files.sort()
     out_filename = list_of_files[-1]
     return out_filename
+
+
+def get_latest_filename_and_url(filename: Path, url: str) -> Tuple[str, str]:
+    """
+    Get the filename and url from a filled filename Path and URL with placeholders
+
+    Parameters
+    ----------
+    filename: Path
+        Path of filename
+    url: str
+        URL to be replaced
+
+    Returns
+    -------
+    Tuple[str, str]
+        The filename and the url with placeholders replaced
+    -------
+    """
+    selected_file = filename.name
+    selected_url = url.split('/')
+    selected_url = selected_url[0:-1]
+    selected_url.append(selected_file)
+    selected_url = '/'.join(selected_url)
+
+    yyyy = selected_file[33:37]
+    mmmm = selected_file[37:39]
+
+    selected_url = selected_url.replace('YYYY', yyyy)
+    selected_url = selected_url.replace('MMMM', mmmm)
+
+    return selected_file, selected_url
 
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
@@ -237,17 +270,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
             months.append(int(month))
             anomalies.append(float(columns[1]))
 
-    selected_file = filename.name
-    selected_url = metadata['url'][0].split('/')
-    selected_url = selected_url[0:-1]
-    selected_url.append(selected_file)
-    selected_url = '/'.join(selected_url)
-
-    yyyy = selected_file[33:37]
-    mmmm = selected_file[37:39]
-
-    selected_url = selected_url.replace('YYYY', yyyy)
-    selected_url = selected_url.replace('MMMM', mmmm)
+    selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url

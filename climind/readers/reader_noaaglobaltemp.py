@@ -17,13 +17,15 @@
 from pathlib import Path
 import xarray as xa
 import numpy as np
+from typing import Tuple
+
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
 import copy
 
 
-def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
+def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
     """
     Find the most recent file that matches
 
@@ -36,13 +38,39 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> str:
 
     Returns
     -------
-
+    Path
+        Path of latest file that matches the filename with wildcards in the directory
     """
     # look in directory to find all matching
     list_of_files = list(out_dir.glob(filename_with_wildcards))
     list_of_files.sort()
     out_filename = list_of_files[-1]
     return out_filename
+
+
+def get_latest_filename_and_url(filename: Path, url: str) -> Tuple[str, str]:
+    """
+    Get the filename and url from a filled filename Path and URL with placeholders
+
+    Parameters
+    ----------
+    filename: Path
+        Path of filename
+    url: str
+        URL to be replaced
+
+    Returns
+    -------
+    Tuple[str, str]
+        The filename and the url with placeholders replaced
+    """
+    selected_file = filename.name
+    selected_url = url.split('/')
+    selected_url = selected_url[0:-1]
+    selected_url.append(selected_file)
+    selected_url = '/'.join(selected_url)
+
+    return selected_file, selected_url
 
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
@@ -68,7 +96,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_grid(filename: str, metadata: CombinedMetadata):
+def read_monthly_grid(filename: Path, metadata: CombinedMetadata):
     df = xa.open_dataset(filename)
 
     number_of_months = len(df.time.data)
@@ -96,7 +124,7 @@ def read_monthly_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
+def read_monthly_1x1_grid(filename: Path, metadata: CombinedMetadata):
     df = read_monthly_grid(filename, metadata)
     df = df.df
     # regrid to 1x1
@@ -143,11 +171,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
             anomalies.append(float(columns[2]))
             uncertainties.append(np.sqrt(float(columns[3])))
 
-    selected_file = filename.name
-    selected_url = metadata['url'][0].split('/')
-    selected_url = selected_url[0:-1]
-    selected_url.append(selected_file)
-    selected_url = '/'.join(selected_url)
+    selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url
@@ -186,11 +210,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata):
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
 
-    selected_file = filename.name
-    selected_url = metadata['url'][0].split('/')
-    selected_url = selected_url[0:-1]
-    selected_url.append(selected_file)
-    selected_url = '/'.join(selected_url)
+    selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url
