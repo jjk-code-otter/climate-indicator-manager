@@ -237,8 +237,23 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
             months.append(int(month))
             anomalies.append(float(columns[1]))
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    selected_file = filename.name
+    selected_url = metadata['url'][0].split('/')
+    selected_url = selected_url[0:-1]
+    selected_url.append(selected_file)
+    selected_url = '/'.join(selected_url)
+
+    yyyy = selected_file[33:37]
+    mmmm = selected_file[37:39]
+
+    selected_url = selected_url.replace('YYYY', yyyy)
+    selected_url = selected_url.replace('MMMM', mmmm)
+
+    metadata['filename'][0] = selected_file
+    metadata['url'][0] = selected_url
+
+    metadata['history'] = [f"Time series created from file {selected_file} "
+                           f"downloaded from {selected_url}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 

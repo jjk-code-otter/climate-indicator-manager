@@ -116,14 +116,14 @@ def read_monthly_1x1_grid(filename: str, metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: str, metadata: CombinedMetadata):
+def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     """
     Read in monthly file
 
     Parameters
     ----------
-    filename : str
-        Filename for monthly file
+    filename : Path
+        Path of monthly file
     metadata : dict
         Dictionary containing metadata
     Returns
@@ -143,19 +143,28 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
             anomalies.append(float(columns[2]))
             uncertainties.append(np.sqrt(float(columns[3])))
 
-    metadata['history'] = [f"Time series created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    selected_file = filename.name
+    selected_url = metadata['url'][0].split('/')
+    selected_url = selected_url[0:-1]
+    selected_url.append(selected_file)
+    selected_url = '/'.join(selected_url)
+
+    metadata['filename'][0] = selected_file
+    metadata['url'][0] = selected_url
+
+    metadata['history'] = [f"Time series created from file {selected_file} "
+                           f"downloaded from {selected_url}"]
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
 
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata):
     """
     Read in annual file
 
     Parameters
     ----------
-    filename : str
+    filename : Path
         Filename for annual file
     metadata : dict
         Dictionary containing metadata
@@ -176,5 +185,17 @@ def read_annual_ts(filename: str, metadata: CombinedMetadata):
 
     metadata['history'] = [f"Time series created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
+
+    selected_file = filename.name
+    selected_url = metadata['url'][0].split('/')
+    selected_url = selected_url[0:-1]
+    selected_url.append(selected_file)
+    selected_url = '/'.join(selected_url)
+
+    metadata['filename'][0] = selected_file
+    metadata['url'][0] = selected_url
+
+    metadata['history'] = [f"Time series created from file {selected_file} "
+                           f"downloaded from {selected_url}"]
 
     return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata, uncertainty=uncertainties)
