@@ -223,6 +223,7 @@ class Card(WebComponent):
                     'display_name': ds.metadata['display_name'],
                     'url': ds.metadata['url'],
                     'citation': ds.metadata['citation'],
+                    'citation_url': ds.metadata['citation_url'],
                     'data_citation': ds.metadata['data_citation'],
                     'acknowledgement': ds.metadata['acknowledgement'],
                     'history': ds.metadata['history']

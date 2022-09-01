@@ -5,6 +5,7 @@
   "variable": "glacier",
   "units": "mwe",
   "citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
+  "citation_url": ["https://doi.org/10.5904/wgms-fog-2018-11"],
   "data_citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
   "acknowledgement": "",
   "colour": "#e69f00",

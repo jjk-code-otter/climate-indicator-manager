@@ -13,13 +13,31 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import copy
 
 import pytest
 import json
 from pathlib import Path
+
 from jsonschema import ValidationError, validate, RefResolver
+
 from climind.definitions import ROOT_DIR
-from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, BaseMetadata, CombinedMetadata, list_match
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, BaseMetadata, CombinedMetadata, \
+    list_match
+
+schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'dataset_schema.json'
+with open(schema_path) as f:
+    dataset_schema = json.load(f)
+
+schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
+with open(schema_path) as f:
+    collection_schema = json.load(f)
+
+combined_schema = copy.deepcopy(collection_schema)
+combined_schema["properties"]["datasets"]["items"]["$ref"] = "#/$defs/dataset"
+combined_schema["$defs"] = {"dataset": dataset_schema}
+
+collection_schema["properties"]["datasets"]["items"]["type"] = "string"
 
 
 @pytest.fixture
@@ -33,9 +51,9 @@ def test_dataset_attributes():
                   'climatology_end': 1990,
                   'actual': False,
                   'derived': False,
-                  'history': '',
                   'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'
+                  'fetcher': 'test_fetcher',
+                  'history': []
                   }
 
     return attributes
@@ -44,6 +62,7 @@ def test_dataset_attributes():
 @pytest.fixture
 def test_collection_attributes():
     attributes = {"name": "HadCRUT5",
+                  "display_name": "HadCRUT5",
                   "version": "5.0.1.0",
                   "variable": "tas",
                   "units": "degC",
@@ -52,9 +71,11 @@ def test_collection_attributes():
                       f"R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated "
                       f"assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. "
                       f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+                  "citation_url": ["kttps://notaurul"],
                   "data_citation": [""],
                   "colour": "#444444",
-                  "zpos": 99}
+                  "zpos": 99
+                  }
 
     return attributes
 
@@ -109,25 +130,19 @@ def test_match(test_dataset_attributes):
 
 def test_match_with_irrelevant_metadata(test_dataset_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
-
     metadata_to_match_irrelevant = {'irrelevance': 'meh'}
-
     assert ds.match_metadata(metadata_to_match_irrelevant)
 
 
 def test_match_list(test_dataset_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
-
     metadata_to_match_pass = {'climatology_start': [1961, 1981]}
-
     assert ds.match_metadata(metadata_to_match_pass)
 
 
 def test_no_match_list(test_dataset_attributes):
     ds = DatasetMetadata(test_dataset_attributes)
-
     metadata_to_match_pass = {'climatology_end': [1900, 2020]}
-
     assert not ds.match_metadata(metadata_to_match_pass)
 
 

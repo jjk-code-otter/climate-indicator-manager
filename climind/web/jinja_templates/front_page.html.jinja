@@ -39,6 +39,7 @@ p {
 
 
 
+
 </style>
 <body>
 
@@ -159,7 +160,10 @@ p {
                 {% if ds.citation %}
                 {% if ds.citation.0 != '' %}
                 <p>
-                    Citation{% if ds.citation|length > 1 %}s{% endif %}: {{ ds.citation|join(',<br>') }}
+                    Citation{% if ds.citation|length > 1 %}s{% endif %}:
+                    {% for cite in ds.citation %}
+                    <a href="{{ ds.citation_url[loop.index0] }}">{{ cite }}</a>.
+                    {% endfor %}
                 </p>
                 {% endif %}
                 {% endif %}

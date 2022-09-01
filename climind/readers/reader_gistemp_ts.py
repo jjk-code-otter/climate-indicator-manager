@@ -66,7 +66,7 @@ def build_transfer(xx: int, yy: int):
     return transfer, lox, hix, loy, hiy
 
 
-def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     df = xa.open_dataset(filename[0])
     df = df.rename({'tempanomaly': 'tas_mean',
                     'lat': 'latitude',
@@ -75,7 +75,7 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     """
     Convert 2x2 grid to 1x1 grid by copying 2x2 value into all 4 1x1 grid cells it
     contains
@@ -110,7 +110,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     gistemp = xa.open_dataset(filename[0])
     number_of_months = len(gistemp.time.data)
     target_grid = np.zeros((number_of_months, 36, 72))

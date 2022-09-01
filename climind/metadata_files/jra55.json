@@ -5,6 +5,7 @@
   "variable": "tas",
   "units": "degC",
   "citation": ["Kobayashi, S., Ota, Y., Harada, Y., Ebita, A., Moriya, M., Onoda, H., Onogi, K., Kamahori, H., Kobayashi, C., Endo, H. and Miyaoka, K., (2015). The JRA-55 reanalysis: General specifications and basic characteristics. Journal of the Meteorological Society of Japan. Ser. II, 93(1), pp.5-48."],
+  "citation_url": ["https://doi.org/10.2151/jmsj.2015-001"],
   "data_citation": [""],
   "acknowledgement": "",
   "colour": "#d55e00",

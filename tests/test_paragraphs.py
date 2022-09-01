@@ -53,6 +53,7 @@ def test_collection_attributes():
                       f"R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated "
                       f"assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. "
                       f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+                  "citation_url": ["utps://thingy"],
                   "data_citation": [""],
                   "colour": "#444444",
                   "zpos": 99}

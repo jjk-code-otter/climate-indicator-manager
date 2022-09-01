@@ -34,11 +34,11 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     return read_monthly_grid(filename, metadata)
 
 
-def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     df = xa.open_dataset(filename[0])
     # regrid to 1x1
     lats = np.arange(-89.5, 90.5, 1.0)

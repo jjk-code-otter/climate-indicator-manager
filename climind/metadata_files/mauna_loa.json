@@ -5,6 +5,7 @@
   "variable": "co2",
   "units": "ppm",
   "citation": ["Keeling, C. D., Bacastow, R. B., Bainbridge, A. E., Ekdahl, C. A., Guenther, P. R., Waterman, L. S. and Chin, J. F. (1976), Atmospheric carbon dioxide variations at Mauna Loa Observatory, Hawaii. Tellus, 28: 538-551. doi:10.1111/j.2153-3490.1976.tb00701.x"],
+  "citation_url": ["https://doi.org/10.1111/j.2153-3490.1976.tb00701.x"],
   "data_citation": [""],
   "acknowledgement": "Dr. Pieter Tans, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends/) and Dr. Ralph Keeling, Scripps Institution of Oceanography (scrippsco2.ucsd.edu/).",
   "colour": "#009e73",
