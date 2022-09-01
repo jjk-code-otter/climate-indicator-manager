@@ -37,6 +37,8 @@ p {
 
 
 
+
+
 </style>
 <body>
 
@@ -55,15 +57,19 @@ p {
 
             <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
                 <p>
-                    <img src="figures/{{ item.figure_name }}" width=100% alt="{{ item.caption }}">
+                    <img src="figures/{{ item.figure_name }}" width=100% alt="{{ item.caption }}"
+                         title="Graph of {{ item.title }}">
                 </p>
                 <h3>{{ item.title }}</h3>
                 <p>
                 <div style="float: left;">
-                    Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="">png</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank" aria-label="">pdf</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank" aria-label="">svg</a><br>
-                    Formatted data: <a href="formatted_data/{{ item.csv_name }}">csv</a>
+                    Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="Figure in png format">png</a>-<a
+                        href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank"
+                        aria-label="Figure in pdf format">pdf</a>-<a
+                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank"
+                        aria-label="Figure in svg format">svg</a><br>
+                    Formatted data: <a href="formatted_data/{{ item.csv_name }}"
+                                       aria-label="Bundle of csv data in a zip file">csv</a>
                 </div>
                 <div style="float: right;">
                     {% if item.link_to is not none %}
@@ -109,7 +115,7 @@ p {
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
             <div class="w3-content">
                 {% for item in paragraphs %}
-                <h3>{{ item.dataset_metadata.long_name }}</h3>
+                <h2>{{ item.dataset_metadata.long_name }}</h2>
                 <p>
                     {{ item.text }}
                 </p>
@@ -145,7 +151,9 @@ p {
                 <h3>{{ ds.display_name }}</h3>
                 <p>
                     {% for this_url in ds.url %}
-                    <a href="{{ this_url }}">Original data file (external link)</a>
+                    <a href="{{ this_url }}" target="_blank"
+                       aria-label="Link to original data file for {{ ds.display_name }}">Original data file (external
+                        link)</a>
                     {% endfor %}
                 </p>
                 {% if ds.citation %}
