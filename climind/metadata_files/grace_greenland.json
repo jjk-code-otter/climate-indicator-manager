@@ -5,6 +5,7 @@
   "variable": "greenland",
   "units": "Gt",
   "citation": ["Watkins, M. M., D. N. Wiese, D. -N. Yuan, C. Boening, and F. W. Landerer (2015), Improved methods for observing Earth's time variable mass distribution with GRACE using spherical cap mascons, J. Geophys. Res. Solid Earth, 120, 2648_2671, doi: 10.1002/2014JB011547."],
+  "citation_url": ["https://doi.org/10.1002/2014JB011547."],
   "data_citation": ["Wiese, D. N., D.-N. Yuan, C. Boening, F. W. Landerer, and M. M. Watkins (2019) JPL GRACE and GRACE-FO Mascon Ocean, Ice, and Hydrology Equivalent Water Height RL06M CRI Filtered Version 2.0, Ver. 2.0, PO.DAAC, CA, USA. Dataset accessed [AAAA] at http://dx.doi.org/10.5067/TEMSC-3MJ62."],
   "acknowledgement": "",
   "colour": "#56b4e9",

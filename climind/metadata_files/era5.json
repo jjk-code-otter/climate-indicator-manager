@@ -5,6 +5,7 @@
   "variable": "tas",
   "units": "degC",
   "citation": ["Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999– 2049. https://doi.org/10.1002/qj.3803"],
+  "citation_url": ["https://doi.org/10.1002/qj.3803"],
   "data_citation": [""],
   "acknowledgement": "",
   "colour": "#0072b2",

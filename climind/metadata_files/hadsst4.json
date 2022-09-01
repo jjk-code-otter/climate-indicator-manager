@@ -5,8 +5,9 @@
   "variable": "sst",
   "units": "degC",
   "citation": ["Kennedy, J. J., Rayner, N. A., Atkinson, C. P., and Killick, R. E. (2019). An ensemble data set of sea-surface temperature change from 1850: the Met Office Hadley Centre HadSST.4.0.0.0 data set. Journal of Geophysical Research: Atmospheres, 124. https://doi.org/10.1029/2018JD029867"],
+  "citation_url": ["https://doi.org/10.1029/2018JD029867"],
   "data_citation": [""],
-  "acknowledgement": "",
+  "acknowledgement": "HadSST.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadsst4 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "colour": "dimgrey",
   "zpos": 99,
   "datasets": [

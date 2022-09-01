@@ -6,7 +6,11 @@
   "type": "object",
   "properties": {
     "name": {
-      "description": "Name of the data set",
+      "description": "Unique name of the data set",
+      "type": "string"
+    },
+    "display_name": {
+      "description": "Name of the data set as it will appear in plots",
       "type": "string"
     },
     "version": {
@@ -26,6 +30,15 @@
     },
     "citation": {
       "description": "List of citations for the papers related to the data in the data collection",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "citation_url": {
+      "description": "List of citation urls for the papers related to the data in the data collection",
       "type": "array",
       "items": {
         "type": "string"
@@ -55,15 +68,18 @@
       "type": "array",
       "items": {
         "$ref": "dataset_schema.json"
-      }
+      },
+      "minItems": 1
     }
   },
   "required": [
     "name",
+    "display_name",
     "version",
     "variable",
     "units",
     "citation",
+    "citation_url",
     "data_citation",
     "colour",
     "zpos"

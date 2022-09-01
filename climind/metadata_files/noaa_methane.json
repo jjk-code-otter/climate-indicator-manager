@@ -5,6 +5,7 @@
   "variable": "ch4",
   "units": "ppm",
   "citation": ["Dlugokencky, E. J., L. P. Steele, P. M. Lang, and K. A. Masarie (1994), The growth rate and distribution of atmospheric methane, J. Geophys. Res., 99, 17,021– 17,043, doi:10.1029/94JD01245."],
+  "citation_url": ["https://doi.org/10.1029/94JD01245."],
   "data_citation": ["Ed Dlugokencky, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends_ch4/)"],
   "acknowledgement": "Ed Dlugokencky, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends_ch4/)",
   "colour": "#009e73",

@@ -31,6 +31,10 @@
       "description": "Is the data actuals (as in not anomalies)",
       "type": "boolean"
     },
+    "derived": {
+      "description": "Is the data processed after initial reading",
+      "type": "boolean"
+    },
     "url": {
       "description": "Url of the data set",
       "type": "array",
@@ -40,6 +44,13 @@
     },
     "filename": {
       "description": "Filename for the data set",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "history": {
+      "description": "List of processing steps applied to data set",
       "type": "array",
       "items": {
         "type": "string"

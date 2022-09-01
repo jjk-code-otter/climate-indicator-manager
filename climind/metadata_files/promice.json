@@ -5,6 +5,7 @@
   "variable": "greenland",
   "units": "Gt",
   "citation": ["Mankoff, K. D., Fettweis, X., Langen, P. L., Stendel, M., Kjeldsen, K. K., Karlsson, N. B., Noël, B., van den Broeke, M. R., Solgaard, A., Colgan, W., Box, J. E., Simonsen, S. B., King, M. D., Ahlstrøm, A. P., Andersen, S. B., and Fausto, R. S.: Greenland ice sheet mass balance from 1840 through next week, Earth Syst. Sci. Data, 13, 5001–5025, https://doi.org/10.5194/essd-13-5001-2021, 2021. doi: 10.5194/essd-13-5001-2021"],
+  "citation_url": ["https://doi.org/10.5194/essd-13-5001-2021"],
   "data_citation": ["https://doi.org/10.22008/FK2/OHI23Z"],
   "acknowledgement": "",
   "colour": "#009e73",

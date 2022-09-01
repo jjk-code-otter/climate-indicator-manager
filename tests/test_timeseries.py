@@ -456,15 +456,17 @@ def test_metadata():
                   'climatology_end': 1990,
                   'actual': False,
                   'derived': False,
-                  'history': [],
+                  'history': ['step1', 'step2'],
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher'}
 
     global_attributes = {'name': '',
+                         'display_name': '',
                          'version': '',
                          'variable': 'ohc',
                          'units': 'zJ',
-                         'citation': [''],
+                         'citation': ['cite1','cite2'],
+                         'citation_url': ['cite1','cite2'],
                          'data_citation': [''],
                          'colour': '',
                          'zpos': 99}
@@ -493,6 +495,7 @@ def test_write_csv_monthly_no_runon_line(simple_monthly, test_metadata, tmpdir):
 
     with open(test_filename, 'r') as f:
         for line in f:
+            assert 'history,G,"step1"history,G,"step2"' not in line
             assert line != 'type,month,intlong_name,data,ohc,zJ\n'
             assert line != '\n'
 

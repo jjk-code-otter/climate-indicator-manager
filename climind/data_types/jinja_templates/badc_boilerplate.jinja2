@@ -8,12 +8,10 @@ source,G,Produced by climind version {{ climind_version }}
 observation_station,G,derived data
 location,G,90.,-180.,-90.,180.
 activity,G,WMO
-{% for history_element in metadata.history -%}
-history,G,"{{ history_element }}"
-{%- endfor %}
-{% for citation in metadata.citation -%}
-reference,G,"{{ citation }}"
-{%- endfor %}
+{% for history_element in metadata.history -%}history,G,"{{ history_element }}"
+{% endfor -%}
+{% for citation in metadata.citation -%}reference,G,"{{ citation }}"
+{% endfor -%}
 rights,G,TBD
 comments,G,Data produced by climind version {{ climind_version }}
 comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv

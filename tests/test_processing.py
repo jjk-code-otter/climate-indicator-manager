@@ -35,7 +35,7 @@ def test_attributes():
                   'climatology_end': 1990,
                   'actual': False,
                   'derived': False,
-                  'history': '',
+                  'history': [],
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher',
                   'variable': 'ohc'}
@@ -54,15 +54,17 @@ def test_dataset():
                   'climatology_end': 1990,
                   'actual': False,
                   'derived': False,
-                  'history': '',
+                  'history': [],
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher'}
 
     global_attributes = {'name': '',
+                         'display_name': '',
                          'version': '',
                          'variable': 'ohc',
                          'units': 'zJ',
                          'citation': [''],
+                         'citation_url': [''],
                          'data_citation': [''],
                          'colour': '',
                          'zpos': 99}
@@ -76,10 +78,12 @@ def test_dataset():
 @pytest.fixture
 def test_collection_metadata():
     global_attributes = {'name': '',
+                         'display_name': '',
                          'version': '',
                          'variable': '',
                          'units': '1',
                          'citation': [''],
+                         'citation_url': [''],
                          'data_citation': [''],
                          'colour': '',
                          'zpos': 99}

@@ -8,6 +8,10 @@
     "Hall , B.D., G.S. Dutton, and J.W. Elkins (2007), The NOAA nitrous oxide standard scale for atmospheric observations, J. Geophys. Res., 112, D09305, doi:10.1029/2006JD007954.",
     "Elkins, J.W, and G.S. Dutton (2009), Nitrous oxide and sulfur hexafluoride [in 'State of the Climate in 2008']. Bull. Amer. Meteor. Soc, 90 S38-S39."
   ],
+  "citation_url": [
+    "https://doi.org/10.1029/2006JD007954",
+    "https://doi.org/10.1175/BAMS-90-8-StateoftheClimate"
+  ],
   "data_citation": ["Data obtained from https://gml.noaa.gov/hats/combined/N2O.html"],
   "acknowledgement": "",
   "colour": "#009e73",
