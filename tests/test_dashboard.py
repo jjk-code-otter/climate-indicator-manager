@@ -22,7 +22,7 @@ from zipfile import is_zipfile
 from climind.definitions import ROOT_DIR, METADATA_DIR
 import climind.data_manager.processing as dm
 import climind.web.dashboard as db
-
+from climind.data_types.timeseries import TimeSeriesMonthly
 
 @pytest.fixture
 def card_metadata():
@@ -243,7 +243,7 @@ def test_card_plot_with_kwargs(mocker, card_metadata):
 
 def test_card_csv_write(mocker, card_metadata):
     card = db.Card(card_metadata)
-    mockds = mocker.MagicMock()
+    mockds = mocker.MagicMock(spec=TimeSeriesMonthly)
     mockds.write_csv.return_value = 'test'
     mockds.metadata = {'variable': 'ohc', 'name': 'test_name'}
 

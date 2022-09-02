@@ -1,0 +1,50 @@
+{
+    "name": "NOAAGlobalTemp_5x5",
+    "display_name": "NOAAGlobalTemp",
+    "version": "v5.0.0",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Huang, B., M. J. Menne, T. Boyer, E. Freeman, B. E. Gleason, J. H. Lawrimore, C. Liu, J. J. Rennie, C. Schreck, F. Sun, R. Vose, C. N. Williams, X. Yin, H.-M. Zhang, 2020: Uncertainty estimates for sea surface temperature and land surface air temperature in NOAAGlobalTemp version 5. , J. Climate, 33, 1351-1379, DOI: 10.1175/JCLI-D-19-0395.1",
+        "Zhang, Huai-Min, Jay H. Lawrimore, Boyin Huang, Matthew J. Menne, Xungang Yin, Ahira S\u00c8\u00a7nchez-Lugo, Byron E. Gleason, Russell Vose, Derek Arndt, J. Jared Rennie, and Claude N. Williams. (2019) Updated Temperature Data Give a Sharper View of Climate Trends. Eos, 100, https://doi.org/10.1029/2019EO128229"
+    ],
+    "citation_url": [
+        "https://doi.org/10.1175/JCLI-D-19-0395.1",
+        "https://doi.org/10.1029/2019EO128229"
+    ],
+    "data_citation": [
+        "Zhang, H.-M., B. Huang, J. Lawrimore, M. Menne, Thomas M. Smith, NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 5 [indicate subset used]. NOAA National Centers for Environmental Information. doi:10.25921/9qth-2p70 Accessed [2022-09-02 09:51:04]."
+    ],
+    "acknowledgement": "",
+    "colour": "#e69f00",
+    "zpos": 10,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "NOAAGlobalTemp_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 5.0,
+            "climatology_start": 1981,
+            "climatology_end": 2010,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2022-09-02 09:51:04']",
+                "Rebaselined to 1981-2010",
+                "Calculated annual average",
+                "Wrote to file NOAAGlobalTemp_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2022-09-02 09:51:04"
+            ]
+        }
+    ]
+}

@@ -13,7 +13,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import copy
+import itertools
 from pathlib import Path
 
 import cartopy.crs as ccrs
@@ -26,8 +27,9 @@ import numpy as np
 from typing import List, Union
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
+from climind.data_types.grid import GridAnnual
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
-    caption_builder
+    caption_builder, map_caption_builder
 
 FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "zJ": "zJ",
@@ -912,3 +914,61 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
                                           f'{year}-{month:02d}-28'))
 
     nice_map(selection, image_filename, title, var=var)
+
+
+def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    dataset = copy.deepcopy(all_datasets[0])
+
+    out_grid = np.zeros((1, 36, 72))
+    n_data_sets = len(all_datasets)
+    stack = np.zeros((n_data_sets, 36, 72))
+    for i, ds in enumerate(all_datasets):
+        stack[i, :, :] = ds.df['tas_mean'].data[0, :, :]
+
+    for xx, yy in itertools.product(range(72), range(36)):
+        select = stack[:, yy, xx]
+        out_grid[0, yy, xx] = np.median(select[~np.isnan(select)])
+
+    dataset.df['tas_mean'].data = out_grid
+
+    data = dataset.df['tas_mean']
+    lon = dataset.df.coords['longitude']
+    lon_idx = data.dims.index('longitude')
+    wrap_data, wrap_lon = add_cyclic_point(data.values, coord=lon, axis=lon_idx)
+
+    plt.figure(figsize=(16, 9))
+    proj = ccrs.EqualEarth(central_longitude=0)
+
+    wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+
+    wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+
+    fig = plt.figure(figsize=(16, 9))
+    ax = fig.add_subplot(111, projection=proj, aspect='auto')
+    p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                    transform=ccrs.PlateCarree(), robust=True,
+                    levels=wmo_levels,
+                    colors=wmo_cols, add_colorbar=False,
+                    extend='both'
+                    )
+
+    cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
+
+    cbar.ax.tick_params(labelsize=15)
+    cbar.set_ticks(wmo_levels)
+    cbar.set_ticklabels(wmo_levels)
+    cbar.set_label(r'Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
+
+    p.axes.coastlines()
+    p.axes.set_global()
+
+    plt.title(f'{title}', pad=20, fontdict={'fontsize': 20})
+    plt.savefig(out_dir / f'{image_filename}')
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
+    plt.close()
+
+    caption = map_caption_builder(all_datasets)
+
+    return caption

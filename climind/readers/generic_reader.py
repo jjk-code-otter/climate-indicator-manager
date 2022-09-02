@@ -48,7 +48,10 @@ def get_reader_script_name(metadata: Union[CombinedMetadata, dict], **kwargs) ->
 
     elif metadata['type'] == 'gridded':
 
-        chosen_reader_script = 'read_monthly_grid'
+        if metadata['time_resolution'] == 'monthly':
+            chosen_reader_script = 'read_monthly_grid'
+        elif metadata['time_resolution'] == 'annual':
+            chosen_reader_script = 'read_annual_grid'
 
         if 'grid_resolution' in kwargs:
             if kwargs['grid_resolution'] == 5:

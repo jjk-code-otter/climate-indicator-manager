@@ -19,6 +19,7 @@ import numpy as np
 from numpy import ndarray
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
+from climind.data_types.grid import GridAnnual
 
 
 def calculate_trends(all_datasets: List[TimeSeriesAnnual], y1: int, y2: int) -> Tuple[float, float, float]:
@@ -218,6 +219,44 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
     caption += f" from {first_year}-{last_year}. "
     if 1 < len(all_datasets) < 17:
         caption += f"Data are from the following {number_to_word[len(all_datasets)]} data sets: "
+    else:
+        caption += f"Data are from "
+
+    dataset_names_for_caption = []
+    for ds in all_datasets:
+        dataset_names_for_caption.append(f"{ds.metadata['name']}")
+
+    caption += ', '.join(dataset_names_for_caption)
+    caption += '.'
+
+    return caption
+
+def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
+    """
+    Write a caption for the standard time series plots.
+
+    Parameters
+    ----------
+    all_datasets: List[Union[GridAnnual]]
+        List of datasets used in the plot
+    Returns
+    -------
+    str
+        Caption for the collection of data sets
+    """
+
+    ds = all_datasets[-1]
+
+    number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+                      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
+
+    caption = f"{ds.metadata['time_resolution']} {ds.metadata['long_name']} ({ds.metadata['units']}"
+    if not ds.metadata['actual']:
+        caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
+    caption += ") "
+    caption += f" for 2021. "
+    if 1 < len(all_datasets) < 17:
+        caption += f"Data shown are the median of the following {number_to_word[len(all_datasets)]} data sets: "
     else:
         caption += f"Data are from "
 

@@ -1,0 +1,49 @@
+{
+    "name": "JRA-55_5x5",
+    "display_name": "JRA-55",
+    "version": "",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Kobayashi, S., Ota, Y., Harada, Y., Ebita, A., Moriya, M., Onoda, H., Onogi, K., Kamahori, H., Kobayashi, C., Endo, H. and Miyaoka, K., (2015). The JRA-55 reanalysis: General specifications and basic characteristics. Journal of the Meteorological Society of Japan. Ser. II, 93(1), pp.5-48."
+    ],
+    "citation_url": [
+        "https://doi.org/10.2151/jmsj.2015-001"
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "",
+    "colour": "#d55e00",
+    "zpos": 1,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "JRA-55_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 1.25,
+            "climatology_start": 1981,
+            "climatology_end": 2010,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Data set created from file ['anl_surf125.011_tmp.202201_202212', 'anl_surf125.2022MMMM'] downloaded from ['', ''] at ['2022-08-05 16:33:02']",
+                "Regridded to 5 degree latitude-longitude resolution",
+                "Rebaselined to 1981-2010",
+                "Calculated annual average",
+                "Wrote to file JRA-55_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2022-08-05 16:33:02"
+            ]
+        }
+    ]
+}
