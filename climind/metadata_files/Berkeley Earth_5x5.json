@@ -1,0 +1,49 @@
+{
+    "name": "Berkeley Earth_5x5",
+    "display_name": "Berkeley Earth",
+    "version": "",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469\u00e2\u20ac\u201c3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"
+    ],
+    "citation_url": [
+        "https://doi.org/10.5194/essd-12-3469-2020"
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "",
+    "colour": "#009e73",
+    "zpos": 10,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "Berkeley Earth_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 1.0,
+            "climatology_start": 1981,
+            "climatology_end": 2010,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Data set created from file ['Land_and_Ocean_LatLong1.nc'] downloaded from ['http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc'] at ['2022-09-02 09:49:56']",
+                "Regridded to 5 degree latitude-longitude resolution",
+                "Rebaselined to 1981-2010",
+                "Calculated annual average",
+                "Wrote to file Berkeley Earth_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2022-09-02 09:49:56"
+            ]
+        }
+    ]
+}

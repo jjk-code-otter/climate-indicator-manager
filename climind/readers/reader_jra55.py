@@ -23,6 +23,7 @@ import numpy as np
 
 import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
+from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
@@ -30,7 +31,7 @@ from climind.readers.generic_reader import read_ts
 
 def read_grid(filename: List[Path]):
     dataset_list = []
-
+    returned_filename = None
     for year in range(1958, 2020):
 
         filled_filename = str(filename[0]).replace('YYYY', f'{year}')
@@ -40,6 +41,7 @@ def read_grid(filename: List[Path]):
             field = xa.open_dataset(filled_filename, engine='cfgrib')
             field = field.rename({'t2m': 'tas_mean'})
             dataset_list.append(field)
+            returned_filename = filled_filename
 
     for year, month in itertools.product(range(2020, 2050), range(1, 13)):
 
@@ -51,19 +53,22 @@ def read_grid(filename: List[Path]):
             field = field.expand_dims('time')
             field = field.rename({'t2m': 'tas_mean'})
             dataset_list.append(field)
+            returned_filename = filled_filename
 
     combo = xa.concat(dataset_list, dim='time')
-    return combo
+    return combo, returned_filename
 
 
-def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata):
-    ds = read_grid(filename)
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+    ds, filled_filename = read_grid(filename)
+    metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
     metadata.creation_message()
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
-    ds = read_grid(filename)
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+    ds, filled_filename = read_grid(filename)
+    metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
 
     jra55_125 = ds.tas_mean
     number_of_months = jra55_125.shape[0]
@@ -114,8 +119,9 @@ def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata):
-    ds = read_grid(filename)
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+    ds, filled_filename = read_grid(filename)
+    metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
 
     jra55_125 = ds.tas_mean
     number_of_months = jra55_125.shape[0]

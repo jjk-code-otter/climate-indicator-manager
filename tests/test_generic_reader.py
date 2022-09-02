@@ -28,12 +28,12 @@ def test_get_reader_script_name():
     test_script = get_reader_script_name(metadata)
     assert test_script == 'read_annual_ts'
 
-    metadata = {'type': 'gridded'}
+    metadata = {'type': 'gridded', 'time_resolution': 'monthly'}
     kwargs = {'grid_resolution': 1}
     test_script = get_reader_script_name(metadata, **kwargs)
     assert test_script == 'read_monthly_1x1_grid'
 
-    metadata = {'type': 'gridded'}
+    metadata = {'type': 'gridded', 'time_resolution': 'monthly'}
     kwargs = {'grid_resolution': 5}
     test_script = get_reader_script_name(metadata, **kwargs)
     assert test_script == 'read_monthly_5x5_grid'

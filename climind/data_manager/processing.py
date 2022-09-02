@@ -110,10 +110,7 @@ class DataSet:
 
         for url in self.metadata['url']:
             print(f"Downloading {url}")
-            if url == '':
-                print(f"Skipping: no url for {self.metadata['name']}")
-            else:
-                fetch_fn(url, out_dir)
+            fetch_fn(url, out_dir)
 
     def _get_fetcher(self):
         """

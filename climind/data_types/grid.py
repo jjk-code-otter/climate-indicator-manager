@@ -15,11 +15,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+import pkg_resources
 import itertools
 import xarray as xa
 import numpy as np
 import logging
 import regionmask
+from pathlib import Path
+from datetime import datetime
 from climind.data_manager.metadata import CombinedMetadata
 import climind.data_types.timeseries as ts
 
@@ -193,6 +196,7 @@ class GridMonthly:
         self.metadata['climatology_start'] = y1
         self.metadata['climatology_end'] = y2
         self.metadata['actual'] = False
+        self.metadata['derived'] = True
         self.update_history(f'Rebaselined to {y1}-{y2}')
 
         return anom
@@ -210,6 +214,8 @@ class GridMonthly:
 
         annual = GridAnnual(dsg, self.metadata)
         annual.update_history('Calculated annual average')
+        annual.metadata['time_resolution'] = 'annual'
+        annual.metadata['derived'] = True
 
         return annual
 
@@ -310,3 +316,38 @@ class GridAnnual:
         None
         """
         self.metadata['history'].append(message)
+
+    def write_grid(self, filename: Path, metadata_filename: Path = None, name: str = None):
+        if metadata_filename is not None:
+            if name is not None:
+                self.metadata['name'] = name
+            self.metadata['filename'] = [str(filename.name)]
+            self.metadata['url'] = [""]
+            self.metadata['reader'] = "reader_standard_grid"
+            self.metadata['fetcher'] = "fetcher_no_url"
+            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
+            self.metadata.write_metadata(metadata_filename)
+
+        now = datetime.today()
+        climind_version = pkg_resources.get_distribution("climind").version
+
+        self.df.to_netcdf(filename, format="NETCDF4")
+
+    def select_year_range(self, start_year: int, end_year: int):
+        """
+        Select a year range
+
+        Parameters
+        ----------
+        start_year
+        end_year
+
+        Returns
+        -------
+
+        """
+        self.df = self.df.where(self.df['year'] >= start_year, drop=True)
+        self.df = self.df.where(self.df.year <= end_year, drop=True)
+        self.update_history(f'Selected year range {start_year} to {end_year}')
+
+        return self

@@ -1,0 +1,48 @@
+{
+    "name": "HadCRUT5_5x5",
+    "display_name": "HadCRUT5",
+    "version": "5.0.1.0",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Morice, C. P., Kennedy, J. J., Rayner, N. A., Winn, J. P., Hogan, E., Killick, R. E., et al. (2021). An updated assessment of near-surface temperature change from 1850: the HadCRUT5 data set. Journal of Geophysical Research: Atmospheres, 126, e2019JD032361. https://doi.org/10.1029/2019JD032361"
+    ],
+    "citation_url": [
+        "https://doi.org/10.1029/2019JD032361"
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are \u00c2\u00a9 British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "colour": "dimgrey",
+    "zpos": 99,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "HadCRUT5_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 5.0,
+            "climatology_start": 1981,
+            "climatology_end": 2010,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Gridded dataset created from file ['HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc'] downloaded from ['https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc']",
+                "Rebaselined to 1981-2010",
+                "Calculated annual average",
+                "Wrote to file HadCRUT5_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2022-09-02 09:50:49"
+            ]
+        }
+    ]
+}

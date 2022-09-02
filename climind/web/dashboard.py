@@ -276,10 +276,11 @@ class Card(WebComponent):
         """
         csv_paths = []
         for ds in self.datasets:
-            csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
-            csv_path = formatted_data_dir / csv_filename
-            ds.write_csv(csv_path)
-            csv_paths.append(csv_path)
+            if isinstance(ds, TimeSeriesMonthly) or isinstance(ds, TimeSeriesAnnual):
+                csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
+                csv_path = formatted_data_dir / csv_filename
+                ds.write_csv(csv_path)
+                csv_paths.append(csv_path)
 
         return csv_paths
 
