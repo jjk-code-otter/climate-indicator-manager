@@ -15,17 +15,70 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
+from pathlib import Path
 from shapely.geometry import Polygon
+import xarray as xa
 import geopandas as gp
 import numpy as np
 import pandas as pd
 import climind.data_types.grid as gd
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 from xarray import Dataset
 from unittest.mock import call
 
 
 @pytest.fixture
-def monthly_grid_2():
+def test_dataset_attributes():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename', 'test_filename VVVV'],
+                  'type': 'gridded',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher',
+                  'history': [],
+                  'notes': 'This says BBBB'
+                  }
+
+    return attributes
+
+
+@pytest.fixture
+def test_collection_attributes():
+    attributes = {"name": "test_name",
+                  "display_name": "HadCRUT5",
+                  "version": "5.0.1.0",
+                  "variable": "tas",
+                  "units": "degC",
+                  "citation": [
+                      f"Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, "
+                      f"R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated "
+                      f"assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. "
+                      f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+                  "citation_url": ["kttps://notaurul"],
+                  "data_citation": [""],
+                  "acknowledgement": "Version VVVV of the data set was downloaded AAAA in the year of our lord YYYY",
+                  "colour": "#444444",
+                  "zpos": 99
+                  }
+
+    return attributes
+
+
+@pytest.fixture
+def test_combo(test_dataset_attributes, test_collection_attributes):
+    ds = DatasetMetadata(test_dataset_attributes)
+    cl = CollectionMetadata(test_collection_attributes)
+    combo = CombinedMetadata(ds, cl)
+    return combo
+
+
+@pytest.fixture
+def monthly_grid_2(test_combo):
     number_of_months = 12 * (1 + 2022 - 1850)
 
     test_grid = np.zeros((number_of_months, 36, 72))
@@ -37,15 +90,12 @@ def monthly_grid_2():
     times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
-    test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
-                                                 'history': [],
-                                                 'climatology_start': 1961,
-                                                 'climatology_end': 1990})
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
     return test_grid_monthly
 
 
 @pytest.fixture
-def monthly_grid():
+def monthly_grid(test_combo):
     number_of_months = 12 * (1 + 2022 - 1850)
 
     test_grid = np.zeros((number_of_months, 36, 72))
@@ -58,10 +108,7 @@ def monthly_grid():
     times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
-    test_grid_monthly = gd.GridMonthly(test_ds, {'name': 'test_name',
-                                                 'history': [],
-                                                 'climatology_start': 1961,
-                                                 'climatology_end': 1990})
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
     return test_grid_monthly
 
 
@@ -99,7 +146,7 @@ def test_update_history(monthly_grid):
 
 
 @pytest.fixture
-def annual_grid():
+def annual_grid(test_combo):
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
@@ -107,9 +154,56 @@ def annual_grid():
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
 
-    test_grid_annual = gd.GridAnnual(test_ds, {'name': 'test_name'})
+    test_grid_annual = gd.GridAnnual(test_ds, test_combo)
 
     return test_grid_annual
+
+
+def test_basic_write_grid(annual_grid, tmpdir):
+    filename = Path(tmpdir) / 'test.nc'
+    metadata_filename = Path(tmpdir) / 'test_metadata.json'
+
+    annual_grid.write_grid(filename)
+
+    assert filename.exists()
+    assert not metadata_filename.exists()
+
+
+def test_write_grid_with_metadata(annual_grid, tmpdir):
+    filename = Path(tmpdir) / 'test.nc'
+    metadata_filename = Path(tmpdir) / 'test_metadata.json'
+    new_name = 'newish_name'
+
+    annual_grid.write_grid(filename, metadata_filename=metadata_filename, name=new_name)
+
+    assert filename.exists()
+    assert metadata_filename.exists()
+
+
+def test_select_year_range(test_combo):
+    target_grid = np.zeros((2002 - 1995 + 1, 36, 72))
+    latitudes = np.arange(-87.5, 90.0, 5.0)
+    longitudes = np.arange(-177.5, 180.0, 5.0)
+    years = np.arange(1995, 2002.0001, 1)
+
+    ds = xa.Dataset({
+        'tas_mean': xa.DataArray(
+            data=target_grid,
+            dims=['year', 'latitude', 'longitude'],
+            coords={'year': years, 'latitude': latitudes, 'longitude': longitudes},
+            attrs={'long_name': '2m air temperature', 'units': 'K'}
+        )
+    },
+        attrs={'project': 'NA'}
+    )
+
+    test_grid_annual = gd.GridAnnual(ds, test_combo)
+
+    subset = test_grid_annual.select_year_range(1999, 2000)
+
+    assert subset.df.tas_mean.shape == (2, 36, 72)
+    assert subset.df.year.values[0] == 1999
+    assert subset.df.year.values[1] == 2000
 
 
 def test_log_activity(mocker):
