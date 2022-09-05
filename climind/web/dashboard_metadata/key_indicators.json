@@ -50,6 +50,11 @@
       ],
       "paragraphs": [
         {
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
+          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
+          "writing": {"function": "co2_paragraph"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
@@ -65,14 +70,19 @@
           "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "co2_paragraph"}
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
+          "writing": {"function": "long_term_trend_paragraph"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
           "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "greenland_ice_sheet"}
         }
       ]
     },
