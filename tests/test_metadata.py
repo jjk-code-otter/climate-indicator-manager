@@ -137,8 +137,6 @@ def tests_fill_string_again(test_dataset_attributes):
     assert replacement in bm['notes']
     assert 'BBBB' not in bm['notes']
 
-    return
-
 
 # DatasetMetadata
 
@@ -193,6 +191,7 @@ def test_creation_message(test_dataset_attributes):
     assert datestamp in ds['history'][history_length]
     assert ds['url'][0] in ds['history'][history_length]
     assert ds['filename'][0] in ds['history'][history_length]
+
 
 # CollectionMetadata
 

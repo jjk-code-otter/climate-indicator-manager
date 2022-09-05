@@ -22,7 +22,6 @@ from climind.data_manager.processing import DataCollection
 
 
 def test_get_last_modified(tmpdir):
-
     filename = Path(tmpdir) / 'test_file.txt'
 
     with open(filename, 'w') as f:
@@ -34,9 +33,6 @@ def test_get_last_modified(tmpdir):
     last_updated = get_last_modified_time(filename)
 
     assert last_updated == last_updated_from_file
-
-
-    pass
 
 
 def test_get_reader_script_name():
