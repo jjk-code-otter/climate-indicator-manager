@@ -103,13 +103,19 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         if isinstance(ds, TimeSeriesAnnual):
             x_values = ds.df['year']
             linewidth = 3
+            start_year, end_year = ds.get_first_and_last_year()
+            date_range = f"{start_year}-{end_year}"
         elif isinstance(ds, TimeSeriesMonthly):
             x_values = ds.df['year'] + (ds.df['month'] - 1) / 12.
             linewidth = 1
+            start_date, end_date = ds.get_start_and_end_dates()
+            date_range = f"{start_date.year}.{start_date.month:02d}-" \
+                         f"{end_date.year}.{end_date.month:02d}"
+
         else:
             raise TypeError('Wrong kind of object')
 
-        axis.plot(x_values, ds.df['data'], label=ds.metadata['display_name'],
+        axis.plot(x_values, ds.df['data'], label=f"{ds.metadata['display_name']} ({date_range})",
                   color=col, zorder=zord, linewidth=linewidth)
 
         if 'uncertainty' in ds.df.columns:
@@ -449,12 +455,14 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label='Marine cold spells', color=col, zorder=zord, linewidth=3)
+        start_year, end_year = ds.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine cold spells ({date_range})', color=col, zorder=zord, linewidth=3)
     for i, ds in enumerate(mhw):
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label='Marine heatwaves', color=col, zorder=zord, linewidth=3)
+        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine heatwaves ({date_range})', color=col, zorder=zord, linewidth=3)
 
     sns.despine(right=True, top=True, left=True)
 
@@ -538,12 +546,16 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(3)
-        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} March",
+        start_year, end_year = subds.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} March ({date_range})",
                  color=march_colors[i], linewidth=3)
 
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(9)
-        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} September",
+        start_year, end_year = subds.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} September ({date_range})",
                  color=september_colors[i], linewidth=3)
 
     ds = all_datasets[-1]
@@ -622,12 +634,16 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(2)
-        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} February",
+        start_year, end_year = subds.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} February ({date_range})",
                  color=february_colors[i], linewidth=3)
 
     for i, ds in enumerate(all_datasets):
         subds = ds.make_annual_by_selecting_month(9)
-        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} September",
+        start_year, end_year = subds.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        plt.plot(subds.df['year'], subds.df['data'], label=f"{ds.metadata['name']} September ({date_range})",
                  color=september_colors[i], linewidth=3)
 
     ds = all_datasets[-1]

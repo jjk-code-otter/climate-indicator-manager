@@ -2,7 +2,7 @@
   "name": "IMBIE Antarctica",
   "display_name": "IMBIE 2018",
   "version": "",
-  "variable": "antarctica",
+  "variable": "antarctica_ignore",
   "units": "Gt",
   "citation": ["Slater, T., Shepherd, A. Antarctic ice losses tracking high. Nature Clim Change 8, 1025–1026 (2018). https://doi.org/10.1038/s41558-018-0284-9"],
   "citation_url": ["https://www.nature.com/articles/s41558-018-0284-9"],
