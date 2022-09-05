@@ -16,8 +16,28 @@
 
 import pytest
 from pathlib import Path
-from climind.readers.generic_reader import read_ts, get_reader_script_name, get_module
+from datetime import datetime
+from climind.readers.generic_reader import read_ts, get_reader_script_name, get_module, get_last_modified_time
 from climind.data_manager.processing import DataCollection
+
+
+def test_get_last_modified(tmpdir):
+
+    filename = Path(tmpdir) / 'test_file.txt'
+
+    with open(filename, 'w') as f:
+        f.write('test text')
+
+    longtime = filename.stat().st_mtime
+    last_updated_from_file = datetime.fromtimestamp(longtime).strftime("%Y-%m-%d %H:%M:%S")
+
+    last_updated = get_last_modified_time(filename)
+
+    assert last_updated == last_updated_from_file
+
+
+    pass
+
 
 def test_get_reader_script_name():
     metadata = {'type': 'timeseries', 'time_resolution': 'monthly'}

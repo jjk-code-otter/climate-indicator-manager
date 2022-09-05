@@ -415,3 +415,8 @@ def tests_marine_heatwave_paragraph(prepared_mhw_datasets):
 def tests_marine_heatwave_no_input_paragraph():
     with pytest.raises(RuntimeError):
         _ = pg.marine_heatwave_and_cold_spell_paragraph([], 2021)
+
+
+def test_compare_to_highest_anomaly_and_rank_with_nothing_in_list():
+    with pytest.raises(RuntimeError):
+        _ = pg.compare_to_highest_anomaly_and_rank([], 2020)

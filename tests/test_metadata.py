@@ -43,7 +43,7 @@ collection_schema["properties"]["datasets"]["items"]["type"] = "string"
 @pytest.fixture
 def test_dataset_attributes():
     attributes = {'url': ['test_url'],
-                  'filename': ['test_filename'],
+                  'filename': ['test_filename', 'test_filename VVVV'],
                   'type': 'gridded',
                   'time_resolution': 'monthly',
                   'space_resolution': 999,
@@ -53,7 +53,8 @@ def test_dataset_attributes():
                   'derived': False,
                   'reader': 'test_reader',
                   'fetcher': 'test_fetcher',
-                  'history': []
+                  'history': ['AAAA', 'AAAB', 'BBBB'],
+                  'notes': 'This says BBBB'
                   }
 
     return attributes
@@ -73,6 +74,7 @@ def test_collection_attributes():
                       f"Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
                   "citation_url": ["kttps://notaurul"],
                   "data_citation": [""],
+                  "acknowledgement": "Version VVVV of the data set was downloaded AAAA in the year of our lord YYYY",
                   "colour": "#444444",
                   "zpos": 99
                   }
@@ -108,6 +110,37 @@ def test_print_base_metadata():
     assert 'flash' in test_string
     assert 'aha' in test_string
 
+
+def tests_fill_string(test_dataset_attributes):
+    bm = BaseMetadata(test_dataset_attributes)
+
+    replacement = '3456'
+    save_value = copy.deepcopy(bm['history'][1])
+
+    bm.fill_string('AAAA', replacement)
+    assert bm['history'][0] == replacement
+    assert bm['history'][1] == save_value
+
+
+def tests_fill_string_again(test_dataset_attributes):
+    bm = BaseMetadata(test_dataset_attributes)
+
+    replacement = '99'
+    save_value0 = copy.deepcopy(bm['history'][0])
+    save_value1 = copy.deepcopy(bm['history'][1])
+
+    bm.fill_string('BBBB', replacement)
+
+    assert bm['history'][0] == save_value0
+    assert bm['history'][1] == save_value1
+    assert bm['history'][2] == replacement
+    assert replacement in bm['notes']
+    assert 'BBBB' not in bm['notes']
+
+    return
+
+
+# DatasetMetadata
 
 def test_missing_standard_attribute_in_dataset():
     attributes = {'url': 'test_url',
@@ -145,6 +178,23 @@ def test_no_match_list(test_dataset_attributes):
     metadata_to_match_pass = {'climatology_end': [1900, 2020]}
     assert not ds.match_metadata(metadata_to_match_pass)
 
+
+def test_creation_message(test_dataset_attributes):
+    ds = DatasetMetadata(test_dataset_attributes)
+    datestamp = '2099-09-07'
+    ds['last_modified'] = datestamp
+
+    history_length = len(ds['history'])
+
+    ds.creation_message()
+
+    # adds an item to the history and that item contains the last_modified attribute
+    assert len(ds['history']) == history_length + 1
+    assert datestamp in ds['history'][history_length]
+    assert ds['url'][0] in ds['history'][history_length]
+    assert ds['filename'][0] in ds['history'][history_length]
+
+# CollectionMetadata
 
 def test_collection(test_collection_attributes):
     ds = CollectionMetadata(test_collection_attributes)
@@ -238,3 +288,23 @@ def test_combined_write(test_dataset_attributes, test_collection_attributes, tmp
         metadata_schema = json.load(f)
     resolver = RefResolver(schema_path.as_uri(), metadata_schema)
     validate(read_in_json, metadata_schema, resolver=resolver)
+
+
+def test_combined_creation_message(test_dataset_attributes, test_collection_attributes):
+    datestamp = '2075-01-19 12:34:56'
+    test_dataset_attributes['last_modified'] = [datestamp]
+
+    filled_acknowledgement = test_collection_attributes['acknowledgement']
+    filled_acknowledgement = filled_acknowledgement.replace('AAAA', datestamp)
+    filled_acknowledgement = filled_acknowledgement.replace('YYYY', '2075')
+    filled_acknowledgement = filled_acknowledgement.replace('VVVV', test_collection_attributes['version'])
+
+    ds = DatasetMetadata(test_dataset_attributes)
+    col = CollectionMetadata(test_collection_attributes)
+    combo = CombinedMetadata(ds, col)
+
+    combo.creation_message()
+
+    assert datestamp in combo['acknowledgement']
+    assert combo['history'][0] == datestamp
+    assert combo['acknowledgement'] == filled_acknowledgement
