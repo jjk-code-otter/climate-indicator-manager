@@ -2,7 +2,7 @@
   "name": "IMBIE Greenland",
   "display_name": "IMBIE 2018",
   "version": "",
-  "variable": "greenland",
+  "variable": "greenland_ignore",
   "units": "Gt",
   "citation": ["The IMBIE Team. Mass balance of the Greenland Ice Sheet from 1992 to 2018. Nature 579, 233–239 (2020). https://doi.org/10.1038/s41586-019-1855-2"],
   "citation_url": ["https://doi.org/10.1038/s41586-019-1855-2"],

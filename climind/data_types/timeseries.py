@@ -293,6 +293,7 @@ class TimeSeriesMonthly:
 
         return out_value
 
+    @log_activity
     def add_offset(self, offset: float):
         """
         Add an offset to the whole data series
@@ -308,6 +309,7 @@ class TimeSeriesMonthly:
         self.df['data'] = self.df['data'] + offset
         self.update_history(f'Added offset of {offset}')
 
+    @log_activity
     def zero_on_month(self, year: int, month: int):
         """
         Zero data set on the value for a single month in a single year
@@ -430,6 +432,24 @@ class TimeSeriesMonthly:
         first_year = self.df['year'].tolist()[0]
         last_year = self.df['year'].tolist()[-1]
         return first_year, last_year
+
+    def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
+        """
+        Get the first and last dates in the dataset
+
+        Returns
+        -------
+        Tuple[datetime, datetime]
+        """
+        time_str = self.df.year.astype(str) + self.df.month.astype(str)
+        self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
+
+        n_time = len(self.df['time'])
+
+        start_date = self.df['time'][0]
+        end_date = self.df['time'][n_time - 1]
+
+        return start_date, end_date
 
 
 class TimeSeriesAnnual:

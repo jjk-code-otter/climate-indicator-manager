@@ -264,6 +264,16 @@ def test_zero_on_month(simple_monthly):
         assert simple_monthly.df['data'][i] == simple_monthly.df['year'][i] - 1870.
 
 
+def test_get_start_and_end_dates(simple_monthly):
+    start_date, end_date = simple_monthly.get_start_and_end_dates()
+
+    assert start_date.year == 1850
+    assert start_date.month == 1
+
+    assert end_date.year == 2022
+    assert end_date.month == 12
+
+
 # Annual tests
 
 def test_make_from_df(uncertainty_annual):
@@ -465,8 +475,8 @@ def test_metadata():
                          'version': '',
                          'variable': 'ohc',
                          'units': 'zJ',
-                         'citation': ['cite1','cite2'],
-                         'citation_url': ['cite1','cite2'],
+                         'citation': ['cite1', 'cite2'],
+                         'citation_url': ['cite1', 'cite2'],
                          'data_citation': [''],
                          'colour': '',
                          'zpos': 99}
