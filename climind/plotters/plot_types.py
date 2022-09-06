@@ -211,11 +211,11 @@ def after_plot(zords, ds, title):
 
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
     this_parameter_set = STANDARD_PARAMETER_SET
-    this_parameter_set['grid.color'] = 'dimgrey',
-    this_parameter_set['figure.facecolor'] = 'black',
-    this_parameter_set['text.color'] = 'lightgrey',
-    this_parameter_set['xtick.color'] = 'lightgrey',
-    this_parameter_set['ytick.color'] = 'lightgrey',
+    this_parameter_set['grid.color'] = '#696969'
+    this_parameter_set['figure.facecolor'] = '#000000'
+    this_parameter_set['text.color'] = '#d3d3d3'
+    this_parameter_set['xtick.color'] = '#d3d3d3'
+    this_parameter_set['ytick.color'] = '#d3d3d3'
 
     sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
 
