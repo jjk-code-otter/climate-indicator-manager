@@ -1,5 +1,9 @@
 include climind/metadata_files/*.json
 include climind/data_manager/metadata_schema.json
 include climind/data_manager/dataset_schema.json
+include climind/data_types/jinja_templates/badc_boilerplate.jinja2
+include climind/web/dashboard_metadata/*.json
+include climind/web/jinja_templates/*html
+include climind/web/jinja_templates/*jinja
 include tests/test_data/*.json
 recursive-include docs *.rst

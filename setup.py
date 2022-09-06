@@ -24,12 +24,13 @@ setup(
     author_email='jjk.code.otter@gmail.com',
     # Needed to actually package something
     packages=['climind', 'climind.config', 'climind.data_manager', 'climind.data_types',
-              'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats'],
+              'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats',
+              'climind.web'],
     # Needed for dependencies
     install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
                       'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
                       'python-dotenv', 'regionmask', 'geopandas', 'shapely',
-                      'cdsapi', 'cartopy', 'cftime', 'jinja2'],
+                      'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx'],
     # version number
     version='0.1',
     # The license can be anything you like
