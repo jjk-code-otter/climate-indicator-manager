@@ -20,6 +20,7 @@ import requests
 from dotenv import load_dotenv
 from climind.fetchers.fetcher_utils import filename_from_url
 from climind.config.config import DATA_DIR
+from datetime import datetime
 
 
 def fetch(url: str, outdir: Path):
@@ -43,15 +44,29 @@ def fetch(url: str, outdir: Path):
     username = os.getenv('PODAAC_USER')
     password = os.getenv('PODAAC_PSWD')
 
-    req = requests.get(url, auth=(username, password))
+    now = datetime.now()
+    y = now.year
+    m = now.month
+    nsteps = 12
 
-    filename = filename_from_url(url)
-    filename = outdir / filename
+    # Search back through past 12 months to finding a matching filename
+    for _ in range(1, nsteps + 1):
 
-    if req.status_code != 404:
-        with open(filename, 'wb') as outfile:
-            chunk_size = 1048576
-            for chunk in req.iter_content(chunk_size=chunk_size):
-                outfile.write(chunk)
-    else:
-        print("404 returned for ", filename)
+        filled_url = url.replace('YYYY', f'{y}')
+        filled_url = filled_url.replace('MMMM', f'{m:02d}')
+
+        req = requests.get(filled_url, auth=(username, password))
+
+        filename = filename_from_url(filled_url)
+        filename = outdir / filename
+
+        if req.status_code != 404:
+            with open(filename, 'wb') as outfile:
+                chunk_size = 1048576
+                for chunk in req.iter_content(chunk_size=chunk_size):
+                    outfile.write(chunk)
+
+        m -= 1
+        if m == 0:
+            y -= 1
+            m = 12
