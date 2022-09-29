@@ -15,16 +15,42 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-
+import copy
 import numpy as np
 import pandas as pd
 from typing import List
 
 import climind.data_types.timeseries as ts
-
+from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
 
-from climind.readers.generic_reader import read_ts
+def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
+
+    # look in directory to find all matching
+    filename_with_wildcards = filename_with_wildcards.replace('YYYYMMMM', '*')
+    list_of_files = list(out_dir.glob(filename_with_wildcards))
+    list_of_files.sort()
+    out_filename = list_of_files[-1]
+    return out_filename
+
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
+
+    filename_with_wildcards = metadata['filename'][0]
+    filename = find_latest(out_dir, filename_with_wildcards)
+    last_modified = get_last_modified_time(filename)
+
+    construction_metadata = copy.deepcopy(metadata)
+    construction_metadata.dataset['last_modified'] = [last_modified]
+
+    if metadata['type'] == 'timeseries':
+        if metadata['time_resolution'] == 'monthly':
+            return read_monthly_ts([filename], construction_metadata)
+        elif metadata['time_resolution'] == 'annual':
+            return read_annual_ts([filename], construction_metadata)
+        else:
+            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+
+    pass
 
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):

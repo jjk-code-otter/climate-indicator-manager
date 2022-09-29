@@ -81,6 +81,7 @@ def get_module(package_name: str, script_name: str):
     module = __import__(ext, fromlist=[None])
     return module
 
+
 def get_last_modified_time(file: Path) -> Optional[str]:
     """
     Get update time of file if it exists, else None

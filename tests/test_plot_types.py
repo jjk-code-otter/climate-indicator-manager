@@ -169,11 +169,11 @@ def test_set_yaxis(mocker):
     assert test_hi == pytest.approx(8.15, 6)
     assert len(test_ticks) == 12
 
-    mock_axis.get_ylim.return_value = [-11., 14.]
+    mock_axis.get_ylim.return_value = [-110., 140.]
     ds = Tiny('ohc')
     test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
-    assert test_lo == pytest.approx(-10, 6)
-    assert test_hi == pytest.approx(15, 6)
+    assert test_lo == pytest.approx(-100, 6)
+    assert test_hi == pytest.approx(150, 6)
     assert len(test_ticks) == 5
 
     mock_axis.get_ylim.return_value = [-5., 75.]
