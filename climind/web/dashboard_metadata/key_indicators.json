@@ -190,6 +190,12 @@
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
+          "link_to":  null, "title": "Ocean heat content to 2000m",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Ocean heat content to 2000m"}
+        },
+        {
           "link_to":  null, "title": "Ocean pH",
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
           "processing": [],

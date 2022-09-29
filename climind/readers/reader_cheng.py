@@ -40,8 +40,18 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
             years.append(int(year))
             months.append(int(month))
             if columns[1] != '':
-                anomalies.append(float(columns[2]))
-                uncertainties.append(float(columns[4]))
+                if metadata['variable'] == 'ohc':
+                    anomalies.append(10 * float(columns[2]))
+                    uncertainties.append(10 * float(columns[4]))
+                elif metadata['variable'] == 'ohc2k':
+                    # need to combine the upper 0-700m layer with the lower 700-2000m layer
+                    upper = 10 * float(columns[2])
+                    lower = 10 * float(columns[5])
+                    anomalies.append(upper + lower)
+
+                    upper = 10 * float(columns[4])
+                    lower = 10 * float(columns[7])
+                    uncertainties.append(np.sqrt(upper**2 + lower**2))
             else:
                 anomalies.append(np.nan)
                 uncertainties.append(np.nan)

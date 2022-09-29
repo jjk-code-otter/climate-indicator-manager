@@ -42,8 +42,12 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
             year = columns[0]
             years.append(int(year))
             if columns[1] != '':
-                anomalies.append(float(columns[1]))
-                uncertainty.append(float(columns[4]))
+                if metadata['variable'] == 'ohc':
+                    anomalies.append(10*float(columns[1]))
+                    uncertainty.append(10*float(columns[4]))
+                elif metadata['variable'] == 'ohc2k':
+                    anomalies.append(10*float(columns[3]))
+                    uncertainty.append(10*float(columns[4]))
             else:
                 anomalies.append(np.nan)
                 uncertainty.append(np.nan)

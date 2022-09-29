@@ -49,7 +49,6 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
 
     with open(filename[0], 'r') as f:
         for line in f:
-            print(line)
             if line[0] != '#' and line != '\n':
                 columns = line.split()
                 year = columns[0]

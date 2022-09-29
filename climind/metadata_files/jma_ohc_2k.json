@@ -1,0 +1,30 @@
+{
+  "name": "Ishii2k",
+  "display_name": "Ishii",
+  "version": "",
+  "variable": "ohc2k",
+  "units": "zJ",
+  "citation": ["Ishii, M., Y. Fukuda, H. Hirahara, S. Yasui, T. Suzuki, and K. Sato, 2017: Accuracy of Global Upper Ocean Heat Content Estimation Expected from Present Observational Data Sets. SOLA, Vol. 13, 163 – 167, doi:10.2151/sola.2017-030."],
+  "citation_url": ["https://doi.org/10.2151/sola.2017-030."],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#d55e00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://www.data.jma.go.jp/gmd/kaiyou/data/english/ohc/ohc_global_1955.txt"],
+      "filename": ["ohc_global_1955.txt"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_ishii",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -50,6 +50,12 @@ if __name__ == "__main__":
              'time_resolution': 'annual'},
             'Ocean heat content'
         ],
+        'ohc2k': [
+            {'variable': 'ohc2k',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Ocean heat content'
+        ],
         'mhw': [
             {'variable': 'mhw',
              'type': 'timeseries',
@@ -139,7 +145,7 @@ if __name__ == "__main__":
         m = []
         for ds in all_datasets:
             # ds.select_year_range(1980, 2022)
-            if variable in ['arctic_ice', 'antarctic_ice', 'ohc']:
+            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k']:
                 ds.rebaseline(1981, 2010)
             if variable in ['antarctica']:
                 ds.zero_on_month(2005, 6)
