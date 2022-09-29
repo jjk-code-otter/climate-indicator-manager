@@ -50,6 +50,12 @@ if __name__ == "__main__":
              'time_resolution': 'annual'},
             'Ocean heat content'
         ],
+        'ohc2k': [
+            {'variable': 'ohc2k',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Ocean heat content'
+        ],
         'mhw': [
             {'variable': 'mhw',
              'type': 'timeseries',
@@ -123,15 +129,6 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'annual'},
             'Glacier mass balance'
-        ]
-    }
-
-    holdall = {
-        'ohc': [
-            {'variable': 'ohc2k',
-             'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Ocean heat content'
         ]
     }
 
