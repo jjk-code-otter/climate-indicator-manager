@@ -1,0 +1,45 @@
+{
+  "name": "Levitus2k",
+  "display_name": "Levitus",
+  "version": "",
+  "variable": "ohc2k_ignore",
+  "units": "zJ",
+  "citation": ["Levitus, S., et al. (2012), World ocean heat content and thermosteric sea level change (0–2000 m), 1955–2010, Geophys. Res. Lett., 39, L10603, doi:10.1029/2012GL051106"],
+  "citation_url": ["https://doi.org/10.1029/2012GL051106"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://www.ncei.noaa.gov/data/oceans/woa/DATA_ANALYSIS/3M_HEAT_CONTENT/DATA/basin/3month/ohc2000m_levitus_climdash_seasonal.csv"],
+      "filename": ["ohc2000m_levitus_climdash_seasonal.csv"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_levitus",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.ncei.noaa.gov/data/oceans/woa/DATA_ANALYSIS/3M_HEAT_CONTENT/DATA/basin/yearly/h22-w0-2000m.dat"],
+      "filename": ["h22-w0-2000m.dat"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_levitus",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
