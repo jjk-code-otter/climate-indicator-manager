@@ -460,12 +460,14 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
         zords.append(zord)
         start_year, end_year = ds.get_first_and_last_year()
         date_range = f"{start_year}-{end_year}"
-        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine cold spells ({date_range})', color=col, zorder=zord, linewidth=3)
+        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine cold spells ({date_range})', color=col, zorder=zord,
+                 linewidth=3)
     for i, ds in enumerate(mhw):
         col = ds.metadata['colour']
         zord = ds.metadata['zpos']
         zords.append(zord)
-        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine heatwaves ({date_range})', color=col, zorder=zord, linewidth=3)
+        plt.plot(ds.df['year'], ds.df['data'], label=f'Marine heatwaves ({date_range})', color=col, zorder=zord,
+                 linewidth=3)
 
     sns.despine(right=True, top=True, left=True)
 
@@ -935,7 +937,8 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
     nice_map(selection, image_filename, title, var=var)
 
 
-def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
+                          type: str) -> str:
     dataset = copy.deepcopy(all_datasets[0])
 
     out_grid = np.zeros((1, 36, 72))
@@ -946,7 +949,11 @@ def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename:
 
     for xx, yy in itertools.product(range(72), range(36)):
         select = stack[:, yy, xx]
-        out_grid[0, yy, xx] = np.median(select[~np.isnan(select)])
+        if type == 'mean':
+            out_grid[0, yy, xx] = np.median(select[~np.isnan(select)])
+        if type == 'unc':
+            anomaly_range = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
+            out_grid[0, yy, xx] = anomaly_range / 2.
 
     dataset.df['tas_mean'].data = out_grid
 
@@ -958,26 +965,40 @@ def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename:
     plt.figure(figsize=(16, 9))
     proj = ccrs.EqualEarth(central_longitude=0)
 
-    wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
-
-    wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    if type == 'mean':
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    elif type == 'unc':
+        wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
-                    transform=ccrs.PlateCarree(), robust=True,
-                    levels=wmo_levels,
-                    colors=wmo_cols, add_colorbar=False,
-                    extend='both'
-                    )
+    if type == 'mean':
+        p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                        transform=ccrs.PlateCarree(), robust=True,
+                        levels=wmo_levels,
+                        colors=wmo_cols, add_colorbar=False,
+                        extend='both'
+                        )
+    elif type == 'unc':
+        p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                        transform=ccrs.PlateCarree(), robust=True,
+                        levels=wmo_levels,
+                        cmap='YlGnBu', add_colorbar=False,
+                        extend='max'
+                        )
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 
     cbar.ax.tick_params(labelsize=15)
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
-    cbar.set_label(r'Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
+
+    label_text = r'Temperature difference from 1981-2010 average ($\degree$C)'
+    if type == 'unc':
+        label_text = r'Temperature anomaly half-range ($\degree$C)'
+    cbar.set_label(label_text, rotation=0, fontsize=15)
 
     p.axes.coastlines()
     p.axes.set_global()
@@ -991,3 +1012,11 @@ def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename:
     caption = map_caption_builder(all_datasets)
 
     return caption
+
+
+def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'mean')
+
+
+def dashboard_uncertainty_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'unc')
