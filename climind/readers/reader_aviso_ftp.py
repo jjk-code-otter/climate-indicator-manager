@@ -29,7 +29,14 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
 
     df = xa.open_dataset(filename[0])
 
+    correction = xa.open_dataset(filename[0].parent / 'Topex-A_correction.nc')
+    msl_correction = correction.tpa_correction.values.tolist()
+
     anomalies = df.msl.values.tolist()
+
+    for i in range(len(msl_correction)):
+        anomalies[i] = anomalies[i] - msl_correction[i]
+
     years = df.time.dt.year.data.tolist()
     months = df.time.dt.month.data.tolist()
 
