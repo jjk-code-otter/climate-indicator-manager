@@ -51,3 +51,11 @@ if __name__ == "__main__":
     dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir))
+
+    # Key indicators 2022
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2022.json'
+    dash = Dashboard.from_json(json_file, METADATA_DIR)
+    dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2022'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir), focus_year=2022)
+

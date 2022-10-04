@@ -18,7 +18,7 @@
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
@@ -50,28 +50,17 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
-          "writing": {"function": "co2_paragraph"}
-        },
-        {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
-                          {"method": "select_year_range", "args":  [1850,2021]}],
-          "writing": {"function": "anomaly_and_rank"}
-        },
-        {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2022]}],
           "writing": {"function": "long_term_trend_paragraph"}
         },
         {
@@ -114,7 +103,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2021]}],
+          "processing": [{"method": "select_year_range", "args": [1850, 2022]}],
           "writing": {"function": "co2_paragraph"}
         }
       ]
@@ -130,7 +119,7 @@
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
@@ -151,23 +140,23 @@
           "link_to":  null, "title": "Temperature anomaly map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2021, 2021]}],
+          "processing":  [{"method": "select_year_range", "args": [2022, 2022]}],
           "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2021"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2021, 2021]}],
+          "processing":  [{"method": "select_year_range", "args": [2022, 2022]}],
           "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2021"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly rank map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
-          "processing":  [{"method":  "select_year_range", "args": [1850, 2021]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2022]},
                           {"method":  "rank", "args": []},
-                          {"method":  "select_year_range", "args": [2021, 2021]}],
+                          {"method":  "select_year_range", "args": [2022, 2022]}],
           "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2021"}
         }
       ],
@@ -176,7 +165,7 @@
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2021]},
+                          {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "writing": {"function": "anomaly_and_rank"}
@@ -248,7 +237,7 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2022]}],
           "writing": {"function": "long_term_trend_paragraph"}
         }
 

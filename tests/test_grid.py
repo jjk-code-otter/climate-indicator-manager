@@ -394,6 +394,49 @@ def test_make_grid_annual():
     assert 'name' in test_grid_annual.metadata
 
 
+def test_rank_annual():
+    test_grid = np.zeros((12, 36, 72))
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = np.arange(1., 13., 1.0)
+
+    for i in range(12):
+        test_grid[i, :, :] = i
+        test_grid[i, 9, 7] = 12 - i
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_annual = gd.GridAnnual(test_ds, {})
+
+    test_ranked = test_grid_annual.rank()
+
+    assert test_ranked.df['tas_mean'].data[11, 0, 0] == 1
+    assert test_ranked.df['tas_mean'].data[11, 9, 7] == 12
+
+
+def test_rank_annual_with_missing():
+    test_grid = np.zeros((12, 36, 72))
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = np.arange(1., 13., 1.0)
+
+    for i in range(10):
+        test_grid[i, :, :] = i
+        test_grid[i, 9, 7] = 12 - i
+
+    test_grid[10, :, :] = np.nan
+    test_grid[11, :, :] = np.nan
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_annual = gd.GridAnnual(test_ds, {})
+
+    test_ranked = test_grid_annual.rank()
+
+    assert test_ranked.df['tas_mean'].data[9, 0, 0] == 1
+    assert test_ranked.df['tas_mean'].data[9, 9, 7] == 10
+
+
 @pytest.fixture
 def shapes():
     data_dictionary = {

@@ -165,6 +165,18 @@ def log_activity(in_function):
     return wrapper
 
 
+def rank_array(in_array) -> int:
+
+    in_array[np.isnan(in_array)] = -9999.9999
+
+    ntime = len(in_array)
+    temp = in_array.argsort()
+    ranks = np.empty_like(temp)
+    ranks[temp] = np.arange(ntime)
+    rank = ntime - ranks
+    return rank
+
+
 class GridMonthly:
 
     def __init__(self, input_data: xa.Dataset, metadata: CombinedMetadata):
@@ -351,3 +363,13 @@ class GridAnnual:
         self.update_history(f'Selected year range {start_year} to {end_year}')
 
         return self
+
+    def rank(self):
+        output = copy.deepcopy(self)
+        out_grid = np.zeros(output.df['tas_mean'].data.shape)
+        for xx, yy in itertools.product(range(72), range(36)):
+            selection = output.df['tas_mean'].data[:, yy, xx]
+            rank = rank_array(selection)
+            out_grid[:, yy, xx] = rank
+        output.df['tas_mean'].data = out_grid
+        return output
