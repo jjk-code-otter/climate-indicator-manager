@@ -1,0 +1,359 @@
+{
+  "name": "Key Indicators",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Key Climate Indicators",
+      "descriptor": "key_indicator.html",
+      "template": "front_page",
+      "cards": [
+        {
+          "link_to": "greenhouse_gases", "title": "Greenhouse gases",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+        },
+        {
+          "link_to": "global_mean_temperature", "title": "Global temperature",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2022]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to": "ocean_heat_content", "title": "Ocean Indicators",
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
+        },
+        {
+          "link_to": "sea_level", "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
+        },
+        {
+          "link_to": "sea_ice_extent", "title": "Sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
+        },
+        {
+          "link_to": "glaciers_and_ice_sheets", "title":"Glaciers and ice sheets",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "processing": [{"method":  "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2022]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [{"method": "select_year_range", "args":  [1850,2022]}],
+          "writing": {"function": "long_term_trend_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [],
+          "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "greenland_ice_sheet"}
+        }
+      ]
+    },
+    {
+      "id": "greenhouse_gases",
+      "name": "Greenhouse gases",
+      "descriptor": "greenhouse_gases.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Carbon dioxide",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+        },
+        {
+          "link_to":  null, "title": "Methane",
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": "WDCGG CH4"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
+        },
+        {
+          "link_to":  null, "title": "Nitrous Oxide",
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
+          "processing": [{"method": "select_year_range", "args": [1850, 2022]}],
+          "writing": {"function": "co2_paragraph"}
+        }
+      ]
+    },
+    {
+      "id": "global_mean_temperature",
+      "name": "Global mean temperature",
+      "descriptor": "global_temperature.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Global mean temperature",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2022]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to":  null, "title": "Land air temperature",
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Global land temperature"}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2022, 2022]}],
+          "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2021"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2022, 2022]}],
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2021"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly rank map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2022]},
+                          {"method":  "rank", "args": []},
+                          {"method":  "select_year_range", "args": [2022, 2022]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2021"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2022]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        }
+      ]
+    },
+    {
+      "id": "ocean_heat_content",
+      "name": "Ocean Indicators",
+      "descriptor": "ocean_indicators.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Ocean heat content",
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
+        },
+        {
+          "link_to":  null, "title": "Ocean heat content to 2000m",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Ocean heat content to 2000m"}
+        },
+        {
+          "link_to":  null, "title": "Ocean pH",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Ocean pH"}
+        },
+        {
+          "link_to":  null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
+        },
+        {
+          "link_to":  null, "title": "Marine heat waves",
+          "selecting": {"type": "timeseries", "variable": ["mhw", "mcs"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "mhw", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "marine_heatwave_and_cold_spell_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "mcs", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "marine_heatwave_and_cold_spell_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [{"method": "select_year_range", "args":  [1850,2022]}],
+          "writing": {"function": "long_term_trend_paragraph"}
+        }
+
+      ]
+    },
+    {
+      "id": "sea_level",
+      "name": "Sea Level",
+      "descriptor": "ocean_indicators.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
+        },
+        {
+          "link_to":  null, "title": "Ocean heat content",
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "processing": [{"method": "select_year_range", "args":  [1850,2021]}],
+          "writing": {"function": "long_term_trend_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "writing": {"function": "anomaly_and_rank"}
+        }
+      ]
+    },
+    {
+      "id": "sea_ice_extent",
+      "name": "Sea ice extent",
+      "descriptor": "sea_ice_extent.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Arctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [],
+          "writing": {"function": "arctic_ice_paragraph"}
+        }
+      ]
+    },
+    {
+      "id": "glaciers_and_ice_sheets",
+      "name": "Glaciers and Ice Sheets",
+      "descriptor": "glaciers_and_ice_sheets.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Glacier mass balance",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing":  [],
+          "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
+
+        },
+        {
+          "link_to":  null, "title": "Greenland ice sheet",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+
+        },
+        {
+          "link_to":  null, "title": "Antarctic ice sheet",
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly"},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
+          "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "glacier_paragraph"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "greenland_ice_sheet"}
+        }
+      ]
+    }
+  ]
+}

@@ -114,7 +114,7 @@ class Paragraph(WebComponent):
     def __init__(self, paragraph_metadata: dict):
         super().__init__(paragraph_metadata)
 
-    def process_paragraph(self, data_dir: Path, archive: DataArchive):
+    def process_paragraph(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021):
         """
         Process and ultimately render the Paragraph object
 
@@ -131,7 +131,7 @@ class Paragraph(WebComponent):
         """
         self.select_and_read_data(data_dir, archive)
         self.process_datasets()
-        self.render()
+        self.render(focus_year)
 
     def process_datasets(self):
         """
@@ -359,7 +359,7 @@ class Page:
             processed_cards.append(this_card)
         return processed_cards
 
-    def _process_paragraphs(self, data_dir: Path, archive: DataArchive) -> List[Paragraph]:
+    def _process_paragraphs(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021) -> List[Paragraph]:
         """
         Process each of the paragraphs on the page
 
@@ -369,6 +369,8 @@ class Page:
             Path of the directory containing the data
         archive: DataArchive
             Archive which contains all the metadata for this selection
+        focus_year: int
+            Year to focus on
 
         Returns
         -------
@@ -378,11 +380,11 @@ class Page:
         processed_paragraphs = []
         for paragraph_metadata in self['paragraphs']:
             this_paragraph = Paragraph(paragraph_metadata)
-            this_paragraph.process_paragraph(data_dir, archive)
+            this_paragraph.process_paragraph(data_dir, archive, focus_year=focus_year)
             processed_paragraphs.append(this_paragraph)
         return processed_paragraphs
 
-    def build(self, build_dir: Path, data_dir: Path, archive: DataArchive):
+    def build(self, build_dir: Path, data_dir: Path, archive: DataArchive, focus_year: int = 2021):
         """
         Build the Page, processing all the Card and Paragraph objects, then populating the template
         to generate a webpage, figures and formatted data.
@@ -395,6 +397,8 @@ class Page:
             Path of the directory where the data are to be found.
         archive: DataArchive
             DataArchive containing the metadata for the datasets
+        focus_year: int
+            Year to focus on. Usually, this will be the latest year
 
         Returns
         -------
@@ -409,7 +413,7 @@ class Page:
         print(f"Building {self.metadata['id']} using template {self.metadata['template']}")
 
         processed_cards = self._process_cards(data_dir, figure_dir, formatted_data_dir, archive)
-        processed_paragraphs = self._process_paragraphs(data_dir, archive)
+        processed_paragraphs = self._process_paragraphs(data_dir, archive, focus_year=focus_year)
 
         now = datetime.today()
         climind_version = pkg_resources.get_distribution("climind").version
@@ -472,7 +476,7 @@ class Dashboard:
         archive = DataArchive.from_directory(archive_dir)
         return Dashboard(metadata, archive)
 
-    def build(self, build_dir: Path):
+    def build(self, build_dir: Path, focus_year: int = 2021):
         """
         Build all the pages in the dashboard. This will create the html, the images,
         the formatted data in a chosen directory
@@ -481,9 +485,11 @@ class Dashboard:
         ----------
         build_dir: Path
             Path of the directory to build the web pages in
+        focus_year: int
+            Year to focus on. Usually, this will be the latest year
         Returns
         -------
         None
         """
         for page in self.pages:
-            page.build(build_dir, self.data_dir, self.archive)
+            page.build(build_dir, self.data_dir, self.archive, focus_year=focus_year)
