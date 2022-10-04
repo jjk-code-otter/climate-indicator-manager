@@ -29,7 +29,7 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': ['HadCRUT5']#, 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
+            'name': ['HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
         }
     )
 

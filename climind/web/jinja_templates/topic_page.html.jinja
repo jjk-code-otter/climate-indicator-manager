@@ -50,6 +50,7 @@ p {
 
 
 
+
 </style>
 <body>
 
@@ -205,7 +206,13 @@ p {
     </div>
     {% endfor %}
 
+    <p>
+        Page created on {{ page_meta.created }} using
+        <a href="https://github.com/jjk-code-otter/climate-indicator-manager">{{ page_meta.code_version }}</a>
+    </p>
+
 </div>
+
 
 </body>
 </html>

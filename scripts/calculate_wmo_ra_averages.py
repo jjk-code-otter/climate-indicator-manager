@@ -69,7 +69,7 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': datasets_to_use[0:4]
+            'name': datasets_to_use[0:]
         }
     )
 
