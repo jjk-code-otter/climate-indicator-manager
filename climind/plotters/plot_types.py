@@ -949,7 +949,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     for xx, yy in itertools.product(range(72), range(36)):
         select = stack[:, yy, xx]
-        if type == 'mean':
+        if type == 'mean' or type == 'rank':
             out_grid[0, yy, xx] = np.median(select[~np.isnan(select)])
         if type == 'unc':
             anomaly_range = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
@@ -971,10 +971,15 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
     elif type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    elif type == 'rank':
+        wmo_cols = ["#f0f9e8", "#bae4bc", "#7bccc4", "#43a2ca", "#0868ac"]
+        wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
+        wmo_cols = list(reversed(wmo_cols))
+        wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if type == 'mean':
+    if type == 'mean' or type == 'rank':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(), robust=True,
                         levels=wmo_levels,
@@ -1020,3 +1025,7 @@ def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename:
 
 def dashboard_uncertainty_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'unc')
+
+
+def dashboard_rank_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'rank')

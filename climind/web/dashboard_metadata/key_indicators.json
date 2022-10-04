@@ -160,6 +160,15 @@
             "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2021, 2021]}],
           "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2021"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly rank map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2021]},
+                          {"method":  "rank", "args": []},
+                          {"method":  "select_year_range", "args": [2021, 2021]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2021"}
         }
       ],
       "paragraphs": [
