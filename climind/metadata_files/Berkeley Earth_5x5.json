@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['Land_and_Ocean_LatLong1.nc'] downloaded from ['http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc'] at ['2022-09-02 09:49:56']",
+                "Data set created from file ['Land_and_Ocean_LatLong1.nc'] downloaded from ['http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc'] at ['2022-10-03 15:27:16']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1981-2010",
                 "Calculated annual average",
@@ -42,7 +42,7 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2022-09-02 09:49:56"
+                "2022-10-03 15:27:16"
             ]
         }
     ]

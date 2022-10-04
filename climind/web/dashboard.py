@@ -15,6 +15,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import pkg_resources
+from datetime import datetime
 from typing import Union, List
 from pathlib import Path
 from zipfile import ZipFile
@@ -408,6 +410,12 @@ class Page:
 
         processed_cards = self._process_cards(data_dir, figure_dir, formatted_data_dir, archive)
         processed_paragraphs = self._process_paragraphs(data_dir, archive)
+
+        now = datetime.today()
+        climind_version = pkg_resources.get_distribution("climind").version
+
+        self['created'] = f'{now.year}-{now.month:02d}-{now.day:02d}'
+        self['code_version'] = f'climind v{climind_version}'
 
         # populate template to make webpage
         env = Environment(
