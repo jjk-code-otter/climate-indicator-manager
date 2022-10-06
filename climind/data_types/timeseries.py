@@ -780,6 +780,9 @@ class TimeSeriesAnnual:
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
 
+    if len(all_datasets) == 0:
+        return None, None
+
     first_years = []
     last_years = []
     for ds in all_datasets:

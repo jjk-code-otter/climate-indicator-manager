@@ -392,6 +392,7 @@ def prepared_mhw_datasets(mocker):
         m.get_value_from_year.side_effect = [33.3, 79.8]
         m.get_rank_from_year.return_value = 3
         m.get_year_from_rank.return_value = [2011]
+        m.get_first_and_last_year.return_value = [1982,2021]
 
         all_datasets.append(m)
 

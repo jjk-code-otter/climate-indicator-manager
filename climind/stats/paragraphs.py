@@ -482,7 +482,7 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
 def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     first_year, last_year = get_start_and_end_year(all_datasets)
 
-    if year > last_year:
+    if last_year is not None and year > last_year:
         out_text = f'The most recent available year is {last_year}. '
         year = last_year
     else:
@@ -516,11 +516,11 @@ def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual
             mcs_max_area = ds.get_value_from_year(mcs_max_year)
 
     if mhw_check:
-        out_text = f"In {year}, {mhw_area:.1f}% of the ocean was affected by at least one marine heatwave. " \
+        out_text += f"In {year}, {mhw_area:.1f}% of the ocean was affected by at least one marine heatwave. " \
                    f"The {ordinal(mhw_rank)} highest on record. " \
                    f"The highest ocean area affected in any year was {mhw_max_area:.1f}% in {mhw_max_year}. "
     if mcs_check:
-        out_text = f"The area of the ocean affected by at least one marine cold spells was {mcs_area:.1f}%. " \
+        out_text += f"The area of the ocean affected by at least one marine cold spells was {mcs_area:.1f}%. " \
                    f"The {ordinal(mcs_rank)} highest on record. " \
                    f"The highest area affected in any year by marine cold spells was {mcs_max_area:.1f}% in {mcs_max_year}."
 
