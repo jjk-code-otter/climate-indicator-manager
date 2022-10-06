@@ -777,3 +777,14 @@ class TimeSeriesAnnual:
         first_year = self.df['year'].tolist()[0]
         last_year = self.df['year'].tolist()[-1]
         return first_year, last_year
+
+def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
+
+    first_years = []
+    last_years = []
+    for ds in all_datasets:
+        first_year, last_year = ds.get_first_and_last_year()
+        first_years.append(first_year)
+        last_years.append(last_year)
+
+    return min(first_years), max(last_years)

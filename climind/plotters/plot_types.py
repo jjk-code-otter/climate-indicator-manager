@@ -27,7 +27,7 @@ import numpy as np
 from typing import List, Union
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
-from climind.data_types.grid import GridAnnual
+from climind.data_types.grid import GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
 
@@ -939,23 +939,11 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
 
 def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
                           type: str) -> str:
-    dataset = copy.deepcopy(all_datasets[0])
 
-    out_grid = np.zeros((1, 36, 72))
-    n_data_sets = len(all_datasets)
-    stack = np.zeros((n_data_sets, 36, 72))
-    for i, ds in enumerate(all_datasets):
-        stack[i, :, :] = ds.df['tas_mean'].data[0, :, :]
-
-    for xx, yy in itertools.product(range(72), range(36)):
-        select = stack[:, yy, xx]
-        if type == 'mean' or type == 'rank':
-            out_grid[0, yy, xx] = np.median(select[~np.isnan(select)])
-        if type == 'unc':
-            anomaly_range = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
-            out_grid[0, yy, xx] = anomaly_range / 2.
-
-    dataset.df['tas_mean'].data = out_grid
+    if type == 'mean' or type == 'rank':
+        dataset = process_datasets(all_datasets, 'median')
+    if type == 'unc':
+        dataset = process_datasets(all_datasets, 'range')
 
     data = dataset.df['tas_mean']
     lon = dataset.df.coords['longitude']

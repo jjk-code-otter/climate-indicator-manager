@@ -1,0 +1,45 @@
+{
+  "name": "WDCGG CO2 update",
+  "display_name": "WDCGG update",
+  "version": "",
+  "variable": "co2",
+  "units": "ppm",
+  "citation": ["WMO Greenhouse Gas Bulletin, No.18, 2022. October 2022 ISSN 2078-0796"],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#0062ff",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["co2_monthly.csv"],
+	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of carbon dioxide",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_ts",
+	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [""],
+      "filename": ["co2_monthly.csv"],
+	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of carbon dioxide",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_ts_update",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

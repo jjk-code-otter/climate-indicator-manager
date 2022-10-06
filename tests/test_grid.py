@@ -21,6 +21,8 @@ import xarray as xa
 import geopandas as gp
 import numpy as np
 import pandas as pd
+from datetime import date
+
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 from xarray import Dataset
@@ -150,13 +152,71 @@ def annual_grid(test_combo):
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
-    times = np.arange(1., 13., 1.0)
+    #    times = np.arange(1., 13., 1.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1YS', periods=12)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_ds = test_ds.groupby('time.year').mean(dim='time')
+
+    test_grid_annual = gd.GridAnnual(test_ds, test_combo)
+    return test_grid_annual
+
+
+@pytest.fixture
+def annual_grid_2(test_combo):
+    test_grid = np.zeros((12, 36, 72)) + 1.0
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1851-01-01', freq='1YS', periods=12)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_ds = test_ds.groupby('time.year').mean(dim='time')
 
     test_grid_annual = gd.GridAnnual(test_ds, test_combo)
 
     return test_grid_annual
+
+
+def test_median_of_datasets(annual_grid, annual_grid_2):
+    all_datasets = [annual_grid, annual_grid_2]
+    test_median = gd.median_of_datasets(all_datasets)
+
+    assert test_median.df['tas_mean'].data[0, 0, 0] == 0.0
+    for i in range(1, 12):
+        assert test_median.df['tas_mean'].data[i, 0, 0] == 0.5
+    assert test_median.df['tas_mean'].data[12, 0, 0] == 1.0
+
+    assert test_median.df['tas_mean'].data.shape[0] == 13
+    assert test_median.get_start_year() == 1850
+    assert test_median.get_end_year() == 1862
+
+
+def test_range_of_datasets(annual_grid, annual_grid_2):
+    all_datasets = [annual_grid, annual_grid_2]
+    test_median = gd.range_of_datasets(all_datasets)
+
+    assert test_median.df['tas_mean'].data[0, 0, 0] == 0.0
+    for i in range(1, 12):
+        assert test_median.df['tas_mean'].data[i, 0, 0] == 1.0 / 2.
+    assert test_median.df['tas_mean'].data[12, 0, 0] == 0.0
+
+    assert test_median.df['tas_mean'].data.shape[0] == 13
+    assert test_median.get_start_year() == 1850
+    assert test_median.get_end_year() == 1862
+
+
+def test_get_first_year_and_last_years(annual_grid):
+    test_start_date = annual_grid.get_start_year()
+    test_end_date = annual_grid.get_end_year()
+    assert test_start_date == 1850
+    assert test_end_date == 1861
+
+
+def test_get_first_year_and_last_years_from_list_of_datasets(annual_grid, annual_grid_2):
+    all_datasets = [annual_grid, annual_grid_2]
+    test_start_date, test_end_date = gd.get_start_and_end_year(all_datasets)
+    assert test_start_date == 1850
+    assert test_end_date == 1862
 
 
 def test_basic_write_grid(annual_grid, tmpdir):

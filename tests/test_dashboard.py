@@ -385,10 +385,10 @@ def test_process_paragraphs(mocker, tas_page_metadata):
 
     data_dir = Path('data_dir')
 
-    _ = page._process_paragraphs(data_dir, 'archive')
+    _ = page._process_paragraphs(data_dir, 'archive', focus_year=2019)
 
     assert m.call_count == 1
-    m.assert_called_with(data_dir, 'archive')
+    m.assert_called_with(data_dir, 'archive', focus_year=2019)
 
 
 def test_page_build_creates_directories_and_webpage(tmpdir, mocker, tas_page_metadata):
@@ -427,10 +427,10 @@ def test_dashboard_build(mocker, tmpdir):
     assert m.call_count == 4
 
     calls = [
-        call(tmpdir, 'data_dir', 'archive'),
-        call(tmpdir, 'data_dir', 'archive'),
-        call(tmpdir, 'data_dir', 'archive'),
-        call(tmpdir, 'data_dir', 'archive')
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021)
     ]
 
     m.assert_has_calls(calls, any_order=True)

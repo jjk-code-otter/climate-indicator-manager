@@ -27,7 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2020
+    final_year = 2022
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -103,6 +103,7 @@ if __name__ == "__main__":
         sst_anns.append(annual)
 
     tens = []
+    twenties = []
     dtens = []
 
     sst_tens = []
@@ -113,6 +114,7 @@ if __name__ == "__main__":
 
     for ds in all_annual_datasets:
         tens.append(ds.running_mean(10))
+        twenties.append(ds.running_mean(20))
         dtens.append(ds.running_mean(10).select_decade())
 
     for ds in sst_anns:
@@ -125,6 +127,7 @@ if __name__ == "__main__":
     pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', r'10-year Global Mean SST Difference ($\degree$C))')
     pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', r'10-year Global Mean LSAT Difference ($\degree$C))')
     pt.neat_plot(figure_dir, tens, 'ten.png', r'10-year Global Mean Temperature Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, twenties, 'twenty.png', r'20-year Global Mean Temperature Difference ($\degree$C))')
 
     pt.decade_plot(figure_dir, sst_dtens, 'dten_sst.png',
                    r'10-year Global Mean SST Difference ($\degree$C))')
@@ -134,3 +137,4 @@ if __name__ == "__main__":
                    r'10-year Global Mean Temperature Difference ($\degree$C))')
 
     utils.run_the_numbers(tens, final_year, 'tenyear_stats', report_dir)
+    utils.run_the_numbers(twenties, final_year, 'twentyyear_stats', report_dir)

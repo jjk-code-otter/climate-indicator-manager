@@ -18,7 +18,7 @@ import copy
 import numpy as np
 import climind.plotters.plot_utils as pu
 from typing import Union, List
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, get_start_and_end_year
 
 ordinal = lambda n: "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10::4])
 
@@ -112,14 +112,22 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
 
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
+    if year > last_year:
+        out_text = f'The most recent available year is {last_year}. '
+        year = last_year
+    else:
+        out_text = ''
+
     min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
-    out_text = f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
-               f'on record. The mean value for {year} was ' \
-               f'{mean_anomaly:.2f}{units} '
+    out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
+                f'on record. The mean value for {year} was ' \
+                f'{mean_anomaly:.2f}{units} '
 
     if not all_datasets[0].metadata['actual']:
         clim_start = all_datasets[0].metadata['climatology_start']
@@ -136,9 +144,16 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
 
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
+    if year > last_year:
+        out_text = f'The most recent available year is {last_year}. '
+        year = last_year
+    else:
+        out_text = ''
+
     min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     units = fancy_html_units(all_datasets[0].metadata['units'])
-    out_text = ''
 
     # If this is the highest year in all data sets, leave the text as is
     if max_rank == 1 and min_rank == 1:
@@ -337,6 +352,14 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     if len(all_datasets) == 0:
         raise RuntimeError('No datasets provided')
 
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
+    if year > last_year:
+        out_text = f'The most recent available year is {last_year}. '
+        year = last_year
+    else:
+        out_text = ''
+
     counter = 0
     last_positive = -999
     for ds in all_datasets:
@@ -353,14 +376,18 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
-    out_text = f'This was the {ordinal(counter)} consecutive year of negative mass balance ' \
-               f'since {last_positive + 1}. ' \
-               f'Cumulative glacier loss since 1970 is {all_datasets[0].get_value_from_year(year):.1f}{units}.'
+    out_text += f'This was the {ordinal(counter)} consecutive year of negative mass balance ' \
+                f'since {last_positive + 1}. ' \
+                f'Cumulative glacier loss since 1970 is {all_datasets[0].get_value_from_year(year):.1f}{units}.'
 
     return out_text
 
 
-def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+def co2_paragraph_update(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    return co2_paragraph(all_datasets, year, update=True)
+
+
+def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False) -> str:
     """
     Generate a paragraph of some standard stats for greenhouse gases
 
@@ -381,9 +408,14 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     tb = {}
     cl = {'co2': 277.3, 'ch4': 721.0, 'n2o': 270.9}
 
-    last_year = 9999
+    last_year = -9999
+
+    matcher = 'WDCGG'
+    if update:
+        matcher = 'WDCGG update'
+
     for ds in all_datasets:
-        if ds.metadata['display_name'] == 'WDCGG':
+        if ds.metadata['display_name'] == matcher:
             variable = ds.metadata['variable']
             first_year, last_year = ds.get_first_and_last_year()
             rank = ds.get_rank_from_year(last_year)
@@ -391,7 +423,7 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
             uncertainty = ds.get_uncertainty_from_year(last_year)
             tb[variable] = [rank, value, uncertainty]
 
-    if last_year == 9999:
+    if last_year == -9999:
         raise RuntimeError("No greenhouse gas data sets found")
 
     if tb['co2'][0] == 1 and tb['ch4'][0] == 1 and tb['n2o'][0] == 1:
@@ -427,13 +459,16 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
         all_highest = True
         upupup = True
         for ds in all_datasets:
-            if ds.metadata['display_name'] != 'WDCGG':
+            if ds.metadata['display_name'] != 'WDCGG' and ds.metadata['display_name'] != 'WDCGG CO2 update':
                 rank = ds.get_rank_from_year(year)
-                value = ds.get_value_from_year(year) - ds.get_value_from_year(last_year)
-                if rank != 1:
-                    all_highest = False
-                if value <= 0:
+                if rank is None:
                     upupup = False
+                else:
+                    value = ds.get_value_from_year(year) - ds.get_value_from_year(last_year)
+                    if rank != 1:
+                        all_highest = False
+                    if value <= 0:
+                        upupup = False
 
         if upupup and all_highest:
             out_text = out_text + f' Real-time data from specific locations, including Mauna Loa (Hawaii) and ' \
@@ -445,7 +480,13 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
 
 def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
-    out_text = ''
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
+    if year > last_year:
+        out_text = f'The most recent available year is {last_year}. '
+        year = last_year
+    else:
+        out_text = ''
 
     mhw_area = None
     mhw_rank = None

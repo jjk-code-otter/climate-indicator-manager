@@ -58,4 +58,3 @@ if __name__ == "__main__":
     dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2022'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir), focus_year=2022)
-

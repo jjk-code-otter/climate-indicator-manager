@@ -15,6 +15,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+
+import pandas as pd
 import pkg_resources
 import itertools
 import xarray as xa
@@ -23,6 +25,10 @@ import logging
 import regionmask
 from pathlib import Path
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+from typing import List
+
 from climind.data_manager.metadata import CombinedMetadata
 import climind.data_types.timeseries as ts
 
@@ -128,6 +134,16 @@ def make_xarray(target_grid, times, latitudes, longitudes):
     return ds
 
 
+def make_standard_grid(out_grid, start_date, freq, number_of_times):
+    times = pd.date_range(start=start_date, freq=freq, periods=number_of_times)
+    latitudes = np.linspace(-87.5, 87.5, 36)
+    longitudes = np.linspace(-177.5, 177.5, 72)
+
+    dataset = make_xarray(out_grid, times, latitudes, longitudes)
+
+    return dataset
+
+
 def log_activity(in_function):
     """
     Decorator function to log name of function run and with which arguments.
@@ -166,7 +182,6 @@ def log_activity(in_function):
 
 
 def rank_array(in_array) -> int:
-
     in_array[np.isnan(in_array)] = -9999.9999
 
     ntime = len(in_array)
@@ -364,7 +379,37 @@ class GridAnnual:
 
         return self
 
+    def get_year_range(self, start_year: int, end_year: int):
+        """
+        Select a year range
+
+        Parameters
+        ----------
+        start_year: int
+            start year
+        end_year: int
+            end year
+
+        Returns
+        -------
+        GridAnnual
+        """
+        out = copy.deepcopy(self)
+
+        out.df = out.df.where(out.df['year'] >= start_year, drop=True)
+        out.df = out.df.where(out.df.year <= end_year, drop=True)
+        out.update_history(f'Selected year range {start_year} to {end_year}')
+
+        return out
+
     def rank(self):
+        """
+        Return a data set where the values are the ranks of each grid cell value.
+
+        Returns
+        -------
+        GridAnnual
+        """
         output = copy.deepcopy(self)
         out_grid = np.zeros(output.df['tas_mean'].data.shape)
         for xx, yy in itertools.product(range(72), range(36)):
@@ -373,3 +418,110 @@ class GridAnnual:
             out_grid[:, yy, xx] = rank
         output.df['tas_mean'].data = out_grid
         return output
+
+    def get_start_year(self) -> int:
+        """
+        Get the first year in the dataset
+
+        Returns
+        -------
+        int
+        """
+        start_date = self.df.year.data[0]
+        return start_date
+
+    def get_end_year(self) -> int:
+        """
+        Get the last year in the dataset
+
+        Returns
+        -------
+        int
+        """
+        end_date = self.df.year.data[-1]
+        return end_date
+
+
+def get_start_and_end_year(all_datasets: List[GridAnnual]) -> int:
+    start_dates = []
+    end_dates = []
+    for ds in all_datasets:
+        start_dates.append(ds.get_start_year())
+        end_dates.append(ds.get_end_year())
+    start_date = min(start_dates)
+    end_date = max(end_dates)
+    return start_date, end_date
+
+
+def process_datasets(all_datasets: List[GridAnnual], type) -> GridAnnual:
+    """
+    Calculate the median of a list of data sets
+
+    Parameters
+    ----------
+    all_datasets
+
+    Returns
+    -------
+
+    """
+    start_date, end_date = get_start_and_end_year(all_datasets)
+    number_of_years = end_date - start_date + 1
+
+    # create a dataset from the earliest start date to the latest end date
+    out_grid = np.zeros((number_of_years, 36, 72))
+
+    # for each time step calculate the median of available data sets.
+    for year in range(start_date, start_date + number_of_years):
+        n_data_sets = len(all_datasets)
+        stack = np.zeros((n_data_sets, 36, 72))
+        for i, ds in enumerate(all_datasets):
+            temp_df = ds.get_year_range(year, year)
+            if temp_df.df['tas_mean'].data.shape[0] != 0:
+                stack[i, :, :] = temp_df.df['tas_mean'].data[0, :, :]
+            else:
+                stack[i, :, :] = np.nan
+
+        for xx, yy in itertools.product(range(72), range(36)):
+            select = stack[:, yy, xx]
+            if type == 'median':
+                out_grid[year - start_date, yy, xx] = np.median(select[~np.isnan(select)])
+            elif type == 'range':
+                range_of_datasets = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
+                out_grid[year - start_date, yy, xx] = range_of_datasets / 2.
+
+    dataset = make_standard_grid(out_grid, str(start_date), '1YS', number_of_years)
+    dataset = dataset.groupby('time.year').mean(dim='time')
+    dataset = GridAnnual(dataset, all_datasets[0].metadata)
+
+    return dataset
+
+
+def median_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
+    """
+    Calculate the median of a list of data sets
+
+    Parameters
+    ----------
+    all_datasets: List[GridAnnual]
+
+    Returns
+    -------
+    GridAnnual
+    """
+    return process_datasets(all_datasets, 'median')
+
+
+def range_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
+    """
+    Calculate the median of a list of data sets
+
+    Parameters
+    ----------
+    all_datasets: List[GridAnnual]
+
+    Returns
+    -------
+    GridAnnual
+    """
+    return process_datasets(all_datasets, 'range')
