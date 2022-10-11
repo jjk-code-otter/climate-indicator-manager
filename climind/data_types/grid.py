@@ -210,6 +210,12 @@ class GridMonthly:
             self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
+            self.metadata.dataset['last_month'] = str(self.get_last_month())
+
+
+    def get_last_month(self):
+        last_month = self.df.time.dt.date.data[-1]
+        return last_month
 
     def rebaseline(self, y1: int, y2: int):
 

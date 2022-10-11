@@ -11,7 +11,7 @@
         "https://doi.org/10.1029/2018JD029522"
     ],
     "data_citation": [
-        "GISTEMP Team, 2022: GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies. Dataset accessed 2022-10-03 15:28:14 at data.giss.nasa.gov/gistemp/."
+        "GISTEMP Team, 2022: GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies. Dataset accessed 2022-10-10 17:07:57 at data.giss.nasa.gov/gistemp/."
     ],
     "acknowledgement": "",
     "colour": "#56b4e9",
@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['gistemp1200_GHCNv4_ERSSTv5.nc.gz'] downloaded from ['https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz'] at ['2022-10-03 15:28:14']",
+                "Data set created from file ['gistemp1200_GHCNv4_ERSSTv5.nc.gz'] downloaded from ['https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz'] at ['2022-10-10 17:07:57']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1981-2010",
                 "Calculated annual average",
@@ -42,8 +42,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2022-10-03 15:28:14"
-            ]
+                "2022-10-10 17:07:57"
+            ],
+            "last_month": "2022-08-15"
         }
     ]
 }

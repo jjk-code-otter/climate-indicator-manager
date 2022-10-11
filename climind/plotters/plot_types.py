@@ -945,6 +945,11 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     if type == 'unc':
         dataset = process_datasets(all_datasets, 'range')
 
+    last_months = []
+    for ds in all_datasets:
+        year_month = "-".join(ds.metadata['last_month'].split('-')[0:2])
+        last_months.append(f"{ds.metadata['display_name']} to {year_month}")
+
     data = dataset.df['tas_mean']
     lon = dataset.df.coords['longitude']
     lon_idx = data.dims.index('longitude')
@@ -987,6 +992,9 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     cbar.ax.tick_params(labelsize=15)
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
+
+    plt.gcf().text(.075, .012, ",".join(last_months),
+                   bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = r'Temperature difference from 1981-2010 average ($\degree$C)'
     if type == 'unc':

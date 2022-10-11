@@ -40,7 +40,8 @@
                 "Wrote to file ERA5_5x5.nc"
             ],
             "reader": "reader_standard_grid",
-            "fetcher": "fetcher_no_url"
+            "fetcher": "fetcher_no_url",
+            "last_month": "2022-09-01"
         }
     ]
 }

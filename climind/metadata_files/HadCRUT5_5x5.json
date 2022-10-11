@@ -41,8 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2022-10-03 15:28:14"
-            ]
+                "2022-10-10 17:07:58"
+            ],
+            "last_month": "2022-08-16"
         }
     ]
 }
