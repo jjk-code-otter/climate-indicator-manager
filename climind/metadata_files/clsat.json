@@ -8,7 +8,7 @@
   "citation_url": ["https://doi.org/10.1007/s00382-020-05502-0"],
   "data_citation": ["Sun Wenbin; Qingxiang, Li (2021): China global Land Surface Air Temperature 2.0 during 1850-2020. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16968334.v4"],
   "acknowledgement": "",
-  "colour": "#e69f00",
+  "colour": "#56b4e9",
   "zpos": 10,
   "datasets": [
     {
@@ -24,6 +24,21 @@
 	  "history": [],
       "reader": "reader_clsat",
 	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": [""],
+	  "filename": ["Land and ocean time series - final.csv"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_clsat",
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

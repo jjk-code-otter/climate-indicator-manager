@@ -18,7 +18,10 @@ from pathlib import Path
 import xarray as xa
 from typing import List
 
+import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
+
+from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
 
@@ -26,3 +29,21 @@ from climind.readers.generic_reader import read_ts
 def read_monthly_grid(filename: List[Path], metadata):
     df = xa.open_dataset(filename[0])
     return gd.GridMonthly(df, metadata)
+
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
+
+    years = []
+    anomalies = []
+
+    with open(filename[0], 'r') as f:
+        f.readline()
+
+        for line in f:
+            columns = line.split(',')
+            years.append(int(columns[0]))
+            anomalies.append(float(columns[5]))
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)

@@ -27,7 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2022
+    final_year = 2020
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -66,10 +66,16 @@ if __name__ == "__main__":
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly'})
 
+    lsat_ann_archive = archive.select({'variable': 'lsat',
+                                       'type': 'timeseries',
+                                       'time_resolution': 'annual',
+                                       'name': 'CLSAT'})
+
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
 
     lsat_datasets = lsat_archive.read_datasets(data_dir)
+    lsat_ann_datasets = lsat_ann_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
 
     all_annual_datasets = []
@@ -94,6 +100,11 @@ if __name__ == "__main__":
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
         lsat_anns.append(annual)
+
+    for ds in lsat_ann_datasets:
+        ds.rebaseline(1981, 2010)
+        ds.select_year_range(1850, final_year)
+        lsat_anns.append(ds)
 
     sst_anns = []
     for ds in sst_datasets:
@@ -137,4 +148,6 @@ if __name__ == "__main__":
                    r'10-year Global Mean Temperature Difference ($\degree$C))')
 
     utils.run_the_numbers(tens, final_year, 'tenyear_stats', report_dir)
+    utils.run_the_numbers(lsat_tens, final_year, 'lsat_tenyear_stats', report_dir)
+    utils.run_the_numbers(sst_tens, final_year, 'sst_tenyear_stats', report_dir)
     utils.run_the_numbers(twenties, final_year, 'twentyyear_stats', report_dir)

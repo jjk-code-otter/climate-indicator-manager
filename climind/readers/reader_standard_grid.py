@@ -25,6 +25,6 @@ from climind.readers.generic_reader import read_ts
 
 def read_annual_grid(filename: List[Path], metadata: CombinedMetadata):
     df = xa.open_dataset(filename[0])
-    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
-                           f"downloaded from {metadata['url']}"]
+    metadata['history'].append(f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}")
     return gd.GridAnnual(df, metadata)

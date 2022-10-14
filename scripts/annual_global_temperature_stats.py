@@ -67,10 +67,16 @@ if __name__ == "__main__":
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly'})
 
+    lsat_ann_archive = archive.select({'variable': 'lsat',
+                                       'type': 'timeseries',
+                                       'time_resolution': 'annual',
+                                       'name': 'CLSAT'})
+
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
 
     lsat_datasets = lsat_archive.read_datasets(data_dir)
+    lsat_ann_datasets = lsat_ann_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
 
     all_annual_datasets = []
@@ -97,6 +103,11 @@ if __name__ == "__main__":
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
         lsat_anns.append(annual)
+
+    for ds in lsat_ann_datasets:
+        ds.rebaseline(1981, 2010)
+        ds.select_year_range(1850, final_year)
+        lsat_anns.append(ds)
 
     sst_anns = []
     for ds in sst_datasets:
