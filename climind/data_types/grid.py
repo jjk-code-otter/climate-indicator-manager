@@ -212,7 +212,6 @@ class GridMonthly:
             self.metadata = metadata
             self.metadata.dataset['last_month'] = str(self.get_last_month())
 
-
     def get_last_month(self):
         last_month = self.df.time.dt.date.data[-1]
         return last_month
@@ -446,6 +445,23 @@ class GridAnnual:
         """
         end_date = self.df.year.data[-1]
         return end_date
+
+    def running_average(self, n_year: int):
+        """
+        Calculate an n_year running average
+
+        Parameters
+        ----------
+        n_year: int
+            Number of years for which the running average is calculated
+
+        Returns
+        -------
+        GridAnnual
+        """
+        self.df['tas_mean'] = self.df['tas_mean'].rolling(year=n_year).mean()
+        self.update_history(f'Calculate rolling {n_year}-year average')
+        return self
 
 
 def get_start_and_end_year(all_datasets: List[GridAnnual]) -> int:

@@ -183,6 +183,39 @@ def annual_grid_2(test_combo):
     return test_grid_annual
 
 
+@pytest.fixture
+def annual_grid_3(test_combo):
+    test_grid = np.zeros((12, 36, 72))
+    for i in range(12):
+        test_grid[i, :, :] = i
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1851-01-01', freq='1YS', periods=12)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_ds = test_ds.groupby('time.year').mean(dim='time')
+
+    test_grid_annual = gd.GridAnnual(test_ds, test_combo)
+
+    return test_grid_annual
+
+
+def test_running_average(annual_grid_3):
+    test_ds = annual_grid_3.running_average(3)
+    for i in range(0, 2):
+        assert np.isnan(test_ds.df['tas_mean'].data[i, 0, 0])
+    for i in range(2, 12):
+        assert test_ds.df['tas_mean'].data[i, 0, 0] == i - 1.0
+
+
+def test_running_average_longer(annual_grid_3):
+    test_ds = annual_grid_3.running_average(5)
+    for i in range(0, 4):
+        assert np.isnan(test_ds.df['tas_mean'].data[i, 0, 0])
+    for i in range(4, 12):
+        assert test_ds.df['tas_mean'].data[i, 0, 0] == i - 2.0
+
+
 def test_median_of_datasets(annual_grid, annual_grid_2):
     all_datasets = [annual_grid, annual_grid_2]
     test_median = gd.median_of_datasets(all_datasets)
