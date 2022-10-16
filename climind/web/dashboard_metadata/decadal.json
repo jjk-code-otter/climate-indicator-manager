@@ -1,0 +1,68 @@
+{
+  "name": "Decadal",
+  "pages": [
+    {
+      "id": "global_mean_temperature",
+      "name": "Global mean temperature",
+      "descriptor": "global_temperature.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Global mean temperature",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2020]},
+                          {"method": "running_mean", "args": [10]},
+                          {"method": "select_decade", "args": []},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "decade_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to":  null, "title": "Land air temperature",
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "running_mean", "args": [10]},
+                          {"method": "select_decade", "args": []}],
+          "plotting": {"function": "decade_plot", "title": "Global land temperature"}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "running_mean", "args": [10]},
+                          {"method": "select_decade", "args": []}],
+          "plotting": {"function": "decade_plot", "title": "Global sea-surface temperature"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "running_average", "args": [10]},
+                          {"method": "select_year_range", "args": [2020, 2020]}],
+          "plotting": {"function": "dashboard_map", "title": "Decadal Temperature Anomalies 2011-2020"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "running_average", "args": [10]},
+                          {"method": "select_year_range", "args": [2020, 2020]}],
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "Decadal Temperature Anomalies Uncertainty 2011-2020"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly rank map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2020]},
+                          {"method": "running_average", "args": [10]},
+                          {"method":  "rank", "args": []},
+                          {"method":  "select_year_range", "args": [2020, 2020]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "Decadal Temperature Anomalies Ranking 2011-2020"}
+        }
+      ],
+      "paragraphs": []
+    }
+  ]
+}
