@@ -21,6 +21,8 @@ import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 import climind.stats.utils as utils
 
+from climind.data_types.timeseries import make_combined_series
+
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
@@ -88,6 +90,10 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
+
+    # Make the combined series by taking the mean of the series
+    combined = make_combined_series(all_annual_datasets)
+    combined.write_csv(fdata_dir / "combined_global_mean_temperature.csv")
 
     for ds in ann_datasets:
         ds.rebaseline(1981, 2010)
