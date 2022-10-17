@@ -16,9 +16,11 @@
 
 from typing import Optional, Tuple, List
 import pandas as pd
+import numpy as np
 import logging
 import copy
 import pkg_resources
+from functools import reduce
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
 import cftime as cf
@@ -746,6 +748,12 @@ class TimeSeriesAnnual:
         time_units = 'days since 1800-01-01 00:00:00.0'
         self.df['time'] = self.generate_dates(time_units)
 
+        uncertainty = False
+        columns_to_write = ['time', 'year', 'data']
+        if 'uncertainty' in self.df.columns:
+            uncertainty = True
+            columns_to_write = ['time', 'year', 'data', 'uncertainty']
+
         # populate template to make webpage
         env = Environment(
             loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
@@ -754,7 +762,8 @@ class TimeSeriesAnnual:
         template = env.get_template("badc_boilerplate.jinja2")
 
         rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=False)
+                                   metadata=self.metadata, monthly=False,
+                                   time_units=time_units, uncertainty=uncertainty)
 
         with open(filename, 'w') as f:
             f.write(rendered)
@@ -762,7 +771,7 @@ class TimeSeriesAnnual:
                                    line_terminator='\n',
                                    float_format='%.4f',
                                    header=False,
-                                   columns=['time', 'year', 'data']))
+                                   columns=columns_to_write))
             f.write("end data\n")
 
     def get_first_and_last_year(self) -> Tuple[int, int]:
@@ -778,8 +787,8 @@ class TimeSeriesAnnual:
         last_year = self.df['year'].tolist()[-1]
         return first_year, last_year
 
-def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
 
+def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
     if len(all_datasets) == 0:
         return None, None
 
@@ -791,3 +800,38 @@ def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
         last_years.append(last_year)
 
     return min(first_years), max(last_years)
+
+
+def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnual:
+    data_frames = []
+    metadata = copy.deepcopy(all_datasets[0].metadata)
+    metadata['name'] = 'Combined'
+    metadata['display_name'] = 'Combined series'
+    metadata['version'] = ''
+    metadata['colour'] = '#ff0000'
+    metadata['zpos'] = 0
+
+    list_attributes = ['citation', 'citation_url', 'data_citation', 'url', 'filename', 'history']
+    for i, ds in enumerate(all_datasets):
+        data_frames.append(ds.df)
+        if i > 0:
+            for att in list_attributes:
+                metadata[att].extend(ds.metadata[att])
+
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer'), data_frames)
+
+    columns = []
+    for col in df_merged.columns:
+        if 'data' in col:
+            columns.append(col)
+
+    df_merged['combined'] = df_merged[columns].mean(axis=1)
+    df_merged['uncertainty'] = df_merged[columns].std(axis=1)
+
+    df_merged['uncertainty'] = df_merged['uncertainty'] * 1.645
+    df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty']**2 + 0.12**2)
+
+    df_merged = df_merged.drop(columns=columns)
+    df_merged = df_merged.rename(columns={'combined': 'data'})
+
+    return TimeSeriesAnnual.make_from_df(df_merged, metadata)

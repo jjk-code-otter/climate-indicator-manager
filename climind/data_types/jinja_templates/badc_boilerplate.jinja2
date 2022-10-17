@@ -25,11 +25,23 @@ type,month,int
 {% endif -%}
 long_name,data,{{ metadata.variable }},{{ metadata.units }}
 type,data,float
+{% if uncertainty -%}
+long_name,uncertainty,{{ metadata.variable }} uncertainty,{{ metadata.units }}
+type,uncertainty,float
+{% endif -%}
 coordinate_variable,time,t
 data
+{% if uncertainty -%}
+{% if monthly -%}
+time,year,month,data,uncertainty
+{%- else -%}
+time,year,data,uncertainty
+{%- endif %}
+{%- else -%}
 {% if monthly -%}
 time,year,month,data
 {%- else -%}
 time,year,data
+{%- endif %}
 {%- endif %}
 

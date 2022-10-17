@@ -13,6 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import copy
 
 import pytest
 import numpy as np
@@ -126,6 +127,80 @@ def uncertainty_annual():
 
     return ts.TimeSeriesAnnual(years, anoms, metadata=None, uncertainty=uncertainties)
 
+
+@pytest.fixture
+def annual_metadata():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'timeseries',
+                  'long_name': 'Global mean temperature',
+                  'time_resolution': 'annual',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': ['step1', 'step2'],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'}
+
+    global_attributes = {'name': '',
+                         'display_name': '',
+                         'version': '',
+                         'variable': 'tas',
+                         'units': 'degC',
+                         'citation': ['cite1', 'cite2'],
+                         'citation_url': ['cite1', 'cite2'],
+                         'data_citation': [''],
+                         'colour': '',
+                         'zpos': 99}
+
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
+
+    return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+@pytest.fixture
+def annual_datalist(annual_metadata):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    years1 = []
+    years2 = []
+    years3 = []
+    anoms1 = []
+    anoms2 = []
+    anoms3 = []
+
+    for y in range(1850, 2023):
+        years1.append(y)
+        anoms1.append(1.0)
+    for y in range(1855, 2018):
+        years2.append(y)
+        anoms2.append(2.0)
+    for y in range(1851, 2023):
+        years3.append(y)
+        anoms3.append(6.0)
+
+    datalist = [ts.TimeSeriesAnnual(years1, anoms1, copy.deepcopy(annual_metadata)),
+                ts.TimeSeriesAnnual(years2, anoms2, copy.deepcopy(annual_metadata)),
+                ts.TimeSeriesAnnual(years3, anoms3, copy.deepcopy(annual_metadata))]
+
+    return datalist
+
+
+def test_make_combined_series(annual_datalist):
+    test_result = ts.make_combined_series(annual_datalist)
+
+    assert len(test_result.metadata['history']) == 6
+    assert test_result.df['data'][0] == 1.0
+    assert test_result.df['data'][1] == 3.5
+    assert test_result.df['data'][2022 - 1850] == 3.5
+    assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645)**2 + 0.12**2)
 
 def test_creation_monthly():
     f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
