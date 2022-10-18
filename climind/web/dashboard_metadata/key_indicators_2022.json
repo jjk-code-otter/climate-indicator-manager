@@ -43,9 +43,9 @@
         },
         {
           "link_to": "glaciers_and_ice_sheets", "title":"Glaciers and ice sheets",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
-          "processing": [{"method":  "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
         }
       ],
       "paragraphs": [
