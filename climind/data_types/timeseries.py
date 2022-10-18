@@ -64,25 +64,35 @@ def log_activity(in_function):
     return wrapper
 
 
-class TimeSeriesIrregular:
+class TimeSeries:
 
-    def __init__(self, years: list, months: list, days: list, data: list,
-                 metadata: CombinedMetadata = None,
-                 uncertainty: Optional[list] = None):
-
-        dico = {'year': years, 'month': months, 'day': days, 'data': data}
-        if uncertainty is not None:
-            dico['uncertainty'] = uncertainty
-
-        self.df = pd.DataFrame(dico)
+    def __init__(self, metadata: CombinedMetadata = None):
+        self.df = None
         if metadata is None:
             self.metadata = {"name": "", "history": []}
         else:
             self.metadata = metadata
 
-    def __str__(self) -> str:
-        out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
-        return out_str
+    @log_activity
+    def select_year_range(self, start_year: int, end_year: int):
+        self.df = self.df[self.df['year'] >= start_year]
+        self.df = self.df[self.df['year'] <= end_year]
+        self.df = self.df.reset_index()
+        self.update_history(f'Selected year range {start_year} to {end_year}.')
+        return self
+
+    def get_first_and_last_year(self) -> Tuple[int, int]:
+        """
+        Get the first and last year in the series
+
+        Returns
+        -------
+        Tuple[int, int]
+            first and last year
+        """
+        first_year = self.df['year'].tolist()[0]
+        last_year = self.df['year'].tolist()[-1]
+        return first_year, last_year
 
     def update_history(self, message: str):
         """
@@ -98,6 +108,42 @@ class TimeSeriesIrregular:
         None
         """
         self.metadata['history'].append(message)
+
+    @log_activity
+    def add_offset(self, offset: float):
+        """
+        Add an offset to the data set
+
+        Parameters
+        ----------
+        offset : float
+            offset to be added to the data set.
+
+        Returns
+        -------
+
+        """
+
+        self.df['data'] = self.df['data'] + offset
+        self.metadata['derived'] = True
+        self.update_history(f'Added offset of {offset}')
+
+
+class TimeSeriesIrregular(TimeSeries):
+
+    def __init__(self, years: list, months: list, days: list, data: list,
+                 metadata: CombinedMetadata = None,
+                 uncertainty: Optional[list] = None):
+        super().__init__(metadata)
+
+        dico = {'year': years, 'month': months, 'day': days, 'data': data}
+        if uncertainty is not None:
+            dico['uncertainty'] = uncertainty
+        self.df = pd.DataFrame(dico)
+
+    def __str__(self) -> str:
+        out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
+        return out_str
 
     @log_activity
     def make_monthly(self):
@@ -130,14 +176,6 @@ class TimeSeriesIrregular:
 
         return monthly_series
 
-    @log_activity
-    def select_year_range(self, start_year, end_year):
-        self.df = self.df[self.df['year'] >= start_year]
-        self.df = self.df[self.df['year'] <= end_year]
-        self.df = self.df.reset_index()
-        self.update_history(f'Selected year range {start_year} to {end_year}.')
-        return self
-
     def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
         """
         Get the first and last dates in the dataset
@@ -158,57 +196,8 @@ class TimeSeriesIrregular:
 
         return start_date, end_date
 
-    def get_first_and_last_year(self) -> Tuple[int, int]:
-        """
-        Get the first and last year in the series
 
-        Returns
-        -------
-        Tuple[int, int]
-            first and last year
-        """
-        first_year = self.df['year'].tolist()[0]
-        last_year = self.df['year'].tolist()[-1]
-        return first_year, last_year
-
-    @log_activity
-    def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
-        """
-        Given a year and month, extract the rank of the data for that month. Ties are given the
-        same rank, which is the lowest rank of the group. Default behaviour is to rank the month
-        against the same month in all other years. Setting all to True as a keyword argument ranks
-        the month against all other months in all other years.
-
-        Parameters
-        ----------
-        year : int
-            Year of year-month pair for which we want the rank
-        month : int
-            Month of year-month pair for which we want the rank
-        versus_all_months : bool
-            If set then the ranking is done for the monthly value relative to all other months.
-
-        Returns
-        -------
-        int
-            Returns the rank of the specified year-month pair as compared to the same month in
-            all other years. If "versus_all_months" is set then returns rank of the anomaly for a particular year
-            and month ranked against all other years and months.
-        """
-        if versus_all_months:
-            month_select = self.df
-        else:
-            month_select = self.df[self.df['month'] == month]
-        ranked = month_select.rank(method='min', ascending=False)
-        rank = ranked[(month_select['year'] == year) & (month_select['month'] == month)]['data']
-
-        if len(rank) > 0:
-            return int(rank.iloc[0])
-        else:
-            return None
-
-
-class TimeSeriesMonthly:
+class TimeSeriesMonthly(TimeSeries):
 
     def __init__(self, years: list, months: list, data: list, metadata: CombinedMetadata = None,
                  uncertainty: Optional[list] = None):
@@ -234,15 +223,13 @@ class TimeSeriesMonthly:
         metadata : dict
             Dictionary containing metadata. The only guaranteed entry is "history"
         """
+
+        super().__init__(metadata)
+
         dico = {'year': years, 'month': months, 'data': data}
         if uncertainty is not None:
             dico['uncertainty'] = uncertainty
-
         self.df = pd.DataFrame(dico)
-        if metadata is None:
-            self.metadata = {"name": "", "history": []}
-        else:
-            self.metadata = metadata
 
     def __str__(self) -> str:
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
@@ -272,21 +259,6 @@ class TimeSeriesMonthly:
             return TimeSeriesMonthly(years, months, data, metadata, uncertainty=uncertainty)
         else:
             return TimeSeriesMonthly(years, months, data, metadata)
-
-    def update_history(self, message: str):
-        """
-        Update the history metadata
-
-        Parameters
-        ----------
-        message : str
-            Message to be added to history
-
-        Returns
-        -------
-        None
-        """
-        self.metadata['history'].append(message)
 
     @log_activity
     def make_annual(self, cumulative: bool = False):
@@ -465,22 +437,6 @@ class TimeSeriesMonthly:
         return out_value
 
     @log_activity
-    def add_offset(self, offset: float):
-        """
-        Add an offset to the whole data series
-
-        Parameters
-        ----------
-        offset: float
-
-        Returns
-        -------
-        None
-        """
-        self.df['data'] = self.df['data'] + offset
-        self.update_history(f'Added offset of {offset}')
-
-    @log_activity
     def zero_on_month(self, year: int, month: int):
         """
         Zero data set on the value for a single month in a single year
@@ -502,14 +458,6 @@ class TimeSeriesMonthly:
         zero_value = -1 * self.get_value(year, month)
         self.update_history(f'Zeroed series on {month_names[month - 1]} {year} by adding offset (see next entry)')
         self.add_offset(zero_value)
-
-    @log_activity
-    def select_year_range(self, start_year: int, end_year: int):
-        self.df = self.df[self.df['year'] >= start_year]
-        self.df = self.df[self.df['year'] <= end_year]
-        self.df = self.df.reset_index()
-        self.update_history(f'Selected year range {start_year} to {end_year}.')
-        return self
 
     @log_activity
     def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
@@ -591,19 +539,6 @@ class TimeSeriesMonthly:
                                    columns=['time', 'year', 'month', 'data']))
             f.write("end data\n")
 
-    def get_first_and_last_year(self) -> Tuple[int, int]:
-        """
-        Get the first and last year in the series
-
-        Returns
-        -------
-        Tuple[int, int]
-            first and last year
-        """
-        first_year = self.df['year'].tolist()[0]
-        last_year = self.df['year'].tolist()[-1]
-        return first_year, last_year
-
     def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
         """
         Get the first and last dates in the dataset
@@ -623,7 +558,7 @@ class TimeSeriesMonthly:
         return start_date, end_date
 
 
-class TimeSeriesAnnual:
+class TimeSeriesAnnual(TimeSeries):
 
     def __init__(self, years: list, data: list, metadata=None, uncertainty: Optional[list] = None):
         """
@@ -644,14 +579,13 @@ class TimeSeriesAnnual:
         metadata : dict
             Dictionary containing the metadata. The only guaranteed entry is 'history'
         """
+
+        super().__init__(metadata)
+
         dico = {'year': years, 'data': data}
         if uncertainty is not None:
             dico['uncertainty'] = uncertainty
         self.df = pd.DataFrame(dico)
-        if metadata is None:
-            self.metadata = {"name": "", "history": []}
-        else:
-            self.metadata = metadata
 
     def __str__(self):
         out_str = f'TimeSeriesAnnual: {self.metadata["name"]}'
@@ -843,24 +777,24 @@ class TimeSeriesAnnual:
 
         return moving_average
 
-    @log_activity
-    def add_offset(self, offset: float):
-        """
-        Add an offset to the data set
-
-        Parameters
-        ----------
-        offset : float
-            offset to be added to the data set.
-
-        Returns
-        -------
-
-        """
-
-        self.df['data'] = self.df['data'] + offset
-        self.metadata['derived'] = True
-        self.update_history(f'Added offset of {offset}')
+    # @log_activity
+    # def add_offset(self, offset: float):
+    #     """
+    #     Add an offset to the data set
+    #
+    #     Parameters
+    #     ----------
+    #     offset : float
+    #         offset to be added to the data set.
+    #
+    #     Returns
+    #     -------
+    #
+    #     """
+    #
+    #     self.df['data'] = self.df['data'] + offset
+    #     self.metadata['derived'] = True
+    #     self.update_history(f'Added offset of {offset}')
 
     @log_activity
     def select_decade(self, end_year: int = 0):
@@ -870,28 +804,28 @@ class TimeSeriesAnnual:
         self.update_history(f'Selected years ending in {end_year}')
         return self
 
-    @log_activity
-    def select_year_range(self, start_year: int, end_year: int):
-        self.df = self.df[self.df['year'] >= start_year]
-        self.df = self.df[self.df['year'] <= end_year]
-        self.df = self.df.reset_index()
-        self.update_history(f'Selected year range {start_year} to {end_year}')
-        return self
+    # @log_activity
+    # def select_year_range(self, start_year: int, end_year: int):
+    #     self.df = self.df[self.df['year'] >= start_year]
+    #     self.df = self.df[self.df['year'] <= end_year]
+    #     self.df = self.df.reset_index()
+    #     self.update_history(f'Selected year range {start_year} to {end_year}')
+    #     return self
 
-    def update_history(self, message: str):
-        """
-        Update the history metadata
-
-        Parameters
-        ----------
-        message : str
-            Message to be added to history
-
-        Returns
-        -------
-        None
-        """
-        self.metadata['history'].append(message)
+    # def update_history(self, message: str):
+    #     """
+    #     Update the history metadata
+    #
+    #     Parameters
+    #     ----------
+    #     message : str
+    #         Message to be added to history
+    #
+    #     Returns
+    #     -------
+    #     None
+    #     """
+    #     self.metadata['history'].append(message)
 
     def generate_dates(self, time_units):
         self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
@@ -943,18 +877,18 @@ class TimeSeriesAnnual:
                                    columns=columns_to_write))
             f.write("end data\n")
 
-    def get_first_and_last_year(self) -> Tuple[int, int]:
-        """
-        Get the first and last year in the series
-
-        Returns
-        -------
-        Tuple[int, int]
-            first and last year
-        """
-        first_year = self.df['year'].tolist()[0]
-        last_year = self.df['year'].tolist()[-1]
-        return first_year, last_year
+    # def get_first_and_last_year(self) -> Tuple[int, int]:
+    #     """
+    #     Get the first and last year in the series
+    #
+    #     Returns
+    #     -------
+    #     Tuple[int, int]
+    #         first and last year
+    #     """
+    #     first_year = self.df['year'].tolist()[0]
+    #     last_year = self.df['year'].tolist()[-1]
+    #     return first_year, last_year
 
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
