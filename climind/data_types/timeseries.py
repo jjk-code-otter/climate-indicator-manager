@@ -99,6 +99,7 @@ class TimeSeriesIrregular:
         """
         self.metadata['history'].append(message)
 
+    @log_activity
     def make_monthly(self):
         """
         Calculate a TimeSeriesMonthly from the TimeSeriesIrregular. The monthly average is
@@ -128,6 +129,83 @@ class TimeSeriesIrregular:
         monthly_series.metadata['derived'] = True
 
         return monthly_series
+
+    @log_activity
+    def select_year_range(self, start_year, end_year):
+        self.df = self.df[self.df['year'] >= start_year]
+        self.df = self.df[self.df['year'] <= end_year]
+        self.df = self.df.reset_index()
+        self.update_history(f'Selected year range {start_year} to {end_year}.')
+        return self
+
+    def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
+        """
+        Get the first and last dates in the dataset
+
+        Returns
+        -------
+        Tuple[datetime, datetime]
+        """
+        time_str = self.df.year.astype(str) + \
+                   self.df.month.map('{:02d}'.format) + \
+                   self.df.day.map('{:02d}'.format)
+        self.df['time'] = pd.to_datetime(time_str, format='%Y%m%d')
+
+        n_time = len(self.df['time'])
+
+        start_date = self.df['time'][0]
+        end_date = self.df['time'][n_time - 1]
+
+        return start_date, end_date
+
+    def get_first_and_last_year(self) -> Tuple[int, int]:
+        """
+        Get the first and last year in the series
+
+        Returns
+        -------
+        Tuple[int, int]
+            first and last year
+        """
+        first_year = self.df['year'].tolist()[0]
+        last_year = self.df['year'].tolist()[-1]
+        return first_year, last_year
+
+    @log_activity
+    def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
+        """
+        Given a year and month, extract the rank of the data for that month. Ties are given the
+        same rank, which is the lowest rank of the group. Default behaviour is to rank the month
+        against the same month in all other years. Setting all to True as a keyword argument ranks
+        the month against all other months in all other years.
+
+        Parameters
+        ----------
+        year : int
+            Year of year-month pair for which we want the rank
+        month : int
+            Month of year-month pair for which we want the rank
+        versus_all_months : bool
+            If set then the ranking is done for the monthly value relative to all other months.
+
+        Returns
+        -------
+        int
+            Returns the rank of the specified year-month pair as compared to the same month in
+            all other years. If "versus_all_months" is set then returns rank of the anomaly for a particular year
+            and month ranked against all other years and months.
+        """
+        if versus_all_months:
+            month_select = self.df
+        else:
+            month_select = self.df[self.df['month'] == month]
+        ranked = month_select.rank(method='min', ascending=False)
+        rank = ranked[(month_select['year'] == year) & (month_select['month'] == month)]['data']
+
+        if len(rank) > 0:
+            return int(rank.iloc[0])
+        else:
+            return None
 
 
 class TimeSeriesMonthly:

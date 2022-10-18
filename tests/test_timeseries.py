@@ -20,6 +20,7 @@ import pytest
 import numpy as np
 import json
 import itertools
+from datetime import date
 from pathlib import Path
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 import climind.data_types.timeseries as ts
@@ -275,6 +276,28 @@ def test_update_history_irregular(simple_irregular):
     test_message = 'snoopy is a dog'
     simple_irregular.update_history(test_message)
     assert simple_irregular.metadata['history'][-1] == test_message
+
+
+def test_irregular_start_and_end_dates(simple_irregular):
+    start_date, end_date = simple_irregular.get_start_and_end_dates()
+
+    assert start_date == date(1993, 1, 3)
+    assert end_date == date(2002, 12, 15)
+
+
+def test_irregular_select_year_range(simple_irregular):
+    simple_irregular = simple_irregular.select_year_range(1995, 2000)
+    start_date, end_date = simple_irregular.get_start_and_end_dates()
+
+    assert start_date == date(1995, 1, 1)
+    assert end_date == date(2000, 12, 31)
+
+
+def test_irregular_get_first_and_last_year(simple_irregular):
+    start_date, end_date = simple_irregular.get_first_and_last_year()
+
+    assert start_date == 1993
+    assert end_date == 2002
 
 
 # Monthly times series

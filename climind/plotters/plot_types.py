@@ -26,7 +26,7 @@ import seaborn as sns
 import numpy as np
 from typing import List, Union
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular
 from climind.data_types.grid import GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
@@ -111,7 +111,12 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             start_date, end_date = ds.get_start_and_end_dates()
             date_range = f"{start_date.year}.{start_date.month:02d}-" \
                          f"{end_date.year}.{end_date.month:02d}"
-
+        elif isinstance(ds, TimeSeriesIrregular):
+            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12. + (ds.df['day']-1) / 365.
+            linewidth = 1
+            start_date, end_date = ds.get_start_and_end_dates()
+            date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
+                         f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
         else:
             raise TypeError('Wrong kind of object')
 

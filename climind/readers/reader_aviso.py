@@ -46,21 +46,10 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     dates = pd.to_datetime(years, format='%Y %j')
     years = dates.year.tolist()
     months = dates.month.tolist()
-
-    dico = {'year': years, 'month': months, 'data': anomalies}
-
-    df = pd.DataFrame(dico)
-    mdf1 = df.groupby(['year', 'month'])['year'].mean()
-    mdf2 = df.groupby(['year', 'month'])['data'].mean()
-    mdf3 = df.groupby(['year', 'month'])['month'].mean()
-
-    mdf1 = mdf1.astype(int)
-    mdf3 = mdf3.astype(int)
-
-    years = mdf1.values.tolist()
-    months = mdf3.values.tolist()
-    anomalies = mdf2.values.tolist()
+    days = dates.day.tolist()
 
     metadata.creation_message()
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies,
+                                       metadata=metadata)
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return outseries

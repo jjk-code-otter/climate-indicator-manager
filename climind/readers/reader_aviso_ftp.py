@@ -26,7 +26,6 @@ from climind.readers.generic_reader import read_ts
 
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
-
     df = xa.open_dataset(filename[0])
 
     correction = xa.open_dataset(filename[0].parent / 'Topex-A_correction.nc')
@@ -35,25 +34,17 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     anomalies = df.msl.values.tolist()
 
     for i in range(len(msl_correction)):
-        anomalies[i] = anomalies[i] - msl_correction[i]
+        anomalies[i] = (anomalies[i] - msl_correction[i])
+
+    for i in range(len(anomalies)):
+        anomalies[i] = anomalies[i] * 1000.
 
     years = df.time.dt.year.data.tolist()
     months = df.time.dt.month.data.tolist()
-
-    dico = {'year': years, 'month': months, 'data': anomalies}
-
-    df = pd.DataFrame(dico)
-    mdf1 = df.groupby(['year', 'month'])['year'].mean()
-    mdf2 = df.groupby(['year', 'month'])['data'].mean() * 1000.
-    mdf3 = df.groupby(['year', 'month'])['month'].mean()
-
-    mdf1 = mdf1.astype(int)
-    mdf3 = mdf3.astype(int)
-
-    years = mdf1.values.tolist()
-    months = mdf3.values.tolist()
-    anomalies = mdf2.values.tolist()
+    days = df.time.dt.day.data.tolist()
 
     metadata.creation_message()
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies,
+                                       metadata=metadata)
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return outseries
