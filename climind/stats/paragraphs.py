@@ -600,7 +600,7 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
-def long_term_trend_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
     all_trends = []
     out_text = ""
     for ds in all_datasets:
