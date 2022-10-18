@@ -777,25 +777,6 @@ class TimeSeriesAnnual(TimeSeries):
 
         return moving_average
 
-    # @log_activity
-    # def add_offset(self, offset: float):
-    #     """
-    #     Add an offset to the data set
-    #
-    #     Parameters
-    #     ----------
-    #     offset : float
-    #         offset to be added to the data set.
-    #
-    #     Returns
-    #     -------
-    #
-    #     """
-    #
-    #     self.df['data'] = self.df['data'] + offset
-    #     self.metadata['derived'] = True
-    #     self.update_history(f'Added offset of {offset}')
-
     @log_activity
     def select_decade(self, end_year: int = 0):
         self.df = self.df[self.df['year'] % 10 == end_year]
@@ -803,29 +784,6 @@ class TimeSeriesAnnual(TimeSeries):
         self.metadata['derived'] = True
         self.update_history(f'Selected years ending in {end_year}')
         return self
-
-    # @log_activity
-    # def select_year_range(self, start_year: int, end_year: int):
-    #     self.df = self.df[self.df['year'] >= start_year]
-    #     self.df = self.df[self.df['year'] <= end_year]
-    #     self.df = self.df.reset_index()
-    #     self.update_history(f'Selected year range {start_year} to {end_year}')
-    #     return self
-
-    # def update_history(self, message: str):
-    #     """
-    #     Update the history metadata
-    #
-    #     Parameters
-    #     ----------
-    #     message : str
-    #         Message to be added to history
-    #
-    #     Returns
-    #     -------
-    #     None
-    #     """
-    #     self.metadata['history'].append(message)
 
     def generate_dates(self, time_units):
         self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
@@ -876,19 +834,6 @@ class TimeSeriesAnnual(TimeSeries):
                                    header=False,
                                    columns=columns_to_write))
             f.write("end data\n")
-
-    # def get_first_and_last_year(self) -> Tuple[int, int]:
-    #     """
-    #     Get the first and last year in the series
-    #
-    #     Returns
-    #     -------
-    #     Tuple[int, int]
-    #         first and last year
-    #     """
-    #     first_year = self.df['year'].tolist()[0]
-    #     last_year = self.df['year'].tolist()[-1]
-    #     return first_year, last_year
 
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
