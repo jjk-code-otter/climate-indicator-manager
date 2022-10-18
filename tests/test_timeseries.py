@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 
+import pandas as pd
 import pytest
 import numpy as np
 import json
@@ -22,6 +23,29 @@ import itertools
 from pathlib import Path
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 import climind.data_types.timeseries as ts
+
+
+# Fixtures
+@pytest.fixture
+def simple_irregular(test_metadata):
+    test_metadata['time_resolution'] = 'irregular'
+    test_metadata['type'] = 'timeseries'
+
+    test_metadata['variable'] = 'sealevel'
+    test_metadata['units'] = 'mm'
+
+    number_of_times = 520
+    dates = pd.date_range(start=f'1993-01-01', freq='1W', periods=number_of_times)
+
+    years = dates.year.tolist()
+    months = dates.month.tolist()
+    days = dates.day.tolist()
+
+    data = []
+    for i in range(number_of_times):
+        data.append(float(years[i] * 100 + months[i]))
+
+    return ts.TimeSeriesIrregular(years, months, days, data, metadata=test_metadata)
 
 
 @pytest.fixture
@@ -193,6 +217,40 @@ def annual_datalist(annual_metadata):
     return datalist
 
 
+@pytest.fixture
+def test_metadata():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'long_name': 'Ocean heat content',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': ['step1', 'step2'],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'}
+
+    global_attributes = {'name': '',
+                         'display_name': '',
+                         'version': '',
+                         'variable': 'ohc',
+                         'units': 'zJ',
+                         'citation': ['cite1', 'cite2'],
+                         'citation_url': ['cite1', 'cite2'],
+                         'data_citation': [''],
+                         'colour': '',
+                         'zpos': 99}
+
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
+
+    return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+# Free-floating functions
 def test_make_combined_series(annual_datalist):
     test_result = ts.make_combined_series(annual_datalist)
 
@@ -200,8 +258,26 @@ def test_make_combined_series(annual_datalist):
     assert test_result.df['data'][0] == 1.0
     assert test_result.df['data'][1] == 3.5
     assert test_result.df['data'][2022 - 1850] == 3.5
-    assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645)**2 + 0.12**2)
+    assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645) ** 2 + 0.12 ** 2)
 
+
+# Irregular time series
+def test_make_monthly(simple_irregular):
+    test_monthly = simple_irregular.make_monthly()
+    assert isinstance(test_monthly, ts.TimeSeriesMonthly)
+    assert test_monthly.df['data'][0] == 199301.
+    assert 'Calculated monthly average' in test_monthly.metadata['history'][-1]
+    assert test_monthly.metadata['time_resolution'] == 'monthly'
+    assert test_monthly.metadata['derived']
+
+
+def test_update_history_irregular(simple_irregular):
+    test_message = 'snoopy is a dog'
+    simple_irregular.update_history(test_message)
+    assert simple_irregular.metadata['history'][-1] == test_message
+
+
+# Monthly times series
 def test_creation_monthly():
     f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
 
@@ -349,8 +425,71 @@ def test_get_start_and_end_dates(simple_monthly):
     assert end_date.month == 12
 
 
-# Annual tests
+def test_write_csv_monthly(simple_monthly, test_metadata, tmpdir):
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_monthly.write_csv(test_filename)
 
+    assert test_filename.exists()
+
+
+def test_write_csv_monthly_no_runon_line(simple_monthly, test_metadata, tmpdir):
+    """ make your bugs into tests - make sure there are no missing lines or run-on lines """
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_monthly.write_csv(test_filename)
+
+    with open(test_filename, 'r') as f:
+        for line in f:
+            assert 'history,G,"step1"history,G,"step2"' not in line
+            assert line != 'type,month,intlong_name,data,ohc,zJ\n'
+            assert line != '\n'
+
+
+def test_write_csv_monthly_with_metadata(simple_monthly, test_metadata, tmpdir):
+    simple_monthly.metadata = test_metadata
+    simple_monthly.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    test_metadata_filename = Path(tmpdir) / 'test_metadata.json'
+    simple_monthly.write_csv(test_filename, metadata_filename=test_metadata_filename)
+
+    assert test_filename.exists()
+    assert test_metadata_filename.exists()
+
+
+def test_ranking_monthly(simple_monthly):
+    for i in range(21):
+        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12)
+        assert rank == i + 1
+
+
+def test_ranking_monthly_with_non_existent_date_returns_none(simple_monthly):
+    assert simple_monthly.get_rank_from_year_and_month(2099, 3) is None
+
+
+def test_ranking_monthly_with_all_keyword(simple_monthly):
+    for i in range(21):
+        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12, versus_all_months=True)
+        assert rank == 12 * i + 1
+
+
+def test_get_year_range_monthly(simple_monthly):
+    first_year, last_year = simple_monthly.get_first_and_last_year()
+    assert first_year == 1850
+    assert last_year == 2022
+
+
+def test_select_year_range_monthly(simple_monthly):
+    chomp = simple_monthly.select_year_range(1999, 2011)
+
+    assert isinstance(chomp, ts.TimeSeriesMonthly)
+    assert chomp.df['year'][0] == 1999
+    assert chomp.df['year'][12 * (2011 - 1999)] == 2011
+
+
+# Annual tests
 def test_make_from_df(uncertainty_annual):
     annual = ts.TimeSeriesAnnual.make_from_df(uncertainty_annual.df, uncertainty_annual.metadata)
     assert isinstance(annual, ts.TimeSeriesAnnual)
@@ -445,28 +584,6 @@ def test_get_year_from_rank_annual(simple_annual):
     assert year[0] == 2020
 
 
-def test_ranking_monthly(simple_monthly):
-    for i in range(21):
-        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12)
-        assert rank == i + 1
-
-
-def test_ranking_monthly_with_non_existent_date_returns_none(simple_monthly):
-    assert simple_monthly.get_rank_from_year_and_month(2099, 3) is None
-
-
-def test_ranking_monthly_with_all_keyword(simple_monthly):
-    for i in range(21):
-        rank = simple_monthly.get_rank_from_year_and_month(2022 - i, 12, versus_all_months=True)
-        assert rank == 12 * i + 1
-
-
-def test_get_year_range_monthly(simple_monthly):
-    first_year, last_year = simple_monthly.get_first_and_last_year()
-    assert first_year == 1850
-    assert last_year == 2022
-
-
 def test_get_year_range_annual(simple_annual):
     first_year, last_year = simple_annual.get_first_and_last_year()
     assert first_year == 1850
@@ -519,81 +636,6 @@ def test_select_year_range_annual(simple_annual):
     assert isinstance(chomp, ts.TimeSeriesAnnual)
     assert chomp.df['year'][0] == 1999
     assert chomp.df['year'][2011 - 1999] == 2011
-
-
-def test_select_year_range_monthly(simple_monthly):
-    chomp = simple_monthly.select_year_range(1999, 2011)
-
-    assert isinstance(chomp, ts.TimeSeriesMonthly)
-    assert chomp.df['year'][0] == 1999
-    assert chomp.df['year'][12 * (2011 - 1999)] == 2011
-
-
-@pytest.fixture
-def test_metadata():
-    attributes = {'url': ['test_url'],
-                  'filename': ['test_filename'],
-                  'type': 'gridded',
-                  'long_name': 'Ocean heat content',
-                  'time_resolution': 'monthly',
-                  'space_resolution': 999,
-                  'climatology_start': 1961,
-                  'climatology_end': 1990,
-                  'actual': False,
-                  'derived': False,
-                  'history': ['step1', 'step2'],
-                  'reader': 'test_reader',
-                  'fetcher': 'test_fetcher'}
-
-    global_attributes = {'name': '',
-                         'display_name': '',
-                         'version': '',
-                         'variable': 'ohc',
-                         'units': 'zJ',
-                         'citation': ['cite1', 'cite2'],
-                         'citation_url': ['cite1', 'cite2'],
-                         'data_citation': [''],
-                         'colour': '',
-                         'zpos': 99}
-
-    dataset_metadata = DatasetMetadata(attributes)
-    collection_metadata = CollectionMetadata(global_attributes)
-
-    return CombinedMetadata(dataset_metadata, collection_metadata)
-
-
-def test_write_csv_monthly(simple_monthly, test_metadata, tmpdir):
-    simple_monthly.metadata = test_metadata
-    simple_monthly.manually_set_baseline(1901, 2000)
-    test_filename = Path(tmpdir) / 'test.csv'
-    simple_monthly.write_csv(test_filename)
-
-    assert test_filename.exists()
-
-
-def test_write_csv_monthly_no_runon_line(simple_monthly, test_metadata, tmpdir):
-    """ make your bugs into tests - make sure there are no missing lines or run-on lines """
-    simple_monthly.metadata = test_metadata
-    simple_monthly.manually_set_baseline(1901, 2000)
-    test_filename = Path(tmpdir) / 'test.csv'
-    simple_monthly.write_csv(test_filename)
-
-    with open(test_filename, 'r') as f:
-        for line in f:
-            assert 'history,G,"step1"history,G,"step2"' not in line
-            assert line != 'type,month,intlong_name,data,ohc,zJ\n'
-            assert line != '\n'
-
-
-def test_write_csv_monthly_with_metadata(simple_monthly, test_metadata, tmpdir):
-    simple_monthly.metadata = test_metadata
-    simple_monthly.manually_set_baseline(1901, 2000)
-    test_filename = Path(tmpdir) / 'test.csv'
-    test_metadata_filename = Path(tmpdir) / 'test_metadata.json'
-    simple_monthly.write_csv(test_filename, metadata_filename=test_metadata_filename)
-
-    assert test_filename.exists()
-    assert test_metadata_filename.exists()
 
 
 def test_write_csv_annual(simple_annual, test_metadata, tmpdir):

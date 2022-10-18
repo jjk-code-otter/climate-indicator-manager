@@ -64,6 +64,72 @@ def log_activity(in_function):
     return wrapper
 
 
+class TimeSeriesIrregular:
+
+    def __init__(self, years: list, months: list, days: list, data: list,
+                 metadata: CombinedMetadata = None,
+                 uncertainty: Optional[list] = None):
+
+        dico = {'year': years, 'month': months, 'day': days, 'data': data}
+        if uncertainty is not None:
+            dico['uncertainty'] = uncertainty
+
+        self.df = pd.DataFrame(dico)
+        if metadata is None:
+            self.metadata = {"name": "", "history": []}
+        else:
+            self.metadata = metadata
+
+    def __str__(self) -> str:
+        out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
+        return out_str
+
+    def update_history(self, message: str):
+        """
+        Update the history metadata
+
+        Parameters
+        ----------
+        message : str
+            Message to be added to history
+
+        Returns
+        -------
+        None
+        """
+        self.metadata['history'].append(message)
+
+    def make_monthly(self):
+        """
+        Calculate a TimeSeriesMonthly from the TimeSeriesIrregular. The monthly average is
+        calculated from the mean of values within the month
+
+        Returns
+        -------
+        TimeSeriesMonthly
+            Return a monthly time series
+        """
+        self.df['yearmonth'] = 100 * self.df['year'] + self.df['month']
+
+        grouped_data = self.df.groupby(['yearmonth'])['data'].mean().reset_index()
+        grouped_years = self.df.groupby(['yearmonth'])['year'].mean().reset_index()
+        grouped_months = self.df.groupby(['yearmonth'])['month'].mean().reset_index()
+
+        grouped_months = grouped_months['month'].tolist()
+        grouped_data = grouped_data['data'].tolist()
+        grouped_years = grouped_years['year'].tolist()
+
+        monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
+
+        monthly_series.update_history('Calculated monthly average from values using arithmetic mean')
+
+        # update attributes
+        monthly_series.metadata['time_resolution'] = 'monthly'
+        monthly_series.metadata['derived'] = True
+
+        return monthly_series
+
+
 class TimeSeriesMonthly:
 
     def __init__(self, years: list, months: list, data: list, metadata: CombinedMetadata = None,
@@ -103,6 +169,31 @@ class TimeSeriesMonthly:
     def __str__(self) -> str:
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
         return out_str
+
+    @staticmethod
+    def make_from_df(df: pd.DataFrame, metadata: CombinedMetadata):
+        """
+        Create a TimeSeriesMonthly from a pandas data frame.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            Pandas dataframe containing columns 'year' 'month' and 'data'
+        metadata : dict
+            Dictionary containing the metadata
+
+        Returns
+        -------
+        TimeSeriesMonthly
+        """
+        years = df['year'].tolist()
+        months = df['month'].tolist()
+        data = df['data'].tolist()
+        if 'uncertainty' in df.columns:
+            uncertainty = df['uncertainty'].tolist()
+            return TimeSeriesMonthly(years, months, data, metadata, uncertainty=uncertainty)
+        else:
+            return TimeSeriesMonthly(years, months, data, metadata)
 
     def update_history(self, message: str):
         """
@@ -829,7 +920,7 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
     df_merged['uncertainty'] = df_merged[columns].std(axis=1)
 
     df_merged['uncertainty'] = df_merged['uncertainty'] * 1.645
-    df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty']**2 + 0.12**2)
+    df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty'] ** 2 + 0.12 ** 2)
 
     df_merged = df_merged.drop(columns=columns)
     df_merged = df_merged.rename(columns={'combined': 'data'})
