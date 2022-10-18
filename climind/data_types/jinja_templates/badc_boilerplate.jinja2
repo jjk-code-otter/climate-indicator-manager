@@ -23,6 +23,12 @@ type,year,int
 long_name,month,month,1
 type,month,int
 {% endif -%}
+{% if irregular -%}
+long_name,month,month,1
+type,month,int
+long_name,day,day,1
+type,day,int
+{% endif -%}
 long_name,data,{{ metadata.variable }},{{ metadata.units }}
 type,data,float
 {% if uncertainty -%}
@@ -34,12 +40,16 @@ data
 {% if uncertainty -%}
 {% if monthly -%}
 time,year,month,data,uncertainty
+{%- elif irregular -%}
+time,year,month,day,data,uncertainty
 {%- else -%}
 time,year,data,uncertainty
 {%- endif %}
 {%- else -%}
 {% if monthly -%}
 time,year,month,data
+{%- elif irregular -%}
+time,year,month,day,data
 {%- else -%}
 time,year,data
 {%- endif %}

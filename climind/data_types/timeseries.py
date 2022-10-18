@@ -196,6 +196,52 @@ class TimeSeriesIrregular(TimeSeries):
 
         return start_date, end_date
 
+    def generate_dates(self, time_units: str):
+        time_str = self.df.year.astype(str) + \
+                   self.df.month.map('{:02d}'.format) + \
+                   self.df.day.map('{:02d}'.format)
+        self.df['time'] = pd.to_datetime(time_str, format='%Y%m%d')
+        dates = cf.date2num(self.df['time'].tolist(),
+                            units=time_units,
+                            has_year_zero=False,
+                            calendar='standard')
+        return dates
+
+    def write_csv(self, filename, metadata_filename=None):
+
+        if metadata_filename is not None:
+            self.metadata['filename'] = [str(filename.name)]
+            self.metadata['url'] = [""]
+            self.metadata['reader'] = "reader_badc_csv"
+            self.metadata['fetcher'] = "fetcher_no_url"
+            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
+            self.metadata.write_metadata(metadata_filename)
+
+        now = datetime.today()
+        climind_version = pkg_resources.get_distribution("climind").version
+
+        time_units = 'days since 1800-01-01 00:00:00.0'
+        self.df['time'] = self.generate_dates(time_units)
+
+        # populate template to make webpage
+        env = Environment(
+            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
+            autoescape=select_autoescape()
+        )
+        template = env.get_template("badc_boilerplate.jinja2")
+
+        rendered = template.render(now=now, climind_version=climind_version,
+                                   metadata=self.metadata, monthly=False, irregular=True)
+
+        with open(filename, 'w') as f:
+            f.write(rendered)
+            f.write(self.df.to_csv(index=False,
+                                   line_terminator='\n',
+                                   float_format='%.4f',
+                                   header=False,
+                                   columns=['time', 'year', 'month', 'day', 'data']))
+            f.write("end data\n")
+
 
 class TimeSeriesMonthly(TimeSeries):
 
@@ -528,7 +574,7 @@ class TimeSeriesMonthly(TimeSeries):
         template = env.get_template("badc_boilerplate.jinja2")
 
         rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=True)
+                                   metadata=self.metadata, monthly=True, irregular=False)
 
         with open(filename, 'w') as f:
             f.write(rendered)
@@ -823,7 +869,7 @@ class TimeSeriesAnnual(TimeSeries):
         template = env.get_template("badc_boilerplate.jinja2")
 
         rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=False,
+                                   metadata=self.metadata, monthly=False, irregular=False,
                                    time_units=time_units, uncertainty=uncertainty)
 
         with open(filename, 'w') as f:

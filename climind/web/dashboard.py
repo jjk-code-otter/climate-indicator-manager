@@ -22,7 +22,7 @@ from pathlib import Path
 from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular
 import climind.plotters.plot_types as pt
 import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
@@ -278,7 +278,11 @@ class Card(WebComponent):
         """
         csv_paths = []
         for ds in self.datasets:
-            if isinstance(ds, TimeSeriesMonthly) or isinstance(ds, TimeSeriesAnnual):
+            if (
+                    isinstance(ds, TimeSeriesMonthly) or
+                    isinstance(ds, TimeSeriesAnnual) or
+                    isinstance(ds, TimeSeriesIrregular)
+            ):
                 csv_filename = f"{ds.metadata['variable']}_{ds.metadata['name']}.csv".replace(" ", "_")
                 csv_path = formatted_data_dir / csv_filename
                 ds.write_csv(csv_path)
