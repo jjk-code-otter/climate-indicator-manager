@@ -84,6 +84,7 @@ if __name__ == "__main__":
     all_annual_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
+        pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
         annual = ds.make_annual()
         annual.add_offset(0.69)
         annual.manually_set_baseline(1850, 1900)
