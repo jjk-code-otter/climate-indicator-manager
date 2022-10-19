@@ -112,7 +112,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             date_range = f"{start_date.year}.{start_date.month:02d}-" \
                          f"{end_date.year}.{end_date.month:02d}"
         elif isinstance(ds, TimeSeriesIrregular):
-            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12. + (ds.df['day']-1) / 365.
+            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12. + (ds.df['day'] - 1) / 365.
             linewidth = 1
             start_date, end_date = ds.get_start_and_end_dates()
             date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
@@ -215,6 +215,7 @@ def after_plot(zords, ds, title):
 
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+
 
 # time series
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
@@ -881,6 +882,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
 
     return caption
 
+
 # Maps
 def quick_and_dirty_map(dataset, image_filename):
     plt.figure()
@@ -944,7 +946,6 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
 
 def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
                           type: str) -> str:
-
     if type == 'mean' or type == 'rank':
         dataset = process_datasets(all_datasets, 'median')
     if type == 'unc':
@@ -1034,7 +1035,6 @@ def dashboard_rank_map(out_dir: Path, all_datasets: List[GridAnnual], image_file
 
 # Miscellany
 def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename):
-
     first_year, last_year = dataset.get_first_and_last_year()
 
     plt.figure(figsize=[9, 9])
@@ -1045,9 +1045,9 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename):
     df = df.reset_index()
     n_months_last_year = len(df)
 
-    all_accumulators = np.zeros((12, last_year-first_year))
+    all_accumulators = np.zeros((12, last_year - first_year))
 
-    for year in range(first_year, last_year+1):
+    for year in range(first_year, last_year + 1):
         df = copy.deepcopy(dataset.df)
         df = df[df['year'] >= year]
         df = df[df['year'] <= year]
@@ -1056,10 +1056,10 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename):
         n_months = len(df)
         accumulator = np.zeros(n_months)
         for i in range(n_months):
-            accumulator[i] = np.mean(df['data'][0:i+1])
+            accumulator[i] = np.mean(df['data'][0:i + 1])
 
         if year < last_year:
-            all_accumulators[:, year-first_year] = accumulator - accumulator[n_months_last_year-1]
+            all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
         colour = 'lightgrey'
         lthk = 1
@@ -1068,20 +1068,18 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename):
         if year == last_year:
             colour = 'darkred'
             lthk = 3
-            all_accumulators = all_accumulators + accumulator[n_months_last_year-1]
+            all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
             for y2 in range(1980, last_year):
-                plt.plot(range(n_months_last_year,13), all_accumulators[n_months_last_year-1:,y2-first_year],
+                plt.plot(range(n_months_last_year, 13), all_accumulators[n_months_last_year - 1:, y2 - first_year],
                          color=colour, linewidth=0.1)
 
-        plt.plot(range(1, n_months+1), accumulator, color=colour, linewidth=lthk)
+        plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk)
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(FANCY_UNITS['degC'])
     plt.gca().set_ylim(0.1, 0.85)
-    plt.xticks(np.arange(1,13,1))
+    plt.xticks(np.arange(1, 13, 1))
     plt.title(dataset.metadata['display_name'])
 
-    plt.savefig(out_dir/image_filename)
+    plt.savefig(out_dir / image_filename)
     plt.close()
-
-    return
