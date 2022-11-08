@@ -76,6 +76,7 @@ if __name__ == "__main__":
 
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
+    alt_datasets = ts_archive.read_datasets(data_dir)
 
     lsat_datasets = lsat_archive.read_datasets(data_dir)
     lsat_ann_datasets = lsat_ann_archive.read_datasets(data_dir)
@@ -91,6 +92,16 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
+
+    # Switch order of operations
+    all_alt_datasets = []
+    for ds in alt_datasets:
+        annual = ds.make_annual()
+        annual.rebaseline(1981, 2010)
+        annual.add_offset(0.69)
+        annual.manually_set_baseline(1850, 1900)
+        annual.select_year_range(1850, final_year)
+        all_alt_datasets.append(annual)
 
     # Make the combined series by taking the mean of the series
     combined = make_combined_series(all_annual_datasets)
@@ -133,4 +144,5 @@ if __name__ == "__main__":
     print()
     print("Single year statistics")
     utils.run_the_numbers(all_annual_datasets, final_year, 'annual_stats', report_dir)
+    utils.run_the_numbers(all_alt_datasets, final_year, 'alt_stats', report_dir)
 

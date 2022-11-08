@@ -335,6 +335,50 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
     return out_text
 
 
+def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+    """
+    Generate a paragraph of some standard stats for the Antarctic sea ice: rank and value for max and min extents in the
+    year (Feb and September).
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesMonthly]
+        List of datasets on which the assessment will be based
+    year: int
+        Chosen year to focus on
+    Returns
+    -------
+    str
+        Paragraph of text
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError('No datasets provided')
+
+    march = []
+    september = []
+    for ds in all_datasets:
+        march.append(ds.make_annual_by_selecting_month(2))
+        september.append(ds.make_annual_by_selecting_month(9))
+
+    units = fancy_html_units(all_datasets[0].metadata['units'])
+
+    min_march_rank, max_march_rank = pu.calculate_ranks(march, year, ascending=True)
+    mean_march_value, min_march_value, max_march_value = pu.calculate_values(march, year)
+
+    min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
+    mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
+
+    out_text = f'Antarctic sea ice extent in February {year} was between {min_march_value:.2f} and ' \
+               f'{max_march_value:.2f}{units}. ' \
+               f'This was {rank_ranges(min_march_rank, max_march_rank)} lowest extent on record. ' \
+               f'In September the extent was between {min_september_value:.2f} and ' \
+               f'{max_september_value:.2f}{units}. ' \
+               f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
+               f'Data sets used were: {dataset_name_list(all_datasets)}'
+
+    return out_text
+
+
 def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year: int) -> str:
     """
     Write the glacier paragraph
@@ -517,12 +561,12 @@ def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual
 
     if mhw_check:
         out_text += f"In {year}, {mhw_area:.1f}% of the ocean was affected by at least one marine heatwave. " \
-                   f"The {ordinal(mhw_rank)} highest on record. " \
-                   f"The highest ocean area affected in any year was {mhw_max_area:.1f}% in {mhw_max_year}. "
+                    f"The {ordinal(mhw_rank)} highest on record. " \
+                    f"The highest ocean area affected in any year was {mhw_max_area:.1f}% in {mhw_max_year}. "
     if mcs_check:
         out_text += f"The area of the ocean affected by at least one marine cold spells was {mcs_area:.1f}%. " \
-                   f"The {ordinal(mcs_rank)} highest on record. " \
-                   f"The highest area affected in any year by marine cold spells was {mcs_max_area:.1f}% in {mcs_max_year}."
+                    f"The {ordinal(mcs_rank)} highest on record. " \
+                    f"The highest area affected in any year by marine cold spells was {mcs_max_area:.1f}% in {mcs_max_year}."
 
     if not mcs_check and not mhw_check:
         raise RuntimeError("One of MHW or MCS data not found in the data set list")

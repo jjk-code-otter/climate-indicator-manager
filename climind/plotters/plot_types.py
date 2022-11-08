@@ -576,7 +576,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     plot_units = add_labels(plt.gca(), ds)
 
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca())
+    xlims = plt.gca().get_xlim()
+    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
     plt.yticks(yticks)
     plt.xticks(xticks)
 

@@ -311,6 +311,11 @@
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
           "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "processing": [],
+          "writing": {"function": "antarctic_ice_paragraph"}
         }
       ]
     },
