@@ -2,7 +2,7 @@
   "name": "WDCGG N2O update",
   "display_name": "WDCGG update",
   "version": "",
-  "variable": "n2o",
+  "variable": "n2oignore",
   "units": "ppb",
   "citation": ["WMO Greenhouse Gas Bulletin, No.18, 2022. October 2022 ISSN 2078-0796"],
   "citation_url": [""],

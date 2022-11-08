@@ -85,7 +85,7 @@ if __name__ == "__main__":
         for region in range(6):
             monthly_time_series = ds.calculate_regional_average(continents, region)
             annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1900, 2021)
+            annual_time_series.select_year_range(1900, final_year)
 
             wmo_ra = region + 1
             annual_time_series.metadata['name'] = f"wmo_ra_{wmo_ra}_{annual_time_series.metadata['name']}"
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         for region in range(6):
             monthly_time_series = ds.calculate_regional_average(subregions, region)
             annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1900, 2021)
+            annual_time_series.select_year_range(1900, final_year)
 
             wmo_subregion = region + 1
             annual_time_series.metadata[

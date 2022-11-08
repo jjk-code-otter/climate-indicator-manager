@@ -2,7 +2,7 @@
   "name": "WDCGG CO2 update",
   "display_name": "WDCGG update",
   "version": "",
-  "variable": "co2",
+  "variable": "co2ignore",
   "units": "ppm",
   "citation": ["WMO Greenhouse Gas Bulletin, No.18, 2022. October 2022 ISSN 2078-0796"],
   "citation_url": [""],

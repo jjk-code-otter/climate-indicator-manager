@@ -46,32 +46,32 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -154,37 +154,37 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -213,7 +213,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -242,7 +242,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -271,7 +271,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -300,7 +300,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -329,7 +329,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2021]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]

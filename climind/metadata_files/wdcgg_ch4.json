@@ -4,16 +4,16 @@
   "version": "",
   "variable": "ch4",
   "units": "ppb",
-  "citation": ["WMO Greenhouse Gas Bulletin, No.17, 2021. 25 October 2021 ISSN 2078-0796"],
-  "citation_url": ["https://library.wmo.int/?lvl=notice_display&id=21975"],
+  "citation": ["WMO Greenhouse Gas Bulletin, No.18, 2022. 26 October 2022 ISSN 2078-0796"],
+  "citation_url": ["https://library.wmo.int/index.php?lvl=notice_display&id=3030"],
   "data_citation": [""],
   "acknowledgement": "",
   "colour": "#d55e00",
   "zpos": 10,
   "datasets": [
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2021/ch4_monthly_20211025.csv"],
-      "filename": ["ch4_monthly_20211025.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2022/ch4_monthly_20221026.csv"],
+      "filename": ["ch4_monthly_20221026.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of methane",
 	  "time_resolution": "monthly",
@@ -27,8 +27,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2021/ch4_annual_20211025.csv"],
-      "filename": ["ch4_annual_20211025.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2022/ch4_annual_20221026.csv"],
+      "filename": ["ch4_annual_20221026.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of methane",
 	  "time_resolution": "annual",

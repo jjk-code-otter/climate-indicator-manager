@@ -65,5 +65,5 @@ if __name__ == "__main__":
     dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalData'
     dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
     dash_dir.mkdir(exist_ok=True)
-    dash.build(Path(dash_dir))
+    dash.build(Path(dash_dir), focus_year=2022)
 

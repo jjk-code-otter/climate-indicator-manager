@@ -450,7 +450,8 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
         raise RuntimeError('No datasets provided')
 
     tb = {}
-    cl = {'co2': 277.3, 'ch4': 721.0, 'n2o': 270.9}
+    #pre-industrual values
+    cl = {'co2': 278.3, 'ch4': 729.2, 'n2o': 270.1}
 
     last_year = -9999
 

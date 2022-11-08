@@ -9,7 +9,7 @@
       "cards": [
         {
           "link_to": "greenhouse_gases", "title": "Greenhouse gases",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG CO2 update"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
@@ -67,11 +67,6 @@
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
           "processing": [],
           "writing": {"function": "arctic_ice_paragraph"}
-        },
-        {
-          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "annual"},
-          "processing": [],
-          "writing": {"function": "greenland_ice_sheet"}
         }
       ]
     },
@@ -83,19 +78,19 @@
       "cards": [
         {
           "link_to":  null, "title": "Carbon dioxide",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG CO2 update"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
           "link_to":  null, "title": "Methane",
-          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": "WDCGG CH4 update"},
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": "WDCGG CH4"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
         },
         {
           "link_to":  null, "title": "Nitrous Oxide",
-          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O update"},
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         }
@@ -104,7 +99,7 @@
         {
           "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
           "processing": [{"method": "select_year_range", "args": [1850, 2022]}],
-          "writing": {"function": "co2_paragraph_update"}
+          "writing": {"function": "co2_paragraph"}
         }
       ]
     },

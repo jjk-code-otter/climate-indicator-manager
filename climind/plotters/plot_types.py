@@ -219,7 +219,7 @@ def after_plot(zords, ds, title):
 
 # time series
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    this_parameter_set = STANDARD_PARAMETER_SET
+    this_parameter_set = copy.deepcopy(STANDARD_PARAMETER_SET)
     this_parameter_set['grid.color'] = '#696969'
     this_parameter_set['figure.facecolor'] = '#000000'
     this_parameter_set['text.color'] = '#d3d3d3'
