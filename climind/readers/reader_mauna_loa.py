@@ -30,7 +30,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
 
     with open(filename[0], 'r') as f:
         for line in f:
-            if line[0] != '#':
+            if line[0] != '#' and line[0] != '\n':
                 columns = line.split()
                 year = columns[0]
                 month = columns[1]
