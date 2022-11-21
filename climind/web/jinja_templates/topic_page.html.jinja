@@ -51,6 +51,7 @@ p {
 
 
 
+
 </style>
 <body>
 
@@ -81,7 +82,9 @@ p {
                         href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank"
                         aria-label="Figure in svg format">svg</a><br>
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}"
-                                       aria-label="Bundle of csv data in a zip file">csv</a><br>
+                                       aria-label="Bundle of csv data in a zip file">csv</a>
+                    (<a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
+                        aria-label="extrenal link to data format description">format</a>)<br>
                     <a href="#{{ item.title }}"
                        aria-label="link to references, acknowledgements and processing details">References and
                         processing</a><br>
@@ -163,6 +166,13 @@ p {
                 {% include var + '.html' ignore missing %}
                 {% endfor %}
                 {% endif %}
+
+                <p>
+                    Data in consistent format: <a href="formatted_data/{{ item.csv_name }}"
+                                       aria-label="Bundle of csv data in a zip file">csv</a>
+                    (Data are in <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
+                        aria-label="extrenal link to data format description">BADC CSV format</a>)<br>
+                </p>
 
                 {% for ds in item.dataset_metadata %}
                 <h3>{{ ds.display_name }}</h3>
