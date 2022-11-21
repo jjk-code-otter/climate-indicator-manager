@@ -315,8 +315,8 @@ class Card(WebComponent):
                 csv_path.unlink()
 
         with open(formatted_data_dir / zipfile_name, "rb") as f:
-            bytes = f.read()  # read file as bytes
-            checksum = hashlib.sha512(bytes).hexdigest()
+            gobbled_bytes = f.read()  # read file as bytes
+            checksum = hashlib.sha512(gobbled_bytes).hexdigest()
 
         self['csv_checksum'] = checksum
         self['csv_name'] = zipfile_name
