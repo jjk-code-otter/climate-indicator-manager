@@ -7,7 +7,7 @@
   "citation": ["Legeais, J.-F., Ablain, M., Zawadzki, L., Zuo, H., Johannessen, J. A., Scharffenberg, M. G., Fenoglio-Marc, L., Fernandes, M. J., Andersen, O. B., Rudenko, S., Cipollini, P., Quartly, G. D., Passaro, M., Cazenave, A., and Benveniste, J. (2018). An improved and homogeneous altimeter sea level record from the ESA Climate Change Initiative. Earth System Science Data, 10, 281-301. DOI: 10.5194/essd-10-281-2018"],
   "citation_url": ["https://doi.org/10.5194/essd-10-281-2018"],
   "data_citation": [""],
-  "acknowledgement": "",
+  "acknowledgement": "Generated using AVISO+ Products",
   "colour": "#ff0000",
   "zpos": 10,
   "datasets": [

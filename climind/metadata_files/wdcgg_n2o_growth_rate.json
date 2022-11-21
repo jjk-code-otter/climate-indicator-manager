@@ -1,0 +1,45 @@
+{
+  "name": "WDCGG N2O growth",
+  "display_name": "WDCGG",
+  "version": "",
+  "variable": "n2orate",
+  "units": "ppb/year",
+  "citation": ["WMO Greenhouse Gas Bulletin, No.18, 2022. 26 October 2022 ISSN 2078-0796"],
+  "citation_url": ["https://library.wmo.int/index.php?lvl=notice_display&id=3030"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#d55e00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2022/n2o_monthly_20221026.csv"],
+      "filename": ["n2o_monthly_20221026.csv"],
+	  "type": "timeseries",
+      "long_name": "Growth rate of nitrous oxide concentration",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_rate_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2022/n2o_annual_20221026.csv"],
+      "filename": ["n2o_annual_20221026.csv"],
+	  "type": "timeseries",
+      "long_name": "Growth rate of nitrous oxide concentration",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wdcgg_rate_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

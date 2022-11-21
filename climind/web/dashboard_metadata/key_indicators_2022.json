@@ -93,6 +93,24 @@
           "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O"},
           "processing": [],
           "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
+        },
+        {
+          "link_to":  null, "title": "Carbon dioxide growth rate",
+          "selecting": {"type": "timeseries", "variable": "co2rate", "time_resolution": "annual", "name": "WDCGG CO2 growth"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Carbon dioxide growth rate"}
+        },
+        {
+          "link_to":  null, "title": "Methane growth rate",
+          "selecting": {"type": "timeseries", "variable": "ch4rate", "time_resolution": "annual", "name": "WDCGG CH4 growth"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Methane growth rate"}
+        },
+        {
+          "link_to":  null, "title": "Nitrous oxide growth rate",
+          "selecting": {"type": "timeseries", "variable": "n2orate", "time_resolution": "annual", "name": "WDCGG N2O growth"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Nitrous oxide growth rate"}
         }
       ],
       "paragraphs": [

@@ -147,7 +147,7 @@ def set_yaxis(axis, dataset):
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
 
-    if dataset.metadata['variable'] in ['glacier', 'n2o']:
+    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
     if dataset.metadata['variable'] in ['ohc', 'ohc2k']:
