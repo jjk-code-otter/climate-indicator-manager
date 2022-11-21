@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import hashlib
 import pkg_resources
 from datetime import datetime
 from typing import Union, List
@@ -313,6 +314,11 @@ class Card(WebComponent):
                 zip_archive.write(csv_path, arcname=csv_filename)
                 csv_path.unlink()
 
+        with open(formatted_data_dir / zipfile_name, "rb") as f:
+            bytes = f.read()  # read file as bytes
+            checksum = hashlib.md5(bytes).hexdigest()
+
+        self['csv_checksum'] = checksum
         self['csv_name'] = zipfile_name
 
 
