@@ -43,6 +43,7 @@ p {
 
 
 
+
 </style>
 <body>
 
@@ -157,10 +158,14 @@ p {
                 {% endif %}
 
                 <p>
-                    Data in consistent format: <a href="formatted_data/{{ item.csv_name }}"
-                                       aria-label="Bundle of csv data in a zip file">csv</a>
-                    (Data are in <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
-                        aria-label="extrenal link to data format description">BADC CSV format</a>)<br>
+                    The data in the above plot are available in a zip file containing a csv file for each data set.
+                </p>
+                <p>
+                    Data file: <a href="formatted_data/{{ item.csv_name }}"
+                                                  aria-label="Bundle of csv data in a zip file">{{ item.csv_name }}</a>
+                    <br>Checksum: {{ item.csv_checksum }}
+                    <br>Format: <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
+                       aria-label="extrenal link to data format description">BADC CSV format</a><br>
                 </p>
 
                 {% for ds in item.dataset_metadata %}
