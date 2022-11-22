@@ -277,6 +277,10 @@ class TimeSeriesMonthly(TimeSeries):
             dico['uncertainty'] = uncertainty
         self.df = pd.DataFrame(dico)
 
+        if self.metadata is not None:
+            start_date, end_date = self.get_start_and_end_dates()
+            self.metadata.dataset['last_month'] = str(end_date)
+
     def __str__(self) -> str:
         out_str = f'TimeSeriesMonthly: {self.metadata["name"]}'
         return out_str
@@ -593,7 +597,7 @@ class TimeSeriesMonthly(TimeSeries):
         -------
         Tuple[datetime, datetime]
         """
-        time_str = self.df.year.astype(str) + self.df.month.astype(str)
+        time_str = self.df.year.astype(int).astype(str) + self.df.month.astype(int).astype(str)
         self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
 
         n_time = len(self.df['time'])

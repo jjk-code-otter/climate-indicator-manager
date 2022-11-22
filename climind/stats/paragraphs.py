@@ -23,6 +23,14 @@ from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, g
 ordinal = lambda n: "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10::4])
 
 
+def get_last_month(in_str):
+    year = in_str[0:4]
+    year = int(year)
+    month = in_str[5:7]
+    month = int(month)
+    return year, month
+
+
 def rank_ranges(low: int, high: int) -> str:
     """
     Given an upper and lower limit on the rank, return a string which describes the range. e.g. 'the 2nd' or
@@ -58,7 +66,7 @@ def nice_list(names):
     return name_list
 
 
-def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> str:
+def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year=None) -> str:
     """
     Given a list of dataset, return a comma-and-and separated list of the names.
 
@@ -72,9 +80,15 @@ def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     str
         A list of the dataset names separated by commas and, where appropriate, 'and'
     """
+    str_month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
     names = []
     for ds in all_datasets:
-        names.append(ds.metadata['display_name'])
+        entry = ds.metadata['display_name']
+        if year is not None and 'last_month' in ds.metadata:
+            lyear, lmonth = get_last_month(ds.metadata['last_month'])
+            if lmonth != 12 and year==lyear:
+                entry += f" (to {str_month[lmonth-1]} {year})"
+        names.append(entry)
 
     return nice_list(names)
 
@@ -135,7 +149,7 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
         out_text += f"relative to the {clim_start}-{clim_end} average "
 
     out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
-                f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets)}.'
+                f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets, year)}.'
 
     return out_text
 
@@ -450,7 +464,7 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
         raise RuntimeError('No datasets provided')
 
     tb = {}
-    #pre-industrual values
+    # pre-industrual values
     cl = {'co2': 278.3, 'ch4': 729.2, 'n2o': 270.1}
 
     last_year = -9999
