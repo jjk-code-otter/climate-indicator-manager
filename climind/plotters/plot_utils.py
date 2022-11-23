@@ -233,7 +233,7 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
 
 def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
     """
-    Write a caption for the standard time series plots.
+    Write a caption for the standard map plots.
 
     Parameters
     ----------

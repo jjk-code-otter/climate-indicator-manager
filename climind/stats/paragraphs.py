@@ -136,6 +136,9 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
 
     first_year, last_year = get_start_and_end_year(all_datasets)
 
+    variable = all_datasets[0].metadata['variable']
+    super_text = superlative(variable)
+
     if year > last_year:
         out_text = f'The most recent available year is {last_year}. '
         year = last_year
@@ -147,7 +150,7 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
-    out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} highest ' \
+    out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} {super_text} ' \
                 f'on record. The mean value for {year} was ' \
                 f'{mean_anomaly:.2f}{units} '
 
@@ -168,6 +171,9 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
 
     first_year, last_year = get_start_and_end_year(all_datasets)
 
+    variable = all_datasets[0].metadata['variable']
+    super_text = superlative(variable)
+
     if year > last_year:
         out_text = f'The most recent available year is {last_year}. '
         year = last_year
@@ -185,20 +191,20 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     elif min_rank == 1 and max_rank != 1:
         highest_years, highest_values = pu.calculate_highest_year_and_values(all_datasets)
         highest_years = [str(x) for x in highest_years]
-        out_text += f'{year} is joint highest on record together with {nice_list(highest_years)}.'
+        out_text += f'{year} is joint {super_text} on record together with {nice_list(highest_years)}.'
 
     # if this is highest year in no data sets
     elif min_rank > 1:
         highest_years, highest_values = pu.calculate_highest_year_and_values(all_datasets)
 
         if len(highest_years) == 1:
-            out_text += f'The highest year on record was {highest_years[0]} with a value ' \
+            out_text += f'The {super_text} year on record was {highest_years[0]} with a value ' \
                         f'between {highest_values[0][0]:.2f} and {highest_values[0][1]:.2f} {units}.'
         if len(highest_years) > 1:
             highest_year_entry = []
             for i, high_year in enumerate(highest_years):
                 highest_year_entry.append(f'{high_year} ({highest_values[i][0]:.2f}-{highest_values[i][1]:.2f}{units})')
-            out_text += f'The highest year on record was one of {nice_list(highest_year_entry)}.'
+            out_text += f'The {super_text} year on record was one of {nice_list(highest_year_entry)}.'
 
     return out_text
 

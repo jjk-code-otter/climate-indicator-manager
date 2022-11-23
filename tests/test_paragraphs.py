@@ -218,7 +218,7 @@ def test_fancy_units():
 def test_basic_anomaly_and_rank(simple_annual):
     test_text = pg.basic_anomaly_and_rank([simple_annual], 2022)
 
-    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The year 2022 was ranked the 1st warmest' in test_text
     assert 'The mean value for 2022 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
@@ -228,7 +228,7 @@ def test_basic_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):
     test_text = pg.basic_anomaly_and_rank([simple_annual], 2023)
 
     assert 'The most recent available year is 2022.' in test_text
-    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The year 2022 was ranked the 1st warmest' in test_text
     assert 'The mean value for 2022 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
@@ -237,14 +237,14 @@ def test_basic_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):
 def test_anomaly_and_rank(simple_annual):
     test_text = pg.anomaly_and_rank([simple_annual], 2022)
 
-    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The year 2022 was ranked the 1st warmest' in test_text
     assert 'The mean value for 2022 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
 
     test_text = pg.anomaly_and_rank([simple_annual], 2021)
 
-    assert 'The year 2021 was ranked the 2nd highest' in test_text
+    assert 'The year 2021 was ranked the 2nd warmest' in test_text
     assert 'The mean value for 2021 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
@@ -260,7 +260,7 @@ def test_anomaly_and_rank_plus_new_base(simple_annual):
 def test_anomaly_and_rank_multiple_datasets(simple_annual, simple_annual_descending):
     test_text = pg.anomaly_and_rank([simple_annual, simple_annual_descending], 2022)
 
-    assert 'The year 2022 was ranked between the 1st and 173rd highest' in test_text
+    assert 'The year 2022 was ranked between the 1st and 173rd warmest' in test_text
     assert 'The mean value for 2022 was 1.01&deg;C' in test_text
     assert '(0.00-2.02&deg;C depending' in test_text
     assert '2 data sets were used in this assessment: HadCRUT5 and HadCRUT5' in test_text
@@ -503,18 +503,18 @@ def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
     simple_annual_list[0].df['data'][2022-1850] = 2.0205
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
     assert test_text != ''
-    assert '2022 is joint highest on record together with 2021' in test_text
+    assert '2022 is joint warmest on record together with 2021' in test_text
 
     simple_annual_list[1].df['data'][2022 - 1850] = 2.0205
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
     assert test_text != ''
-    assert 'The highest year on record was 2021 with a value' in test_text
+    assert 'The warmest year on record was 2021 with a value' in test_text
 
     simple_annual_list[1].df['data'][2022 - 1850] = 2.0195
     simple_annual_list[1].df['data'][2021 - 1850] = 2.0195
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
     assert test_text != ''
-    assert 'The highest year on record was one of' in test_text
+    assert 'The warmest year on record was one of' in test_text
     assert '2020' in test_text
     assert '2021' in test_text
 

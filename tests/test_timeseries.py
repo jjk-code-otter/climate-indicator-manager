@@ -118,7 +118,7 @@ def monthly_data_is_month(test_metadata):
 
 
 @pytest.fixture
-def simple_annual():
+def simple_annual(annual_metadata):
     """
     Produces an annual time series from 1850 to 2022.
     Returns
@@ -132,11 +132,11 @@ def simple_annual():
         years.append(y)
         anoms.append(float(y) / 1000.)
 
-    return ts.TimeSeriesAnnual(years, anoms)
+    return ts.TimeSeriesAnnual(years, anoms, metadata=annual_metadata)
 
 
 @pytest.fixture
-def uncertainty_annual():
+def uncertainty_annual(annual_metadata):
     """
     Produces an annual time series from 1850 to 2022.
     Returns
@@ -152,7 +152,8 @@ def uncertainty_annual():
         anoms.append(float(y) / 1000.)
         uncertainties.append(0.77)
 
-    return ts.TimeSeriesAnnual(years, anoms, metadata=None, uncertainty=uncertainties)
+    return ts.TimeSeriesAnnual(years, anoms,
+                               metadata=annual_metadata, uncertainty=uncertainties)
 
 
 @pytest.fixture
@@ -323,6 +324,7 @@ def test_write_csv_irregular(simple_irregular, tmpdir):
     simple_irregular.write_csv(test_filename, metadata_filename=test_metadata_filename)
     assert test_filename.exists()
     assert test_metadata_filename.exists()
+
 
 # Monthly times series
 def test_creation_monthly(test_metadata):
@@ -532,6 +534,26 @@ def test_select_year_range_monthly(simple_monthly):
     assert chomp.df['year'][12 * (2011 - 1999)] == 2011
 
 
+def test_make_monthly_from_df(simple_monthly):
+
+    df = simple_monthly.df
+    metadata = simple_monthly.metadata
+
+    test_ds = ts.TimeSeriesMonthly.make_from_df(df, metadata)
+
+    assert 'uncertainty' not in test_ds.df.columns
+
+
+def test_make_monthly_from_df_with_uncertainty(uncertainty_monthly):
+
+    df = uncertainty_monthly.df
+    metadata = uncertainty_monthly.metadata
+
+    test_ds = ts.TimeSeriesMonthly.make_from_df(df, metadata)
+
+    assert 'uncertainty' in test_ds.df.columns
+
+
 # Annual tests
 def test_make_from_df(uncertainty_annual):
     annual = ts.TimeSeriesAnnual.make_from_df(uncertainty_annual.df, uncertainty_annual.metadata)
@@ -710,3 +732,19 @@ def test_write_csv_annual_with_metadata(simple_annual, test_metadata, tmpdir):
 
     assert test_filename.exists()
     assert test_metadata_filename.exists()
+
+
+def test_write_csv_annual_with_uncertainty(uncertainty_annual, tmpdir):
+    uncertainty_annual.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    uncertainty_annual.write_csv(test_filename)
+
+    assert test_filename.exists()
+
+    found_it = False
+    with open(test_filename, 'r') as f:
+        for line in f:
+            if 'time,year,data,uncertainty' in line:
+                found_it = True
+
+    assert found_it
