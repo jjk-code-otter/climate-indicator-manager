@@ -103,7 +103,7 @@ class BaseMetadata:
 
         return match
 
-    def fill_string(self, string_to_replace:str, replacement:str):
+    def fill_string(self, string_to_replace: str, replacement: str):
         """
         Replace string_to_replace with the replacement value in all elements
 
@@ -128,6 +128,7 @@ class BaseMetadata:
                     entry = entry.replace(string_to_replace, replacement)
                     replacement_list.append(entry)
                 self.metadata[key] = replacement_list
+
 
 class CollectionMetadata(BaseMetadata):
 

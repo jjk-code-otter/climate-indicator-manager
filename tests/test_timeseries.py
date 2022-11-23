@@ -43,14 +43,16 @@ def simple_irregular(test_metadata):
     days = dates.day.tolist()
 
     data = []
+    uncertainty = []
     for i in range(number_of_times):
         data.append(float(years[i] * 100 + months[i]))
+        uncertainty.append(1.37)
 
-    return ts.TimeSeriesIrregular(years, months, days, data, metadata=test_metadata)
+    return ts.TimeSeriesIrregular(years, months, days, data, metadata=test_metadata, uncertainty=uncertainty)
 
 
 @pytest.fixture
-def simple_monthly():
+def simple_monthly(test_metadata):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
     which the month falls
@@ -67,11 +69,11 @@ def simple_monthly():
         months.append(m)
         anomalies.append(float(y))
 
-    return ts.TimeSeriesMonthly(years, months, anomalies)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata)
 
 
 @pytest.fixture
-def uncertainty_monthly():
+def uncertainty_monthly(test_metadata):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
     which the month falls
@@ -91,11 +93,11 @@ def uncertainty_monthly():
         uncertainties.append(0.3)
 
     return ts.TimeSeriesMonthly(years, months, anomalies,
-                                metadata=None, uncertainty=uncertainties)
+                                metadata=test_metadata, uncertainty=uncertainties)
 
 
 @pytest.fixture
-def monthly_data_is_month():
+def monthly_data_is_month(test_metadata):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
     which the month falls
@@ -112,7 +114,7 @@ def monthly_data_is_month():
         months.append(m)
         anomalies.append(float(m))
 
-    return ts.TimeSeriesMonthly(years, months, anomalies)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata)
 
 
 @pytest.fixture
@@ -300,23 +302,41 @@ def test_irregular_get_first_and_last_year(simple_irregular):
     assert end_date == 2002
 
 
+def test_generate_dates_irregular(simple_irregular):
+    dates = simple_irregular.generate_dates('days since 1993-01-01 00:00:00.0')
+    assert dates[0] == 2
+    assert dates[1] - dates[0] == 7
+
+
+def test_write_csv_irregular(simple_irregular, tmpdir):
+    test_filename = Path(tmpdir) / 'test_irregular.csv'
+    test_metadata_filename = Path(tmpdir) / 'test_irregular_metadata.csv'
+
+    simple_irregular.write_csv(test_filename)
+    assert test_filename.exists()
+
+    # check there are no missing lines
+    with open(test_filename, 'r') as f:
+        for line in f:
+            assert line != '\n'
+
+    simple_irregular.write_csv(test_filename, metadata_filename=test_metadata_filename)
+    assert test_filename.exists()
+    assert test_metadata_filename.exists()
+
 # Monthly times series
-def test_creation_monthly():
-    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
+def test_creation_monthly(test_metadata):
+    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=test_metadata)
 
     assert isinstance(f, ts.TimeSeriesMonthly)
     assert f.df['year'][0] == 1999
 
 
-def test_creation_monthly_with_metadata():
-    with open(Path('test_data') / 'gistemp.json') as f:
-        collection_metadata = json.load(f)
-    metadata = collection_metadata['datasets'][1]
-
-    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=metadata)
+def test_creation_monthly_with_metadata(test_metadata):
+    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=test_metadata)
 
     assert isinstance(f, ts.TimeSeriesMonthly)
-    assert f.metadata['space_resolution'] == 999
+    assert f.metadata['space_resolution'] == test_metadata['space_resolution']
     assert f.df['year'][0] == 1999
 
 
@@ -325,9 +345,9 @@ def test_creation_monthly_with_uncertainty(uncertainty_monthly):
     assert uncertainty_monthly.df['uncertainty'][0] == 0.3
 
 
-def test_make_annual():
+def test_make_annual(test_metadata):
     """Create annual series from monthly series and check history is updated"""
-    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
+    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=test_metadata)
     a = f.make_annual()
     assert isinstance(a, ts.TimeSeriesAnnual)
     assert a.df['data'][0] == 2.5
@@ -335,9 +355,9 @@ def test_make_annual():
     assert 'Calculated annual average' in a.metadata['history'][-1]
 
 
-def test_make_annual_cumulative():
+def test_make_annual_cumulative(test_metadata):
     """Create annual series from monthly series and check history is updated"""
-    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0])
+    f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=test_metadata)
     a = f.make_annual(cumulative=True)
     assert isinstance(a, ts.TimeSeriesAnnual)
     assert a.df['data'][0] == 5.0

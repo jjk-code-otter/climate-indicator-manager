@@ -70,6 +70,7 @@
     "time_resolution": {
       "description": "Time resolution of the data",
       "enum": [
+        "irregular",
         "monthly",
         "annual"
       ]
