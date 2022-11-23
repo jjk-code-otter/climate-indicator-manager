@@ -86,8 +86,8 @@ def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
         entry = ds.metadata['display_name']
         if year is not None and 'last_month' in ds.metadata:
             lyear, lmonth = get_last_month(ds.metadata['last_month'])
-            if lmonth != 12 and year==lyear:
-                entry += f" (to {str_month[lmonth-1]} {year})"
+            if lmonth != 12 and year == lyear:
+                entry += f" (to {str_month[lmonth - 1]} {year})"
         names.append(entry)
 
     return nice_list(names)
@@ -120,6 +120,14 @@ def fancy_html_units(units: str) -> str:
         fancy = units
 
     return fancy
+
+
+def superlative(variable):
+    lookup = {'tas': 'warmest'}
+    if variable in lookup:
+        return lookup[variable]
+
+    return 'highest'
 
 
 def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:

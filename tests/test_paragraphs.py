@@ -103,6 +103,26 @@ def simple_annual(test_dataset_attributes, test_collection_attributes):
 
 
 @pytest.fixture
+def simple_annual_list(test_dataset_attributes, test_collection_attributes):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes))
+    years = []
+    anoms = []
+    for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y) / 1000.)
+
+    return [ts.TimeSeriesAnnual(years, anoms, metadata),
+            ts.TimeSeriesAnnual(years, anoms, metadata)]
+
+
+@pytest.fixture
 def simple_annual_descending(test_dataset_attributes, test_collection_attributes):
     """
     Produces an annual time series from 1850 to 2022.
@@ -118,6 +138,23 @@ def simple_annual_descending(test_dataset_attributes, test_collection_attributes
         years.append(y)
         anoms.append(float(2022 - y) / 1000.)
     return ts.TimeSeriesAnnual(years, anoms, metadata)
+
+
+def test_get_last_month():
+    test_string = '2015-03-04 15:47:00'
+
+    year, month = pg.get_last_month(test_string)
+
+    assert year == 2015
+    assert month == 3
+
+
+def test_superlative():
+    test_string = pg.superlative('tas')
+    assert test_string == 'warmest'
+
+    test_string = pg.superlative('ohc')
+    assert test_string == 'highest'
 
 
 def test_rank_ranges():
@@ -158,9 +195,43 @@ def test_dataset_name_list():
     assert test_text == '1 and 2'
 
 
+def test_dataset_name_list_incomplete_year():
+    all_datasets = []
+    for i in range(1, 4):
+        ds = Tiny(i)
+        ds.metadata['last_month'] = '2022-11-03'
+        all_datasets.append(ds)
+
+    # check last year shows last available month
+    test_text = pg.dataset_name_list(all_datasets, 2022)
+    assert test_text == '1 (to Nov 2022), 2 (to Nov 2022), and 3 (to Nov 2022)'
+    # check earlier year does not as this would be complete
+    test_text = pg.dataset_name_list(all_datasets, 2021)
+    assert test_text == '1, 2, and 3'
+
+
 def test_fancy_units():
     assert pg.fancy_html_units('degC') == '&deg;C'
     assert pg.fancy_html_units('numpty') == 'numpty'
+
+
+def test_basic_anomaly_and_rank(simple_annual):
+    test_text = pg.basic_anomaly_and_rank([simple_annual], 2022)
+
+    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The mean value for 2022 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+
+def test_basic_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):
+    test_text = pg.basic_anomaly_and_rank([simple_annual], 2023)
+
+    assert 'The most recent available year is 2022.' in test_text
+    assert 'The year 2022 was ranked the 1st highest' in test_text
+    assert 'The mean value for 2022 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
 
 
 def test_anomaly_and_rank(simple_annual):
@@ -392,7 +463,7 @@ def prepared_mhw_datasets(mocker):
         m.get_value_from_year.side_effect = [33.3, 79.8]
         m.get_rank_from_year.return_value = 3
         m.get_year_from_rank.return_value = [2011]
-        m.get_first_and_last_year.return_value = [1982,2021]
+        m.get_first_and_last_year.return_value = [1982, 2021]
 
         all_datasets.append(m)
 
@@ -421,3 +492,31 @@ def tests_marine_heatwave_no_input_paragraph():
 def test_compare_to_highest_anomaly_and_rank_with_nothing_in_list():
     with pytest.raises(RuntimeError):
         _ = pg.compare_to_highest_anomaly_and_rank([], 2020)
+
+
+def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
+
+    # If 2022 is the highest year in all datasets then returns nothing.
+    test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert test_text == ''
+
+    simple_annual_list[0].df['data'][2022-1850] = 2.0205
+    test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert test_text != ''
+    assert '2022 is joint highest on record together with 2021' in test_text
+
+    simple_annual_list[1].df['data'][2022 - 1850] = 2.0205
+    test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert test_text != ''
+    assert 'The highest year on record was 2021 with a value' in test_text
+
+    simple_annual_list[1].df['data'][2022 - 1850] = 2.0195
+    simple_annual_list[1].df['data'][2021 - 1850] = 2.0195
+    test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert test_text != ''
+    assert 'The highest year on record was one of' in test_text
+    assert '2020' in test_text
+    assert '2021' in test_text
+
+    test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2023)
+    assert 'The most recent available year is 2022' in test_text
