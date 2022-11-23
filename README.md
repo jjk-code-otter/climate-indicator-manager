@@ -9,7 +9,7 @@ data sets from those collections. For example, a *collection* might be something
 *dataset* would be the file containing the monthly global mean temperatures calculated by the providers of "HadCRUT".
 
 The current functionality includes tools to download, read and undertake simple processing of monthly and annual
-timeseries. Currently, simple processing includes:
+timeseries and grids. Currently, simple processing includes:
 
 1. changing the baseline of the data,
 2. aggregating monthly data into annual data and
@@ -18,9 +18,9 @@ timeseries. Currently, simple processing includes:
 Various statistics can also be calculated from the timeseries, including rankings for particular years and years
 associated with particular rankings.
 
-Each step in processing is logged and added to the metadata for the dataset so that .
+Each step in processing is logged and added to the metadata for the dataset so that processing steps can be traced 
+and reproduced.
 
-The package also manages the download of gridded data.
 
 Installation
 ============
@@ -71,12 +71,11 @@ the gridded data.
 The volume of gridded data is considerably larger than the volume of time series data. For some datasets, the whole
 gridded dataset is downloaded each time this is run, but for the reanalyses the full dataset is only downloaded once
 with subsequent runs of the get_grids.py script only downloading months that have not already been downloaded. The
-gridded data are used to calculate custom area averages (
-such as the WMO Regional Association averages) and for plotting maps of the data. The key global indicators are all time
-series.
+gridded data are used to calculate custom area averages (such as the WMO Regional Association averages) and for 
+plotting maps of the data. The key global indicators are all time series.
 
 Some datasets are not available online (the JRA-55 global mean temperature for example) so you will have to obtain 
-these from somewhere else.
+these from somewhere else or remove them from the processing.
 
 Processing the data
 ===================
@@ -89,6 +88,12 @@ scripts directory and run:
 This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
 six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
 load and process a lot of reanalysis data.
+
+The gridded data need to be pre-processed by running:
+
+`python regrid_grids.py`
+
+which calculates annual average grids on a consistent 5 degree latitude longitude grid for all data sets.
 
 Building the website
 ====================
@@ -124,7 +129,7 @@ To add a dataset for an existing variable, you need to
 * write a fetcher function in the `fetchers` directory. This should correspond to the "reader" entry in the collection metadata. This is only necessary if the file(s) can't be downloaded as a simple http(s) or ftp(s) request. For example, some datasets do not have a static URL, or there are a large number of files, or there is an API for accessing the data.
 
 The form of these files should be clear from the other files and function in the respective 
-directories. An example metadata file looks like this:
+directories, or by perusal of the schemas in the `data_manager` directory. An example metadata file looks like this:
 
 ```
 {
@@ -164,8 +169,8 @@ inputs and maintains transparency of the system. The "reader" and "fetcher" spec
 
 More complicated examples can be found in the repository.
 
-* `name` - this is a unique name for this particular collection
-* `display_name` - name used to label datasets in this collection in figure legends.
+* `name` - this is a **unique** name for this particular collection
+* `display_name` - name used to label datasets in this collection in figure legends, captions and text.
 * `version` - latest version number for the data set
 * `variable` - variable name. `tas` is global surface temperature.
 * `units` - units used for this variable. 
