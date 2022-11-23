@@ -20,6 +20,7 @@ import numpy as np
 import logging
 import copy
 import pkg_resources
+from pathlib import Path
 from functools import reduce
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
@@ -78,8 +79,31 @@ class TimeSeries:
         self.df = self.df[self.df['year'] >= start_year]
         self.df = self.df[self.df['year'] <= end_year]
         self.df = self.df.reset_index()
-        self.update_history(f'Selected year range {start_year} to {end_year}.')
+        self.update_history(f'Selected years within the range {start_year} to {end_year}.')
         return self
+
+    @log_activity
+    def manually_set_baseline(self, baseline_start_year: int, baseline_end_year: int):
+        """
+        Manually set baseline.
+
+        Parameters
+        ----------
+        baseline_start_year: int
+            Start of baseline period
+        baseline_end_year: int
+            End of baseline period
+
+        Returns
+        -------
+        None
+        """
+        # update attributes
+        self.metadata['climatology_start'] = baseline_start_year
+        self.metadata['climatology_end'] = baseline_end_year
+        self.metadata['actual'] = False
+        self.update_history(f'Manually changed baseline to {baseline_start_year}-{baseline_end_year}. '
+                            f'Note that data values remain unchanged.')
 
     def get_first_and_last_year(self) -> Tuple[int, int]:
         """
@@ -94,7 +118,7 @@ class TimeSeries:
         last_year = self.df['year'].tolist()[-1]
         return first_year, last_year
 
-    def update_history(self, message: str):
+    def update_history(self, message: str) -> None:
         """
         Update the history metadata
 
@@ -110,30 +134,86 @@ class TimeSeries:
         self.metadata['history'].append(message)
 
     @log_activity
-    def add_offset(self, offset: float):
+    def add_offset(self, offset: float) -> None:
         """
-        Add an offset to the data set
+        Add an offset to the data set.
 
         Parameters
         ----------
         offset : float
-            offset to be added to the data set.
+            offset to be added to all values in the data set.
 
         Returns
         -------
-
+        None
         """
 
         self.df['data'] = self.df['data'] + offset
         self.metadata['derived'] = True
-        self.update_history(f'Added offset of {offset}')
+        self.update_history(f'Added offset of {offset} to all data values.')
+
+    def write_generic_csv(self, filename, metadata_filename, monthly, uncertainty, irregular,
+                          columns_to_write):
+
+        if metadata_filename is not None:
+            self.metadata['filename'] = [str(filename.name)]
+            self.metadata['url'] = [""]
+            self.metadata['reader'] = "reader_badc_csv"
+            self.metadata['fetcher'] = "fetcher_no_url"
+            self.update_history(f"Wrote to file {str(filename.name)}")
+            self.metadata.write_metadata(metadata_filename)
+
+        now = datetime.today()
+        climind_version = pkg_resources.get_distribution("climind").version
+
+        time_units = 'days since 1800-01-01 00:00:00.0'
+        self.df['time'] = self.generate_dates(time_units)
+
+        # populate template to make webpage
+        env = Environment(
+            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
+            autoescape=select_autoescape()
+        )
+        template = env.get_template("badc_boilerplate.jinja2")
+
+        rendered = template.render(now=now, climind_version=climind_version,
+                                   metadata=self.metadata,
+                                   monthly=monthly, irregular=irregular,
+                                   time_units=time_units, uncertainty=uncertainty)
+
+        with open(filename, 'w') as f:
+            f.write(rendered)
+            f.write(self.df.to_csv(index=False,
+                                   line_terminator='\n',
+                                   float_format='%.4f',
+                                   header=False,
+                                   columns=columns_to_write))
+            f.write("end data\n")
 
 
 class TimeSeriesIrregular(TimeSeries):
 
-    def __init__(self, years: list, months: list, days: list, data: list,
+    def __init__(self, years: List[int], months: List[int], days: List[int], data: List[float],
                  metadata: CombinedMetadata = None,
-                 uncertainty: Optional[list] = None):
+                 uncertainty: Optional[List[float]] = None):
+        """
+        Create TimeSeriesIrregular
+
+        Parameters
+        ----------
+        years: List[int]
+            List of integers specifying the year of each data point
+        months: List[int]
+            List of integers specifying the month of each data point
+        days: List[int]
+            List of integers specifying the day of each data point
+        data: List[float]
+            List of floats with the data values
+        metadata: CombinedMetadata
+            CombinedMetadata object holding the metadata for the dataset
+        uncertainty: List[float]
+            List of floats with the uncertainty values for each data point
+        """
         super().__init__(metadata)
 
         dico = {'year': years, 'month': months, 'day': days, 'data': data}
@@ -149,7 +229,7 @@ class TimeSeriesIrregular(TimeSeries):
     def make_monthly(self):
         """
         Calculate a TimeSeriesMonthly from the TimeSeriesIrregular. The monthly average is
-        calculated from the mean of values within the month
+        calculated from the mean of values within the month.
 
         Returns
         -------
@@ -168,7 +248,8 @@ class TimeSeriesIrregular(TimeSeries):
 
         monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
 
-        monthly_series.update_history('Calculated monthly average from values using arithmetic mean')
+        monthly_series.update_history(f'Calculated monthly average from values using arithmetic mean '
+                                      f'of all dates that fall within each month')
 
         # update attributes
         monthly_series.metadata['time_resolution'] = 'monthly'
@@ -196,7 +277,20 @@ class TimeSeriesIrregular(TimeSeries):
 
         return start_date, end_date
 
-    def generate_dates(self, time_units: str):
+    def generate_dates(self, time_units: str) -> List[int]:
+        """
+        Given a string specifying the required time units (something like days since 1800-01-01 00:00:00.0),
+        generate a list of times from the time series corresponding to those units.
+
+        Parameters
+        ----------
+        time_units: str
+            String specifying the units to use for generating the times e.g. "days since 1800-01-01 00:00:00.0"
+
+        Returns
+        -------
+        List[int]
+        """
         time_str = self.df.year.astype(str) + \
                    self.df.month.map('{:02d}'.format) + \
                    self.df.day.map('{:02d}'.format)
@@ -207,60 +301,50 @@ class TimeSeriesIrregular(TimeSeries):
                             calendar='standard')
         return dates
 
-    def write_csv(self, filename, metadata_filename=None):
+    def write_csv(self, filename: Path, metadata_filename: Path = None) -> None:
+        """
+        Write the timeseries to a csv file with the specified filename. The format used for writing is given
+        by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for writing a
+        metadata file is also provided.
 
-        if metadata_filename is not None:
-            self.metadata['filename'] = [str(filename.name)]
-            self.metadata['url'] = [""]
-            self.metadata['reader'] = "reader_badc_csv"
-            self.metadata['fetcher'] = "fetcher_no_url"
-            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
-            self.metadata.write_metadata(metadata_filename)
+        Parameters
+        ----------
+        filename: Path
+            Path of the filename to write the data to
+        metadata_filename: Path
+            Path of the filename to write the metadata to
 
-        now = datetime.today()
-        climind_version = pkg_resources.get_distribution("climind").version
-
-        time_units = 'days since 1800-01-01 00:00:00.0'
-        self.df['time'] = self.generate_dates(time_units)
-
-        # populate template to make webpage
-        env = Environment(
-            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
-            autoescape=select_autoescape()
-        )
-        template = env.get_template("badc_boilerplate.jinja2")
-
-        rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=False, irregular=True)
-
-        with open(filename, 'w') as f:
-            f.write(rendered)
-            f.write(self.df.to_csv(index=False,
-                                   line_terminator='\n',
-                                   float_format='%.4f',
-                                   header=False,
-                                   columns=['time', 'year', 'month', 'day', 'data']))
-            f.write("end data\n")
+        Returns
+        -------
+        None
+        """
+        monthly = False
+        uncertainty = False
+        irregular = True
+        columns_to_write = ['time', 'year', 'month', 'day', 'data']
+        super().write_generic_csv(filename, metadata_filename,
+                                  monthly, uncertainty, irregular,
+                                  columns_to_write)
 
 
 class TimeSeriesMonthly(TimeSeries):
 
-    def __init__(self, years: list, months: list, data: list, metadata: CombinedMetadata = None,
-                 uncertainty: Optional[list] = None):
+    def __init__(self, years: List[int], months: List[int], data: List[float], metadata: CombinedMetadata = None,
+                 uncertainty: Optional[List[float]] = None):
         """
         Monthly time series class
 
         Parameters
         ----------
-        years : list
+        years : List[int]
             List of years
-        months : list
+        months : List[int]
             List of months
-        data : list
+        data : List[float]
             List of data values
         metadata : CombinedMetadata
             CombinedMetadata object containing the metadata
-        uncertainty: Optional[list]
+        uncertainty: Optional[List[float]]
 
         Attributes
         ----------
@@ -293,7 +377,7 @@ class TimeSeriesMonthly(TimeSeries):
         Parameters
         ----------
         df : pd.DataFrame
-            Pandas dataframe containing columns 'year' 'month' and 'data'
+            Pandas dataframe containing columns 'year' 'month' and 'data' (optionally 'uncertainty')
         metadata : dict
             Dictionary containing the metadata
 
@@ -344,10 +428,10 @@ class TimeSeriesMonthly(TimeSeries):
         return annual_series
 
     @log_activity
-    def make_annual_by_selecting_month(self, month):
+    def make_annual_by_selecting_month(self, month: int):
         """
         Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual value is
-        taken from one of the monthly values specified by the user3
+        taken from one of the monthly values specified by the user.
 
         Returns
         -------
@@ -369,29 +453,7 @@ class TimeSeriesMonthly(TimeSeries):
         return annual_series
 
     @log_activity
-    def manually_set_baseline(self, y1: int, y2: int):
-        """
-        Manually set baseline.
-
-        Parameters
-        ----------
-        y1: int
-            Start of baseline period
-        y2: int
-            End of baseline period
-
-        Returns
-        -------
-        None
-        """
-        # update attributes
-        self.metadata['climatology_start'] = y1
-        self.metadata['climatology_end'] = y2
-        self.metadata['actual'] = False
-        self.update_history(f'Manually changed baseline to {y1}-{y2}')
-
-    @log_activity
-    def rebaseline(self, y1, y2):
+    def rebaseline(self, baseline_start_year, baseline_end_year):
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
         Each month is rebaselined separately, allowing for changes in seasonality. If years are
@@ -399,9 +461,9 @@ class TimeSeriesMonthly(TimeSeries):
 
         Parameters
         ----------
-        y1 : int
+        baseline_start_year : int
             The first year of the climatology period
-        y2 : int
+        baseline_end_year : int
             The last year of the climatology period
 
         Returns
@@ -409,7 +471,7 @@ class TimeSeriesMonthly(TimeSeries):
             Action occurs in place
         """
         # select part of series in climatology period
-        climatology_part = self.df[(self.df['year'] >= y1) & (self.df['year'] <= y2)]
+        climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
 
         # calculate monthly climatology
         climatology = climatology_part.groupby(['month'])['data'].mean().reset_index()
@@ -422,12 +484,14 @@ class TimeSeriesMonthly(TimeSeries):
         self.df['data'] = self.df['data'] - self.df['climatology']
 
         # update attributes
-        self.metadata['climatology_start'] = y1
-        self.metadata['climatology_end'] = y2
+        self.metadata['climatology_start'] = baseline_start_year
+        self.metadata['climatology_end'] = baseline_end_year
         self.metadata['actual'] = False
 
         self.update_history(
-            f'Rebaselined to {y1}-{y2} by subtracting mean over the climatology period for each month separately'
+            f'Rebaselined to {baseline_start_year}-{baseline_end_year} for each month separately by calculating the '
+            f'arithmetic mean of the data over the baseline period and subtracting the mean from all data values. '
+            f'This is done for each month separately (Januarys, Februarys etc).'
         )
 
     def get_value(self, year: int, month: int):
@@ -506,8 +570,10 @@ class TimeSeriesMonthly(TimeSeries):
                        'July', 'August', 'September', 'October', 'November', 'December']
 
         zero_value = -1 * self.get_value(year, month)
-        self.update_history(f'Zeroed series on {month_names[month - 1]} {year} by adding offset (see next entry)')
+        self.update_history(f'Zeroed series on {month_names[month - 1]} {year} by subtracting the value for that '
+                            f'month from all data values (see next entry)')
         self.add_offset(zero_value)
+        self.manually_set_baseline(year, year)
 
     @log_activity
     def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
@@ -545,7 +611,20 @@ class TimeSeriesMonthly(TimeSeries):
         else:
             return None
 
-    def generate_dates(self, time_units: str):
+    def generate_dates(self, time_units: str) -> List[int]:
+        """
+        Given a string specifying the required time units (something like days since 1800-01-01 00:00:00.0),
+        generate a list of times from the time series corresponding to those units.
+
+        Parameters
+        ----------
+        time_units: str
+            String specifying the units to use for generating the times e.g. "days since 1800-01-01 00:00:00.0"
+
+        Returns
+        -------
+        List[int]
+        """
         time_str = self.df.year.astype(str) + self.df.month.astype(str)
         self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
         dates = cf.date2num(self.df['time'].tolist(),
@@ -554,40 +633,30 @@ class TimeSeriesMonthly(TimeSeries):
                             calendar='standard')
         return dates
 
-    def write_csv(self, filename, metadata_filename=None):
+    def write_csv(self, filename: Path, metadata_filename: Path = None):
+        """
+        Write the timeseries to a csv file with the specified filename. The format used for writing is given
+        by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for writing a
+        metadata file is also provided.
 
-        if metadata_filename is not None:
-            self.metadata['filename'] = [str(filename.name)]
-            self.metadata['url'] = [""]
-            self.metadata['reader'] = "reader_badc_csv"
-            self.metadata['fetcher'] = "fetcher_no_url"
-            self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
-            self.metadata.write_metadata(metadata_filename)
+        Parameters
+        ----------
+        filename: Path
+            Path of the filename to write the data to
+        metadata_filename: Path
+            Path of the filename to write the metadata to
 
-        now = datetime.today()
-        climind_version = pkg_resources.get_distribution("climind").version
-
-        time_units = 'days since 1800-01-01 00:00:00.0'
-        self.df['time'] = self.generate_dates(time_units)
-
-        # populate template to make webpage
-        env = Environment(
-            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
-            autoescape=select_autoescape()
-        )
-        template = env.get_template("badc_boilerplate.jinja2")
-
-        rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=True, irregular=False)
-
-        with open(filename, 'w') as f:
-            f.write(rendered)
-            f.write(self.df.to_csv(index=False,
-                                   line_terminator='\n',
-                                   float_format='%.4f',
-                                   header=False,
-                                   columns=['time', 'year', 'month', 'data']))
-            f.write("end data\n")
+        Returns
+        -------
+        None
+        """
+        columns_to_write = ['time', 'year', 'month', 'data']
+        monthly = True
+        uncertainty = False
+        irregular = False
+        super().write_generic_csv(filename, metadata_filename,
+                                  monthly, uncertainty, irregular,
+                                  columns_to_write)
 
     def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
         """
@@ -666,37 +735,15 @@ class TimeSeriesAnnual(TimeSeries):
             return TimeSeriesAnnual(years, data, metadata)
 
     @log_activity
-    def manually_set_baseline(self, y1: int, y2: int):
-        """
-        Manually set baseline.
-
-        Parameters
-        ----------
-        y1: int
-            Start of baseline period
-        y2: int
-            End of baseline period
-
-        Returns
-        -------
-        None
-        """
-        # update attributes
-        self.metadata['climatology_start'] = y1
-        self.metadata['climatology_end'] = y2
-        self.metadata['actual'] = False
-        self.metadata['history'].append(f'Manually changed baseline to {y1}-{y2}')
-
-    @log_activity
-    def rebaseline(self, y1: int, y2: int):
+    def rebaseline(self, baseline_start_year: int, baseline_end_year: int):
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
 
         Parameters
         ----------
-        y1 : int
+        baseline_start_year : int
             First year of the climatology period
-        y2 : int
+        baseline_end_year : int
             Last year of the climatology period
 
         Returns
@@ -704,7 +751,7 @@ class TimeSeriesAnnual(TimeSeries):
             Action occurs in place.
         """
         # select part of series in climatology period
-        climatology_part = self.df[(self.df['year'] >= y1) & (self.df['year'] <= y2)]
+        climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
 
         # calculate monthly climatology
         climatology = climatology_part['data'].mean()
@@ -713,11 +760,12 @@ class TimeSeriesAnnual(TimeSeries):
         self.df['data'] = self.df['data'] - climatology
 
         # update attributes
-        self.metadata['climatology_start'] = y1
-        self.metadata['climatology_end'] = y2
+        self.metadata['climatology_start'] = baseline_start_year
+        self.metadata['climatology_end'] = baseline_end_year
         self.metadata['actual'] = False
 
-        self.update_history(f'Rebaselined to {y1}-{y2} by subtracting mean for that period')
+        self.update_history(f'Rebaselined to {baseline_start_year}-{baseline_end_year} by subtracting the arithemtic '
+                            f'mean for that period from all data values.')
 
     @log_activity
     def get_rank_from_year(self, year: int) -> Optional[int]:
@@ -829,13 +877,39 @@ class TimeSeriesAnnual(TimeSeries):
 
     @log_activity
     def select_decade(self, end_year: int = 0):
+        """
+        Select every tenth year from the time series, the last digit of the years can
+        be selected using the end_year keyword argument.
+
+        Parameters
+        ----------
+        end_year: int
+            Last digit of the years to be selected. e.g. set to 0 to pick 1850, 1860... 2010, 2020 etc.
+
+        Returns
+        -------
+        TimeSeriesAnnual
+        """
         self.df = self.df[self.df['year'] % 10 == end_year]
         self.df = self.df.reset_index()
         self.metadata['derived'] = True
         self.update_history(f'Selected years ending in {end_year}')
         return self
 
-    def generate_dates(self, time_units):
+    def generate_dates(self, time_units: str) -> List[int]:
+        """
+        Given a string specifying the required time units (something like days since 1800-01-01 00:00:00.0),
+        generate a list of times from the time series corresponding to those units.
+
+        Parameters
+        ----------
+        time_units: str
+            String specifying the units to use for generating the times e.g. "days since 1800-01-01 00:00:00.0"
+
+        Returns
+        -------
+        List[int]
+        """
         self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
         dates = cf.date2num(self.df['time'].tolist(),
                             units=time_units,
@@ -844,49 +918,46 @@ class TimeSeriesAnnual(TimeSeries):
         return dates
 
     def write_csv(self, filename, metadata_filename=None):
+        """
+        Write the timeseries to a csv file with the specified filename. The format used for writing is given
+        by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for writing a
+        metadata file is also provided.
 
-        if metadata_filename is not None:
-            self.metadata['filename'] = [str(filename.name)]
-            self.metadata['url'] = [""]
-            self.metadata['reader'] = "reader_badc_csv"
-            self.metadata['fetcher'] = "fetcher_no_url"
-            self.update_history(f"Wrote to file {str(filename.name)}")
-            self.metadata.write_metadata(metadata_filename)
+        Parameters
+        ----------
+        filename: Path
+            Path of the filename to write the data to
+        metadata_filename: Path
+            Path of the filename to write the metadata to
 
-        now = datetime.today()
-        climind_version = pkg_resources.get_distribution("climind").version
-
-        time_units = 'days since 1800-01-01 00:00:00.0'
-        self.df['time'] = self.generate_dates(time_units)
-
+        Returns
+        -------
+        None
+        """
+        monthly = False
+        irregular = False
         uncertainty = False
         columns_to_write = ['time', 'year', 'data']
         if 'uncertainty' in self.df.columns:
             uncertainty = True
             columns_to_write = ['time', 'year', 'data', 'uncertainty']
 
-        # populate template to make webpage
-        env = Environment(
-            loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
-            autoescape=select_autoescape()
-        )
-        template = env.get_template("badc_boilerplate.jinja2")
-
-        rendered = template.render(now=now, climind_version=climind_version,
-                                   metadata=self.metadata, monthly=False, irregular=False,
-                                   time_units=time_units, uncertainty=uncertainty)
-
-        with open(filename, 'w') as f:
-            f.write(rendered)
-            f.write(self.df.to_csv(index=False,
-                                   line_terminator='\n',
-                                   float_format='%.4f',
-                                   header=False,
-                                   columns=columns_to_write))
-            f.write("end data\n")
+        super().write_generic_csv(filename, metadata_filename,
+                                  monthly, uncertainty, irregular, columns_to_write)
 
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
+    """
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets from which to extract the earliest first year and latest final year.
+
+    Returns
+    -------
+    (int, int)
+    """
     if len(all_datasets) == 0:
         return None, None
 
@@ -901,6 +972,18 @@ def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
 
 
 def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnual:
+    """
+    Combine a list of datasets into a single TimeSeriesAnnual by taking the arithmetic mean
+    of all available datasets for each year. Merges the metadata for all the input time series.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets to be combined
+    Returns
+    -------
+    TimeSeriesAnnual
+    """
     data_frames = []
     metadata = copy.deepcopy(all_datasets[0].metadata)
     metadata['name'] = 'Combined'
