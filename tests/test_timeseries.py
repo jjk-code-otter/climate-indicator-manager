@@ -333,10 +333,6 @@ def test_creation_monthly(test_metadata):
 
 
 def test_creation_monthly_with_metadata(test_metadata):
-    # with open(Path('test_data') / 'gistemp.json') as f:
-    #     collection_metadata = json.load(f)
-    # metadata = collection_metadata['datasets'][1]
-
     f = ts.TimeSeriesMonthly([1999, 1999], [1, 2], [2.0, 3.0], metadata=test_metadata)
 
     assert isinstance(f, ts.TimeSeriesMonthly)
