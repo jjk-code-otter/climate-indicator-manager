@@ -44,7 +44,18 @@ p {
 
 
 
+
 </style>
+
+<script>
+        function copyText(invar) {
+
+            /* Copy text into clipboard */
+            navigator.clipboard.writeText
+                (invar);
+        }
+
+</script>
 <body>
 
 <div class="w3-container w3-padding-32 w3-light-grey">
@@ -162,10 +173,11 @@ p {
                 </p>
                 <p>
                     Data file: <a href="formatted_data/{{ item.csv_name }}"
-                                                  aria-label="Bundle of csv data in a zip file">{{ item.csv_name }}</a>
+                                  aria-label="Bundle of csv data in a zip file">{{ item.csv_name }}</a>
                     <br>Checksum: {{ item.csv_checksum }}
+                    <button onclick="copyText('{{ item.csv_checksum }}')">Copy</button>
                     <br>Format: <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
-                       aria-label="extrenal link to data format description">BADC CSV format</a><br>
+                                   aria-label="extrenal link to data format description">BADC CSV format</a><br>
                 </p>
 
                 {% for ds in item.dataset_metadata %}
