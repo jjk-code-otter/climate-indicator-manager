@@ -18,6 +18,7 @@ from typing import Tuple, Union, List
 import numpy as np
 from numpy import ndarray
 
+from climind.stats.paragraphs import fancy_html_units
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 from climind.data_types.grid import GridAnnual
 
@@ -129,7 +130,6 @@ def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
 
 
 def calculate_highest_year_and_values(all_datasets: List[TimeSeriesAnnual]):
-
     all_highest_years = []
     all_highest_values = []
     for ds in all_datasets:
@@ -212,7 +212,10 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
     number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
                       'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
 
-    caption = f"{ds.metadata['time_resolution']} {ds.metadata['long_name']} ({ds.metadata['units']}"
+    fancy_units = fancy_html_units(ds.metadata['units'])
+
+    caption = f"{ds.metadata['time_resolution']}".capitalize()
+    caption += f" {ds.metadata['long_name']} ({fancy_units}"
     if not ds.metadata['actual']:
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
@@ -224,12 +227,13 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
 
     dataset_names_for_caption = []
     for ds in all_datasets:
-        dataset_names_for_caption.append(f"{ds.metadata['name']}")
+        dataset_names_for_caption.append(f"{ds.metadata['display_name']}")
 
     caption += ', '.join(dataset_names_for_caption)
     caption += '.'
 
     return caption
+
 
 def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
     """
@@ -250,7 +254,10 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
     number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
                       'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
 
-    caption = f"{ds.metadata['time_resolution']} {ds.metadata['long_name']} ({ds.metadata['units']}"
+    fancy_units = fancy_html_units(ds.metadata['units'])
+
+    caption = f"{ds.metadata['time_resolution']}".capitalize()
+    caption += f" {ds.metadata['long_name']} ({fancy_units}"
     if not ds.metadata['actual']:
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
@@ -262,7 +269,7 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
 
     dataset_names_for_caption = []
     for ds in all_datasets:
-        dataset_names_for_caption.append(f"{ds.metadata['name']}")
+        dataset_names_for_caption.append(f"{ds.metadata['display_name']}")
 
     caption += ', '.join(dataset_names_for_caption)
     caption += '.'
