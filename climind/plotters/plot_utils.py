@@ -235,7 +235,7 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
     return caption
 
 
-def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
+def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str:
     """
     Write a caption for the standard map plots.
 
@@ -257,13 +257,26 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]]) -> str:
     fancy_units = fancy_html_units(ds.metadata['units'])
 
     caption = f"{ds.metadata['time_resolution']}".capitalize()
-    caption += f" {ds.metadata['long_name']} ({fancy_units}"
-    if not ds.metadata['actual']:
+    caption += f" {ds.metadata['long_name']}"
+
+    if type == 'unc':
+        caption += " uncertainty"
+        calculation = 'half-range'
+    elif type == 'rank':
+        caption += " rank"
+        calculation = 'median rank'
+    else:
+        caption +=  " anomaly"
+        calculation = 'median'
+
+    caption += f" ({fancy_units}"
+    if not ds.metadata['actual'] and type not in ['unc', 'rank']:
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
-    caption += f" for 2021. "
+
+    caption += f" for 2022. "
     if 1 < len(all_datasets) < 17:
-        caption += f"Data shown are the median of the following {number_to_word[len(all_datasets)]} data sets: "
+        caption += f"Data shown are the {calculation} of the following {number_to_word[len(all_datasets)]} data sets: "
     else:
         caption += f"Data are from "
 

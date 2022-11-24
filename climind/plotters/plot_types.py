@@ -743,7 +743,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure
     """
-    caption = f'Figure shows the trends for four sub=periods (1901-1930, 1931-1960, 1961-1990 and 1991-present. ' \
+    caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-present. ' \
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
               f'of different estimates.'
 
@@ -1017,7 +1017,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
     plt.close()
 
-    caption = map_caption_builder(all_datasets)
+    caption = map_caption_builder(all_datasets, type)
 
     return caption
 
