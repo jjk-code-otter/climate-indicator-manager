@@ -52,9 +52,10 @@ p {
         </div>
     </div>
 
+    {% for card_row in cards | batch(3, '') %}
     <div class="w3-row-padding" style="margin:0 -16px">
 
-        {% for item in cards %}
+        {% for item in card_row %}
         <div class="w3-third">
 
             <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
@@ -95,6 +96,7 @@ p {
         {% endfor %}
 
     </div>
+    {% endfor %}
 
     {% if page_meta.descriptor %}
     <div class="w3-container" style="margin:0 -16px">
