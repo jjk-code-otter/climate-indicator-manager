@@ -140,7 +140,8 @@
         {
           "link_to":  null, "title": "Land air temperature",
           "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "select_year_range", "args": [1850, 2022]}],
           "plotting": {"function": "neat_plot", "title": "Global land temperature"}
         },
         {
