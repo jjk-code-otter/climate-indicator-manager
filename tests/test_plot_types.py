@@ -137,6 +137,7 @@ def test_caption(simple_annual_datasets):
         ds.metadata['climatology_start'] = 1961
         ds.metadata['climatology_end'] = 1990
         ds.metadata['name'] = f'dataset{i}'
+        ds.metadata['display_name'] = f'dataset{i}'
         i += 1
 
     caption = pu.caption_builder(simple_annual_datasets)
