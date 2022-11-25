@@ -661,8 +661,8 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
     out_text = f"There are {len(summary)} data sets of Greenland mass balance. "
     for entry in summary:
-        out_text += f"In the {entry[0]} data set, the mass change {year - 1} and " \
-                    f" {year} was {entry[1]:.2f}Gt, which is "
+        out_text += f"In the {entry[0]} data set, the mass change between {year - 1} and " \
+                    f"{year} was {entry[1]:.2f}Gt, which is "
         if entry[2] > entry[1] and entry[1] < 0:
             out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt/year. "
         elif entry[2] < entry[1] and entry[1] < 0:

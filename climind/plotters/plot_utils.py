@@ -18,7 +18,7 @@ from typing import Tuple, Union, List
 import numpy as np
 from numpy import ndarray
 
-from climind.stats.paragraphs import fancy_html_units
+import climind.stats.paragraphs as pg
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 from climind.data_types.grid import GridAnnual
 
@@ -212,7 +212,7 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
     number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
                       'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
 
-    fancy_units = fancy_html_units(ds.metadata['units'])
+    fancy_units = pg.fancy_html_units(ds.metadata['units'])
 
     caption = f"{ds.metadata['time_resolution']}".capitalize()
     caption += f" {ds.metadata['long_name']} ({fancy_units}"
@@ -254,7 +254,7 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str
     number_to_word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
                       'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
 
-    fancy_units = fancy_html_units(ds.metadata['units'])
+    fancy_units = pg.fancy_html_units(ds.metadata['units'])
 
     caption = f"{ds.metadata['time_resolution']}".capitalize()
     caption += f" {ds.metadata['long_name']}"

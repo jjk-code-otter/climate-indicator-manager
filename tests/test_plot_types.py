@@ -18,12 +18,28 @@ import pytest
 import copy
 import itertools
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 import climind.data_types.timeseries as ts
+import climind.data_types.grid as gd
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 
 import climind.plotters.plot_utils as pu
 import climind.plotters.plot_types as pt
+
+
+@pytest.fixture
+def simple_monthly_grid(test_metadata):
+    number_of_months = 12
+    latitudes = np.linspace(-87.5, 87.5, 36)
+    longitudes = np.linspace(-177.5, 177.5, 72)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
+    target_grid = np.zeros((number_of_months, 36, 72))
+
+    ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
+
+    return gd.GridMonthly(ds, test_metadata)
 
 
 @pytest.fixture
@@ -43,6 +59,35 @@ def simple_annual_datasets():
             anoms.append(0.01 * float(i) * float(y - 1850))
 
         all_datasets.append(ts.TimeSeriesAnnual(years, anoms))
+
+    return all_datasets
+
+
+@pytest.fixture
+def regional_annual_datasets(annual_metadata):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    region_names = ['tas','wmo_ra_1','wmo_ra_2','wmo_ra_3','wmo_ra_4','wmo_ra_5','wmo_ra_6']
+
+    all_datasets = []
+
+    for region in range(7):
+
+        for i in range(6):
+            years = []
+            anoms = []
+            for y in range(1900, 2023):
+                years.append(y)
+                anoms.append(0.01 * float(i) * float(y - 1900))
+
+            this_metadata = copy.deepcopy(annual_metadata)
+            this_metadata['variable'] = region_names[region]
+
+            all_datasets.append(ts.TimeSeriesAnnual(years, anoms, metadata=this_metadata))
 
     return all_datasets
 
@@ -194,7 +239,7 @@ def monthly_datalist(test_metadata):
         for y, m in itertools.product(range(1850, 2023), range(1, 13)):
             years.append(y)
             months.append(m)
-            anomalies.append(float(y))
+            anomalies.append(float(y) / 100.)
 
         datalist.append(ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata))
     return datalist
@@ -220,6 +265,47 @@ def test_neat_plot(annual_datalist, tmpdir):
 
     assert 'Annual Global mean temperature' in test_caption
     assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_marine_heat_plot(annual_datalist, tmpdir):
+    annual_datalist = annual_datalist[0:2]
+    annual_datalist[0].metadata['variable'] = 'mhw'
+    annual_datalist[1].metadata['variable'] = 'mcs'
+
+    test_caption = pt.marine_heatwave_plot(tmpdir, annual_datalist, 'test.png', '')
+
+    assert 'marine heatwave' in test_caption
+    assert 'marine cold spell' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_arctic_sea_ice_plot(monthly_datalist, tmpdir):
+    for i in range(len(monthly_datalist)):
+        monthly_datalist[i].metadata['variable'] = 'arctic_ice'
+    test_caption = pt.arctic_sea_ice_plot(tmpdir, monthly_datalist, 'test.png', '')
+
+    assert 'September' in test_caption
+    assert 'March' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_antarctic_sea_ice_plot(monthly_datalist, tmpdir):
+    for i in range(len(monthly_datalist)):
+        monthly_datalist[i].metadata['variable'] = 'antarctic_ice'
+    test_caption = pt.antarctic_sea_ice_plot(tmpdir, monthly_datalist, 'test.png', '')
+
+    assert 'September' in test_caption
+    assert 'February' in test_caption
 
     assert (tmpdir / 'test.png').exists()
     assert (tmpdir / 'test.pdf').exists()
@@ -263,8 +349,6 @@ def test_monthly_plot(monthly_datalist, tmpdir):
     assert (tmpdir / 'test.png').exists()
     assert (tmpdir / 'test.pdf').exists()
     assert (tmpdir / 'test.svg').exists()
-
-
 
 
 def test_calculate_highest_year_and_values(complex_annual_datasets):
@@ -442,3 +526,62 @@ def test_map_caption(simple_annual_datasets):
     assert 'Monthly caspar uncertainty' in test_caption
     assert '(&deg;C)' in test_caption
     assert 'Data shown are the half-range of the following five data sets: dataset1, dataset2, dataset3, dataset4, dataset5.' in test_caption
+
+
+def test_quick_and_dirty_map(simple_monthly_grid, tmpdir):
+    filename = tmpdir / 'test.png'
+    pt.quick_and_dirty_map(simple_monthly_grid.df, filename)
+    assert filename.exists()
+
+
+def test_nice_map(simple_monthly_grid, tmpdir):
+    filename = tmpdir / 'test'
+    filename2 = tmpdir / 'test.png'
+    pt.nice_map(simple_monthly_grid.df, filename, 'Words to test title')
+    assert filename2.exists()
+
+
+def test_plot_map_by_year_and_month(simple_monthly_grid, tmpdir):
+    filename = tmpdir / 'test'
+    filename2 = tmpdir / 'test.png'
+    pt.plot_map_by_year_and_month(simple_monthly_grid, 1850, 5, filename, '')
+    assert filename2.exists()
+
+
+def test_generic_map(simple_monthly_grid, tmpdir):
+    annual_grid = simple_monthly_grid.make_annual()
+    test_caption = pt.dashboard_map(tmpdir, [annual_grid], 'test.png', 'title words')
+    assert (tmpdir / 'test.png').exists()
+
+    assert 'Annual Ocean heat content anomaly' in test_caption
+    assert '(zJ, difference from the 1961-1990 average)' in test_caption
+    assert 'Data shown are the median of the following one data sets:' in test_caption
+
+    test_caption = pt.dashboard_rank_map(tmpdir, [annual_grid], 'test.png', 'title words')
+    assert (tmpdir / 'test.png').exists()
+
+    assert 'Annual Ocean heat content rank' in test_caption
+    assert '(zJ)' in test_caption
+    assert 'Data shown are the median rank of the following one data sets:' in test_caption
+
+    test_caption = pt.dashboard_uncertainty_map(tmpdir, [annual_grid], 'test.png', 'title words')
+    assert (tmpdir / 'test.png').exists()
+
+    assert 'Annual Ocean heat content uncertainty' in test_caption
+    assert '(zJ)' in test_caption
+    assert 'Data shown are the half-range of the following one data sets:' in test_caption
+
+
+def test_wave_plot(monthly_datalist, tmpdir):
+    monthly_dataset = monthly_datalist[0]
+    pt.wave_plot(tmpdir, monthly_dataset, 'test.png')
+    assert (tmpdir / 'test.png').exists()
+
+def test_trend_plot(regional_annual_datasets, tmpdir):
+
+    test_caption = pt.trends_plot(tmpdir, regional_annual_datasets, 'test.png', 'test words',
+                                  order = ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"])
+
+    assert (tmpdir / 'test.png').exists()
+
+    assert 'Figure shows' in test_caption

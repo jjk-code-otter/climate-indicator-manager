@@ -298,9 +298,24 @@ def test_arctic_ice_paragraph(simple_monthly):
     assert 'Data sets used were: HadCRUT5.'
 
 
+def test_antarctic_ice_paragraph(simple_monthly):
+    test_text = pg.antarctic_ice_paragraph([simple_monthly], 2022)
+
+    assert 'in February 2022 was between 2022.00 and 2022.00&deg;C.' in test_text
+    assert 'was the 173rd lowest' in test_text
+    assert 'In September the extent was between 2022.00 and 2022.00&deg;C' in test_text
+    assert 'This was the 173rd lowest' in test_text
+    assert 'Data sets used were: HadCRUT5.'
+
+
 def test_arctic_ice_paragraph_no_dataset_raises():
     with pytest.raises(RuntimeError):
         _ = pg.arctic_ice_paragraph([], 2022)
+
+
+def test_antarctic_ice_paragraph_no_dataset_raises():
+    with pytest.raises(RuntimeError):
+        _ = pg.antarctic_ice_paragraph([], 2022)
 
 
 def test_glacier(simple_annual):
@@ -495,12 +510,11 @@ def test_compare_to_highest_anomaly_and_rank_with_nothing_in_list():
 
 
 def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
-
     # If 2022 is the highest year in all datasets then returns nothing.
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
     assert test_text == ''
 
-    simple_annual_list[0].df['data'][2022-1850] = 2.0205
+    simple_annual_list[0].df['data'][2022 - 1850] = 2.0205
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
     assert test_text != ''
     assert '2022 is joint warmest on record together with 2021' in test_text
@@ -520,3 +534,21 @@ def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
 
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2023)
     assert 'The most recent available year is 2022' in test_text
+
+
+def test_greenland_ice_sheet(simple_annual):
+
+    test_text = pg.greenland_ice_sheet([simple_annual], 2022)
+
+    print(test_text)
+    assert 'There are 1 data sets of Greenland mass balance' in test_text
+    assert 'the mass change between 2021 and 2022 was 0.00Gt' in test_text
+
+
+def test_greenland_ice_sheet_monthly(simple_monthly):
+
+    test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
+
+    print(test_text)
+    assert 'There are 1 data sets of Greenland mass balance' in test_text
+    assert 'the mass change between 1 September 2021 and 31 August 2022 was 1.00Gt' in test_text
