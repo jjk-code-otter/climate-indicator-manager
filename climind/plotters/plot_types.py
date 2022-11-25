@@ -26,7 +26,7 @@ import seaborn as sns
 import numpy as np
 from typing import List, Union
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, get_list_of_unique_variables, superset_dataset_list
 from climind.data_types.grid import GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
@@ -100,27 +100,15 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         zord = ds.metadata['zpos']
         zords.append(zord)
 
-        if isinstance(ds, TimeSeriesAnnual):
-            x_values = ds.df['year']
-            linewidth = 3
-            start_year, end_year = ds.get_first_and_last_year()
-            date_range = f"{start_year}-{end_year}"
-        elif isinstance(ds, TimeSeriesMonthly):
-            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12.
-            linewidth = 1
-            start_date, end_date = ds.get_start_and_end_dates()
-            date_range = f"{start_date.year}.{start_date.month:02d}-" \
-                         f"{end_date.year}.{end_date.month:02d}"
-        elif isinstance(ds, TimeSeriesIrregular):
-            x_values = ds.df['year'] + (ds.df['month'] - 1) / 12. + (ds.df['day'] - 1) / 365.
-            linewidth = 1
-            start_date, end_date = ds.get_start_and_end_dates()
-            date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
-                         f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
-        else:
-            raise TypeError('Wrong kind of object')
+        x_values = ds.get_year_axis()
+        date_range = ds.get_string_date_range()
 
-        axis.plot(x_values, ds.df['data'], label=f"{ds.metadata['display_name']} ({date_range})",
+        linewidth = 3
+        if len(x_values) > 180:
+            linewidth = 1
+
+        axis.plot(x_values, ds.df['data'],
+                  label=f"{ds.metadata['display_name']} ({date_range})",
                   color=col, zorder=zord, linewidth=linewidth)
 
         if 'uncertainty' in ds.df.columns:
@@ -150,7 +138,7 @@ def set_yaxis(axis, dataset):
     if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
-    if dataset.metadata['variable'] in ['ohc', 'ohc2k']:
+    if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.0)
 
     if dataset.metadata['variable'] == 'ph':
@@ -158,9 +146,6 @@ def set_yaxis(axis, dataset):
 
     if dataset.metadata['variable'] in ['mhw', 'mcs', 'co2', 'ch4', 'sealevel']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
-
-    if dataset.metadata['variable'] in ['ch4']:
-        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.)
 
     if dataset.metadata['variable'] in ['greenland', 'antarctica']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1000.)
@@ -219,38 +204,11 @@ def after_plot(zords, ds, title):
 
 # time series
 def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
-    this_parameter_set = copy.deepcopy(STANDARD_PARAMETER_SET)
-    this_parameter_set['grid.color'] = '#696969'
-    this_parameter_set['figure.facecolor'] = '#000000'
-    this_parameter_set['text.color'] = '#d3d3d3'
-    this_parameter_set['xtick.color'] = '#d3d3d3'
-    this_parameter_set['ytick.color'] = '#d3d3d3'
-
-    sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
-
-    plt.figure(figsize=[16, 9])
-    zords = add_data_sets(plt.gca(), all_datasets, dark=True)
-    ds = all_datasets[-1]
-
-    sns.despine(right=True, top=True, left=True)
-
-    add_labels(plt.gca(), ds)
-
-    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca())
-    plt.yticks(yticks)
-    plt.xticks(xticks)
-
-    after_plot(zords, ds, title)
-
-    plt.savefig(out_dir / image_filename)
-    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
-    plt.close()
-    return ''
+    return neat_plot(out_dir, all_datasets, image_filename, title, dark=True)
 
 
 def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
-              image_filename: str, title: str) -> str:
+              image_filename: str, title: str, dark: bool = False) -> str:
     """
     Create the standard annual plot
 
@@ -264,6 +222,8 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
         filename for the figure. Must end in .png
     title: str
         title for the plot
+    dark: bool
+        set to True to plot using a dark background
 
     Returns
     -------
@@ -272,10 +232,19 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
+    if dark:
+        this_parameter_set = copy.deepcopy(STANDARD_PARAMETER_SET)
+        this_parameter_set['grid.color'] = '#696969'
+        this_parameter_set['figure.facecolor'] = '#000000'
+        this_parameter_set['text.color'] = '#d3d3d3'
+        this_parameter_set['xtick.color'] = '#d3d3d3'
+        this_parameter_set['ytick.color'] = '#d3d3d3'
+        sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
+
     caption = caption_builder(all_datasets)
 
     plt.figure(figsize=[16, 9])
-    zords = add_data_sets(plt.gca(), all_datasets)
+    zords = add_data_sets(plt.gca(), all_datasets, dark=dark)
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
@@ -378,6 +347,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
 
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
     return caption
 
@@ -764,19 +734,11 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     }
 
     # get list of all unique variables
-    variables = []
-    superset = []
+    variables = get_list_of_unique_variables(in_all_datasets)
     names = []
-    for ds in in_all_datasets:
-        if ds.metadata['variable'] not in variables:
-            variables.append(ds.metadata['variable'])
-            superset.append([])
-            names.append(equivalence[ds.metadata['variable']])
-
-    # build a list of lists, one for each unique variable
-    for ds in in_all_datasets:
-        i = variables.index(ds.metadata['variable'])
-        superset[i].append(ds)
+    for variable in variables:
+        names.append(equivalence[variable])
+    superset = superset_dataset_list(in_all_datasets, variables)
 
     colours = ['#f33d3d', '#ffd465', '#9dd742',
                '#84d1cd', '#848dd1', '#cf84d1', '#b4b4b4']

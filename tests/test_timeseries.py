@@ -13,10 +13,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import pytest
 import copy
 
 import pandas as pd
-import pytest
 import numpy as np
 import json
 import itertools
@@ -265,6 +265,39 @@ def test_make_combined_series(annual_datalist):
     assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645) ** 2 + 0.12 ** 2)
 
 
+def test_get_list_of_unique_variables(annual_datalist):
+    test_list = ts.get_list_of_unique_variables(annual_datalist)
+
+    assert isinstance(test_list, list)
+    assert len(test_list) == 1
+    assert test_list[0] == 'tas'
+
+    annual_datalist[0].metadata['variable'] = 'ohc'
+    test_list = ts.get_list_of_unique_variables(annual_datalist)
+    assert isinstance(test_list, list)
+    assert len(test_list) == 2
+    assert 'tas' in test_list
+    assert 'ohc' in test_list
+
+
+def test_superset(annual_datalist):
+    variable_list = ts.get_list_of_unique_variables(annual_datalist)
+    test_set = ts.superset_dataset_list(annual_datalist, variable_list)
+
+    assert isinstance(test_set, list)
+    assert len(test_set) == 1
+    assert len(test_set[0]) == 3
+
+    annual_datalist[0].metadata['variable'] = 'ohc'
+    variable_list = ts.get_list_of_unique_variables(annual_datalist)
+    test_set = ts.superset_dataset_list(annual_datalist, variable_list)
+
+    assert isinstance(test_set, list)
+    assert len(test_set) == 2
+    assert len(test_set[0]) == 1
+    assert len(test_set[1]) == 2
+
+
 # Irregular time series
 def test_make_monthly(simple_irregular):
     test_monthly = simple_irregular.make_monthly()
@@ -324,6 +357,18 @@ def test_write_csv_irregular(simple_irregular, tmpdir):
     simple_irregular.write_csv(test_filename, metadata_filename=test_metadata_filename)
     assert test_filename.exists()
     assert test_metadata_filename.exists()
+
+
+def test_get_year_axis_irregular(simple_irregular):
+    test_axis = simple_irregular.get_year_axis()
+    assert test_axis[0] == simple_irregular.df['year'][0] + (simple_irregular.df['day'][0] - 1) / 365
+    assert test_axis[1] == simple_irregular.df['year'][1] + (simple_irregular.df['day'][1] - 1) / 365
+    assert len(test_axis) == len(simple_irregular.df)
+
+
+def test_get_string_date_range_irregular(simple_irregular):
+    test_range = simple_irregular.get_string_date_range()
+    assert test_range == '1993.01.03-2002.12.15'
 
 
 # Monthly times series
@@ -535,7 +580,6 @@ def test_select_year_range_monthly(simple_monthly):
 
 
 def test_make_monthly_from_df(simple_monthly):
-
     df = simple_monthly.df
     metadata = simple_monthly.metadata
 
@@ -545,13 +589,24 @@ def test_make_monthly_from_df(simple_monthly):
 
 
 def test_make_monthly_from_df_with_uncertainty(uncertainty_monthly):
-
     df = uncertainty_monthly.df
     metadata = uncertainty_monthly.metadata
 
     test_ds = ts.TimeSeriesMonthly.make_from_df(df, metadata)
 
     assert 'uncertainty' in test_ds.df.columns
+
+
+def test_get_year_axis_monthly(simple_monthly):
+    test_axis = simple_monthly.get_year_axis()
+
+    assert test_axis[0] == 1850.0
+    assert test_axis[(2022 - 1850 + 1) * 12 - 1] == 2022.0 + 11. / 12.
+
+
+def test_get_string_date_range_monthly(simple_monthly):
+    test_range = simple_monthly.get_string_date_range()
+    assert test_range == '1850.01-2022.12'
 
 
 # Annual tests
@@ -748,3 +803,14 @@ def test_write_csv_annual_with_uncertainty(uncertainty_annual, tmpdir):
                 found_it = True
 
     assert found_it
+
+
+def test_get_year_axis_annual(simple_annual):
+    test_axis = simple_annual.get_year_axis()
+    for i in range(len(test_axis)):
+        assert test_axis[i] == simple_annual.df['year'][i]
+
+
+def test_get_string_date_range_annual(simple_annual):
+    test_range = simple_annual.get_string_date_range()
+    assert test_range == '1850-2022'

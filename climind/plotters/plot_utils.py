@@ -275,10 +275,7 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str
     caption += ") "
 
     caption += f" for 2022. "
-    if 1 < len(all_datasets) < 17:
-        caption += f"Data shown are the {calculation} of the following {number_to_word[len(all_datasets)]} data sets: "
-    else:
-        caption += f"Data are from "
+    caption += f"Data shown are the {calculation} of the following {number_to_word[len(all_datasets)]} data sets: "
 
     dataset_names_for_caption = []
     for ds in all_datasets:

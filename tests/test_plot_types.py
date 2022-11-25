@@ -15,10 +15,12 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
-
+import copy
+import itertools
 import matplotlib.pyplot as plt
 
 import climind.data_types.timeseries as ts
+from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 
 import climind.plotters.plot_utils as pu
 import climind.plotters.plot_types as pt
@@ -82,6 +84,187 @@ def complex_annual_datasets():
         all_datasets.append(ts.TimeSeriesAnnual(years, anoms))
 
     return all_datasets
+
+
+@pytest.fixture
+def annual_metadata():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'timeseries',
+                  'long_name': 'Global mean temperature',
+                  'time_resolution': 'annual',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': ['step1', 'step2'],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'}
+
+    global_attributes = {'name': '',
+                         'display_name': 'nonunique name',
+                         'version': '',
+                         'variable': 'tas',
+                         'units': 'degC',
+                         'citation': ['cite1', 'cite2'],
+                         'citation_url': ['cite1', 'cite2'],
+                         'data_citation': [''],
+                         'colour': 'dimgrey',
+                         'zpos': 99}
+
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
+
+    return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+@pytest.fixture
+def annual_datalist(annual_metadata):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    datalist = []
+    for i in range(1, 4):
+        year = []
+        anoms = []
+        unc = []
+        for y in range(1850, 2023):
+            year.append(y)
+            anoms.append(float(i))
+            unc.append(0.1)
+        datalist.append(ts.TimeSeriesAnnual(year, anoms,
+                                            copy.deepcopy(annual_metadata),
+                                            uncertainty=unc))
+
+    return datalist
+
+
+@pytest.fixture
+def test_metadata():
+    attributes = {'url': ['test_url'],
+                  'filename': ['test_filename'],
+                  'type': 'gridded',
+                  'long_name': 'Ocean heat content',
+                  'time_resolution': 'monthly',
+                  'space_resolution': 999,
+                  'climatology_start': 1961,
+                  'climatology_end': 1990,
+                  'actual': False,
+                  'derived': False,
+                  'history': ['step1', 'step2'],
+                  'reader': 'test_reader',
+                  'fetcher': 'test_fetcher'}
+
+    global_attributes = {'name': '',
+                         'display_name': '',
+                         'version': '',
+                         'variable': 'ohc',
+                         'units': 'zJ',
+                         'citation': ['cite1', 'cite2'],
+                         'citation_url': ['cite1', 'cite2'],
+                         'data_citation': [''],
+                         'colour': 'dimgrey',
+                         'zpos': 99}
+
+    dataset_metadata = DatasetMetadata(attributes)
+    collection_metadata = CollectionMetadata(global_attributes)
+
+    return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+@pytest.fixture
+def monthly_datalist(test_metadata):
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    datalist = []
+    for i in range(3):
+        years = []
+        months = []
+        anomalies = []
+
+        for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+            years.append(y)
+            months.append(m)
+            anomalies.append(float(y))
+
+        datalist.append(ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata))
+    return datalist
+
+
+def test_add_data_sets(annual_datalist):
+    plt.figure(figsize=[16, 9])
+    test_output = pt.add_data_sets(plt.gca(), annual_datalist, dark=True)
+
+    # check that all the annual datasest were added
+    for i in range(len(annual_datalist)):
+        x_plot, y_plot = plt.gca().lines[i].get_xydata().T
+        for year in range(1850, 2023):
+            assert x_plot[year - 1850] == year
+            assert y_plot[year - 1850] == float(i + 1)
+    plt.close()
+
+    assert len(test_output) == len(annual_datalist)
+
+
+def test_neat_plot(annual_datalist, tmpdir):
+    test_caption = pt.neat_plot(tmpdir, annual_datalist, 'test.png', 'Title words')
+
+    assert 'Annual Global mean temperature' in test_caption
+    assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_dark_plot(annual_datalist, tmpdir):
+    test_caption = pt.dark_plot(tmpdir, annual_datalist, 'test.png', 'Title words')
+
+    assert 'Annual Global mean temperature' in test_caption
+    assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_decadal_plot(annual_datalist, tmpdir):
+    decadal = []
+    for ds in annual_datalist:
+        dec = ds.running_mean(10)
+        dec.select_decade()
+        decadal.append(dec)
+
+    test_caption = pt.decade_plot(tmpdir, decadal, 'test.png', 'Decadal words')
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+    print(test_caption)
+    pass
+
+
+def test_monthly_plot(monthly_datalist, tmpdir):
+    test_caption = pt.monthly_plot(tmpdir, monthly_datalist, 'test.png', 'Title words')
+
+    assert 'Monthly Ocean heat content' in test_caption
+    assert '(zJ, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
 
 
 def test_calculate_highest_year_and_values(complex_annual_datasets):
@@ -191,6 +374,13 @@ def test_set_yaxis(mocker):
     assert test_hi == pytest.approx(3000., 6)
     assert len(test_ticks) == 5
 
+    mock_axis.get_ylim.return_value = [-25.2, 5.]
+    ds = Tiny('glacier')
+    test_lo, test_hi, test_ticks = pt.set_yaxis(mock_axis, ds)
+    assert test_lo == pytest.approx(-25., 6)
+    assert test_hi == pytest.approx(10., 6)
+    assert len(test_ticks) == 7
+
 
 def test_set_xaxis(mocker):
     mock_axis = mocker.MagicMock()
@@ -220,3 +410,35 @@ def test_add_labels():
     pt.add_labels(plt.gca(), dataset)
     assert plt.gca().get_xlabel() == 'Year'
     assert plt.gca().get_ylabel() == r"empty"
+
+
+def test_map_caption(simple_annual_datasets):
+    i = 1
+    for ds in simple_annual_datasets:
+        ds.metadata['time_resolution'] = 'monthly'
+        ds.metadata['long_name'] = 'caspar'
+        ds.metadata['units'] = 'degC'
+        ds.metadata['actual'] = False
+        ds.metadata['climatology_start'] = 1961
+        ds.metadata['climatology_end'] = 1990
+        ds.metadata['name'] = f'dataset{i}'
+        ds.metadata['display_name'] = f'dataset{i}'
+        i += 1
+
+    test_caption = pu.map_caption_builder(simple_annual_datasets, 'mean')
+
+    assert 'Monthly caspar anomaly' in test_caption
+    assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+    assert 'Data shown are the median of the following five data sets: dataset1, dataset2, dataset3, dataset4, dataset5.' in test_caption
+
+    test_caption = pu.map_caption_builder(simple_annual_datasets, 'rank')
+
+    assert 'Monthly caspar rank' in test_caption
+    assert '(&deg;C)' in test_caption
+    assert 'Data shown are the median rank of the following five data sets: dataset1, dataset2, dataset3, dataset4, dataset5.' in test_caption
+
+    test_caption = pu.map_caption_builder(simple_annual_datasets, 'unc')
+
+    assert 'Monthly caspar uncertainty' in test_caption
+    assert '(&deg;C)' in test_caption
+    assert 'Data shown are the half-range of the following five data sets: dataset1, dataset2, dataset3, dataset4, dataset5.' in test_caption

@@ -326,6 +326,23 @@ class TimeSeriesIrregular(TimeSeries):
                                   monthly, uncertainty, irregular,
                                   columns_to_write)
 
+    def get_year_axis(self):
+        """
+        Return a year axis
+
+        Returns
+        -------
+
+        """
+        year_axis = self.df['year'] + (self.df['month'] - 1) / 12. + (self.df['day'] - 1) / 365.
+        return year_axis
+
+    def get_string_date_range(self) -> str:
+        start_date, end_date = self.get_start_and_end_dates()
+        date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
+                     f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
+        return date_range
+
 
 class TimeSeriesMonthly(TimeSeries):
 
@@ -676,6 +693,23 @@ class TimeSeriesMonthly(TimeSeries):
 
         return start_date, end_date
 
+    def get_year_axis(self):
+        """
+        Return a year axis
+
+        Returns
+        -------
+
+        """
+        year_axis = self.df['year'] + (self.df['month'] - 1) / 12.
+        return year_axis
+
+    def get_string_date_range(self) -> str:
+        start_date, end_date = self.get_start_and_end_dates()
+        date_range = f"{start_date.year}.{start_date.month:02d}-" \
+                     f"{end_date.year}.{end_date.month:02d}"
+        return date_range
+
 
 class TimeSeriesAnnual(TimeSeries):
 
@@ -945,6 +979,22 @@ class TimeSeriesAnnual(TimeSeries):
         super().write_generic_csv(filename, metadata_filename,
                                   monthly, uncertainty, irregular, columns_to_write)
 
+    def get_year_axis(self):
+        """
+        Return a year axis
+
+        Returns
+        -------
+
+        """
+        year_axis = self.df['year']
+        return year_axis
+
+    def get_string_date_range(self) -> str:
+        start_year, end_year = self.get_first_and_last_year()
+        date_range = f"{start_year}-{end_year}"
+        return date_range
+
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
     """
@@ -1016,3 +1066,50 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
     df_merged = df_merged.rename(columns={'combined': 'data'})
 
     return TimeSeriesAnnual.make_from_df(df_merged, metadata)
+
+
+def get_list_of_unique_variables(all_datasets: List[TimeSeriesAnnual]) -> List[str]:
+    """
+    Given a list of datasets, get a list of the unique variable names
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+
+    Returns
+    -------
+    List[str]
+    """
+    # get list of all unique variables
+    variables = []
+    for ds in all_datasets:
+        if ds.metadata['variable'] not in variables:
+            variables.append(ds.metadata['variable'])
+
+    return variables
+
+
+def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[str]) -> List[List[TimeSeriesAnnual]]:
+    """
+    Given a list of variables, create a list where each entry is a list of all data sets
+    corresponding to the variable in that index position.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of datasets
+    variables: List[str]
+        List of variable names
+    Returns
+    -------
+    List[List[TimeSeriesAnnual]]
+    """
+    superset = []
+    for _ in variables:
+        superset.append([])
+
+    for ds in all_datasets:
+        i = variables.index(ds.metadata['variable'])
+        superset[i].append(ds)
+
+    return superset
