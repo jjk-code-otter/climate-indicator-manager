@@ -995,6 +995,28 @@ class TimeSeriesAnnual(TimeSeries):
         date_range = f"{start_year}-{end_year}"
         return date_range
 
+    def add_year(self, year: int, value: float, uncertainty: float = None) -> None:
+        """
+        Add a year of data.
+
+        Parameters
+        ----------
+        year: int
+            the year to be added
+        value: float
+            the data value to be added
+        uncertainty:
+            the uncertainty of the data value to be added (optional)
+
+        Returns
+        -------
+        None
+        """
+        dict_to_add = {'year': year, 'data': value}
+        if uncertainty is not None:
+            dict_to_add['uncertainty'] = uncertainty
+        self.df = self.df.append(dict_to_add, ignore_index=True)
+
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
     """

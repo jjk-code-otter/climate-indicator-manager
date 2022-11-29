@@ -814,3 +814,20 @@ def test_get_year_axis_annual(simple_annual):
 def test_get_string_date_range_annual(simple_annual):
     test_range = simple_annual.get_string_date_range()
     assert test_range == '1850-2022'
+
+
+def test_add_year(simple_annual, uncertainty_annual):
+
+    test_year = 2023
+    test_value = 3.987
+    test_uncertainty = 0.77
+
+    assert simple_annual.get_value_from_year(test_year) is None
+    assert uncertainty_annual.get_value_from_year(test_year) is None
+
+    simple_annual.add_year(test_year, test_value)
+    assert simple_annual.get_value_from_year(test_year) == test_value
+
+    uncertainty_annual.add_year(test_year, test_value, test_uncertainty)
+    assert uncertainty_annual.get_value_from_year(test_year) == test_value
+    assert uncertainty_annual.get_uncertainty_from_year(test_year) == test_uncertainty

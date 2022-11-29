@@ -52,10 +52,11 @@ p {
         </div>
     </div>
 
-    {% for card_row in cards | batch(3, '') %}
+    {% for card_row in cards | batch(3) %}
     <div class="w3-row-padding" style="margin:0 -16px">
 
         {% for item in card_row %}
+        {% if item is not none %}
         <div class="w3-third">
 
             <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey"  style="padding-bottom:10px">
@@ -93,6 +94,7 @@ p {
             </div>
 
         </div>
+        {% endif %}
         {% endfor %}
 
     </div>

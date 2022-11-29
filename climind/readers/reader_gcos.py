@@ -53,18 +53,10 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata):
     if metadata['variable'] == 'ohc':
         data = df['ocean_heat_content_0-700m'].values.tolist()
         uncertainty = (2* df['ocean_heat_content_0-700m_uncertainty']).data.tolist()
-        if years[-1] == 2020:
-            years.append(2021)
-            data.append(59.11770062848573)
-            uncertainty.append(2*3.2964123834089676)
 
     elif metadata['variable'] == 'ohc2k':
         data = df['ocean_heat_content_0-2000m'].values.tolist()
         uncertainty = (2 * df['ocean_heat_content_0-2000m_uncertainty']).data.tolist()
-        if years[-1] == 2020:
-            years.append(2021)
-            data.append(86.7400547105579)
-            uncertainty.append(2*9.249591755271991)
 
     metadata.creation_message()
 
