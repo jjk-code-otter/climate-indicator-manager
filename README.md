@@ -2,7 +2,7 @@ Climate Indicator Manager
 =========================
 
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
-climate indicators.
+climate indicators, as well as creating dashboards based on these indicators.
 
 It is built on a collection of metadata fies which describe the location and content of individual data collections and
 data sets from those collections. For example, a *collection* might be something like "HadCRUT" and an individual
@@ -33,8 +33,8 @@ Navigate to the root directory of the repository and type
 
 This should install the package and necessary dependencies.
 
-Running
-=======
+Set up
+======
 
 The managed data will be stored in a directory specified by the environment variable DATADIR. This is easy to set in
 linux. In windows, do the following:
@@ -79,8 +79,8 @@ these from somewhere else or remove them from the processing. Any extra files su
 copied into the `$DATADIR/ManagedData/Data/` directory in an appropriately named subdirectory that corresponds 
 to the unique name given to the data set. This can be found in the metadata file for the data set (see below).
 
-Processing the data
-===================
+Pre-pocessing the data
+======================
 
 The gridded data need to be pre-processed by running:
 
@@ -113,13 +113,20 @@ and regional indicators to 2022.
 To display a dashboard on the web, the files in the appropriate directory will need to be copied to an appropriate 
 web server.
 
+
+Navigating the website
+======================
+
+Each dashboard consists of 
+
+
 Diverse other scripts
 =====================
 
 As well as these main scripts, described above, there are others which perform the following tasks:
 
 * `annual_global_temperature_stats.py` which generates some annual plots and statistics
-* `arctic_sea_ice_plot.py` which generates some sea ice plots
+* `arctic_sea_ice_plot.py` which generates some sea ice plots used in the State of the Climate report
 * `change_per_month_plots.py` which generates some plots based on monthly global mean temperature as well as some stats.
 * `five_year_global_temperature_stats.py` which generates some plots and stats based on 5-year running averages of
   global temperature
@@ -127,7 +134,7 @@ As well as these main scripts, described above, there are others which perform t
 * `plot_monthly_indicators.py` which generates a set of plots for a range of indicators (not all monthly).
 * `plot_monthly_maps.py` which allows for the plotting of monthly temperature anomaly maps.
 * `ten_year_global_temperature_stats.py` which generates some plots and stats based on 10-year running averages of
-  global temperature
+  global temperature for use in the decadal state of the climate report.
   
 Adding data sets for an existing variable
 =========================================
@@ -215,6 +222,9 @@ It is possible to add new variables. For example, there is currently no snow_cov
 2. Check that the variable does not already exist. You can do this by looking through the metadata files.
 3. Add a new metadata file describing a collection with snow cover data in it.
 4. Check that the units are in the `metadata_schema.json` file in `climind.data_manager`. This is used to validate the metadata when it is read in.
+5. Add the new variable to the word document in `climind/web/word_documents/key_indicators_texts.docx`. Individual variables 
+   appear towards the end of the document. The short `variable` name should appear in `Heading1` style and the text desribing it 
+   should appear in `normal` style text. These short descriptions appear on the webpages in the section detailing the datasets and their processing.
 
 That should be sufficient.
 
@@ -223,7 +233,7 @@ Making a new dashboard
 
 A dashboard is created using a dashboard metadata file. These are located in `climind/web/dashboard_metadata`. Each dashboard is split into Pages, which 
 each correspond to an html webpage. Each Page consists of a set of Cards and Paragraphs (the capital letters indicate these are represented as classes 
-in the underlying code).
+in the underlying code). For examples, please see the `climind/web/dashboard_metadata` directory.
 
 A dashboard metadata file:
 
@@ -245,6 +255,9 @@ The `pages` entry consists of a list of Pages which look something like:
   "paragraphs": [ ... ]
 },
 ```
+
+The `template` can be either a `front_page` or a `topic_page`. The front page is intended to be a clean landing page 
+for users. More information is provided on topic pages, including e.g. figure captions.
 
 The `cards` entry is made up of one or more cards and the `paragraphs` entry of one or more paragraphs.
 
