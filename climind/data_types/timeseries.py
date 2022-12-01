@@ -76,6 +76,21 @@ class TimeSeries:
 
     @log_activity
     def select_year_range(self, start_year: int, end_year: int):
+        """
+        Select consecutive years in the specified range and throw away the rest.
+
+        Parameters
+        ----------
+        start_year: int
+            First year in the selected range
+        end_year: int
+            Final year in the selected range
+
+        Returns
+        -------
+        TimeSeries
+            Return time series which only contains years in the specified range
+        """
         self.df = self.df[self.df['year'] >= start_year]
         self.df = self.df[self.df['year'] <= end_year]
         self.df = self.df.reset_index()
@@ -85,7 +100,8 @@ class TimeSeries:
     @log_activity
     def manually_set_baseline(self, baseline_start_year: int, baseline_end_year: int):
         """
-        Manually set baseline.
+        Manually set baseline. This changes the baseline in the metadata, but does not change the
+        data themselves.
 
         Parameters
         ----------
@@ -152,8 +168,31 @@ class TimeSeries:
         self.metadata['derived'] = True
         self.update_history(f'Added offset of {offset} to all data values.')
 
-    def write_generic_csv(self, filename, metadata_filename, monthly, uncertainty, irregular,
-                          columns_to_write):
+    def write_generic_csv(self, filename: Path, metadata_filename: Path,
+                          monthly: bool, uncertainty:bool, irregular:bool,
+                          columns_to_write: List[str]) -> None:
+        """
+        Write the dataset out into csv format
+
+        Parameters
+        ----------
+        filename: Path
+            Path of the csv file to which the data will be written.
+        metadata_filename: Path
+            Path of the json file to which the data will be written.
+        monthly: bool
+            Set to True for monthly data
+        uncertainty: bool
+            Set to True to print uncertainties
+        irregular: bool
+            Set to True for irregular data
+        columns_to_write: List[str]
+            List of the columns from the dataframe to be written to the data file
+
+        Returns
+        -------
+        None
+        """
 
         if metadata_filename is not None:
             self.metadata['filename'] = [str(filename.name)]
