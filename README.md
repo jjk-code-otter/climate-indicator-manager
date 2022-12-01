@@ -75,12 +75,20 @@ gridded data are used to calculate custom area averages (such as the WMO Regiona
 plotting maps of the data. The key global indicators are all time series.
 
 Some datasets are not available online (the JRA-55 global mean temperature for example) so you will have to obtain 
-these from somewhere else or remove them from the processing.
+these from somewhere else or remove them from the processing. Any extra files such as these should be 
+copied into the `$DATADIR/ManagedData/Data/` directory in an appropriately named subdirectory that corresponds 
+to the unique name given to the data set. This can be found in the metadata file for the data set (see below).
 
 Processing the data
 ===================
 
-In order to generate area averages from the gridded data for specified sub regions, you will need to run navigate to the
+The gridded data need to be pre-processed by running:
+
+`python regrid_grids.py`
+
+which calculates annual average grids on a consistent 5-degree latitude longitude grid for all the gridded data sets.
+
+In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
 scripts directory and run:
 
 `python calculate_wmo_ra_averages.py`
@@ -89,11 +97,6 @@ This reads in each of the data sets, regrids it to a standard resolution and the
 six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
 load and process a lot of reanalysis data.
 
-The gridded data need to be pre-processed by running:
-
-`python regrid_grids.py`
-
-which calculates annual average grids on a consistent 5 degree latitude longitude grid for all data sets.
 
 Building the website
 ====================
@@ -102,7 +105,13 @@ To build the websites, navigate to the scripts directory and run
 
 `python build_dashboard.py`
 
-This builds all the webpages, produces the figures for each web page and prepares the formatted data sets.
+This builds all the webpages, produces the figures for each web page and prepares the formatted data sets. These are 
+written to the `DATADIR/ManagedData` directory with one directory created for each dashboard. Currently the code is 
+set up to generate four dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, 
+and regional indicators to 2022.
+
+To display a dashboard on the web, the files in the appropriate directory will need to be copied to an appropriate 
+web server.
 
 Diverse other scripts
 =====================
@@ -296,4 +305,6 @@ Calculating regional averages
 =============================
 
 Regional averages are calculated using `calculate_wmo_ra_averages.py`. This generates a large number of files containing regional averages based 
-on the gridded temperature data sets. This takes rather a long time to run.
+on the gridded temperature data sets. This takes some time to run.
+
+`python calculate_wmo_ra_averages.py`
