@@ -321,3 +321,25 @@ Regional averages are calculated using `calculate_wmo_ra_averages.py`. This gene
 on the gridded temperature data sets. This takes some time to run.
 
 `python calculate_wmo_ra_averages.py`
+
+Descriptive text
+================
+
+In `climind/web/word_documents` there is a Word document that is used to generate text for the 
+web pages. The document is called `key_indicators_texts.docx`. This has descriptive text for 
+each page on the key indicators dashboard as well as descriptions for each of the variables. 
+
+when changes are made to the word document, these will need to be converted to html by navigating to `climind/web` and running
+
+`python extract_from_word.py`
+
+The word document is structured using the inbuilt "styles".
+
+Each page in the dashboard can have an Introduction text. To do this, add a new `Heading1` style heading in the document 
+with text that matches the id of a page in the dashboard. You can then write `normal` style text beneath it. 
+Subheadings can be added using `Heading2` style text followed by `normal` text. For example, the "What the IPCC says" 
+sections. Hyperlinks can be added and these will be rendered in the webpages.
+
+Individual variable descriptions can also be added here. The method is similar. A Heading1 style heading which matches 
+the `variable` name from the metadata file, followed by `normal` style text. Sub-headings do not work for variables. These 
+are intended to be short descriptions of the variables.
