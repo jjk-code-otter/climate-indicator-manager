@@ -27,7 +27,7 @@ setup(
               'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats',
               'climind.web'],
     # Needed for dependencies
-    install_requires=['pytest==7.1.1', 'numpy==1.21.5', 'requests==2.24.0',
+    install_requires=['pytest==7.1.1', 'requests==2.24.0',
                       'beautifulsoup4==4.10.0',
                       'pandas==1.3.4', 'jsonschema==4.7.1', 'matplotlib==3.3.1',
                       'seaborn==0.11.2', 'xarray==0.20.2',
