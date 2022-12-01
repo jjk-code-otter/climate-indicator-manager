@@ -23,19 +23,21 @@ from climind.data_types.timeseries import TimeSeriesAnnual, TimeSeriesMonthly
 from climind.data_types.grid import GridMonthly
 
 
-def get_reader_script_name(metadata: Union[CombinedMetadata, dict], **kwargs) -> Optional[str]:
+def get_reader_script_name(metadata: CombinedMetadata, **kwargs) -> Optional[str]:
     """
     Get the name of the reader function for the provided metadata combination
 
     Parameters
     ----------
-    metadata: Union[CombinedMetadata, dict]
+    metadata: CombinedMetadata
         contains the metadata required to chose the reader script
     kwargs:
+        list of keyword arguments
 
     Returns
     -------
-    str
+    Optional[str]
+        Returns the name of the reader function that will read that combination of metadata, or None
     """
     chosen_reader_script = None
 
@@ -75,7 +77,8 @@ def get_module(package_name: str, script_name: str):
 
     Returns
     -------
-    The imported module
+    module
+        Returns module specified by the package name and script name
     """
     ext = '.'.join([package_name, script_name])
     module = __import__(ext, fromlist=[None])
@@ -84,11 +87,12 @@ def get_module(package_name: str, script_name: str):
 
 def get_last_modified_time(file: Path) -> Optional[str]:
     """
-    Get update time of file if it exists, else None
+    Get the update time of file if it exists, else None
+
     Parameters
     ----------
     file: Path
-        File path
+        File path of the file for which the last modified time is required
 
     Returns
     -------
@@ -121,7 +125,8 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs) -> Union[
 
     Returns
     -------
-
+    Union[TimeSeriesMonthly, TimeSeriesAnnual, GridMonthly]
+        Returns a TimeSeries of some kind
     """
     script_name = metadata['reader']
     module = get_module('climind.readers', script_name)

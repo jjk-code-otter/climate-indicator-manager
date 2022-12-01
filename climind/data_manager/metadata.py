@@ -206,7 +206,20 @@ class CombinedMetadata:
         outstr += '\n'
         return outstr
 
-    def match_metadata(self, metadata_to_match):
+    def match_metadata(self, metadata_to_match: dict) -> bool:
+        """
+        Test to see if metadata matches metadata to match. Returns True unless there is a mismatch
+        between the required metadata_to_match and the metadata.
+
+        Parameters
+        ----------
+        metadata_to_match: dict
+            Dictionary of metadata terms to match
+        Returns
+        -------
+        bool
+            Return True unless an element in metadata_to_match conflicts with an entry in the metadata
+        """
 
         test1 = self.collection.match_metadata(metadata_to_match)
         test2 = self.dataset.match_metadata(metadata_to_match)
@@ -216,7 +229,18 @@ class CombinedMetadata:
         else:
             return False
 
-    def write_metadata(self, filename):
+    def write_metadata(self, filename: Path) -> None:
+        """
+        Write out the metadata in json format to a file specified by filename
+
+        Parameters
+        ----------
+        filename: Path
+            Path of filename to be created
+        Returns
+        -------
+        None
+        """
 
         rebuilt = self.collection.metadata
         rebuilt['datasets'] = [self.dataset.metadata]
@@ -230,7 +254,15 @@ class CombinedMetadata:
         with open(filename, 'w') as out_json:
             json.dump(rebuilt, out_json, indent=4)
 
-    def creation_message(self):
+    def creation_message(self) -> None:
+        """
+        Add a creation message to the dataset history and populate the wildcards in the metadata,
+        such as AAAA (last modified/download time), YYYY (year), VVVV (version number).
+
+        Returns
+        -------
+        None
+        """
         self.dataset.creation_message()
         last_modified = self['last_modified'][0]
         self.dataset.fill_string('AAAA', last_modified)

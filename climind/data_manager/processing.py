@@ -16,12 +16,13 @@
 
 import json
 from jsonschema import validate, RefResolver
+from typing import Callable
 from pathlib import Path
 from climind.data_manager.metadata import CollectionMetadata, DatasetMetadata, CombinedMetadata
 from climind.definitions import ROOT_DIR
 
 
-def get_function(module_path: str, script_name: str, function_name: str):
+def get_function(module_path: str, script_name: str, function_name: str) -> Callable:
     """
     For a particular module and script in that module, return the function with
     a specified name
@@ -37,7 +38,7 @@ def get_function(module_path: str, script_name: str, function_name: str):
 
     Returns
     -------
-    function
+    Callable
         Returns the function with the specified function name from the script with
         the specified script name in the specified module path
     """
@@ -90,10 +91,14 @@ class DataSet:
         ----------
         metadata_to_match : dict
             Dictionary of key-value or key-list pairs to match.
+        Returns
+        -------
+        bool
+            Return True unless there is a mismatch
         """
         return self.metadata.match_metadata(metadata_to_match)
 
-    def download(self, out_dir: Path):
+    def download(self, out_dir: Path) -> None:
         """
         Download the data set using its "fetcher"
 
@@ -103,7 +108,7 @@ class DataSet:
             Directory to which the data set will be downloaded
         Returns
         -------
-
+        None
         """
 
         fetch_fn = self._get_fetcher()
@@ -112,14 +117,14 @@ class DataSet:
             print(f"Downloading {url}")
             fetch_fn(url, out_dir)
 
-    def _get_fetcher(self):
+    def _get_fetcher(self) -> Callable:
         """
         Get the fetcher function for this dataset. This is the function
         specified in the dataset metadata which downloads the datasets files
 
         Returns
         -------
-        function
+        Callable
             Function that will, given appropriate inputs, download the dataset files
         """
         fetcher_name = self.metadata['fetcher']
@@ -127,7 +132,7 @@ class DataSet:
 
         return fetch_fn
 
-    def _get_reader(self):
+    def _get_reader(self) -> Callable:
         """
         Get the reader function for this dataset. This is the function
         specified in the dataset metadata which reads in the dataset and converts
@@ -135,7 +140,8 @@ class DataSet:
 
         Returns
         -------
-        function
+        Callable
+            Function that will, given appropriate inputs, read in a data file
         """
         reader_name = self.metadata['reader']
         reader_fn = get_function('climind.readers', reader_name, 'read_ts')
@@ -237,6 +243,7 @@ class DataCollection:
         Returns
         -------
         dict
+            A dictionary containing all the metadata from the collection
         """
         rebuilt = self.global_attributes.metadata
         rebuilt['datasets'] = []
@@ -253,12 +260,12 @@ class DataCollection:
 
     def to_file(self, filename: Path):
         """
-        Write the collection metadata to file
+        Write the collection metadata to file in json format.
 
         Parameters
         ----------
-        filename
-
+        filename: Path
+            Path to the file to be written
         Returns
         -------
 
@@ -277,7 +284,7 @@ class DataCollection:
             DataSet to be added
         Returns
         -------
-
+        None
         """
         self.datasets.append(ds)
 
@@ -295,6 +302,7 @@ class DataCollection:
         Returns
         -------
         DataCollection
+            Return DataCollection that matches the metadata_to_match
         """
         if not self.global_attributes.match_metadata(metadata_to_match):
             return None
@@ -313,7 +321,7 @@ class DataCollection:
 
         return out_collection
 
-    def get_collection_dir(self, data_dir: Path):
+    def get_collection_dir(self, data_dir: Path) -> Path:
         """
         Get the Path to the directory where the data for this collection are stored.
         If the directory does not exist, then create it.
@@ -332,7 +340,7 @@ class DataCollection:
         collection_dir.mkdir(exist_ok=True)
         return collection_dir
 
-    def download(self, data_dir: Path):
+    def download(self, data_dir: Path) -> None:
         """
         Download all the data sets in the collection
 
@@ -342,7 +350,7 @@ class DataCollection:
             Location to which the datasets should be downloaded
         Returns
         -------
-
+        None
         """
         collection_dir = self.get_collection_dir(data_dir)
 
@@ -361,6 +369,7 @@ class DataCollection:
         Returns
         -------
         list
+            Return list of all data sets described in the DataCollection
         """
         collection_dir = out_dir / self.global_attributes['name']
         collection_dir.mkdir(exist_ok=True)
@@ -395,13 +404,17 @@ class DataArchive:
 
         return out_str
 
-    def add_collection(self, data_collection: DataCollection):
+    def add_collection(self, data_collection: DataCollection) -> None:
         """
         Add a DataCollection to the archive
 
         Parameters
         ----------
         data_collection : DataCollection
+            DataCollection to be added to the DataCollection
+        Returns
+        -------
+        None
         """
         self.collections[data_collection.global_attributes['name']] = data_collection
 
@@ -417,6 +430,7 @@ class DataArchive:
         Returns
         -------
         DataArchive
+            Returns data archive containing only data that match the metadata_to_match
         """
 
         out_arch = DataArchive()
@@ -446,7 +460,7 @@ class DataArchive:
 
         return out_archive
 
-    def download(self, out_dir: Path):
+    def download(self, out_dir: Path) -> None:
         """
         Download all files in the data archive
 
@@ -454,6 +468,9 @@ class DataArchive:
         ----------
         out_dir : Path
             Directory to which the files should be downloaded
+        Returns
+        -------
+        None
         """
         for key in self.collections:
             self.collections[key].download(out_dir)
@@ -468,7 +485,8 @@ class DataArchive:
             Path of directory containing the data
         Returns
         -------
-
+        list
+            List of datasets specified by metadata in the archive.
         """
         all_datasets = []
 
