@@ -27,10 +27,14 @@ setup(
               'climind.fetchers', 'climind.plotters', 'climind.readers', 'climind.stats',
               'climind.web'],
     # Needed for dependencies
-    install_requires=['pytest', 'numpy', 'requests', 'beautifulsoup4',
-                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
-                      'python-dotenv', 'regionmask', 'geopandas', 'shapely',
-                      'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx'],
+    install_requires=['pytest==7.1.1', 'numpy==1.21.5', 'requests==2.24.0',
+                      'beautifulsoup4==4.10.0',
+                      'pandas==1.3.4', 'jsonschema==4.7.1', 'matplotlib==3.3.1',
+                      'seaborn==0.11.2', 'xarray==0.20.2',
+                      'python-dotenv==0.20.0', 'regionmask==0.9.0', 'geopandas==0.9.0',
+                      'shapely==1.7.1',
+                      'cdsapi==0.5.1', 'cartopy==0.18.0', 'cftime==1.5.1.1',
+                      'jinja2==3.0.3', 'python-docx==0.8.11'],
     # version number
     version='0.1',
     # The license can be anything you like
