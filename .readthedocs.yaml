@@ -8,6 +8,9 @@ version: 2
 submodules:
   include: all
 
+conda:
+  environment: environment_droplet.yml
+
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
    configuration: docs/source/conf.py
