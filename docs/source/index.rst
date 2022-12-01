@@ -11,8 +11,6 @@ Climind documentation
    :maxdepth: 2
    :caption: Contents:
 
-   modules
-
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
 climate indicators.
 
