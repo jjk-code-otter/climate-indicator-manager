@@ -11,17 +11,6 @@ python:
     - method: pip
       path: .
 
-build:
-  os: "ubuntu-20.04"
-  tools:
-    python: "mambaforge-4.10"
-
-conda:
-  environment: environment.yml
-
-submodules:
-  include: all
-
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
    configuration: docs/source/conf.py
