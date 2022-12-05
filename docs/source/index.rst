@@ -17,7 +17,7 @@ Climind documentation
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
 climate indicators.
 
-It is built on a collection of metadata fies which describe the location and content of individual data collections and
+It is built on a collection of metadata files which describe the location and content of individual data collections and
 data sets from those collections. For example, a *collection* might be something like "HadCRUT" and an individual
 *dataset* would be the file containing the monthly global mean temperatures calculated by the providers of "HadCRUT".
 
