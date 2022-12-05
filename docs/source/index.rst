@@ -6,11 +6,21 @@
 Climind documentation
 =====================
 
+.. automodule:: climind
+   :members:
+   :private-members:
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   modules
+   :hidden:
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
 
 
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
@@ -46,8 +56,8 @@ Navigate to the root directory of the repository and type
 This should install the package and necessary dependencies.
 
 
-Running
-=======
+Set up
+======
 
 The managed data will be stored in a directory specified by the environment variable DATADIR. This is easy to set in
 linux. In windows, do the following:
@@ -331,16 +341,5 @@ on the gridded temperature data sets. This takes some time to run.
 
 
 
-.. autosummary::
-   :recursive:
-
-   climind
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
 

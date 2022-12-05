@@ -33,7 +33,10 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               'sphinx.ext.napoleon']
 
-autosummary_generate = True  # Turn on sphinx.ext.autosummary
+autodoc_mock_imports = ['pytest', 'numpy', 'requests', 'beautifulsoup4',
+                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
+                      'python-dotenv', 'regionmask', 'geopandas', 'shapely',
+                      'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -56,3 +59,5 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 master_doc = 'index'
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
