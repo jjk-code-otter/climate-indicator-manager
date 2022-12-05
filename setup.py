@@ -41,6 +41,7 @@ setup(
 #                       'cdsapi==0.5.1', 'cartopy==0.18.0', 'cftime==1.5.1.1',
 #                       'jinja2==3.0.3', 'python-docx==0.8.11'],
 # >>>>>>> parent of 9ce3864 (add requirements)
+    autoclass_content = 'both',
     # version number
     version='0.1',
     # The license can be anything you like
