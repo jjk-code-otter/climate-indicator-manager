@@ -21,7 +21,21 @@ import shutil
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, out_dir: Path):
+def fetch(url: str, out_dir: Path) -> None:
+    """
+    Fetch ERSST gridded dataset from NOAA. There is one file per month. Only
+    files that have not already been downloaded will be downloaded.
+
+    Parameters
+    ----------
+    url: str
+        URL of the file
+    out_dir: Path
+        Path of the directory to which output will be written
+    Returns
+    -------
+    None
+    """
     for year, month in itertools.product(range(1854, 2023), range(1, 13)):
 
         filled_url = url.replace('*', f'{year}{month:02d}')

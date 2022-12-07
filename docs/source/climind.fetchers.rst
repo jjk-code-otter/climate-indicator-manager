@@ -1,6 +1,11 @@
 climind.fetchers package
 ========================
 
+.. automodule:: climind.fetchers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -96,14 +101,6 @@ climind.fetchers.fetcher\_utils module
 --------------------------------------
 
 .. automodule:: climind.fetchers.fetcher_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: climind.fetchers
    :members:
    :undoc-members:
    :show-inheritance:

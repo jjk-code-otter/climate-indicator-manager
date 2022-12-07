@@ -1,6 +1,11 @@
 climind.readers package
 =======================
 
+.. automodule:: climind.readers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -312,14 +317,6 @@ climind.readers.reader\_wgms module
 -----------------------------------
 
 .. automodule:: climind.readers.reader_wgms
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: climind.readers
    :members:
    :undoc-members:
    :show-inheritance:

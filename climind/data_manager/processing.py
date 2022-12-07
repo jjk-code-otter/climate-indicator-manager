@@ -13,7 +13,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+The classes and functions in this script describe groupings of metadata. The basic building
+block is a :class:`DataSet`, which specifies a file (or files) which contains the data for a single
+data set. :class:`DataSet` objects are grouped into :class:`DataCollection` objects, which gather
+together all the individual data sets which are derived from a single product. For example,
+HadCRUT5 is a product and so it has a corresponding DataCollection made up of several :class:`DataSet`
+objects. Finally, a :class:`DataArchive` contains one or more :class:`DataCollection` objects.
+"""
 import json
 from jsonschema import validate, RefResolver
 from typing import Callable
@@ -51,18 +58,23 @@ def get_function(module_path: str, script_name: str, function_name: str) -> Call
 
 
 class DataSet:
+    """
+    A DataSet contains *metadata* for a single dataset (one that might be split across multiple
+    files). For example, NSIDC monthly sea ice extent data is a single data set provided
+    in 12 files, one for each month. In contrast, HadCRUT5 monthly global mean temperature
+    is a single file. Both of these would be described by a DataSet.
+    """
 
     def __init__(self, metadata: DatasetMetadata, global_metadata: CollectionMetadata):
         """
-        A single dataset that may be split across multiple files. For example, monthly global mean
-        temperature from Berkeley Earth
+        Create a DataSet from :class:`.DatasetMetadata` and :class:`CollectionMetadata`.
 
         Parameters
         ----------
         metadata : DatasetMetadata
-            DatasetMetadata containing the dataset metadata.
+            :class:`.DatasetMetadata` containing the dataset metadata.
         global_metadata : CollectionMetadata
-            CollectionMetadata containing the global metadata
+            :class:`CollectionMetadata` containing the global metadata
 
         Attributes
         ----------
@@ -84,7 +96,7 @@ class DataSet:
 
     def match_metadata(self, metadata_to_match: dict) -> bool:
         """
-        Check if DataSet attributes match contents of dictionary, metadata_to_match.
+        Check if :class:`DataSet` attributes match contents of dictionary, metadata_to_match.
         Only items that are in the attributes are checked.
 
         Parameters
@@ -169,12 +181,14 @@ class DataSet:
 
 class DataCollection:
     """
-    A grouping of data sets derived from a single source. e.g. HadCRUT5. This could include, for example,
-    monthly and annual time series and the gridded data.
+    A grouping of :class:`DataSet` objects derived from a single product or source. e.g. HadCRUT5.
+    This could include, for example, monthly and annual time series along with the
+    gridded data.
     """
 
     def __init__(self, metadata: dict):
         """
+        Create DataCollection from a metadata dictionary.
 
         Parameters
         ----------
@@ -183,18 +197,19 @@ class DataCollection:
         Attributes
         ----------
         global_attributes : CollectionMetadata
-            Metadata containing the attributes that apply to all DataSets in the DataCollection
-        datasets : list
-            List containing all the DataSets
+            Metadata containing the attributes that apply to all DataSets in the
+            :class:`DataCollection`
+        datasets : List[DataSet]
+            List containing all the :class:`DataSet` objects in this collection
         """
         global_attributes = {}
         self.datasets = []
 
-        # copy all metadata except datasets into global attributes
+        # copy all metadata except datasets into global attributes and create
+        # the collection metadata
         for key in metadata:
             if key != 'datasets':
                 global_attributes[key] = metadata[key]
-
         self.global_attributes = CollectionMetadata(global_attributes)
 
         for key in metadata:
@@ -215,14 +230,17 @@ class DataCollection:
     @staticmethod
     def from_file(filename: Path):
         """
-        Given a file path create the DataCollection from metadata in that file
+        Given a file path create the :class:`DataCollection` from metadata in that file
+
         Parameters
         ----------
         filename : Path
             Filename of the metadata file in json format
         Returns
         -------
-
+        DataCollection
+            DataCollection containing all the :class:`DataSet` objects specified by the
+            metadata file
         """
         with open(filename, 'r') as f:
             metadata_from_file = json.load(f)
@@ -258,7 +276,7 @@ class DataCollection:
 
         return rebuilt
 
-    def to_file(self, filename: Path):
+    def to_file(self, filename: Path) -> None:
         """
         Write the collection metadata to file in json format.
 
@@ -268,7 +286,7 @@ class DataCollection:
             Path to the file to be written
         Returns
         -------
-
+        None
         """
         rebuilt = self._rebuild_metadata()
         with open(filename, 'w') as f:
@@ -291,18 +309,18 @@ class DataCollection:
     def match_metadata(self, metadata_to_match: dict):
         """
         Given a dictionary of metadata keys and required values for each key,
-        return a DataCollection which contains only data sets matching the specified
+        return a :class:`DataCollection` which contains only data sets matching the specified
         metadata
 
         Parameters
         ----------
         metadata_to_match : dict
             Dictionary containing key:value pairs that specify the data sets required
-            in the output DataCollection
+            in the output :class:`DataCollection`
         Returns
         -------
         DataCollection
-            Return DataCollection that matches the metadata_to_match
+            Return :class:`DataCollection` that matches the metadata_to_match
         """
         if not self.global_attributes.match_metadata(metadata_to_match):
             return None
@@ -334,7 +352,7 @@ class DataCollection:
         Returns
         --------
         Path
-            Path to the directory for this DataCollection
+            Path to the directory for this :class:`DataCollection`.
         """
         collection_dir = data_dir / self.global_attributes['name']
         collection_dir.mkdir(exist_ok=True)
@@ -359,7 +377,7 @@ class DataCollection:
 
     def read_datasets(self, out_dir: Path, **kwargs) -> list:
         """
-        Read all the datasets in the DataCollection
+        Read all the datasets in the :class:`DataCollection`
 
         Parameters
         ----------
@@ -369,7 +387,7 @@ class DataCollection:
         Returns
         -------
         list
-            Return list of all data sets described in the DataCollection
+            Return list of all data sets described in the :class:`DataCollection`.
         """
         collection_dir = out_dir / self.global_attributes['name']
         collection_dir.mkdir(exist_ok=True)
@@ -383,10 +401,15 @@ class DataCollection:
 
 
 class DataArchive:
+    """
+    A set of :class:`DataCollection` objects. A class:`DataArchive` is the starting point for
+    the analysis. Particular :class:`DataSet` objects are selected from the class:`DataArchive`
+    before plotting or summarising the data.
+    """
 
     def __init__(self):
         """
-        A grouping of multiple DataCollections
+        Create a :class:`DataArchive` object, initially empty.
 
         Attributes
         ----------
@@ -406,12 +429,12 @@ class DataArchive:
 
     def add_collection(self, data_collection: DataCollection) -> None:
         """
-        Add a DataCollection to the archive
+        Add a :class:`DataCollection` to the archive
 
         Parameters
         ----------
         data_collection : DataCollection
-            DataCollection to be added to the DataCollection
+            :class:`DataCollection` to be added to the :class:`DataArchive`
         Returns
         -------
         None
@@ -430,7 +453,7 @@ class DataArchive:
         Returns
         -------
         DataArchive
-            Returns data archive containing only data that match the metadata_to_match
+            Returns :class:`DataArchive` containing only data that match the metadata_to_match
         """
 
         out_arch = DataArchive()
@@ -451,6 +474,13 @@ class DataArchive:
         Parameters
         ----------
         path_to_dir : Path
+            Path to the directory containing the metadata files that will be used
+            to populate the archive
+        Returns
+        -------
+        DataArchive
+            Archive of data containing all :class:`DataCollection` objects described in the
+            metadata files
         """
         out_archive = DataArchive()
 

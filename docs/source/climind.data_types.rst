@@ -1,6 +1,11 @@
 climind.data\_types package
 ===========================
 
+.. automodule:: climind.data_types
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,14 +21,6 @@ climind.data\_types.timeseries module
 -------------------------------------
 
 .. automodule:: climind.data_types.timeseries
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: climind.data_types
    :members:
    :undoc-members:
    :show-inheritance:

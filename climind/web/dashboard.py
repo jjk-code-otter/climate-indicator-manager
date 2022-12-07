@@ -125,6 +125,8 @@ class Paragraph(WebComponent):
             Path of the directory containing the data
         archive: DataArchive
             DataArchive object with the metadata describing all the datasets
+        focus_year: int
+            Year which the paragraph will focus on, usually the most recent year, though it needn't be.
 
         Returns
         -------

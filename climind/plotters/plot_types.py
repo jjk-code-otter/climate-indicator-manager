@@ -24,9 +24,10 @@ import matplotlib.patches as patches
 from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
-from typing import List, Union
+from typing import List, Union, Tuple
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, get_list_of_unique_variables, superset_dataset_list
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
+    get_list_of_unique_variables, superset_dataset_list
 from climind.data_types.grid import GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
@@ -84,8 +85,10 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
     ----------
     axis: Matplotlib axis
         Set of Matplotlib axes for plotting on
-    all_datasets: List[TimeSeriesAnnual]
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
         list of data sets to be plotted on the axes
+    dark: bool
+        Set to True to plot in the dark style (charcoal background, light coloured lines)
 
     Returns
     -------
@@ -120,7 +123,21 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
     return zords
 
 
-def add_labels(axis, dataset):
+def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> str:
+    """
+    Add labels to the x and y axes
+
+    Parameters
+    ----------
+    axis: Matplotlib axis
+        set of matplotlib axes
+    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+        Data set which will be used to specify the units on the y axis
+    Returns
+    -------
+    str
+        Units of the y-axis
+    """
     plot_units = dataset.metadata['units']
     if plot_units in FANCY_UNITS:
         plot_units = FANCY_UNITS[plot_units]
@@ -129,7 +146,22 @@ def add_labels(axis, dataset):
     return plot_units
 
 
-def set_yaxis(axis, dataset):
+def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> Tuple[float, float, np.ndarray]:
+    """
+    Work out the extents of the y axis and the tick values
+
+    Parameters
+    ----------
+    axis: Matplotlib axis
+        Matplotlib axis
+    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+        Time series which contains one of the datasets being plotted
+
+    Returns
+    -------
+    Tuple[float, float, np.ndarray]
+        The lowest and highest points on the y axis and an array of tick values for the major ticks on the y axis.
+    """
     ylims = axis.get_ylim()
     ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
     if len(yticks) > 10:
@@ -153,7 +185,20 @@ def set_yaxis(axis, dataset):
     return ylo, yhi, yticks
 
 
-def set_xaxis(axis):
+def set_xaxis(axis) -> Tuple[float, float, np.ndarray]:
+    """
+    Work out the extents of the x axis and the tick values
+
+    Parameters
+    ----------
+    axis: Matplotlib axis
+        The axis on which everything is being plotted
+
+    Returns
+    -------
+    Tuple[float, float, np.ndarray]
+        The lowest and highest points on the y axis and an array of tick values for the major ticks on the y axis.
+    """
     xlims = axis.get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
     if len(xticks) < 3:
@@ -162,7 +207,24 @@ def set_xaxis(axis):
     return xlo, xhi, xticks
 
 
-def after_plot(zords, ds, title):
+def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly], title: str) -> None:
+    """
+    Add fancy stuff to the plots after all the data lines have been plotted.
+
+    Parameters
+    ----------
+    zords: List[int]
+        List of the zorders of the data sets
+    ds: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+        Example dataset of the datasets plotted, used to determine where to plot the legend and the
+        climatology period
+    title: str
+        Title for the plot
+
+    Returns
+    -------
+    None
+    """
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
         which='both',  # both major and minor ticks are affected
@@ -203,11 +265,31 @@ def after_plot(zords, ds, title):
 
 
 # time series
-def dark_plot(out_dir: Path, all_datasets: list, image_filename: str, title: str):
+def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]], image_filename: str,
+              title: str) -> str:
+    """
+    Plot the data sets in the dark style - charcoal background with light coloured lines. Tron like.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Directory to which the plot will be written
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
+        List of datasets to be plotted
+    image_filename: str
+        Name for the file to be written. Should end with .png
+    title: str
+        Title for the plot
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
     return neat_plot(out_dir, all_datasets, image_filename, title, dark=True)
 
 
-def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
+def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]],
               image_filename: str, title: str, dark: bool = False) -> str:
     """
     Create the standard annual plot
@@ -216,7 +298,7 @@ def neat_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual],
     ----------
     out_dir: Path
         Directory to which the figure will be written
-    all_datasets: List[TimeSeriesAnnual]
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
         list of datasets to be plotted
     image_filename: str
         filename for the figure. Must end in .png

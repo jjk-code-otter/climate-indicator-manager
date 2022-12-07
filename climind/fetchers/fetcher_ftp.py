@@ -19,7 +19,21 @@ import urllib.request
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, out_dir: Path):
+def fetch(url: str, out_dir: Path) -> None:
+    """
+    Generic fetcher for ftp files
+
+    Parameters
+    ----------
+    url: str
+        URL of the file
+    out_dir: Path
+        Path of the direcotry to which the output will be written.
+
+    Returns
+    -------
+    None
+    """
     filename = filename_from_url(url)
     out_path = out_dir / filename
 

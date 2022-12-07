@@ -37,6 +37,8 @@ autodoc_mock_imports = ['pytest', 'numpy', 'requests', 'beautifulsoup4',
                       'python-dotenv', 'regionmask', 'geopandas', 'shapely',
                       'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx']
 
+autoclass_content = 'both'
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

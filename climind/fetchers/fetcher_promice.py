@@ -21,6 +21,22 @@ from bs4 import BeautifulSoup, SoupStrainer
 
 
 def fetch(url: str, outdir: Path):
+    """
+    Fetch Greenland mass balance data. The script scrapes a webpage in order to find the specific URLs
+    of the latest version of the dataset (these change daily). These files are then downloaded. There should be
+    two files: a daily file and an annual file.
+
+    Parameters
+    ----------
+    url: srt
+        URL of the directory which contains the files to be downloaded
+    outdir: Path
+        Path of the directory to which the output will be written
+
+    Returns
+    -------
+    None
+    """
     # First open up the landing page
     landing_page_url = "https://dataverse.geus.dk/api/datasets/:persistentId/dirindex?persistentId=doi:10.22008/FK2/OHI23Z"
     landing_page_request = requests.get(landing_page_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})

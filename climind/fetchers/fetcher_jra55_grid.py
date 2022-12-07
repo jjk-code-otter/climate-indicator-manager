@@ -13,17 +13,37 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+Set of scripts to download the JRA-55 gridded data. Adapted from the scripts
+provided by UCAR. Data are stored by year up till a certain point and by
+month for near-real time data thereafter. Credentials are needed (see fetch function)
+"""
 import itertools
 from pathlib import Path
 import sys
 import os
 import requests
 from dotenv import load_dotenv
+from typing import List
+
 from climind.config.config import DATA_DIR
 
 
-def check_file_status(file_path, file_size):
+def check_file_status(file_path, file_size) -> None:
+    """
+    Writes a status bar on the download. Not used.
+
+    Parameters
+    ----------
+    file_path: str
+        Path of the file
+    file_size: float
+        Size of the file
+
+    Returns
+    -------
+    None
+    """
     sys.stdout.write('\r')
     sys.stdout.flush()
     size = int(os.stat(file_path).st_size)
@@ -32,21 +52,67 @@ def check_file_status(file_path, file_size):
     sys.stdout.flush()
 
 
-def make_realtime_file_list(y1, y2):
+def make_realtime_file_list(first_year: int, final_year: int) -> List[str]:
+    """
+    Make a list of monthly real-time filenames between the two specified years.
+
+    Parameters
+    ----------
+    first_year: int
+        Year to start generation
+    final_year: int
+        Year to end generation
+
+    Returns
+    -------
+    List[str]
+        List of filenames for real-time data between the specified years
+    """
     filelist = []
-    for year, month in itertools.product(range(y1, y2 + 1), range(1, 13)):
+    for year, month in itertools.product(range(first_year, final_year + 1), range(1, 13)):
         filelist.append(f'anl_surf125/{year}{month:02d}/anl_surf125.{year}{month:02d}')
     return filelist
 
 
-def make_file_list(y1, y2):
+def make_file_list(first_year, final_year) -> List[str]:
+    """
+    Make a list of annual archived filenames between the two specified years.
+
+    Parameters
+    ----------
+    first_year: int
+        Year to start generation
+    final_year: int
+        Year to end generation
+
+    Returns
+    -------
+    List[str]
+        List of filenames for archived data between the specified years
+    """
     filelist = []
-    for year in range(y1, y2 + 1):
+    for year in range(first_year, final_year + 1):
         filelist.append(f'anl_surf125/{year}/anl_surf125.011_tmp.{year}01_{year}12')
     return filelist
 
 
-def download_file(filename, file_base, ret):
+def download_file(filename: str, file_base: str, ret) -> None:
+    """
+    Download a file.
+
+    Parameters
+    ----------
+    filename: str
+        URL of the file to be downloaded
+    file_base: str
+        Name of the output file to which the data will be written
+    ret:
+        Authentication information
+
+    Returns
+    -------
+    None
+    """
     req = requests.get(filename, cookies=ret.cookies, allow_redirects=True, stream=True)
 
     if req.status_code == 404:
@@ -59,7 +125,24 @@ def download_file(filename, file_base, ret):
             outfile.write(chunk)
 
 
-def get_files(filelist, web_path, ret):
+def get_files(filelist: str, web_path: str, ret) -> None:
+    """
+    For each file in a file list, check if it already exists on the system and if it does
+    not, attempt to download it.
+
+    Parameters
+    ----------
+    filelist: str
+        List of files to be downloaded
+    web_path: str
+        URL of the directory that contains the files.
+    ret:
+        Authentication information
+
+    Returns
+    -------
+    None
+    """
     for file in filelist:
         filename = web_path + file
         file_base = DATA_DIR / "ManagedData" / "Data" / "JRA-55" / os.path.basename(file)
@@ -71,7 +154,25 @@ def get_files(filelist, web_path, ret):
             download_file(filename, file_base, ret)
 
 
-def fetch(_, out_dir: Path):
+def fetch(_, out_dir: Path) -> None:
+    """
+    Get JRA-55 files from UCAR. Requires the credentials:
+
+    * username, specified by entry in .env UCAR_USER
+    * password, specified by entry in .env UCAR_PSWD
+
+
+    Parameters
+    ----------
+    _:
+        dummy input to match interface.
+    out_dir: Path
+        Path of the directory to which the output will be written.
+
+    Returns
+    -------
+    None
+    """
     load_dotenv()
 
     email = os.getenv('UCAR_EMAIL')

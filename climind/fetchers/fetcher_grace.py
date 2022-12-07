@@ -23,10 +23,15 @@ from climind.config.config import DATA_DIR
 from datetime import datetime
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, outdir: Path) -> None:
     """
     Fetch files from the PODAAC website. Note that the API URL base is:
     API_url = "https://podaac-tools.jpl.nasa.gov/drive/files"
+
+    Requires the credentials:
+
+    * username, specified by entry in .env PODAAC_USER
+    * password, specified by entry in .env PODAAC_PSWD
 
     Parameters
     ----------

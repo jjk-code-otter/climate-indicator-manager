@@ -22,7 +22,24 @@ from ftplib import FTP
 from climind.fetchers.fetcher_utils import get_ftp_host_and_directory_from_url
 
 
-def fetch(url: str, out_dir: Path):
+def fetch(url: str, out_dir: Path) -> None:
+    """
+    Fetch data from the CMEMS ftp system. Credentials required are
+
+    * username, specified by entry in .env CMEMS_USER
+    * password, specified by entry in .env CMEMS_PSWD
+
+    Parameters
+    ----------
+    url: str
+        The URL of the file to be downloaded
+    out_dir: Path
+        Path of the directory to which the files will be saved
+
+    Returns
+    -------
+    None
+    """
     load_dotenv()
     username = os.getenv('CMEMS_USER')
     password = os.getenv('CMEMS_PSWD')

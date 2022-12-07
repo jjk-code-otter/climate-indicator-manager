@@ -21,8 +21,21 @@ import shutil
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, outdir: Path) -> None:
+    """
+    Fetcher for a standard URL that can be accessed without restrictions, credentials, or any other tomfoolery.
 
+    Parameters
+    ----------
+    url: str
+        URL of the file to be downloaded.
+    outdir: Path
+        Path of the directory to which the output will be written
+
+    Returns
+    -------
+    None
+    """
     filename = filename_from_url(url)
     out_path = outdir / filename
 

@@ -13,22 +13,28 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+These metadata classes contain all the information about the datasets that are manipulated
+by the packages. The :class:`BaseMetadata` class contains much of the functionality, with
+:class:`CollectionMetadata` and :class:`.DatasetMetadata` inheriting that functionality and
+differing chiefly in the schemas used to validate their contents. The :class:`CombinedMetadata`
+class comprises a :class:`CollectionMetadata` object and a :class:`.DatasetMetadata` object.
+"""
 import json
 from pathlib import Path
 from jsonschema import validate, RefResolver
 from climind.definitions import ROOT_DIR
 
 
-def list_match(list_to_match: list, attribute) -> bool:
+def list_match(list_to_match: list, attribute: str) -> bool:
     """
-    If att matches any item in mtm return True, otherwise False
+    If attribute matches any item in list_to_match return True, otherwise False
 
     Parameters
     ----------
     list_to_match: list
         List of metadata to match
-    attribute:
+    attribute: str
         attribute to check against
 
     Returns
@@ -41,16 +47,27 @@ def list_match(list_to_match: list, attribute) -> bool:
 
 class BaseMetadata:
     """
-    Simple class to store metadata and find matches
+    Simple class to store metadata and find matches. Metadata items can be set and recovered using a
+    dictionary-like syntax:
+
+    metadata_object['key'] = value
+
+    value = metadata_object['key']
     """
 
     def __init__(self, metadata: dict):
         """
+        Create a :class:`BaseMetadata` object from a dictionary containing the metaadata in key-value pairs.
 
         Parameters
         ----------
         metadata : dict
             Dictionary containing the metadata
+
+        Attributes
+        ----------
+        metadata: dict
+            Contains the metadata information in key value pairs
         """
         self.metadata = metadata
 
@@ -131,8 +148,21 @@ class BaseMetadata:
 
 
 class CollectionMetadata(BaseMetadata):
+    """
+    Class to store collection-level metadata, containing information that refers to all
+    data sets in the collection.
+    """
 
     def __init__(self, metadata: dict):
+        """
+        Create :class:`CollectionMetadata` from a dictionary containing metadata. Metadata are
+        validated using the metadata_schema.json file.
+
+        Parameters
+        ----------
+        metadata: dict
+            Dictionary containing metadata in key value pairs.
+        """
         schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'metadata_schema.json'
         with open(schema_path) as f:
             metadata_schema = json.load(f)
@@ -143,8 +173,21 @@ class CollectionMetadata(BaseMetadata):
 
 
 class DatasetMetadata(BaseMetadata):
+    """
+    Class to store dataset-level metadata, containing information that refers specifically
+    to a single data set.
+    """
 
     def __init__(self, metadata: dict):
+        """
+        Create :class:`DatasetMetadata` from a dictionary containing metadata. Metadata are
+        validated using the dataset_schema.json file.
+
+        Parameters
+        ----------
+        metadata: dict
+            Dictionary containing metadata in key value pairs.
+        """
         schema_path = Path(ROOT_DIR) / 'climind' / 'data_manager' / 'dataset_schema.json'
         with open(schema_path) as f:
             metadata_schema = json.load(f)
@@ -152,13 +195,13 @@ class DatasetMetadata(BaseMetadata):
 
         super().__init__(metadata)
 
-    def creation_message(self):
+    def creation_message(self) -> None:
         """
-        Add creation message to the history
+        Add creation message to the history.
 
         Returns
         -------
-
+        None
         """
         download_message = f"Data set created from file {self.metadata['filename']} " \
                            f"downloaded from {self.metadata['url']} " \
@@ -168,6 +211,10 @@ class DatasetMetadata(BaseMetadata):
 
 
 class CombinedMetadata:
+    """
+    :class:`CombinedMetadata` combines :class:`DatasetMetadata` and :class:`CollectionMetadata` in one single
+    object so that both sets of metadata elements are available in one container.
+    """
 
     def __init__(self, dataset: DatasetMetadata, collection: CollectionMetadata):
 

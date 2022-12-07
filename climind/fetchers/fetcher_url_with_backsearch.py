@@ -23,13 +23,40 @@ from datetime import datetime
 
 
 def filename_from_url(url: str) -> str:
+    """
+    Extract just the filename from a URL.
+
+    Parameters
+    ----------
+    url: str
+        URL of a file
+    Returns
+    -------
+    str
+        The filename of the file specified by the URL
+    """
     parsed_url = urlparse(url)
     filename = os.path.basename(parsed_url.path)
 
     return filename
 
 
-def fetch(url: str, out_dir: Path):
+def fetch(url: str, out_dir: Path) -> None:
+    """
+    Fetch file but using a backsearch. Backsearching starts with the most recent month, creates a filename using
+    that month to fill the year (YYYY) and month (MMMM) placeholders in the specified URL and then tries to download
+    that file. Search proceeds backwards for 24 months from today's date.
+
+    Parameters
+    ----------
+    url: str
+        URL of the file containing placeholders for the year (YYYY) and month (MMMM)
+    out_dir: Path
+        Path to which the output will be written
+    Returns
+    -------
+    None
+    """
     now = datetime.now()
     y = now.year
     m = now.month

@@ -13,9 +13,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+Contains a set of routines used by the fetchers to perform various standard tasks such as extracting the filename from
+a URL.
+"""
 import os
 from urllib.parse import urlparse
+
+from typing import Tuple, List
 
 
 def filename_from_url(url: str) -> str:
@@ -39,7 +44,7 @@ def filename_from_url(url: str) -> str:
     return filename
 
 
-def dir_and_filename_from_url(url: str):
+def dir_and_filename_from_url(url: str) -> Tuple[str, str]:
     """
     Get the filename and url up to, but not including the filename
 
@@ -59,20 +64,20 @@ def dir_and_filename_from_url(url: str):
     return dirname, filename
 
 
-def url_from_filename(url: str, filename: str):
+def url_from_filename(url: str, filename: str) -> str:
     """
     Given an url and filename, replace the filename in the URL with the input filename
 
     Parameters
     ----------
     url : str
+        URL specifying a file, for which the filename will be changed.
     filename : str
-
+        New filename to be use in output URL
     Returns
     -------
     str
-    -------
-
+        Returns the URL with the new filename
     """
     parsed_url = urlparse(url)
     dirname = os.path.dirname(parsed_url.path)
@@ -81,7 +86,7 @@ def url_from_filename(url: str, filename: str):
     return outurl
 
 
-def get_ftp_host_and_directory_from_url(url):
+def get_ftp_host_and_directory_from_url(url: str) -> Tuple[str, List[str]]:
     """
     From a url, extract the host name and the directory, the directory being
     broken down into a list of subdirectories

@@ -1,6 +1,11 @@
 climind.stats package
 =====================
 
+.. automodule:: climind.stats
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,14 +21,6 @@ climind.stats.utils module
 --------------------------
 
 .. automodule:: climind.stats.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: climind.stats
    :members:
    :undoc-members:
    :show-inheritance:

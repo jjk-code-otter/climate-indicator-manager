@@ -13,13 +13,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+Fetcher which uses the Copernicus Climate Data Store to download ERA5 gridded data
+"""
 import cdsapi
 from pathlib import Path
 from datetime import datetime
 
+from typing import List
 
-def pick_months(year: int, now: datetime):
+
+def pick_months(year: int, now: datetime) -> List[str]:
     """
     For a given year, return a list of strings containing the months which are available in the
     CDS for ERA5. For years before the current year, return all months. For the current year
@@ -28,12 +32,15 @@ def pick_months(year: int, now: datetime):
 
     Parameters
     ----------
-    year
-    now
+    year: int
+        Year for which we want to pick months
+    now: datetime
+        Today, used to assess how incomplete is the current year.
 
     Returns
     -------
-
+    List[str]
+        List of the months to download for the specified year.
     """
     if year < now.year:
         months_to_download = [
@@ -53,7 +60,7 @@ def pick_months(year: int, now: datetime):
     return months_to_download
 
 
-def fetch_year(out_dir: Path, year: int):
+def fetch_year(out_dir: Path, year: int) -> None:
     """
     Fetch a specified year of data and write it to the outdir. If the year is
     incomplete, only recover available months.
@@ -100,6 +107,20 @@ def fetch_year(out_dir: Path, year: int):
         str(output_file))
 
 
-def fetch(_, outdir: Path):
+def fetch(_, outdir: Path) -> None:
+    """
+    Fetch all data in the range 1979 to 2022.
+
+    Parameters
+    ----------
+    _:
+        dummy variable needed to match the interface.
+    outdir: Path
+        Path to the directory to which the data will be written.
+
+    Returns
+    -------
+    None
+    """
     for year in range(1979, 2023):
         fetch_year(outdir, year)

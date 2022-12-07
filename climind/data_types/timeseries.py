@@ -231,7 +231,12 @@ class TimeSeries:
 
 
 class TimeSeriesIrregular(TimeSeries):
-
+    """
+    A :class:`TimeSeriesIrregular` combines a pandas Dataframe with a
+    :class:`.CombinedMetadata` to bring together data and
+    metadata in one object. It represents non-monthly, non-annual averages of data such as weekly, or
+    5-day averages.
+    """
     def __init__(self, years: List[int], months: List[int], days: List[int], data: List[float],
                  metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
@@ -384,7 +389,11 @@ class TimeSeriesIrregular(TimeSeries):
 
 
 class TimeSeriesMonthly(TimeSeries):
-
+    """
+    A :class:`TimeSeriesMonthly` combines a pandas Dataframe with a
+    :class:`CombinedMetadata` to bring together data and
+    metadata in one object. It represents monthly averages of data.
+    """
     def __init__(self, years: List[int], months: List[int], data: List[float], metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
         """
@@ -751,7 +760,11 @@ class TimeSeriesMonthly(TimeSeries):
 
 
 class TimeSeriesAnnual(TimeSeries):
-
+    """
+    A :class:`TimeSeriesAnnual` combines a pandas Dataframe with a
+    :class:`.CombinedMetadata` to bring together data and
+    metadata in one object. It represents annual averages of data.
+    """
     def __init__(self, years: list, data: list, metadata=None, uncertainty: Optional[list] = None):
         """
 

@@ -13,7 +13,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+"""
+Sets up the DATA_DIR variable used throughout the package
+"""
 import os
 from pathlib import Path
 

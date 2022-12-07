@@ -162,6 +162,27 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
 
 
 def make_standard_grid(out_grid, start_date, freq, number_of_times):
+    """
+    Make the standard 5x5 grid from a numpy array, start date, temporal frequency and
+    number of time steps.
+
+    Parameters
+    ----------
+    out_grid:
+        Numpy array containing the data. Shape should be (number_of_times, 36, 72)
+    start_date: datetime
+        Date of the first time step
+    freq: str
+        Temporal frequency
+    number_of_times: int
+        Number of time steps, should match the first dimension of the out_grid
+
+    Returns
+    -------
+    xa.Dataset
+        xarray Dataset containing the data in out_grid with the specified temporal
+        frequency and number of time steps
+    """
     times = pd.date_range(start=start_date, freq=freq, periods=number_of_times)
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
@@ -215,7 +236,7 @@ def rank_array(in_array) -> int:
     Parameters
     ----------
     in_array: np.ndarray
-
+        Array to be ranked
     Returns
     -------
     int
@@ -231,10 +252,15 @@ def rank_array(in_array) -> int:
 
 
 class GridMonthly:
-
+    """
+    A :class:`GridMonthly` combines an xarray Dataset with a
+    :class:`.CombinedMetadata` to bring together data and
+    metadata in one object. It represents monthly averages of data.
+    """
     def __init__(self, input_data: xa.Dataset, metadata: CombinedMetadata):
         """
-        GridMonthly combines an xarray Dataset with metadata.
+        Create a :class:'.GridMonthly` object from an xarray
+        Dataset and a :class:`.CombinedMetadata` object.
 
         Parameters
         ----------
@@ -251,27 +277,28 @@ class GridMonthly:
             self.metadata = metadata
             self.metadata.dataset['last_month'] = str(self.get_last_month())
 
-    def get_last_month(self) -> int:
+    def get_last_month(self) -> datetime:
         """
         Get the date of the last month in the dataset
 
         Returns
         -------
-        int
+        datetime
+            Date of the last month in the dataset
         """
         last_month = self.df.time.dt.date.data[-1]
         return last_month
 
-    def rebaseline(self, y1: int, y2: int) -> xa.Dataset:
+    def rebaseline(self, first_year: int, final_year: int) -> xa.Dataset:
         """
         Change the baseline of the data to the period between y1 and y2 by subtracting the average of the
         available data between those two years (inclusive).
 
         Parameters
         ----------
-        y1: int
+        first_year: int
             First year of climatology period
-        y2: int
+        final_year: int
             Final year of climatology period
 
         Returns
@@ -281,17 +308,17 @@ class GridMonthly:
         """
 
         dsg = self.df.groupby('time.month')
-        gb = self.df.sel(time=slice(f'{y1}-01-01', f'{y2}-12-31')).groupby('time.month')
+        gb = self.df.sel(time=slice(f'{first_year}-01-01', f'{final_year}-12-31')).groupby('time.month')
         clim = gb.mean(dim='time')
         anom = dsg - clim
 
         self.df = anom
 
-        self.metadata['climatology_start'] = y1
-        self.metadata['climatology_end'] = y2
+        self.metadata['climatology_start'] = first_year
+        self.metadata['climatology_end'] = final_year
         self.metadata['actual'] = False
         self.metadata['derived'] = True
-        self.update_history(f'Rebaselined to {y1}-{y2}')
+        self.update_history(f'Rebaselined to {first_year}-{final_year}')
 
         return anom
 
@@ -314,7 +341,7 @@ class GridMonthly:
 
         return annual
 
-    def calculate_regional_average(self, regions, region_number, land_only=True):
+    def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """
         Calculate a regional average from the grid. The region is specified by a geopandas
         Geodataframe and the index (region_number) of the chosen shape. By default, the output
@@ -362,9 +389,9 @@ class GridMonthly:
 
         return out_series
 
-    def update_history(self, message: str):
+    def update_history(self, message: str) -> None:
         """
-        Update the history metadata
+        Update the history metadata with a message.
 
         Parameters
         ----------
@@ -379,10 +406,15 @@ class GridMonthly:
 
 
 class GridAnnual:
-
+    """
+    A :class:`GridAnnual` combines an xarray Dataset with a
+    :class:`.CombinedMetadata` to bring together data and
+    metadata in one object. It represents annual averages of data.
+    """
     def __init__(self, input_data, metadata: CombinedMetadata):
         """
-        Create an annual gridded data set from an xarray Dataset and CombinedMetadata.
+        Create an annual gridded data set from an xarray Dataset and
+        :class:`.CombinedMetadata` object.
 
         Parameters
         ----------
@@ -460,6 +492,7 @@ class GridAnnual:
         Returns
         -------
         GridAnnual
+            Returns a :class:`GridAnnual` containing only data within the specified year range.
         """
         self.df = self.df.where(self.df['year'] >= start_year, drop=True)
         self.df = self.df.where(self.df.year <= end_year, drop=True)
@@ -481,6 +514,7 @@ class GridAnnual:
         Returns
         -------
         GridAnnual
+            Returns a :class:`GridAnnual` containing only data within the specified year range.
         """
         out = copy.deepcopy(self)
 
@@ -497,6 +531,7 @@ class GridAnnual:
         Returns
         -------
         GridAnnual
+            Return a :class:`GridAnnual` containing the values as ranks from highest (1) to lowest.
         """
         output = copy.deepcopy(self)
         out_grid = np.zeros(output.df['tas_mean'].data.shape)
@@ -552,7 +587,7 @@ class GridAnnual:
 
 def get_start_and_end_year(all_datasets: List[GridAnnual]) -> Tuple[int, int]:
     """
-    Given a list of GridAnnual datasets, find the earliest start year and the latest end year
+    Given a list of :class:`GridAnnual` datasets, find the earliest start year and the latest end year
 
     Parameters
     ----------
@@ -574,7 +609,7 @@ def get_start_and_end_year(all_datasets: List[GridAnnual]) -> Tuple[int, int]:
 
 def process_datasets(all_datasets: List[GridAnnual], type: str) -> GridAnnual:
     """
-    Calculate the median or range (depending on selected type) of a list of annual data sets.
+    Calculate the median or range (depending on selected type) of a list of :class:`GridAnnual` data sets.
     Medians are calculated on a grid cell by grid cell basis based on all available data in the
     list of data sets.
 
@@ -623,7 +658,7 @@ def process_datasets(all_datasets: List[GridAnnual], type: str) -> GridAnnual:
 
 def median_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
     """
-    Calculate the median of a list of data sets
+    Calculate the median of a list of :class:`GridAnnual` data sets
 
     Parameters
     ----------
@@ -638,7 +673,7 @@ def median_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
 
 def range_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
     """
-    Calculate the half-range of a list of data sets
+    Calculate the half-range of a list of :class:`GridAnnual` data sets
 
     Parameters
     ----------
