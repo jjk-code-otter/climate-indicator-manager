@@ -69,11 +69,6 @@ if __name__ == "__main__":
         copy_ds.metadata['colour'] = '#a6cee3'
         tens.append(copy_ds.running_mean(10, centred=True))
 
-        # copy_ds = copy.deepcopy(ds)
-        # copy_ds.metadata['display_name'] = 'HadCRUT5 8-year'
-        # copy_ds.metadata['colour'] = 'goldenrod'
-        # tens.append(copy_ds.running_mean(8, centred=True))
-
         copy_ds = copy.deepcopy(ds)
         copy_ds.metadata['display_name'] = 'HadCRUT5 5-year'
         copy_ds.metadata['colour'] = '#b2df8a'
