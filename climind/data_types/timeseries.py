@@ -169,7 +169,7 @@ class TimeSeries:
         self.update_history(f'Added offset of {offset} to all data values.')
 
     def write_generic_csv(self, filename: Path, metadata_filename: Path,
-                          monthly: bool, uncertainty:bool, irregular:bool,
+                          monthly: bool, uncertainty: bool, irregular: bool,
                           columns_to_write: List[str]) -> None:
         """
         Write the dataset out into csv format
@@ -237,6 +237,7 @@ class TimeSeriesIrregular(TimeSeries):
     metadata in one object. It represents non-monthly, non-annual averages of data such as weekly, or
     5-day averages.
     """
+
     def __init__(self, years: List[int], months: List[int], days: List[int], data: List[float],
                  metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
@@ -394,6 +395,7 @@ class TimeSeriesMonthly(TimeSeries):
     :class:`CombinedMetadata` to bring together data and
     metadata in one object. It represents monthly averages of data.
     """
+
     def __init__(self, years: List[int], months: List[int], data: List[float], metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
         """
@@ -765,6 +767,7 @@ class TimeSeriesAnnual(TimeSeries):
     :class:`.CombinedMetadata` to bring together data and
     metadata in one object. It represents annual averages of data.
     """
+
     def __init__(self, years: list, data: list, metadata=None, uncertainty: Optional[list] = None):
         """
 
@@ -939,7 +942,7 @@ class TimeSeriesAnnual(TimeSeries):
         return years
 
     @log_activity
-    def running_mean(self, run_length: int):
+    def running_mean(self, run_length: int, centred: bool = False):
         """
         Calculate running mean of the data for a specified run length
 
@@ -947,6 +950,9 @@ class TimeSeriesAnnual(TimeSeries):
         ----------
         run_length : int
             length of the run
+        centred: bool
+            Set to True to centre the times associated to the data points, otherwise the time used will be the last
+            time in the n-year run.
 
         Returns
         -------
@@ -955,7 +961,15 @@ class TimeSeriesAnnual(TimeSeries):
         """
         moving_average = copy.deepcopy(self)
         moving_average.df['data'] = moving_average.df['data'].rolling(run_length).mean()
-        moving_average.update_history(f'Calculated {run_length}-year moving average')
+        if centred:
+            moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
+            moving_average.df.dropna(0, how='any', inplace=True)
+
+        if centred:
+            moving_average.update_history(
+                f'Calculated {run_length}-year moving average centred on the middle year of the period')
+        else:
+            moving_average.update_history(f'Calculated {run_length}-year moving average')
 
         moving_average.metadata['derived'] = True
 

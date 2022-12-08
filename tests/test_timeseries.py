@@ -719,6 +719,16 @@ def test_rolling_average(simple_annual):
     assert ma.df['data'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023)) / 1000.
 
 
+def test_rolling_average_centre(simple_annual):
+    ma = simple_annual.running_mean(10, centred=True)
+
+    assert isinstance(ma, ts.TimeSeriesAnnual)
+    assert ma.metadata['derived']
+    assert ma.metadata['history'] != ''
+    assert ma.df['data'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023)) / 1000.
+    assert ma.df['year'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023))
+
+
 def test_add_offset(simple_annual):
     simple_annual.add_offset(99.)
     assert simple_annual.df['data'][0] == 1850. / 1000. + 99.
@@ -817,7 +827,6 @@ def test_get_string_date_range_annual(simple_annual):
 
 
 def test_add_year(simple_annual, uncertainty_annual):
-
     test_year = 2023
     test_value = 3.987
     test_uncertainty = 0.77
