@@ -340,9 +340,7 @@ def test_greenhouse_gas_paragraph_all_record(mocker):
 
     for variable in ['co2', 'ch4', 'n2o']:
         m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'WDCGG'
-        m.metadata['variable'] = variable
+        m.metadata = {'display_name': 'WDCGG', 'variable': variable}
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 1
         m.get_value_from_year.return_value = 765.432
@@ -363,9 +361,7 @@ def test_greenhouse_gas_paragraph_not_all_record(mocker):
 
     for variable in ['co2', 'ch4', 'n2o']:
         m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'WDCGG'
-        m.metadata['variable'] = variable
+        m.metadata = {'display_name': 'WDCGG', 'variable': variable}
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 2
         m.get_value_from_year.return_value = 765.432
@@ -391,9 +387,7 @@ def test_greenhouse_gas_paragraph_no_wdcgg_datasets(mocker):
     all_datasets = []
     for variable in ['co2', 'ch4', 'n2o']:
         m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'Nobody'
-        m.metadata['variable'] = variable
+        m.metadata = {'display_name': 'Nobody', 'variable': variable}
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 1
         m.get_value_from_year.return_value = 765.432
@@ -409,9 +403,7 @@ def prepared_datasets(mocker):
 
     for variable in ['co2', 'ch4', 'n2o']:
         m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'WDCGG'
-        m.metadata['variable'] = variable
+        m.metadata = {'display_name': 'WDCGG', 'variable': variable}
         m.get_first_and_last_year.return_value = (1980, 2020)
         m.get_rank_from_year.return_value = 1
         m.get_value_from_year.return_value = 765.432
@@ -424,9 +416,7 @@ def prepared_datasets(mocker):
 
 def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker, prepared_datasets):
     m = mocker.MagicMock()
-    m.metadata = {}
-    m.metadata['display_name'] = 'AnotherCentre'
-    m.metadata['variable'] = 'co2'
+    m.metadata = {'display_name': 'AnotherCentre', 'variable': 'co2'}
     m.get_first_and_last_year.return_value = (1980, 2020)
     m.get_rank_from_year.return_value = 2
     m.get_value_from_year.side_effect = [4.0, 5.0]
@@ -446,9 +436,7 @@ def test_greenhouse_gas_paragraph_all_record_but_next_year_isnt(mocker, prepared
 
 def test_greenhouse_gas_paragraph_all_record_and_next_year_is_too(mocker, prepared_datasets):
     m = mocker.MagicMock()
-    m.metadata = {}
-    m.metadata['display_name'] = 'AnotherCentre'
-    m.metadata['variable'] = 'co2'
+    m.metadata = {'display_name': 'AnotherCentre', 'variable': 'co2'}
     m.get_first_and_last_year.return_value = (1980, 2020)
     m.get_rank_from_year.return_value = 1
     m.get_value_from_year.side_effect = [6.0, 5.0]
@@ -472,9 +460,7 @@ def prepared_mhw_datasets(mocker):
 
     for variable in ['mhw', 'mcs']:
         m = mocker.MagicMock()
-        m.metadata = {}
-        m.metadata['display_name'] = 'OISST'
-        m.metadata['variable'] = variable
+        m.metadata = {'display_name': 'OISST', 'variable': variable}
         m.get_value_from_year.side_effect = [33.3, 79.8]
         m.get_rank_from_year.return_value = 3
         m.get_year_from_rank.return_value = [2011]

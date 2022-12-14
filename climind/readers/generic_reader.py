@@ -126,7 +126,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs) -> Union[
     Returns
     -------
     Union[TimeSeriesMonthly, TimeSeriesAnnual, GridMonthly]
-        Returns a TimeSeries of some kind
+        Returns a TimeSeries or Grid of some kind
     """
     script_name = metadata['reader']
     module = get_module('climind.readers', script_name)

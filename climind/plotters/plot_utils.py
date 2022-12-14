@@ -23,18 +23,19 @@ from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 from climind.data_types.grid import GridAnnual
 
 
-def calculate_trends(all_datasets: List[TimeSeriesAnnual], y1: int, y2: int) -> Tuple[float, float, float]:
+def calculate_trends(all_datasets: List[TimeSeriesAnnual], trend_start_year: int, trend_end_year: int) -> Tuple[
+    float, float, float]:
     """
     given a set of data sets, return the mean, min and max trends from the data sets calculated
     using OLS between the chosen years.
 
     Parameters
     ----------
-    all_datasets : list
-        list of data sets
-    y1 : int
+    all_datasets : List[TimeSeriesAnnual]
+        list of :class:`.TimeSeriesAnnual` data sets
+    trend_start_year : int
         first year for trend
-    y2 : int
+    trend_end_year : int
         last year for trend
 
     Returns
@@ -45,7 +46,8 @@ def calculate_trends(all_datasets: List[TimeSeriesAnnual], y1: int, y2: int) -> 
     all_trends = []
 
     for ds in all_datasets:
-        subset = ds.df.loc[(ds.df['year'] >= y1) & (ds.df['year'] <= y2) & (~ds.df['data'].isnull())]
+        subset = ds.df.loc[
+            (ds.df['year'] >= trend_start_year) & (ds.df['year'] <= trend_end_year) & (~ds.df['data'].isnull())]
 
         if len(subset) > 25:
             trends = np.polyfit(subset['year'], subset['data'], 1)
@@ -59,16 +61,16 @@ def calculate_trends(all_datasets: List[TimeSeriesAnnual], y1: int, y2: int) -> 
     return mean_trend, min_trend, max_trend
 
 
-def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tuple[int, int]:
+def calculate_ranks(all_datasets: List[TimeSeriesAnnual], year: int, ascending: bool = False) -> Tuple[int, int]:
     """
-    given a set of data sets, return the min and max ranks from the data sets.
+    given a set of data sets, return the min and max ranks from the data sets for a given year.
 
     Parameters
     ----------
     all_datasets : list
         list of data sets
-    y1 : int
-        year to calculate trends for
+    year : int
+        year to calculate ranks for
     ascending: bool
         Set to true to rank low (1st) to high (nth) rather than high (1st) to low (nth)
 
@@ -81,10 +83,8 @@ def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tup
 
     for ds in all_datasets:
         ranked = ds.df.rank(method='min', ascending=ascending)
-        subrank = ranked[ds.df['year'] == y1]['data']
-        if len(subrank) == 0:
-            rank = None
-        else:
+        subrank = ranked[ds.df['year'] == year]['data']
+        if len(subrank) != 0:
             rank = int(subrank.iloc[0])
             all_ranks.append(rank)
 
@@ -98,15 +98,15 @@ def calculate_ranks(all_datasets: list, y1: int, ascending: bool = False) -> Tup
     return int(min_rank), int(max_rank)
 
 
-def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
+def calculate_values(all_datasets: List[TimeSeriesAnnual], year: int) -> Tuple[float, float, float]:
     """
     given a set of data sets, return the mean min and max values from the data sets for specified year.
 
     Parameters
     ----------
     all_datasets : list
-        list of data sets
-    y1 : int
+        list of :class:`.TimeSeriesAnnual` data sets
+    year : int
         year to calculate values for
 
     Returns
@@ -117,7 +117,7 @@ def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
     all_ranks = []
 
     for ds in all_datasets:
-        value = ds.df[ds.df['year'] == y1]['data']
+        value = ds.df[ds.df['year'] == year]['data']
         if len(value) > 0:
             all_ranks.append(value.values[0])
 
@@ -129,7 +129,23 @@ def calculate_values(all_datasets: list, y1: int) -> Tuple[float, float, float]:
     return mean_rank, min_rank, max_rank
 
 
-def calculate_highest_year_and_values(all_datasets: List[TimeSeriesAnnual]):
+def calculate_highest_year_and_values(all_datasets: List[TimeSeriesAnnual]) -> Tuple[List[int], List[List[float]]]:
+    """
+    From the list of :class:`.TimeSeriesAnnual` get the year that ranks first in each data set. Then, for
+    each of those years get the highest and lowest data value from all of the data sets.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of :class:`.TimeSeriesAnnual` data sets
+
+    Returns
+    -------
+    Tuple[List[int], List[List[float]]]
+        The first returned element is a list of years that rank first in the data sets. The second element is
+        a list with the same length as the first. Each element in the list is two-element list holding the
+        lowest and highest values found in any of the datasets for the corresponding year in the first list.
+    """
     all_highest_years = []
     all_highest_values = []
     for ds in all_datasets:
@@ -172,6 +188,7 @@ def set_lo_hi_ticks(limits: list, spacing: float) -> Tuple[float, float, ndarray
 def get_first_and_last_years(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]) -> Tuple[int, int]:
     """
     Extract the first and last years from a list of data sets
+
     Parameters
     ----------
     all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]])
@@ -235,7 +252,7 @@ def caption_builder(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual
     return caption
 
 
-def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str:
+def map_caption_builder(all_datasets: List[Union[GridAnnual]], grid_type: str) -> str:
     """
     Write a caption for the standard map plots.
 
@@ -243,6 +260,8 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str
     ----------
     all_datasets: List[Union[GridAnnual]]
         List of datasets used in the plot
+    grid_type: str
+        Type is one of 'mean', 'rank' or 'unc'.
     Returns
     -------
     str
@@ -259,18 +278,18 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], type: str) -> str
     caption = f"{ds.metadata['time_resolution']}".capitalize()
     caption += f" {ds.metadata['long_name']}"
 
-    if type == 'unc':
+    if grid_type == 'unc':
         caption += " uncertainty"
         calculation = 'half-range'
-    elif type == 'rank':
+    elif grid_type == 'rank':
         caption += " rank"
         calculation = 'median rank'
     else:
-        caption +=  " anomaly"
+        caption += " anomaly"
         calculation = 'median'
 
     caption += f" ({fancy_units}"
-    if not ds.metadata['actual'] and type not in ['unc', 'rank']:
+    if not ds.metadata['actual'] and grid_type not in ['unc', 'rank']:
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
 

@@ -20,7 +20,7 @@ from typing import List, Union
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual
 
 
-def table_by_year(datasets, match_year: int, years_to_show: int = 12) -> str:
+def table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
     out_text = ''
     for year in range(match_year - years_to_show, match_year + 1):
 

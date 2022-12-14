@@ -23,7 +23,7 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
@@ -43,7 +43,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     years = []
     anomalies = []
 

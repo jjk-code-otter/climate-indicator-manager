@@ -44,7 +44,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
         raise NotImplementedError
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     df = xa.open_dataset(filename)
 
     years = df.time.dt.year.data.tolist()
@@ -52,11 +52,14 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata):
     # Double uncertainties to get 95% range
     if metadata['variable'] == 'ohc':
         data = df['ocean_heat_content_0-700m'].values.tolist()
-        uncertainty = (2* df['ocean_heat_content_0-700m_uncertainty']).data.tolist()
+        uncertainty = (2 * df['ocean_heat_content_0-700m_uncertainty']).data.tolist()
 
     elif metadata['variable'] == 'ohc2k':
         data = df['ocean_heat_content_0-2000m'].values.tolist()
         uncertainty = (2 * df['ocean_heat_content_0-2000m_uncertainty']).data.tolist()
+
+    else:
+        raise ValueError(f"Variable {metadata['variable']} unrecognised")
 
     metadata.creation_message()
 

@@ -19,11 +19,9 @@ import logging
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
-import climind.stats.utils as utils
 
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
-
 
 if __name__ == "__main__":
 
@@ -48,7 +46,7 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name':'HadCRUT5'})
+                                 'name': 'HadCRUT5'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
 

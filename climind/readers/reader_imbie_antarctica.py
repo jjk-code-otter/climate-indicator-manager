@@ -25,7 +25,7 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> ts.TimeSeriesMonthly:
     if 'first_difference' in kwargs:
         first_diff = kwargs['first_difference']
     else:
@@ -58,7 +58,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     return ts.TimeSeriesMonthly(years, months, mass_balance, metadata=metadata, uncertainty=uncertainty)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata, **kwargs)
     annual = monthly.make_annual(cumulative=True)
     return annual

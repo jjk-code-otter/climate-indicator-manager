@@ -24,8 +24,8 @@ import climind.data_types.timeseries as ts
 from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
 
-def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
 
+def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
     # look in directory to find all matching
     filename_with_wildcards = filename_with_wildcards.replace('YYYYMMMM', '*')
     list_of_files = list(out_dir.glob(filename_with_wildcards))
@@ -33,8 +33,8 @@ def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
     out_filename = list_of_files[-1]
     return out_filename
 
-def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filename_with_wildcards = metadata['filename'][0]
     filename = find_latest(out_dir, filename_with_wildcards)
     last_modified = get_last_modified_time(filename)
@@ -53,7 +53,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     pass
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> ts.TimeSeriesMonthly:
     lines_to_skip = 31
 
     if 'first_difference' in kwargs:
@@ -101,7 +101,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
     return ts.TimeSeriesMonthly(years2, months2, data, metadata=metadata, uncertainty=uncertainties)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata, **kwargs)
     annual = monthly.make_annual_by_selecting_month(8)
     return annual

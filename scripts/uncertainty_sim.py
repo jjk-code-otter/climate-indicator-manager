@@ -13,18 +13,29 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import numpy as np
+import random
 
-from typing import List
-from pathlib import Path
-import xarray as xa
-import climind.data_types.grid as gd
-from climind.data_manager.metadata import CombinedMetadata
+trials = []
 
-from climind.readers.generic_reader import read_ts
+# calculate estimated uncertainty for average of 100 values
+var = (2.0 * 0.5) ** 2 / 12.
+estimated_uncertainty = np.sqrt(var / 100.)
 
+# do ten thousand trials
+for j in range(0, 100000):
 
-def read_annual_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridAnnual:
-    df = xa.open_dataset(filename[0])
-    metadata['history'].append(f"Gridded dataset created from file {metadata['filename']} "
-                               f"downloaded from {metadata['url']}")
-    return gd.GridAnnual(df, metadata)
+    # generate random numbers and then round them
+    samples = []
+    intsamples = []
+    for i in range(0, 100):
+        rn = random.gauss(0, 1)
+        samples.append(rn)
+        intsamples.append(float(round(rn)))
+
+    full_precision_average = np.mean(samples)
+    rounded_average = np.mean(intsamples)
+
+    trials.append(full_precision_average - rounded_average)
+
+print(np.std(trials), estimated_uncertainty)

@@ -25,9 +25,8 @@ import logging
 import regionmask
 from pathlib import Path
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
-from typing import List, Tuple
+from typing import List, Tuple, Callable
 
 from climind.data_manager.metadata import CombinedMetadata
 import climind.data_types.timeseries as ts
@@ -103,6 +102,7 @@ def simple_regrid(ingrid: np.ndarray, lon0: float, lat0: float, dx: float, targe
     Returns
     -------
     np.ndarray
+        Returns regridded array.
     """
     nlat = int(180 / target_dy)
     nlon = int(360 / target_dy)
@@ -133,13 +133,13 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
 
     Parameters
     ----------
-    target_grid:
+    target_grid: np.ndarray
         numpy array of shape (ntime, nlat, nlon)
-    times:
+    times: np.ndarray
         Array of times, shape (ntime)
-    latitudes:
+    latitudes: np.ndarray
         Array of latitudes, shape (nlat)
-    longitudes
+    longitudes: np.ndarray
         Array of longitudes, shape (nlon)
 
     Returns
@@ -161,14 +161,14 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
     return ds
 
 
-def make_standard_grid(out_grid, start_date, freq, number_of_times):
+def make_standard_grid(out_grid: np.ndarray, start_date: datetime, freq: str, number_of_times: int) -> xa.Dataset:
     """
     Make the standard 5x5 grid from a numpy array, start date, temporal frequency and
     number of time steps.
 
     Parameters
     ----------
-    out_grid:
+    out_grid: np.ndarray
         Numpy array containing the data. Shape should be (number_of_times, 36, 72)
     start_date: datetime
         Date of the first time step
@@ -192,19 +192,19 @@ def make_standard_grid(out_grid, start_date, freq, number_of_times):
     return dataset
 
 
-def log_activity(in_function):
+def log_activity(in_function) -> Callable:
     """
     Decorator function to log name of function run and with which arguments.
     This aims to provide some traceability in the output.
 
     Parameters
     ----------
-    in_function: function
+    in_function: Callable
         The function to be decorated
 
     Returns
     -------
-    function
+    Callable
     """
 
     def wrapper(*args, **kwargs):
@@ -229,7 +229,7 @@ def log_activity(in_function):
     return wrapper
 
 
-def rank_array(in_array) -> int:
+def rank_array(in_array: np.ndarray) -> int:
     """
     Rank array
 
@@ -255,7 +255,7 @@ class GridMonthly:
     """
     A :class:`GridMonthly` combines an xarray Dataset with a
     :class:`.CombinedMetadata` to bring together data and
-    metadata in one object. It represents monthly averages of data.
+    metadata in one object. It represents monthly averages of data on a regular grid.
     """
     def __init__(self, input_data: xa.Dataset, metadata: CombinedMetadata):
         """
@@ -291,8 +291,8 @@ class GridMonthly:
 
     def rebaseline(self, first_year: int, final_year: int) -> xa.Dataset:
         """
-        Change the baseline of the data to the period between y1 and y2 by subtracting the average of the
-        available data between those two years (inclusive).
+        Change the baseline of the data to the period between first_year and final_year by
+        subtracting the average of the available data between those two years (inclusive).
 
         Parameters
         ----------
@@ -306,7 +306,6 @@ class GridMonthly:
         xa.Dataset
             Changes the dataset in place, but also returns the dataset if needed
         """
-
         dsg = self.df.groupby('time.month')
         gb = self.df.sel(time=slice(f'{first_year}-01-01', f'{final_year}-12-31')).groupby('time.month')
         clim = gb.mean(dim='time')
@@ -473,9 +472,6 @@ class GridAnnual:
             self.metadata['history'].append(f"Wrote to file {str(filename.name)}")
             self.metadata.write_metadata(metadata_filename)
 
-        now = datetime.today()
-        climind_version = pkg_resources.get_distribution("climind").version
-
         self.df.to_netcdf(filename, format="NETCDF4")
 
     def select_year_range(self, start_year: int, end_year: int):
@@ -607,7 +603,7 @@ def get_start_and_end_year(all_datasets: List[GridAnnual]) -> Tuple[int, int]:
     return start_date, end_date
 
 
-def process_datasets(all_datasets: List[GridAnnual], type: str) -> GridAnnual:
+def process_datasets(all_datasets: List[GridAnnual], grid_type: str) -> GridAnnual:
     """
     Calculate the median or range (depending on selected type) of a list of :class:`GridAnnual` data sets.
     Medians are calculated on a grid cell by grid cell basis based on all available data in the
@@ -617,7 +613,7 @@ def process_datasets(all_datasets: List[GridAnnual], type: str) -> GridAnnual:
     ----------
     all_datasets: List[GridAnnual]
         list of GridAnnual data sets
-    type: str
+    grid_type: str
         Either 'median' or 'range'
     Returns
     -------
@@ -643,11 +639,11 @@ def process_datasets(all_datasets: List[GridAnnual], type: str) -> GridAnnual:
 
         for xx, yy in itertools.product(range(72), range(36)):
             select = stack[:, yy, xx]
-            if type == 'median':
+            if grid_type == 'median':
                 out_grid[year - start_date, yy, xx] = np.median(select[~np.isnan(select)])
-            elif type == 'range':
-                range_of_datasets = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
-                out_grid[year - start_date, yy, xx] = range_of_datasets / 2.
+            elif grid_type == 'range':
+                full_range = np.max(select[~np.isnan(select)]) - np.min(select[~np.isnan(select)])
+                out_grid[year - start_date, yy, xx] = full_range / 2.
 
     dataset = make_standard_grid(out_grid, str(start_date), '1YS', number_of_years)
     dataset = dataset.groupby('time.year').mean(dim='time')
@@ -663,7 +659,7 @@ def median_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
     Parameters
     ----------
     all_datasets: List[GridAnnual]
-        List of datasets from which the medians will be calculated.
+        List of :class:`GridAnnual` datasets from which the medians will be calculated.
     Returns
     -------
     GridAnnual
@@ -678,7 +674,7 @@ def range_of_datasets(all_datasets: List[GridAnnual]) -> GridAnnual:
     Parameters
     ----------
     all_datasets: List[GridAnnual]
-        List of datasets from which the ranges will be calculated.
+        List of :class:`GridAnnual` datasets from which the ranges will be calculated.
     Returns
     -------
     GridAnnual

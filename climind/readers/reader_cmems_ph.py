@@ -44,7 +44,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
         raise NotImplementedError
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     df = xa.open_dataset(filename)
 
     data = df.ph.values.tolist()

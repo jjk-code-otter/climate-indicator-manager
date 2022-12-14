@@ -24,6 +24,7 @@ import climind.data_manager.processing as dm
 import climind.web.dashboard as db
 from climind.data_types.timeseries import TimeSeriesMonthly
 
+
 @pytest.fixture
 def card_metadata():
     metadata = {

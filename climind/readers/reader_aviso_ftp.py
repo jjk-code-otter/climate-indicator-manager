@@ -15,17 +15,15 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import pandas as pd
 from typing import List
 import xarray as xa
 import climind.data_types.timeseries as ts
-import copy
 
 from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     df = xa.open_dataset(filename[0])
 
     correction = xa.open_dataset(filename[0].parent / 'Topex-A_correction.nc')

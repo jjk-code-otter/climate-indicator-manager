@@ -66,7 +66,7 @@ def nice_list(names):
     return name_list
 
 
-def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year=None) -> str:
+def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year: int = None) -> str:
     """
     Given a list of dataset, return a comma-and-and separated list of the names.
 
@@ -74,6 +74,8 @@ def dataset_name_list(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
     ----------
     all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]
         List of data sets whose names you want in a list
+    year: int
+        If year is specified, the name list will specify to what month data are available if the year is incomplete.
 
     Returns
     -------
@@ -259,7 +261,7 @@ def anomaly_and_rank_plus_new_base(all_datasets: List[TimeSeriesAnnual], year: i
             ds.rebaseline(1961, 1990)
             processed_data.append(ds)
 
-    min_rank, max_rank = pu.calculate_ranks(processed_data, year)
+    # min_rank, max_rank = pu.calculate_ranks(processed_data, year)
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(processed_data, year)
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
@@ -469,6 +471,8 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
         List of datasets on which the assessment will be based
     year: int
         Chosen year to focus on
+    update: bool
+        If set to True treat this as an update
     Returns
     -------
     str
@@ -595,7 +599,8 @@ def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual
     if mcs_check:
         out_text += f"The area of the ocean affected by at least one marine cold spells was {mcs_area:.1f}%. " \
                     f"The {ordinal(mcs_rank)} highest on record. " \
-                    f"The highest area affected in any year by marine cold spells was {mcs_max_area:.1f}% in {mcs_max_year}."
+                    f"The highest area affected in any year by marine cold spells " \
+                    f"was {mcs_max_area:.1f}% in {mcs_max_year}."
 
     if not mcs_check and not mhw_check:
         raise RuntimeError("One of MHW or MCS data not found in the data set list")
@@ -630,7 +635,7 @@ def greenland_ice_sheet_monthly(all_datasets: List[TimeSeriesMonthly], year: int
                     f"31 August {year} was {entry[1]:.2f}Gt, which is "
         if entry[2] > entry[1] and entry[1] < 0:
             out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
-        elif entry[2] < entry[1] and entry[1] < 0:
+        elif entry[2] < entry[1] < 0:
             out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
         elif entry[1] > 0:
             pass
@@ -665,7 +670,7 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
                     f"{year} was {entry[1]:.2f}Gt, which is "
         if entry[2] > entry[1] and entry[1] < 0:
             out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt/year. "
-        elif entry[2] < entry[1] and entry[1] < 0:
+        elif entry[2] < entry[1] < 0:
             out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt/year. "
         elif entry[1] > 0:
             out_text += f" {year} saw an increase in the mass of Greenland ice."
@@ -673,7 +678,7 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
-def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], _) -> str:
     all_trends = []
     out_text = ""
     for ds in all_datasets:

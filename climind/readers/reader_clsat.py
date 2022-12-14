@@ -26,13 +26,12 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_grid(filename: List[Path], metadata):
+def read_monthly_grid(filename: List[Path], metadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
     return gd.GridMonthly(df, metadata)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
-
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     years = []
     anomalies = []
 

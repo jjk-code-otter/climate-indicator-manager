@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../climind'))
 
+sys.path.insert(0, os.path.abspath('../../climind'))
 
 # -- Project information -----------------------------------------------------
 
@@ -33,9 +33,9 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon']
 
 autodoc_mock_imports = ['pytest', 'numpy', 'requests', 'beautifulsoup4',
-                      'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
-                      'python-dotenv', 'regionmask', 'geopandas', 'shapely',
-                      'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx']
+                        'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
+                        'python-dotenv', 'regionmask', 'geopandas', 'shapely',
+                        'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx']
 
 autoclass_content = 'both'
 

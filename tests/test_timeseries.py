@@ -18,7 +18,6 @@ import copy
 
 import pandas as pd
 import numpy as np
-import json
 import itertools
 from datetime import date
 from pathlib import Path
@@ -252,6 +251,12 @@ def test_metadata():
     collection_metadata = CollectionMetadata(global_attributes)
 
     return CombinedMetadata(dataset_metadata, collection_metadata)
+
+
+# Base TimeSeries class
+def test_basic_timeseries_creation_raises_type_error(annual_metadata):
+    with pytest.raises(TypeError):
+        _ = ts.TimeSeries(metadata=annual_metadata)
 
 
 # Free-floating functions

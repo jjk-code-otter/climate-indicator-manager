@@ -19,13 +19,12 @@ import pandas as pd
 from typing import List
 
 import climind.data_types.timeseries as ts
-import copy
 
 from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     years = []
     anomalies = []
 

@@ -21,7 +21,6 @@ import xarray as xa
 import geopandas as gp
 import numpy as np
 import pandas as pd
-from datetime import date
 
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata

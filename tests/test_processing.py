@@ -20,9 +20,8 @@ from pathlib import Path
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata
 import climind.data_manager.processing as dm
 
-from climind.definitions import ROOT_DIR
-
 HADCRUT5_PATH = 'test_data/hadcrut5.json'
+
 
 @pytest.fixture
 def test_attributes():
@@ -239,7 +238,7 @@ def test_select_without_a_match():
 def test_select_match_global_but_not_dataset():
     data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     sub_data_collection = data_collection.match_metadata({'variable': 'tas',
-                               'type': 'renault'})
+                                                          'type': 'renault'})
     assert sub_data_collection is None
 
 

@@ -14,10 +14,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
-import itertools
 from pathlib import Path
 
 import cartopy.crs as ccrs
+import xarray
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -28,7 +28,7 @@ from typing import List, Union, Tuple
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
     get_list_of_unique_variables, superset_dataset_list
-from climind.data_types.grid import GridAnnual, process_datasets
+from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
 
@@ -76,7 +76,7 @@ STANDARD_PARAMETER_SET = {
 }
 
 
-def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]],
+def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
                   dark: bool = False) -> List[int]:
     """
     Given a list of data sets, plot each one on the provided axis.
@@ -85,7 +85,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
     ----------
     axis: Matplotlib axis
         Set of Matplotlib axes for plotting on
-    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
         list of data sets to be plotted on the axes
     dark: bool
         Set to True to plot in the dark style (charcoal background, light coloured lines)
@@ -123,7 +123,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
     return zords
 
 
-def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> str:
+def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]) -> str:
     """
     Add labels to the x and y axes
 
@@ -131,7 +131,7 @@ def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> str
     ----------
     axis: Matplotlib axis
         set of matplotlib axes
-    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]
         Data set which will be used to specify the units on the y axis
     Returns
     -------
@@ -146,7 +146,8 @@ def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> str
     return plot_units
 
 
-def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> Tuple[float, float, np.ndarray]:
+def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]) -> Tuple[
+    float, float, np.ndarray]:
     """
     Work out the extents of the y axis and the tick values
 
@@ -154,7 +155,7 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]) -> Tupl
     ----------
     axis: Matplotlib axis
         Matplotlib axis
-    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+    dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]
         Time series which contains one of the datasets being plotted
 
     Returns
@@ -207,7 +208,8 @@ def set_xaxis(axis) -> Tuple[float, float, np.ndarray]:
     return xlo, xhi, xticks
 
 
-def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly], title: str) -> None:
+def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular],
+               title: str) -> None:
     """
     Add fancy stuff to the plots after all the data lines have been plotted.
 
@@ -215,7 +217,7 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly],
     ----------
     zords: List[int]
         List of the zorders of the data sets
-    ds: Union[TimeSeriesAnnual, TimeSeriesMonthly]
+    ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]
         Example dataset of the datasets plotted, used to determine where to plot the legend and the
         climatology period
     title: str
@@ -265,7 +267,8 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly],
 
 
 # time series
-def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]], image_filename: str,
+def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
+              image_filename: str,
               title: str) -> str:
     """
     Plot the data sets in the dark style - charcoal background with light coloured lines. Tron like.
@@ -274,7 +277,7 @@ def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     ----------
     out_dir: Path
         Directory to which the plot will be written
-    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
         List of datasets to be plotted
     image_filename: str
         Name for the file to be written. Should end with .png
@@ -289,7 +292,7 @@ def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     return neat_plot(out_dir, all_datasets, image_filename, title, dark=True)
 
 
-def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]],
+def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
               image_filename: str, title: str, dark: bool = False) -> str:
     """
     Create the standard annual plot
@@ -298,7 +301,7 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     ----------
     out_dir: Path
         Directory to which the figure will be written
-    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly]]
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
         list of datasets to be plotted
     image_filename: str
         filename for the figure. Must end in .png
@@ -356,7 +359,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     out_dir: Path
         Path of the directory to which the image will be written
     all_datasets: List[TimeSeriesAnnual]
-        List of datasets to be plotted.
+        List of datasets of type :class:`.TimeSeriesAnnual` to be plotted.
     image_filename: str
         Name for the image file, should end in .png
     title: str
@@ -443,7 +446,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
     out_dir: Path
         Path of directory to which the image will be written
     all_datasets: List[TimeSeriesMonthly]
-        List of datasets to plot
+        List of datasets of type :class:`.TimeSeriesMonthly` to plot
     image_filename: str
         File name for the image
     title: str
@@ -491,7 +494,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     out_dir: Path
         Path of the directory to which the image will be written
     all_datasets: List[TimeSeriesAnnual]
-        List of data sets to plot
+        List of data sets of type :class:`.TimeSeriesAnnual` to plot
     image_filename: str
         File name for the image, should end in .png
 
@@ -592,7 +595,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     out_dir: Path
         Directory to which the image will be written
     all_datasets: List[TimeSeriesMonthly]
-        List of data sets to be plotted
+        List of data sets of type :class:`.TimeSeriesMonthly` to be plotted
     image_filename: str
         File name for the image, should end in .png.
 
@@ -681,7 +684,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     out_dir: Path
         Directory to which the image will be written
     all_datasets: List[TimeSeriesMonthly]
-        List of data sets to be plotted
+        List of data sets of type :class:`.TimeSeriesMonthly` to be plotted
     image_filename: str
         File name for the image, should end in .png.
 
@@ -782,7 +785,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     out_dir: Path
         Path of the directory to which the figure will be written
     in_all_datasets: List[TimeSeriesAnnual]
-        List of data sets to be plotted
+        List of data sets of type :class:`.TimeSeriesAnnual` to be plotted
     image_filename: str
         File name for the output figure
     title: str
@@ -929,7 +932,20 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
 
 
 # Maps
-def quick_and_dirty_map(dataset, image_filename):
+def quick_and_dirty_map(dataset: xarray.Dataset, image_filename: Path) -> None:
+    """
+    Quick and very rough map plotter which plots the last field in an xarray Dataset
+
+    Parameters
+    ----------
+    dataset: xarray.Dataset
+        xarray Dataset to be plotted.
+    image_filename: Path
+        Path for the output file
+    Returns
+    -------
+    None
+    """
     plt.figure()
     proj = ccrs.PlateCarree()
     p = dataset.tas_mean[-1].plot(transform=proj, robust=True,
@@ -941,7 +957,25 @@ def quick_and_dirty_map(dataset, image_filename):
     plt.close()
 
 
-def nice_map(dataset, image_filename, title, var='tas_mean'):
+def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str = 'tas_mean') -> None:
+    """
+    Plot a nice looking map (relatively speaking) of the last field in an xarray dataset.
+
+    Parameters
+    ----------
+    dataset: xarray.Dataset
+        Data set to be plotted
+    image_filename: Path
+        Name for output file
+    title: str
+        Title for the plot
+    var: str
+        Variabel to plot from the dataset
+
+    Returns
+    -------
+    None
+    """
     # This is a pain, but we need to do some magic to convince cartopy that the data
     # are continuous across the dateline
     data = dataset[var]
@@ -982,7 +1016,30 @@ def nice_map(dataset, image_filename, title, var='tas_mean'):
     plt.close()
 
 
-def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var='tas_mean'):
+def plot_map_by_year_and_month(dataset: GridMonthly, year: int, month: int, image_filename: Path, title: str,
+                               var: str = 'tas_mean') -> None:
+    """
+    Plot map for specified year and month
+
+    Parameters
+    ----------
+    dataset: GridMonthly
+        :class:`.GridMonthly` to be plotted
+    year: int
+        Year to be plotted
+    month: int
+        Month in year to be plotted
+    image_filename: Path
+        Path to output file
+    title: str
+        Title for the plot
+    var: str
+        Variable to be plotted
+
+    Returns
+    -------
+    None
+    """
     selection = dataset.df.sel(time=slice(f'{year}-{month:02d}-01',
                                           f'{year}-{month:02d}-28'))
 
@@ -990,11 +1047,34 @@ def plot_map_by_year_and_month(dataset, year, month, image_filename, title, var=
 
 
 def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
-                          type: str) -> str:
-    if type == 'mean' or type == 'rank':
+                          grid_type: str) -> str:
+    """
+    Plot generic style map for the dashboard. Type must be one of "mean", "rank", or "unc".
+
+    Parameters
+    ----------
+    out_dir: Path
+        Output directory to which the image will be written
+    all_datasets: List[GridAnnual]
+        List of :class:`.GridAnnual` datasets to be plotted
+    image_filename: str
+        Filename for output file
+    title: str
+        Title for the plot
+    grid_type: str
+        Indicates how the datasets in the input list should be combined, 'mean', 'rank' or 'unc'
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
+    if grid_type == 'mean' or grid_type == 'rank':
         dataset = process_datasets(all_datasets, 'median')
-    if type == 'unc':
+    elif grid_type == 'unc':
         dataset = process_datasets(all_datasets, 'range')
+    else:
+        raise RuntimeError(f'Unknown type {grid_type}')
 
     last_months = []
     for ds in all_datasets:
@@ -1009,13 +1089,13 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.figure(figsize=(16, 9))
     proj = ccrs.EqualEarth(central_longitude=0)
 
-    if type == 'mean':
+    if grid_type == 'mean':
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
-    elif type == 'unc':
+    elif grid_type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    elif type == 'rank':
+    elif grid_type == 'rank':
         wmo_cols = ["#f0f9e8", "#bae4bc", "#7bccc4", "#43a2ca", "#0868ac"]
         wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
         wmo_cols = list(reversed(wmo_cols))
@@ -1023,14 +1103,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if type == 'mean' or type == 'rank':
+    if grid_type == 'mean' or grid_type == 'rank':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(), robust=True,
                         levels=wmo_levels,
                         colors=wmo_cols, add_colorbar=False,
                         extend='both'
                         )
-    elif type == 'unc':
+    elif grid_type == 'unc':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(), robust=True,
                         levels=wmo_levels,
@@ -1048,7 +1128,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = r'Temperature difference from 1981-2010 average ($\degree$C)'
-    if type == 'unc':
+    if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     cbar.set_label(label_text, rotation=0, fontsize=15)
 
@@ -1061,7 +1141,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
     plt.close()
 
-    caption = map_caption_builder(all_datasets, type)
+    caption = map_caption_builder(all_datasets, grid_type)
 
     return caption
 
@@ -1079,7 +1159,24 @@ def dashboard_rank_map(out_dir: Path, all_datasets: List[GridAnnual], image_file
 
 
 # Miscellany
-def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename):
+def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
+    """
+    Wave plot with month on the x-axis from January to December and each year shown as a separate line
+    showing the cumulative average for the year-to-date for that year.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path to the directory to which the image will be written.
+    dataset: TimeSeriesMonthly
+        :class:`.TimeSeriesMonthly` to plot.
+    image_filename: str
+        Name of the image file to be written.
+
+    Returns
+    -------
+    None
+    """
     first_year, last_year = dataset.get_first_and_last_year()
 
     plt.figure(figsize=[9, 9])

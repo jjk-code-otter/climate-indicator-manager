@@ -14,12 +14,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Callable
 import pandas as pd
 import numpy as np
 import logging
 import copy
 import pkg_resources
+from abc import ABC, abstractmethod
 from pathlib import Path
 from functools import reduce
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -29,18 +30,19 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.definitions import ROOT_DIR
 
 
-def log_activity(in_function):
+def log_activity(in_function: Callable) -> Callable:
     """
     Decorator function to log name of function run and with which arguments.
     This aims to provide some traceability in the output.
 
     Parameters
     ----------
-    in_function: The function to be decorated
+    in_function: Callable
+        The function to be decorated
 
     Returns
     -------
-
+    Callable
     """
 
     def wrapper(*args, **kwargs):
@@ -65,7 +67,12 @@ def log_activity(in_function):
     return wrapper
 
 
-class TimeSeries:
+class TimeSeries(ABC):
+    """
+    A base class for representing time series data sets. Note that this class should not generally be used
+    and only its subclasses :class:`TimeSeriesMonthly`, :class:`TimeSeriesAnnual` and :class:`TimeSeriesIrregular`
+    should be used. This class contains shared functionality from these classes but does not work on its own.
+    """
 
     def __init__(self, metadata: CombinedMetadata = None):
         self.df = None
@@ -98,7 +105,7 @@ class TimeSeries:
         return self
 
     @log_activity
-    def manually_set_baseline(self, baseline_start_year: int, baseline_end_year: int):
+    def manually_set_baseline(self, baseline_start_year: int, baseline_end_year: int) -> None:
         """
         Manually set baseline. This changes the baseline in the metadata, but does not change the
         data themselves.
@@ -229,6 +236,16 @@ class TimeSeries:
                                    columns=columns_to_write))
             f.write("end data\n")
 
+    @abstractmethod
+    def get_string_date_range(self) -> str:
+        """
+        Create a string which specifies the date range covered by the time series
+
+        Returns
+        -------
+        str
+        """
+
 
 class TimeSeriesIrregular(TimeSeries):
     """
@@ -242,7 +259,7 @@ class TimeSeriesIrregular(TimeSeries):
                  metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
         """
-        Create TimeSeriesIrregular
+        Create :class:`TimeSeriesIrregular` object.
 
         Parameters
         ----------
@@ -273,13 +290,13 @@ class TimeSeriesIrregular(TimeSeries):
     @log_activity
     def make_monthly(self):
         """
-        Calculate a TimeSeriesMonthly from the TimeSeriesIrregular. The monthly average is
+        Calculate a :class:`TimeSeriesMonthly` from the :class:`TimeSeriesIrregular`. The monthly average is
         calculated from the mean of values within the month.
 
         Returns
         -------
         TimeSeriesMonthly
-            Return a monthly time series
+            Return a :class:`TimeSeriesMonthly` containing the monthly averages.
         """
         self.df['yearmonth'] = 100 * self.df['year'] + self.df['month']
 
@@ -336,14 +353,9 @@ class TimeSeriesIrregular(TimeSeries):
         -------
         List[int]
         """
-        time_str = self.df.year.astype(str) + \
-                   self.df.month.map('{:02d}'.format) + \
-                   self.df.day.map('{:02d}'.format)
+        time_str = self.df.year.astype(str) + self.df.month.map('{:02d}'.format) + self.df.day.map('{:02d}'.format)
         self.df['time'] = pd.to_datetime(time_str, format='%Y%m%d')
-        dates = cf.date2num(self.df['time'].tolist(),
-                            units=time_units,
-                            has_year_zero=False,
-                            calendar='standard')
+        dates = cf.date2num(self.df['time'].tolist(), units=time_units, has_year_zero=False, calendar='standard')
         return dates
 
     def write_csv(self, filename: Path, metadata_filename: Path = None) -> None:
@@ -367,22 +379,30 @@ class TimeSeriesIrregular(TimeSeries):
         uncertainty = False
         irregular = True
         columns_to_write = ['time', 'year', 'month', 'day', 'data']
-        super().write_generic_csv(filename, metadata_filename,
-                                  monthly, uncertainty, irregular,
-                                  columns_to_write)
+        super().write_generic_csv(filename, metadata_filename, monthly, uncertainty, irregular, columns_to_write)
 
-    def get_year_axis(self):
+    def get_year_axis(self) -> List[float]:
         """
-        Return a year axis
+        Return a year in which all dates are represented as decimal years. January 1st 1984 is 1984.00.
 
         Returns
         -------
-
+        List[float]
+            List of dates represented as decimal years.
         """
         year_axis = self.df['year'] + (self.df['month'] - 1) / 12. + (self.df['day'] - 1) / 365.
         return year_axis
 
     def get_string_date_range(self) -> str:
+        """
+        Create a string which specifies the date range covered by the :class:`TimeSeriesIrregular` in the format
+        YYYY.MM.DD-YYYY.MM.DD
+
+        Returns
+        -------
+        str
+            String that specifies the date range covered
+        """
         start_date, end_date = self.get_start_and_end_dates()
         date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
                      f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
@@ -399,7 +419,7 @@ class TimeSeriesMonthly(TimeSeries):
     def __init__(self, years: List[int], months: List[int], data: List[float], metadata: CombinedMetadata = None,
                  uncertainty: Optional[List[float]] = None):
         """
-        Monthly time series class
+        Create :class:`TimeSeriesMonthly` object.
 
         Parameters
         ----------
@@ -439,7 +459,7 @@ class TimeSeriesMonthly(TimeSeries):
     @staticmethod
     def make_from_df(df: pd.DataFrame, metadata: CombinedMetadata):
         """
-        Create a TimeSeriesMonthly from a pandas data frame.
+        Create a :class:`TimeSeriesMonthly` from a pandas data frame.
 
         Parameters
         ----------
@@ -451,6 +471,7 @@ class TimeSeriesMonthly(TimeSeries):
         Returns
         -------
         TimeSeriesMonthly
+            :class:`TimeSeriesMonthly` built from input components.
         """
         years = df['year'].tolist()
         months = df['month'].tolist()
@@ -464,8 +485,8 @@ class TimeSeriesMonthly(TimeSeries):
     @log_activity
     def make_annual(self, cumulative: bool = False):
         """
-        Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual average is
-        calculated from the mean of monthly values
+        Calculate a :class:`TimeSeriesAnnual` from the :class:`TimeSeriesMonthly`. The annual average is
+        calculated from the mean of available monthly values
 
         Parameters
         ----------
@@ -475,7 +496,7 @@ class TimeSeriesMonthly(TimeSeries):
         Returns
         -------
         TimeSeriesAnnual
-            Return an annual time series
+            Return a :class:`TimeSeriesAnnual` object containing the annual averages.
         """
         if cumulative:
             grouped = self.df.groupby(['year'])['data'].sum().reset_index()
@@ -497,13 +518,13 @@ class TimeSeriesMonthly(TimeSeries):
     @log_activity
     def make_annual_by_selecting_month(self, month: int):
         """
-        Calculate a TimeSeriesAnnual from the TimeSeriesMonthly. The annual value is
+        Calculate a :class:`TimeSeriesAnnual` from the :class:`TimeSeriesMonthly`. The annual value is
         taken from one of the monthly values specified by the user.
 
         Returns
         -------
         TimeSeriesAnnual
-            Return an annual time series
+            Return a :class:`TimeSeriesAnnual` object containing only the selected month from each year.
         """
         month_names = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December']
@@ -520,7 +541,7 @@ class TimeSeriesMonthly(TimeSeries):
         return annual_series
 
     @log_activity
-    def rebaseline(self, baseline_start_year, baseline_end_year):
+    def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
         Each month is rebaselined separately, allowing for changes in seasonality. If years are
@@ -535,6 +556,7 @@ class TimeSeriesMonthly(TimeSeries):
 
         Returns
         -------
+        None
             Action occurs in place
         """
         # select part of series in climatology period
@@ -561,23 +583,22 @@ class TimeSeriesMonthly(TimeSeries):
             f'This is done for each month separately (Januarys, Februarys etc).'
         )
 
-    def get_value(self, year: int, month: int):
+    def get_value(self, year: int, month: int) -> Optional[float]:
         """
         Get the current value for a particular year and month
 
         Parameters
         ----------
         year: int
-            Year requested
+            Year for which the value is required.
         month: int
-            Month requested/
+            Month  for which the value is required.
 
         Returns
         -------
-        float
-            Value for that year and month
+        Optional[float]
+            Value for the specified year and month or None if it does not exist
         """
-
         selection = self.df[(self.df['year'] == year) & (self.df['month'] == month)]
         if len(selection) == 0:
             out_value = None
@@ -595,14 +616,14 @@ class TimeSeriesMonthly(TimeSeries):
         Parameters
         ----------
         year: int
-            Year requested
+            Year for which the uncertainty is required.
         month: int
-            Month requested/
+            Month for which the uncertainty is required.
 
         Returns
         -------
-        float
-            Value for that year and month or None if it doesn't exist
+        Optional[float]
+            Value for the specified year and month or None if it does not exist
         """
 
         if 'uncertainty' not in self.df.columns:
@@ -618,16 +639,17 @@ class TimeSeriesMonthly(TimeSeries):
         return out_value
 
     @log_activity
-    def zero_on_month(self, year: int, month: int):
+    def zero_on_month(self, year: int, month: int) -> None:
         """
-        Zero data set on the value for a single month in a single year
+        Zero data set on the value for a single month in a single year by substracting the value for that month
+        from all values in the dataset.
 
         Parameters
         ----------
         year: int
-            Year required
+            Year of the month on which the data will be zeroed.
         month: int
-            Month required
+            Month of the month on which the data will be zeroed.
 
         Returns
         -------
@@ -636,7 +658,7 @@ class TimeSeriesMonthly(TimeSeries):
         month_names = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December']
 
-        zero_value = -1 * self.get_value(year, month)
+        zero_value = -1. * self.get_value(year, month)
         self.update_history(f'Zeroed series on {month_names[month - 1]} {year} by subtracting the value for that '
                             f'month from all data values (see next entry)')
         self.add_offset(zero_value)
@@ -700,11 +722,11 @@ class TimeSeriesMonthly(TimeSeries):
                             calendar='standard')
         return dates
 
-    def write_csv(self, filename: Path, metadata_filename: Path = None):
+    def write_csv(self, filename: Path, metadata_filename: Path = None) -> None:
         """
-        Write the timeseries to a csv file with the specified filename. The format used for writing is given
-        by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for writing a
-        metadata file is also provided.
+        Write the :class:`TimeSeriesMonthly` to a csv file with the specified filename. The format used for writing
+        is given by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for
+        writing a metadata file is also provided.
 
         Parameters
         ----------
@@ -721,9 +743,7 @@ class TimeSeriesMonthly(TimeSeries):
         monthly = True
         uncertainty = False
         irregular = False
-        super().write_generic_csv(filename, metadata_filename,
-                                  monthly, uncertainty, irregular,
-                                  columns_to_write)
+        super().write_generic_csv(filename, metadata_filename, monthly, uncertainty, irregular, columns_to_write)
 
     def get_start_and_end_dates(self) -> Tuple[datetime, datetime]:
         """
@@ -732,6 +752,7 @@ class TimeSeriesMonthly(TimeSeries):
         Returns
         -------
         Tuple[datetime, datetime]
+            Start and end dates.
         """
         time_str = self.df.year.astype(int).astype(str) + self.df.month.astype(int).astype(str)
         self.df['time'] = pd.to_datetime(time_str, format='%Y%m')
@@ -743,18 +764,28 @@ class TimeSeriesMonthly(TimeSeries):
 
         return start_date, end_date
 
-    def get_year_axis(self):
+    def get_year_axis(self) -> List[float]:
         """
-        Return a year axis
+        Return a year axis as decimal year. 1st January 1984 is 1984.00.
 
         Returns
         -------
-
+        List[float]
+            List of dates expressed as a decimal year.
         """
         year_axis = self.df['year'] + (self.df['month'] - 1) / 12.
         return year_axis
 
     def get_string_date_range(self) -> str:
+        """
+        Create a string which specifies the date range covered by the :class:`TimeSeriesMonthly` in the format
+        YYYY.MM-YYYY.MM
+
+        Returns
+        -------
+        str
+            String that specifies the date range covered
+        """
         start_date, end_date = self.get_start_and_end_dates()
         date_range = f"{start_date.year}.{start_date.month:02d}-" \
                      f"{end_date.year}.{end_date.month:02d}"
@@ -770,6 +801,7 @@ class TimeSeriesAnnual(TimeSeries):
 
     def __init__(self, years: list, data: list, metadata=None, uncertainty: Optional[list] = None):
         """
+        Create :class:`TimeSeriesAnnual` object from its components.
 
         Parameters
         ----------
@@ -802,7 +834,7 @@ class TimeSeriesAnnual(TimeSeries):
     @staticmethod
     def make_from_df(df: pd.DataFrame, metadata: CombinedMetadata):
         """
-        Create a TimeSeriesAnnual from a pandas data frame.
+        Create a :class:`TimeSeriesAnnual` from a pandas data frame.
 
         Parameters
         ----------
@@ -814,6 +846,7 @@ class TimeSeriesAnnual(TimeSeries):
         Returns
         -------
         TimeSeriesAnnual
+            :class:`TimeSeriesAnnual` created from the elements in the dataframe and metadata.
         """
         years = df['year'].tolist()
         data = df['data'].tolist()
@@ -824,9 +857,9 @@ class TimeSeriesAnnual(TimeSeries):
             return TimeSeriesAnnual(years, data, metadata)
 
     @log_activity
-    def rebaseline(self, baseline_start_year: int, baseline_end_year: int):
+    def rebaseline(self, baseline_start_year: int, baseline_end_year: int) -> None:
         """
-        Shift the time series to a new baseline, specified by start and end years (inclusive).
+        Shift the :class:`TimeSeriesAnnual` to a new baseline, specified by start and end years (inclusive).
 
         Parameters
         ----------
@@ -837,6 +870,7 @@ class TimeSeriesAnnual(TimeSeries):
 
         Returns
         -------
+        None
             Action occurs in place.
         """
         # select part of series in climatology period
@@ -869,8 +903,8 @@ class TimeSeriesAnnual(TimeSeries):
 
         Returns
         -------
-        int
-            Rank of specified year
+        Optional[int]
+            Rank of specified year or None if year is not available.
         """
         ranked = self.df.rank(method='min', ascending=False)
         rank = ranked[self.df['year'] == year]['data']
@@ -890,8 +924,8 @@ class TimeSeriesAnnual(TimeSeries):
 
         Returns
         -------
-        float
-            Or None if year is not in the data set
+        Optional[float]
+            Value for the year, or None if year is not in the data set
         """
         val = self.df[self.df['year'] == year]['data']
         if len(val) == 0:
@@ -910,8 +944,8 @@ class TimeSeriesAnnual(TimeSeries):
 
         Returns
         -------
-        float
-            Or None if year is not in the data set
+        Optional[float]
+            Uncertainty for the year, or None if year is not in the data set
         """
         if 'uncertainty' not in self.df.columns:
             return None
@@ -925,16 +959,16 @@ class TimeSeriesAnnual(TimeSeries):
         """
         Given a particular rank, extract a list of years which match that rank.
         Returns a list because years can (theoretically) be tied with each other. Rank
-        1 corresponds to the highest value.
+        1 corresponds to the highest value in the dataset.
 
         Parameters
         ----------
         rank : int
-            Rank for which we want the year which as that rank
+            Rank for which we want the year which has that rank
 
         Returns
         -------
-        list
+        List[int]
             List of years that have the specified rank
         """
         ranked = self.df.rank(method='min', ascending=False)
@@ -957,7 +991,8 @@ class TimeSeriesAnnual(TimeSeries):
         Returns
         -------
         TimeSeriesAnnual
-            Time series with running average of run_length
+            :class:`TimeSeriesAnnual` containing running averages of length run_length. Where there are too few
+            years to calculate a running average, np.nan appears in the data column of the data frame
         """
         moving_average = copy.deepcopy(self)
         moving_average.df['data'] = moving_average.df['data'].rolling(run_length).mean()
@@ -978,8 +1013,9 @@ class TimeSeriesAnnual(TimeSeries):
     @log_activity
     def select_decade(self, end_year: int = 0):
         """
-        Select every tenth year from the time series, the last digit of the years can
-        be selected using the end_year keyword argument.
+        Select every tenth year from the :class:`TimesSeriesAnnual`, the last digit of the years can
+        be selected using the end_year keyword argument. The default is to select all years ending in 0,
+        e.g. 1850, 1860, 1870... 2020.
 
         Parameters
         ----------
@@ -989,6 +1025,7 @@ class TimeSeriesAnnual(TimeSeries):
         Returns
         -------
         TimeSeriesAnnual
+            :class:`TimeSeriesAnnual` containing every tenth year
         """
         self.df = self.df[self.df['year'] % 10 == end_year]
         self.df = self.df.reset_index()
@@ -996,7 +1033,7 @@ class TimeSeriesAnnual(TimeSeries):
         self.update_history(f'Selected years ending in {end_year}')
         return self
 
-    def generate_dates(self, time_units: str) -> List[int]:
+    def generate_dates(self, time_units: str) -> List[datetime]:
         """
         Given a string specifying the required time units (something like days since 1800-01-01 00:00:00.0),
         generate a list of times from the time series corresponding to those units.
@@ -1008,13 +1045,11 @@ class TimeSeriesAnnual(TimeSeries):
 
         Returns
         -------
-        List[int]
+        List[datetime]
+            List of dates
         """
         self.df['time'] = pd.to_datetime(self.df.year, format='%Y')
-        dates = cf.date2num(self.df['time'].tolist(),
-                            units=time_units,
-                            has_year_zero=False,
-                            calendar='standard')
+        dates = cf.date2num(self.df['time'].tolist(), units=time_units, has_year_zero=False, calendar='standard')
         return dates
 
     def write_csv(self, filename, metadata_filename=None):
@@ -1042,21 +1077,30 @@ class TimeSeriesAnnual(TimeSeries):
             uncertainty = True
             columns_to_write = ['time', 'year', 'data', 'uncertainty']
 
-        super().write_generic_csv(filename, metadata_filename,
-                                  monthly, uncertainty, irregular, columns_to_write)
+        super().write_generic_csv(filename, metadata_filename, monthly, uncertainty, irregular, columns_to_write)
 
-    def get_year_axis(self):
+    def get_year_axis(self) -> List[float]:
         """
-        Return a year axis
+        Return a year axis with dates represented as decimal years.
 
         Returns
         -------
-
+        List[float]
+            List of dates as decimal years.
         """
         year_axis = self.df['year']
         return year_axis
 
     def get_string_date_range(self) -> str:
+        """
+        Create a string which specifies the date range covered by the :class:`TimeSeriesAnnual` in the format
+        YYYY-YYYY
+
+        Returns
+        -------
+        str
+            String that specifies the date range covered
+        """
         start_year, end_year = self.get_first_and_last_year()
         date_range = f"{start_year}-{end_year}"
         return date_range
@@ -1084,8 +1128,10 @@ class TimeSeriesAnnual(TimeSeries):
         self.df = self.df.append(dict_to_add, ignore_index=True)
 
 
-def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
+def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> Tuple[Optional[int], Optional[int]]:
     """
+    Given a list of :class:`TimeSeriesAnnual`, extract the first year in any of the data
+    sets and the last year in any of the data sets.
 
     Parameters
     ----------
@@ -1094,7 +1140,8 @@ def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
 
     Returns
     -------
-    (int, int)
+    Tuple[Optional[int], Optional[int]]
+        Return the first and last years in the list of data sets
     """
     if len(all_datasets) == 0:
         return None, None
@@ -1111,7 +1158,7 @@ def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> (int, int):
 
 def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnual:
     """
-    Combine a list of datasets into a single TimeSeriesAnnual by taking the arithmetic mean
+    Combine a list of datasets into a single :class:`TimeSeriesAnnual` by taking the arithmetic mean
     of all available datasets for each year. Merges the metadata for all the input time series.
 
     Parameters
@@ -1121,6 +1168,7 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
     Returns
     -------
     TimeSeriesAnnual
+        :class:`TimeSeriesAnnual` which is the mean of all availabale datasets in each year.
     """
     data_frames = []
     metadata = copy.deepcopy(all_datasets[0].metadata)
@@ -1158,7 +1206,8 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
 
 def get_list_of_unique_variables(all_datasets: List[TimeSeriesAnnual]) -> List[str]:
     """
-    Given a list of datasets, get a list of the unique variable names
+    Given a list of :class:`TimeSeriesAnnual`, get a list of the unique variable names represented in
+    that list.
 
     Parameters
     ----------
@@ -1167,6 +1216,7 @@ def get_list_of_unique_variables(all_datasets: List[TimeSeriesAnnual]) -> List[s
     Returns
     -------
     List[str]
+        List of the unique variable names.
     """
     # get list of all unique variables
     variables = []
@@ -1179,7 +1229,7 @@ def get_list_of_unique_variables(all_datasets: List[TimeSeriesAnnual]) -> List[s
 
 def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[str]) -> List[List[TimeSeriesAnnual]]:
     """
-    Given a list of variables, create a list where each entry is a list of all data sets
+    Given a list of variables, create a list where each entry is a list of all :class:`TimeSeriesAnnual` objects
     corresponding to the variable in that index position.
 
     Parameters
@@ -1191,6 +1241,7 @@ def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[
     Returns
     -------
     List[List[TimeSeriesAnnual]]
+        List of lists of :class:`TimeSeriesAnnual`.
     """
     superset = []
     for _ in variables:

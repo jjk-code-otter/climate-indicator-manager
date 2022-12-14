@@ -108,7 +108,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_5x5_grid(filename, metadata):
+def read_monthly_5x5_grid(filename, metadata) -> gd.GridMonthly:
     combo = read_grid(filename)
 
     number_of_months = combo.t2m.data.shape[0]
@@ -172,7 +172,7 @@ def read_monthly_5x5_grid(filename, metadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename, metadata):
+def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
     combo = read_grid(filename)
 
     number_of_months = combo.t2m.data.shape[0]
@@ -236,7 +236,7 @@ def read_monthly_1x1_grid(filename, metadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_grid(filename: str, metadata):
+def read_monthly_grid(filename: str, metadata) -> gd.GridMonthly:
     combo = read_grid(filename)
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
@@ -254,7 +254,7 @@ def read_grid(filename: str):
     return combo
 
 
-def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
+def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
@@ -282,7 +282,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

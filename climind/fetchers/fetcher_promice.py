@@ -38,7 +38,8 @@ def fetch(url: str, outdir: Path):
     None
     """
     # First open up the landing page
-    landing_page_url = "https://dataverse.geus.dk/api/datasets/:persistentId/dirindex?persistentId=doi:10.22008/FK2/OHI23Z"
+    landing_page_url = f"https://dataverse.geus.dk/api/datasets/:persistentId/" \
+                       f"dirindex?persistentId=doi:10.22008/FK2/OHI23Z"
     landing_page_request = requests.get(landing_page_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
 
     # Next scan through the landing page to find the links to the required files. The ULRs for these change, but

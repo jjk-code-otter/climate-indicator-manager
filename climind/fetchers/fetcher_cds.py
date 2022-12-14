@@ -14,7 +14,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-Fetcher which uses the Copernicus Climate Data Store to download ERA5 gridded data
+Fetcher which uses the Copernicus Climate Data Store to download ERA5 gridded data. The first time it is run,
+it will download *all* data. This will take a while.
 """
 import cdsapi
 from pathlib import Path

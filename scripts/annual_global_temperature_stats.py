@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
-    pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', 'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
 #    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
     print()

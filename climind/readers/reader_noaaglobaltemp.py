@@ -100,7 +100,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
-def read_monthly_grid(filename: Path, metadata: CombinedMetadata):
+def read_monthly_grid(filename: Path, metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename)
 
     number_of_months = len(df.time.data)
@@ -127,7 +127,7 @@ def read_monthly_grid(filename: Path, metadata: CombinedMetadata):
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename: Path, metadata: CombinedMetadata):
+def read_monthly_1x1_grid(filename: Path, metadata: CombinedMetadata) -> gd.GridMonthly:
     df = read_monthly_grid(filename, metadata)
     df = df.df
     # regrid to 1x1
@@ -146,7 +146,7 @@ def read_monthly_1x1_grid(filename: Path, metadata: CombinedMetadata):
     return gd.GridMonthly(df, metadata)
 
 
-def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
+def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     """
     Read in monthly file
 
@@ -183,7 +183,7 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata):
+def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     """
     Read in annual file
 

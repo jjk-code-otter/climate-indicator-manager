@@ -22,18 +22,17 @@ from typing import List
 
 import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
-import copy
 
 from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     return read_monthly_grid(filename, metadata)
 
 
-def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     """
     Although Berkeley Earth is 1x1 already, the time dimension is extremely non-standard.
     In order to get consistency with the other data sets regridded to 1x1, the data is copied
@@ -71,7 +70,7 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     berkeley = xa.open_dataset(filename[0])
     number_of_months = len(berkeley.time.data)
     target_grid = np.zeros((number_of_months, 36, 72))
@@ -109,7 +108,7 @@ def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
@@ -133,7 +132,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

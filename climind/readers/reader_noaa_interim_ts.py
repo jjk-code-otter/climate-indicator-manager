@@ -25,7 +25,7 @@ import copy
 from climind.readers.generic_reader import read_ts
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     years = []
     anomalies = []
 

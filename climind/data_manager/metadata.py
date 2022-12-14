@@ -50,9 +50,13 @@ class BaseMetadata:
     Simple class to store metadata and find matches. Metadata items can be set and recovered using a
     dictionary-like syntax:
 
-    metadata_object['key'] = value
+    `metadata_object['key'] = value`
 
-    value = metadata_object['key']
+    `value = metadata_object['key']`
+
+    And testing if a key-value pair exists is also dict-like
+
+    `key in metadata_object`
     """
 
     def __init__(self, metadata: dict):
@@ -96,7 +100,7 @@ class BaseMetadata:
         """
         Check if metadata match contents of dictionary, metadata_to_match. Only
         definite non-matches are rejected. If a key is not found in the
-        dictionary this not counted as a non-match.
+        dictionary this is not counted as a non-match.
 
         Parameters
         ----------
@@ -122,7 +126,7 @@ class BaseMetadata:
 
     def fill_string(self, string_to_replace: str, replacement: str):
         """
-        Replace string_to_replace with the replacement value in all elements
+        Replace string_to_replace with the replacement value in all elements of the metadata.
 
         Parameters
         ----------

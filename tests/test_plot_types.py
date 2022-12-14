@@ -71,7 +71,7 @@ def regional_annual_datasets(annual_metadata):
     -------
 
     """
-    region_names = ['tas','wmo_ra_1','wmo_ra_2','wmo_ra_3','wmo_ra_4','wmo_ra_5','wmo_ra_6']
+    region_names = ['tas', 'wmo_ra_1', 'wmo_ra_2', 'wmo_ra_3', 'wmo_ra_4', 'wmo_ra_5', 'wmo_ra_6']
 
     all_datasets = []
 
@@ -394,7 +394,7 @@ def test_get_first_and_last_years(simple_annual_datasets):
     assert last == 2022
 
 
-def test_caption(simple_annual_datasets):
+def test_caption_writer(simple_annual_datasets):
     i = 1
     for ds in simple_annual_datasets:
         ds.metadata['time_resolution'] = 'monthly'
@@ -577,10 +577,10 @@ def test_wave_plot(monthly_datalist, tmpdir):
     pt.wave_plot(tmpdir, monthly_dataset, 'test.png')
     assert (tmpdir / 'test.png').exists()
 
-def test_trend_plot(regional_annual_datasets, tmpdir):
 
+def test_trend_plot(regional_annual_datasets, tmpdir):
     test_caption = pt.trends_plot(tmpdir, regional_annual_datasets, 'test.png', 'test words',
-                                  order = ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"])
+                                  order=["wmo_ra_1", "wmo_ra_2", "wmo_ra_3", "wmo_ra_4", "wmo_ra_5", "wmo_ra_6", "tas"])
 
     assert (tmpdir / 'test.png').exists()
 

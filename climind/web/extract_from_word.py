@@ -94,7 +94,8 @@ def split_document(document_name):
 
 def clean_awkward_characters(in_text: str) -> str:
     """
-    Clean a string of odd characters or otherwise inelegant combinations
+    Clean a string of odd characters or otherwise inelegant combinations that cause problems for jinja and/or
+    html.
 
     Parameters
     ----------

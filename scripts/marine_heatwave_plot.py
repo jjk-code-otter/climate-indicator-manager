@@ -24,7 +24,6 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-
     final_year = 2022
 
     project_dir = DATA_DIR / "ManagedData"
@@ -42,7 +41,6 @@ if __name__ == "__main__":
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
-
 
     mhw_archive = archive.select({'variable': ['mhw', 'mcs']})
 

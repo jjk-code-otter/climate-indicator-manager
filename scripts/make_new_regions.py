@@ -14,11 +14,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import logging
 import copy
 
-from pathlib import Path
 from shapely.geometry import Polygon
 
 import matplotlib.pyplot as plt
@@ -81,7 +78,6 @@ def make_the_thing(main_index):
         clean_geoms = pd.DataFrame([["Polygon", coordinates[i]]],
                                    columns=["field_geom_type", "field_coords"])
     data = Polygon(eval(clean_geoms.field_coords.iloc[0])[0])
-    gdf = gp.GeoSeries(data)
     series_list.append(data)
 
     d = {'name': area_names, 'geometry': series_list}

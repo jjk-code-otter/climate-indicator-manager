@@ -50,9 +50,9 @@ if __name__ == "__main__":
 
         annual.write_grid(grid_filename,
                           metadata_filename=metadata_filename,
-                          name = new_name)
+                          name=new_name)
 
-        annual = annual.select_year_range(2021,2021)
+        annual = annual.select_year_range(2021, 2021)
         all_annual.append(annual)
 
     cap = pt.dashboard_map(project_dir / 'Figures', all_annual, 'test.png', title='Spam')

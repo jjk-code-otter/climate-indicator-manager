@@ -125,14 +125,14 @@ def download_file(filename: str, file_base: str, ret) -> None:
             outfile.write(chunk)
 
 
-def get_files(filelist: str, web_path: str, ret) -> None:
+def get_files(filelist: List[str], web_path: str, ret) -> None:
     """
     For each file in a file list, check if it already exists on the system and if it does
     not, attempt to download it.
 
     Parameters
     ----------
-    filelist: str
+    filelist: List[str]
         List of files to be downloaded
     web_path: str
         URL of the directory that contains the files.

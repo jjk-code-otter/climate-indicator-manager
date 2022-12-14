@@ -23,7 +23,7 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> ts.TimeSeriesAnnual:
     if 'first_difference' in kwargs:
         first_diff = kwargs['first_difference']
     else:

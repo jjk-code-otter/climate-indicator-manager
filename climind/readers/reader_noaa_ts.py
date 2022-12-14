@@ -59,7 +59,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata):
         raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
 
-def read_monthly_ts(filename: str, metadata: CombinedMetadata):
+def read_monthly_ts(filename: str, metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
@@ -80,7 +80,7 @@ def read_monthly_ts(filename: str, metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: str, metadata: CombinedMetadata):
+def read_annual_ts(filename: str, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 

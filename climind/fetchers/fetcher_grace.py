@@ -19,7 +19,6 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 from climind.fetchers.fetcher_utils import filename_from_url
-from climind.config.config import DATA_DIR
 from datetime import datetime
 
 

@@ -59,14 +59,14 @@ def read_grid(filename: List[Path]):
     return combo, returned_filename
 
 
-def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     ds, filled_filename = read_grid(filename)
     metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
     metadata.creation_message()
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     ds, filled_filename = read_grid(filename)
     metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
 
@@ -119,7 +119,7 @@ def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs):
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     ds, filled_filename = read_grid(filename)
     metadata.dataset['last_modified'] = [get_last_modified_time(filled_filename)]
 
@@ -157,7 +157,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     return gd.GridMonthly(ds, metadata)
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
@@ -177,7 +177,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata):
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata):
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     monthly = read_monthly_ts(filename, metadata)
     annual = monthly.make_annual()
 
