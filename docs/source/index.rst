@@ -16,11 +16,13 @@ Climind documentation
    :caption: Contents:
    :hidden:
 
-Indices and tables
-==================
+Other pages
+===========
 
+* :ref:`howto`
 * :ref:`genindex`
 * :ref:`modindex`
+
 
 
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting

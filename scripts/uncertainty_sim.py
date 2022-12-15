@@ -18,18 +18,24 @@ import random
 
 trials = []
 
-# calculate estimated uncertainty for average of 100 values
+number_of_obs = 100
+number_of_trials = 100000
+
+
+# calculate estimated uncertainty for average of number_of_obs values.
+# Variance of uncertainty from rounding is same as rectangular distrib with width one (half either side of the whole
+# values)
 var = (2.0 * 0.5) ** 2 / 12.
-estimated_uncertainty = np.sqrt(var / 100.)
+estimated_uncertainty = np.sqrt(var / float(number_of_obs))
 
 # do ten thousand trials
-for j in range(0, 100000):
+for j in range(number_of_trials):
 
     # generate random numbers and then round them
     samples = []
     intsamples = []
-    for i in range(0, 100):
-        rn = random.gauss(0, 1)
+    for i in range(number_of_obs):
+        rn = random.gauss(0, 3)
         samples.append(rn)
         intsamples.append(float(round(rn)))
 
