@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.readers package &mdash; Climind 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">climind.readers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-climind.readers.generic_reader">climind.readers.generic_reader module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_aviso">climind.readers.reader_aviso module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_aviso_ftp">climind.readers.reader_aviso_ftp module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_badc_csv">climind.readers.reader_badc_csv module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_berkeley">climind.readers.reader_berkeley module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_berkeley_ts">climind.readers.reader_berkeley_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_cheng">climind.readers.reader_cheng module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_clsat">climind.readers.reader_clsat module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_cmems_ph">climind.readers.reader_cmems_ph module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_era5">climind.readers.reader_era5 module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_gcos">climind.readers.reader_gcos module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_gistemp_ts">climind.readers.reader_gistemp_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_gml">climind.readers.reader_gml module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_grace">climind.readers.reader_grace module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_gsfc">climind.readers.reader_gsfc module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_hadcrut_ts">climind.readers.reader_hadcrut_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_hadsst_ts">climind.readers.reader_hadsst_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_imbie">climind.readers.reader_imbie module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_imbie_2021_antarctica">climind.readers.reader_imbie_2021_antarctica module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_imbie_antarctica">climind.readers.reader_imbie_antarctica module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_ipcc_ts">climind.readers.reader_ipcc_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_ishii">climind.readers.reader_ishii module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_jra55">climind.readers.reader_jra55 module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_kennaook">climind.readers.reader_kennaook module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_levitus">climind.readers.reader_levitus module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_mauna_loa">climind.readers.reader_mauna_loa module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_mhw_ts">climind.readers.reader_mhw_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_noaa_interim_ts">climind.readers.reader_noaa_interim_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_noaa_ts">climind.readers.reader_noaa_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_noaaglobaltemp">climind.readers.reader_noaaglobaltemp module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_nsidc">climind.readers.reader_nsidc module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_osisaf">climind.readers.reader_osisaf module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_promice">climind.readers.reader_promice module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_standard_grid">climind.readers.reader_standard_grid module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_test">climind.readers.reader_test module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_wdcgg_rate_ts">climind.readers.reader_wdcgg_rate_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_wdcgg_ts">climind.readers.reader_wdcgg_ts module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_wdcgg_ts_update">climind.readers.reader_wdcgg_ts_update module</a></li>
+<li><a class="reference internal" href="#module-climind.readers.reader_wgms">climind.readers.reader_wgms module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">climind.readers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/climind.readers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-climind.readers">
+<span id="climind-readers-package"></span><h1>climind.readers package<a class="headerlink" href="#module-climind.readers" title="Permalink to this heading"></a></h1>
+<p>The readers package contains all the scripts needed to read the data sets. Because of the diversity of
+data formats, there is roughly one reader per dataset.</p>
+<p>Most readers will import the generic_reader script which handles the selection of the
+appropriate reaader routines based on the metadata provided.</p>
+<p>Individual reader scripts generally have one or more of the following functions:</p>
+<ul class="simple">
+<li><p>read_monthly_ts</p></li>
+<li><p>read_annual_ts</p></li>
+<li><p>read_monthly_grid</p></li>
+<li><p>read_monthly_5x5_grid</p></li>
+<li><p>read_monthly_1x1_grid</p></li>
+</ul>
+<p>Each of these function must take a list of filenames and a
+<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> object as
+inputs. These are used to read the data and create an appropriate dataset.</p>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</div>
+<div class="section" id="module-climind.readers.generic_reader">
+<span id="climind-readers-generic-reader-module"></span><h2>climind.readers.generic_reader module<a class="headerlink" href="#module-climind.readers.generic_reader" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.generic_reader.get_last_modified_time">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.generic_reader.</span></span><span class="sig-name descname"><span class="pre">get_last_modified_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.readers.generic_reader.get_last_modified_time" title="Permalink to this definition"></a></dt>
+<dd><p>Get the update time of file if it exists, else None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>Path</em>) – File path of the file for which the last modified time is required</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing last updated time for the file or None if it does not exist</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.generic_reader.get_module">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.generic_reader.</span></span><span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.generic_reader.get_module" title="Permalink to this definition"></a></dt>
+<dd><p>Get the module from the package name and the script name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>package_name</strong> (<em>str</em>) – String containing the package path as a dot separated string</p></li>
+<li><p><strong>script_name</strong> (<em>str</em>) – Name of the script to import</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns module specified by the package name and script name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.generic_reader.get_reader_script_name">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.generic_reader.</span></span><span class="sig-name descname"><span class="pre">get_reader_script_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.readers.generic_reader.get_reader_script_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get the name of the reader function for the provided metadata combination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metadata</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><em>CombinedMetadata</em></a>) – contains the metadata required to chose the reader script</p></li>
+<li><p><strong>kwargs</strong> – list of keyword arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns the name of the reader function that will read that combination of metadata, or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.generic_reader.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.generic_reader.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.readers.generic_reader.read_ts" title="Permalink to this definition"></a></dt>
+<dd><p>Generic reader for the data sets. This works out which reader is needed, imports and runs it.
+If a particular reader is not available (e.g. because the data is only a timeseries and not a grid)
+then it raises a not implemented error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory in which the data are to be found</p></li>
+<li><p><strong>metadata</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><em>CombinedMetadata</em></a>) – Metadata describing the required dataset</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Optional arguments as required for particular data sets</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns a TimeSeries or Grid of some kind</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly">TimeSeriesMonthly</a>, <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a>, <a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly">GridMonthly</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_aviso">
+<span id="climind-readers-reader-aviso-module"></span><h2>climind.readers.reader_aviso module<a class="headerlink" href="#module-climind.readers.reader_aviso" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_aviso.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_aviso.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a></span></span><a class="headerlink" href="#climind.readers.reader_aviso.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_aviso_ftp">
+<span id="climind-readers-reader-aviso-ftp-module"></span><h2>climind.readers.reader_aviso_ftp module<a class="headerlink" href="#module-climind.readers.reader_aviso_ftp" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_aviso_ftp.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_aviso_ftp.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a></span></span><a class="headerlink" href="#climind.readers.reader_aviso_ftp.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_badc_csv">
+<span id="climind-readers-reader-badc-csv-module"></span><h2>climind.readers.reader_badc_csv module<a class="headerlink" href="#module-climind.readers.reader_badc_csv" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_badc_csv.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_badc_csv.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_badc_csv.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_badc_csv.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_badc_csv.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_badc_csv.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_berkeley">
+<span id="climind-readers-reader-berkeley-module"></span><h2>climind.readers.reader_berkeley module<a class="headerlink" href="#module-climind.readers.reader_berkeley" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd><p>Although Berkeley Earth is 1x1 already, the time dimension is extremely non-standard.
+In order to get consistency with the other data sets regridded to 1x1, the data is copied
+into a consistent xarray Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Filename of the netcdf grid</p></li>
+<li><p><strong>metadata</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><em>CombinedMetadata</em></a>) – CombinedMetadata object holding the dataset metadata.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly">GridMonthly</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_berkeley_ts">
+<span id="climind-readers-reader-berkeley-ts-module"></span><h2>climind.readers.reader_berkeley_ts module<a class="headerlink" href="#module-climind.readers.reader_berkeley_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley_ts.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley_ts.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley_ts.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley_ts.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley_ts.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley_ts.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_berkeley_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_berkeley_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_berkeley_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_cheng">
+<span id="climind-readers-reader-cheng-module"></span><h2>climind.readers.reader_cheng module<a class="headerlink" href="#module-climind.readers.reader_cheng" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_cheng.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_cheng.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_cheng.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_cheng.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_cheng.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_cheng.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_clsat">
+<span id="climind-readers-reader-clsat-module"></span><h2>climind.readers.reader_clsat module<a class="headerlink" href="#module-climind.readers.reader_clsat" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_clsat.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_clsat.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_clsat.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_clsat.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_clsat.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_clsat.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_cmems_ph">
+<span id="climind-readers-reader-cmems-ph-module"></span><h2>climind.readers.reader_cmems_ph module<a class="headerlink" href="#module-climind.readers.reader_cmems_ph" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_cmems_ph.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_cmems_ph.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_cmems_ph.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_cmems_ph.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_cmems_ph.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_cmems_ph.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_era5">
+<span id="climind-readers-reader-era5-module"></span><h2>climind.readers.reader_era5 module<a class="headerlink" href="#module-climind.readers.reader_era5" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.find_latest">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">find_latest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_with_wildcards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#climind.readers.reader_era5.find_latest" title="Permalink to this definition"></a></dt>
+<dd><p>Find the most recent file that matches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename_with_wildcards</strong> (<em>str</em>) – Filename including wildcards</p></li>
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of data directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.get_latest_filename_and_url">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">get_latest_filename_and_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.readers.reader_era5.get_latest_filename_and_url" title="Permalink to this definition"></a></dt>
+<dd><p>Get the filename and url from a filled filename Path and URL with placeholders</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Path</em>) – Path of filename</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – URL to be replaced</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Tuple[str, str]</em> – The filename and the url with placeholders replaced</p></li>
+<li><p><em>——-</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_era5.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_era5.read_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_era5.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_era5.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_era5.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_era5.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_era5.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_era5.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_era5.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_gcos">
+<span id="climind-readers-reader-gcos-module"></span><h2>climind.readers.reader_gcos module<a class="headerlink" href="#module-climind.readers.reader_gcos" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gcos.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gcos.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gcos.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gcos.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gcos.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_gcos.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_gistemp_ts">
+<span id="climind-readers-reader-gistemp-ts-module"></span><h2>climind.readers.reader_gistemp_ts module<a class="headerlink" href="#module-climind.readers.reader_gistemp_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.build_transfer">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">build_transfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.build_transfer" title="Permalink to this definition"></a></dt>
+<dd><p>Build the transfer matrix for this 5x5 grid cell</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xx</strong> (<em>int</em>) – Longitudinal index of grid cell in range 0, 71</p></li>
+<li><p><strong>yy</strong> (<em>int</em>) – Latitudinal index of grid cell in range 0, 35</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd><p>Convert 2x2 grid to 1x1 grid by copying 2x2 value into all 4 1x1 grid cells it
+contains</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – </p></li>
+<li><p><strong>metadata</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gistemp_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gistemp_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gistemp_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_gml">
+<span id="climind-readers-reader-gml-module"></span><h2>climind.readers.reader_gml module<a class="headerlink" href="#module-climind.readers.reader_gml" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gml.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gml.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gml.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_grace">
+<span id="climind-readers-reader-grace-module"></span><h2>climind.readers.reader_grace module<a class="headerlink" href="#module-climind.readers.reader_grace" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_grace.find_latest">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_grace.</span></span><span class="sig-name descname"><span class="pre">find_latest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_with_wildcards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#climind.readers.reader_grace.find_latest" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_grace.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_grace.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_grace.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_grace.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_grace.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_grace.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_grace.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_grace.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_grace.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_gsfc">
+<span id="climind-readers-reader-gsfc-module"></span><h2>climind.readers.reader_gsfc module<a class="headerlink" href="#module-climind.readers.reader_gsfc" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_gsfc.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_gsfc.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_gsfc.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_hadcrut_ts">
+<span id="climind-readers-reader-hadcrut-ts-module"></span><h2>climind.readers.reader_hadcrut_ts module<a class="headerlink" href="#module-climind.readers.reader_hadcrut_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadcrut_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadcrut_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadcrut_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadcrut_ts.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadcrut_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadcrut_ts.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadcrut_ts.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadcrut_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadcrut_ts.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadcrut_ts.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadcrut_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadcrut_ts.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadcrut_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadcrut_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadcrut_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_hadsst_ts">
+<span id="climind-readers-reader-hadsst-ts-module"></span><h2>climind.readers.reader_hadsst_ts module<a class="headerlink" href="#module-climind.readers.reader_hadsst_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadsst_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadsst_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadsst_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_hadsst_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_hadsst_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_hadsst_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_imbie">
+<span id="climind-readers-reader-imbie-module"></span><h2>climind.readers.reader_imbie module<a class="headerlink" href="#module-climind.readers.reader_imbie" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_imbie_2021_antarctica">
+<span id="climind-readers-reader-imbie-2021-antarctica-module"></span><h2>climind.readers.reader_imbie_2021_antarctica module<a class="headerlink" href="#module-climind.readers.reader_imbie_2021_antarctica" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie_2021_antarctica.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie_2021_antarctica.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie_2021_antarctica.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie_2021_antarctica.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie_2021_antarctica.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie_2021_antarctica.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_imbie_antarctica">
+<span id="climind-readers-reader-imbie-antarctica-module"></span><h2>climind.readers.reader_imbie_antarctica module<a class="headerlink" href="#module-climind.readers.reader_imbie_antarctica" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie_antarctica.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie_antarctica.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie_antarctica.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_imbie_antarctica.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_imbie_antarctica.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_imbie_antarctica.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_ipcc_ts">
+<span id="climind-readers-reader-ipcc-ts-module"></span><h2>climind.readers.reader_ipcc_ts module<a class="headerlink" href="#module-climind.readers.reader_ipcc_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_ipcc_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_ipcc_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_ipcc_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_ishii">
+<span id="climind-readers-reader-ishii-module"></span><h2>climind.readers.reader_ishii module<a class="headerlink" href="#module-climind.readers.reader_ishii" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_ishii.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_ishii.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_ishii.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_jra55">
+<span id="climind-readers-reader-jra55-module"></span><h2>climind.readers.reader_jra55 module<a class="headerlink" href="#module-climind.readers.reader_jra55" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_jra55.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_jra55.read_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_jra55.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_monthly_5x5_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_monthly_5x5_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_jra55.read_monthly_5x5_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_jra55.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_jra55.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_jra55.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_jra55.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_kennaook">
+<span id="climind-readers-reader-kennaook-module"></span><h2>climind.readers.reader_kennaook module<a class="headerlink" href="#module-climind.readers.reader_kennaook" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_kennaook.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_kennaook.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_kennaook.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_levitus">
+<span id="climind-readers-reader-levitus-module"></span><h2>climind.readers.reader_levitus module<a class="headerlink" href="#module-climind.readers.reader_levitus" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_levitus.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_levitus.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_levitus.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_levitus.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_levitus.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_levitus.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_mauna_loa">
+<span id="climind-readers-reader-mauna-loa-module"></span><h2>climind.readers.reader_mauna_loa module<a class="headerlink" href="#module-climind.readers.reader_mauna_loa" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_mauna_loa.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_mauna_loa.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_mauna_loa.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_mauna_loa.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_mauna_loa.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_mauna_loa.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_mhw_ts">
+<span id="climind-readers-reader-mhw-ts-module"></span><h2>climind.readers.reader_mhw_ts module<a class="headerlink" href="#module-climind.readers.reader_mhw_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_mhw_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_mhw_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_mhw_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_noaa_interim_ts">
+<span id="climind-readers-reader-noaa-interim-ts-module"></span><h2>climind.readers.reader_noaa_interim_ts module<a class="headerlink" href="#module-climind.readers.reader_noaa_interim_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaa_interim_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaa_interim_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaa_interim_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_noaa_ts">
+<span id="climind-readers-reader-noaa-ts-module"></span><h2>climind.readers.reader_noaa_ts module<a class="headerlink" href="#module-climind.readers.reader_noaa_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaa_ts.find_latest">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaa_ts.</span></span><span class="sig-name descname"><span class="pre">find_latest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_with_wildcards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.readers.reader_noaa_ts.find_latest" title="Permalink to this definition"></a></dt>
+<dd><p>Find the most recent file that matches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename_with_wildcards</strong> (<em>str</em>) – Filename including wildcards</p></li>
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of data directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaa_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaa_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaa_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaa_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaa_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaa_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaa_ts.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaa_ts.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_noaa_ts.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_noaaglobaltemp">
+<span id="climind-readers-reader-noaaglobaltemp-module"></span><h2>climind.readers.reader_noaaglobaltemp module<a class="headerlink" href="#module-climind.readers.reader_noaaglobaltemp" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.find_latest">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">find_latest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_with_wildcards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.find_latest" title="Permalink to this definition"></a></dt>
+<dd><p>Find the most recent file that matches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename_with_wildcards</strong> (<em>str</em>) – Filename including wildcards</p></li>
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of data directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Path of latest file that matches the filename with wildcards in the directory</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.get_latest_filename_and_url">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">get_latest_filename_and_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.get_latest_filename_and_url" title="Permalink to this definition"></a></dt>
+<dd><p>Get the filename and url from a filled filename Path and URL with placeholders</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Path</em>) – Path of filename</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – URL to be replaced</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The filename and the url with placeholders replaced</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd><p>Read in annual file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Path</em>) – Filename for annual file</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing metadata</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ts.TimeSeriesAnnual</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd><p>Read in monthly file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Path</em>) – Path of monthly file</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing metadata</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ts.TimeSeriesMonthly</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_noaaglobaltemp.read_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">read_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_noaaglobaltemp.read_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_nsidc">
+<span id="climind-readers-reader-nsidc-module"></span><h2>climind.readers.reader_nsidc module<a class="headerlink" href="#module-climind.readers.reader_nsidc" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_nsidc.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_nsidc.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_nsidc.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_osisaf">
+<span id="climind-readers-reader-osisaf-module"></span><h2>climind.readers.reader_osisaf module<a class="headerlink" href="#module-climind.readers.reader_osisaf" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_osisaf.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_osisaf.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_osisaf.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_promice">
+<span id="climind-readers-reader-promice-module"></span><h2>climind.readers.reader_promice module<a class="headerlink" href="#module-climind.readers.reader_promice" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_promice.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_promice.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_promice.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_promice.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_promice.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_promice.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_standard_grid">
+<span id="climind-readers-reader-standard-grid-module"></span><h2>climind.readers.reader_standard_grid module<a class="headerlink" href="#module-climind.readers.reader_standard_grid" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_standard_grid.read_annual_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_standard_grid.</span></span><span class="sig-name descname"><span class="pre">read_annual_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_standard_grid.read_annual_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_test">
+<span id="climind-readers-reader-test-module"></span><h2>climind.readers.reader_test module<a class="headerlink" href="#module-climind.readers.reader_test" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_test.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_test.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_test.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_test.read_monthly_1x1_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_test.</span></span><span class="sig-name descname"><span class="pre">read_monthly_1x1_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_test.read_monthly_1x1_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_test.read_monthly_grid">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_test.</span></span><span class="sig-name descname"><span class="pre">read_monthly_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_test.read_monthly_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_test.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_test.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.readers.reader_test.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_wdcgg_rate_ts">
+<span id="climind-readers-reader-wdcgg-rate-ts-module"></span><h2>climind.readers.reader_wdcgg_rate_ts module<a class="headerlink" href="#module-climind.readers.reader_wdcgg_rate_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_rate_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_rate_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_rate_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_rate_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_rate_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_rate_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_wdcgg_ts">
+<span id="climind-readers-reader-wdcgg-ts-module"></span><h2>climind.readers.reader_wdcgg_ts module<a class="headerlink" href="#module-climind.readers.reader_wdcgg_ts" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_ts.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_ts.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_ts.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_ts.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_ts.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_ts.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_wdcgg_ts_update">
+<span id="climind-readers-reader-wdcgg-ts-update-module"></span><h2>climind.readers.reader_wdcgg_ts_update module<a class="headerlink" href="#module-climind.readers.reader_wdcgg_ts_update" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_ts_update.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_ts_update.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_ts_update.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wdcgg_ts_update.read_monthly_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wdcgg_ts_update.</span></span><span class="sig-name descname"><span class="pre">read_monthly_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wdcgg_ts_update.read_monthly_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-climind.readers.reader_wgms">
+<span id="climind-readers-reader-wgms-module"></span><h2>climind.readers.reader_wgms module<a class="headerlink" href="#module-climind.readers.reader_wgms" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.readers.reader_wgms.read_annual_ts">
+<span class="sig-prename descclassname"><span class="pre">climind.readers.reader_wgms.</span></span><span class="sig-name descname"><span class="pre">read_annual_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.readers.reader_wgms.read_annual_ts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
