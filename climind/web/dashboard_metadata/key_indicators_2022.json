@@ -39,7 +39,7 @@
         {
           "link_to": "sea_ice_extent", "title": "Sea ice",
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
@@ -141,14 +141,14 @@
         {
           "link_to":  null, "title": "Land air temperature",
           "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2022]}],
           "plotting": {"function": "neat_plot", "title": "Global land temperature"}
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         },
         {
@@ -187,12 +187,12 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
           "writing": {"function": "anomaly_and_rank"}
         }
       ]
@@ -239,7 +239,8 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [{"method": "rebaseline", "args": [2005, 2020]},
+                          {"method": "add_year", "args":  [2021, 59.1177006, 6.5928]}],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
@@ -282,7 +283,7 @@
         {
           "link_to":  null, "title": "Sea-surface temperature",
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
       ],
@@ -294,7 +295,8 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing": [{"method": "rebaseline", "args": [2005, 2020]},
+                          {"method": "add_year", "args":  [2021, 59.1177006, 6.5928]}],
           "writing": {"function": "anomaly_and_rank"}
         }
       ]
@@ -308,19 +310,19 @@
         {
           "link_to":  null, "title": "Arctic sea ice",
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
         },
         {
           "link_to":  null, "title": "Antarctic sea ice",
           "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1981, 2010]}],
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
       ],

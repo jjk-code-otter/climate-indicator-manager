@@ -21,7 +21,7 @@ import geopandas as gp
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 
-from climind.config.config import DATA_DIR
+from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     # start processing
     for ds in all_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.rebaseline(CLIMATOLOGY[0], CLIMATOLOGY[1])
         pt.nice_map(ds.df, figure_dir / f"{ds.metadata['name']}", ds.metadata['name'])
 
         region_names = ['Africa', 'Asia', 'South America',

@@ -5,7 +5,7 @@
     "variable": "tas",
     "units": "degC",
     "citation": [
-        "Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999\u00e2\u20ac\u201c 2049. https://doi.org/10.1002/qj.3803"
+        "Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803"
     ],
     "citation_url": [
         "https://doi.org/10.1002/qj.3803"
@@ -28,20 +28,20 @@
             "long_name": "Near surface temperature",
             "time_resolution": "annual",
             "space_resolution": 0.25,
-            "climatology_start": 1981,
-            "climatology_end": 2010,
+            "climatology_start": 1991,
+            "climatology_end": 2020,
             "actual": false,
             "derived": true,
             "history": [
                 "Gridded dataset created from file ['era5_2m_tas_YYYY.nc'] downloaded from ['']",
                 "Regridded to 5 degree latitude-longitude resolution",
-                "Rebaselined to 1981-2010",
+                "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file ERA5_5x5.nc"
             ],
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
-            "last_month": "2022-10-01"
+            "last_month": "2022-11-01"
         }
     ]
 }
