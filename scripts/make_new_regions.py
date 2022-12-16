@@ -25,6 +25,9 @@ from climind.config.config import DATA_DIR
 
 
 def make_the_thing(main_index):
+    project_dir = DATA_DIR / "ManagedData"
+    out_shape_dir = project_dir / "Shape_Files"
+
     # Use natural Earth Shape files.
     shape_dir = DATA_DIR / "Natural_Earth" / "ne_10m_admin_0_countries"
 
@@ -61,7 +64,11 @@ def make_the_thing(main_index):
 
     wmo_sub_region_shapes = countries.dissolve(by='wmosubregion')
 
-    all_area_names = ['South America', 'Mexico', 'Caribbean']
+    all_area_names = [
+        'South America',
+        'Mexico',
+        'Caribbean'
+    ]
 
     all_coordinates = [
         "[[[-90, -60], [-90, 15], [-30, 15], [-30, -60], [-90, -60]]]",
@@ -69,29 +76,24 @@ def make_the_thing(main_index):
         "[[[-85, 5], [-85, 30], [-55, 30], [-55, 5], [-85, 5]]]"
     ]
 
-    area_names = [all_area_names[main_index]]
-    coordinates = [all_coordinates[main_index]]
+    area_names = all_area_names[main_index]
+    coordinates = all_coordinates[main_index]
 
-    series_list = []
-
-    for i in range(len(area_names)):
-        clean_geoms = pd.DataFrame([["Polygon", coordinates[i]]],
-                                   columns=["field_geom_type", "field_coords"])
+    clean_geoms = pd.DataFrame([["Polygon", coordinates]], columns=["field_geom_type", "field_coords"])
     data = Polygon(eval(clean_geoms.field_coords.iloc[0])[0])
-    series_list.append(data)
 
-    d = {'name': area_names, 'geometry': series_list}
-    masks = gp.GeoDataFrame(d)
+    masks = gp.GeoDataFrame({'name': [area_names], 'geometry': [data]})
 
-    wmo_sub_region_shapes = wmo_sub_region_shapes.loc[area_names]
-
+    wmo_sub_region_shapes = wmo_sub_region_shapes.loc[[area_names]]
     wmo_sub_region_clipped = copy.deepcopy(wmo_sub_region_shapes)
+    wmo_sub_region_clipped.geometry[area_names] = wmo_sub_region_shapes.geometry[area_names].intersection(masks.geometry[0])
+    wmo_sub_region_clipped['region'] = area_names
 
-    for i, name in enumerate(area_names):
-        wmo_sub_region_clipped.geometry[name] = wmo_sub_region_shapes.geometry[name].intersection(masks.geometry[i])
+    wmo_sub_region_clipped.to_file(out_shape_dir / f'{area_names}')
 
     wmo_sub_region_clipped.plot(column='ECONOMY')
     plt.show()
+    plt.close()
 
     print()
 

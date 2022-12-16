@@ -230,6 +230,18 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
         },
         {
+          "link_to":  null, "title": "Mexico",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_2", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Mexico and Central America"}
+        },
+        {
+          "link_to":  null, "title": "Caribbean",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Caribbean"}
+        },
+        {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
           "processing": [],
@@ -237,11 +249,34 @@
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
+        },
+        {
+          "link_to":  null, "title": "Regional trends",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Regional trends",
+            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3"]}
+          }
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_2", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
