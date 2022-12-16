@@ -59,6 +59,11 @@ if __name__ == "__main__":
     subregions = subregions.reset_index()
     print(subregions)
 
+    region3 = gp.read_file(shape_dir / 'South America' / 'South America.shp')
+    region3 = region3.append(gp.read_file(shape_dir / 'Mexico' / 'Mexico.shp'), ignore_index=True)
+    region3 = region3.append(gp.read_file(shape_dir / 'Caribbean' / 'Caribbean.shp'), ignore_index=True)
+    region3 = region3.reindex()
+
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
@@ -122,6 +127,27 @@ if __name__ == "__main__":
 
             annual_time_series.metadata['variable'] = f'africa_subregion_{wmo_subregion}'
             annual_time_series.metadata['long_name'] = f'Regional mean temperature for {sub_region_names[region]}'
+
+            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
+                                         metadata_filename=regional_metadata_dir / metadata_filename)
+
+        lac_region_names = ['South America', 'Mexico', 'Caribbean']
+        for region in range(3):
+            monthly_time_series = ds.calculate_regional_average(region3, region)
+            annual_time_series = monthly_time_series.make_annual()
+            annual_time_series.select_year_range(1900, final_year)
+
+            lac_subregion = region + 1
+            dataset_name = f"lac_subregion_{lac_subregion}_{annual_time_series.metadata['name']}"
+            annual_time_series.metadata['name'] = dataset_name
+
+            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
+
+            filename = f"{dataset_name}.csv"
+            metadata_filename = f"{dataset_name}.json"
+
+            annual_time_series.metadata['variable'] = f'lac_subregion_{lac_subregion}'
+            annual_time_series.metadata['long_name'] = f'Regional mean temperature for {lac_region_names[region]}'
 
             annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
                                          metadata_filename=regional_metadata_dir / metadata_filename)

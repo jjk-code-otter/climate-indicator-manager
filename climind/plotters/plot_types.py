@@ -828,6 +828,9 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
         'africa_subregion_4': 'Eastern Africa',
         'africa_subregion_5': 'Southern Africa',
         'africa_subregion_6': 'Indian Ocean',
+        'lac_subregion_1': 'South America',
+        'lac_subregion_2': 'Mexico and Central America',
+        'lac_subregion_3': 'Caribbean'
     }
 
     # get list of all unique variables
@@ -836,6 +839,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     for variable in variables:
         names.append(equivalence[variable])
     superset = superset_dataset_list(in_all_datasets, variables)
+    series_count = len(superset)
 
     colours = ['#f33d3d', '#ffd465', '#9dd742',
                '#84d1cd', '#848dd1', '#cf84d1', '#b4b4b4']
@@ -895,7 +899,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             grey_background = True
 
         # calculate trend for each data set
-        for i in range(7):
+        for i in range(series_count):
             pos_ind = variables.index(order[i])
             all_datasets = superset[pos_ind]
 
@@ -908,7 +912,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             print(f'{start_end[0]}-{start_end[1]} {mean_trend:.2f} ({min_trend:.2f}-{max_trend:.2f})')
 
             interset_delta = 0.4
-            width = (30. - 2 * interset_delta) / 7.
+            width = (30. - 2 * interset_delta) / float(series_count)
             rect_xstart = y1 + interset_delta + (width * i)
             mid_point = rect_xstart + width / 2.
             delta = 0.3
@@ -923,7 +927,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             plt.gca().add_patch(rect)
             plt.plot([mid_point, mid_point], [min_trend, max_trend], color='black')
 
-    for i in range(7):
+    for i in range(series_count):
         name_index = variables.index(order[i])
         name = names[name_index]
         plt.text(1902, 0.55 - name_index * 0.05, name, fontsize=25, ha='left', color=colours[i])
