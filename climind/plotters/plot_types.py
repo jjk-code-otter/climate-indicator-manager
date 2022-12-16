@@ -671,8 +671,13 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Arctic sea ice extent (shown as differences from the 1981-2010 average) from 1979 to present. Two " \
-           "months are shown - March and September - at the annual maximum and minimum extents respectively."
+
+    caption = f"Arctic sea ice extent (shown as differences from the " \
+              f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average) " \
+              f"from 1979 to {end_year}. Two months are shown - March and September - " \
+              f"at the annual maximum and minimum extents respectively."
+
+    return caption
 
 
 def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, _) -> str:
@@ -769,8 +774,13 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return "Antarctic sea ice extent (shown as differences from the 1981-2010 average) from 1979 to present. Two " \
-           "months are shown - September and February - at the annual maximum and minimum extents respectively."
+
+    caption = f"Antarctic sea ice extent (shown as differences from the " \
+              f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average) " \
+              f"from 1979 to {end_year}. Two months are shown - September and February - " \
+              f"at the annual maximum and minimum extents respectively."
+
+    return caption
 
 
 def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
@@ -798,7 +808,9 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure
     """
-    caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-present. ' \
+    final_year = 2022
+
+    caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
               f'of different estimates.'
 
@@ -870,7 +882,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     for start_end in [[1901, 1930],
                       [1931, 1960],
                       [1961, 1990],
-                      [1991, 2021]]:
+                      [1991, final_year]]:
 
         y1 = start_end[0]
         y2 = start_end[1]
@@ -888,10 +900,10 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             all_datasets = superset[pos_ind]
 
             mean_trend, min_trend, max_trend = calculate_trends(all_datasets, y1, y2)
-            min_rank, max_rank = calculate_ranks(all_datasets, 2021)
-            mean_value, min_value, max_value = calculate_values(all_datasets, 2021)
+            min_rank, max_rank = calculate_ranks(all_datasets, final_year)
+            mean_value, min_value, max_value = calculate_values(all_datasets, final_year)
 
-            print(f'{names[pos_ind]}  2021 {mean_value:.2f} ({min_value:.2f}-{max_value:.2f}), '
+            print(f'{names[pos_ind]}  {final_year} {mean_value:.2f} ({min_value:.2f}-{max_value:.2f}), '
                   f'rank: {min_rank}-{max_rank}')
             print(f'{start_end[0]}-{start_end[1]} {mean_trend:.2f} ({min_trend:.2f}-{max_trend:.2f})')
 
@@ -1080,6 +1092,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     for ds in all_datasets:
         year_month = "-".join(ds.metadata['last_month'].split('-')[0:2])
         last_months.append(f"{ds.metadata['display_name']} to {year_month}")
+    ds = all_datasets[-1]
 
     data = dataset.df['tas_mean']
     lon = dataset.df.coords['longitude']
@@ -1127,7 +1140,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.gcf().text(.075, .012, ",".join(last_months),
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
-    label_text = r'Temperature difference from 1981-2010 average ($\degree$C)'
+    label_text = f"Temperature difference from " \
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     cbar.set_label(label_text, rotation=0, fontsize=15)

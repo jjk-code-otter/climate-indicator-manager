@@ -13,7 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from climind.config.config import DATA_DIR
+from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     all_annual = []
     for ds in all_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.rebaseline(CLIMATOLOGY[0], CLIMATOLOGY[1])
         annual = ds.make_annual()
 
         new_name = f"{ds.metadata['name']}_5x5"
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                           metadata_filename=metadata_filename,
                           name=new_name)
 
-        annual = annual.select_year_range(2021, 2021)
+        annual = annual.select_year_range(2022, 2022)
         all_annual.append(annual)
 
     cap = pt.dashboard_map(project_dir / 'Figures', all_annual, 'test.png', title='Spam')
