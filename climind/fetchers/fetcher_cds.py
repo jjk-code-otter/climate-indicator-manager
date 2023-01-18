@@ -81,7 +81,11 @@ def fetch_year(out_dir: Path, year: int) -> None:
 
     now = datetime.now()
 
-    if output_file.exists() and year != now.year:
+    # Want to download the complete file for a completed year in January as well as updates to
+    # the partial file for the current year
+    override = (year == now.year or (year == now.year-1 and now.month == 1))
+
+    if output_file.exists() and not override:
         print(f'File for {year} already exists, not downloading')
         return
 

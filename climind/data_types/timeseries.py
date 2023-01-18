@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Optional, Tuple, List, Callable
+import warnings
 import pandas as pd
 import numpy as np
 import logging
@@ -1122,10 +1123,13 @@ class TimeSeriesAnnual(TimeSeries):
         -------
         None
         """
-        dict_to_add = {'year': year, 'data': value}
-        if uncertainty is not None:
-            dict_to_add['uncertainty'] = uncertainty
-        self.df = self.df.append(dict_to_add, ignore_index=True)
+        if year not in self.df['year'].tolist():
+            dict_to_add = {'year': year, 'data': value}
+            if uncertainty is not None:
+                dict_to_add['uncertainty'] = uncertainty
+            self.df = self.df.append(dict_to_add, ignore_index=True)
+        else:
+            warnings.warn(f"Year {year} already exists. No change")
 
 
 def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> Tuple[Optional[int], Optional[int]]:

@@ -137,7 +137,7 @@
           }
         },
         {
-          "link_to":  null, "title": "Regional trends",
+          "link_to":  null, "title": "Regional trends Africa",
           "selecting": {
             "type": "timeseries",
             "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3", "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
@@ -145,7 +145,7 @@
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Regional trends",
+            "function": "trends_plot", "title": "Regional trends Africa",
             "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
                                   "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
           }
@@ -251,7 +251,7 @@
           }
         },
         {
-          "link_to":  null, "title": "Regional trends",
+          "link_to":  null, "title": "Regional trends LAC",
           "selecting": {
             "type": "timeseries",
             "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3"],
@@ -259,7 +259,7 @@
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Regional trends",
+            "function": "trends_plot", "title": "Regional trends LAC",
             "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3"]}
           }
         }

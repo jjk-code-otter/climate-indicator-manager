@@ -55,7 +55,8 @@ if __name__ == "__main__":
                                   'name': [  # 'NOAA Interim',
                                       'Kadow IPCC',
                                       # 'Berkeley IPCC',
-                                      'NOAA Interim IPCC']})
+                                      # 'NOAA Interim IPCC'
+                                  ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',

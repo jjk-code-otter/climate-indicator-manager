@@ -845,3 +845,14 @@ def test_add_year(simple_annual, uncertainty_annual):
     uncertainty_annual.add_year(test_year, test_value, test_uncertainty)
     assert uncertainty_annual.get_value_from_year(test_year) == test_value
     assert uncertainty_annual.get_uncertainty_from_year(test_year) == test_uncertainty
+
+
+def test_add_year_year_already_exists_raises_warning(simple_annual, uncertainty_annual):
+    test_year = 2020
+    test_value = 3.987
+    test_uncertainty = 0.77
+
+    with pytest.warns():
+        simple_annual.add_year(test_year, test_value)
+    with pytest.warns():
+        uncertainty_annual.add_year(test_year, test_value)

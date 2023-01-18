@@ -139,7 +139,7 @@ p {
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
             <div class="w3-content">
-                <h1>Dataset details</h1>
+                <h1>Dataset and processing details</h1>
             </div>
         </div>
     </div>
@@ -199,7 +199,7 @@ p {
                 {% if ds.acknowledgement %}
                 <p>Acknowledgement: {{ ds.acknowledgement }}</p>
                 {% endif %}
-                <p>Processing:</p>
+                <p>To produce the plot, the following processing steps were performed:</p>
                 <ul>
                     {% for step in ds.history %}
                     <li>{{ step }}</li>

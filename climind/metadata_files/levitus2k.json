@@ -2,7 +2,7 @@
   "name": "Levitus2k",
   "display_name": "Levitus",
   "version": "",
-  "variable": "ohc2k_ignore",
+  "variable": "ohc2k",
   "units": "zJ",
   "citation": ["Levitus, S., et al. (2012), World ocean heat content and thermosteric sea level change (0–2000 m), 1955–2010, Geophys. Res. Lett., 39, L10603, doi:10.1029/2012GL051106"],
   "citation_url": ["https://doi.org/10.1029/2012GL051106"],
