@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 from pathlib import Path
+from datetime import datetime
 
 import cartopy.crs as ccrs
 import xarray
@@ -261,6 +262,10 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, 
     else:
         subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
                    f"{ds.metadata['climatology_end']} average"
+
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.90, .012, current_time[0:28], ha = 'right',
+                   bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
@@ -937,9 +942,13 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     plt.yticks(np.arange(-0.2, 0.8, 0.2))
     plt.gca().set_ylim(-0.2, 0.6)
 
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.02, 0.012, current_time[0:28], ha = 'left',
+                   bbox={'facecolor': 'w', 'edgecolor': None})
+
     plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
 
-    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.2, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
@@ -1143,6 +1152,10 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     cbar.set_ticklabels(wmo_levels)
 
     plt.gcf().text(.075, .012, ",".join(last_months),
+                   bbox={'facecolor': 'w', 'edgecolor': None})
+
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.90, .012, current_time[0:28], ha = 'right',
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
