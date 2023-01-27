@@ -1009,6 +1009,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
+
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
                     transform=ccrs.PlateCarree(), robust=True,
                     levels=wmo_levels,
