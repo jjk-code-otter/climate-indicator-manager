@@ -397,7 +397,7 @@ class Page:
         return processed_paragraphs
 
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive,
-              focus_year: int = 2021, menu_items: List[str] = []):
+              focus_year: int = 2021, menu_items: List[List[str]] = []):
         """
         Build the Page, processing all the Card and Paragraph objects, then populating the template
         to generate a webpage, figures and formatted data.
@@ -412,8 +412,10 @@ class Page:
             DataArchive containing the metadata for the datasets
         focus_year: int
             Year to focus on. Usually, this will be the latest year
-        menu_items: List[str]
-            List of items to display in the menu
+        menu_items: List[List[str]]
+            List of items to display in the menu. Each item is a two element list, with the name of the webpage as
+            the first element (which gets a .html extension) and the title of the page as the second elements. The
+            title is used to generate the menu items so should be human readable.
 
         Returns
         -------
