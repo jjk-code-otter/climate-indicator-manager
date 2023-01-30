@@ -396,7 +396,8 @@ class Page:
             processed_paragraphs.append(this_paragraph)
         return processed_paragraphs
 
-    def build(self, build_dir: Path, data_dir: Path, archive: DataArchive, focus_year: int = 2021):
+    def build(self, build_dir: Path, data_dir: Path, archive: DataArchive,
+              focus_year: int = 2021, menu_items: List[str] = []):
         """
         Build the Page, processing all the Card and Paragraph objects, then populating the template
         to generate a webpage, figures and formatted data.
@@ -411,6 +412,8 @@ class Page:
             DataArchive containing the metadata for the datasets
         focus_year: int
             Year to focus on. Usually, this will be the latest year
+        menu_items: List[str]
+            List of items to display in the menu
 
         Returns
         -------
@@ -442,7 +445,8 @@ class Page:
         with open(build_dir / f"{self['id']}.html", 'w') as out_file:
             out_file.write(template.render(cards=processed_cards,
                                            paragraphs=processed_paragraphs,
-                                           page_meta=self))
+                                           page_meta=self,
+                                           menu_items=menu_items))
 
 
 class Dashboard:
@@ -503,5 +507,11 @@ class Dashboard:
         -------
         None
         """
+        page_ids = []
         for page in self.pages:
-            page.build(build_dir, self.data_dir, self.archive, focus_year=focus_year)
+            page_ids.append([page['id'], page['name']])
+
+        for page in self.pages:
+            page.build(build_dir, self.data_dir, self.archive,
+                       focus_year=focus_year,
+                       menu_items = page_ids)

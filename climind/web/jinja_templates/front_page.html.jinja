@@ -32,6 +32,60 @@ p {
   display: inline-block;
   border-radius: 5px;
 }
+.navbar {
+  margin-bottom: 12px;
+  margin-top: 0px;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: black;
+  padding: 8px 10px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #ddd;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 8px 10px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 </style>
 
 <script>
@@ -41,10 +95,23 @@ p {
             navigator.clipboard.writeText
                 (invar);
         }
+
 </script>
 <body>
 
 <div class="w3-container w3-padding-32 w3-light-grey">
+
+    <div class="w3-card navbar w3-margin-bottom ">
+        <a href="dashboard.html">Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                {% for id in menu_items %}
+                <a href="{{ id[0] }}.html">{{ id[1] }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
     <div class="w3-container" style="margin:0 -16px">
         <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
@@ -59,7 +126,7 @@ p {
         {% if item is not none %}
         <div class="w3-third">
 
-            <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey"  style="padding-bottom:10px">
+            <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey" style="padding-bottom:10px">
                 <p>
                     <img src="figures/{{ item.figure_name }}" width=100% alt="{{ item.caption }}"
                          title="Graph of {{ item.title }}">
@@ -82,7 +149,7 @@ p {
                 </div>
                 <div style="float: right;">
                     {% if item.link_to is not none %}
-                    <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Click to read more</a>
+                    <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Click for more indicators</a>
                     {% endif %}
                 </div>
                 </p>

@@ -419,7 +419,13 @@ def test_dashboard_from_json():
 
 def test_dashboard_build(mocker, tmpdir):
     m = mocker.patch("climind.web.dashboard.Page.build")
-    dash = db.Dashboard({'pages': [0, 1, 2, 3]}, 'archive')
+
+    page1 = {'id': '0', 'name': '0'}
+    page2 = {'id': '1', 'name': '1'}
+    page3 = {'id': '2', 'name': '2'}
+    page4 = {'id': '3', 'name': '3'}
+
+    dash = db.Dashboard({'pages': [page1, page2, page3, page4]}, 'archive')
     assert len(dash.pages) == 4
 
     dash.data_dir = 'data_dir'
@@ -427,11 +433,18 @@ def test_dashboard_build(mocker, tmpdir):
 
     assert m.call_count == 4
 
+    expected_menu_items = [
+        ['0', '0'],
+        ['1', '1'],
+        ['2', '2'],
+        ['3', '3']
+    ]
+
     calls = [
-        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
-        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
-        call(tmpdir, 'data_dir', 'archive', focus_year=2021),
-        call(tmpdir, 'data_dir', 'archive', focus_year=2021)
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021, menu_items=expected_menu_items),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021, menu_items=expected_menu_items),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021, menu_items=expected_menu_items),
+        call(tmpdir, 'data_dir', 'archive', focus_year=2021, menu_items=expected_menu_items)
     ]
 
     m.assert_has_calls(calls, any_order=True)
