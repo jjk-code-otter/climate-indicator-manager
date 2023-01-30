@@ -276,7 +276,7 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
