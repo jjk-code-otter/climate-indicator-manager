@@ -230,7 +230,7 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
         },
         {
-          "link_to":  null, "title": "Mexico",
+          "link_to":  null, "title": "Mexico and Central America",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_2", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Mexico and Central America"}
@@ -240,6 +240,18 @@
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Caribbean"}
+        },
+        {
+          "link_to":  null, "title": "Mexico",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Mexico"}
+        },
+        {
+          "link_to":  null, "title": "Central America",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Central America"}
         },
         {
           "link_to":  null, "title": "Continental trends",
@@ -254,13 +266,13 @@
           "link_to":  null, "title": "Regional trends LAC",
           "selecting": {
             "type": "timeseries",
-            "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3"],
+            "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5"],
             "time_resolution": "annual"
           },
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Regional trends LAC",
-            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3"]}
+            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
           }
         }
       ],
@@ -277,6 +289,16 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }

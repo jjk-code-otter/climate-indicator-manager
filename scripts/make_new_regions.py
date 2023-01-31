@@ -40,7 +40,7 @@ def make_the_thing(main_index):
                               'BR', 'BO', 'PY', 'CL', 'UY', 'AR']
         },
         {
-            'Mexico': ['MX', 'HN', 'CR', 'NI', 'GT', 'BZ', 'SV',
+            'Mexico and Central America': ['MX', 'HN', 'CR', 'NI', 'GT', 'BZ', 'SV',
                        'PA', 'CU', 'JM', 'CO', 'US']
         },
         {
@@ -48,6 +48,12 @@ def make_the_thing(main_index):
                           'CU', 'JM', 'HT', 'BS', 'DO', 'PR', 'TC',
                           'VG', 'AI', 'MS', 'GP', 'DM', 'MQ', 'LC',
                           'VC', 'BB', 'GD', 'TT', 'AW', 'CW', 'KY']
+        },
+        {
+            'Mexico': ['MX']
+        },
+        {
+            'Central America': ['HN', 'CR', 'NI', 'GT', 'BZ', 'SV', 'PA']
         }
     ]
 
@@ -66,14 +72,18 @@ def make_the_thing(main_index):
 
     all_area_names = [
         'South America',
+        'Mexico and Central America',
+        'Caribbean',
         'Mexico',
-        'Caribbean'
+        'Central America'
     ]
 
     all_coordinates = [
         "[[[-90, -60], [-90, 15], [-30, 15], [-30, -60], [-90, -60]]]",
         "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]",
-        "[[[-85, 5], [-85, 30], [-55, 30], [-55, 5], [-85, 5]]]"
+        "[[[-85, 5], [-85, 30], [-55, 30], [-55, 5], [-85, 5]]]",
+        "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]",
+        "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]"
     ]
 
     area_names = all_area_names[main_index]
@@ -86,13 +96,15 @@ def make_the_thing(main_index):
 
     wmo_sub_region_shapes = wmo_sub_region_shapes.loc[[area_names]]
     wmo_sub_region_clipped = copy.deepcopy(wmo_sub_region_shapes)
-    wmo_sub_region_clipped.geometry[area_names] = wmo_sub_region_shapes.geometry[area_names].intersection(masks.geometry[0])
+    wmo_sub_region_clipped.geometry[area_names] = wmo_sub_region_shapes.geometry[area_names].intersection(
+        masks.geometry[0])
     wmo_sub_region_clipped['region'] = area_names
 
     wmo_sub_region_clipped.to_file(out_shape_dir / f'{area_names}')
 
     wmo_sub_region_clipped.plot(column='ECONOMY')
-    plt.show()
+    plt.title(area_names)
+    plt.savefig(project_dir / 'Figures' / f'LAC_subregion_{main_index+1}.png')
     plt.close()
 
     print()
@@ -100,5 +112,5 @@ def make_the_thing(main_index):
 
 if __name__ == '__main__':
 
-    for i in range(3):
+    for i in range(5):
         make_the_thing(i)

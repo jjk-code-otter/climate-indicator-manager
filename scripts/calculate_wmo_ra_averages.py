@@ -60,14 +60,16 @@ if __name__ == "__main__":
     print(subregions)
 
     region3 = gp.read_file(shape_dir / 'South America' / 'South America.shp')
-    region3 = region3.append(gp.read_file(shape_dir / 'Mexico' / 'Mexico.shp'), ignore_index=True)
+    region3 = region3.append(gp.read_file(shape_dir / 'Mexico and Central America' / 'Mexico and Central America.shp'), ignore_index=True)
     region3 = region3.append(gp.read_file(shape_dir / 'Caribbean' / 'Caribbean.shp'), ignore_index=True)
+    region3 = region3.append(gp.read_file(shape_dir / 'Mexico' / 'Mexico.shp'), ignore_index=True)
+    region3 = region3.append(gp.read_file(shape_dir / 'Central America' / 'Central America.shp'), ignore_index=True)
     region3 = region3.reindex()
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['ERA5']# ['HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
+    datasets_to_use = ['ERA5', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
 
     ts_archive = archive.select(
         {
@@ -131,8 +133,8 @@ if __name__ == "__main__":
             annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
                                          metadata_filename=regional_metadata_dir / metadata_filename)
 
-        lac_region_names = ['South America', 'Mexico', 'Caribbean']
-        for region in range(3):
+        lac_region_names = ['South America', 'Mexico and Central America', 'Caribbean', 'Mexico', 'Central America']
+        for region in range(5):
             monthly_time_series = ds.calculate_regional_average(region3, region)
             annual_time_series = monthly_time_series.make_annual()
             annual_time_series.select_year_range(1900, final_year)
