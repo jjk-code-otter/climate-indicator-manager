@@ -230,6 +230,12 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
         },
         {
+          "link_to":  null, "title": "Latin America and Caribbean",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Latin America and Caribbean annual temperature"}
+        },
+        {
           "link_to":  null, "title": "Mexico and Central America",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_2", "time_resolution": "annual"},
           "processing": [],
@@ -266,19 +272,24 @@
           "link_to":  null, "title": "Regional trends LAC",
           "selecting": {
             "type": "timeseries",
-            "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5"],
+            "variable": ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5","lac_subregion_6"],
             "time_resolution": "annual"
           },
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Regional trends LAC",
-            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
+            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_2","lac_subregion_3","lac_subregion_4","lac_subregion_5","lac_subregion_6"]}
           }
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },

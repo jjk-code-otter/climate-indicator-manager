@@ -837,7 +837,8 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
         'lac_subregion_2': 'Mexico and Central America',
         'lac_subregion_3': 'Caribbean',
         'lac_subregion_4': 'Mexico',
-        'lac_subregion_5': 'Central America'
+        'lac_subregion_5': 'Central America',
+        'lac_subregion_6': 'Latin America and Caribbean'
     }
 
     # get list of all unique variables

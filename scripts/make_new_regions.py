@@ -41,7 +41,7 @@ def make_the_thing(main_index):
         },
         {
             'Mexico and Central America': ['MX', 'HN', 'CR', 'NI', 'GT', 'BZ', 'SV',
-                       'PA', 'CU', 'JM', 'CO', 'US']
+                                           'PA', 'CU', 'JM', 'CO', 'US']
         },
         {
             'Caribbean': ['CO', 'VE', 'PA', 'CR', 'NI', 'HN', 'US', 'GY', 'SR',
@@ -54,6 +54,17 @@ def make_the_thing(main_index):
         },
         {
             'Central America': ['HN', 'CR', 'NI', 'GT', 'BZ', 'SV', 'PA']
+        },
+        {
+            'Latin America and Caribbean': ['MX',  # Mexico
+                                            'HN', 'CR', 'NI', 'GT', 'BZ', 'SV', 'PA',  # Central America
+                                            'CO', 'VE', 'GY', 'SR',  # Caribbean
+                                            'CU', 'JM', 'HT', 'BS', 'DO', 'PR', 'TC',
+                                            'VG', 'AI', 'MS', 'GP', 'DM', 'MQ', 'LC',
+                                            'VC', 'BB', 'GD', 'TT', 'AW', 'CW', 'KY',
+                                            'CO', 'VE', 'GY', 'SR', 'FR', 'EC', 'PE',  # South America
+                                            'BR', 'BO', 'PY', 'CL', 'UY', 'AR'
+                                            ]
         }
     ]
 
@@ -75,7 +86,8 @@ def make_the_thing(main_index):
         'Mexico and Central America',
         'Caribbean',
         'Mexico',
-        'Central America'
+        'Central America',
+        'Latin America and Caribbean'
     ]
 
     all_coordinates = [
@@ -83,7 +95,8 @@ def make_the_thing(main_index):
         "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]",
         "[[[-85, 5], [-85, 30], [-55, 30], [-55, 5], [-85, 5]]]",
         "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]",
-        "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]"
+        "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]",
+        "[[[-120, -60], [-120, 35], [-30, 35], [-30, -60], [-120, -60]]]"
     ]
 
     area_names = all_area_names[main_index]
@@ -104,7 +117,7 @@ def make_the_thing(main_index):
 
     wmo_sub_region_clipped.plot(column='ECONOMY')
     plt.title(area_names)
-    plt.savefig(project_dir / 'Figures' / f'LAC_subregion_{main_index+1}.png')
+    plt.savefig(project_dir / 'Figures' / f'LAC_subregion_{main_index + 1}.png')
     plt.close()
 
     print()
@@ -112,5 +125,5 @@ def make_the_thing(main_index):
 
 if __name__ == '__main__':
 
-    for i in range(5):
+    for i in range(6):
         make_the_thing(i)
