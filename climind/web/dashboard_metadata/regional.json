@@ -268,6 +268,19 @@
             "function": "trends_plot", "title": "Regional trends LAC",
             "kwargs": {"order":  ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
           }
+        },
+        {
+          "link_to":  null, "title": "Region definitions",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Region definitions",
+            "kwargs": {"original_filename":  "LAC_regions.png", "caption": "Region definitions. Area within each region is indicated in red."}
+          }
         }
       ],
       "paragraphs": [

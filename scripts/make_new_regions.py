@@ -24,7 +24,7 @@ import geopandas as gp
 from climind.config.config import DATA_DIR
 
 
-def make_the_thing(main_index):
+def make_the_thing(main_index, axs):
     project_dir = DATA_DIR / "ManagedData"
     out_shape_dir = project_dir / "Shape_Files"
 
@@ -33,6 +33,7 @@ def make_the_thing(main_index):
 
     countries = gp.read_file(shape_dir / "ne_10m_admin_0_countries.shp")
     countries['wmosubregion'] = ''
+    countries['dummy'] = ''
 
     region_to_country_lookups = [
         {
@@ -45,9 +46,10 @@ def make_the_thing(main_index):
         },
         {
             'Caribbean': ['CO', 'VE', 'PA', 'CR', 'NI', 'HN', 'US', 'GY', 'SR',
-                          'CU', 'JM', 'HT', 'BS', 'DO', 'PR', 'TC',
-                          'VG', 'AI', 'MS', 'GP', 'DM', 'MQ', 'LC',
-                          'VC', 'BB', 'GD', 'TT', 'AW', 'CW', 'KY']
+                          'CU', 'JM', 'HT', 'BS', 'DO', 'PR', 'TC', 'VI', 'MF',
+                          'VG', 'AI', 'MS', 'GP', 'DM', 'MQ', 'LC', 'KN',
+                          'VC', 'BB', 'GD', 'TT', 'AW', 'CW', 'KY', 'AG',
+                          'FR', 'NL', 'GB', 'BL']
         },
         {
             'Mexico': ['MX']
@@ -80,6 +82,7 @@ def make_the_thing(main_index):
             print("No match", countries.NAME[i], countries.ISO_A2_EH[i])
 
     wmo_sub_region_shapes = countries.dissolve(by='wmosubregion')
+    whole_world = countries.dissolve(by='dummy')
 
     all_area_names = [
         'South America',
@@ -115,15 +118,42 @@ def make_the_thing(main_index):
 
     wmo_sub_region_clipped.to_file(out_shape_dir / f'{area_names}')
 
-    wmo_sub_region_clipped.plot(column='ECONOMY')
-    plt.title(area_names)
-    plt.savefig(project_dir / 'Figures' / f'LAC_subregion_{main_index + 1}.png')
-    plt.close()
+    if main_index in [0, 2, 3, 4]:
+        if main_index == 0:
+           i1, i2 = 0, 0
+        if main_index == 2:
+            i1, i2 = 0, 1
+        if main_index == 3:
+            i1, i2 = 1, 0
+        if main_index == 4:
+            i1, i2 = 1, 1
+
+        minx, miny, maxx, maxy = wmo_sub_region_clipped.geometry.total_bounds
+
+        whole_world['POP_RANK'] = 1
+        whole_world.plot(ax=axs[i1][i2], color='lightgrey', column='POP_RANK')
+        wmo_sub_region_clipped.plot(ax=axs[i1][i2], color='lightcoral', column='POP_RANK')
+        axs[i1, i2].set_title(area_names, fontsize=10)
+        axs[i1, i2].set_xlim(minx - 2, maxx + 2)  # added/substracted value is to give some margin around total bounds
+        axs[i1, i2].set_ylim(miny - 2, maxy + 2)
 
     print()
 
-
 if __name__ == '__main__':
-
+    fig, axs = plt.subplots(2, 2)
     for i in range(6):
-        make_the_thing(i)
+        make_the_thing(i, axs)
+
+    for i in range(2):
+        for j in range(2):
+            axs[i][j].set_xticklabels([])
+            axs[i][j].set_yticklabels([])
+            axs[i][j].set_xticks([])
+            axs[i][j].set_yticks([])
+
+    plt.subplots_adjust(hspace=0.15)
+    project_dir = DATA_DIR / "ManagedData"
+    plt.savefig(project_dir / 'Figures' / f'LAC_regions.png')
+    plt.savefig(project_dir / 'Figures' / f'LAC_regions.svg')
+    plt.savefig(project_dir / 'Figures' / f'LAC_regions.pdf')
+    plt.close()
