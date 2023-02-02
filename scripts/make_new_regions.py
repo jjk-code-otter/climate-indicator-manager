@@ -120,8 +120,8 @@ if __name__ == '__main__':
         if main_index in [0, 2, 3, 4]:
             minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
 
-            whole_world.plot(ax=axs[i1][i2], color='lightgrey', column='POP_RANK')
-            region_clipped.plot(ax=axs[i1][i2], color='lightcoral', column='POP_RANK')
+            whole_world.plot(ax=axs[i1][i2], color='lightgrey')
+            region_clipped.plot(ax=axs[i1][i2], color='lightcoral')
 
             axs[i1, i2].set_title(area_name, fontsize=10)
             axs[i1, i2].set_xlim(minx - 2, maxx + 2)
