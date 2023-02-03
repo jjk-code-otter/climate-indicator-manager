@@ -54,10 +54,8 @@ class RegionData:
 def label_regions(countries, region_name, country_list):
     country_count = len(countries)
     for i in range(country_count):
-#        countries.wmosubregion[i] = 'Null'
         countries.at[i, 'wmosubregion'] = 'Null'
         if countries.ISO_A2_EH[i] in country_list:
-#            countries.wmosubregion[i] = region_name
             countries.at[i, 'wmosubregion'] = region_name
 
     return countries
