@@ -39,8 +39,13 @@ def fetch(url: str, outdir: Path) -> None:
     filename = filename_from_url(url)
     out_path = outdir / filename
 
-    r = requests.get(url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
-    if r.status_code == 200:
-        with open(out_path, 'wb') as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+    try:
+        r = requests.get(url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
+
+        if r.status_code == 200:
+            with open(out_path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+
+    except requests.exceptions.ConnectionError:
+        print(f"Couldn't connect to {url}")
