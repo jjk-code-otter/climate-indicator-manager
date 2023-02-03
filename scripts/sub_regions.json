@@ -1,0 +1,53 @@
+[
+  {
+    "name": "South America",
+    "countries": [
+      "CO", "VE", "GY", "SR", "FR", "EC", "PE",
+      "BR", "BO", "PY", "CL", "UY", "AR"
+    ],
+    "coordinates": "[[[-90, -60], [-90, 15], [-30, 15], [-30, -60], [-90, -60]]]"
+  },
+  {
+    "name": "Mexico and Central America",
+    "countries": [
+      "MX", "HN", "CR", "NI", "GT", "BZ", "SV",
+      "PA", "CU", "JM", "CO", "US"
+    ],
+    "coordinates": "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]"
+  },
+  {
+    "name": "Caribbean",
+    "countries": [
+      "CO", "VE", "PA", "CR", "NI", "HN", "US", "GY", "SR",
+      "CU", "JM", "HT", "BS", "DO", "PR", "TC", "VI", "MF",
+      "VG", "AI", "MS", "GP", "DM", "MQ", "LC", "KN",
+      "VC", "BB", "GD", "TT", "AW", "CW", "KY", "AG",
+      "FR", "NL", "GB", "BL"
+    ],
+    "coordinates": "[[[-85, 5], [-85, 30], [-55, 30], [-55, 5], [-85, 5]]]"
+  },
+  {
+    "name": "Mexico",
+    "countries": ["MX"],
+    "coordinates": "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]"
+  },
+  {
+    "name": "Central America",
+    "countries": ["HN", "CR", "NI", "GT", "BZ", "SV", "PA"],
+    "coordinates": "[[[-120, 5], [-120, 35], [-85, 35], [-85, 23], [-75, 23], [-75, 5], [-120, 5]]]"
+  },
+  {
+    "name":"Latin America and Caribbean",
+    "countries": [
+      "MX",
+      "HN", "CR", "NI", "GT", "BZ", "SV", "PA",
+      "CO", "VE", "GY", "SR",
+      "CU", "JM", "HT", "BS", "DO", "PR", "TC",
+      "VG", "AI", "MS", "GP", "DM", "MQ", "LC",
+      "VC", "BB", "GD", "TT", "AW", "CW", "KY",
+      "CO", "VE", "GY", "SR", "FR", "EC", "PE",
+      "BR", "BO", "PY", "CL", "UY", "AR"
+    ],
+    "coordinates": "[[[-120, -60], [-120, 35], [-30, 35], [-30, -60], [-120, -60]]]"
+  }
+]

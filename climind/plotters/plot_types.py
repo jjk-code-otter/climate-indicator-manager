@@ -14,6 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
+import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -264,7 +265,7 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, 
                    f"{ds.metadata['climatology_end']} average"
 
     current_time = f"Created: {datetime.today()}"
-    plt.gcf().text(.90, .012, current_time[0:28], ha = 'right',
+    plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
@@ -946,7 +947,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     plt.gca().set_ylim(-0.2, 0.6)
 
     current_time = f"Created: {datetime.today()}"
-    plt.gcf().text(.02, 0.012, current_time[0:28], ha = 'left',
+    plt.gcf().text(.02, 0.012, current_time[0:28], ha='left',
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.gca().set_title(title, pad=45, fontdict={'fontsize': 40}, loc='left')
@@ -955,6 +956,25 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
+
+    return caption
+
+
+def show_premade_image(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
+                       image_filename: str, title: str,
+                       original_filename: str = '', caption: str = ''):
+
+    from climind.config.config import DATA_DIR
+    source_dir = DATA_DIR / 'ManagedData' / 'Figures'
+
+    for extension in ['.png','.svg','.pdf']:
+        source_file = source_dir / original_filename.replace('.png', extension)
+
+        if source_dir.exists():
+            shutil.copy(source_file,
+                        out_dir / image_filename.replace('.png', extension))
+        else:
+            raise FileNotFoundError(f'{extension} version of file {source_file} does not exist')
 
     return caption
 
@@ -1158,7 +1178,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     current_time = f"Created: {datetime.today()}"
-    plt.gcf().text(.90, .012, current_time[0:28], ha = 'right',
+    plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                    bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \

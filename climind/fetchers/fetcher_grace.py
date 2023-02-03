@@ -64,7 +64,7 @@ def fetch(url: str, outdir: Path) -> None:
         filename = filename_from_url(filled_url)
         filename = outdir / filename
 
-        if req.status_code != 404:
+        if req.status_code != 404 and req.status_code != 500:
             with open(filename, 'wb') as outfile:
                 chunk_size = 1048576
                 for chunk in req.iter_content(chunk_size=chunk_size):
