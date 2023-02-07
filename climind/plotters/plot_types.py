@@ -179,7 +179,10 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     if dataset.metadata['variable'] == 'ph':
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.01)
 
-    if dataset.metadata['variable'] in ['mhw', 'mcs', 'co2', 'ch4', 'sealevel']:
+    if dataset.metadata['variable'] in ['co2', 'sealevel']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
+
+    if dataset.metadata['variable'] in ['mhw', 'mcs']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 
     if dataset.metadata['variable'] in ['greenland', 'antarctica']:
@@ -543,7 +546,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     plt.ylabel(plot_units, rotation=0, labelpad=10)
 
     plt.gca().set_ylim(0, 65)
-    yticks = np.arange(0, 65, 10)
+    yticks = np.arange(0, 101, 10)
 
     xlims = plt.gca().get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)

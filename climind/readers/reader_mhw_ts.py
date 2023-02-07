@@ -40,7 +40,7 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeS
             if columns[1] == 'I Moderate':
                 prop_area = 0.0
 
-            prop_area += float(columns[5])
+            prop_area += float(columns[9]) * 100
 
             if columns[1] == 'IV Extreme':
                 year = columns[0]

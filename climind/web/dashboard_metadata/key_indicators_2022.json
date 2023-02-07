@@ -25,7 +25,7 @@
         },
         {
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
           "processing":  [{"method": "rebaseline", "args": [2005, 2020]},
                           {"method": "add_year", "args":  [2021, 59.1177006, 6.5928]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
@@ -205,14 +205,14 @@
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content",
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
           "processing":  [{"method": "rebaseline", "args": [2005, 2020]},
                           {"method": "add_year", "args":  [2021, 59.1177006, 6.5928]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
           "link_to":  null, "title": "Ocean heat content to 2000m",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "GCOS2k"},
           "processing":  [{"method": "rebaseline", "args": [2005, 2020]},
                           {"method": "add_year", "args":  [2021, 86.740054, 18.4991835]}],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content to 2000m"}
@@ -238,7 +238,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
           "processing": [{"method": "rebaseline", "args": [2005, 2020]},
                           {"method": "add_year", "args":  [2021, 59.1177006, 6.5928]}],
           "writing": {"function": "anomaly_and_rank"}
