@@ -14,7 +14,8 @@
     {
       "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/interim.2020/temp.ano.merg5.asc"],
 	  "filename": ["temp.ano.merg5.asc"],
-      "type": "gridded_ignore",
+      "type": "gridded",
+      "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
 	  "climatology_start": 1961,
@@ -22,7 +23,7 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_noaa_interm_ascii",
+      "reader": "reader_noaa_interim_ts",
 	  "fetcher": "fetcher_standard_url"
     },
 	{

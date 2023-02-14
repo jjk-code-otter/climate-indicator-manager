@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['ERA5', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5 old', 'JRA-55']
+    datasets_to_use = ['NOAA Interim']#, 'ERA5', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5 old', 'JRA-55']
 
     ts_archive = archive.select(
         {
