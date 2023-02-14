@@ -130,9 +130,9 @@ class DataSet:
 
         fetch_fn = self._get_fetcher()
 
-        for url in self.metadata['url']:
-            print(f"Downloading {url}")
-            fetch_fn(url, out_dir)
+        for url, filename in zip(self.metadata['url'], self.metadata['filename']):
+            print(f"Downloading {url} to filename {filename}")
+            fetch_fn(url, out_dir, filename)
 
     def _get_fetcher(self) -> Callable:
         """

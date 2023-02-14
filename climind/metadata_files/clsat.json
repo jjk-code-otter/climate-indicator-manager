@@ -23,7 +23,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_clsat",
-	  "fetcher": "fetcher_standard_url"
+	  "fetcher": "fetcher_standard_url_with_rename"
     },
     {
       "url": [""],

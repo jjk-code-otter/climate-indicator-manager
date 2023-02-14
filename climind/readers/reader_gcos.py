@@ -51,12 +51,20 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
 
     # Double uncertainties to get 95% range
     if metadata['variable'] == 'ohc':
-        data = df['ocean_heat_content_0-700m'].values.tolist()
-        uncertainty = (2 * df['ocean_heat_content_0-700m_uncertainty']).data.tolist()
+        if 'ocean_heat_content_0-700m' in df:
+            data = df['ocean_heat_content_0-700m'].values.tolist()
+            uncertainty = (2 * df['ocean_heat_content_0-700m_uncertainty']).data.tolist()
+        elif 'ohc_mean_0-700m' in df:
+            data = (df['ohc_mean_0-700m'] / 1e21).values.tolist()
+            uncertainty = (2 * df['ohc_std_0-700m'] / 1e21).data.tolist()
 
     elif metadata['variable'] == 'ohc2k':
-        data = df['ocean_heat_content_0-2000m'].values.tolist()
-        uncertainty = (2 * df['ocean_heat_content_0-2000m_uncertainty']).data.tolist()
+        if 'ocean_heat_content_0-2000m' in df:
+            data = df['ocean_heat_content_0-2000m'].values.tolist()
+            uncertainty = (2 * df['ocean_heat_content_0-2000m_uncertainty']).data.tolist()
+        elif 'ohc_mean_0-2000m' in df:
+            data = (df['ohc_mean_0-2000m'] / 1e21).values.tolist()
+            uncertainty = (2 * df['ohc_std_0-2000m'] / 1e21).data.tolist()
 
     else:
         raise ValueError(f"Variable {metadata['variable']} unrecognised")

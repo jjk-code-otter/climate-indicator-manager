@@ -83,7 +83,7 @@ def fetch_year(out_dir: Path, year: int) -> None:
 
     # Want to download the complete file for a completed year in January as well as updates to
     # the partial file for the current year
-    override = (year == now.year or (year == now.year-1 and now.month == 1))
+    override = (year == now.year or (year == now.year - 1 and now.month == 1))
 
     if output_file.exists() and not override:
         print(f'File for {year} already exists, not downloading')
@@ -112,14 +112,14 @@ def fetch_year(out_dir: Path, year: int) -> None:
         str(output_file))
 
 
-def fetch(_, outdir: Path) -> None:
+def fetch(url: str, outdir: Path, _) -> None:
     """
     Fetch all data in the range 1979 to 2022.
 
     Parameters
     ----------
-    _:
-        dummy variable needed to match the interface.
+    url: str
+        url of the file
     outdir: Path
         Path to the directory to which the data will be written.
 
@@ -127,5 +127,9 @@ def fetch(_, outdir: Path) -> None:
     -------
     None
     """
-    for year in range(1979, 2023):
+    first_year = 1979
+    if 'extension' in url:
+        first_year = 1959
+
+    for year in range(first_year, 2024):
         fetch_year(outdir, year)

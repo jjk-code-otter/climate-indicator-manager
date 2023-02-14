@@ -1,18 +1,20 @@
 {
-  "name": "ERA5 old",
+  "name": "ERA5",
   "display_name": "ERA5",
   "version": "",
   "variable": "tas",
   "units": "degC",
-  "citation": ["Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803"],
-  "citation_url": ["https://doi.org/10.1002/qj.3803"],
+  "citation": ["Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803",
+               "Bell, B., Hersbach, H., Simmons, A., Berrisford, P., Dahlgren, P., Horányi, A., et al. (2021) The ERA5 global reanalysis: Preliminary extension to 1950. Q J R Meteorol Soc, 147 741, 4186-4227. https://doi.org/10.1002/qj.4174"],
+  "citation_url": ["https://doi.org/10.1002/qj.3803",
+                   "https://doi.org/10.1002/qj.4174"],
   "data_citation": [""],
   "acknowledgement": "",
-  "colour": "#0072b2",
+  "colour": "#dddd00",
   "zpos": 1,
   "datasets": [
     {
-      "url": [""],
+      "url": ["extension"],
 	  "filename": ["era5_2m_tas_YYYY.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",
@@ -27,8 +29,8 @@
 	  "fetcher": "fetcher_cds"
     },
     {
-      "url": ["https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/YYYY/MMMM/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
-	  "filename": ["ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
+      "url": [""],
+	  "filename": ["era5_monthy_sfc_temp_ano_global_1958-2022_for_wmo.csv"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "monthly",
@@ -39,11 +41,11 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_era5",
-	  "fetcher": "fetcher_url_with_backsearch"
+	  "fetcher": "fetcher_no_url"
     },
     {
-      "url": ["https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/YYYY/MMMM/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
-      "filename": ["ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
+      "url": [""],
+      "filename": ["era5_monthy_sfc_temp_ano_global_1958-2022_for_wmo.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",
@@ -54,7 +56,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_era5",
-	  "fetcher": "fetcher_url_with_backsearch"
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

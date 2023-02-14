@@ -138,9 +138,10 @@ def test_get_fetcher(mocker, test_dataset):
 
 
 def test_download(mocker, test_dataset):
-    def _two_input_function(a, b):
+    def _two_input_function(a, b, c):
         assert a == 'test_url'
         assert b == Path('')
+        assert c == 'test_filename'
         return
 
     m = mocker.patch("climind.data_manager.processing.DataSet._get_fetcher",

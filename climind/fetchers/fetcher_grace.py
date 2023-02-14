@@ -22,7 +22,7 @@ from climind.fetchers.fetcher_utils import filename_from_url
 from datetime import datetime
 
 
-def fetch(url: str, outdir: Path) -> None:
+def fetch(url: str, outdir: Path, _) -> None:
     """
     Fetch files from the PODAAC website. Note that the API URL base is:
     API_url = "https://podaac-tools.jpl.nasa.gov/drive/files"

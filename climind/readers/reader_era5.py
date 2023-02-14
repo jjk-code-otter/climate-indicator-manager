@@ -245,7 +245,7 @@ def read_monthly_grid(filename: str, metadata) -> gd.GridMonthly:
 
 def read_grid(filename: str):
     dataset_list = []
-    for year in range(1979, 2030):
+    for year in range(1959, 2030):
         filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
         if filled_filename.exists():
             dataset_list.append(xa.open_dataset(filled_filename))

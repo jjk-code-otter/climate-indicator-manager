@@ -41,7 +41,7 @@ def filename_from_url(url: str) -> str:
     return filename
 
 
-def fetch(url: str, out_dir: Path) -> None:
+def fetch(url: str, out_dir: Path, _) -> None:
     """
     Fetch file but using a backsearch. Backsearching starts with the most recent month, creates a filename using
     that month to fill the year (YYYY) and month (MMMM) placeholders in the specified URL and then tries to download

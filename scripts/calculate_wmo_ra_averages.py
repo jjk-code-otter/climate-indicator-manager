@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['ERA5', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
+    datasets_to_use = ['ERA5', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5 old', 'JRA-55']
 
     ts_archive = archive.select(
         {
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         for region in range(6):
             monthly_time_series = ds.calculate_regional_average(continents, region)
             annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1900, final_year)
+            annual_time_series.select_year_range(1850, final_year)
 
             wmo_ra = region + 1
             annual_time_series.metadata['name'] = f"wmo_ra_{wmo_ra}_{annual_time_series.metadata['name']}"

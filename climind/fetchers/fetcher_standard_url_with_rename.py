@@ -15,32 +15,41 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import urllib.request
+import requests
+import shutil
+
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, out_dir: Path, filename: str) -> None:
+def fetch(url: str, outdir: Path, filename: str) -> None:
     """
-    Generic fetcher for ftp files
+    Fetcher for a standard URL that can be accessed without restrictions, credentials, or any other tomfoolery.
 
     Parameters
     ----------
     url: str
-        URL of the file
-    out_dir: Path
-        Path of the directory to which the output will be written.
+        URL of the file to be downloaded.
+    outdir: Path
+        Path of the directory to which the output will be written
     filename: str
-        Filename to save file to
+        Filename to save file as locally
 
     Returns
     -------
     None
     """
     inferred_filename = filename_from_url(url)
-    out_path = out_dir / inferred_filename
+    if inferred_filename != filename:
+        print(f"Renaming file from {inferred_filename} to {filename}")
+    out_path = outdir / filename
 
-    with urllib.request.urlopen(url) as r:
-        data = r.read()
+    try:
+        r = requests.get(url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
 
-    with open(out_path, 'wb') as f:
-        f.write(data)
+        if r.status_code == 200:
+            with open(out_path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+
+    except requests.exceptions.ConnectionError:
+        print(f"Couldn't connect to {url}")

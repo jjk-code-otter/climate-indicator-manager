@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from climind.fetchers.fetcher_utils import dir_and_filename_from_url, url_from_filename
 
 
-def fetch(url: str, outdir: Path) -> None:
+def fetch(url: str, outdir: Path, _) -> None:
     """
     Fetch NOAAGlobalTemp data. The script scrapes the directory specified in the URL for a file
     that matches the pattern specified in the URL.

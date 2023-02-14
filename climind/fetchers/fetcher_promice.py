@@ -20,7 +20,7 @@ import shutil
 from bs4 import BeautifulSoup, SoupStrainer
 
 
-def fetch(url: str, outdir: Path):
+def fetch(url: str, outdir: Path, _):
     """
     Fetch Greenland mass balance data. The script scrapes a webpage in order to find the specific URLs
     of the latest version of the dataset (these change daily). These files are then downloaded. There should be

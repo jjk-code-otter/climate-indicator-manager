@@ -14,10 +14,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-def fetch(url, out_dir):
+def fetch(url, out_dir, filename):
     """
     A stub so that there is a fetcher for datasets which don't exist online.
     """
 
     if url != '':
-        print(f"Requested {url} but nothing is being downloaded to {out_dir}")
+        print(f"Requested {url} but nothing is being downloaded to {out_dir}. "
+              f"Filename should be {filename}")

@@ -21,7 +21,7 @@ import shutil
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, out_dir: Path) -> None:
+def fetch(url: str, out_dir: Path, _) -> None:
     """
     Fetch ERSST gridded dataset from NOAA. There is one file per month. Only
     files that have not already been downloaded will be downloaded.

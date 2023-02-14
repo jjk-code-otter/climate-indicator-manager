@@ -154,7 +154,7 @@ def get_files(filelist: List[str], web_path: str, ret) -> None:
             download_file(filename, file_base, ret)
 
 
-def fetch(_, out_dir: Path) -> None:
+def fetch(_, out_dir: Path, _filename) -> None:
     """
     Get JRA-55 files from UCAR. Requires the credentials:
 
@@ -168,6 +168,8 @@ def fetch(_, out_dir: Path) -> None:
         dummy input to match interface.
     out_dir: Path
         Path of the directory to which the output will be written.
+    _filename: str
+        Unused filename argument
 
     Returns
     -------

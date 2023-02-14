@@ -22,7 +22,7 @@ from ftplib import FTP
 from climind.fetchers.fetcher_utils import get_ftp_host_and_directory_from_url
 
 
-def fetch(url: str, out_dir: Path) -> None:
+def fetch(url: str, out_dir: Path, _) -> None:
     """
     Fetch data from the CMEMS ftp system. Credentials required are
 

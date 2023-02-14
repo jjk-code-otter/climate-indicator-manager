@@ -21,7 +21,7 @@ import shutil
 from climind.fetchers.fetcher_utils import filename_from_url
 
 
-def fetch(url: str, outdir: Path) -> None:
+def fetch(url: str, outdir: Path, filename: str) -> None:
     """
     Fetcher for a standard URL that can be accessed without restrictions, credentials, or any other tomfoolery.
 
@@ -31,13 +31,15 @@ def fetch(url: str, outdir: Path) -> None:
         URL of the file to be downloaded.
     outdir: Path
         Path of the directory to which the output will be written
+    filename: str
+        Filename to save file as locally
 
     Returns
     -------
     None
     """
-    filename = filename_from_url(url)
-    out_path = outdir / filename
+    inferred_filename = filename_from_url(url)
+    out_path = outdir / inferred_filename
 
     try:
         r = requests.get(url, stream=True, headers={'User-agent': 'Mozilla/5.0'})

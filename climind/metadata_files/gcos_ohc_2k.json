@@ -13,8 +13,10 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["https://www.wdc-climate.de/WDCC/ui/download/transferArchive?acronym=GCOS_EHI_1960-2020_OHC_d&rmin=0&rmax=0"],
-      "filename": ["GCOS_EHI_1960-2020_Earth_Heat_Inventory_Ocean_Heat_Content_data.nc"],
+      "url": ["https://www.wdc-climate.de/WDCC/ui/download/transferArchive?acronym=GCOS_EHI_1960-2020_OHC_d&rmin=0&rmax=0",
+              ""],
+      "filename": ["GCOS_EHI_1960-2020_Earth_Heat_Inventory_Ocean_Heat_Content_data.nc",
+                   "WMO_global_OHC_60N60S_mean_spread_1960-2021_ZJ.nc"],
 	  "type": "timeseries",
       "long_name": "Global ocean heat content",
 	  "time_resolution": "annual",

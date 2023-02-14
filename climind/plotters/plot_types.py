@@ -16,7 +16,7 @@
 import copy
 import shutil
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, date
 
 import cartopy.crs as ccrs
 import xarray
@@ -791,6 +791,88 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
 
     return caption
 
+
+def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
+              image_filename: str, title: str) -> str:
+    cherry_params = {
+        'axes.axisbelow': False,
+        'axes.labelsize': 20,
+        'xtick.labelsize': 15,
+        'ytick.labelsize': 0,
+        'axes.edgecolor': '#d13d64',
+        'axes.facecolor': 'None',
+
+        'axes.grid.axis': 'x',
+        'grid.color': '#d13d64',
+        'grid.alpha': 0.2,
+
+        'axes.labelcolor': '#d13d64',
+
+        'axes.spines.left': False,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+        'axes.spines.bottom': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': 'dimgrey',
+
+        'xtick.bottom': True,
+        'xtick.color': '#d13d64',
+        'xtick.direction': 'out',
+        'xtick.top': False,
+        'xtick.labelbottom': True,
+
+        'ytick.major.width': 0.4,
+        'ytick.color': '#d13d64',
+        'ytick.direction': 'out',
+        'ytick.left': False,
+        'ytick.right': False
+    }
+
+    sns.set(font='Franklin Gothic Book', rc=cherry_params)
+
+    ds =all_datasets[0]
+
+    plt.figure(figsize=[16, 8])
+    date_range = ds.get_string_date_range()
+    col = ds.metadata['colour']
+
+    plt.scatter(ds.df['year'], ds.df['data'], s=100, alpha=0.4,
+                  label=f"{ds.metadata['display_name']} ({date_range})",
+                  color=col, zorder=10, linewidth=1)
+
+    sns.despine(right=True, top=True, left=True, bottom=True)
+
+    march15 = date(2003, 3, 15).timetuple().tm_yday
+    april1 = date(2003, 4, 1).timetuple().tm_yday
+    april15 = date(2003, 4, 15).timetuple().tm_yday
+    may1 = date(2003, 5, 1).timetuple().tm_yday
+
+    xlims = plt.gca().get_xlim()
+    xlims = [xlims[0]-45, xlims[1]]
+
+    plt.plot(xlims, [march15, march15], color='#d13d64', zorder=1)
+    plt.plot(xlims, [april1, april1], color='#d13d64', zorder=1)
+    plt.plot(xlims, [april15, april15], color='#d13d64', zorder=1)
+    plt.plot(xlims, [may1, may1], color='#d13d64', zorder=1)
+
+    plt.text(xlims[0], march15+1, 'March 15', color='#d13d64')
+    plt.text(xlims[0], april1+1, 'April 1', color='#d13d64')
+    plt.text(xlims[0], april15+1, 'April 15', color='#d13d64')
+    plt.text(xlims[0], may1+1, 'May 1', color='#d13d64')
+
+    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40},
+                        color='#d13d64', x=0.37, y=0.95)
+
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+    plt.close()
+
+    return ''
 
 def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
                 image_filename: str, title: str, order: list = []) -> str:

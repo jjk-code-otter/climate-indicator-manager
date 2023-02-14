@@ -1,0 +1,30 @@
+{
+  "name": "Kyoto",
+  "display_name": "Kyoto",
+  "version": "",
+  "variable": "cherry",
+  "units": "diy",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#ff87a7",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/index.html"],
+	  "filename": ["index.html"],
+      "type": "timeseries",
+      "long_name": "Cherry blossom flowering date",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cherry",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
