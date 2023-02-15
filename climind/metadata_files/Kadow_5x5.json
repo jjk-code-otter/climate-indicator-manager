@@ -1,0 +1,49 @@
+{
+    "name": "Kadow_5x5",
+    "display_name": "Kadow et al.",
+    "version": "",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Kadow, C., Hall, D.M. & Ulbrich, U. Artificial intelligence reconstructs missing climate information. Nat. Geosci. (2020). https://doi.org/10.1038/s41561-020-0582-5"
+    ],
+    "citation_url": [
+        "https://doi.org/10.1038/s41561-020-0582-5"
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "",
+    "colour": "#cc79a7",
+    "zpos": 10,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "Kadow_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 999,
+            "climatology_start": 1991,
+            "climatology_end": 2020,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Gridded dataset created from file ['20crAI_HadCRUT4_4.6.0.0_tas_mon_185001-201812.nc'] downloaded from ['']",
+                "Rebaselined to 1991-2020",
+                "Calculated annual average",
+                "Wrote to file Kadow_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2023-02-14 15:27:52"
+            ],
+            "last_month": "2018-12-16"
+        }
+    ]
+}

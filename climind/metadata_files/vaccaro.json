@@ -1,0 +1,30 @@
+{
+  "name": "Vaccaro",
+  "display_name": "Vaccaro et al.",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Vaccaro, A., Emile-Geay, J., Guillot, D., Verna, R., Morice, C., Kennedy, J., & Rajaratnam, B. (2021). Climate Field Completion via Markov Random Fields: Application to the HadCRUT4.6 Temperature Dataset, Journal of Climate, 34(10), 4169-4188 https://doi.org/10.1175/JCLI-D-19-0814.1"],
+  "citation_url": ["https://doi.org/10.1175/JCLI-D-19-0814.1"],
+  "data_citation": ["Vaccaro, Adam Darroch, Emile-Geay, Julien, Guillot, Dominique, Verna, Resherle, Morice, Colin, Kennedy, John, & Rajaratnam, Bala. (2021). GraphEM-infilled HadCRUT4.6.0.0 January 1850 - December 2017 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.4601616"],
+  "acknowledgement": "",
+  "colour": "#32a852",
+  "zpos": 10,
+  "datasets": [
+	{
+      "url": [""],
+      "filename": ["HadCRUT4.6.0.0.median.GraphEM.SP60.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_vaccaro_ts",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

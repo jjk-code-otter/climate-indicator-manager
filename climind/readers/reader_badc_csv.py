@@ -41,9 +41,10 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
         for line in f:
             if 'end data' not in line:
                 columns = line.split(',')
-                years.append(int(columns[1]))
-                months.append(int(columns[2]))
-                anomalies.append(float(columns[3]))
+                if columns[3].rstrip() != '':
+                    years.append(int(columns[1]))
+                    months.append(int(columns[2]))
+                    anomalies.append(float(columns[3]))
             else:
                 break
 
@@ -69,8 +70,9 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeS
         for line in f:
             if 'end data' not in line:
                 columns = line.split(',')
-                years.append(int(columns[1]))
-                anomalies.append(float(columns[2]))
+                if columns[2].rstrip() != '':
+                    years.append(int(columns[1]))
+                    anomalies.append(float(columns[2]))
             else:
                 break
 
