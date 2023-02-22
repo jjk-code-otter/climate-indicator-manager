@@ -18,7 +18,8 @@ import copy
 import numpy as np
 import climind.plotters.plot_utils as pu
 from typing import Union, List
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, get_start_and_end_year
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, \
+    get_start_and_end_year, AveragesCollection
 
 ordinal = lambda n: "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10::4])
 
@@ -231,6 +232,45 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     out_text += compare_to_highest_anomaly_and_rank(all_datasets, year)
     out_text += "</p><p>"
     out_text += basic_anomaly_and_rank(all_datasets, year - 1)
+
+    return out_text
+
+
+def pre_industrial_estimate(all_datasets: List[TimeSeriesAnnual], _) -> str:
+    """
+    Write a short paragraph estimating the difference between the modern baselin and
+    1850 to 1900.
+
+    Parameters
+    ----------
+    all_datasets: List[TimeSeriesAnnual]
+        List of all the data sets to be analysed
+
+    Returns
+    -------
+    str
+        Returns a paragraph of text stating an estimate of the pre-industrial temperature
+        from these data sets
+    """
+    out_text = ''
+
+    holder = AveragesCollection(all_datasets)
+
+    the_mean = holder.best_estimate()
+    the_range = holder.range()
+    lower = holder.lower_range()
+    upper = holder.upper_range()
+
+    out_text += f"The mean: {the_mean:.2f} and the range {the_range:.2f} " \
+                f"from {lower:.2f} to {upper:.2f}. Using {holder.count()} datasets."
+
+    holder.expand = True
+    out_text += f"Narrow expanded range is {holder.range():.2f} " \
+                f"[{holder.lower_range():.2f} to {holder.upper_range():.2f}] or "
+
+    holder.widest = True
+    out_text += f"Wide expanded range is {holder.range():.2f} " \
+                f"[{holder.lower_range():.2f} to {holder.upper_range():.2f}] or "
 
     return out_text
 

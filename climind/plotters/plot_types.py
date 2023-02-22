@@ -29,7 +29,7 @@ import numpy as np
 from typing import List, Union, Tuple
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
-    get_list_of_unique_variables, superset_dataset_list
+    get_list_of_unique_variables, superset_dataset_list, AveragesCollection
 from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
@@ -1365,3 +1365,83 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
 
     plt.savefig(out_dir / image_filename)
     plt.close()
+
+
+def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
+                               image_filename: str, title: str) -> str:
+    equivalence = {
+        'tas': 'Globe',
+        'wmo_ra_1': 'Africa',
+        'wmo_ra_2': 'Asia',
+        'wmo_ra_3': 'South America',
+        'wmo_ra_4': 'North America',
+        'wmo_ra_5': 'Southwest Pacific',
+        'wmo_ra_6': 'Europe',
+        'africa_subregion_1': 'North Africa',
+        'africa_subregion_2': 'West Africa',
+        'africa_subregion_3': 'Central Africa',
+        'africa_subregion_4': 'Eastern Africa',
+        'africa_subregion_5': 'Southern Africa',
+        'africa_subregion_6': 'Indian Ocean',
+        'lac_subregion_1': 'South America',
+        'lac_subregion_2': 'Mexico and Central America',
+        'lac_subregion_3': 'Caribbean',
+        'lac_subregion_4': 'Mexico',
+        'lac_subregion_5': 'Central America',
+        'lac_subregion_6': 'Latin America and Caribbean'
+    }
+
+    variables = get_list_of_unique_variables(in_all_datasets)
+
+    plt.figure(figsize=[16, 9])
+
+    for i, v in enumerate(variables):
+        all_datasets = []
+        for ds in in_all_datasets:
+            if ds.metadata['variable'] == v:
+                all_datasets.append(ds)
+
+        holder = AveragesCollection(all_datasets)
+        holder.expand = True
+        holder.widest = True
+
+        plt.fill_between([i,i+1],
+                         [holder.lower_range(),holder.lower_range()],
+                         [holder.upper_range(),holder.upper_range()],
+                         color='#7ea0f7'
+                         )
+
+        holder.widest = False
+
+        plt.fill_between([i,i+1],
+                         [holder.lower_range(),holder.lower_range()],
+                         [holder.upper_range(),holder.upper_range()],
+                         color='#466dcf'
+                         )
+
+        holder.expand = False
+
+        plt.fill_between([i,i+1],
+                         [holder.lower_range(),holder.lower_range()],
+                         [holder.upper_range(),holder.upper_range()],
+                         color='#173c99'
+                         )
+
+        plt.plot([i,i+1], [holder.best_estimate(), holder.best_estimate()],color='black',linewidth=2)
+
+        plt.text(i+0.5, 0, equivalence[v], ha='center', va='center',fontsize=20)
+
+    ylims = plt.gca().get_ylim()
+    ylims = [ylims[0], ylims[1]]
+    if ylims[1] < 0.1:
+        ylims[1] = 0.1
+    plt.gca().set_ylim(ylims[0], ylims[1])
+
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.2, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+
+    plt.close()
+
+    caption = ''
+    return caption

@@ -1012,6 +1012,41 @@ class TimeSeriesAnnual(TimeSeries):
         return moving_average
 
     @log_activity
+    def running_stdev(self, run_length: int, centred: bool = False):
+        """
+        Calculate running standard deviation of the data for a specified run length
+
+        Parameters
+        ----------
+        run_length : int
+            length of the run
+        centred: bool
+            Set to True to centre the times associated to the data points, otherwise the time used will be the last
+            time in the n-year run.
+
+        Returns
+        -------
+        TimeSeriesAnnual
+            :class:`TimeSeriesAnnual` containing running standard deviation of length run_length. Where there are too few
+            years to calculate a running average, np.nan appears in the data column of the data frame
+        """
+        moving_average = copy.deepcopy(self)
+        moving_average.df['data'] = moving_average.df['data'].rolling(run_length).std()
+        if centred:
+            moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
+            moving_average.df.dropna(0, how='any', inplace=True)
+
+        if centred:
+            moving_average.update_history(
+                f'Calculated {run_length}-year moving standard devitation centred on the middle year of the period')
+        else:
+            moving_average.update_history(f'Calculated {run_length}-year moving standard deviation')
+
+        moving_average.metadata['derived'] = True
+
+        return moving_average
+
+    @log_activity
     def select_decade(self, end_year: int = 0):
         """
         Select every tenth year from the :class:`TimesSeriesAnnual`, the last digit of the years can
@@ -1256,3 +1291,71 @@ def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[
         superset[i].append(ds)
 
     return superset
+
+
+class AveragesCollection:
+
+    def __init__(self, all_datasets):
+
+        self.averages = []
+        self.stdevs = []
+
+        self.plus_unc_lower = []
+        self.minus_unc_lower = []
+        self.plus_unc_upper = []
+        self.minus_unc_upper = []
+
+        self.expand = False
+        self.widest = False
+
+        for ds in all_datasets:
+            first_year, last_year = ds.get_first_and_last_year()
+            if first_year == 1850:
+                pre_average = ds.running_mean(51)
+                pre_stdev = ds.running_stdev(51)
+
+                pre_average = pre_average.df['data'][50]
+                pre_stdev = pre_stdev.df['data'][50]
+
+                self.averages.append(pre_average)
+                self.stdevs.append(pre_stdev)
+
+                self.plus_unc_lower.append(pre_average + 1.645 * pre_stdev / np.sqrt(51.))
+                self.minus_unc_lower.append(pre_average - 1.645 * pre_stdev / np.sqrt(51.))
+
+                self.plus_unc_upper.append(pre_average + 1.645 * pre_stdev)
+                self.minus_unc_upper.append(pre_average - 1.645 * pre_stdev)
+
+    def count(self):
+        return len(self.averages)
+
+    def best_estimate(self):
+        return np.mean(self.averages)
+
+    def range(self):
+        if self.expand:
+            if self.widest:
+                return np.max(self.plus_unc_upper) - np.min(self.minus_unc_upper)
+            else:
+                return np.max(self.plus_unc_lower) - np.min(self.minus_unc_lower)
+        else:
+            return np.max(self.averages) - np.min(self.averages)
+
+    def lower_range(self):
+        if self.expand:
+            if self.widest:
+                return np.min(self.minus_unc_upper)
+            else:
+                return np.min(self.minus_unc_lower)
+        else:
+            return np.min(self.averages)
+
+    def upper_range(self):
+        if self.expand:
+            if self.widest:
+                return np.max(self.plus_unc_upper)
+            else:
+                return np.max(self.plus_unc_lower)
+        else:
+            return np.max(self.averages)
+

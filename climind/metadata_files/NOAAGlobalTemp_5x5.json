@@ -13,7 +13,7 @@
         "https://doi.org/10.1029/2019EO128229"
     ],
     "data_citation": [
-        "Zhang, H.-M., B. Huang, J. Lawrimore, M. Menne, Thomas M. Smith, NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 5 [indicate subset used]. NOAA National Centers for Environmental Information. doi:10.25921/9qth-2p70 Accessed [2023-01-26 09:19:42]."
+        "Zhang, H.-M., B. Huang, J. Lawrimore, M. Menne, Thomas M. Smith, NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 5 [indicate subset used]. NOAA National Centers for Environmental Information. doi:10.25921/9qth-2p70 Accessed [2023-02-16 09:22:15]."
     ],
     "acknowledgement": "",
     "colour": "#e69f00",
@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-01-26 09:19:42']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-02-16 09:22:15']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAAGlobalTemp_5x5.nc"
@@ -43,7 +43,7 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-01-26 09:19:42"
+                "2023-02-16 09:22:15"
             ],
             "last_month": "2022-12-01"
         }

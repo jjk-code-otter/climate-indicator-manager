@@ -29,7 +29,8 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': ['Vaccaro']#, 'Kadow CMIP', 'Kadow', 'NOAA Interim', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55']
+            'name': ['CMST', 'Vaccaro', 'Kadow CMIP', 'Kadow', 'NOAA Interim', 'HadCRUT5',
+                     'Berkeley Earth', 'GISTEMP', 'NOAAGlobalTemp', 'ERA5', 'JRA-55']
         }
     )
 
@@ -52,7 +53,7 @@ if __name__ == "__main__":
                           metadata_filename=metadata_filename,
                           name=new_name)
 
-        annual = annual.select_year_range(1998, 1998)
+        annual = annual.select_year_range(1899, 1899)
         all_annual.append(annual)
 
-    cap = pt.dashboard_map(project_dir / 'Figures', all_annual, 'test.png', title='Spam')
+        cap = pt.dashboard_map(project_dir / 'Figures', [annual], f"{annual.metadata['name']}.png", title='Spam')

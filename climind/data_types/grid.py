@@ -388,6 +388,71 @@ class GridMonthly:
 
         return out_series
 
+    def calculate_regional_average_missing(self, regions, region_number, threshold=0.3, land_only=True) -> ts.TimeSeriesMonthly:
+        """
+        Calculate a regional average from the grid. The region is specified by a geopandas
+        Geodataframe and the index (region_number) of the chosen shape. By default, the output
+        is masked to land areas only, this can be switched off by setting land_only to False.
+
+        Parameters
+        ----------
+        regions: Geodataframe
+            geopandas Geodataframe specifying the region to be average over
+        region_number: int
+            the index of the particular region in the Geodataframe
+        threshold: float
+            If the area covered by data in the region drops below this threshold then NaN is returned.
+        land_only: bool
+            By defauly output is masked to land areas only, to calculate a full area average set
+            land_only to False
+
+        Returns
+        -------
+        ts.TimeSeriesMonthly
+            Returns time series of area averages.
+        """
+        mask = regionmask.mask_3D_geopandas(regions,
+                                            self.df.longitude,
+                                            self.df.latitude, drop=False, overlap=True)
+        r1 = mask.sel(region=region_number)
+        selected_variable = self.df.tas_mean.where(r1)
+
+        # copy the variable array, set values to one and missing data to zero then mask that
+        missing = copy.deepcopy(self.df.tas_mean)
+        replacer = (np.isnan(missing.data))
+        missing.data[:,:,:] = 1.0
+        missing.data[replacer] = 0.0
+        missing = missing.where(r1)
+
+        if land_only:
+            land_110 = regionmask.defined_regions.natural_earth_v5_0_0.land_110
+            land_mask = land_110.mask_3D(self.df.longitude, self.df.latitude)
+            land_mask = land_mask.sel(region=0)
+            selected_variable = selected_variable.where(land_mask)
+            missing = missing.where(land_mask)
+
+        weights = np.cos(np.deg2rad(selected_variable.latitude))
+        regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
+        missing_ts = missing.weighted(weights).mean(dim=("latitude", "longitude"))
+        regional_ts[missing_ts < threshold] = np.nan
+
+        # import matplotlib.pyplot as plt
+        # plt.plot(missing_ts.data)
+        # plt.plot(regional_ts)
+        # plt.show()
+
+        # It's such a struggle extracting time information from these blasted xarrays
+        years = regional_ts.time.dt.year.data.tolist()
+        months = regional_ts.time.dt.month.data.tolist()
+        data = regional_ts.values.tolist()
+
+        timeseries_metadata = copy.deepcopy(self.metadata)
+        timeseries_metadata['type'] = 'timeseries'
+        timeseries_metadata['history'].append('Calculated area-average')
+        out_series = ts.TimeSeriesMonthly(years, months, data, timeseries_metadata)
+
+        return out_series
+
     def update_history(self, message: str) -> None:
         """
         Update the history metadata with a message.

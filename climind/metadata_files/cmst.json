@@ -1,0 +1,34 @@
+{
+  "name": "CMST",
+  "display_name": "CMST interim",
+  "version": "2.0",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Sun, W., Yang, Y., Chao, L., Dong, W., Huang, B., Jones, P., and Li, Q.: Description of the China global Merged Surface Temperature version 2.0, Earth Syst. Sci. Data, 14, 1677–1693, https://doi.org/10.5194/essd-14-1677-2022, 2022"],
+  "citation_url": ["https://doi.org/10.5194/essd-14-1677-2022"],
+  "data_citation": ["Sun Wenbin; Qingxiang, Li (2021): China global Merged surface temperature 2.0 during 1850-2020. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16929427.v4 "],
+  "acknowledgement": "",
+  "colour": "#ff0000",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": [
+        ""
+      ],
+      "filename": [
+        "China-MST-Interim.nc"
+      ],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_cmst",
+      "fetcher": "fetcher_no_url"
+    }
+  ]
+}

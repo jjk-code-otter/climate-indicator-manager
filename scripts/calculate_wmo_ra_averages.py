@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['Vaccaro', 'Kadow CMIP', 'NOAA Interim','Kadow', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth']#, 'ERA5', 'JRA-55']
+    datasets_to_use = ['CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim','Kadow', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth']#, 'ERA5', 'JRA-55']
 
     ts_archive = archive.select(
         {
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         region_names = ['Africa', 'Asia', 'South America',
                         'North America', 'South-West Pacific', 'Europe']
         for region in range(6):
-            monthly_time_series = ds.calculate_regional_average(continents, region)
+            monthly_time_series = ds.calculate_regional_average_missing(continents, region)
             annual_time_series = monthly_time_series.make_annual()
             annual_time_series.select_year_range(1850, final_year)
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
                             'Eastern Africa', 'Southern Africa', 'Indian Ocean']
         for region in range(6):
-            monthly_time_series = ds.calculate_regional_average(subregions, region)
+            monthly_time_series = ds.calculate_regional_average_missing(subregions, region)
             annual_time_series = monthly_time_series.make_annual()
             annual_time_series.select_year_range(1850, final_year)
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
             'Mexico', 'Central America', 'Latin America and Caribbean'
         ]
         for region in range(6):
-            monthly_time_series = ds.calculate_regional_average(region3, region)
+            monthly_time_series = ds.calculate_regional_average_missing(region3, region)
             annual_time_series = monthly_time_series.make_annual()
             annual_time_series.select_year_range(1850, final_year)
 
