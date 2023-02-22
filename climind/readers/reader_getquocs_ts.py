@@ -34,7 +34,7 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.Gr
     number_of_months = df.temperature.data.shape[1]
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
+    times = pd.date_range(start='1850-01-01', freq='1MS', periods=number_of_months)
 
     target_grid = np.zeros((number_of_months, 36, 72))
     target_grid[:, :, :] = df.temperature.data[0, :, :, :]
@@ -56,7 +56,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     number_of_months = df.temperature.data.shape[1]
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
+    times = pd.date_range(start='1850-01-01', freq='1MS', periods=number_of_months)
 
     target_grid = np.zeros((number_of_months, 36, 72))
     target_grid[:, :, :] = df.temperature.data[20, :, :, :]
