@@ -1,0 +1,49 @@
+{
+    "name": "GETQUOCS_5x5",
+    "display_name": "GETQUOCS",
+    "version": "",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Ilyas, M., Nychka, D., Brierley, C., and Guillas, S.: Global ensemble of temperatures over 1850\u00e2\u20ac\u201c2018: quantification of uncertainties in observations, coverage, and spatial modeling (GETQUOCS), Atmos. Meas. Tech., 14, 7103\u00e2\u20ac\u201c7121, https://doi.org/10.5194/amt-14-7103-2021, 2021."
+    ],
+    "citation_url": [
+        "https://doi.org/10.5194/amt-14-7103-2021"
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "",
+    "colour": "#cafcaa",
+    "zpos": 10,
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "GETQUOCS_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 999,
+            "climatology_start": 1991,
+            "climatology_end": 2020,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Gridded dataset created from file ['GETQUOCS_ensemble_subsample_monthly.packed.nc'] downloaded from ['']",
+                "Rebaselined to 1991-2020",
+                "Calculated annual average",
+                "Wrote to file GETQUOCS_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2023-02-22 15:01:37"
+            ],
+            "last_month": "2018-12-01"
+        }
+    ]
+}
