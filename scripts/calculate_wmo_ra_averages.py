@@ -24,6 +24,33 @@ import climind.plotters.plot_types as pt
 from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 
+
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, final_year):
+
+    n_regions = len(region_names)
+
+    for region in range(n_regions):
+        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region)
+        annual_time_series = monthly_time_series.make_annual()
+        annual_time_series.select_year_range(1850, final_year)
+
+        wmo_ra = region + 1
+        annual_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{annual_time_series.metadata['name']}"
+        dataset_name = annual_time_series.metadata['name']
+
+        (regional_data_dir / dataset_name).mkdir(exist_ok=True)
+
+        filename = f"{dataset_name}.csv"
+        metadata_filename = f"{dataset_name}.json"
+
+        annual_time_series.metadata['variable'] = f'{stub}_{wmo_ra}'
+        annual_time_series.metadata[
+            'long_name'] = f'Regional mean temperature for WMO RA {region + 1} {region_names[region]}'
+
+        annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
+                                     metadata_filename=regional_metadata_dir / metadata_filename)
+
+
 if __name__ == "__main__":
     final_year = 2022
 
@@ -60,17 +87,22 @@ if __name__ == "__main__":
     print(subregions)
 
     region3 = gp.read_file(shape_dir / 'South America' / 'South America.shp')
-    region3 = region3.append(gp.read_file(shape_dir / 'Mexico and Central America' / 'Mexico and Central America.shp'), ignore_index=True)
+    region3 = region3.append(gp.read_file(shape_dir / 'Mexico and Central America' / 'Mexico and Central America.shp'),
+                             ignore_index=True)
     region3 = region3.append(gp.read_file(shape_dir / 'Caribbean' / 'Caribbean.shp'), ignore_index=True)
     region3 = region3.append(gp.read_file(shape_dir / 'Mexico' / 'Mexico.shp'), ignore_index=True)
     region3 = region3.append(gp.read_file(shape_dir / 'Central America' / 'Central America.shp'), ignore_index=True)
-    region3 = region3.append(gp.read_file(shape_dir / 'Latin America and Caribbean' / 'Latin America and Caribbean.shp'), ignore_index=True)
+    region3 = region3.append(
+        gp.read_file(shape_dir / 'Latin America and Caribbean' / 'Latin America and Caribbean.shp'), ignore_index=True)
     region3 = region3.reindex()
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = ['CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim','Kadow', 'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth']#, 'ERA5', 'JRA-55']
+    datasets_to_use = [
+        'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim','Kadow', 'HadCRUT5',
+        'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55'
+    ]
 
     ts_archive = archive.select(
         {
@@ -90,70 +122,12 @@ if __name__ == "__main__":
 
         region_names = ['Africa', 'Asia', 'South America',
                         'North America', 'South-West Pacific', 'Europe']
-        for region in range(6):
-            monthly_time_series = ds.calculate_regional_average_missing(continents, region)
-            annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1850, final_year)
-
-            wmo_ra = region + 1
-            annual_time_series.metadata['name'] = f"wmo_ra_{wmo_ra}_{annual_time_series.metadata['name']}"
-            dataset_name = annual_time_series.metadata['name']
-
-            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
-
-            filename = f"{dataset_name}.csv"
-            metadata_filename = f"{dataset_name}.json"
-
-            annual_time_series.metadata['variable'] = f'wmo_ra_{wmo_ra}'
-            annual_time_series.metadata[
-                'long_name'] = f'Regional mean temperature for WMO RA {region + 1} {region_names[region]}'
-
-            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
-                                         metadata_filename=regional_metadata_dir / metadata_filename)
+        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', final_year)
 
         sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
                             'Eastern Africa', 'Southern Africa', 'Indian Ocean']
-        for region in range(6):
-            monthly_time_series = ds.calculate_regional_average_missing(subregions, region)
-            annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1850, final_year)
+        process_regions(sub_region_names, subregions, regional_data_dir, ds, 'africa_subregion', final_year)
 
-            wmo_subregion = region + 1
-            annual_time_series.metadata[
-                'name'] = f"africa_subregion_{wmo_subregion}_{annual_time_series.metadata['name']}"
-            dataset_name = annual_time_series.metadata['name']
-
-            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
-
-            filename = f"{dataset_name}.csv"
-            metadata_filename = f"{dataset_name}.json"
-
-            annual_time_series.metadata['variable'] = f'africa_subregion_{wmo_subregion}'
-            annual_time_series.metadata['long_name'] = f'Regional mean temperature for {sub_region_names[region]}'
-
-            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
-                                         metadata_filename=regional_metadata_dir / metadata_filename)
-
-        lac_region_names = [
-            'South America', 'Mexico and Central America', 'Caribbean',
-            'Mexico', 'Central America', 'Latin America and Caribbean'
-        ]
-        for region in range(6):
-            monthly_time_series = ds.calculate_regional_average_missing(region3, region)
-            annual_time_series = monthly_time_series.make_annual()
-            annual_time_series.select_year_range(1850, final_year)
-
-            lac_subregion = region + 1
-            dataset_name = f"lac_subregion_{lac_subregion}_{annual_time_series.metadata['name']}"
-            annual_time_series.metadata['name'] = dataset_name
-
-            (regional_data_dir / dataset_name).mkdir(exist_ok=True)
-
-            filename = f"{dataset_name}.csv"
-            metadata_filename = f"{dataset_name}.json"
-
-            annual_time_series.metadata['variable'] = f'lac_subregion_{lac_subregion}'
-            annual_time_series.metadata['long_name'] = f'Regional mean temperature for {lac_region_names[region]}'
-
-            annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
-                                         metadata_filename=regional_metadata_dir / metadata_filename)
+        lac_region_names = ['South America', 'Mexico and Central America', 'Caribbean',
+                            'Mexico', 'Central America', 'Latin America and Caribbean' ]
+        process_regions(lac_region_names, region3, regional_data_dir, ds, 'lac_subregion', final_year)
