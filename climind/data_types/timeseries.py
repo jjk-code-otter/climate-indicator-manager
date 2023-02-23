@@ -1038,7 +1038,7 @@ class TimeSeriesAnnual(TimeSeries):
 
         if centred:
             moving_average.update_history(
-                f'Calculated {run_length}-year moving standard devitation centred on the middle year of the period')
+                f'Calculated {run_length}-year moving standard deviation centred on the middle year of the period')
         else:
             moving_average.update_history(f'Calculated {run_length}-year moving standard deviation')
 

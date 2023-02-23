@@ -589,6 +589,40 @@ def test_calculate_regional_average(shapes, test_combo):
         assert ts.df['data'][i] == pytest.approx(1.0, 0.000001)
 
 
+def test_calculate_regional_average_missing(shapes, test_combo):
+    test_grid = np.zeros((12, 36, 72))
+
+    test_grid[:, 0:18, :] = -1.0
+    test_grid[:, 18:, :] = 1.0
+
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
+
+    ts = test_grid_monthly.calculate_regional_average_missing(shapes, 0, land_only=False)
+    for i in range(12):
+        assert ts.df['data'][i] == pytest.approx(0.0, 0.000001)
+
+    ts = test_grid_monthly.calculate_regional_average_missing(shapes, 1, land_only=False)
+    for i in range(12):
+        assert ts.df['data'][i] == pytest.approx(1.0, 0.000001)
+
+    ts = test_grid_monthly.calculate_regional_average_missing(shapes, 2, land_only=False)
+    for i in range(12):
+        assert ts.df['data'][i] == pytest.approx(-1.0, 0.000001)
+
+    test_grid[:, :, :] = 1.0
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
+    ts = test_grid_monthly.calculate_regional_average_missing(shapes, 0, land_only=True)
+    for i in range(12):
+        assert ts.df['data'][i] == pytest.approx(1.0, 0.000001)
+
+
 def test_calculate_non_uniform_regional_average(shapes, test_combo):
     test_grid = np.zeros((12, 36, 72))
     lats = np.arange(-87.5, 90.0, 5.0)

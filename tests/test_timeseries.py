@@ -734,6 +734,25 @@ def test_rolling_average_centre(simple_annual):
     assert ma.df['year'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023))
 
 
+def test_rolling_average_stdev(simple_annual):
+    ma = simple_annual.running_stdev(10)
+
+    assert isinstance(ma, ts.TimeSeriesAnnual)
+    assert ma.metadata['derived']
+    assert ma.metadata['history'] != ''
+    assert pytest.approx(np.std(np.arange(2022 - 9, 2023), ddof=1) / 1000.) == ma.df['data'][2022 - 1850]
+
+
+def test_rolling_average_stdev_centre(simple_annual):
+    ma = simple_annual.running_stdev(10, centred=True)
+
+    assert isinstance(ma, ts.TimeSeriesAnnual)
+    assert ma.metadata['derived']
+    assert ma.metadata['history'] != ''
+    assert pytest.approx(np.std(np.arange(2022 - 9, 2023), ddof=1) / 1000.) == ma.df['data'][2022 - 1850]
+    assert ma.df['year'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023))
+
+
 def test_add_offset(simple_annual):
     simple_annual.add_offset(99.)
     assert simple_annual.df['data'][0] == 1850. / 1000. + 99.
