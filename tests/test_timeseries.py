@@ -878,7 +878,6 @@ def test_add_year_year_already_exists_raises_warning(simple_annual, uncertainty_
 
 
 def test_averages_collection(simple_annual):
-
     annual1 = copy.deepcopy(simple_annual)
     annual1.df['data'] = -1.0
 
@@ -914,6 +913,3 @@ def test_averages_collection(simple_annual):
     assert ac.lower_range() == -1.0
     assert ac.upper_range() == 1.0
     assert ac.range() == 2.0
-
-
-    pass

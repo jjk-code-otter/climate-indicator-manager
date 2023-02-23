@@ -597,7 +597,7 @@ def test_calculate_regional_average_missing(shapes, test_combo):
 
     lats = np.arange(-87.5, 90.0, 5.0)
     lons = np.arange(-177.5, 180.0, 5.0)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
+    times = pd.date_range(start='1850-01-01', freq='1MS', periods=12)
 
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
 
