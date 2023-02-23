@@ -25,14 +25,35 @@ from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 
 
-def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, final_year):
+def process_africa_shape_files(in_shape_dir):
+    subregions = gp.read_file(in_shape_dir / 'Africa_subregion.shp')
+    subregions = subregions.rename(columns={'subregion': 'region'})
+    # Select only the first of each subregion using iloc
+    subregions = subregions.iloc[[0, 1, 2, 6, 7, 8]]
+    subregions = subregions.reset_index()
+    return subregions
 
+
+def process_lac_shape_files(in_shape_dir):
+    additional_regions = ['Mexico and Central America', 'Caribbean', 'Mexico',
+                          'Central America', 'Latin America and Caribbean']
+
+    subregions = gp.read_file(in_shape_dir / 'South America' / 'South America.shp')
+    for reg in additional_regions:
+        addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
+        subregions = subregions.append(addition, ignore_index=True)
+
+    subregions = subregions.reindex()
+    return subregions
+
+
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year):
     n_regions = len(region_names)
 
     for region in range(n_regions):
         monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region)
         annual_time_series = monthly_time_series.make_annual()
-        annual_time_series.select_year_range(1850, final_year)
+        annual_time_series.select_year_range(start_year, final_year)
 
         wmo_ra = region + 1
         annual_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{annual_time_series.metadata['name']}"
@@ -52,14 +73,33 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, fi
 
 
 if __name__ == "__main__":
+
+    test = False
+
+    if test:
+        start_year = 1850
+        output_data_dir = "RegionalTestData"
+        output_metadata_dir = "RegionalTestMetadata"
+        datasets_to_use = [
+            'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim', 'Kadow', 'HadCRUT5',
+            'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55'
+        ]
+    else:
+        start_year = 1900
+        output_data_dir = "RegionalData"
+        output_metadata_dir = "RegionalMetadata"
+    datasets_to_use = [
+        'HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55'
+    ]
+
     final_year = 2022
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
 
-    regional_data_dir = project_dir / "RegionalData"
+    regional_data_dir = project_dir / output_data_dir
     regional_data_dir.mkdir(exist_ok=True)
-    regional_metadata_dir = project_dir / "RegionalMetadata"
+    regional_metadata_dir = project_dir / output_metadata_dir
     regional_metadata_dir.mkdir(exist_ok=True)
 
     data_dir = project_dir / "Data"
@@ -74,42 +114,29 @@ if __name__ == "__main__":
     logging.basicConfig(filename=log_dir / f'{script}.log',
                         filemode='w', level=logging.INFO)
 
-    # Prepare the shape files
+    # Read in the WMO RA shape file
     continents = gp.read_file(shape_dir / 'WMO_RAs.shp')
     continents = continents.rename(columns={'Region': 'region'})
     print(continents)
 
-    # Read in African subregions and select only the first of each subregion using iloc
-    subregions = gp.read_file(shape_dir / 'Africa_subregion.shp')
-    subregions = subregions.rename(columns={'subregion': 'region'})
-    subregions = subregions.iloc[[0, 1, 2, 6, 7, 8]]
-    subregions = subregions.reset_index()
-    print(subregions)
+    # Read in African subregions
+    africa_subregions = process_africa_shape_files(shape_dir)
+    print(africa_subregions)
 
-    region3 = gp.read_file(shape_dir / 'South America' / 'South America.shp')
-    region3 = region3.append(gp.read_file(shape_dir / 'Mexico and Central America' / 'Mexico and Central America.shp'),
-                             ignore_index=True)
-    region3 = region3.append(gp.read_file(shape_dir / 'Caribbean' / 'Caribbean.shp'), ignore_index=True)
-    region3 = region3.append(gp.read_file(shape_dir / 'Mexico' / 'Mexico.shp'), ignore_index=True)
-    region3 = region3.append(gp.read_file(shape_dir / 'Central America' / 'Central America.shp'), ignore_index=True)
-    region3 = region3.append(
-        gp.read_file(shape_dir / 'Latin America and Caribbean' / 'Latin America and Caribbean.shp'), ignore_index=True)
-    region3 = region3.reindex()
+    # Read in LAC subregions
+    lac_subregions = process_lac_shape_files(shape_dir)
+    print(lac_subregions)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    datasets_to_use = [
-        'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim','Kadow', 'HadCRUT5',
-        'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55'
-    ]
 
     ts_archive = archive.select(
         {
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': datasets_to_use[0:]
+            'name': datasets_to_use
         }
     )
 
@@ -122,12 +149,14 @@ if __name__ == "__main__":
 
         region_names = ['Africa', 'Asia', 'South America',
                         'North America', 'South-West Pacific', 'Europe']
-        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', final_year)
+        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', start_year, final_year)
 
         sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
                             'Eastern Africa', 'Southern Africa', 'Indian Ocean']
-        process_regions(sub_region_names, subregions, regional_data_dir, ds, 'africa_subregion', final_year)
+        process_regions(sub_region_names, africa_subregions, regional_data_dir, ds, 'africa_subregion', start_year,
+                        final_year)
 
         lac_region_names = ['South America', 'Mexico and Central America', 'Caribbean',
-                            'Mexico', 'Central America', 'Latin America and Caribbean' ]
-        process_regions(lac_region_names, region3, regional_data_dir, ds, 'lac_subregion', final_year)
+                            'Mexico', 'Central America', 'Latin America and Caribbean']
+        process_regions(lac_region_names, lac_subregions, regional_data_dir, ds, 'lac_subregion', start_year,
+                        final_year)
