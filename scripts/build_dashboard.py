@@ -20,11 +20,10 @@ from climind.config.config import DATA_DIR
 from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
-    # regional
-    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional.json'
-    dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalMetadata')
-    dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalData'
-    dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
+    # Key indicators 2022
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2022.json'
+    dash = Dashboard.from_json(json_file, METADATA_DIR)
+    dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2022'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir), focus_year=2022)
 
@@ -35,13 +34,6 @@ if __name__ == "__main__":
     dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir))
-
-    # Key indicators 2022
-    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2022.json'
-    dash = Dashboard.from_json(json_file, METADATA_DIR)
-    dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2022'
-    dash_dir.mkdir(exist_ok=True)
-    dash.build(Path(dash_dir), focus_year=2022)
 
     # Decadal
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'decadal.json'
@@ -66,5 +58,13 @@ if __name__ == "__main__":
     dash_dir = DATA_DIR / 'ManagedData' / 'CryoDashboard'
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir))
+
+    # regional
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional.json'
+    dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalMetadata')
+    dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalData'
+    dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir), focus_year=2022)
 
 

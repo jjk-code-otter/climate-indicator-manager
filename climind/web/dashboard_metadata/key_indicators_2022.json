@@ -57,7 +57,7 @@
                           {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "writing": {"function": "anomaly_and_rank"}
+          "writing": {"function": "global_anomaly_and_rank"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
@@ -183,7 +183,7 @@
                           {"method": "select_year_range", "args":  [1850,2022]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "writing": {"function": "anomaly_and_rank"}
+          "writing": {"function": "global_anomaly_and_rank"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},

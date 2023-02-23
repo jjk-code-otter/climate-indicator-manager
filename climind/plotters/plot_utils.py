@@ -114,19 +114,53 @@ def calculate_values(all_datasets: List[TimeSeriesAnnual], year: int) -> Tuple[f
     Tuple[float, float, float]
         Return the mean, min and max values for the chosen year from all_datasets
     """
-    all_ranks = []
+    all_values = []
 
     for ds in all_datasets:
         value = ds.df[ds.df['year'] == year]['data']
         if len(value) > 0:
-            all_ranks.append(value.values[0])
+            all_values.append(value.values[0])
 
     # calculate the mean trend and max and min trends
-    mean_rank = float(np.mean(all_ranks))
-    max_rank = float(np.max(all_ranks))
-    min_rank = float(np.min(all_ranks))
+    mean_value = float(np.mean(all_values))
+    max_value = float(np.max(all_values))
+    min_value = float(np.min(all_values))
 
-    return mean_rank, min_rank, max_rank
+    return mean_value, min_value, max_value
+
+
+def calculate_values_ipcc_style(all_datasets: List[TimeSeriesAnnual], year: int) -> Tuple[float, float, float]:
+    """
+    given a set of data sets, return the mean min and max values from the data sets for specified year.
+
+    Parameters
+    ----------
+    all_datasets : list
+        list of :class:`.TimeSeriesAnnual` data sets
+    year : int
+        year to calculate values for
+
+    Returns
+    -------
+    Tuple[float, float, float]
+        Return the mean, min and max values for the chosen year from all_datasets
+    """
+    all_values = []
+
+    for ds in all_datasets:
+        value = ds.df[ds.df['year'] == year]['data']
+        if len(value) > 0:
+            all_values.append(value.values[0])
+
+    # calculate the mean trend and max and min trends
+    mean_value = float(np.mean(all_values))
+    stdev_value = float(np.std(all_values)) * 1.645
+    stdev_value = np.sqrt(stdev_value ** 2 + (0.24 / 2) ** 2)
+
+    max_value = mean_value + stdev_value
+    min_value = mean_value - stdev_value
+
+    return mean_value, min_value, max_value
 
 
 def calculate_highest_year_and_values(all_datasets: List[TimeSeriesAnnual]) -> Tuple[List[int], List[List[float]]]:
