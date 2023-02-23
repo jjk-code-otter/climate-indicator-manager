@@ -368,7 +368,8 @@ class Page:
         for card_metadata in self['cards']:
             this_card = Card(card_metadata)
             this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
-            processed_cards.append(this_card)
+            if 'hidden' not in card_metadata:
+                processed_cards.append(this_card)
         return processed_cards
 
     def _process_paragraphs(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021) -> List[Paragraph]:

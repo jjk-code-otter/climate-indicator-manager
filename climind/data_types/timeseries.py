@@ -1038,7 +1038,7 @@ class TimeSeriesAnnual(TimeSeries):
 
         if centred:
             moving_average.update_history(
-                f'Calculated {run_length}-year moving standard devitation centred on the middle year of the period')
+                f'Calculated {run_length}-year moving standard deviation centred on the middle year of the period')
         else:
             moving_average.update_history(f'Calculated {run_length}-year moving standard deviation')
 
@@ -1294,6 +1294,9 @@ def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[
 
 
 class AveragesCollection:
+    """
+    A simple class to perform specific tasks on lists of :class:`.TimeSeriesAnnual`
+    """
 
     def __init__(self, all_datasets):
 

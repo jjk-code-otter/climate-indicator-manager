@@ -37,7 +37,8 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.Gr
     times = pd.date_range(start='1850-01-01', freq='1MS', periods=number_of_months)
 
     target_grid = np.zeros((number_of_months, 36, 72))
-    target_grid[:, :, :] = df.temperature.data[0, :, :, :]
+    ensemble_mean = np.mean(df.temperature.data, axis=0)
+    target_grid[:, :, :] = ensemble_mean[:, :, :]
 
     df = gd.make_xarray(target_grid, times, latitudes, longitudes)
 
@@ -59,7 +60,8 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     times = pd.date_range(start='1850-01-01', freq='1MS', periods=number_of_months)
 
     target_grid = np.zeros((number_of_months, 36, 72))
-    target_grid[:, :, :] = df.temperature.data[20, :, :, :]
+    ensemble_mean = np.mean(df.temperature.data, axis=0)
+    target_grid[:, :, :] = ensemble_mean[:, :, :]
 
     df = gd.make_xarray(target_grid, times, latitudes, longitudes)
 

@@ -734,6 +734,25 @@ def test_rolling_average_centre(simple_annual):
     assert ma.df['year'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023))
 
 
+def test_rolling_average_stdev(simple_annual):
+    ma = simple_annual.running_stdev(10)
+
+    assert isinstance(ma, ts.TimeSeriesAnnual)
+    assert ma.metadata['derived']
+    assert ma.metadata['history'] != ''
+    assert pytest.approx(np.std(np.arange(2022 - 9, 2023), ddof=1) / 1000.) == ma.df['data'][2022 - 1850]
+
+
+def test_rolling_average_stdev_centre(simple_annual):
+    ma = simple_annual.running_stdev(10, centred=True)
+
+    assert isinstance(ma, ts.TimeSeriesAnnual)
+    assert ma.metadata['derived']
+    assert ma.metadata['history'] != ''
+    assert pytest.approx(np.std(np.arange(2022 - 9, 2023), ddof=1) / 1000.) == ma.df['data'][2022 - 1850]
+    assert ma.df['year'][2022 - 1850] == np.mean(np.arange(2022 - 9, 2023))
+
+
 def test_add_offset(simple_annual):
     simple_annual.add_offset(99.)
     assert simple_annual.df['data'][0] == 1850. / 1000. + 99.
@@ -856,3 +875,41 @@ def test_add_year_year_already_exists_raises_warning(simple_annual, uncertainty_
         simple_annual.add_year(test_year, test_value)
     with pytest.warns():
         uncertainty_annual.add_year(test_year, test_value)
+
+
+def test_averages_collection(simple_annual):
+    annual1 = copy.deepcopy(simple_annual)
+    annual1.df['data'] = -1.0
+
+    annual2 = copy.deepcopy(simple_annual)
+    annual2.df['data'] = 1.0
+
+    ac = ts.AveragesCollection([annual1, annual2])
+
+    assert ac.averages[0] == -1.0
+    assert ac.averages[1] == 1.0
+
+    assert ac.stdevs[0] == 0.0
+    assert ac.stdevs[1] == 0.0
+
+    assert ac.count() == 2
+    assert ac.best_estimate() == 0.0
+    assert ac.lower_range() == -1.0
+    assert ac.upper_range() == 1.0
+    assert ac.range() == 2.0
+
+    ac.expand = True
+
+    assert ac.count() == 2
+    assert ac.best_estimate() == 0.0
+    assert ac.lower_range() == -1.0
+    assert ac.upper_range() == 1.0
+    assert ac.range() == 2.0
+
+    ac.widest = True
+
+    assert ac.count() == 2
+    assert ac.best_estimate() == 0.0
+    assert ac.lower_range() == -1.0
+    assert ac.upper_range() == 1.0
+    assert ac.range() == 2.0

@@ -176,7 +176,8 @@
           "processing": [],
           "plotting": {
             "function": "preindustrial_summary_plot", "title": "preindus"
-           }
+           },
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Regional trends Africa",
@@ -202,7 +203,8 @@
           "processing": [],
           "plotting": {
             "function": "preindustrial_summary_plot", "title": "preindus2"
-           }
+           },
+          "hidden": true
         }
       ],
       "paragraphs": [
@@ -363,7 +365,8 @@
           "processing": [],
           "plotting": {
             "function": "preindustrial_summary_plot", "title": "preindus_lac"
-          }
+          },
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Region definitions",
