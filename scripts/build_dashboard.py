@@ -67,4 +67,12 @@ if __name__ == "__main__":
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir), focus_year=2022)
 
+    # regional
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_test.json'
+    dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalTestMetadata')
+    dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalTestData'
+    dash_dir = DATA_DIR / 'ManagedData' / 'RegionalTestDashboard'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir), focus_year=2022)
+
 

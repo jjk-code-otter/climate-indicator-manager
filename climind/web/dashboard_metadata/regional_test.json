@@ -50,9 +50,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
@@ -60,9 +70,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
@@ -70,9 +90,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         }
       ]
     },
@@ -137,6 +167,19 @@
           }
         },
         {
+          "link_to":  null, "title": "Preindustrial",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "preindustrial_summary_plot", "title": "preindus"
+           },
+          "hidden": true
+        },
+        {
           "link_to":  null, "title": "Regional trends Africa",
           "selecting": {
             "type": "timeseries",
@@ -149,6 +192,19 @@
             "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
                                   "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
           }
+        },
+        {
+          "link_to":  null, "title": "Preindustrial2",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_1", "africa_subregion_1","africa_subregion_2","africa_subregion_3", "africa_subregion_4","africa_subregion_5","africa_subregion_6"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "preindustrial_summary_plot", "title": "preindus2"
+           },
+          "hidden": true
         }
       ],
       "paragraphs": [
@@ -163,9 +219,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
@@ -173,9 +239,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
@@ -183,9 +259,19 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
         }
       ]
     },
@@ -270,6 +356,19 @@
           }
         },
         {
+          "link_to":  null, "title": "Preindustrial3",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "preindustrial_summary_plot", "title": "preindus_lac"
+          },
+          "hidden": true
+        },
+        {
           "link_to":  null, "title": "Region definitions",
           "selecting": {
             "type": "timeseries",
@@ -295,14 +394,29 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "pre_industrial_estimate"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
-          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+          "writing": {"function": "pre_industrial_estimate"}
         }
       ]
     },
