@@ -212,6 +212,51 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     return out_text
 
 
+def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+    """
+
+    Parameters
+    ----------
+    all_datasets
+    year
+
+    Returns
+    -------
+
+    """
+    if len(all_datasets) == 0:
+        raise RuntimeError("No datasets provided")
+
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
+    variable = all_datasets[0].metadata['variable']
+    super_text = superlative(variable)
+
+    if year > last_year:
+        out_text = f'The most recent available year is {last_year}. '
+        year = last_year
+    else:
+        out_text = ''
+
+    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values_ipcc_style(all_datasets, year)
+
+    units = fancy_html_units(all_datasets[0].metadata['units'])
+
+    out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} {super_text} ' \
+                f'on record. The anomaly for {year} was ' \
+                f'{mean_anomaly:.2f} [{min_anomaly:.2f} to {max_anomaly:.2f}]{units} '
+
+    if not all_datasets[0].metadata['actual']:
+        clim_start = all_datasets[0].metadata['climatology_start']
+        clim_end = all_datasets[0].metadata['climatology_end']
+        out_text += f"relative to the {clim_start}-{clim_end} average "
+
+    out_text += f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets, year)}.'
+
+    return out_text
+
+
 def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     """
     Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
