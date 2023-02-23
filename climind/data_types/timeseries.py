@@ -1294,6 +1294,9 @@ def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[
 
 
 class AveragesCollection:
+    """
+    A simple class to perform specific tasks on lists of :class:`.TimeSeriesAnnual`
+    """
 
     def __init__(self, all_datasets):
 
