@@ -25,7 +25,7 @@ from climind.data_manager.metadata import CombinedMetadata
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     filenames = []
-    for filename in out_dir.glob(metadata['filename'][0]):
+    for filename in out_dir.glob(metadata['filename'][1]):
         filenames.append(filename)
     filenames.sort()
     filename = filenames[-1]
