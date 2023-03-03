@@ -1,0 +1,33 @@
+{
+  "name": "GCOS2k",
+  "display_name": "GCOS",
+  "version": "",
+  "variable": "ohc2k",
+  "units": "zJ",
+  "citation": ["von Schuckmann, K., Cheng, L., Palmer, M. D., Hansen, J., Tassone, C., Aich, V., Adusumilli, S., Beltrami, H., Boyer, T., Cuesta-Valero, F. J., Desbruyères, D., Domingues, C., García-García, A., Gentine, P., Gilson, J., Gorfer, M., Haimberger, L., Ishii, M., Johnson, G. C., Killick, R., King, B. A., Kirchengast, G., Kolodziejczyk, N., Lyman, J., Marzeion, B., Mayer, M., Monier, M., Monselesan, D. P., Purkey, S., Roemmich, D., Schweiger, A., Seneviratne, S. I., Shepherd, A., Slater, D. A., Steiner, A. K., Straneo, F., Timmermans, M.-L., and Wijffels, S. E.: Heat stored in the Earth system: where does the energy go?, Earth Syst. Sci. Data, 12, 2013–2041, https://doi.org/10.5194/essd-12-2013-2020, 2020."],
+  "citation_url": ["https://doi.org/10.5194/essd-12-2013-2020"],
+  "data_citation": ["von Schuckmann, Karina; Minière, Audrey; Gues, Flora; Cuesta-Valero, Francisco; Kirchengast, Gottfried; Adusumilli, Susheel; Straneo, Fiammetta; Allan, Richard; Barker, Paul M.; Beltrami, Hugo; Boyer, Tim; Cheng, Lijing; Church, John; Desbruyeres, Damien; Dolman, Han; Domingues, Catia; García-García, Almudena; Giglio, Donata; Gilson, John; Gorfer, Maximilian; Haimberger, Leopold; Hendricks, Stefan; Hosoda, Shigeki; Johnson, Gregory; Killick, Rachel; King, Brian; Kolodziejczyk, Nicolas; Korosov, Anton; Krinner, Gerhard; Kuusela, Mikael; Langer, Moritz; Lavergne, Thomas; Li, Yuehua; Lyman, John; Marzeion, Ben; Mayer, Michael; MacDougall, Andrew; Lawrence, Isobel; McDougall, Trevor; Monselesan, Didier; Nitzbon, Jean; Otosaka, Inès; Peng, Jian; Purkey, Sarah; Roemmich, Dean; Sato, Kanako; Sato, Katsunari; Savita, Abhishek; Schweiger, Axel; Shepherd, Andrew; Seneviratne, Sonia; Simons, Leon; Slater, Donald; Slater, Thomas; Smith, Noah; Steiner, Andrea; Suga, Toshio; Szekely, Tanguy; Thiery, Wim; Timmermanns, Mary-Louise; Vanderkelen, Inne; Wijffels, Susan; Wu, Tonghua; Zemp, Michael (2022). Heat stored in the Earth system 1960-2020: Where does the energy go?. World Data Center for Climate (WDCC) at DKRZ. https://www.wdc-climate.de/ui/entry?acronym=GCOS_EHI_1960-2020"],
+  "acknowledgement": "",
+  "colour": "#555555",
+  "zpos": 99,
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://www.wdc-climate.de/WDCC/ui/download/transferArchive?acronym=GCOS_EHI_1960-2020_OHC_d&rmin=0&rmax=0",
+              ""],
+      "filename": ["GCOS_EHI_1960-2020_Earth_Heat_Inventory_Ocean_Heat_Content_data.nc",
+                   "WMO_global_OHC_60N60S_mean_spread_1960-2021_ZJ.nc"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gcos",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}
