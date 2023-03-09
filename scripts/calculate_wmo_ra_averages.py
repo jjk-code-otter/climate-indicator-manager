@@ -47,11 +47,12 @@ def process_lac_shape_files(in_shape_dir):
     return subregions
 
 
-def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year):
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year, long_names,
+                    land_only=True) -> None:
     n_regions = len(region_names)
 
     for region in range(n_regions):
-        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region)
+        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region, land_only=land_only)
         annual_time_series = monthly_time_series.make_annual()
         annual_time_series.select_year_range(start_year, final_year)
 
@@ -65,8 +66,7 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
         metadata_filename = f"{dataset_name}.json"
 
         annual_time_series.metadata['variable'] = f'{stub}_{wmo_ra}'
-        annual_time_series.metadata[
-            'long_name'] = f'Regional mean temperature for WMO RA {region + 1} {region_names[region]}'
+        annual_time_series.metadata['long_name'] = long_names[region]
 
         annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
                                      metadata_filename=regional_metadata_dir / metadata_filename)
@@ -130,7 +130,6 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-
     ts_archive = archive.select(
         {
             'variable': 'tas',
@@ -149,14 +148,22 @@ if __name__ == "__main__":
 
         region_names = ['Africa', 'Asia', 'South America',
                         'North America', 'South-West Pacific', 'Europe']
-        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', start_year, final_year)
+        long_names = [f'Regional mean temperature for WMO RA {i+1} {region_names[i]}' for i in range(6)]
+        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', start_year, final_year, long_names)
+
+        # Do land and ocean processing for the RA areas.
+        long_names = [f'Regional mean land and ocean temperature for WMO RA {i+1} {region_names[i]}' for i in range(6)]
+        process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra_land_ocean', start_year, final_year,
+                        long_names, land_only=False)
 
         sub_region_names = ['North Africa', 'West Africa', 'Central Africa',
                             'Eastern Africa', 'Southern Africa', 'Indian Ocean']
+        long_names = [f'Regional mean temperature for WMO RA 1 {sub_region_names[i]}' for i in range(6)]
         process_regions(sub_region_names, africa_subregions, regional_data_dir, ds, 'africa_subregion', start_year,
-                        final_year)
+                        final_year, long_names)
 
         lac_region_names = ['South America', 'Mexico and Central America', 'Caribbean',
                             'Mexico', 'Central America', 'Latin America and Caribbean']
+        long_names = [f'Regional mean temperature for {lac_region_names[i]}' for i in range(6)]
         process_regions(lac_region_names, lac_subregions, regional_data_dir, ds, 'lac_subregion', start_year,
-                        final_year)
+                        final_year, long_names)
