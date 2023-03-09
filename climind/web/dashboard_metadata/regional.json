@@ -347,6 +347,12 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
         },
         {
+          "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean)",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean"}
+        },
+        {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
           "processing": [],
@@ -359,6 +365,11 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
