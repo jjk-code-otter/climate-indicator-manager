@@ -793,7 +793,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
 
 
 def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-              image_filename: str, title: str) -> str:
+                image_filename: str, title: str) -> str:
     cherry_params = {
         'axes.axisbelow': False,
         'axes.labelsize': 20,
@@ -834,15 +834,15 @@ def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSe
 
     sns.set(font='Franklin Gothic Book', rc=cherry_params)
 
-    ds =all_datasets[0]
+    ds = all_datasets[0]
 
     plt.figure(figsize=[16, 8])
     date_range = ds.get_string_date_range()
     col = ds.metadata['colour']
 
     plt.scatter(ds.df['year'], ds.df['data'], s=100, alpha=0.4,
-                  label=f"{ds.metadata['display_name']} ({date_range})",
-                  color=col, zorder=10, linewidth=1)
+                label=f"{ds.metadata['display_name']} ({date_range})",
+                color=col, zorder=10, linewidth=1)
 
     sns.despine(right=True, top=True, left=True, bottom=True)
 
@@ -852,17 +852,17 @@ def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSe
     may1 = date(2003, 5, 1).timetuple().tm_yday
 
     xlims = plt.gca().get_xlim()
-    xlims = [xlims[0]-45, xlims[1]]
+    xlims = [xlims[0] - 45, xlims[1]]
 
     plt.plot(xlims, [march15, march15], color='#d13d64', zorder=1)
     plt.plot(xlims, [april1, april1], color='#d13d64', zorder=1)
     plt.plot(xlims, [april15, april15], color='#d13d64', zorder=1)
     plt.plot(xlims, [may1, may1], color='#d13d64', zorder=1)
 
-    plt.text(xlims[0], march15+1, 'March 15', color='#d13d64')
-    plt.text(xlims[0], april1+1, 'April 1', color='#d13d64')
-    plt.text(xlims[0], april15+1, 'April 15', color='#d13d64')
-    plt.text(xlims[0], may1+1, 'May 1', color='#d13d64')
+    plt.text(xlims[0], march15 + 1, 'March 15', color='#d13d64')
+    plt.text(xlims[0], april1 + 1, 'April 1', color='#d13d64')
+    plt.text(xlims[0], april15 + 1, 'April 15', color='#d13d64')
+    plt.text(xlims[0], may1 + 1, 'May 1', color='#d13d64')
 
     plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40},
                         color='#d13d64', x=0.37, y=0.95)
@@ -873,6 +873,7 @@ def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSe
     plt.close()
 
     return ''
+
 
 def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
                 image_filename: str, title: str, order: list = []) -> str:
@@ -1048,11 +1049,10 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
 def show_premade_image(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
                        image_filename: str, title: str,
                        original_filename: str = '', caption: str = ''):
-
     from climind.config.config import DATA_DIR
     source_dir = DATA_DIR / 'ManagedData' / 'Figures'
 
-    for extension in ['.png','.svg','.pdf']:
+    for extension in ['.png', '.svg', '.pdf']:
         source_file = source_dir / original_filename.replace('.png', extension)
 
         if source_dir.exists():
@@ -1298,6 +1298,129 @@ def dashboard_rank_map(out_dir: Path, all_datasets: List[GridAnnual], image_file
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'rank')
 
 
+def regional_dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
+                                   grid_type: str, west=None, east=None, south=None, north=None) -> str:
+    """
+    Plot generic style map for the dashboard. Type must be one of "mean", "rank", or "unc".
+
+    Parameters
+    ----------
+    out_dir: Path
+        Output directory to which the image will be written
+    all_datasets: List[GridAnnual]
+        List of :class:`.GridAnnual` datasets to be plotted
+    image_filename: str
+        Filename for output file
+    title: str
+        Title for the plot
+    grid_type: str
+        Indicates how the datasets in the input list should be combined, 'mean', 'rank' or 'unc'
+    west: float
+        Western extent of region to plot
+    east: float
+        Eastern extent of region to plot
+    north: float
+        Northern extent of region to plot
+    south: float
+        Southern extent of region to plot
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
+    if grid_type == 'mean' or grid_type == 'rank':
+        dataset = process_datasets(all_datasets, 'median')
+    elif grid_type == 'unc':
+        dataset = process_datasets(all_datasets, 'range')
+    else:
+        raise RuntimeError(f'Unknown type {grid_type}')
+
+    last_months = []
+    for ds in all_datasets:
+        year_month = "-".join(ds.metadata['last_month'].split('-')[0:2])
+        last_months.append(f"{ds.metadata['display_name']} to {year_month}")
+    ds = all_datasets[-1]
+
+    data = dataset.df['tas_mean']
+    lon = dataset.df.coords['longitude']
+    lon_idx = data.dims.index('longitude')
+    wrap_data, wrap_lon = add_cyclic_point(data.values, coord=lon, axis=lon_idx)
+
+    plt.figure(figsize=(16, 9))
+    proj = ccrs.PlateCarree(central_longitude=0)
+
+    if grid_type == 'mean':
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    elif grid_type == 'unc':
+        wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    elif grid_type == 'rank':
+        wmo_cols = ["#f0f9e8", "#bae4bc", "#7bccc4", "#43a2ca", "#0868ac"]
+        wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
+        wmo_cols = list(reversed(wmo_cols))
+        wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
+
+    fig = plt.figure(figsize=(16, 9))
+    ax = fig.add_subplot(111, projection=proj, aspect='auto')
+    if grid_type == 'mean' or grid_type == 'rank':
+        p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                        transform=ccrs.PlateCarree(), robust=True,
+                        levels=wmo_levels,
+                        colors=wmo_cols, add_colorbar=False,
+                        extend='both'
+                        )
+    elif grid_type == 'unc':
+        p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                        transform=ccrs.PlateCarree(), robust=True,
+                        levels=wmo_levels,
+                        cmap='YlGnBu', add_colorbar=False,
+                        extend='max'
+                        )
+
+    cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
+
+    cbar.ax.tick_params(labelsize=15)
+    cbar.set_ticks(wmo_levels)
+    cbar.set_ticklabels(wmo_levels)
+
+    plt.gcf().text(.075, .012, ",".join(last_months),
+                   bbox={'facecolor': 'w', 'edgecolor': None})
+
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.90, .012, current_time[0:28], ha='right',
+                   bbox={'facecolor': 'w', 'edgecolor': None})
+
+    label_text = f"Temperature difference from " \
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+    if grid_type == 'unc':
+        label_text = r'Temperature anomaly half-range ($\degree$C)'
+    cbar.set_label(label_text, rotation=0, fontsize=15)
+
+    p.axes.coastlines()
+    p.axes.set_extent([west, east, south, north], crs=proj)
+#    p.axes.set_adjustable('datalim')
+    p.axes.set_aspect('equal')
+    #    p.axes.set_global()
+
+    plt.title(f'{title}', pad=20, fontdict={'fontsize': 20})
+    plt.savefig(out_dir / f'{image_filename}')
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
+    plt.close()
+
+    caption = map_caption_builder(all_datasets, grid_type)
+
+    return caption
+
+
+def regional_dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
+                           west=None, east=None, south=None, north=None) -> str:
+    return regional_dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'mean',
+                                          west=west, east=east, north=north, south=south)
+
+
 # Miscellany
 def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
     """
@@ -1405,31 +1528,31 @@ def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSe
         holder.expand = True
         holder.widest = True
 
-        plt.fill_between([i,i+1],
-                         [holder.lower_range(),holder.lower_range()],
-                         [holder.upper_range(),holder.upper_range()],
+        plt.fill_between([i, i + 1],
+                         [holder.lower_range(), holder.lower_range()],
+                         [holder.upper_range(), holder.upper_range()],
                          color='#7ea0f7'
                          )
 
         holder.widest = False
 
-        plt.fill_between([i,i+1],
-                         [holder.lower_range(),holder.lower_range()],
-                         [holder.upper_range(),holder.upper_range()],
+        plt.fill_between([i, i + 1],
+                         [holder.lower_range(), holder.lower_range()],
+                         [holder.upper_range(), holder.upper_range()],
                          color='#466dcf'
                          )
 
         holder.expand = False
 
-        plt.fill_between([i,i+1],
-                         [holder.lower_range(),holder.lower_range()],
-                         [holder.upper_range(),holder.upper_range()],
+        plt.fill_between([i, i + 1],
+                         [holder.lower_range(), holder.lower_range()],
+                         [holder.upper_range(), holder.upper_range()],
                          color='#173c99'
                          )
 
-        plt.plot([i,i+1], [holder.best_estimate(), holder.best_estimate()],color='black',linewidth=2)
+        plt.plot([i, i + 1], [holder.best_estimate(), holder.best_estimate()], color='black', linewidth=2)
 
-        plt.text(i+0.5, 0, equivalence[v], ha='center', va='center',fontsize=20)
+        plt.text(i + 0.5, 0, equivalence[v], ha='center', va='center', fontsize=20)
 
     ylims = plt.gca().get_ylim()
     ylims = [ylims[0], ylims[1]]
