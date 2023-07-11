@@ -13,7 +13,7 @@
   "notes": "Data from the GRACE and GRACE-FO JPL RL06Mv2 Mascon Solution",
   "datasets": [
      {
-      "url": ["https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI/greenland_mass_200204_YYYYMMMM.txt"],
+      "url": ["https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/GREENLAND_MASS_TELLUS_MASCON_CRI_TIME_SERIES_RL06.1_V3/greenland_mass_200204_YYYYMMMM.txt"],
       "filename": ["greenland_mass_200204_YYYYMMMM.txt"],
 	  "type": "timeseries",
       "long_name": "Greenland ice sheet cumulative mass balance",
@@ -25,10 +25,10 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_grace",
-	  "fetcher": "fetcher_grace"
+	  "fetcher": "fetcher_no_url"
     },
     {
-      "url": ["https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI/greenland_mass_200204_YYYYMMMM.txt"],
+      "url": ["https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/GREENLAND_MASS_TELLUS_MASCON_CRI_TIME_SERIES_RL06.1_V3/greenland_mass_200204_YYYYMMMM.txt"],
       "filename": ["greenland_mass_200204_YYYYMMMM.txt"],
 	  "type": "timeseries",
       "long_name": "Greenland ice sheet cumulative mass balance",
@@ -40,7 +40,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_grace",
-	  "fetcher": "fetcher_grace"
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

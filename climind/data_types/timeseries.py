@@ -1115,6 +1115,9 @@ class TimeSeriesAnnual(TimeSeries):
 
         super().write_generic_csv(filename, metadata_filename, monthly, uncertainty, irregular, columns_to_write)
 
+    def write_simple_csv(self, filename):
+        self.df.to_csv(filename)
+
     def get_year_axis(self) -> List[float]:
         """
         Return a year axis with dates represented as decimal years.

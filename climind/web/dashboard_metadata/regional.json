@@ -248,6 +248,12 @@
           "plotting": {"function": "neat_plot", "title": "Central America"}
         },
         {
+          "link_to":  null, "title": "Latin America and the Caribbean",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean"}
+        },
+        {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
           "processing": [],
@@ -301,6 +307,11 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }

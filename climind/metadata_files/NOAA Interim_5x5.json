@@ -1,20 +1,20 @@
 {
     "name": "NOAA Interim_5x5",
-    "display_name": "NOAA Interim",
-    "version": "",
+    "display_name": "NOAAGlobalTemp",
+    "version": "v5.1.0",
     "variable": "tas",
     "units": "degC",
     "citation": [
-        "Vose, R. S., Huang, B., Yin, X., Arndt, D., Easterling, D. R., Lawrimore, J. H., et al. (2021). Implementing full spatial coverage in NOAA\u00e2\u20ac\u2122s global temperature analysis. Geophysical Research Letters, 48, e2020GL090873. https://doi.org/10.1029/2020GL090873"
+        ""
     ],
     "citation_url": [
-        "https://doi.org/10.1029/2020GL090873"
+        ""
     ],
     "data_citation": [
         ""
     ],
     "acknowledgement": "",
-    "colour": "#805800",
+    "colour": "#e69f00",
     "zpos": 10,
     "datasets": [
         {
@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['temp.ano.merg5.asc'] downloaded from ['https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/2020.grl.dat/interim.2020/temp.ano.merg5.asc'] at ['2022-07-27 09:13:27']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-05-10 08:50:04']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAA Interim_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2022-07-27 09:13:27"
+                "2023-05-10 08:50:04"
             ],
-            "last_month": "2020-12-01"
+            "last_month": "2023-03-01"
         }
     ]
 }

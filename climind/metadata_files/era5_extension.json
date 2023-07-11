@@ -1,8 +1,8 @@
 {
-  "name": "ERA5",
+  "name": "ERA5 extension",
   "display_name": "ERA5",
   "version": "",
-  "variable": "tas",
+  "variable": "tasIGNORE",
   "units": "degC",
   "citation": ["Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803",
                "Bell, B., Hersbach, H., Simmons, A., Berrisford, P., Dahlgren, P., Horányi, A., et al. (2021) The ERA5 global reanalysis: Preliminary extension to 1950. Q J R Meteorol Soc, 147 741, 4186-4227. https://doi.org/10.1002/qj.4174"],

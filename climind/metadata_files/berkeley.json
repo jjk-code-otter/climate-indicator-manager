@@ -12,7 +12,7 @@
   "zpos": 10,
   "datasets": [
     {
-      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Gridded/Land_and_Ocean_LatLong1.nc"],
+      "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Gridded/Land_and_Ocean_LatLong1.nc"],
 	  "filename": ["Land_and_Ocean_LatLong1.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",
@@ -27,7 +27,7 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Land_and_Ocean_complete.txt"],
+      "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt"],
 	  "filename": ["Land_and_Ocean_complete.txt"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
@@ -42,7 +42,7 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["http://berkeleyearth.lbl.gov/auto/Global/Land_and_Ocean_complete.txt"],
+      "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt"],
 	  "filename": ["Land_and_Ocean_complete.txt"],
       "type": "timeseries",
       "long_name": "Global mean temperature",

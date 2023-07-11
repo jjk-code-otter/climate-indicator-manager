@@ -433,19 +433,27 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
-    min_march_rank, max_march_rank = pu.calculate_ranks(march, year, ascending=True)
-    mean_march_value, min_march_value, max_march_value = pu.calculate_values(march, year)
+    out_text = ''
 
-    min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
-    mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
+    try:
+        min_march_rank, max_march_rank = pu.calculate_ranks(march, year, ascending=True)
+        mean_march_value, min_march_value, max_march_value = pu.calculate_values(march, year)
 
-    out_text = f'Arctic sea ice extent in March {year} was between {min_march_value:.2f} and ' \
-               f'{max_march_value:.2f}{units}. ' \
-               f'This was {rank_ranges(min_march_rank, max_march_rank)} lowest extent on record. ' \
-               f'In September the extent was between {min_september_value:.2f} and ' \
-               f'{max_september_value:.2f}{units}. ' \
-               f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
-               f'Data sets used were: {dataset_name_list(all_datasets)}'
+        out_text = f'Arctic sea ice extent in March {year} was between {min_march_value:.2f} and ' \
+                   f'{max_march_value:.2f}{units}. ' \
+                   f'This was {rank_ranges(min_march_rank, max_march_rank)} lowest extent on record. '
+    except:
+        out_text += f"March data are not available for {year}."
+
+    try:
+        min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
+        mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
+        out_text += f'In September the extent was between {min_september_value:.2f} and ' \
+                    f'{max_september_value:.2f}{units}. ' \
+                    f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
+                    f'Data sets used were: {dataset_name_list(all_datasets)}'
+    except:
+        out_text += f"September data are not available for {year}."
 
     return out_text
 

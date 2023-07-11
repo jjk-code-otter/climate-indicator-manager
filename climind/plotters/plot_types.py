@@ -345,6 +345,27 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
     add_labels(plt.gca(), ds)
 
+    #plt.plot([2025, 2025],[1.5, 1.5],color='green', label='fcst', marker='*',  markersize=15)
+    # plt.plot([1850,2027], [1.5, 1.5],color='green', linewidth=3)
+    # plt.text(2027, 1.5, '1.5$\degree$C', color='green', ha='right', va='bottom',fontsize=24)
+    #
+    # plt.text(2012,1.3, 'Linear projection 30-year average ±0.2', color='pink', ha='right', va='center',fontsize=24)
+    # ad = all_datasets[-1]
+    # ad = ad.select_year_range(1980, 2022)
+    # from sklearn.linear_model import LinearRegression
+    # x = np.array(ad.df['year']).reshape((-1, 1))
+    # y = np.array(ad.df['data'])
+    # model = LinearRegression()
+    # model.fit(x, y)
+    # print(10 * model.coef_)
+    # x_pred = np.arange(1980,2027.5,1)
+    # y_pred = model.predict(x_pred.reshape((-1,1)))
+    # plt.plot(x_pred, y_pred, color='pink', linewidth=4, linestyle='--')
+    # plt.plot(x_pred, y_pred+0.2, color='pink', linewidth=1, linestyle='--')
+    # plt.plot(x_pred, y_pred-0.2, color='pink', linewidth=1, linestyle='--')
+    # plt.plot([2023,2023],[-0.2,1.5], linewidth=1, linestyle='--', color='#dddddd')
+    # plt.plot([2027,2027],[-0.2,1.5], linewidth=1, linestyle='--', color='#dddddd')
+
     ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
     xlo, xhi, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
@@ -1313,6 +1334,11 @@ def regional_dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_
     region_extents = [west, east, south, north]
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'mean', region=region_extents)
 
+def regional_dashboard_uncertainty_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
+                           west=None, east=None, south=None, north=None) -> str:
+    region_extents = [west, east, south, north]
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'unc', region=region_extents)
+
 
 # Miscellany
 def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
@@ -1362,20 +1388,21 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
         colour = 'lightgrey'
         lthk = 1
         if year >= 2015:
-            colour = 'indianred'
+            colour = 'dodgerblue' # 'indianred'
+            lthk = 2
         if year == last_year:
             colour = 'darkred'
             lthk = 3
             all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
             for y2 in range(1980, last_year):
                 plt.plot(range(n_months_last_year, 13), all_accumulators[n_months_last_year - 1:, y2 - first_year],
-                         color=colour, linewidth=0.1)
+                         color=colour, linewidth=0.5, zorder=-5)
 
         plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk)
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(FANCY_UNITS['degC'])
-    plt.gca().set_ylim(0.1, 0.85)
+    plt.gca().set_ylim(-1.54, 0.85)
     plt.xticks(np.arange(1, 13, 1))
     plt.title(dataset.metadata['display_name'])
 

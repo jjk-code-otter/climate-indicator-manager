@@ -25,7 +25,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2022
+    final_year = 2023
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': 'HadCRUT5'})
+                                 'name': 'GISTEMP'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
@@ -63,9 +63,9 @@ if __name__ == "__main__":
 
     for ds in all_annual_datasets:
         copy_ds = copy.deepcopy(ds)
-        copy_ds.metadata['display_name'] = 'HadCRUT5 10-year'
-        copy_ds.metadata['colour'] = '#a6cee3'
-        tens.append(copy_ds.running_mean(10, centred=True))
+        copy_ds.metadata['display_name'] = 'HadCRUT5 1-year'
+        copy_ds.metadata['colour'] = '#dddddd'
+        tens.append(copy_ds)
 
         copy_ds = copy.deepcopy(ds)
         copy_ds.metadata['display_name'] = 'HadCRUT5 5-year'
@@ -73,8 +73,18 @@ if __name__ == "__main__":
         tens.append(copy_ds.running_mean(5, centred=True))
 
         copy_ds = copy.deepcopy(ds)
+        copy_ds.metadata['display_name'] = 'HadCRUT5 10-year'
+        copy_ds.metadata['colour'] = '#a6cee3'
+        tens.append(copy_ds.running_mean(10, centred=True))
+
+        copy_ds = copy.deepcopy(ds)
         copy_ds.metadata['display_name'] = 'HadCRUT5 20-year'
         copy_ds.metadata['colour'] = '#1f78b4'
         tens.append(copy_ds.running_mean(20, centred=True))
 
-    pt.neat_plot(figure_dir, tens, 'centred.png', r'Global Mean Temperature Difference ($\degree$C))')
+        copy_ds = copy.deepcopy(ds)
+        copy_ds.metadata['display_name'] = 'HadCRUT5 30-year'
+        copy_ds.metadata['colour'] = '#444444'
+        tens.append(copy_ds.running_mean(30, centred=True))
+
+    pt.neat_plot(figure_dir, tens, 'era_centred.png', r'Global Mean Temperature Difference ($\degree$C)')

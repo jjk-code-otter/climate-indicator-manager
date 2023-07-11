@@ -5,18 +5,16 @@
     "variable": "tas",
     "units": "degC",
     "citation": [
-        "Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803",
-        "Bell, B., Hersbach, H., Simmons, A., Berrisford, P., Dahlgren, P., Hor\u00c3\u00a1nyi, A., et al. (2021) The ERA5 global reanalysis: Preliminary extension to 1950. Q J R Meteorol Soc, 147 741, 4186-4227. https://doi.org/10.1002/qj.4174"
+        "Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803"
     ],
     "citation_url": [
-        "https://doi.org/10.1002/qj.3803",
-        "https://doi.org/10.1002/qj.4174"
+        "https://doi.org/10.1002/qj.3803"
     ],
     "data_citation": [
         ""
     ],
     "acknowledgement": "",
-    "colour": "#dddd00",
+    "colour": "#0072b2",
     "zpos": 1,
     "datasets": [
         {
@@ -35,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['era5_2m_tas_YYYY.nc'] downloaded from ['extension']",
+                "Gridded dataset created from file ['era5_2m_tas_YYYY.nc'] downloaded from ['']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -43,7 +41,7 @@
             ],
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
-            "last_month": "2022-12-01"
+            "last_month": "2023-04-01"
         }
     ]
 }

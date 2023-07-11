@@ -52,7 +52,8 @@ if __name__ == "__main__":
                                   'name': [  # 'NOAA Interim',
                                       'Kadow IPCC',
                                       # 'Berkeley IPCC',
-                                      'NOAA Interim IPCC']})
+                                  #    'NOAA Interim IPCC'
+                                  ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
@@ -128,7 +129,7 @@ if __name__ == "__main__":
         tens.append(ds.running_mean(10))
         twenties.append(ds.running_mean(20))
         thirties.append(ds.running_mean(20))
-        dtens.append(ds.running_mean(10).select_decade())
+        dtens.append(ds.running_mean(10).select_decade(2))
 
     for ds in sst_anns:
         sst_tens.append(ds.running_mean(10))

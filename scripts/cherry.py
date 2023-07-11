@@ -58,4 +58,7 @@ if __name__ == "__main__":
 
     ann_datasets = ann_archive.read_datasets(data_dir)
 
+    for ds in ann_datasets:
+        ds.write_simple_csv(fdata_dir / 'cherry.csv')
+
     pt.cherry_plot(figure_dir, ann_datasets, 'cherry_blossom.png', 'Cherry Tree Flowering at Kyoto City')

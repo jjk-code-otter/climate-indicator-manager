@@ -1,7 +1,7 @@
 {
   "name": "ERSST",
   "display_name": "ERSST",
-  "version": "v5.0.0",
+  "version": "v5.1.0",
   "variable": "sst",
   "units": "degC",
   "citation": ["Huang, B., Peter W. Thorne, et. al, 2017: Extended Reconstructed Sea Surface Temperature version 5 (ERSSTv5), Upgrades, validations, and intercomparisons. J. Climate, doi: 10.1175/JCLI-D-16-0836.1"],
@@ -26,10 +26,10 @@
 	  "fetcher": "fetcher_ersst"
     },
     {
-      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.mon.ocean.90S.90N.v5.0.0.YYYYMMMM.asc",
-	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.ocean.90S.90N.v5.0.0.YYYYMMMM.asc"],
-      "filename": ["aravg.mon.ocean.90S.90N.v5.0.0.YYYYMMMM.asc",
-	               "aravg.ann.ocean.90S.90N.v5.0.0.YYYYMMMM.asc"],
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.mon.ocean.90S.90N.v5.1.0.YYYYMMMM.asc",
+	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.ann.ocean.90S.90N.v5.1.0.YYYYMMMM.asc"],
+      "filename": ["aravg.mon.ocean.90S.90N.v5.1.0.YYYYMMMM.asc",
+	               "aravg.ann.ocean.90S.90N.v5.1.0.YYYYMMMM.asc"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "monthly",
@@ -43,10 +43,10 @@
 	  "fetcher": "fetcher_url_with_backsearch"
     },
     {
-      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.mon.ocean.90S.90N.v5.0.0.YYYYMMMM.asc",
-	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.ocean.90S.90N.v5.0.0.YYYYMMMM.asc"],
-      "filename": ["aravg.mon.ocean.90S.90N.v5.0.0.YYYYMMMM.asc",
-	               "aravg.ann.ocean.90S.90N.v5.0.0.YYYYMMMM.asc"],
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.mon.ocean.90S.90N.v5.1.0.YYYYMMMM.asc",
+	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.ann.ocean.90S.90N.v5.1.0.YYYYMMMM.asc"],
+      "filename": ["aravg.mon.ocean.90S.90N.v5.1.0.YYYYMMMM.asc",
+	               "aravg.ann.ocean.90S.90N.v5.1.0.YYYYMMMM.asc"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "annual",
