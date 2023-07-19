@@ -191,10 +191,10 @@ def fetch(_, out_dir: Path, _filename) -> None:
         exit(1)
 
     # Real time
-    web_path = 'https://rda.ucar.edu/data/ds628.9/'
+    web_path = 'https://data.rda.ucar.edu/ds628.9/'
     filelist = make_realtime_file_list(2020, 2023)
     get_files(filelist, web_path, ret)
 
-    web_path = 'https://rda.ucar.edu/data/ds628.1/'
+    web_path = 'https://data.rda.ucar.edu/ds628.1/'
     filelist = make_file_list(1958, 2020)
     get_files(filelist, web_path, ret)
