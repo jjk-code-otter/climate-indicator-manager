@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-05-10 08:50:04']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-07-19 10:30:33']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAA Interim_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-05-10 08:50:04"
+                "2023-07-19 10:30:33"
             ],
-            "last_month": "2023-03-01"
+            "last_month": "2023-06-01"
         }
     ]
 }

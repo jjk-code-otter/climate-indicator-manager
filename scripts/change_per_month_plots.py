@@ -103,6 +103,6 @@ if __name__ == "__main__":
             m = []
             for ds in all_datasets:
                 ds.rebaseline(1981, 2010)
-                ds.select_year_range(2014, 2022)
+                ds.select_year_range(2014, 2023)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
