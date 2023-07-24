@@ -374,9 +374,9 @@ def test_calculate_ranks(simple_annual_datasets):
     assert max_rank == 1
 
 
-def test_calculate_ranks_missing_year(simple_annual_datasets):
+def test_calculate_ranks_missing_year(annual_datalist):
     with pytest.raises(ValueError):
-        _, _ = pu.calculate_ranks(simple_annual_datasets, 2029)
+        _, _ = pu.calculate_ranks(annual_datalist, 2029)
 
 
 def test_calculate_values(simple_annual_datasets):

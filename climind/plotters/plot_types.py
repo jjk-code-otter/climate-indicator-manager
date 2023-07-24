@@ -1083,7 +1083,7 @@ def quick_and_dirty_map(dataset: xarray.Dataset, image_filename: Path) -> None:
     """
     plt.figure()
     proj = ccrs.PlateCarree()
-    p = dataset.tas_mean[-1].plot(transform=proj, robust=True,
+    p = dataset.tas_mean[-1].plot(transform=proj, #robust=True,
                                   subplot_kws={'projection': proj},
                                   levels=[-3, -2, -1, 0, 1, 2, 3])
     p.axes.coastlines()
@@ -1130,7 +1130,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
 
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
-                    transform=ccrs.PlateCarree(), robust=True,
+                    transform=ccrs.PlateCarree(), #robust=True,
                     levels=wmo_levels,
                     colors=wmo_cols, add_colorbar=False,
                     extend='both'
@@ -1248,14 +1248,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
     if grid_type == 'mean' or grid_type == 'rank':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
-                        transform=ccrs.PlateCarree(), robust=True,
+                        transform=ccrs.PlateCarree(), #robust=True,
                         levels=wmo_levels,
                         colors=wmo_cols, add_colorbar=False,
                         extend='both'
                         )
     elif grid_type == 'unc':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
-                        transform=ccrs.PlateCarree(), robust=True,
+                        transform=ccrs.PlateCarree(), #robust=True,
                         levels=wmo_levels,
                         cmap='YlGnBu', add_colorbar=False,
                         extend='max'

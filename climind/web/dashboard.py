@@ -104,8 +104,12 @@ class WebComponent:
         """
         processed_datasets = []
         for ds in self.datasets:
-            ds = process_single_dataset(ds, self['processing'])
-            processed_datasets.append(ds)
+            try:
+                ds = process_single_dataset(ds, self['processing'])
+            except Exception as e:
+                print(f"Failed to process {ds.metadata['name']} with error {e}")
+            else:
+                processed_datasets.append(ds)
 
         self.datasets = processed_datasets
 

@@ -148,7 +148,11 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
     else:
         out_text = ''
 
-    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    try:
+        min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    except ValueError as e:
+        return f"No data for {year}"
+
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
@@ -183,7 +187,10 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     else:
         out_text = ''
 
-    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    try:
+        min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    except ValueError as e:
+        return f"No data for {year}"
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
     # If this is the highest year in all data sets, leave the text as is
@@ -238,7 +245,10 @@ def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> 
     else:
         out_text = ''
 
-    min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    try:
+        min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+    except ValueError as e:
+        return f"No data for {year}"
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values_ipcc_style(all_datasets, year)
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
@@ -485,19 +495,29 @@ def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) ->
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
-    min_march_rank, max_march_rank = pu.calculate_ranks(march, year, ascending=True)
-    mean_march_value, min_march_value, max_march_value = pu.calculate_values(march, year)
+    out_text = ''
 
-    min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
-    mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
+    try:
+        min_february_rank, max_february_rank = pu.calculate_ranks(march, year, ascending=True)
+        mean_february_value, min_february_value, max_march_value = pu.calculate_values(march, year)
+    except ValueError as e:
+        out_text += 'No data available for February. '
+    else:
+        out_text += f'Antarctic sea ice extent in February {year} was between {min_february_value:.2f} and ' \
+                    f'{max_march_value:.2f}{units}. ' \
+                    f'This was {rank_ranges(min_february_rank, max_february_rank)} lowest extent on record. '
 
-    out_text = f'Antarctic sea ice extent in February {year} was between {min_march_value:.2f} and ' \
-               f'{max_march_value:.2f}{units}. ' \
-               f'This was {rank_ranges(min_march_rank, max_march_rank)} lowest extent on record. ' \
-               f'In September the extent was between {min_september_value:.2f} and ' \
-               f'{max_september_value:.2f}{units}. ' \
-               f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
-               f'Data sets used were: {dataset_name_list(all_datasets)}'
+    try:
+        min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
+        mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
+    except ValueError as e:
+        out_text += 'No data available for September. '
+    else:
+        out_text += f'In September the extent was between {min_september_value:.2f} and ' \
+                    f'{max_september_value:.2f}{units}. ' \
+                    f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
+
+    out_text += f'Data sets used were: {dataset_name_list(all_datasets)}'
 
     return out_text
 
