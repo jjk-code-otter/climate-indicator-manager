@@ -183,7 +183,7 @@ class DataSet:
         try:
             self.data = reader_fn(out_dir, self.metadata, **kwargs)
         except Exception as e:
-            raise Exception(f"Error occurred while executing reader_fn: {e}")
+            raise RuntimeError(f"Error occurred while executing reader_fn: {e}")
         return self.data
 
 
