@@ -50,7 +50,7 @@ def log_activity(in_function: Callable) -> Callable:
         logging.info(f"Running: {in_function.__name__}")
         msg = []
         for a in args:
-            if isinstance(a, TimeSeriesMonthly) or isinstance(a, TimeSeriesAnnual):
+            if isinstance(a, TimeSeries):
                 logging.info(f"on {a.metadata['name']}")
             msg.append(str(a))
         if len(msg) > 0:
@@ -1364,4 +1364,3 @@ class AveragesCollection:
                 return np.max(self.plus_unc_lower)
         else:
             return np.max(self.averages)
-

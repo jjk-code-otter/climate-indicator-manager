@@ -1382,9 +1382,6 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
 
         accumulator = accumulate(df['data'])
         n_months = len(df)
-        # accumulator = np.zeros(n_months)
-        # for i in range(n_months):
-        #     accumulator[i] = np.mean(df['data'][0:i + 1])
 
         if year < last_year:
             all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]

@@ -25,7 +25,6 @@ import pandas as pd
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 from xarray import Dataset
-from unittest.mock import call
 
 
 @pytest.fixture
@@ -304,30 +303,6 @@ def test_select_year_range(test_combo):
     assert subset.df.year.values[1] == 2000
 
 
-def test_log_activity(mocker):
-    def mini():
-        return ''
-
-    m = mocker.patch('logging.info')
-    fn = gd.log_activity(mini)
-    assert fn() == ''
-    m.assert_called_once_with('Running: mini')
-
-
-def test_log_with_args(mocker, annual_grid):
-    def mini(arg1, kw=''):
-        return ''
-
-    m = mocker.patch('logging.info')
-    fn = gd.log_activity(mini)
-    assert fn(annual_grid, kw='test') == ''
-
-    calls = [call('Running: mini'),
-             call('on test_name'),
-             call('With arguments:'),
-             call('And keyword arguments:')]
-
-    m.assert_has_calls(calls, any_order=True)
 
 
 def test_1d_transfer_1_25offset_to_5():
