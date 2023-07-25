@@ -373,7 +373,7 @@ class Page:
             this_card = Card(card_metadata)
             try:
                 this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
-            except Exception as e:
+            except Exception:
                 print(f"Card processing failed {this_card['title']}")
             else:
                 if 'hidden' not in card_metadata:
@@ -404,8 +404,8 @@ class Page:
             this_paragraph = Paragraph(paragraph_metadata)
             try:
                 this_paragraph.process_paragraph(data_dir, archive, focus_year=focus_year)
-            except Exception as e:
-                print(f"Paragraph processing failed.")
+            except Exception:
+                print("Paragraph processing failed.")
             else:
                 processed_paragraphs.append(this_paragraph)
 
