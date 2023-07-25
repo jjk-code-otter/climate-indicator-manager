@@ -215,14 +215,14 @@ def log_activity(in_function) -> Callable:
                 logging.info(f"on {a.metadata['name']}")
             msg.append(str(a))
         if len(msg) > 0:
-            logging.info(f"With arguments:")
+            logging.info("With arguments:")
             logging.info(', '.join(msg))
 
         msg = []
         for k in kwargs:
             msg.append(str(k))
         if len(msg) > 0:
-            logging.info(f"And keyword arguments:")
+            logging.info("And keyword arguments:")
             logging.info(', '.join(msg))
         return in_function(*args, **kwargs)
 
@@ -435,11 +435,6 @@ class GridMonthly:
         regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
         missing_ts = missing.weighted(weights).mean(dim=("latitude", "longitude"))
         regional_ts[missing_ts < threshold] = np.nan
-
-        # import matplotlib.pyplot as plt
-        # plt.plot(missing_ts.data)
-        # plt.plot(regional_ts)
-        # plt.show()
 
         # It's such a struggle extracting time information from these blasted xarrays
         years = regional_ts.time.dt.year.data.tolist()

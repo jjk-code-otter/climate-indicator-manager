@@ -77,6 +77,50 @@ STANDARD_PARAMETER_SET = {
     'ytick.right': False
 }
 
+def accumulate(in_array):
+    """
+    Calculate the accumulated mean for an array so that the nth value is
+    the mean of the first n values in the input array.
+
+    Parameters
+    ----------
+    in_array
+
+    Returns
+    -------
+
+    """
+    n_months = len(in_array)
+    accumulator = np.zeros(n_months)
+    for i in range(n_months):
+        accumulator[i] = np.mean(in_array[0:i+1])
+    return accumulator
+
+
+def equivalence(key):
+    lookup = {
+        'tas': 'Globe',
+        'wmo_ra_1': 'Africa',
+        'wmo_ra_2': 'Asia',
+        'wmo_ra_3': 'South America',
+        'wmo_ra_4': 'North America',
+        'wmo_ra_5': 'Southwest Pacific',
+        'wmo_ra_6': 'Europe',
+        'africa_subregion_1': 'North Africa',
+        'africa_subregion_2': 'West Africa',
+        'africa_subregion_3': 'Central Africa',
+        'africa_subregion_4': 'Eastern Africa',
+        'africa_subregion_5': 'Southern Africa',
+        'africa_subregion_6': 'Indian Ocean',
+        'lac_subregion_1': 'South America',
+        'lac_subregion_2': 'Mexico and Central America',
+        'lac_subregion_3': 'Caribbean',
+        'lac_subregion_4': 'Mexico',
+        'lac_subregion_5': 'Central America',
+        'lac_subregion_6': 'Latin America and Caribbean'
+    }
+    return lookup[key]
+
 
 def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
                   dark: bool = False) -> List[int]:
@@ -347,8 +391,8 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
     add_labels(plt.gca(), ds)
 
-    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca())
+    _, _, yticks = set_yaxis(plt.gca(), ds)
+    _, _, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -403,8 +447,8 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
 
     add_labels(plt.gca(), ds)
 
-    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca())
+    _, _, yticks = set_yaxis(plt.gca(), ds)
+    _, _, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -481,8 +525,8 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
 
     add_labels(plt.gca(), ds)
 
-    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
-    xlo, xhi, xticks = set_xaxis(plt.gca())
+    _, _, yticks = set_yaxis(plt.gca(), ds)
+    _, _, xticks = set_xaxis(plt.gca())
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -551,7 +595,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     yticks = np.arange(0, 101, 10)
 
     xlims = plt.gca().get_xlim()
-    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+    _, _, xticks = set_lo_hi_ticks(xlims, 5.)
 
     plt.yticks(yticks)
     plt.xticks(xticks)
@@ -593,8 +637,8 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close()
-    return f"Figure showing the percentage of ocean area affected by " \
-           f"marine heatwaves and marine cold spells each year since 1982"
+    return "Figure showing the percentage of ocean area affected by " \
+           "marine heatwaves and marine cold spells each year since 1982"
 
 
 def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, _) -> str:
@@ -641,9 +685,9 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     plot_units = add_labels(plt.gca(), ds)
 
-    ylo, yhi, yticks = set_yaxis(plt.gca(), ds)
+    _, _, yticks = set_yaxis(plt.gca(), ds)
     xlims = plt.gca().get_xlim()
-    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+    _, _, xticks = set_lo_hi_ticks(xlims, 5.)
     plt.yticks(yticks)
     plt.xticks(xticks)
 
@@ -740,12 +784,12 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     plt.ylabel(plot_units, rotation=90, labelpad=10)
 
     ylims = plt.gca().get_ylim()
-    ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
+    _, _, yticks = set_lo_hi_ticks(ylims, 0.2)
     if len(yticks) > 10:
-        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
+        _, _, yticks = set_lo_hi_ticks(ylims, 0.5)
 
     xlims = plt.gca().get_xlim()
-    xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+    _, _, xticks = set_lo_hi_ticks(xlims, 5.)
 
     plt.yticks(yticks)
     plt.xticks(xticks)
@@ -908,33 +952,11 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
               f'of different estimates.'
 
-    equivalence = {
-        'tas': 'Globe',
-        'wmo_ra_1': 'Africa',
-        'wmo_ra_2': 'Asia',
-        'wmo_ra_3': 'South America',
-        'wmo_ra_4': 'North America',
-        'wmo_ra_5': 'Southwest Pacific',
-        'wmo_ra_6': 'Europe',
-        'africa_subregion_1': 'North Africa',
-        'africa_subregion_2': 'West Africa',
-        'africa_subregion_3': 'Central Africa',
-        'africa_subregion_4': 'Eastern Africa',
-        'africa_subregion_5': 'Southern Africa',
-        'africa_subregion_6': 'Indian Ocean',
-        'lac_subregion_1': 'South America',
-        'lac_subregion_2': 'Mexico and Central America',
-        'lac_subregion_3': 'Caribbean',
-        'lac_subregion_4': 'Mexico',
-        'lac_subregion_5': 'Central America',
-        'lac_subregion_6': 'Latin America and Caribbean'
-    }
-
     # get list of all unique variables
     variables = get_list_of_unique_variables(in_all_datasets)
     names = []
     for variable in variables:
-        names.append(equivalence[variable])
+        names.append(equivalence(variable))
     superset = superset_dataset_list(in_all_datasets, variables)
     series_count = len(superset)
 
@@ -1015,7 +1037,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             delta = 0.3
             section_mid_point = (y2 + y1) / 2.
 
-            plt.text(section_mid_point, -0.25, f'Trends', fontsize=25, ha='center')
+            plt.text(section_mid_point, -0.25, 'Trends', fontsize=25, ha='center')
             plt.text(section_mid_point, -0.30, f'{y1}-{y2}', fontsize=25, ha='center')
 
             # plot a coloured bar
@@ -1087,7 +1109,7 @@ def quick_and_dirty_map(dataset: xarray.Dataset, image_filename: Path) -> None:
                                   subplot_kws={'projection': proj},
                                   levels=[-3, -2, -1, 0, 1, 2, 3])
     p.axes.coastlines()
-    plt.title(f'')
+    plt.title("")
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
 
@@ -1239,7 +1261,6 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     elif grid_type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     elif grid_type == 'rank':
-        wmo_cols = ["#f0f9e8", "#bae4bc", "#7bccc4", "#43a2ca", "#0868ac"]
         wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
         wmo_cols = list(reversed(wmo_cols))
         wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
@@ -1315,8 +1336,9 @@ def regional_dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_
     region_extents = [west, east, south, north]
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'mean', region=region_extents)
 
+
 def regional_dashboard_uncertainty_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
-                           west=None, east=None, south=None, north=None) -> str:
+                                       west=None, east=None, south=None, north=None) -> str:
     region_extents = [west, east, south, north]
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'unc', region=region_extents)
 
@@ -1358,10 +1380,11 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
         df = df[df['year'] <= year]
         df = df.reset_index()
 
+        accumulator = accumulate(df['data'])
         n_months = len(df)
-        accumulator = np.zeros(n_months)
-        for i in range(n_months):
-            accumulator[i] = np.mean(df['data'][0:i + 1])
+        # accumulator = np.zeros(n_months)
+        # for i in range(n_months):
+        #     accumulator[i] = np.mean(df['data'][0:i + 1])
 
         if year < last_year:
             all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
@@ -1369,14 +1392,15 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
         colour = 'lightgrey'
         lthk = 1
         if year >= 2015:
-            colour = 'dodgerblue' # 'indianred'
+            colour = 'dodgerblue'  # 'indianred'
             lthk = 2
         if year == last_year:
             all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
             for y2 in range(1950, last_year):
                 colour = 'orange'
                 zod = -5
-                if y2 in [1982, 1986, 1994, 1997, 2002, 2004, 2006, 2009, 2015, 2018, 1972, 1965, 1963, 1976, 2014, 1979]:
+                if y2 in [1982, 1986, 1994, 1997, 2002, 2004, 2006, 2009, 2015, 2018, 1972, 1965, 1963, 1976, 2014,
+                          1979]:
                     colour = 'darkred'
                     zod = -1
                 plt.plot(range(n_months_last_year, 13), all_accumulators[n_months_last_year - 1:, y2 - first_year],
@@ -1398,28 +1422,6 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
 
 def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
                                image_filename: str, title: str) -> str:
-    equivalence = {
-        'tas': 'Globe',
-        'wmo_ra_1': 'Africa',
-        'wmo_ra_2': 'Asia',
-        'wmo_ra_3': 'South America',
-        'wmo_ra_4': 'North America',
-        'wmo_ra_5': 'Southwest Pacific',
-        'wmo_ra_6': 'Europe',
-        'africa_subregion_1': 'North Africa',
-        'africa_subregion_2': 'West Africa',
-        'africa_subregion_3': 'Central Africa',
-        'africa_subregion_4': 'Eastern Africa',
-        'africa_subregion_5': 'Southern Africa',
-        'africa_subregion_6': 'Indian Ocean',
-        'lac_subregion_1': 'South America',
-        'lac_subregion_2': 'Mexico and Central America',
-        'lac_subregion_3': 'Caribbean',
-        'lac_subregion_4': 'Mexico',
-        'lac_subregion_5': 'Central America',
-        'lac_subregion_6': 'Latin America and Caribbean'
-    }
-
     variables = get_list_of_unique_variables(in_all_datasets)
 
     plt.figure(figsize=[16, 9])
@@ -1458,7 +1460,7 @@ def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSe
 
         plt.plot([i, i + 1], [holder.best_estimate(), holder.best_estimate()], color='black', linewidth=2)
 
-        plt.text(i + 0.5, 0, equivalence[v], ha='center', va='center', fontsize=20)
+        plt.text(i + 0.5, 0, equivalence(v), ha='center', va='center', fontsize=20)
 
     ylims = plt.gca().get_ylim()
     ylims = [ylims[0], ylims[1]]

@@ -54,14 +54,14 @@ def log_activity(in_function: Callable) -> Callable:
                 logging.info(f"on {a.metadata['name']}")
             msg.append(str(a))
         if len(msg) > 0:
-            logging.info(f"With arguments:")
+            logging.info("With arguments:")
             logging.info(', '.join(msg))
 
         msg = []
         for k in kwargs:
             msg.append(str(k))
         if len(msg) > 0:
-            logging.info(f"And keyword arguments:")
+            logging.info("And keyword arguments:")
             logging.info(', '.join(msg))
         return in_function(*args, **kwargs)
 
@@ -311,8 +311,8 @@ class TimeSeriesIrregular(TimeSeries):
 
         monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
 
-        monthly_series.update_history(f'Calculated monthly average from values using arithmetic mean '
-                                      f'of all dates that fall within each month')
+        monthly_series.update_history('Calculated monthly average from values using arithmetic mean '
+                                      'of all dates that fall within each month')
 
         # update attributes
         monthly_series.metadata['time_resolution'] = 'monthly'
@@ -450,7 +450,7 @@ class TimeSeriesMonthly(TimeSeries):
         self.df = pd.DataFrame(dico)
 
         if self.metadata is not None:
-            start_date, end_date = self.get_start_and_end_dates()
+            _, end_date = self.get_start_and_end_dates()
             self.metadata.dataset['last_month'] = str(end_date)
 
     def __str__(self) -> str:
@@ -1315,7 +1315,7 @@ class AveragesCollection:
         self.widest = False
 
         for ds in all_datasets:
-            first_year, last_year = ds.get_first_and_last_year()
+            first_year, _ = ds.get_first_and_last_year()
             if first_year == 1850:
                 pre_average = ds.running_mean(51)
                 pre_stdev = ds.running_stdev(51)
