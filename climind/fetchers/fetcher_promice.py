@@ -38,16 +38,15 @@ def fetch(url: str, outdir: Path, _):
     None
     """
     # First open up the landing page
-    landing_page_url = f"https://dataverse.geus.dk/api/datasets/:persistentId/" \
-                       f"dirindex?persistentId=doi:10.22008/FK2/OHI23Z"
+    landing_page_url = "https://dataverse.geus.dk/api/datasets/:persistentId/" \
+                       "dirindex?persistentId=doi:10.22008/FK2/OHI23Z"
     landing_page_request = requests.get(landing_page_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
 
     # Next scan through the landing page to find the links to the required files. The ULRs for these change, but
     # the contents of the <a> tags remains the same.
     for link in BeautifulSoup(landing_page_request.text, "html.parser", parse_only=SoupStrainer('a')):
 
-        if ('MB_SMB_D_BMB.csv' in link.contents or
-                'MB_SMB_D_BMB_ann.csv' in link.contents):
+        if ('MB_SMB_D_BMB.csv' in link.contents or 'MB_SMB_D_BMB_ann.csv' in link.contents):
 
             # File number is the number after the last slash in the API call in the <a> tag
             file_number = link['href'].split('/')[-1]

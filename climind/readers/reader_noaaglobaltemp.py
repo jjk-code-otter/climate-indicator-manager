@@ -171,7 +171,10 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeries
             years.append(int(columns[0]))
             months.append(int(columns[1]))
             anomalies.append(float(columns[2]))
-            uncertainties.append(np.sqrt(float(columns[3])))
+
+            uncertainty_value = float(columns[3])
+            if uncertainty_value >= 0.0:
+                uncertainties.append(np.sqrt(uncertainty_value))
 
     selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 
@@ -180,7 +183,10 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeries
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
+    if len(uncertainties) == len(anomalies):
+        return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
+    else:
+        return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
 def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:

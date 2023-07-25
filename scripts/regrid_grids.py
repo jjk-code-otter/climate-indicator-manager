@@ -30,9 +30,9 @@ if __name__ == "__main__":
             'type': 'gridded',
             'time_resolution': 'monthly',
             'name': [#'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'Kadow',
-                     'NOAA Interim', 'HadCRUT5',
-                     'Berkeley Earth', 'GISTEMP',
-                     'NOAAGlobalTemp', 'ERA5', 'JRA-55'
+                     'NOAA Interim'#, 'HadCRUT5',
+                     #'Berkeley Earth', 'GISTEMP',
+                     #'NOAAGlobalTemp', 'ERA5', 'JRA-55'
             ]
         }
     )

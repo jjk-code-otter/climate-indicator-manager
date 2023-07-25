@@ -104,8 +104,12 @@ class WebComponent:
         """
         processed_datasets = []
         for ds in self.datasets:
-            ds = process_single_dataset(ds, self['processing'])
-            processed_datasets.append(ds)
+            try:
+                ds = process_single_dataset(ds, self['processing'])
+            except Exception as e:
+                print(f"Failed to process {ds.metadata['name']} with error {e}")
+            else:
+                processed_datasets.append(ds)
 
         self.datasets = processed_datasets
 
@@ -367,9 +371,14 @@ class Page:
         processed_cards = []
         for card_metadata in self['cards']:
             this_card = Card(card_metadata)
-            this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
-            if 'hidden' not in card_metadata:
-                processed_cards.append(this_card)
+            try:
+                this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
+            except Exception:
+                print(f"Card processing failed {this_card['title']}")
+            else:
+                if 'hidden' not in card_metadata:
+                    processed_cards.append(this_card)
+
         return processed_cards
 
     def _process_paragraphs(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021) -> List[Paragraph]:
@@ -393,8 +402,13 @@ class Page:
         processed_paragraphs = []
         for paragraph_metadata in self['paragraphs']:
             this_paragraph = Paragraph(paragraph_metadata)
-            this_paragraph.process_paragraph(data_dir, archive, focus_year=focus_year)
-            processed_paragraphs.append(this_paragraph)
+            try:
+                this_paragraph.process_paragraph(data_dir, archive, focus_year=focus_year)
+            except Exception:
+                print("Paragraph processing failed.")
+            else:
+                processed_paragraphs.append(this_paragraph)
+
         return processed_paragraphs
 
     def build(self, build_dir: Path, data_dir: Path, archive: DataArchive,

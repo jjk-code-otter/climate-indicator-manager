@@ -21,6 +21,7 @@ import numpy as np
 import itertools
 from datetime import date
 from pathlib import Path
+from unittest.mock import call
 from climind.data_manager.metadata import DatasetMetadata, CollectionMetadata, CombinedMetadata
 import climind.data_types.timeseries as ts
 
@@ -251,6 +252,33 @@ def test_metadata():
     collection_metadata = CollectionMetadata(global_attributes)
 
     return CombinedMetadata(dataset_metadata, collection_metadata)
+
+def test_log_activity(mocker):
+    def mini():
+        return ''
+
+    m = mocker.patch('logging.info')
+    fn = ts.log_activity(mini)
+    assert fn() == ''
+    m.assert_called_once_with('Running: mini')
+
+
+def test_log_with_args(mocker, simple_annual):
+    def mini(arg1, kw=''):
+        return ''
+
+    m = mocker.patch('logging.info')
+    fn = ts.log_activity(mini)
+    simple_annual.metadata['name'] = 'test_name'
+    assert fn(simple_annual, kw='test') == ''
+
+    calls = [call('Running: mini'),
+             call('on test_name'),
+             call('With arguments:'),
+             call('And keyword arguments:')]
+
+    m.assert_has_calls(calls, any_order=True)
+
 
 
 # Base TimeSeries class

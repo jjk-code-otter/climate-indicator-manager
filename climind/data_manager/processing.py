@@ -178,9 +178,12 @@ class DataSet:
         -------
             Object of the appropriate type
         """
-        print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
+        # print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        self.data = reader_fn(out_dir, self.metadata, **kwargs)
+        try:
+            self.data = reader_fn(out_dir, self.metadata, **kwargs)
+        except Exception as e:
+            raise RuntimeError(f"Error occurred while executing reader_fn: {e}")
         return self.data
 
 
@@ -400,8 +403,13 @@ class DataCollection:
 
         all_datasets = []
 
-        for key in self.datasets:
-            all_datasets.append(key.read_dataset(collection_dir, **kwargs))
+        for dataset in self.datasets:
+            try:
+                read_in_dataset = dataset.read_dataset(collection_dir, **kwargs)
+            except Exception as e:
+                print(f"Failed to read {dataset.metadata['name']} with error message {e}")
+            else:
+                all_datasets.append(read_in_dataset)
 
         return all_datasets
 

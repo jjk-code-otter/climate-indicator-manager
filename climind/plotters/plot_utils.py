@@ -89,7 +89,7 @@ def calculate_ranks(all_datasets: List[TimeSeriesAnnual], year: int, ascending: 
             all_ranks.append(rank)
 
     if len(all_ranks) == 0:
-        raise ValueError("Year not found in any data set")
+        raise ValueError(f"Year {year} not found in any data sets of {ds.metadata['variable']}")
 
     # calculate the mean trend and max and min trends
     max_rank = np.max(all_ranks)

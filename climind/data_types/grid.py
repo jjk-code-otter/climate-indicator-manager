@@ -192,43 +192,6 @@ def make_standard_grid(out_grid: np.ndarray, start_date: datetime, freq: str, nu
     return dataset
 
 
-def log_activity(in_function) -> Callable:
-    """
-    Decorator function to log name of function run and with which arguments.
-    This aims to provide some traceability in the output.
-
-    Parameters
-    ----------
-    in_function: Callable
-        The function to be decorated
-
-    Returns
-    -------
-    Callable
-    """
-
-    def wrapper(*args, **kwargs):
-        logging.info(f"Running: {in_function.__name__}")
-        msg = []
-        for a in args:
-            if isinstance(a, GridMonthly) or isinstance(a, GridAnnual):
-                logging.info(f"on {a.metadata['name']}")
-            msg.append(str(a))
-        if len(msg) > 0:
-            logging.info(f"With arguments:")
-            logging.info(', '.join(msg))
-
-        msg = []
-        for k in kwargs:
-            msg.append(str(k))
-        if len(msg) > 0:
-            logging.info(f"And keyword arguments:")
-            logging.info(', '.join(msg))
-        return in_function(*args, **kwargs)
-
-    return wrapper
-
-
 def rank_array(in_array: np.ndarray) -> int:
     """
     Rank array
@@ -257,6 +220,7 @@ class GridMonthly:
     :class:`.CombinedMetadata` to bring together data and
     metadata in one object. It represents monthly averages of data on a regular grid.
     """
+
     def __init__(self, input_data: xa.Dataset, metadata: CombinedMetadata):
         """
         Create a :class:'.GridMonthly` object from an xarray
@@ -388,7 +352,8 @@ class GridMonthly:
 
         return out_series
 
-    def calculate_regional_average_missing(self, regions, region_number, threshold=0.3, land_only=True) -> ts.TimeSeriesMonthly:
+    def calculate_regional_average_missing(self, regions, region_number, threshold=0.3,
+                                           land_only=True) -> ts.TimeSeriesMonthly:
         """
         Calculate a regional average from the grid. The region is specified by a geopandas
         Geodataframe and the index (region_number) of the chosen shape. By default, the output
@@ -420,7 +385,7 @@ class GridMonthly:
         # copy the variable array, set values to one and missing data to zero then mask that
         missing = copy.deepcopy(self.df.tas_mean)
         replacer = (np.isnan(missing.data))
-        missing.data[:,:,:] = 1.0
+        missing.data[:, :, :] = 1.0
         missing.data[replacer] = 0.0
         missing = missing.where(r1)
 
@@ -435,11 +400,6 @@ class GridMonthly:
         regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
         missing_ts = missing.weighted(weights).mean(dim=("latitude", "longitude"))
         regional_ts[missing_ts < threshold] = np.nan
-
-        # import matplotlib.pyplot as plt
-        # plt.plot(missing_ts.data)
-        # plt.plot(regional_ts)
-        # plt.show()
 
         # It's such a struggle extracting time information from these blasted xarrays
         years = regional_ts.time.dt.year.data.tolist()
@@ -475,6 +435,7 @@ class GridAnnual:
     :class:`.CombinedMetadata` to bring together data and
     metadata in one object. It represents annual averages of data.
     """
+
     def __init__(self, input_data, metadata: CombinedMetadata):
         """
         Create an annual gridded data set from an xarray Dataset and
