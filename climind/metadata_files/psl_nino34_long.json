@@ -1,0 +1,30 @@
+{
+  "name": "Nino34Long",
+  "display_name": "HadISST",
+  "version": "",
+  "variable": "nino34",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.data"],
+      "filename": ["nino34.long.data"],
+	  "type": "timeseries",
+      "long_name": "Nino 3.4 index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_psl",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

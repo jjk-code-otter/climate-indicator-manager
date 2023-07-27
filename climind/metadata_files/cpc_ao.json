@@ -1,0 +1,30 @@
+{
+  "name": "AO",
+  "display_name": "NOAA CPC",
+  "version": "",
+  "variable": "ao",
+  "units": "1",
+  "citation": ["https://www.ncei.noaa.gov/access/monitoring/ao/"],
+  "citation_url": ["https://www.ncei.noaa.gov/access/monitoring/ao/"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/monthly.ao.index.b50.current.ascii.table"],
+      "filename": ["monthly.ao.index.b50.current.ascii.table"],
+	  "type": "timeseries",
+      "long_name": "Arctic Oscillation index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cpc",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

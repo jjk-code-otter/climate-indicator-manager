@@ -1,0 +1,44 @@
+{
+  "name": "PDO",
+  "display_name": "NOAA CPC",
+  "version": "",
+  "variable": "pdo",
+  "units": "degC",
+  "citation": ["https://www.ncei.noaa.gov/access/monitoring/pdo/"],
+  "citation_url": ["https://www.ncei.noaa.gov/access/monitoring/pdo/"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/index/ersst.v5.pdo.dat"],
+      "filename": ["ersst.v5.pdo.dat"],
+	  "type": "timeseries",
+      "long_name": "Pacific Decadal Oscillation index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaa_index",
+	  "fetcher": "fetcher_standard_url"
+    },     {
+      "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/index/ersst.v5.pdo.dat"],
+      "filename": ["ersst.v5.pdo.dat"],
+	  "type": "timeseries",
+      "long_name": "Pacific Decadal Oscillation index",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaa_index",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

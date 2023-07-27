@@ -129,6 +129,18 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'annual'},
             'Glacier mass balance'
+        ],
+        'aao': [
+            {'variable': 'aao',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'AAO'
+        ],
+        'ao': [
+            {'variable': 'ao',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'AO'
         ]
     }
 
