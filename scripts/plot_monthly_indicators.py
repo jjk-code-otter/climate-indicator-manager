@@ -145,11 +145,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'daily_antarctic' : [
-            {'variable': 'antarctic_ice',
+        'daily_arctic' : [
+            {'variable': 'arctic_ice',
              'type': 'timeseries',
              'time_resolution': 'irregular'},
-        'DailyAntarctic']
+        'DailyArctic']
     }
 
     for combo in holdall:

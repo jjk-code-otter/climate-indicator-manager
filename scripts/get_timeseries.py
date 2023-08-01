@@ -26,6 +26,6 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'type': 'timeseries',
                                  'time_resolution':'irregular',
-                                 'name': ['OSI SAF SH']})
+                                 'name': ['NSIDC']})
 
     ts_archive.download(data_dir)
