@@ -145,11 +145,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'daily_arctic' : [
-            {'variable': 'arctic_ice',
+        'nino34' : [
+            {'variable': 'nino34',
              'type': 'timeseries',
-             'time_resolution': 'irregular'},
-        'DailyArctic']
+             'time_resolution': 'monthly'},
+        'Nino 3.4']
     }
 
     for combo in holdall:
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         m = []
         for ds in all_datasets:
             # ds.select_year_range(1980, 2022)
-            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k']:
+            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34']:
                 ds.rebaseline(1981, 2010)
             if variable in ['antarctica']:
                 ds.zero_on_month(2005, 6)
