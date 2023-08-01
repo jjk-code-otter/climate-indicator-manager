@@ -284,6 +284,10 @@ class TimeSeriesIrregular(TimeSeries):
             dico['uncertainty'] = uncertainty
         self.df = pd.DataFrame(dico)
 
+        self.df['date'] = pd.to_datetime(dict(year=self.df['year'],
+                                              month=self.df['month'],
+                                              day=self.df['day']))
+
     def __str__(self) -> str:
         out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
         return out_str
@@ -408,6 +412,51 @@ class TimeSeriesIrregular(TimeSeries):
         date_range = f"{start_date.year}.{start_date.month:02d}.{start_date.day:02d}-" \
                      f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
         return date_range
+
+    @log_activity
+    def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
+        """
+        Shift the time series to a new baseline, specified by start and end years (inclusive).
+        Each day is rebaselined separately, allowing for changes in seasonality. If years are
+        incomplete, this might give a different result to the annual and monthly versions.
+
+        Parameters
+        ----------
+        baseline_start_year : int
+            The first year of the climatology period
+        baseline_end_year : int
+            The last year of the climatology period
+
+        Returns
+        -------
+        None
+            Action occurs in place
+        """
+        df_copy = copy.deepcopy(self.df)
+        df_copy = df_copy.set_index('date')
+
+        df2 = df_copy[df_copy['year'] >= baseline_start_year]
+        df2 = df2[df2['year'] <= baseline_end_year]
+
+        climatology = df2.groupby([df2.index.month, df2.index.day]).mean()
+        climatology = climatology.data[zip(df_copy.index.month, df_copy.index.day)]
+        climatology.index = df_copy.index
+
+        df_copy.data = df_copy.data - climatology
+        df_copy = df_copy.reset_index()
+
+        self.df['data'] = df_copy['data']
+
+        # update attributes
+        self.metadata['climatology_start'] = baseline_start_year
+        self.metadata['climatology_end'] = baseline_end_year
+        self.metadata['actual'] = False
+
+        self.update_history(
+            f'Rebaselined to {baseline_start_year}-{baseline_end_year} for each month separately by calculating the '
+            f'arithmetic mean of the data over the baseline period and subtracting the mean from all data values. '
+            f'This is done for each month separately (Januarys, Februarys etc).'
+        )
 
 
 class TimeSeriesMonthly(TimeSeries):
