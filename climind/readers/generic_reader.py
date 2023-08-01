@@ -43,6 +43,8 @@ def get_reader_script_name(metadata: CombinedMetadata, **kwargs) -> Optional[str
 
     if metadata['type'] == 'timeseries':
 
+        if metadata['time_resolution'] == 'irregular':
+            chosen_reader_script = 'read_irregular_ts'
         if metadata['time_resolution'] == 'monthly':
             chosen_reader_script = 'read_monthly_ts'
         elif metadata['time_resolution'] == 'annual':
