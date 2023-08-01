@@ -60,7 +60,7 @@ def daily_irregular(test_metadata):
     test_metadata['units'] = 'millionkm2'
 
     number_of_times = 365 * 40 + 10
-    dates = pd.date_range(start=f'1979-01-01', freq='1D', periods=number_of_times)
+    dates = pd.date_range(start='1979-01-01', freq='1D', periods=number_of_times)
 
     years = dates.year.tolist()
     months = dates.month.tolist()

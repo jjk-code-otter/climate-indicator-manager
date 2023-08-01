@@ -63,7 +63,6 @@ def read_irregular_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.T
     months = []
     days = []
     extents = []
-    time = []
 
     with open(filenames[0], 'r') as f:
         f.readline()

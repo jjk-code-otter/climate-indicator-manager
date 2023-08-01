@@ -94,7 +94,7 @@ def calculate_climatology(climatology_start_year, climatology_end_year, df):
 
 def calculate_historical_stats(year_to_exclude, df):
     # Remove chosen year and calculate stats (max, min) on the remainder
-    df3 = df[df['Year'] != final_year]
+    df3 = df[df['Year'] != year_to_exclude]
 
     climatology_max = df3.groupby([df3.index.month, df3.index.day]).max()
     climatology_max = climatology_max.Extent[zip(df.index.month, df.index.day)]
@@ -117,7 +117,7 @@ def calculate_historical_stats(year_to_exclude, df):
 
 def plot_simple_timeseries(df, project_dir, image_filename):
     # Plot simple anomaly series
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     dfplot = df[df['anomalies'].notna()]  # Drop the gaps so it plots nicely data are every other day at start
@@ -128,7 +128,6 @@ def plot_simple_timeseries(df, project_dir, image_filename):
     plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35, fontdict={'fontsize': 35},
                         loc='left')
     ylim = plt.gca().get_ylim()
-    xlim = plt.gca().get_xlim()
     yloc = ylim[1] + 0.025 * (ylim[1] - ylim[0])
     plt.text(plt.gca().get_xlim()[0], yloc,
              'Difference from 1991-2020 average',
@@ -140,7 +139,7 @@ def plot_simple_timeseries(df, project_dir, image_filename):
 
 def plot_stdev_timeseries(df, project_dir, image_filename):
     # Plot simple anomaly series
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     dfplot = df[df['standard_deviations'].notna()]  # Drop the gaps so it plots nicely data are every other day at start
@@ -151,7 +150,6 @@ def plot_stdev_timeseries(df, project_dir, image_filename):
     plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35, fontdict={'fontsize': 35},
                         loc='left')
     ylim = plt.gca().get_ylim()
-    xlim = plt.gca().get_xlim()
     yloc = ylim[1] + 0.025 * (ylim[1] - ylim[0])
     plt.text(plt.gca().get_xlim()[0], yloc,
              'Standard deviations from the 1991-2020 mean',
@@ -163,7 +161,7 @@ def plot_stdev_timeseries(df, project_dir, image_filename):
 
 def plot_stdev_timeseries_comparison(df, project_dir, image_filename):
     # Plot simple anomaly series
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     dfplot = df[df['standard_deviations'].notna()]  # Drop the gaps so it plots nicely data are every other day at start
@@ -175,7 +173,6 @@ def plot_stdev_timeseries_comparison(df, project_dir, image_filename):
     plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35, fontdict={'fontsize': 35},
                         loc='left')
     ylim = plt.gca().get_ylim()
-    xlim = plt.gca().get_xlim()
     yloc = ylim[1] + 0.025 * (ylim[1] - ylim[0])
     plt.text(plt.gca().get_xlim()[0], yloc,
              'Standard deviations from the 1991-2020 mean',
@@ -187,7 +184,7 @@ def plot_stdev_timeseries_comparison(df, project_dir, image_filename):
 
 def plot_one_in_a(df, project_dir, image_filename):
     # Plot simple anomaly series
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     dfplot = df[df['one_in_a'].notna()]  # Drop the gaps so it plots nicely data are every other day at start
@@ -207,7 +204,6 @@ def plot_one_in_a(df, project_dir, image_filename):
     plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023', pad=35, fontdict={'fontsize': 35},
                         loc='left')
     ylim = plt.gca().get_ylim()
-    xlim = plt.gca().get_xlim()
     yloc = ylim[1] + 0.025 * (ylim[1] - ylim[0])
     plt.text(plt.gca().get_xlim()[0], yloc,
              'Expressed as a one-in-N year event',
@@ -219,7 +215,7 @@ def plot_one_in_a(df, project_dir, image_filename):
 
 def plot_one_in_a_non_log(df, project_dir, image_filename):
     # Plot simple anomaly series
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     dfplot = df[df['one_in_a'].notna()]  # Drop the gaps so it plots nicely data are every other day at start
@@ -238,7 +234,6 @@ def plot_one_in_a_non_log(df, project_dir, image_filename):
     plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023', pad=35, fontdict={'fontsize': 35},
                         loc='left')
     ylim = plt.gca().get_ylim()
-    xlim = plt.gca().get_xlim()
     yloc = ylim[1] + 0.025 * (ylim[1] - ylim[0])
     plt.text(plt.gca().get_xlim()[0], yloc,
              'Expressed as a one-in-N year event',
@@ -250,7 +245,7 @@ def plot_one_in_a_non_log(df, project_dir, image_filename):
 
 def plot_annual_cycle(df, project_dir, image_filename):
     # Plot annual cycle plot
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     # Annual cycle
@@ -306,7 +301,7 @@ def plot_annual_cycle(df, project_dir, image_filename):
 
 def plot_annual_cycle_stdev(df, project_dir, image_filename):
     # Plot annual cycle plot
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     # Annual cycle
@@ -363,7 +358,6 @@ def plot_annual_cycle_stdev(df, project_dir, image_filename):
 project_dir = DATA_DIR / "ManagedData"
 data_dir = project_dir / "Data"
 
-# sea_ice_file = data_dir / "NSIDC" / "N_seaice_extent_daily_v3.0.csv"
 sea_ice_file = data_dir / "NSIDC SH" / "S_seaice_extent_daily_v3.0.csv"
 
 final_year = 2023
