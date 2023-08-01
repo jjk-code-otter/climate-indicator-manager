@@ -18,6 +18,7 @@ import os
 from pathlib import Path
 import requests
 from dotenv import load_dotenv
+from netrc import netrc
 from climind.fetchers.fetcher_utils import filename_from_url
 from datetime import datetime
 
@@ -59,16 +60,26 @@ def fetch(url: str, outdir: Path, _) -> None:
         filled_url = url.replace('YYYY', f'{y}')
         filled_url = filled_url.replace('MMMM', f'{m:02d}')
 
-        req = requests.get(filled_url, auth=(username, password))
+        urs = 'urs.earthdata.nasa.gov'
+        netrcDir = os.path.expanduser("~/.netrc")
+        netrc(netrcDir).authenticators(urs)[0]
 
-        filename = filename_from_url(filled_url)
-        filename = outdir / filename
+        with requests.get(filled_url, verify=False, stream=True) as response:
+            if response.status_code != 200:
+                print("{} not downloaded. Verify that your username and password are correct in {}".format(
+                    filled_url.split('/')[-1].strip(), netrcDir))
+            else:
+                response.raw.decode_content = True
+                content = response.raw
 
-        if req.status_code != 404 and req.status_code != 500:
-            with open(filename, 'wb') as outfile:
-                chunk_size = 1048576
-                for chunk in req.iter_content(chunk_size=chunk_size):
-                    outfile.write(chunk)
+                filename = filename_from_url(filled_url)
+                filename = outdir / filename
+                with open(filename, 'wb') as d:
+                    while True:
+                        chunk = content.read(16 * 1024)
+                        if not chunk:
+                            break
+                        d.write(chunk)
 
         m -= 1
         if m == 0:
