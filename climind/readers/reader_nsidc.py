@@ -56,3 +56,25 @@ def read_monthly_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.Tim
     metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+
+
+def read_irregular_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    years = []
+    months = []
+    days = []
+    extents = []
+
+    with open(filenames[0], 'r') as f:
+        f.readline()
+        f.readline()
+
+        for line in f:
+            columns = line.split(',')
+            years.append(int(columns[0]))
+            months.append(int(columns[1]))
+            days.append(int(columns[2]))
+            extents.append(float(columns[3]))
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesIrregular(years, months, days, extents, metadata=metadata)

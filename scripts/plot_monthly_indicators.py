@@ -144,6 +144,14 @@ if __name__ == "__main__":
         ]
     }
 
+    holdall = {
+        'daily_arctic' : [
+            {'variable': 'arctic_ice',
+             'type': 'timeseries',
+             'time_resolution': 'irregular'},
+        'DailyArctic']
+    }
+
     for combo in holdall:
 
         selection_metadata = holdall[combo][0]

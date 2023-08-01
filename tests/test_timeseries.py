@@ -52,6 +52,30 @@ def simple_irregular(test_metadata):
 
 
 @pytest.fixture
+def daily_irregular(test_metadata):
+    test_metadata['time_resolution'] = 'irregular'
+    test_metadata['type'] = 'timeseries'
+
+    test_metadata['variable'] = 'antarctic_ice'
+    test_metadata['units'] = 'millionkm2'
+
+    number_of_times = 365 * 40 + 10
+    dates = pd.date_range(start='1979-01-01', freq='1D', periods=number_of_times)
+
+    years = dates.year.tolist()
+    months = dates.month.tolist()
+    days = dates.day.tolist()
+
+    data = []
+    uncertainty = []
+    for i in range(number_of_times):
+        data.append(float(years[i] * 100 + months[i]))
+        uncertainty.append(1.37)
+
+    return ts.TimeSeriesIrregular(years, months, days, data, metadata=test_metadata, uncertainty=uncertainty)
+
+
+@pytest.fixture
 def simple_monthly(test_metadata):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
@@ -253,6 +277,7 @@ def test_metadata():
 
     return CombinedMetadata(dataset_metadata, collection_metadata)
 
+
 def test_log_activity(mocker):
     def mini():
         return ''
@@ -278,7 +303,6 @@ def test_log_with_args(mocker, simple_annual):
              call('And keyword arguments:')]
 
     m.assert_has_calls(calls, any_order=True)
-
 
 
 # Base TimeSeries class
@@ -402,6 +426,18 @@ def test_get_year_axis_irregular(simple_irregular):
 def test_get_string_date_range_irregular(simple_irregular):
     test_range = simple_irregular.get_string_date_range()
     assert test_range == '1993.01.03-2002.12.15'
+
+
+def test_rebaseline(daily_irregular):
+    # Data values are YYYYMM so any month's anomaly will be Y1Y100 - Y2Y200 where Y1 is the ob year and Y2 is the
+    # climatology average year
+    daily_irregular.rebaseline(2004, 2004)
+    for i in range(365):
+        assert daily_irregular.df.data[i] == 197900. - 200400.
+
+    daily_irregular.rebaseline(2000, 2004)
+    for i in range(365):
+        assert daily_irregular.df.data[i] == 197900. - (200000. + 200100. + 200200. + 200300. + 200400.)/5.
 
 
 # Monthly times series

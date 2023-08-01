@@ -17,6 +17,7 @@
 from pathlib import Path
 from typing import List
 import numpy as np
+import xarray as xa
 
 import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
@@ -48,3 +49,17 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+
+
+def read_irregular_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+
+    df = xa.open_dataset(filename[0])
+
+    years = df.time.dt.year.data.tolist()
+    months = df.time.dt.month.data.tolist()
+    days = df.time.dt.day.data.tolist()
+    anomalies = df.sie.data.tolist()
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)

@@ -25,6 +25,20 @@
 	  "history": [],
       "reader": "reader_osisaf",
 	  "fetcher": "fetcher_ftp"
+    },{
+      "url": ["https://thredds.met.no/thredds/fileServer/osisaf/met.no/ice/index/v2p1/nh/osisaf_nh_sie_daily.nc"],
+      "filename": ["osisaf_nh_sie_daily.nc"],
+	  "type": "timeseries",
+      "long_name": "Arctic sea-ice extent",
+	  "time_resolution": "irregular",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_osisaf",
+	  "fetcher": "fetcher_standard_url"
     }
   ]
 }
