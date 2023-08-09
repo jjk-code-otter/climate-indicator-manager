@@ -2,7 +2,7 @@
   "name": "NOAAGlobalTemp",
   "display_name": "NOAAGlobalTemp",
   "version": "v5.0.0",
-  "variable": "tas_IGNORE",
+  "variable": "tas",
   "units": "degC",
   "citation": ["Huang, B., M. J. Menne, T. Boyer, E. Freeman, B. E. Gleason, J. H. Lawrimore, C. Liu, J. J. Rennie, C. Schreck, F. Sun, R. Vose, C. N. Williams, X. Yin, H.-M. Zhang, 2020: Uncertainty estimates for sea surface temperature and land surface air temperature in NOAAGlobalTemp version 5. , J. Climate, 33, 1351-1379, DOI: 10.1175/JCLI-D-19-0395.1",
                "Zhang, Huai-Min, Jay H. Lawrimore, Boyin Huang, Matthew J. Menne, Xungang Yin, Ahira Sȧnchez-Lugo, Byron E. Gleason, Russell Vose, Derek Arndt, J. Jared Rennie, and Claude N. Williams. (2019) Updated Temperature Data Give a Sharper View of Climate Trends. Eos, 100, https://doi.org/10.1029/2019EO128229"],

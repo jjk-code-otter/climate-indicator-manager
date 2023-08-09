@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['China-MST-Interim.nc'] downloaded from ['']",
+                "Gridded dataset created from file ['China-MST-Interim.nc'] downloaded from ['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/31695020/ChinaMSTInterim.nc?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIYCQYOYV5JSSROOA/20230809/eu-west-1/s3/aws4_request&X-Amz-Date=20230809T122637Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=4956568e05e54d063e33a0334d9b5cdddcba389819aac375101cd9d5fea051aa']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file CMST_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-02-15 18:30:19"
+                "2023-08-09 14:26:41"
             ],
-            "last_month": "2020-12-01"
+            "last_month": "2020-12-01 00:00:00"
         }
     ]
 }

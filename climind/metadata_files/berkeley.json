@@ -24,7 +24,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_berkeley",
-	  "fetcher": "fetcher_no_url"
+	  "fetcher": "fetcher_standard_url"
     },
     {
       "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt"],

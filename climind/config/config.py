@@ -19,7 +19,23 @@ Sets up the DATA_DIR variable used throughout the package
 import os
 from pathlib import Path
 
+
+def check_setup(data_dir: Path):
+    project_dir = data_dir / "ManagedData"
+    data_dir = project_dir / "Data"
+    log_dir = project_dir / "Logs"
+    figures_dir = project_dir / "Figures"
+    formatted_data_dir = project_dir / "Formatted_Data"
+    project_dir.mkdir(parents=True, exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    formatted_data_dir.mkdir(parents=True, exist_ok=True)
+
+
 data_dir_env = os.getenv('DATADIR')
 
 DATA_DIR = Path(data_dir_env)
 CLIMATOLOGY = [1991, 2020]
+
+check_setup(DATA_DIR)

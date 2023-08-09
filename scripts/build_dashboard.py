@@ -34,14 +34,6 @@ if __name__ == "__main__":
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir), focus_year=2022)
 
-    # # Key indicators
-    # json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators.json'
-    # dash = Dashboard.from_json(json_file, METADATA_DIR)
-    #
-    # dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard'
-    # dash_dir.mkdir(exist_ok=True)
-    # dash.build(Path(dash_dir))
-
     # Decadal
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'decadal.json'
     dash = Dashboard.from_json(json_file, METADATA_DIR)
@@ -71,12 +63,12 @@ if __name__ == "__main__":
     dash_dir.mkdir(exist_ok=True)
     dash.build(Path(dash_dir), focus_year=2022)
 
-    # # regional
-    # json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_test.json'
-    # dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalTestMetadata')
-    # dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalTestData'
-    # dash_dir = DATA_DIR / 'ManagedData' / 'RegionalTestDashboard'
-    # dash_dir.mkdir(exist_ok=True)
-    # dash.build(Path(dash_dir), focus_year=2022)
+    # regional test
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_test.json'
+    dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalTestMetadata')
+    dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalTestData'
+    dash_dir = DATA_DIR / 'ManagedData' / 'RegionalTestDashboard'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir), focus_year=2022)
 
 

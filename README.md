@@ -27,11 +27,28 @@ Installation
 
 Download the code from the repository using your preferred method.
 
+An environment.yml file contains the details of the necessary conda environment. To 
+setup the environment run
+
+`conda env create -f <path_to_yaml_file>`
+
+The environment (called `wmo`) can then be activated by typing
+
+`conda activate wmo`
+
 Navigate to the root directory of the repository and type
 
 `pip install .`
 
-This should install the package and necessary dependencies.
+This should install the package. 
+
+You will need to download a couple of different files if you want to calculate regional 
+averages from gridded data. These include
+
+- WMO Shape files for the WMO Regional Associations and Africa subregions. 
+  I don't know of an online source for these so you will have to ask a friendly person 
+  at the WMO.
+- The Natural Earth country files https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip
 
 Set up
 ======
@@ -60,6 +77,9 @@ CMEMS_PSWD=yetanotherpassword
 ```
 
 All three of these services are free to register, but you will have to set up the credentials online.
+
+Similarly to access the data from the Copernicus Climate Change service, you will need an API key. 
+The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/api-how-to
 
 Downloading data
 ================
@@ -91,6 +111,8 @@ which calculates annual average grids on a consistent 5-degree latitude longitud
 In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
 scripts directory and run:
 
+`python make_new_regions.py` (you only need to run this the first time to generate the shape files for subregion)
+
 `python calculate_wmo_ra_averages.py`
 
 This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
@@ -117,7 +139,20 @@ web server.
 Navigating the website
 ======================
 
-Each dashboard consists of 
+Each dashboard consists of a set of "cards" at the top of the page. These each contain:
+
+- an image, 
+- a set of links to images in different formats (png, svg, and pdf)
+- a link to a zip file of all the datasets in csv format. 
+- a link to "References and processing" which takes you to details of:
+  - the datasets used and their references
+  - the data file and a checksum for assessing data integrity of the download
+  - the processing applied to each dataset 
+
+In some cases there will also be:
+
+- a caption and a button saying "Copy caption" which will save the caption to your clipboard.
+- a button inviting you to "Click for more indicators". Clicking such a button will take you to a page with related indicators.
 
 
 Diverse other scripts

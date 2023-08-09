@@ -29,10 +29,12 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': [#'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'Kadow',
-                     'NOAA Interim'#, 'HadCRUT5',
-                     #'Berkeley Earth', 'GISTEMP',
-                     #'NOAAGlobalTemp', 'ERA5', 'JRA-55'
+            'name': ['GETQUOCS', 'CMST', 'Vaccaro',
+                     'Kadow CMIP', 'Kadow',
+                     'NOAAGlobalTemp',
+                     'NOAA Interim', 'HadCRUT5',
+                     'Berkeley Earth', 'GISTEMP',
+                     'ERA5', 'JRA-55'
             ]
         }
     )

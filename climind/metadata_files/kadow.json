@@ -12,7 +12,7 @@
   "zpos": 10,
   "datasets": [
 	{
-      "url": [""],
+      "url": ["https://zenodo.org/record/6475858/files/FREVA-CLINT/climatereconstructionAI-v1.0.2.zip"],
       "filename": ["20crAI_HadCRUT4_4.6.0.0_tas_mon_185001-201812.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",

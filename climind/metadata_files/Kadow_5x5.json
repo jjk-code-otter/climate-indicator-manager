@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['20crAI_HadCRUT4_4.6.0.0_tas_mon_185001-201812.nc'] downloaded from ['']",
+                "Gridded dataset created from file ['20crAI_HadCRUT4_4.6.0.0_tas_mon_185001-201812.nc'] downloaded from ['https://zenodo.org/record/6475858/files/FREVA-CLINT/climatereconstructionAI-v1.0.2.zip']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file Kadow_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-02-14 15:27:52"
+                "2023-08-09 14:04:54"
             ],
-            "last_month": "2018-12-16"
+            "last_month": "2005-12-16 00:00:00"
         }
     ]
 }

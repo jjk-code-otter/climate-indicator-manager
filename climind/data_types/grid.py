@@ -250,7 +250,11 @@ class GridMonthly:
         datetime
             Date of the last month in the dataset
         """
-        last_month = self.df.time.dt.date.data[-1]
+        year = self.df.time.dt.year.data[-1]
+        month = self.df.time.dt.month.data[-1]
+        day = self.df.time.dt.day.data[-1]
+
+        last_month = datetime(year, month, day)
         return last_month
 
     def rebaseline(self, first_year: int, final_year: int) -> xa.Dataset:
