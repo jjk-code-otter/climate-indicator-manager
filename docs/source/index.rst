@@ -19,6 +19,7 @@ Climind documentation
 Other pages
 ===========
 
+* :ref:`userguide`
 * :ref:`howto`
 * :ref:`genindex`
 * :ref:`modindex`
