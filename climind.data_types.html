@@ -71,10 +71,6 @@
              
   <div class="section" id="module-climind.data_types">
 <span id="climind-data-types-package"></span><h1>climind.data_types package<a class="headerlink" href="#module-climind.data_types" title="Permalink to this heading"></a></h1>
-<p>There are two main data types implemented in this package: timeseries and grids. In each
-of those two cases, the data set consists of a data-carrying part and a metadata part. For
-timeseries, the data-carrying part is a pandas dataframe and for a grid, it’s an xarray
-dataset.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </div>
@@ -84,11 +80,7 @@ dataset.</p>
 <dt class="sig sig-object py" id="climind.data_types.grid.GridAnnual">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">GridAnnual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.GridAnnual" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> combines an xarray Dataset with a
-<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> to bring together data and
-metadata in one object. It represents annual averages of data.</p>
-<p>Create an annual gridded data set from an xarray Dataset and
-<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> object.</p>
+<p>Create an annual gridded data set from an xarray Dataset and CombinedMetadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -136,11 +128,8 @@ metadata in one object. It represents annual averages of data.</p>
 <li><p><strong>end_year</strong> (<em>int</em>) – end year</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns a <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> containing only data within the specified year range.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,11 +139,8 @@ metadata in one object. It represents annual averages of data.</p>
 <span class="sig-name descname"><span class="pre">rank</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.GridAnnual.rank" title="Permalink to this definition"></a></dt>
 <dd><p>Return a data set where the values are the ranks of each grid cell value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Return a <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> containing the values as ranks from highest (1) to lowest.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -187,11 +173,8 @@ metadata in one object. It represents annual averages of data.</p>
 <li><p><strong>end_year</strong> (<em>int</em>) – Final year of selction</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns a <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> containing only data within the specified year range.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -235,11 +218,7 @@ data archive.</p></li>
 <dt class="sig sig-object py" id="climind.data_types.grid.GridMonthly">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">GridMonthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.GridMonthly" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A <a class="reference internal" href="#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridMonthly</span></code></a> combines an xarray Dataset with a
-<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> to bring together data and
-metadata in one object. It represents monthly averages of data on a regular grid.</p>
-<p>Create a :class:’.GridMonthly` object from an xarray
-Dataset and a <a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> object.</p>
+<p>GridMonthly combines an xarray Dataset with metadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -250,7 +229,7 @@ Dataset and a <a class="reference internal" href="climind.data_manager.html#clim
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.grid.GridMonthly.calculate_regional_average">
-<span class="sig-name descname"><span class="pre">calculate_regional_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.calculate_regional_average" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">calculate_regional_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.calculate_regional_average" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate a regional average from the grid. The region is specified by a geopandas
 Geodataframe and the index (region_number) of the chosen shape. By default, the output
 is masked to land areas only, this can be switched off by setting land_only to False.</p>
@@ -274,14 +253,11 @@ land_only to False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.grid.GridMonthly.get_last_month">
-<span class="sig-name descname"><span class="pre">get_last_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.get_last_month" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_last_month</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.get_last_month" title="Permalink to this definition"></a></dt>
 <dd><p>Get the date of the last month in the dataset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Date of the last month in the dataset</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>datetime</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -303,14 +279,14 @@ available monthly anomalies.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.grid.GridMonthly.rebaseline">
-<span class="sig-name descname"><span class="pre">rebaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.Dataset</span></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.rebaseline" title="Permalink to this definition"></a></dt>
-<dd><p>Change the baseline of the data to the period between first_year and final_year by
-subtracting the average of the available data between those two years (inclusive).</p>
+<span class="sig-name descname"><span class="pre">rebaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.Dataset</span></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.rebaseline" title="Permalink to this definition"></a></dt>
+<dd><p>Change the baseline of the data to the period between y1 and y2 by subtracting the average of the
+available data between those two years (inclusive).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>first_year</strong> (<em>int</em>) – First year of climatology period</p></li>
-<li><p><strong>final_year</strong> (<em>int</em>) – Final year of climatology period</p></li>
+<li><p><strong>y1</strong> (<em>int</em>) – First year of climatology period</p></li>
+<li><p><strong>y2</strong> (<em>int</em>) – Final year of climatology period</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -324,8 +300,8 @@ subtracting the average of the available data between those two years (inclusive
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.grid.GridMonthly.update_history">
-<span class="sig-name descname"><span class="pre">update_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.update_history" title="Permalink to this definition"></a></dt>
-<dd><p>Update the history metadata with a message.</p>
+<span class="sig-name descname"><span class="pre">update_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.GridMonthly.update_history" title="Permalink to this definition"></a></dt>
+<dd><p>Update the history metadata</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – Message to be added to history</p>
@@ -365,7 +341,7 @@ and the first and last indices on the new grid.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.get_start_and_end_year">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">get_start_and_end_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.grid.get_start_and_end_year" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> datasets, find the earliest start year and the latest end year</p>
+<dd><p>Given a list of GridAnnual datasets, find the earliest start year and the latest end year</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of datasets for which we want to find the first and last year</p>
@@ -378,42 +354,23 @@ and the first and last indices on the new grid.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.log_activity">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">log_activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_function</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#climind.data_types.grid.log_activity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">log_activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.log_activity" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator function to log name of function run and with which arguments.
 This aims to provide some traceability in the output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>in_function</strong> (<em>Callable</em>) – The function to be decorated</p>
+<dd class="field-odd"><p><strong>in_function</strong> (<em>function</em>) – The function to be decorated</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Callable</p>
+<dd class="field-even"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.make_standard_grid">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">make_standard_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.Dataset</span></span></span><a class="headerlink" href="#climind.data_types.grid.make_standard_grid" title="Permalink to this definition"></a></dt>
-<dd><p>Make the standard 5x5 grid from a numpy array, start date, temporal frequency and
-number of time steps.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>out_grid</strong> (<em>np.ndarray</em>) – Numpy array containing the data. Shape should be (number_of_times, 36, 72)</p></li>
-<li><p><strong>start_date</strong> (<em>datetime</em>) – Date of the first time step</p></li>
-<li><p><strong>freq</strong> (<em>str</em>) – Temporal frequency</p></li>
-<li><p><strong>number_of_times</strong> (<em>int</em>) – Number of time steps, should match the first dimension of the out_grid</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>xarray Dataset containing the data in out_grid with the specified temporal
-frequency and number of time steps</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>xa.Dataset</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">make_standard_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_times</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.grid.make_standard_grid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.make_xarray">
@@ -423,10 +380,10 @@ and arrays of time (ntime), latitude (nlat) and longitude (nlon).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target_grid</strong> (<em>np.ndarray</em>) – numpy array of shape (ntime, nlat, nlon)</p></li>
-<li><p><strong>times</strong> (<em>np.ndarray</em>) – Array of times, shape (ntime)</p></li>
-<li><p><strong>latitudes</strong> (<em>np.ndarray</em>) – Array of latitudes, shape (nlat)</p></li>
-<li><p><strong>longitudes</strong> (<em>np.ndarray</em>) – Array of longitudes, shape (nlon)</p></li>
+<li><p><strong>target_grid</strong> – numpy array of shape (ntime, nlat, nlon)</p></li>
+<li><p><strong>times</strong> – Array of times, shape (ntime)</p></li>
+<li><p><strong>latitudes</strong> – Array of latitudes, shape (nlat)</p></li>
+<li><p><strong>longitudes</strong> – Array of longitudes, shape (nlon)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -441,10 +398,10 @@ and arrays of time (ntime), latitude (nlat) and longitude (nlon).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.median_of_datasets">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">median_of_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a></span></span><a class="headerlink" href="#climind.data_types.grid.median_of_datasets" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the median of a list of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> data sets</p>
+<dd><p>Calculate the median of a list of data sets</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> datasets from which the medians will be calculated.</p>
+<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of datasets from which the medians will be calculated.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
@@ -454,15 +411,15 @@ and arrays of time (ntime), latitude (nlat) and longitude (nlon).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.process_datasets">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a></span></span><a class="headerlink" href="#climind.data_types.grid.process_datasets" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the median or range (depending on selected type) of a list of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> data sets.
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a></span></span><a class="headerlink" href="#climind.data_types.grid.process_datasets" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the median or range (depending on selected type) of a list of annual data sets.
 Medians are calculated on a grid cell by grid cell basis based on all available data in the
 list of data sets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – list of GridAnnual data sets</p></li>
-<li><p><strong>grid_type</strong> (<em>str</em>) – Either ‘median’ or ‘range’</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – Either ‘median’ or ‘range’</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -477,10 +434,10 @@ list of data sets.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.range_of_datasets">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">range_of_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a></span></span><a class="headerlink" href="#climind.data_types.grid.range_of_datasets" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the half-range of a list of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> data sets</p>
+<dd><p>Calculate the half-range of a list of data sets</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of <a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> datasets from which the ranges will be calculated.</p>
+<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of datasets from which the ranges will be calculated.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual">GridAnnual</a></p>
@@ -490,11 +447,11 @@ list of data sets.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.grid.rank_array">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">rank_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#climind.data_types.grid.rank_array" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.grid.</span></span><span class="sig-name descname"><span class="pre">rank_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#climind.data_types.grid.rank_array" title="Permalink to this definition"></a></dt>
 <dd><p>Rank array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>in_array</strong> (<em>np.ndarray</em>) – Array to be ranked</p>
+<dd class="field-odd"><p><strong>in_array</strong> (<em>np.ndarray</em>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
@@ -517,11 +474,8 @@ that fall within the target grid cell.</p>
 <li><p><strong>target_dy</strong> (<em>float</em>) – Target grid spacing</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns regridded array.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -532,10 +486,7 @@ that fall within the target grid cell.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeries">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">TimeSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeries" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>A base class for representing time series data sets. Note that this class should not generally be used
-and only its subclasses <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a>, <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> and <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesIrregular</span></code></a>
-should be used. This class contains shared functionality from these classes but does not work on its own.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeries.add_offset">
 <span class="sig-name descname"><span class="pre">add_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeries.add_offset" title="Permalink to this definition"></a></dt>
@@ -551,17 +502,6 @@ should be used. This class contains shared functionality from these classes but 
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Tuple[int, int]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeries.get_string_date_range">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_string_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeries.get_string_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>Create a string which specifies the date range covered by the time series</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -617,10 +557,6 @@ should be used. This class contains shared functionality from these classes but 
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">TimeSeriesAnnual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uncertainty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.data_types.timeseries.TimeSeries" title="climind.data_types.timeseries.TimeSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeries</span></code></a></p>
-<p>A <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> combines a pandas Dataframe with a
-<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> to bring together data and
-metadata in one object. It represents annual averages of data.</p>
-<p>Create <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> object from its components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -672,18 +608,15 @@ metadata in one object. It represents annual averages of data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual.generate_dates">
-<span class="sig-name descname"><span class="pre">generate_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.generate_dates" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.generate_dates" title="Permalink to this definition"></a></dt>
 <dd><p>Given a string specifying the required time units (something like days since 1800-01-01 00:00:00.0),
 generate a list of times from the time series corresponding to those units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>time_units</strong> (<em>str</em>) – String specifying the units to use for generating the times e.g. “days since 1800-01-01 00:00:00.0”</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of dates</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[datetime]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[int]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -696,17 +629,7 @@ generate a list of times from the time series corresponding to those units.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual.get_string_date_range">
 <span class="sig-name descname"><span class="pre">get_string_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.get_string_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>Create a string which specifies the date range covered by the <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> in the format
-YYYY-YYYY</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>String that specifies the date range covered</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual.get_uncertainty_from_year">
@@ -720,16 +643,8 @@ YYYY-YYYY</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual.get_year_axis">
-<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.get_year_axis" title="Permalink to this definition"></a></dt>
-<dd><p>Return a year axis with dates represented as decimal years.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of dates as decimal years.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[float]</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.get_year_axis" title="Permalink to this definition"></a></dt>
+<dd><p>Return a year axis</p>
 </dd></dl>
 
 <dl class="py method">
@@ -740,7 +655,7 @@ YYYY-YYYY</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesAnnual.make_from_df">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesAnnual.make_from_df" title="Permalink to this definition"></a></dt>
-<dd><p>Create a <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> from a pandas data frame.</p>
+<dd><p>Create a TimeSeriesAnnual from a pandas data frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -748,11 +663,8 @@ YYYY-YYYY</p>
 <li><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the metadata</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> created from the elements in the dataframe and metadata.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -797,11 +709,7 @@ metadata file is also provided.</p>
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesIrregular">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">TimeSeriesIrregular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">months</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uncertainty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesIrregular" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.data_types.timeseries.TimeSeries" title="climind.data_types.timeseries.TimeSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeries</span></code></a></p>
-<p>A <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesIrregular</span></code></a> combines a pandas Dataframe with a
-<a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> to bring together data and
-metadata in one object. It represents non-monthly, non-annual averages of data such as weekly, or
-5-day averages.</p>
-<p>Create <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesIrregular</span></code></a> object.</p>
+<p>Create TimeSeriesIrregular</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -843,30 +751,12 @@ generate a list of times from the time series corresponding to those units.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesIrregular.get_string_date_range">
 <span class="sig-name descname"><span class="pre">get_string_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesIrregular.get_string_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>Create a string which specifies the date range covered by the <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesIrregular</span></code></a> in the format
-YYYY.MM.DD-YYYY.MM.DD</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>String that specifies the date range covered</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesIrregular.get_year_axis">
-<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesIrregular.get_year_axis" title="Permalink to this definition"></a></dt>
-<dd><p>Return a year in which all dates are represented as decimal years. January 1st 1984 is 1984.00.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of dates represented as decimal years.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[float]</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesIrregular.get_year_axis" title="Permalink to this definition"></a></dt>
+<dd><p>Return a year axis</p>
 </dd></dl>
 
 <dl class="py method">
@@ -899,10 +789,7 @@ metadata file is also provided.</p>
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">TimeSeriesMonthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">months</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uncertainty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.data_types.timeseries.TimeSeries" title="climind.data_types.timeseries.TimeSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeries</span></code></a></p>
-<p>A <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> combines a pandas Dataframe with a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code> to bring together data and
-metadata in one object. It represents monthly averages of data.</p>
-<p>Create <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> object.</p>
+<p>Monthly time series class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -961,11 +848,8 @@ generate a list of times from the time series corresponding to those units.</p>
 <span class="sig-name descname"><span class="pre">get_start_and_end_dates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_start_and_end_dates" title="Permalink to this definition"></a></dt>
 <dd><p>Get the first and last dates in the dataset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Start and end dates.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Tuple[datetime, datetime]</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[datetime, datetime]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -973,17 +857,7 @@ generate a list of times from the time series corresponding to those units.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.get_string_date_range">
 <span class="sig-name descname"><span class="pre">get_string_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_string_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>Create a string which specifies the date range covered by the <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> in the format
-YYYY.MM-YYYY.MM</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>String that specifies the date range covered</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.get_uncertainty">
@@ -992,51 +866,43 @@ YYYY.MM-YYYY.MM</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>year</strong> (<em>int</em>) – Year for which the uncertainty is required.</p></li>
-<li><p><strong>month</strong> (<em>int</em>) – Month for which the uncertainty is required.</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – Year requested</p></li>
+<li><p><strong>month</strong> (<em>int</em>) – Month requested/</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Value for the specified year and month or None if it does not exist</p>
+<dd class="field-even"><p>Value for that year and month or None if it doesn’t exist</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Optional[float]</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.get_value">
-<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_value" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_value" title="Permalink to this definition"></a></dt>
 <dd><p>Get the current value for a particular year and month</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>year</strong> (<em>int</em>) – Year for which the value is required.</p></li>
-<li><p><strong>month</strong> (<em>int</em>) – Month  for which the value is required.</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – Year requested</p></li>
+<li><p><strong>month</strong> (<em>int</em>) – Month requested/</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Value for the specified year and month or None if it does not exist</p>
+<dd class="field-even"><p>Value for that year and month</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Optional[float]</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.get_year_axis">
-<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_year_axis" title="Permalink to this definition"></a></dt>
-<dd><p>Return a year axis as decimal year. 1st January 1984 is 1984.00.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of dates expressed as a decimal year.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[float]</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">get_year_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.get_year_axis" title="Permalink to this definition"></a></dt>
+<dd><p>Return a year axis</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1052,7 +918,7 @@ YYYY.MM-YYYY.MM</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.make_from_df">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><span class="pre">CombinedMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.make_from_df" title="Permalink to this definition"></a></dt>
-<dd><p>Create a <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> from a pandas data frame.</p>
+<dd><p>Create a TimeSeriesMonthly from a pandas data frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1060,11 +926,8 @@ YYYY.MM-YYYY.MM</p>
 <li><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the metadata</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> built from input components.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly">TimeSeriesMonthly</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly">TimeSeriesMonthly</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1076,10 +939,10 @@ YYYY.MM-YYYY.MM</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.TimeSeriesMonthly.write_csv">
-<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.write_csv" title="Permalink to this definition"></a></dt>
-<dd><p>Write the <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> to a csv file with the specified filename. The format used for writing
-is given by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for
-writing a metadata file is also provided.</p>
+<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.TimeSeriesMonthly.write_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Write the timeseries to a csv file with the specified filename. The format used for writing is given
+by the BADC CSV format. This has a lot of upfront metadata before the data section. An option for writing a
+metadata file is also provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1103,50 +966,38 @@ writing a metadata file is also provided.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.get_list_of_unique_variables">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">get_list_of_unique_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.get_list_of_unique_variables" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a>, get a list of the unique variable names represented in
-that list.</p>
+<dd><p>Given a list of datasets, get a list of the unique variable names</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of the unique variable names.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.get_start_and_end_year">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">get_start_and_end_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.get_start_and_end_year" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a>, extract the first year in any of the data
-sets and the last year in any of the data sets.</p>
-<dl class="field-list simple">
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">get_start_and_end_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets:</span> <span class="pre">~typing.List[~climind.data_types.timeseries.TimeSeriesAnnual])</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'int'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.get_start_and_end_year" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of datasets from which to extract the earliest first year and latest final year.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Return the first and last years in the list of data sets</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Tuple[Optional[int], Optional[int]]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(int, int)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.log_activity">
-<span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">log_activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#climind.data_types.timeseries.log_activity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">log_activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_types.timeseries.log_activity" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator function to log name of function run and with which arguments.
 This aims to provide some traceability in the output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>in_function</strong> (<em>Callable</em>) – The function to be decorated</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Callable</p>
+<dd class="field-odd"><p><strong>in_function</strong> (<em>The function to be decorated</em>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -1154,17 +1005,14 @@ This aims to provide some traceability in the output.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.make_combined_series">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">make_combined_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a></span></span><a class="headerlink" href="#climind.data_types.timeseries.make_combined_series" title="Permalink to this definition"></a></dt>
-<dd><p>Combine a list of datasets into a single <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> by taking the arithmetic mean
+<dd><p>Combine a list of datasets into a single TimeSeriesAnnual by taking the arithmetic mean
 of all available datasets for each year. Merges the metadata for all the input time series.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of datasets to be combined</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> which is the mean of all availabale datasets in each year.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1172,7 +1020,7 @@ of all available datasets for each year. Merges the metadata for all the input t
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_types.timeseries.superset_dataset_list">
 <span class="sig-prename descclassname"><span class="pre">climind.data_types.timeseries.</span></span><span class="sig-name descname"><span class="pre">superset_dataset_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.data_types.timeseries.superset_dataset_list" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of variables, create a list where each entry is a list of all <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> objects
+<dd><p>Given a list of variables, create a list where each entry is a list of all data sets
 corresponding to the variable in that index position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1181,11 +1029,8 @@ corresponding to the variable in that index position.</p>
 <li><p><strong>variables</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of variable names</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of lists of <a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[List[<a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a>]]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[List[<a class="reference internal" href="#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a>]]</p>
 </dd>
 </dl>
 </dd></dl>

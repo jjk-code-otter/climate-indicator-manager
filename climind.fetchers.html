@@ -81,42 +81,19 @@
              
   <div class="section" id="module-climind.fetchers">
 <span id="climind-fetchers-package"></span><h1>climind.fetchers package<a class="headerlink" href="#module-climind.fetchers" title="Permalink to this heading"></a></h1>
-<p>The fetchers package contains all the scripts needed to download the data sets. There are
-specific fetchers for regular URLs, ftp sites and datasets which are not available online.</p>
-<p>In addition, some websites and data sets have peculiarities that mean a standard
-reader isn’t adequate. For example, NOAAGlobalTemp has a fixed directory, but the filename
-changes unpredictably as it contains the date of its creation. The fetcher for
-NOAAGlobalTemp therefore has to parse the webpage to find the appropriate file and then
-download that.</p>
-<p>Other datasets require credentials, which are stored in a .env file which is in also in
-the fetchers directory, but not part of the package.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_cds">
 <span id="climind-fetchers-fetcher-cds-module"></span><h2>climind.fetchers.fetcher_cds module<a class="headerlink" href="#module-climind.fetchers.fetcher_cds" title="Permalink to this heading"></a></h2>
-<p>Fetcher which uses the Copernicus Climate Data Store to download ERA5 gridded data. The first time it is run,
-it will download <em>all</em> data. This will take a while.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_cds.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_cds.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch all data in the range 1979 to 2022.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>_</strong> – dummy variable needed to match the interface.</p></li>
-<li><p><strong>outdir</strong> (<em>Path</em>) – Path to the directory to which the data will be written.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_cds.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_cds.fetch_year">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">fetch_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_cds.fetch_year" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">fetch_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_cds.fetch_year" title="Permalink to this definition"></a></dt>
 <dd><p>Fetch a specified year of data and write it to the outdir. If the year is
 incomplete, only recover available months.</p>
 <dl class="field-list simple">
@@ -134,7 +111,7 @@ incomplete, only recover available months.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_cds.pick_months">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">pick_months</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">now</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_cds.pick_months" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cds.</span></span><span class="sig-name descname"><span class="pre">pick_months</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">now</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_cds.pick_months" title="Permalink to this definition"></a></dt>
 <dd><p>For a given year, return a list of strings containing the months which are available in the
 CDS for ERA5. For years before the current year, return all months. For the current year
 return all months up to last month, but only include last month if the day of the month is
@@ -142,15 +119,9 @@ after the 7th</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>year</strong> (<em>int</em>) – Year for which we want to pick months</p></li>
-<li><p><strong>now</strong> (<em>datetime</em>) – Today, used to assess how incomplete is the current year.</p></li>
+<li><p><strong>year</strong> – </p></li>
+<li><p><strong>now</strong> – </p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of the months to download for the specified year.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -160,79 +131,33 @@ after the 7th</p>
 <span id="climind-fetchers-fetcher-cmems-ftp-module"></span><h2>climind.fetchers.fetcher_cmems_ftp module<a class="headerlink" href="#module-climind.fetchers.fetcher_cmems_ftp" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_cmems_ftp.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cmems_ftp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_cmems_ftp.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch data from the CMEMS ftp system. Credentials required are</p>
-<ul class="simple">
-<li><p>username, specified by entry in .env CMEMS_USER</p></li>
-<li><p>password, specified by entry in .env CMEMS_PSWD</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – The URL of the file to be downloaded</p></li>
-<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which the files will be saved</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_cmems_ftp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_cmems_ftp.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_ersst">
 <span id="climind-fetchers-fetcher-ersst-module"></span><h2>climind.fetchers.fetcher_ersst module<a class="headerlink" href="#module-climind.fetchers.fetcher_ersst" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_ersst.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_ersst.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_ersst.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch ERSST gridded dataset from NOAA. There is one file per month. Only
-files that have not already been downloaded will be downloaded.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – URL of the file</p></li>
-<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which output will be written</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_ersst.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_ersst.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_ftp">
 <span id="climind-fetchers-fetcher-ftp-module"></span><h2>climind.fetchers.fetcher_ftp module<a class="headerlink" href="#module-climind.fetchers.fetcher_ftp" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_ftp.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_ftp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_ftp.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Generic fetcher for ftp files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – URL of the file</p></li>
-<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the direcotry to which the output will be written.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_ftp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_ftp.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_grace">
 <span id="climind-fetchers-fetcher-grace-module"></span><h2>climind.fetchers.fetcher_grace module<a class="headerlink" href="#module-climind.fetchers.fetcher_grace" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_grace.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_grace.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_grace.fetch" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_grace.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_grace.fetch" title="Permalink to this definition"></a></dt>
 <dd><p>Fetch files from the PODAAC website. Note that the API URL base is:
 API_url = “<a class="reference external" href="https://podaac-tools.jpl.nasa.gov/drive/files">https://podaac-tools.jpl.nasa.gov/drive/files</a>”</p>
-<p>Requires the credentials:</p>
-<ul class="simple">
-<li><p>username, specified by entry in .env PODAAC_USER</p></li>
-<li><p>password, specified by entry in .env PODAAC_PSWD</p></li>
-</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -249,123 +174,35 @@ API_url = “<a class="reference external" href="https://podaac-tools.jpl.nasa.g
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_jra55_grid">
 <span id="climind-fetchers-fetcher-jra55-grid-module"></span><h2>climind.fetchers.fetcher_jra55_grid module<a class="headerlink" href="#module-climind.fetchers.fetcher_jra55_grid" title="Permalink to this heading"></a></h2>
-<p>Set of scripts to download the JRA-55 gridded data. Adapted from the scripts
-provided by UCAR. Data are stored by year up till a certain point and by
-month for near-real time data thereafter. Credentials are needed (see fetch function)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.check_file_status">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">check_file_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_size</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.check_file_status" title="Permalink to this definition"></a></dt>
-<dd><p>Writes a status bar on the download. Not used.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> (<em>str</em>) – Path of the file</p></li>
-<li><p><strong>file_size</strong> (<em>float</em>) – Size of the file</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">check_file_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.check_file_status" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.download_file">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">download_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ret</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.download_file" title="Permalink to this definition"></a></dt>
-<dd><p>Download a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – URL of the file to be downloaded</p></li>
-<li><p><strong>file_base</strong> (<em>str</em>) – Name of the output file to which the data will be written</p></li>
-<li><p><strong>ret</strong> – Authentication information</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">download_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.download_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Get JRA-55 files from UCAR. Requires the credentials:</p>
-<ul class="simple">
-<li><p>username, specified by entry in .env UCAR_USER</p></li>
-<li><p>password, specified by entry in .env UCAR_PSWD</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>_</strong> – dummy input to match interface.</p></li>
-<li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which the output will be written.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.get_files">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">get_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filelist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ret</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.get_files" title="Permalink to this definition"></a></dt>
-<dd><p>For each file in a file list, check if it already exists on the system and if it does
-not, attempt to download it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filelist</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of files to be downloaded</p></li>
-<li><p><strong>web_path</strong> (<em>str</em>) – URL of the directory that contains the files.</p></li>
-<li><p><strong>ret</strong> – Authentication information</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">get_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filelist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.get_files" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.make_file_list">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">make_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_year</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.make_file_list" title="Permalink to this definition"></a></dt>
-<dd><p>Make a list of annual archived filenames between the two specified years.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>first_year</strong> (<em>int</em>) – Year to start generation</p></li>
-<li><p><strong>final_year</strong> (<em>int</em>) – Year to end generation</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of filenames for archived data between the specified years</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">make_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.make_file_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_jra55_grid.make_realtime_file_list">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">make_realtime_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.make_realtime_file_list" title="Permalink to this definition"></a></dt>
-<dd><p>Make a list of monthly real-time filenames between the two specified years.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>first_year</strong> (<em>int</em>) – Year to start generation</p></li>
-<li><p><strong>final_year</strong> (<em>int</em>) – Year to end generation</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of filenames for real-time data between the specified years</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_jra55_grid.</span></span><span class="sig-name descname"><span class="pre">make_realtime_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_jra55_grid.make_realtime_file_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_no_url">
@@ -381,22 +218,8 @@ not, attempt to download it.</p>
 <span id="climind-fetchers-fetcher-noaaglobaltemp-module"></span><h2>climind.fetchers.fetcher_noaaglobaltemp module<a class="headerlink" href="#module-climind.fetchers.fetcher_noaaglobaltemp" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_noaaglobaltemp.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_noaaglobaltemp.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch NOAAGlobalTemp data. The script scrapes the directory specified in the URL for a file
-that matches the pattern specified in the URL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>srt</em>) – URL of the file to be downloaded, containing wildcards for information that needs to be matched
-on a case by case basis.</p></li>
-<li><p><strong>outdir</strong> (<em>Path</em>) – Path of the directory to which the output will be written</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_noaaglobaltemp.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_noaaglobaltemp.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_promice">
@@ -404,89 +227,35 @@ on a case by case basis.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_promice.fetch">
 <span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_promice.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_promice.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch Greenland mass balance data. The script scrapes a webpage in order to find the specific URLs
-of the latest version of the dataset (these change daily). These files are then downloaded. There should be
-two files: a daily file and an annual file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>srt</em>) – URL of the directory which contains the files to be downloaded</p></li>
-<li><p><strong>outdir</strong> (<em>Path</em>) – Path of the directory to which the output will be written</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_standard_url">
 <span id="climind-fetchers-fetcher-standard-url-module"></span><h2>climind.fetchers.fetcher_standard_url module<a class="headerlink" href="#module-climind.fetchers.fetcher_standard_url" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_standard_url.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_standard_url.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_standard_url.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetcher for a standard URL that can be accessed without restrictions, credentials, or any other tomfoolery.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – URL of the file to be downloaded.</p></li>
-<li><p><strong>outdir</strong> (<em>Path</em>) – Path of the directory to which the output will be written</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_standard_url.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_standard_url.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_url_with_backsearch">
 <span id="climind-fetchers-fetcher-url-with-backsearch-module"></span><h2>climind.fetchers.fetcher_url_with_backsearch module<a class="headerlink" href="#module-climind.fetchers.fetcher_url_with_backsearch" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_url_with_backsearch.fetch">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_url_with_backsearch.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_url_with_backsearch.fetch" title="Permalink to this definition"></a></dt>
-<dd><p>Fetch file but using a backsearch. Backsearching starts with the most recent month, creates a filename using
-that month to fill the year (YYYY) and month (MMMM) placeholders in the specified URL and then tries to download
-that file. Search proceeds backwards for 24 months from today’s date.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – URL of the file containing placeholders for the year (YYYY) and month (MMMM)</p></li>
-<li><p><strong>out_dir</strong> (<em>Path</em>) – Path to which the output will be written</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_url_with_backsearch.</span></span><span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_url_with_backsearch.fetch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_url_with_backsearch.filename_from_url">
 <span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_url_with_backsearch.</span></span><span class="sig-name descname"><span class="pre">filename_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_url_with_backsearch.filename_from_url" title="Permalink to this definition"></a></dt>
-<dd><p>Extract just the filename from a URL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – URL of a file</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The filename of the file specified by the URL</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-climind.fetchers.fetcher_utils">
 <span id="climind-fetchers-fetcher-utils-module"></span><h2>climind.fetchers.fetcher_utils module<a class="headerlink" href="#module-climind.fetchers.fetcher_utils" title="Permalink to this heading"></a></h2>
-<p>Contains a set of routines used by the fetchers to perform various standard tasks such as extracting the filename from
-a URL.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_utils.dir_and_filename_from_url">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">dir_and_filename_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_utils.dir_and_filename_from_url" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">dir_and_filename_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_utils.dir_and_filename_from_url" title="Permalink to this definition"></a></dt>
 <dd><p>Get the filename and url up to, but not including the filename</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -520,7 +289,7 @@ a URL.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_utils.get_ftp_host_and_directory_from_url">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">get_ftp_host_and_directory_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_utils.get_ftp_host_and_directory_from_url" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">get_ftp_host_and_directory_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_utils.get_ftp_host_and_directory_from_url" title="Permalink to this definition"></a></dt>
 <dd><p>From a url, extract the host name and the directory, the directory being
 broken down into a list of subdirectories</p>
 <dl class="field-list simple">
@@ -539,20 +308,21 @@ broken down into a list of subdirectories</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.fetchers.fetcher_utils.url_from_filename">
-<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">url_from_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.fetchers.fetcher_utils.url_from_filename" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.fetchers.fetcher_utils.</span></span><span class="sig-name descname"><span class="pre">url_from_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.fetchers.fetcher_utils.url_from_filename" title="Permalink to this definition"></a></dt>
 <dd><p>Given an url and filename, replace the filename in the URL with the input filename</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – URL specifying a file, for which the filename will be changed.</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – New filename to be use in output URL</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – </p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns the URL with the new filename</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>str</em></p></li>
+<li><p><em>——-</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
