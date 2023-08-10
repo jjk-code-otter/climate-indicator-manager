@@ -155,14 +155,14 @@
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2022"}
+          "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2023"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2022"}
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly rank map",
@@ -171,14 +171,14 @@
           "processing":  [{"method":  "select_year_range", "args": [1850, 2023]},
                           {"method":  "rank", "args": []},
                           {"method":  "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2022"}
+          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2023"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA Intreim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2022",
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}},
           "hidden": true
         },
@@ -187,7 +187,7 @@
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2022",
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}},
           "hidden": true
         }
