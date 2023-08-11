@@ -498,7 +498,7 @@ class DataArchive:
         """
         out_archive = DataArchive()
 
-        for json_file in path_to_dir.glob('*.json'):
+        for json_file in path_to_dir.rglob('*.json'):
             dc = DataCollection.from_file(json_file)
             out_archive.add_collection(dc)
 
