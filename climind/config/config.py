@@ -20,7 +20,19 @@ import os
 from pathlib import Path
 
 
-def check_setup(data_dir: Path):
+def check_setup(data_dir: Path) -> None:
+    """
+    Ensure that all the relevant directories exist
+
+    Parameters
+    ----------
+    data_dir: Path
+      Path to the directory which will contain all of the
+
+    Returns
+    -------
+    None
+    """
     project_dir = data_dir / "ManagedData"
     data_dir = project_dir / "Data"
     log_dir = project_dir / "Logs"

@@ -50,7 +50,7 @@
 	  "fetcher": "fetcher_ftp"
     },
     {
-      "url": ["https://masie_web.apps.nsidc.org/pub/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv"],
+      "url": ["https://noaadata.apps.nsidc.org/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv"],
       "filename": ["N_seaice_extent_daily_v3.0.csv"],
 	  "type": "timeseries",
       "long_name": "Arctic sea-ice extent",
