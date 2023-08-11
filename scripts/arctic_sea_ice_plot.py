@@ -53,7 +53,7 @@ if __name__ == "__main__":
         ]
     }
 
-    ts_archive = archive.select({'variable': 'arctic_ice'})
+    ts_archive = archive.select(holdall['arctic_ice'][0])
     all_datasets = ts_archive.read_datasets(data_dir)
 
     for ds in all_datasets:
