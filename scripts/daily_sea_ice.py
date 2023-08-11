@@ -141,12 +141,12 @@ def plot_simple_timeseries(df, project_dir, image_filename):
                     'Difference from 1991-2020 average')
 
 
-
 def plot_stdev_timeseries(df, project_dir, image_filename):
     plot_timeseries(df, project_dir, image_filename,
                     'standard_deviations', 'Date', 'Standard deviations',
                     'Daily Antarctic Sea-ice Extent 1979-2023',
                     'Standard deviations from the 1991-2020 mean')
+
 
 def plot_one_in_a(df, project_dir, image_filename, log=True):
     # Plot simple anomaly series
@@ -179,7 +179,7 @@ def plot_one_in_a(df, project_dir, image_filename, log=True):
     plt.close()
 
 
-def plot_annual_cycle(df, project_dir, image_filename, stdev=False):
+def plot_annual_cycle(df, project_dir, image_filename, stdev=False, nh=False):
     # Plot annual cycle plot
     plt.figure(figsize=(16, 9))
 
@@ -207,19 +207,34 @@ def plot_annual_cycle(df, project_dir, image_filename, stdev=False):
     print(min(df[df['Year'] == final_year].Extent - df[df['Year'] == final_year].climatology))
     print(min(df[df['Year'] == final_year].Extent - df[df['Year'] == final_year].cmin))
 
-    plt.gca().set_yticks([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10, 15, 20, 25])
+    if nh:
+        plt.gca().set_yticks([-4, -3, -2, -1, 0, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16, 18])
+    else:
+        plt.gca().set_yticks([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10, 15, 20, 25])
 
     plt.gca().set_xlabel('Date')
     plt.gca().set_ylabel('million km$^2$')
-    plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35, fontdict={'fontsize': 35},
-                        loc='left')
+    if nh:
+        plt.gca().set_title('Daily Arctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35,
+                            fontdict={'fontsize': 35},
+                            loc='left')
+    else:
+        plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35,
+                            fontdict={'fontsize': 35},
+                            loc='left')
 
     ylim = plt.gca().get_ylim()
     xlim = plt.gca().get_xlim()
-    yloc = ylim[1] - 0.09 * (ylim[1] - ylim[0])
-    plt.text(plt.gca().get_xlim()[0], yloc,
-             '1 million km$^2$ is the area of Egypt, 10 million km$^2$ is about the area of Canada',
-             fontdict={'fontsize': 20})
+    if nh:
+        yloc = ylim[1] + 0.05 * (ylim[1] - ylim[0])
+        plt.text(plt.gca().get_xlim()[0], yloc,
+                 '1 million km$^2$ is the area of Egypt, 10 million km$^2$ is about the area of Canada',
+                 fontdict={'fontsize': 20})
+    else:
+        yloc = ylim[1] - 0.09 * (ylim[1] - ylim[0])
+        plt.text(plt.gca().get_xlim()[0], yloc,
+                 '1 million km$^2$ is the area of Egypt, 10 million km$^2$ is about the area of Canada',
+                 fontdict={'fontsize': 20})
 
     if stdev:
         yloc = ylim[0] + 0.82 * (ylim[1] - ylim[0])
@@ -230,26 +245,47 @@ def plot_annual_cycle(df, project_dir, image_filename, stdev=False):
         xloc = xlim[0] + 0.65 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, 'Mean minus standard deviation', color='lightgrey', fontdict={'fontsize': 18})
     else:
-        yloc = ylim[0] + 0.85 * (ylim[1] - ylim[0])
-        xloc = xlim[0] + 0.65 * (xlim[1] - xlim[0])
-        plt.text(xloc, yloc, 'Record high', color='lightgrey', fontdict={'fontsize': 18})
+        if nh:
+            yloc = ylim[0] + 0.97 * (ylim[1] - ylim[0])
+            xloc = xlim[0] + 0.155 * (xlim[1] - xlim[0])
+            plt.text(xloc, yloc, 'Record high', color='lightgrey', fontdict={'fontsize': 18})
 
-        yloc = ylim[0] + 0.7 * (ylim[1] - ylim[0])
-        xloc = xlim[0] + 0.65 * (xlim[1] - xlim[0])
-        plt.text(xloc, yloc, 'Record low', color='lightgrey', fontdict={'fontsize': 18})
+            yloc = ylim[0] + 0.74 * (ylim[1] - ylim[0])
+            xloc = xlim[0] + 0.155 * (xlim[1] - xlim[0])
+            plt.text(xloc, yloc, 'Record low', color='lightgrey', fontdict={'fontsize': 18})
+        else:
+            yloc = ylim[0] + 0.85 * (ylim[1] - ylim[0])
+            xloc = xlim[0] + 0.65 * (xlim[1] - xlim[0])
+            plt.text(xloc, yloc, 'Record high', color='lightgrey', fontdict={'fontsize': 18})
 
-    yloc = ylim[0] + 0.63 * (ylim[1] - ylim[0])
-    xloc = xlim[0] + 0.57 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, '2023 actual extent', color='red', fontdict={'fontsize': 18})
+            yloc = ylim[0] + 0.7 * (ylim[1] - ylim[0])
+            xloc = xlim[0] + 0.65 * (xlim[1] - xlim[0])
+            plt.text(xloc, yloc, 'Record low', color='lightgrey', fontdict={'fontsize': 18})
 
-    yloc = ylim[0] + 0.07 * (ylim[1] - ylim[0])
-    xloc = xlim[0] + 0.57 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, '2023 difference from long-term mean', color='red', fontdict={'fontsize': 18})
+    if nh:
+        yloc = ylim[0] + 0.43 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2023 actual extent', color='red', fontdict={'fontsize': 18})
 
-    plt.gca().set_ylim(-5, 22)
+        yloc = ylim[0] + 0.13 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2023 difference from long-term mean', color='red', fontdict={'fontsize': 18})
+    else:
+        yloc = ylim[0] + 0.63 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2023 actual extent', color='red', fontdict={'fontsize': 18})
+
+        yloc = ylim[0] + 0.07 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2023 difference from long-term mean', color='red', fontdict={'fontsize': 18})
+
+    if nh:
+        plt.gca().set_ylim(-5, 19)
+    else:
+        plt.gca().set_ylim(-5, 22)
+
     plt.savefig(project_dir / 'Figures' / image_filename)
     plt.close()
-
 
 
 project_dir = DATA_DIR / "ManagedData"
@@ -301,3 +337,28 @@ y = ((1 / (np.sqrt(2 * np.pi) * sigma)) *
 plt.plot(bins, y, '--')
 plt.savefig(project_dir / 'Figures' / 'antarctic_sea_ice_histogram')
 plt.close()
+
+sea_ice_file = data_dir / "NSIDC" / "N_seaice_extent_daily_v3.0.csv"
+
+final_year = 2023
+
+df = read_nsidc_daily(sea_ice_file, final_year)
+climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
+climatology_min, climatology_max, full_series_mean, full_series_stdev = calculate_historical_stats(final_year, df)
+
+# Copy results back into main dataframe
+df['climatology'] = climatology
+df['cmax'] = climatology_max
+df['cmin'] = climatology_min
+df['anomalies'] = df.Extent - climatology
+df['standard_deviations'] = df.anomalies / climatology_stdev
+df['stdev'] = climatology_stdev
+
+sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+# Do some plots
+plot_timeseries(df, project_dir, 'arctic_daily_long_view.png',
+                'anomalies', 'Date', 'million km$^2$',
+                'Daily Arctic Sea-ice Extent 1979-2023 (million km$^2$)',
+                'Difference from 1991-2020 average')
+plot_annual_cycle(df, project_dir, 'arctic_daily.png', nh=True)
