@@ -57,7 +57,7 @@ if __name__ == "__main__":
                                      'time_resolution': 'monthly',
                                      'name': name})
 
-        if name == 'ERA5':
+        if name in ['ERA5', 'ERA5 extension']:
             all_datasets = ts_archive.read_datasets(data_dir, grid_resolution=1)
         else:
             all_datasets = ts_archive.read_datasets(data_dir)
