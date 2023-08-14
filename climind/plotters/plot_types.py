@@ -1143,20 +1143,33 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     plt.figure(figsize=(16, 9))
     proj = ccrs.EqualEarth(central_longitude=0)
 
-    wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
-
-    wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    if var == 'pre':
+        wmo_levels = [-110, -90, -70, -50, -30, -10, 0, 10, 30, 50, 70, 90, 110]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_cols.reverse()
+    else:
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
 
-    p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
-                    transform=ccrs.PlateCarree(),
-                    levels=wmo_levels,
-                    colors=wmo_cols, add_colorbar=False,
-                    extend='both'
-                    )
+    if var == 'pre':
+        p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
+                        transform=ccrs.PlateCarree(),
+                        levels=wmo_levels,
+                        colors=wmo_cols, add_colorbar=False,
+                        extend='both'
+                        )
+    else:
+        p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
+                        transform=ccrs.PlateCarree(),
+                        levels=wmo_levels,
+                        colors=wmo_cols, add_colorbar=False,
+                        extend='both'
+                        )
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 

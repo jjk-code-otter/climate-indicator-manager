@@ -126,7 +126,7 @@ def simple_regrid(ingrid: np.ndarray, lon0: float, lat0: float, dx: float, targe
     return outgrid
 
 
-def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
+def make_xarray(target_grid, times, latitudes, longitudes, variable: str = 'tas_mean') -> xa.Dataset:
     """
     Make a xarray Dataset for a regular lat-lon grid from a numpy grid (ntime, nlat, nlon),
     and arrays of time (ntime), latitude (nlat) and longitude (nlon).
@@ -141,6 +141,8 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
         Array of latitudes, shape (nlat)
     longitudes: np.ndarray
         Array of longitudes, shape (nlon)
+    variable: str
+        Variable name
 
     Returns
     -------
@@ -148,7 +150,7 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
         Dataset built from the input components
     """
     ds = xa.Dataset({
-        'tas_mean': xa.DataArray(
+        variable: xa.DataArray(
             data=target_grid,
             dims=['time', 'latitude', 'longitude'],
             coords={'time': times, 'latitude': latitudes, 'longitude': longitudes},
