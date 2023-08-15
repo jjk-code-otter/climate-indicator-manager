@@ -331,6 +331,31 @@ class GridMonthly:
 
         return self
 
+    def select_period(self, start_year:int, start_month:int, end_year:int, end_month:int):
+        """
+        Select a period from the grid specifed by start year and month and end year and month, inclusive.
+
+        Parameters
+        ----------
+        start_year: int
+            Year of start date
+        start_month: int
+            Month of start date
+        end_year: int
+            Year of end date
+        end_month: int
+            Month of end date
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing only data within the specified date range.
+        """
+        self.df = self.df.sel(time=slice(f'{start_year}-{start_month:02d}-01', f'{end_year}-{end_month:02d}-28'))
+        self.update_history(f'Selected period from {start_month:02d}/{start_year} to {end_month:02d}/{end_year}')
+
+        return self
+
 
     def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """
