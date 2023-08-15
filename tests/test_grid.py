@@ -112,6 +112,13 @@ def monthly_grid(test_combo):
     return test_grid_monthly
 
 
+def test_select_year_and_month(monthly_grid):
+    selection = monthly_grid.select_year_and_month(1982, 7)
+    assert selection.df.time.dt.year.data[0] == 1982
+    assert selection.df.time.dt.month.data[0] == 7
+    assert selection.metadata['history'][-1] == 'Selected single month 07/1982'
+
+
 def test_get_last_month(monthly_grid):
     last_month = monthly_grid.get_last_month()
     assert last_month.year == 2022

@@ -310,6 +310,28 @@ class GridMonthly:
 
         return annual
 
+    def select_year_and_month(self, year: int, month: int):
+        """
+        Select a particular range of consecutive years from the data set and throw away the rest.
+
+        Parameters
+        ----------
+        year: int
+            Year of selection
+        month: int
+            Month of selection
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing only data within the specified year range.
+        """
+        self.df = self.df.sel(time=slice(f'{year}-{month:02d}-01', f'{year}-{month:02d}-28'))
+        self.update_history(f'Selected single month {month:02d}/{year}')
+
+        return self
+
+
     def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """
         Calculate a regional average from the grid. The region is specified by a geopandas
