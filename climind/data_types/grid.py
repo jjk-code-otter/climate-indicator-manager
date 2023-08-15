@@ -126,7 +126,7 @@ def simple_regrid(ingrid: np.ndarray, lon0: float, lat0: float, dx: float, targe
     return outgrid
 
 
-def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
+def make_xarray(target_grid, times, latitudes, longitudes, variable: str = 'tas_mean') -> xa.Dataset:
     """
     Make a xarray Dataset for a regular lat-lon grid from a numpy grid (ntime, nlat, nlon),
     and arrays of time (ntime), latitude (nlat) and longitude (nlon).
@@ -141,6 +141,8 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
         Array of latitudes, shape (nlat)
     longitudes: np.ndarray
         Array of longitudes, shape (nlon)
+    variable: str
+        Variable name
 
     Returns
     -------
@@ -148,7 +150,7 @@ def make_xarray(target_grid, times, latitudes, longitudes) -> xa.Dataset:
         Dataset built from the input components
     """
     ds = xa.Dataset({
-        'tas_mean': xa.DataArray(
+        variable: xa.DataArray(
             data=target_grid,
             dims=['time', 'latitude', 'longitude'],
             coords={'time': times, 'latitude': latitudes, 'longitude': longitudes},
@@ -307,6 +309,28 @@ class GridMonthly:
         annual.metadata['derived'] = True
 
         return annual
+
+    def select_year_and_month(self, year: int, month: int):
+        """
+        Select a particular range of consecutive years from the data set and throw away the rest.
+
+        Parameters
+        ----------
+        year: int
+            Year of selection
+        month: int
+            Month of selection
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing only data within the specified year range.
+        """
+        self.df = self.df.sel(time=slice(f'{year}-{month:02d}-01', f'{year}-{month:02d}-28'))
+        self.update_history(f'Selected single month {month:02d}/{year}')
+
+        return self
+
 
     def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """
