@@ -1156,20 +1156,12 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
 
-    if var == 'pre':
-        p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
-                        transform=ccrs.PlateCarree(),
-                        levels=wmo_levels,
-                        colors=wmo_cols, add_colorbar=False,
-                        extend='both'
-                        )
-    else:
-        p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
-                        transform=ccrs.PlateCarree(),
-                        levels=wmo_levels,
-                        colors=wmo_cols, add_colorbar=False,
-                        extend='both'
-                        )
+    p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
+                    transform=ccrs.PlateCarree(),
+                    levels=wmo_levels,
+                    colors=wmo_cols, add_colorbar=False,
+                    extend='both'
+                    )
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 
