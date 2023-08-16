@@ -331,7 +331,7 @@ class GridMonthly:
 
         return self
 
-    def select_period(self, start_year:int, start_month:int, end_year:int, end_month:int):
+    def select_period(self, start_year: int, start_month: int, end_year: int, end_month: int):
         """
         Select a period from the grid specifed by start year and month and end year and month, inclusive.
 
@@ -356,6 +356,38 @@ class GridMonthly:
 
         return self
 
+    def calculate_time_mean(self):
+        """
+        Calculate the time mean of the map
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing the time mean of the data.
+        """
+        time_mean = self.df.mean(dim='time', keepdims=True)
+
+        main_variable_list = list(time_mean.keys())
+        if len(main_variable_list) > 1:
+            raise RuntimeError('Cant take time mean of xarray dataset with more than one variable')
+        main_variable = main_variable_list[0]
+
+        # save the start time and create a time axis (time meaning destroys this)
+        start_year = self.df.time.dt.year.data[0]
+        start_month = self.df.time.dt.month.data[0]
+        times = pd.date_range(start=f'{start_year}-{start_month:02d}-01', freq='1MS', periods=1)
+
+        # Extract dimensions and the main variable
+        latitudes = self.df.latitude.data
+        longitudes = self.df.longitude.data
+        target_grid = time_mean[main_variable].data
+
+        # Make the output grid and update the metadata
+        out_array = make_xarray(target_grid, times, latitudes, longitudes, variable=main_variable)
+        output_grid = GridMonthly(out_array, copy.deepcopy(self.metadata))
+        output_grid.update_history('Calculated time mean')
+
+        return output_grid
 
     def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """
