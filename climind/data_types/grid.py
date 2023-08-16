@@ -289,7 +289,7 @@ class GridMonthly:
         self.metadata['derived'] = True
         self.update_history(f'Rebaselined to {first_year}-{final_year}')
 
-        return anom
+        return self
 
     def make_annual(self):
         """
@@ -312,7 +312,7 @@ class GridMonthly:
 
     def select_year_and_month(self, year: int, month: int):
         """
-        Select a particular range of consecutive years from the data set and throw away the rest.
+        Select a particular month from the data set and throw away the rest.
 
         Parameters
         ----------

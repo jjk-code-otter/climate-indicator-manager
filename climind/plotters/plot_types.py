@@ -170,6 +170,22 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
     return zords
 
 
+def get_levels_and_palette(variable: str):
+    if variable == 'tas_mean':
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    elif variable == 'pre':
+        wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
+                    '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
+        wmo_levels = [-110, -90, -70, -50, -30, -10, 10, 30, 50, 70, 90, 110]
+    else:
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+
+    return wmo_levels, wmo_cols
+
 def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]) -> str:
     """
     Add labels to the x and y axes
@@ -1241,6 +1257,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         dataset = process_datasets(all_datasets, 'median')
     elif grid_type == 'unc':
         dataset = process_datasets(all_datasets, 'range')
+    elif grid_type == 'single':
+        dataset = all_datasets[0]
     else:
         raise RuntimeError(f'Unknown type {grid_type}')
 
@@ -1250,7 +1268,10 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         last_months.append(f"{ds.metadata['display_name']} to {year_month}")
     ds = all_datasets[-1]
 
-    data = dataset.df['tas_mean']
+    main_variable_list = list(dataset.df.keys())
+    main_variable = main_variable_list[0]
+
+    data = dataset.df[main_variable]
     lon = dataset.df.coords['longitude']
     lon_idx = data.dims.index('longitude')
     wrap_data, wrap_lon = add_cyclic_point(data.values, coord=lon, axis=lon_idx)
@@ -1262,10 +1283,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     else:
         proj = ccrs.EqualEarth(central_longitude=0)
 
-    if grid_type == 'mean':
-        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
-        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
+    if grid_type in ['mean', 'single']:
+        wmo_levels, wmo_cols = get_levels_and_palette(main_variable)
     elif grid_type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     elif grid_type == 'rank':
@@ -1275,7 +1294,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if grid_type == 'mean' or grid_type == 'rank':
+    if grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
@@ -1325,6 +1344,10 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     caption = map_caption_builder(all_datasets, grid_type)
 
     return caption
+
+
+def dashboard_map_single(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'single')
 
 
 def dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
