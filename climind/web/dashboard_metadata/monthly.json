@@ -8,6 +8,12 @@
       "template": "front_page",
       "cards": [
         {
+          "link_to":  null, "title": "Carbon dioxide",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+        },
+        {
           "link_to": null,
           "title": "Global temperature",
           "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly"},
@@ -16,6 +22,16 @@
             {"method": "select_year_range", "args":  [1970, 2023]}
           ],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to": null,
+          "title": "Temperature",
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_and_month", "args": [2023, 5]}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "Temperature"}
         },
         {
           "link_to": null,
