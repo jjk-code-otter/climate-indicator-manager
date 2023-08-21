@@ -356,7 +356,7 @@ class GridMonthly:
 
         return self
 
-    def calculate_time_mean(self):
+    def calculate_time_mean(self, cumulative=False):
         """
         Calculate the time mean of the map
 
@@ -365,7 +365,10 @@ class GridMonthly:
         GridMonthly
             Returns a :class:`GridMonthly` containing the time mean of the data.
         """
-        time_mean = self.df.mean(dim='time', keepdims=True)
+        if cumulative:
+            time_mean = self.df.sum(dim='time', keepdims=True)
+        else:
+            time_mean = self.df.mean(dim='time', keepdims=True)
 
         main_variable_list = list(time_mean.keys())
         if len(main_variable_list) > 1:

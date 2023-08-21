@@ -29,6 +29,7 @@ from climind.readers.generic_reader import read_ts
 
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
+    df = df[['tas_mean']]
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(df, metadata)
