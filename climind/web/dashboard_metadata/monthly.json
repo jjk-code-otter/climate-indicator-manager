@@ -1,0 +1,83 @@
+{
+  "name": "Monthly monitoring",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Monthly monitoring",
+      "descriptor": "key_indicator.html",
+      "template": "front_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Carbon dioxide",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+        },
+        {
+          "link_to": null,
+          "title": "Global temperature",
+          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2010]},
+            {"method": "select_year_range", "args":  [1970, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to": null,
+          "title": "Temperature Anomalies",
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_and_month", "args": [2023, 5]}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "May 2023 Temperature Anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Seasonal Temperature Anomalies",
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "GISTEMP"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_period", "args": [2023, 3, 2023, 5]},
+            {"method": "calculate_time_mean", "args":  []}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "Spring 2023 temperature anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Precipitation",
+          "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_and_month", "args": [2023, 5]}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "May 2023 Precipitation anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Seasonal precipitation anomalies",
+          "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_period", "args": [2023, 3, 2023, 5]},
+            {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "Spring 2023 Precipitation anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Annual precipitation anomalies",
+          "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_period", "args": [2022, 1, 2022, 12]},
+            {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "2022 Annual Precipitation anomaly"}
+        }
+      ],
+      "paragraphs": []
+    }
+  ]
+}

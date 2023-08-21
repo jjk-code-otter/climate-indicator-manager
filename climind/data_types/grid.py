@@ -289,7 +289,7 @@ class GridMonthly:
         self.metadata['derived'] = True
         self.update_history(f'Rebaselined to {first_year}-{final_year}')
 
-        return anom
+        return self
 
     def make_annual(self):
         """
@@ -312,7 +312,7 @@ class GridMonthly:
 
     def select_year_and_month(self, year: int, month: int):
         """
-        Select a particular range of consecutive years from the data set and throw away the rest.
+        Select a particular month from the data set and throw away the rest.
 
         Parameters
         ----------
@@ -331,6 +331,66 @@ class GridMonthly:
 
         return self
 
+    def select_period(self, start_year: int, start_month: int, end_year: int, end_month: int):
+        """
+        Select a period from the grid specifed by start year and month and end year and month, inclusive.
+
+        Parameters
+        ----------
+        start_year: int
+            Year of start date
+        start_month: int
+            Month of start date
+        end_year: int
+            Year of end date
+        end_month: int
+            Month of end date
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing only data within the specified date range.
+        """
+        self.df = self.df.sel(time=slice(f'{start_year}-{start_month:02d}-01', f'{end_year}-{end_month:02d}-28'))
+        self.update_history(f'Selected period from {start_month:02d}/{start_year} to {end_month:02d}/{end_year}')
+
+        return self
+
+    def calculate_time_mean(self, cumulative=False):
+        """
+        Calculate the time mean of the map
+
+        Returns
+        -------
+        GridMonthly
+            Returns a :class:`GridMonthly` containing the time mean of the data.
+        """
+        if cumulative:
+            time_mean = self.df.sum(dim='time', keepdims=True)
+        else:
+            time_mean = self.df.mean(dim='time', keepdims=True)
+
+        main_variable_list = list(time_mean.keys())
+        if len(main_variable_list) > 1:
+            raise RuntimeError('Cant take time mean of xarray dataset with more than one variable')
+        main_variable = main_variable_list[0]
+
+        # save the start time and create a time axis (time meaning destroys this)
+        start_year = self.df.time.dt.year.data[0]
+        start_month = self.df.time.dt.month.data[0]
+        times = pd.date_range(start=f'{start_year}-{start_month:02d}-01', freq='1MS', periods=1)
+
+        # Extract dimensions and the main variable
+        latitudes = self.df.latitude.data
+        longitudes = self.df.longitude.data
+        target_grid = time_mean[main_variable].data
+
+        # Make the output grid and update the metadata
+        out_array = make_xarray(target_grid, times, latitudes, longitudes, variable=main_variable)
+        output_grid = GridMonthly(out_array, copy.deepcopy(self.metadata))
+        output_grid.update_history('Calculated time mean')
+
+        return output_grid
 
     def calculate_regional_average(self, regions, region_number, land_only=True) -> ts.TimeSeriesMonthly:
         """

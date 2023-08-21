@@ -119,6 +119,33 @@ def test_select_year_and_month(monthly_grid):
     assert selection.metadata['history'][-1] == 'Selected single month 07/1982'
 
 
+def test_calculate_time_mean(monthly_grid):
+    selection = monthly_grid.select_period(1980, 1, 1981, 12)
+    selection = selection.calculate_time_mean()
+
+    # Output should be a GridMonthly object with one entry and a date that corresponds to the start
+    # date of the period. Data value should be 0.5 (one year of zero and one year of one)
+    assert isinstance(selection, gd.GridMonthly)
+    assert len(selection.df) == 1
+    assert selection.df.time.dt.year.data[0] == 1980
+    assert selection.df.time.dt.month.data[0] == 1
+    assert selection.metadata['history'][-2] == 'Selected period from 01/1980 to 12/1981'
+    assert selection.metadata['history'][-1] == 'Calculated time mean'
+    assert selection.df.tas_mean.data[0,0,0] == 0.5
+
+    # Make sure the metadata from the original grid is unchanged by the time mean
+    assert monthly_grid.metadata['history'][-1] == 'Selected period from 01/1980 to 12/1981'
+
+
+def test_select_period(monthly_grid):
+    selection = monthly_grid.select_period(1982, 7, 1993, 1)
+    assert selection.df.time.dt.year.data[0] == 1982
+    assert selection.df.time.dt.year.data[-1] == 1993
+    assert selection.df.time.dt.month.data[0] == 7
+    assert selection.df.time.dt.month.data[-1] == 1
+    assert selection.metadata['history'][-1] == 'Selected period from 07/1982 to 01/1993'
+
+
 def test_get_last_month(monthly_grid):
     last_month = monthly_grid.get_last_month()
     assert last_month.year == 2022
@@ -308,8 +335,6 @@ def test_select_year_range(test_combo):
     assert subset.df.tas_mean.shape == (2, 36, 72)
     assert subset.df.year.values[0] == 1999
     assert subset.df.year.values[1] == 2000
-
-
 
 
 def test_1d_transfer_1_25offset_to_5():
