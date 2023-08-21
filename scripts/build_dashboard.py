@@ -20,6 +20,14 @@ from climind.config.config import DATA_DIR
 from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
+    # regional
+    json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_multiyear.json'
+    dash = Dashboard.from_json(json_file, DATA_DIR / 'ManagedData' / 'RegionalMetadata')
+    dash.data_dir = DATA_DIR / 'ManagedData' / 'RegionalData'
+    dash_dir = DATA_DIR / 'ManagedData' / 'RegionalMultiyearDashboard'
+    dash_dir.mkdir(exist_ok=True)
+    dash.build(Path(dash_dir), focus_year=2022)
+
     # Monthly indicators
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'monthly.json'
     dash = Dashboard.from_json(json_file, METADATA_DIR)
