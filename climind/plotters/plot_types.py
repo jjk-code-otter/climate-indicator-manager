@@ -42,9 +42,9 @@ FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
 
 STANDARD_PARAMETER_SET = {
     'axes.axisbelow': False,
-    'axes.labelsize': 20,
-    'xtick.labelsize': 15,
-    'ytick.labelsize': 15,
+    'axes.labelsize': 23,
+    'xtick.labelsize': 23,
+    'ytick.labelsize': 23,
     'axes.edgecolor': 'lightgrey',
     'axes.facecolor': 'None',
 
