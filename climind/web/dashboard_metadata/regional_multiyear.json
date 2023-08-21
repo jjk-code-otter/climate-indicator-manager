@@ -1,0 +1,297 @@
+{
+  "name": "Regional Multi-annual Temperature Indicators",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Regional Multi-annual Temperature Indicators",
+      "template": "front_page",
+      "cards": [
+        {
+          "link_to": "wmo_ra_i", "title": "WMO RA I Africa",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+        },
+        {
+          "link_to": "wmo_ra_ii", "title": "WMO RA II Asia",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+        },
+        {
+          "link_to": "wmo_ra_iii", "title": "WMO RA III South America",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+        },
+        {
+          "link_to": "wmo_ra_iv", "title": "WMO RA IV North America",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+        },
+        {
+          "link_to": "wmo_ra_v", "title": "WMO RA V Southwest Pacific",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+        },
+        {
+          "link_to": "wmo_ra_vi", "title": "WMO RA VI Europe",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_i",
+      "name": "Africa",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA I Africa",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "North Africa",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "North Africa"}
+        },
+        {
+          "link_to":  null, "title": "West Africa",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "West Africa"}
+        },
+        {
+          "link_to":  null, "title": "Central Africa",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Central Africa"}
+        },
+        {
+          "link_to":  null, "title": "Eastern Africa",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Eastern Africa"}
+        },
+        {
+          "link_to":  null, "title": "Southern Africa",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Southern Africa"}
+        },
+        {
+          "link_to":  null, "title": "Indian Ocean",
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Indian Ocean"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Regional trends Africa",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3", "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Regional trends Africa",
+            "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
+                                  "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
+          }
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_ii",
+      "name": "Asia",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA II Asia",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_iii",
+      "name": "South America",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA III South America",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "Caribbean",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Caribbean"}
+        },
+        {
+          "link_to":  null, "title": "Mexico",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Mexico"}
+        },
+        {
+          "link_to":  null, "title": "Central America",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Central America"}
+        },
+        {
+          "link_to":  null, "title": "Latin America and the Caribbean",
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Regional trends LAC",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Regional trends LAC",
+            "kwargs": {"order":  ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Region definitions",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Region definitions",
+            "kwargs": {"original_filename":  "LAC_regions.png", "caption": "Region definitions. Area within each region is indicated in red."}
+          }
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_iv",
+      "name": "North America, Central America and the Caribbean",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA IV North America",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_v",
+      "name": "Southwest Pacific",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA V Southwest Pacific",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean)",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "wmo_ra_vi",
+      "name": "Europe",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "WMO RA VI Europe",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "processing": [{"method": "running_mean", "args": [10]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "Continental trends",
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Continental trends",
+            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        }
+      ],
+      "paragraphs": []
+    }
+  ]
+}
