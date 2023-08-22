@@ -1345,6 +1345,48 @@ def superset_dataset_list(all_datasets: List[TimeSeriesAnnual], variables: List[
     return superset
 
 
+def write_dataset_summary_file(all_datasets, csv_filename):
+    if len(all_datasets) == 0:
+        return None
+
+    dataframes = []
+    dataset_names = []
+    for ds in all_datasets:
+        dataframes.append(ds.df)
+        dataset_names.append(ds.metadata['display_name'])
+
+    ds = all_datasets[0]
+
+    # Find the first and last years from all the dataframes
+    min_year = min(df['year'].min() for df in dataframes)
+    max_year = max(df['year'].max() for df in dataframes)
+
+    # Create a new dataframe that covers the whole date range
+    if isinstance(ds, TimeSeriesAnnual):
+        combined_df = pd.DataFrame({'year': range(min_year, max_year + 1)})
+    elif isinstance(ds, TimeSeriesMonthly):
+        # build a dataframe from all the unique year-month pairs in the input datasets
+        combined_df = pd.concat([df[['year', 'month']] for df in dataframes]).drop_duplicates()
+    else:
+        return None
+
+    # Add columns for "data" from each dataframe and rename to the display_name
+    for df, col_name in zip(dataframes, dataset_names):
+        if 'data' in df.columns:
+            if isinstance(ds, TimeSeriesAnnual):
+                merged_df = pd.merge(combined_df, df[['year', 'data']], on='year', how='left')
+            if isinstance(ds, TimeSeriesMonthly):
+                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left')
+
+            merged_df.rename(columns={'data': col_name}, inplace=True)
+            combined_df = merged_df
+
+    # Write the combined DataFrame to the specified output path as a CSV file
+    combined_df.to_csv(csv_filename, index=False, float_format='%.4f')
+
+    return combined_df
+
+
 class AveragesCollection:
     """
     A simple class to perform specific tasks on lists of :class:`.TimeSeriesAnnual`

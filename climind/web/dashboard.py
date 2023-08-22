@@ -23,7 +23,8 @@ from pathlib import Path
 from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
+    write_dataset_summary_file
 import climind.plotters.plot_types as pt
 import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
@@ -295,6 +296,12 @@ class Card(WebComponent):
                 ds.write_csv(csv_path)
                 csv_paths.append(csv_path)
 
+        if len(self.datasets) > 1 and isinstance(ds, (TimeSeriesAnnual, TimeSeriesMonthly)):
+            csv_filename = f"{ds.metadata['variable']}_summary.csv".replace(" ", "_")
+            csv_path = formatted_data_dir / csv_filename
+            write_dataset_summary_file(self.datasets, csv_path)
+            csv_paths.append(csv_path)
+
         return csv_paths
 
     def make_zip_file(self, formatted_data_dir: Path):
@@ -531,4 +538,4 @@ class Dashboard:
         for page in self.pages:
             page.build(build_dir, self.data_dir, self.archive,
                        focus_year=focus_year,
-                       menu_items = page_ids)
+                       menu_items=page_ids)
