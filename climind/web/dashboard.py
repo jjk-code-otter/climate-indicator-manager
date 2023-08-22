@@ -270,7 +270,7 @@ class Card(WebComponent):
 
     def make_csv_files(self, formatted_data_dir: Path) -> List[Path]:
         """
-        Make a csv file in the standard format for each data set in the Card and return a list of all then names
+        Make a csv file in the standard format for each data set in the Card and return a list of all their names
         of the csv files.
 
         Parameters
