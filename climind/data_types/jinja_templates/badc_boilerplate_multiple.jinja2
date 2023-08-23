@@ -1,0 +1,50 @@
+Conventions,G,BADC-CSV,1
+title,G,{{ datasets[0].metadata.long_name }}
+last_revised_date,G,{{ now.year  }}-{{ "{:02d}".format(now.month) }}-{{ "{:02d}".format(now.day) }}
+date_valid,G,{{ now.year  }}-{{ "{:02d}".format(now.month) }}-{{ "{:02d}".format(now.day) }}
+feature_type,G,area average
+creator,G,WMO
+source,G,Produced by climind version {{ climind_version }}
+observation_station,G,derived data
+location,G,90.,-180.,-90.,180.
+rights,G,TBD
+activity,G,WMO
+comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv
+{% if annual -%}{% set column_offset = 2 %}{% endif -%}
+{% if monthly -%}{% set column_offset = 3 %}{% endif -%}
+{% if irregular -%}{% set column_offset = 4 %}{% endif -%}
+{% for ds in datasets -%}
+{% set dsloop = loop -%}
+{% for history_element in ds.metadata.history -%}history,{{ dsloop.index+column_offset }},"{{ history_element }}"
+{% endfor -%}
+{% for citation in ds.metadata.citation -%}reference,{{ dsloop.index+column_offset }},"{{ citation }}"
+{% endfor -%}
+comments,{{ loop.index+column_offset }},"Original data acknowledgement: {{ ds.metadata.acknowledgement }}"
+{% endfor -%}
+long_name,1,time,{{ time_units }}
+type,1,int
+long_name,2,year,1
+type,2,int
+{% if monthly -%}
+long_name,3,month,1
+type,3,int
+{% endif -%}
+{% if irregular -%}
+long_name,3,month,1
+type,3,int
+long_name,4,day,1
+type,4,int
+{% endif -%}
+{% for ds in datasets -%}
+long_name,{{ loop.index+column_offset }},{{ ds.metadata.variable }},{{ ds.metadata.units }}
+type,{{ loop.index+column_offset }},float
+{% endfor -%}
+coordinate_variable,time,t
+data
+{% if monthly -%}
+time,year,month,data
+{%- elif irregular -%}
+time,year,month,day,data
+{%- else -%}
+time,year{% for ds in datasets %},{{ loop.index + column_offset }}{% endfor %}
+{%- endif %}

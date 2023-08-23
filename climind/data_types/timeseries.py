@@ -1387,6 +1387,87 @@ def write_dataset_summary_file(all_datasets, csv_filename):
     return combined_df
 
 
+def create_common_dataframe(dataframes, monthly=False, annual=False):
+    if annual and monthly:
+        raise ValueError("Both annual and monthly flags set to True. Pick one or the other")
+
+    # Find the first and last years from all the dataframes
+    min_year = min(df['year'].min() for df in dataframes)
+    max_year = max(df['year'].max() for df in dataframes)
+
+    # Create a new dataframe that covers the whole date range
+    if annual:
+        common_dataframe = pd.DataFrame({'year': range(min_year, max_year + 1)})
+    elif monthly:
+        # build a dataframe from all the unique year-month pairs in the input datasets
+        common_dataframe = pd.concat([df[['year', 'month']] for df in dataframes]).drop_duplicates()
+    else:
+        return None
+
+    return common_dataframe
+
+
+def equalise_datasets(all_datasets):
+    if len(all_datasets) <= 1:
+        return all_datasets
+
+    dataframes = []
+    dataset_names = []
+    for ds in all_datasets:
+        dataframes.append(ds.df)
+        dataset_names.append(ds.metadata['display_name'])
+
+    ds = all_datasets[0]
+
+    combined_df = create_common_dataframe(
+        dataframes,
+        monthly=isinstance(ds, TimeSeriesMonthly),
+        annual=isinstance(ds, TimeSeriesAnnual)
+    )
+
+    output_datasets = []
+
+    # for each dataset in the list, merge it with the common dataframe and add to the list
+    for ds in all_datasets:
+        if 'data' in ds.df.columns:
+            if isinstance(ds, TimeSeriesAnnual):
+                merged_df = pd.merge(combined_df, ds.df[['year', 'data']], on='year', how='left')
+            if isinstance(ds, TimeSeriesMonthly):
+                merged_df = pd.merge(combined_df, ds.df[['year', 'month', 'data']], on=['year', 'month'], how='left')
+            ds.df = merged_df
+            output_datasets.append(ds)
+
+    return output_datasets
+
+
+def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual], csv_filename: str):
+    now = datetime.today()
+    climind_version = pkg_resources.get_distribution("climind").version
+
+    time_units = 'days since 1800-01-01 00:00:00.0'
+    for ds in all_datasets:
+        ds.df['time'] = ds.generate_dates(time_units)
+
+    common_datasets = equalise_datasets(all_datasets)
+
+    # populate template to make webpage
+    env = Environment(
+        loader=FileSystemLoader(ROOT_DIR / "climind" / "data_types" / "jinja_templates"),
+        autoescape=select_autoescape()
+    )
+    template = env.get_template("badc_boilerplate_multiple.jinja2")
+
+    rendered = template.render(
+        now=now, climind_version=climind_version,
+        datasets=all_datasets,
+        monthly=isinstance(ds, TimeSeriesMonthly),
+        annual=isinstance(ds, TimeSeriesAnnual),
+        irregular=isinstance(ds, TimeSeriesIrregular)
+    )
+
+    return rendered
+
+
 class AveragesCollection:
     """
     A simple class to perform specific tasks on lists of :class:`.TimeSeriesAnnual`
