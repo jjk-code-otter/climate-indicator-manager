@@ -65,7 +65,3 @@ if __name__ == "__main__":
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
 
     output = write_dataset_summary_file_with_metadata(all_annual_datasets, fdata_dir / f"summary.csv")
-
-    print(output)
-
-    print()

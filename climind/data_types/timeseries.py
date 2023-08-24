@@ -1353,7 +1353,7 @@ def write_dataset_summary_file(all_datasets, csv_filename):
     dataset_names = []
     for ds in all_datasets:
         dataframes.append(ds.df)
-        dataset_names.append(ds.metadata['display_name'])
+        dataset_names.append(ds.metadata['name'])
 
     ds = all_datasets[0]
 
@@ -1415,7 +1415,7 @@ def equalise_datasets(all_datasets):
     dataset_names = []
     for ds in all_datasets:
         dataframes.append(ds.df)
-        dataset_names.append(ds.metadata['display_name'])
+        dataset_names.append(ds.metadata['name'])
 
     ds = all_datasets[0]
 
@@ -1425,19 +1425,18 @@ def equalise_datasets(all_datasets):
         annual=isinstance(ds, TimeSeriesAnnual)
     )
 
-    output_datasets = []
-
     # for each dataset in the list, merge it with the common dataframe and add to the list
-    for ds in all_datasets:
+    for i, ds in enumerate(all_datasets):
         if 'data' in ds.df.columns:
             if isinstance(ds, TimeSeriesAnnual):
-                merged_df = pd.merge(combined_df, ds.df[['year', 'data']], on='year', how='left')
+                merged_df = pd.merge(combined_df, ds.df[['time', 'year', 'data']], on='year', how='left')
             if isinstance(ds, TimeSeriesMonthly):
-                merged_df = pd.merge(combined_df, ds.df[['year', 'month', 'data']], on=['year', 'month'], how='left')
-            ds.df = merged_df
-            output_datasets.append(ds)
+                merged_df = pd.merge(combined_df, ds.df[['time', 'year', 'month', 'data']], on=['year', 'month'], how='left')
 
-    return output_datasets
+            merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
+            combined_df = merged_df
+
+    return combined_df
 
 
 def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual], csv_filename: str):
@@ -1447,6 +1446,7 @@ def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual
     time_units = 'days since 1800-01-01 00:00:00.0'
     for ds in all_datasets:
         ds.df['time'] = ds.generate_dates(time_units)
+    ds = all_datasets[0]
 
     common_datasets = equalise_datasets(all_datasets)
 
@@ -1464,6 +1464,25 @@ def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual
         annual=isinstance(ds, TimeSeriesAnnual),
         irregular=isinstance(ds, TimeSeriesIrregular)
     )
+
+    n_data_columns = len(all_datasets)
+    if isinstance(ds, TimeSeriesMonthly):
+        columns_to_write = ['time', 'year', 'month']
+        column_offset = 3
+    elif isinstance(ds, TimeSeriesAnnual):
+        columns_to_write = ['time', 'year']
+        column_offset = 2
+    for i in range(n_data_columns):
+        columns_to_write.append(all_datasets[i].metadata['name'])
+
+    with open(csv_filename, 'w') as f:
+        f.write(rendered)
+        f.write(common_datasets.to_csv(index=False,
+                                       line_terminator='\n',
+                                       float_format='%.4f',
+                                       header=False,
+                                       columns=columns_to_write))
+        f.write("end data\n")
 
     return rendered
 

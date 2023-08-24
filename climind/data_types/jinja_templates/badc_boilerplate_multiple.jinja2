@@ -10,34 +10,31 @@ location,G,90.,-180.,-90.,180.
 rights,G,TBD
 activity,G,WMO
 comments,G,Format description https://help.ceda.ac.uk/article/105-badc-csv
-{% if annual -%}{% set column_offset = 2 %}{% endif -%}
-{% if monthly -%}{% set column_offset = 3 %}{% endif -%}
-{% if irregular -%}{% set column_offset = 4 %}{% endif -%}
 {% for ds in datasets -%}
 {% set dsloop = loop -%}
-{% for history_element in ds.metadata.history -%}history,{{ dsloop.index+column_offset }},"{{ history_element }}"
+{% for history_element in ds.metadata.history -%}history,{{ ds.metadata.name|replace(' ','_') }},"{{ history_element }}"
 {% endfor -%}
-{% for citation in ds.metadata.citation -%}reference,{{ dsloop.index+column_offset }},"{{ citation }}"
+{% for citation in ds.metadata.citation -%}reference,{{ ds.metadata.name|replace(' ','_') }},"{{ citation }}"
 {% endfor -%}
-comments,{{ loop.index+column_offset }},"Original data acknowledgement: {{ ds.metadata.acknowledgement }}"
+comments,{{ ds.metadata.name|replace(' ','_') }},"Original data acknowledgement: {{ ds.metadata.acknowledgement }}"
 {% endfor -%}
-long_name,1,time,{{ time_units }}
-type,1,int
-long_name,2,year,1
-type,2,int
+long_name,time,time,{{ time_units }}
+type,time,int
+long_name,year,year,1
+type,year,int
 {% if monthly -%}
-long_name,3,month,1
-type,3,int
+long_name,month,month,1
+type,month,int
 {% endif -%}
 {% if irregular -%}
-long_name,3,month,1
-type,3,int
-long_name,4,day,1
-type,4,int
+long_name,month,month,1
+type,month,int
+long_name,day,day,1
+type,day,int
 {% endif -%}
 {% for ds in datasets -%}
-long_name,{{ loop.index+column_offset }},{{ ds.metadata.variable }},{{ ds.metadata.units }}
-type,{{ loop.index+column_offset }},float
+long_name,{{ ds.metadata.name|replace(' ','_') }},{{ ds.metadata.variable }},{{ ds.metadata.units }}
+type,{{ ds.metadata.name|replace(' ','_') }},float
 {% endfor -%}
 coordinate_variable,time,t
 data
@@ -46,5 +43,6 @@ time,year,month,data
 {%- elif irregular -%}
 time,year,month,day,data
 {%- else -%}
-time,year{% for ds in datasets %},{{ loop.index + column_offset }}{% endfor %}
+time,year{% for ds in datasets %},{{ ds.metadata.name|replace(' ','_') }}{% endfor %}
 {%- endif %}
+
