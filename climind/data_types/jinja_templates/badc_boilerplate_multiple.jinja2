@@ -39,9 +39,9 @@ type,{{ ds.metadata.name|replace(' ','_') }},float
 coordinate_variable,time,t
 data
 {% if monthly -%}
-time,year,month,data
+time,year,month{% for ds in datasets %},{{ ds.metadata.name|replace(' ','_') }}{% endfor %}
 {%- elif irregular -%}
-time,year,month,day,data
+time,year,month,day{% for ds in datasets %},{{ ds.metadata.name|replace(' ','_') }}{% endfor %}
 {%- else -%}
 time,year{% for ds in datasets %},{{ ds.metadata.name|replace(' ','_') }}{% endfor %}
 {%- endif %}

@@ -24,7 +24,7 @@ from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
-    write_dataset_summary_file
+    write_dataset_summary_file_with_metadata
 import climind.plotters.plot_types as pt
 import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
@@ -299,7 +299,7 @@ class Card(WebComponent):
         if len(self.datasets) > 1 and isinstance(ds, (TimeSeriesAnnual, TimeSeriesMonthly)):
             csv_filename = f"{ds.metadata['variable']}_summary.csv".replace(" ", "_")
             csv_path = formatted_data_dir / csv_filename
-            write_dataset_summary_file(self.datasets, csv_path)
+            write_dataset_summary_file_with_metadata(self.datasets, csv_path)
             csv_paths.append(csv_path)
 
         return csv_paths

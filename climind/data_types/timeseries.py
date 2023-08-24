@@ -14,7 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Tuple, List, Callable
+from typing import Optional, Tuple, List, Callable, Union
 import warnings
 import pandas as pd
 import numpy as np
@@ -1387,67 +1387,114 @@ def write_dataset_summary_file(all_datasets, csv_filename):
     return combined_df
 
 
-def create_common_dataframe(dataframes, monthly=False, annual=False):
-    if annual and monthly:
-        raise ValueError("Both annual and monthly flags set to True. Pick one or the other")
+def create_common_dataframe(
+        dataframes: List[pd.DataFrame],
+        monthly: bool = False,
+        annual: bool = False,
+        irregular: bool = False
+) -> pd.DataFrame:
+    """
+    Given a list of dataframes make a single dataframe which has rows corresponding to all time steps in the
+    input dataframes
 
-    # Find the first and last years from all the dataframes
-    min_year = min(df['year'].min() for df in dataframes)
-    max_year = max(df['year'].max() for df in dataframes)
+    Parameters
+    ----------
+    dataframes: List[pd.DataFrame]
+        List of dataframes which are to be used as the basis for the common data frame
+    monthly: bool
+        Set to true for monthly data
+    annual: bool
+        Set to true for annual data
+    irregular: bool
+        Set to true for daily/irregular data
 
-    # Create a new dataframe that covers the whole date range
+    Returns
+    -------
+    pd.DataFrame
+        Pandas dataframe with one row for each row in the input dataframes
+    """
+    if sum([annual, monthly, irregular]) != 1:
+        raise ValueError("One and only one flag must be set to True")
+
+    # Create a new dataframe that covers the whole date range from unique data combinations
     if annual:
-        common_dataframe = pd.DataFrame({'year': range(min_year, max_year + 1)})
+        common_dataframe = pd.concat([df[['year']] for df in dataframes]).drop_duplicates()
     elif monthly:
-        # build a dataframe from all the unique year-month pairs in the input datasets
         common_dataframe = pd.concat([df[['year', 'month']] for df in dataframes]).drop_duplicates()
+    elif irregular:
+        common_dataframe = pd.concat([df[['year', 'month', 'day']] for df in dataframes]).drop_duplicates()
     else:
-        return None
+        raise RuntimeError(
+            "Should not have reached here, one of annual or monthly kwarg should be True but both are False"
+        )
 
     return common_dataframe
 
 
-def equalise_datasets(all_datasets):
+def equalise_datasets(
+        all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
+) -> pd.DataFrame:
+    """
+    Given a list of datasets
+
+    Parameters
+    ----------
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
+        List of time series datasets whose data is to be combined in a single data frame. The data column from
+        each data set will be combined into a single data from with each data column becoming a column identified
+        by the "name" of the data set from its metadata.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas dataframe containing the data columns from all the input datasets.
+    """
     if len(all_datasets) <= 1:
-        return all_datasets
+        return all_datasets[0].df
 
     dataframes = []
-    dataset_names = []
     for ds in all_datasets:
-        dataframes.append(ds.df)
-        dataset_names.append(ds.metadata['name'])
+        if 'data' in ds.df.columns:
+            dataframes.append(ds.df)
 
     ds = all_datasets[0]
+    monthly = isinstance(ds, TimeSeriesMonthly)
+    annual = isinstance(ds, TimeSeriesAnnual)
+    irregular = isinstance(ds, TimeSeriesIrregular)
 
-    combined_df = create_common_dataframe(
-        dataframes,
-        monthly=isinstance(ds, TimeSeriesMonthly),
-        annual=isinstance(ds, TimeSeriesAnnual)
-    )
+    combined_df = create_common_dataframe(dataframes, monthly=monthly, annual=annual, irregular=irregular)
 
-    # for each dataset in the list, merge it with the common dataframe and add to the list
-    for i, ds in enumerate(all_datasets):
-        if 'data' in ds.df.columns:
-            if isinstance(ds, TimeSeriesAnnual):
-                merged_df = pd.merge(combined_df, ds.df[['time', 'year', 'data']], on='year', how='left')
-            if isinstance(ds, TimeSeriesMonthly):
-                merged_df = pd.merge(combined_df, ds.df[['time', 'year', 'month', 'data']], on=['year', 'month'], how='left')
+    on_columns = ['year']
+    if monthly:
+        on_columns = ['year', 'month']
+    if irregular:
+        on_columns = ['year', 'month', 'day']
+    columns = ['time', *on_columns, 'data']
 
-            merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
-            combined_df = merged_df
+    # for each dataset in the list, merge it with the combined dataframe, rename the data column and
+    # update the combined dataframe
+    for ds in all_datasets:
+        merged_df = pd.merge(combined_df, ds.df[columns], on=on_columns, how='left')
+        merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
+        combined_df = merged_df
+        columns = [*on_columns, 'data']
 
     return combined_df
 
 
-def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual], csv_filename: str):
+def write_dataset_summary_file_with_metadata(
+        all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
+        csv_filename: Union[str, Path]
+):
+    # Set up the information to fill the template
     now = datetime.today()
     climind_version = pkg_resources.get_distribution("climind").version
-
     time_units = 'days since 1800-01-01 00:00:00.0'
     for ds in all_datasets:
         ds.df['time'] = ds.generate_dates(time_units)
     ds = all_datasets[0]
 
+    # To print out the datasets together, it's necessary to put them on the same time axis
     common_datasets = equalise_datasets(all_datasets)
 
     # populate template to make webpage
@@ -1457,24 +1504,30 @@ def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual
     )
     template = env.get_template("badc_boilerplate_multiple.jinja2")
 
+    monthly = isinstance(ds, TimeSeriesMonthly)
+    annual = isinstance(ds, TimeSeriesAnnual)
+    irregular = isinstance(ds, TimeSeriesIrregular)
+
     rendered = template.render(
-        now=now, climind_version=climind_version,
+        now=now, climind_version=climind_version, time_units=time_units,
         datasets=all_datasets,
-        monthly=isinstance(ds, TimeSeriesMonthly),
-        annual=isinstance(ds, TimeSeriesAnnual),
-        irregular=isinstance(ds, TimeSeriesIrregular)
+        monthly=monthly,
+        annual=annual,
+        irregular=irregular
     )
 
+    # Next set up columns to write from the combined dataframe
     n_data_columns = len(all_datasets)
-    if isinstance(ds, TimeSeriesMonthly):
+    columns_to_write = ['time', 'year']
+    if monthly:
         columns_to_write = ['time', 'year', 'month']
-        column_offset = 3
-    elif isinstance(ds, TimeSeriesAnnual):
-        columns_to_write = ['time', 'year']
-        column_offset = 2
+    elif irregular:
+        columns_to_write = ['time', 'year', 'month', 'day']
+
     for i in range(n_data_columns):
         columns_to_write.append(all_datasets[i].metadata['name'])
 
+    # Now write everything to the file
     with open(csv_filename, 'w') as f:
         f.write(rendered)
         f.write(common_datasets.to_csv(index=False,
@@ -1483,8 +1536,6 @@ def write_dataset_summary_file_with_metadata(all_datasets: List[TimeSeriesAnnual
                                        header=False,
                                        columns=columns_to_write))
         f.write("end data\n")
-
-    return rendered
 
 
 class AveragesCollection:
