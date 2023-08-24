@@ -23,7 +23,8 @@ from pathlib import Path
 from zipfile import ZipFile
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular
+from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
+    write_dataset_summary_file_with_metadata
 import climind.plotters.plot_types as pt
 import climind.stats.paragraphs as pa
 from climind.data_manager.processing import DataArchive
@@ -270,7 +271,7 @@ class Card(WebComponent):
 
     def make_csv_files(self, formatted_data_dir: Path) -> List[Path]:
         """
-        Make a csv file in the standard format for each data set in the Card and return a list of all then names
+        Make a csv file in the standard format for each data set in the Card and return a list of all their names
         of the csv files.
 
         Parameters
@@ -294,6 +295,12 @@ class Card(WebComponent):
                 csv_path = formatted_data_dir / csv_filename
                 ds.write_csv(csv_path)
                 csv_paths.append(csv_path)
+
+        if len(self.datasets) > 1 and isinstance(ds, (TimeSeriesAnnual, TimeSeriesMonthly)):
+            csv_filename = f"{ds.metadata['variable']}_summary.csv".replace(" ", "_")
+            csv_path = formatted_data_dir / csv_filename
+            write_dataset_summary_file_with_metadata(self.datasets, csv_path)
+            csv_paths.append(csv_path)
 
         return csv_paths
 
@@ -531,4 +538,4 @@ class Dashboard:
         for page in self.pages:
             page.build(build_dir, self.data_dir, self.archive,
                        focus_year=focus_year,
-                       menu_items = page_ids)
+                       menu_items=page_ids)
