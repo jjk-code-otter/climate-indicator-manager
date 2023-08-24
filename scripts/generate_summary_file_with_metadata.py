@@ -15,7 +15,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import logging
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -41,10 +40,6 @@ if __name__ == "__main__":
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
 
-    script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
-                        filemode='w', level=logging.INFO)
-
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
@@ -64,4 +59,4 @@ if __name__ == "__main__":
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
 
-    write_dataset_summary_file_with_metadata(all_annual_datasets, fdata_dir / f"summary.csv")
+    write_dataset_summary_file_with_metadata(all_annual_datasets, fdata_dir / "summary.csv")
