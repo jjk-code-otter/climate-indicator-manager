@@ -176,7 +176,7 @@ class Paragraph(WebComponent):
 
         self['text'] = paragraph_text
         now = datetime.now()
-        self['updated'] = f'{now}'
+        self['updated'] = f'{now}'[0:16]
 
 
 class Card(WebComponent):
