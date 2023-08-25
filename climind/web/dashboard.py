@@ -175,6 +175,8 @@ class Paragraph(WebComponent):
             paragraph_text = getattr(pa, paragraph_function)(self.datasets, year)
 
         self['text'] = paragraph_text
+        now = datetime.now()
+        self['updated'] = f'{now}'
 
 
 class Card(WebComponent):

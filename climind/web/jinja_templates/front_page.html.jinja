@@ -142,7 +142,7 @@ p {
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}"
                                        aria-label="Bundle of csv data in a zip file">csv</a>
                     (<a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
-                        aria-label="extrenal link to data format description">format</a>)<br>
+                        aria-label="external link to data format description">format</a>)<br>
                     <a href="#{{ item.title }}"
                        aria-label="link to references, acknowledgements and processing details">References and
                         processing</a><br>
@@ -196,6 +196,9 @@ p {
                 <h2>{{ item.dataset_metadata.long_name }}</h2>
                 <p>
                     {{ item.text }}
+                </p>
+                <p style="font-size: 10pt; color: lightgrey;">
+                    Paragraph updated: {{ item.updated }}
                 </p>
                 {% endfor %}
             </div>

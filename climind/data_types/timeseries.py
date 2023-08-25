@@ -1485,7 +1485,22 @@ def equalise_datasets(
 def write_dataset_summary_file_with_metadata(
         all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
         csv_filename: Union[str, Path]
-):
+) -> None:
+    """
+    Given a list of time series data sets, write them out in a single BADC CSV format csv file with
+    complete metadata.
+
+    Parameters
+    ----------
+    all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
+        A list of time series which are going to be equalised
+    csv_filename: str or Path
+        The name of the file to which the summary will be written.
+
+    Returns
+    -------
+    None
+    """
     # Set up the information to fill the template
     now = datetime.today()
     climind_version = pkg_resources.get_distribution("climind").version

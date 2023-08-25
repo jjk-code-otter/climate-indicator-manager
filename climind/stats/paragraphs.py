@@ -452,7 +452,7 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
                    f'{max_march_value:.2f}{units}. ' \
                    f'This was {rank_ranges(min_march_rank, max_march_rank)} lowest extent on record. '
     except:
-        out_text += f"March data are not available for {year}."
+        out_text += f"March data are not yet available for {year}."
 
     try:
         min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
@@ -462,7 +462,7 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
                     f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
                     f'Data sets used were: {dataset_name_list(all_datasets)}'
     except:
-        out_text += f"September data are not available for {year}."
+        out_text += f"September data are not yet available for {year}."
 
     return out_text
 
