@@ -500,7 +500,7 @@ def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) ->
         min_february_rank, max_february_rank = pu.calculate_ranks(march, year, ascending=True)
         mean_february_value, min_february_value, max_february_value = pu.calculate_values(march, year)
     except ValueError:
-        out_text += 'No data available for February. '
+        out_text += 'No data available yet for February. '
     else:
         out_text += f'Antarctic sea ice extent in February {year} was between {min_february_value:.2f} and ' \
                     f'{max_february_value:.2f}{units}. ' \
@@ -510,7 +510,7 @@ def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) ->
         min_september_rank, max_september_rank = pu.calculate_ranks(september, year, ascending=True)
         mean_september_value, min_september_value, max_september_value = pu.calculate_values(september, year)
     except ValueError:
-        out_text += 'No data available for September. '
+        out_text += 'No data available yet for September. '
     else:
         out_text += f'In September the extent was between {min_september_value:.2f} and ' \
                     f'{max_september_value:.2f}{units}. ' \
