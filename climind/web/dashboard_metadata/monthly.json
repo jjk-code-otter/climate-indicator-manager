@@ -75,6 +75,70 @@
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
           "plotting": {"function": "dashboard_map_single", "title": "2022 Annual Precipitation anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Indian Ocean Dipole",
+          "selecting": {"type":  "timeseries", "variable": "iod", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1990, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Dipole Mode Index"}
+        },
+        {
+          "link_to": null,
+          "title": "ONI",
+          "selecting": {"type":  "timeseries", "variable": "oni", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Oceanic Nino Index"}
+        },
+        {
+          "link_to": null,
+          "title": "ENSO",
+          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Nino 3.4"}
+        },
+        {
+          "link_to": null,
+          "title": "SOI",
+          "selecting": {"type":  "timeseries", "variable": "soi", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Southern Oscillation Index"}
+        },
+        {
+          "link_to": null,
+          "title": "Pacific Decadal Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1990, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
+        },
+        {
+          "link_to": null,
+          "title": "Arctic Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "ao", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [2010, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Arctic Oscillation"}
+        },
+        {
+          "link_to": null,
+          "title": "Antarctic Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "aao", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [2010, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Antarctic Oscillation"}
         }
       ],
       "paragraphs": []

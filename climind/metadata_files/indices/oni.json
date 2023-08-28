@@ -1,0 +1,30 @@
+{
+  "name": "ONI",
+  "display_name": "CPC ONI",
+  "version": "",
+  "variable": "oni",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://psl.noaa.gov/data/correlation/oni.data"],
+      "filename": ["oni.data"],
+	  "type": "timeseries",
+      "long_name": "Oceanic Nino Index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_psl",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

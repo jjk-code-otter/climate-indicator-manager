@@ -22,26 +22,57 @@ from climind.readers.generic_reader import read_ts
 
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    """
+    The PSL monthly format has three main sections. The first line has the start and end years, then there is a
+    data section with each row being a year and 13 columns year and 12 months of data. Finally, there's a metadata
+    section at the end. The first line of the metadata gives the missing data indicator.
+
+    Parameters
+    ----------
+    filename: List[Path]
+        List of paths for the filenames
+    metadata: CombinedMetadata
+        Metadata object
+
+    Returns
+    -------
+    ts.TimeSeriesMonthly
+        Monthly time series read from the file
+    """
     years = []
     months = []
     anomalies = []
 
     with open(filename[0], 'r') as f:
+        # First line has start and end years
         line = f.readline()
         columns = line.split()
         first_year = int(columns[0])
         last_year = int(columns[1])
 
-        for line in f:
+        # Skip over the data to get to the missing data flag
+        for year in range(first_year, last_year + 1):
+            f.readline()
+
+        # Get the missing data indicator
+        missing_flag_line = f.readline()
+        missing_flag = float(missing_flag_line)
+
+    # Reopen the file and read the data
+    with open(filename[0], 'r') as f:
+        # Skip the header
+        f.readline()
+        # Read all years of data
+        for year in range(first_year, last_year + 1):
+            line = f.readline()
             columns = line.split()
             n_columns = len(columns)
             for i in range(1, n_columns):
-                if columns[i] != '-99.99':
+                value = float(columns[i])
+                if value != missing_flag:
                     years.append(int(columns[0]))
                     months.append(int(i))
-                    anomalies.append(float(columns[i]))
-            if int(columns[0]) == last_year:
-                break
+                    anomalies.append(value)
 
     metadata.creation_message()
 
