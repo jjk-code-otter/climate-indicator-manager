@@ -49,6 +49,7 @@
 <li><a class="reference internal" href="#adding-a-new-variable">Adding a new variable</a></li>
 <li><a class="reference internal" href="#making-a-new-dashboard">Making a new dashboard</a></li>
 <li><a class="reference internal" href="#calculating-regional-averages">Calculating regional averages</a></li>
+<li><a class="reference internal" href="#descriptive-text">Descriptive text</a></li>
 </ul>
 </div>
         </div>
@@ -108,9 +109,22 @@ and reproduced.</p>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>Download the code from the repository using your preferred method.</p>
+<p>An environment.yml file contains the details of the necessary conda environment. To
+setup the environment run</p>
+<p><cite>conda env create -f &lt;path_to_yaml_file&gt;</cite></p>
+<p>The environment (called <cite>wmo</cite>) can then be activated by typing</p>
+<p><cite>conda activate wmo</cite></p>
 <p>Navigate to the root directory of the repository and type</p>
 <p><cite>pip install .</cite></p>
-<p>This should install the package and necessary dependencies.</p>
+<p>This should install the package.</p>
+<p>You will need to download a couple of different files if you want to calculate regional
+averages from gridded data. These include</p>
+<ul class="simple">
+<li><p>WMO Shape files for the WMO Regional Associations and Africa subregions.
+I don’t know of an online source for these so you will have to ask a friendly person
+at the WMO.</p></li>
+<li><p>The Natural Earth country files <a class="reference external" href="https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip">https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip</a></p></li>
+</ul>
 </div>
 <div class="section" id="set-up">
 <h1>Set up<a class="headerlink" href="#set-up" title="Permalink to this heading"></a></h1>
@@ -159,6 +173,7 @@ to the unique name given to the data set. This can be found in the metadata file
 <p>which calculates annual average grids on a consistent 5-degree latitude longitude grid for all the gridded data sets.</p>
 <p>In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
 scripts directory and run:</p>
+<p><cite>python make_new_regions.py</cite> (you only need to run this the first time to generate the shape files for subregion)</p>
 <p><cite>python calculate_wmo_ra_averages.py</cite></p>
 <p>This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
 six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
@@ -260,7 +275,7 @@ inputs and maintains transparency of the system. The “reader” and “fetcher
 <li><p><cite>derived</cite> - set to False. During processing, this flag is set to True to indicate that the original data have been further processed within the dashboard software.</p></li>
 <li><p><cite>history</cite> - a list which will hold the details of processing steps</p></li>
 <li><p><cite>reader</cite> - the name of a script in the <cite>climind/readers</cite> directory which will read the data described in the dataset metadata.</p></li>
-<li><p><cite>fetcher</cite> - the name of a script in the <cite>climind/fetchers</cite> direcotyr which will download the data described in the dataset metadata.</p></li>
+<li><p><cite>fetcher</cite> - the name of a script in the <cite>climind/fetchers</cite> direcotry which will download the data described in the dataset metadata.</p></li>
 </ul>
 </div>
 <div class="section" id="adding-a-new-variable">
@@ -271,6 +286,9 @@ inputs and maintains transparency of the system. The “reader” and “fetcher
 <li><p>Check that the variable does not already exist. You can do this by looking through the metadata files.</p></li>
 <li><p>Add a new metadata file describing a collection with snow cover data in it.</p></li>
 <li><p>Check that the units are in the <cite>metadata_schema.json</cite> file in <cite>climind.data_manager</cite>. This is used to validate the metadata when it is read in.</p></li>
+<li><p>Add the new variable to the word document in <cite>climind/web/word_documents/key_indicators_texts.docx</cite>. Individual variables
+appear towards the end of the document. The short <cite>variable</cite> name should appear in <cite>Heading1</cite> style and the text desribing it
+should appear in <cite>normal</cite> style text. These short descriptions appear on the webpages in the section detailing the datasets and their processing.</p></li>
 </ol>
 <p>That should be sufficient.</p>
 </div>
@@ -278,7 +296,7 @@ inputs and maintains transparency of the system. The “reader” and “fetcher
 <h1>Making a new dashboard<a class="headerlink" href="#making-a-new-dashboard" title="Permalink to this heading"></a></h1>
 <p>A dashboard is created using a dashboard metadata file. These are located in <cite>climind/web/dashboard_metadata</cite>. Each dashboard is split into Pages, which
 each correspond to an html webpage. Each Page consists of a set of Cards and Paragraphs (the capital letters indicate these are represented as classes
-in the underlying code).</p>
+in the underlying code). For examples, please see the <cite>climind/web/dashboard_metadata</cite> directory.</p>
 <p>A dashboard metadata file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Key Indicators&quot;</span><span class="p">,</span>
@@ -296,6 +314,8 @@ in the underlying code).</p>
 <span class="p">},</span>
 </pre></div>
 </div>
+<p>The <cite>template</cite> can be either a <cite>front_page</cite> or a <cite>topic_page</cite>. The front page is intended to be a clean landing page
+for users. More information is provided on topic pages, including e.g. figure captions.</p>
 <p>The <cite>cards</cite> entry is made up of one or more cards and the <cite>paragraphs</cite> entry of one or more paragraphs.</p>
 <p>A Card, contains an image, links to the image in other format, links to the data in a standard format and a link to another Page.
 The metadata entries look like this:</p>
@@ -308,7 +328,7 @@ The metadata entries look like this:</p>
                   <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;add_offset&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.69</span><span class="p">]},</span>
                   <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;manually_set_baseline&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1850</span><span class="p">,</span> <span class="mi">1900</span><span class="p">]}],</span>
   <span class="s2">&quot;plotting&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="s2">&quot;neat_plot&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Global mean temperature&quot;</span><span class="p">}</span>
- <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>The entries say which other page the Card can <cite>link_to</cite> using the <cite>id</cite> of a page and what the <cite>title</cite> of the page should be.
@@ -347,6 +367,22 @@ are found in <cite>climind/stats/paragraphs.py</cite>.</p>
 <p>Regional averages are calculated using <cite>calculate_wmo_ra_averages.py</cite>. This generates a large number of files containing regional averages based
 on the gridded temperature data sets. This takes some time to run.</p>
 <p><cite>python calculate_wmo_ra_averages.py</cite></p>
+</div>
+<div class="section" id="descriptive-text">
+<h1>Descriptive text<a class="headerlink" href="#descriptive-text" title="Permalink to this heading"></a></h1>
+<p>In <cite>climind/web/word_documents</cite> there is a Word document that is used to generate text for the
+web pages. The document is called <cite>key_indicators_texts.docx</cite>. This has descriptive text for
+each page on the key indicators dashboard as well as descriptions for each of the variables.</p>
+<p>when changes are made to the word document, these will need to be converted to html by navigating to <cite>climind/web</cite> and running</p>
+<p><cite>python extract_from_word.py</cite></p>
+<p>The word document is structured using the inbuilt “styles”.</p>
+<p>Each page in the dashboard can have an Introduction text. To do this, add a new <cite>Heading1</cite> style heading in the document
+with text that matches the id of a page in the dashboard. You can then write <cite>normal</cite> style text beneath it.
+Subheadings can be added using <cite>Heading2</cite> style text followed by <cite>normal</cite> text. For example, the “What the IPCC says”
+sections. Hyperlinks can be added and these will be rendered in the webpages.</p>
+<p>Individual variable descriptions can also be added here. The method is similar. A Heading1 style heading which matches
+the <cite>variable</cite> name from the metadata file, followed by <cite>normal</cite> style text. Sub-headings do not work for variables. These
+are intended to be short descriptions of the variables.</p>
 </div>
 
 
