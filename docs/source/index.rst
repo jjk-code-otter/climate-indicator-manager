@@ -52,11 +52,28 @@ Installation
 
 Download the code from the repository using your preferred method.
 
+An environment.yml file contains the details of the necessary conda environment. To
+setup the environment run
+
+`conda env create -f <path_to_yaml_file>`
+
+The environment (called `wmo`) can then be activated by typing
+
+`conda activate wmo`
+
 Navigate to the root directory of the repository and type
 
 `pip install .`
 
-This should install the package and necessary dependencies.
+This should install the package.
+
+You will need to download a couple of different files if you want to calculate regional
+averages from gridded data. These include
+
+- WMO Shape files for the WMO Regional Associations and Africa subregions.
+  I don't know of an online source for these so you will have to ask a friendly person
+  at the WMO.
+- The Natural Earth country files https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip
 
 
 Set up
@@ -117,6 +134,8 @@ which calculates annual average grids on a consistent 5-degree latitude longitud
 
 In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
 scripts directory and run:
+
+`python make_new_regions.py` (you only need to run this the first time to generate the shape files for subregion)
 
 `python calculate_wmo_ra_averages.py`
 
@@ -231,7 +250,7 @@ The dataset section consists of a lits of dataset metadata:
 * `derived` - set to False. During processing, this flag is set to True to indicate that the original data have been further processed within the dashboard software.
 * `history` - a list which will hold the details of processing steps
 * `reader` - the name of a script in the `climind/readers` directory which will read the data described in the dataset metadata.
-* `fetcher` - the name of a script in the `climind/fetchers` direcotyr which will download the data described in the dataset metadata.
+* `fetcher` - the name of a script in the `climind/fetchers` direcotry which will download the data described in the dataset metadata.
 
 
 Adding a new variable
@@ -243,6 +262,9 @@ It is possible to add new variables. For example, there is currently no snow_cov
 2. Check that the variable does not already exist. You can do this by looking through the metadata files.
 3. Add a new metadata file describing a collection with snow cover data in it.
 4. Check that the units are in the `metadata_schema.json` file in `climind.data_manager`. This is used to validate the metadata when it is read in.
+5. Add the new variable to the word document in `climind/web/word_documents/key_indicators_texts.docx`. Individual variables
+   appear towards the end of the document. The short `variable` name should appear in `Heading1` style and the text desribing it
+   should appear in `normal` style text. These short descriptions appear on the webpages in the section detailing the datasets and their processing.
 
 That should be sufficient.
 
@@ -251,7 +273,7 @@ Making a new dashboard
 
 A dashboard is created using a dashboard metadata file. These are located in `climind/web/dashboard_metadata`. Each dashboard is split into Pages, which
 each correspond to an html webpage. Each Page consists of a set of Cards and Paragraphs (the capital letters indicate these are represented as classes
-in the underlying code).
+in the underlying code). For examples, please see the `climind/web/dashboard_metadata` directory.
 
 A dashboard metadata file:
 
@@ -261,7 +283,6 @@ A dashboard metadata file:
      "name": "Key Indicators",
      "pages": [ ... ]
    }
-
 
 The `pages` entry consists of a list of Pages which look something like:
 
@@ -275,6 +296,8 @@ The `pages` entry consists of a list of Pages which look something like:
      "paragraphs": [ ... ]
    },
 
+The `template` can be either a `front_page` or a `topic_page`. The front page is intended to be a clean landing page
+for users. More information is provided on topic pages, including e.g. figure captions.
 
 The `cards` entry is made up of one or more cards and the `paragraphs` entry of one or more paragraphs.
 
@@ -292,7 +315,7 @@ The metadata entries look like this:
                      {"method": "add_offset", "args": [0.69]},
                      {"method": "manually_set_baseline", "args": [1850, 1900]}],
      "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
-    }
+   }
 
 
 The entries say which other page the Card can `link_to` using the `id` of a page and what the `title` of the page should be.
@@ -331,7 +354,6 @@ Once the dashboard metadata is complete, add an entry to `climind/scripts/build_
    dash_dir.mkdir(exist_ok=True)
    dash.build(Path(dash_dir))
 
-
 The `json_file` is the dashboard metadata file. The `dash_dir` is the directory where you want to build the dashboard. `dash.build()` builds the dashboard.
 
 Calculating regional averages
@@ -342,6 +364,27 @@ on the gridded temperature data sets. This takes some time to run.
 
 `python calculate_wmo_ra_averages.py`
 
+Descriptive text
+================
+
+In `climind/web/word_documents` there is a Word document that is used to generate text for the
+web pages. The document is called `key_indicators_texts.docx`. This has descriptive text for
+each page on the key indicators dashboard as well as descriptions for each of the variables.
+
+when changes are made to the word document, these will need to be converted to html by navigating to `climind/web` and running
+
+`python extract_from_word.py`
+
+The word document is structured using the inbuilt "styles".
+
+Each page in the dashboard can have an Introduction text. To do this, add a new `Heading1` style heading in the document
+with text that matches the id of a page in the dashboard. You can then write `normal` style text beneath it.
+Subheadings can be added using `Heading2` style text followed by `normal` text. For example, the "What the IPCC says"
+sections. Hyperlinks can be added and these will be rendered in the webpages.
+
+Individual variable descriptions can also be added here. The method is similar. A Heading1 style heading which matches
+the `variable` name from the metadata file, followed by `normal` style text. Sub-headings do not work for variables. These
+are intended to be short descriptions of the variables.
 
 
 

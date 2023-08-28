@@ -245,7 +245,7 @@ The dataset section consists of a lits of dataset metadata:
 * `derived` - set to False. During processing, this flag is set to True to indicate that the original data have been further processed within the dashboard software.
 * `history` - a list which will hold the details of processing steps
 * `reader` - the name of a script in the `climind/readers` directory which will read the data described in the dataset metadata.
-* `fetcher` - the name of a script in the `climind/fetchers` direcotyr which will download the data described in the dataset metadata.
+* `fetcher` - the name of a script in the `climind/fetchers` direcotry which will download the data described in the dataset metadata.
 
 
 Adding a new variable
