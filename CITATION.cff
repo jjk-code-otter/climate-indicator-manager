@@ -1,0 +1,9 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Kennedy
+    given-names: John
+    orcid: https://orcid.org/0000-0002-6841-7289
+title: jjk-code-otter/climate-indicator-manager: First full release
+version: v1.0.0
+date-released: 2023-08-28
