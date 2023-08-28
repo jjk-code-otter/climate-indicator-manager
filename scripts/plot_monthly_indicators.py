@@ -145,11 +145,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'nino34' : [
-            {'variable': 'nino34',
+        'dmi' : [
+            {'variable': 'iod',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
-        'Nino 3.4']
+        'DMI']
     }
 
     for combo in holdall:

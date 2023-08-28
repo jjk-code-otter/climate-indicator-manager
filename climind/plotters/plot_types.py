@@ -230,6 +230,8 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.2)
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.5)
+    if len(yticks) > 10:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1.0)
 
     if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
