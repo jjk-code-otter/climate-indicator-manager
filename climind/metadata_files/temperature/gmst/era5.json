@@ -6,8 +6,8 @@
   "units": "degC",
   "citation": ["Hersbach H, Bell B, Berrisford P et al. 2020. The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146: 1999-2049. https://doi.org/10.1002/qj.3803"],
   "citation_url": ["https://doi.org/10.1002/qj.3803"],
-  "data_citation": [""],
-  "acknowledgement": "",
+  "data_citation": ["Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2023): ERA5 monthly averaged data on single levels from 1940 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS), DOI: 10.24381/cds.f17050d7 (Accessed on AAAA)"],
+  "acknowledgement": "Contains using Copernicus Climate Change Service information [YYYY]. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.",
   "colour": "#0072b2",
   "zpos": 1,
   "datasets": [
