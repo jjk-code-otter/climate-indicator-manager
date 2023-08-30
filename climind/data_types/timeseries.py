@@ -1214,7 +1214,7 @@ class TimeSeriesAnnual(TimeSeries):
             dict_to_add = {'year': year, 'data': value}
             if uncertainty is not None:
                 dict_to_add['uncertainty'] = uncertainty
-            self.df = self.df.append(dict_to_add, ignore_index=True)
+            self.df = self.df.append([dict_to_add], ignore_index=True)
         else:
             warnings.warn(f"Year {year} already exists. No change")
 
