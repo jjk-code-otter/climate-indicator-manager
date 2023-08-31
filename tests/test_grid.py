@@ -120,21 +120,35 @@ def test_select_year_and_month(monthly_grid):
 
 
 def test_calculate_time_mean(monthly_grid):
+    for cumulative in [False, True]:
+
+        selection = monthly_grid.select_period(1980, 1, 1981, 12)
+        selection = selection.calculate_time_mean(cumulative=cumulative)
+
+        # Output should be a GridMonthly object with one entry and a date that corresponds to the start
+        # date of the period. Data value should be 0.5 (one year of zero and one year of one)
+        assert isinstance(selection, gd.GridMonthly)
+        assert len(selection.df) == 1
+        assert selection.df.time.dt.year.data[0] == 1980
+        assert selection.df.time.dt.month.data[0] == 1
+        assert selection.metadata['history'][-2] == 'Selected period from 01/1980 to 12/1981'
+        assert selection.metadata['history'][-1] == 'Calculated time mean'
+
+        if cumulative:
+            assert selection.df.tas_mean.data[0, 0, 0] == 12.0
+        else:
+            assert selection.df.tas_mean.data[0, 0, 0] == 0.5
+
+        # Make sure the metadata from the original grid is unchanged by the time mean
+        assert monthly_grid.metadata['history'][-1] == 'Selected period from 01/1980 to 12/1981'
+
+
+def test_calculate_time_mean_multiple_variables(monthly_grid):
+    # Double up one of the variables
+    monthly_grid.df['precip'] = monthly_grid.df['tas_mean']
     selection = monthly_grid.select_period(1980, 1, 1981, 12)
-    selection = selection.calculate_time_mean()
-
-    # Output should be a GridMonthly object with one entry and a date that corresponds to the start
-    # date of the period. Data value should be 0.5 (one year of zero and one year of one)
-    assert isinstance(selection, gd.GridMonthly)
-    assert len(selection.df) == 1
-    assert selection.df.time.dt.year.data[0] == 1980
-    assert selection.df.time.dt.month.data[0] == 1
-    assert selection.metadata['history'][-2] == 'Selected period from 01/1980 to 12/1981'
-    assert selection.metadata['history'][-1] == 'Calculated time mean'
-    assert selection.df.tas_mean.data[0,0,0] == 0.5
-
-    # Make sure the metadata from the original grid is unchanged by the time mean
-    assert monthly_grid.metadata['history'][-1] == 'Selected period from 01/1980 to 12/1981'
+    with pytest.raises(RuntimeError, match='Cant take time mean of xarray dataset with more than one variable'):
+        selection = selection.calculate_time_mean()
 
 
 def test_select_period(monthly_grid):

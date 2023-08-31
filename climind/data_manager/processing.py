@@ -407,7 +407,7 @@ class DataCollection:
             try:
                 read_in_dataset = dataset.read_dataset(collection_dir, **kwargs)
             except Exception as e:
-                print(f"Failed to read {dataset.metadata['name']} with error message {e}")
+                raise RuntimeError(f"Failed to read {dataset.metadata['name']} with error message {e}")
             else:
                 all_datasets.append(read_in_dataset)
 

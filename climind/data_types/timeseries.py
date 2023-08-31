@@ -1418,15 +1418,16 @@ def create_common_dataframe(
 
     # Create a new dataframe that covers the whole date range from unique data combinations
     if annual:
-        common_dataframe = pd.concat([df[['year']] for df in dataframes]).drop_duplicates()
+        columns = ['year']
     elif monthly:
-        common_dataframe = pd.concat([df[['year', 'month']] for df in dataframes]).drop_duplicates()
+        columns = ['year', 'month']
     elif irregular:
-        common_dataframe = pd.concat([df[['year', 'month', 'day']] for df in dataframes]).drop_duplicates()
-    else:
-        raise RuntimeError(
-            "Should not have reached here, one of annual or monthly kwarg should be True but both are False"
-        )
+        columns = ['year', 'month', 'day']
+
+    if 'time' in dataframes[0].columns:
+        columns.append('time')
+
+    common_dataframe = pd.concat([df[columns] for df in dataframes]).drop_duplicates()
 
     return common_dataframe
 
@@ -1469,7 +1470,7 @@ def equalise_datasets(
         on_columns = ['year', 'month']
     if irregular:
         on_columns = ['year', 'month', 'day']
-    columns = ['time', *on_columns, 'data']
+    columns = [*on_columns, 'data']
 
     # for each dataset in the list, merge it with the combined dataframe, rename the data column and
     # update the combined dataframe
@@ -1478,6 +1479,9 @@ def equalise_datasets(
         merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
         combined_df = merged_df
         columns = [*on_columns, 'data']
+
+    combined_df = combined_df.sort_values(by=on_columns, ascending=True)
+    combined_df = combined_df.reset_index(drop=True)
 
     return combined_df
 
