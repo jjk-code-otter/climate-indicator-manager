@@ -173,8 +173,19 @@ def test_get_function():
 
 
 def simple_return(dummy):
+    """Simple function that returns a function that returns its two arguments"""
+
     def fn(a, b):
         return a, b
+
+    return fn
+
+
+def error_return(dummy):
+    """Simple function that returns a function that raises an error"""
+
+    def fn(a, b):
+        raise RuntimeError("A simple error")
 
     return fn
 
@@ -182,14 +193,25 @@ def simple_return(dummy):
 def test_read(mocker, test_dataset, test_attributes):
     ds = test_dataset
 
-    m = mocker.patch('climind.data_manager.processing.DataSet._get_reader',
-                     new=simple_return)
+    # Mock it so that the get_reader function returns a simple function as specified
+    _ = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=simple_return)
 
     a, b = ds.read_dataset(Path(''))
 
     assert a == Path('')
     for key in test_attributes:
         assert b[key] == test_attributes[key]
+
+
+def test_read_error_handler(mocker, test_dataset, test_attributes):
+    ds = test_dataset
+
+    # Mock it so that the get_reader function returns a simple function as specified
+    _ = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=error_return)
+
+    match_phrase = "Error occurred while executing reader_fn: A simple error"
+    with pytest.raises(RuntimeError, match=match_phrase):
+        _, _ = ds.read_dataset(Path(''))
 
 
 # DataCollection tests
@@ -269,6 +291,13 @@ def test_data_collection_read(mocker):
     assert datasets[1] == 'test'
 
 
+def test_data_collection_read_fail(mocker):
+    """Specified file does not actually exist, so should fail and raise RuntimeError"""
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
+    with pytest.raises(RuntimeError, match="Failed to read HadCRUT5 with error message"):
+        _ = data_collection.read_datasets(Path(''))
+
+
 def test_rebuild_metadata():
     dc = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     metadata = dc._rebuild_metadata()
@@ -338,6 +367,7 @@ def test_select_from_archive():
 
 
 def test_archive_read(mocker):
+    # The test_data directory contains two metadata files which are used to create the archive
     metadata_dir = Path('test_data')
     da = dm.DataArchive.from_directory(metadata_dir)
 
@@ -345,7 +375,7 @@ def test_archive_read(mocker):
 
     datasets = da.read_datasets(Path(''))
 
-    assert 2 == m.call_count
+    assert m.call_count == 2
     assert len(datasets) == 2
     assert datasets[0] == 'test'
     assert datasets[1] == 'test'

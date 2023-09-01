@@ -29,6 +29,8 @@ import climind.data_types.timeseries as ts
 # Fixtures
 @pytest.fixture
 def simple_irregular(test_metadata):
+    test_metadata = copy.deepcopy(test_metadata)
+    test_metadata['name'] = 'original'
     test_metadata['time_resolution'] = 'irregular'
     test_metadata['type'] = 'timeseries'
 
@@ -36,7 +38,33 @@ def simple_irregular(test_metadata):
     test_metadata['units'] = 'mm'
 
     number_of_times = 520
-    dates = pd.date_range(start=f'1993-01-01', freq='1W', periods=number_of_times)
+    dates = pd.date_range(start='1993-01-01', freq='1W', periods=number_of_times)
+
+    years = dates.year.tolist()
+    months = dates.month.tolist()
+    days = dates.day.tolist()
+
+    data = []
+    uncertainty = []
+    for i in range(number_of_times):
+        data.append(float(years[i] * 100 + months[i]))
+        uncertainty.append(1.37)
+
+    return ts.TimeSeriesIrregular(years, months, days, data, metadata=test_metadata, uncertainty=uncertainty)
+
+
+@pytest.fixture
+def simple_irregular_time_shifted(test_metadata):
+    test_metadata = copy.deepcopy(test_metadata)
+    test_metadata['name'] = 'shift'
+    test_metadata['time_resolution'] = 'irregular'
+    test_metadata['type'] = 'timeseries'
+
+    test_metadata['variable'] = 'sealevel'
+    test_metadata['units'] = 'mm'
+
+    number_of_times = 520
+    dates = pd.date_range(start='1992-01-01', freq='1W', periods=number_of_times)
 
     years = dates.year.tolist()
     months = dates.month.tolist()
@@ -84,11 +112,36 @@ def simple_monthly(test_metadata):
     -------
 
     """
+    test_metadata = copy.deepcopy(test_metadata)
+
     years = []
     months = []
     anomalies = []
 
     for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+        years.append(y)
+        months.append(m)
+        anomalies.append(float(y))
+
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata)
+
+
+@pytest.fixture
+def simple_monthly_time_shifted(test_metadata):
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    test_metadata = copy.deepcopy(test_metadata)
+
+    years = []
+    months = []
+    anomalies = []
+
+    for y, m in itertools.product(range(1900, 2033), range(1, 13)):
         years.append(y)
         months.append(m)
         anomalies.append(float(y))
@@ -149,10 +202,32 @@ def simple_annual(annual_metadata):
     -------
 
     """
+    annual_metadata = copy.deepcopy(annual_metadata)
+
     years = []
     anoms = []
 
     for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y) / 1000.)
+
+    return ts.TimeSeriesAnnual(years, anoms, metadata=annual_metadata)
+
+
+@pytest.fixture
+def simple_annual_time_shifted(annual_metadata):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    annual_metadata = copy.deepcopy(annual_metadata)
+
+    years = []
+    anoms = []
+
+    for y in range(1900, 2033):
         years.append(y)
         anoms.append(float(y) / 1000.)
 
@@ -437,7 +512,7 @@ def test_rebaseline(daily_irregular):
 
     daily_irregular.rebaseline(2000, 2004)
     for i in range(365):
-        assert daily_irregular.df.data[i] == 197900. - (200000. + 200100. + 200200. + 200300. + 200400.)/5.
+        assert daily_irregular.df.data[i] == 197900. - (200000. + 200100. + 200200. + 200300. + 200400.) / 5.
 
 
 # Monthly times series
@@ -856,6 +931,15 @@ def test_select_year_range_annual(simple_annual):
     assert chomp.df['year'][2011 - 1999] == 2011
 
 
+def test_write_simple_csv(simple_annual, test_metadata, tmpdir):
+    simple_annual.metadata = test_metadata
+    simple_annual.manually_set_baseline(1901, 2000)
+    test_filename = Path(tmpdir) / 'test.csv'
+    simple_annual.write_simple_csv(test_filename)
+
+    assert test_filename.exists()
+
+
 def test_write_csv_annual(simple_annual, test_metadata, tmpdir):
     simple_annual.metadata = test_metadata
     simple_annual.manually_set_baseline(1901, 2000)
@@ -939,6 +1023,198 @@ def test_add_year_year_already_exists_raises_warning(simple_annual, uncertainty_
         simple_annual.add_year(test_year, test_value)
     with pytest.warns():
         uncertainty_annual.add_year(test_year, test_value)
+
+
+def test_write_dataset_summary_file(simple_annual, simple_annual_time_shifted, tmpdir):
+    # Returns None with no file creation if there list is empty
+    all_datasets = []
+    filename = tmpdir / 'test.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert df is None
+    assert not (filename.exists())
+
+    simple_annual.metadata['name'] = 'one'
+    simple_annual_time_shifted.metadata['name'] = 'two'
+
+    # Creates a file if the list is not empty
+    all_datasets = [simple_annual, simple_annual_time_shifted]
+    filename = tmpdir / 'test.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert isinstance(df, pd.DataFrame)
+    assert filename.exists()
+
+    # Check file contents are as expected
+    with open(filename) as f:
+        line = f.readline()
+        assert line == 'year,one,two\n'
+        line = f.readline()
+        assert line == '1850,1.8500,\n'
+        last_line = f.readlines()[-1]
+        assert last_line == '2032,,2.0320\n'
+
+
+def test_write_dataset_summary_file_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
+    simple_monthly.metadata['name'] = 'one'
+    simple_monthly_time_shifted.metadata['name'] = 'two'
+
+    # Creates a file if the list is not empty
+    all_datasets = [simple_monthly, simple_monthly_time_shifted]
+    filename = tmpdir / 'test_monthly.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert isinstance(df, pd.DataFrame)
+    assert filename.exists()
+
+    # Check file contents are as expected
+    with open(filename) as f:
+        line = f.readline()
+        assert line == 'year,month,one,two\n'
+        line = f.readline()
+        assert line == '1850,1,1850.0000,\n'
+        last_line = f.readlines()[-1]
+        assert last_line == '2032,12,,2032.0000\n'
+
+
+def test_write_dataset_summary_file_irregular(simple_irregular, tmpdir):
+    simple_irregular.metadata['name'] = 'one'
+    all_datasets = [simple_irregular]
+    filename = tmpdir / 'test_irregular.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert df is None
+    assert not (filename.exists())
+
+
+def test_equalise_irregular_datasets(simple_irregular, simple_irregular_time_shifted):
+    time_units = 'days since 1800-01-01 00:00:00.0'
+    simple_irregular.df['time'] = simple_irregular.generate_dates(time_units)
+    simple_irregular_time_shifted.df['time'] = simple_irregular_time_shifted.generate_dates(time_units)
+
+    combined = [simple_irregular, simple_irregular_time_shifted]
+    equalised_combo = ts.equalise_datasets(combined)
+
+    assert isinstance(equalised_combo, pd.DataFrame)
+    assert len(equalised_combo) == 520 + 52
+    assert equalised_combo['year'][0] == 1992
+    assert equalised_combo['year'][520 + 52 - 1] == 2002
+
+
+def test_equalise_monthly_datasets(simple_monthly, simple_monthly_time_shifted):
+    time_units = 'days since 1800-01-01 00:00:00.0'
+    simple_monthly.df['time'] = simple_monthly.generate_dates(time_units)
+    simple_monthly_time_shifted.df['time'] = simple_monthly_time_shifted.generate_dates(time_units)
+
+    combined = [simple_monthly, simple_monthly_time_shifted]
+    equalised_combo = ts.equalise_datasets(combined)
+
+    assert isinstance(equalised_combo, pd.DataFrame)
+    assert len(equalised_combo) == 12 * (2032 - 1850 + 1)
+    assert equalised_combo['year'][0] == 1850
+    assert equalised_combo['year'][12 * (2032 - 1850 + 1) - 1] == 2032
+
+
+def test_create_common_dataframe_raises_error_with_no_flags_set():
+    with pytest.raises(ValueError):
+        ts.create_common_dataframe([])
+
+
+def test_equalise_annual_datasets(simple_annual, simple_annual_time_shifted):
+    time_units = 'days since 1800-01-01 00:00:00.0'
+    simple_annual.df['time'] = simple_annual.generate_dates(time_units)
+    simple_annual_time_shifted.df['time'] = simple_annual_time_shifted.generate_dates(time_units)
+
+    combined = [simple_annual, simple_annual_time_shifted]
+    equalised_combo = ts.equalise_datasets(combined)
+
+    assert isinstance(equalised_combo, pd.DataFrame)
+    assert len(equalised_combo) == 2032 - 1850 + 1
+    assert equalised_combo['year'][0] == 1850
+    assert equalised_combo['year'][2032 - 1850] == 2032
+
+
+def test_equalise_single_dataset(simple_annual):
+    time_units = 'days since 1800-01-01 00:00:00.0'
+    simple_annual.df['time'] = simple_annual.generate_dates(time_units)
+
+    combined = [simple_annual]
+    equalised_combo = ts.equalise_datasets(combined)
+
+    assert isinstance(equalised_combo, pd.DataFrame)
+    assert len(equalised_combo) == len(simple_annual.df)
+    assert equalised_combo['year'][0] == 1850
+    assert equalised_combo['year'][2022 - 1850] == 2022
+
+
+def test_write_dataset_summary_file_with_metadata(simple_annual, simple_annual_time_shifted, tmpdir):
+    simple_annual.metadata['name'] = 'one'
+    simple_annual_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets = [simple_annual, simple_annual_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '18262,1850,1.8500,\n'
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
+
+
+def test_write_dataset_summary_file_with_metadata_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
+    simple_monthly.metadata['name'] = 'one'
+    simple_monthly_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets = [simple_monthly, simple_monthly_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,month,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '18262,1850,1,1850.0000,\n'
+
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
+
+
+def test_write_dataset_summary_file_with_metadata_irregular(simple_irregular, simple_irregular_time_shifted, tmpdir):
+    simple_irregular.metadata['name'] = 'one'
+    simple_irregular_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets = [simple_irregular, simple_irregular_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,month,day,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '70130,1992,1,5,,199201.0000\n'
+
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
 
 
 def test_averages_collection(simple_annual):

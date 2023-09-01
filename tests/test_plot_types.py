@@ -386,6 +386,15 @@ def test_calculate_values(simple_annual_datasets):
     assert min_value == 0.0
     assert max_value == float(2022 - 1850) * 0.01 * 4.0
 
+def test_calculate_values_ipcc_style(simple_annual_datasets):
+    mean_value, min_value, max_value = pu.calculate_values_ipcc_style(simple_annual_datasets, 2022)
+
+    delta = 0.5631748300567634
+
+    assert mean_value == float(2022 - 1850) * 0.01 * 2.0
+    assert min_value == pytest.approx(0.0 - delta, 0.0001)
+    assert max_value == pytest.approx(float(2022 - 1850) * 0.01 * 4.0 + delta, 0.0001)
+
 
 def test_get_first_and_last_years(simple_annual_datasets):
     first, last = pu.get_first_and_last_years(simple_annual_datasets)

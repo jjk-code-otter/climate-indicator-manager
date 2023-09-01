@@ -101,6 +101,49 @@ def test_paragraph_metadata():
     return metadata
 
 
+class SimpleWidget:
+    """
+    Quick class to test the process_single_dataset function
+    """
+
+    def __init__(self, value: float):
+        self.value = value
+        self.metadata = {'name': 'WidgetOne'}
+
+    def sum(self, new_value: float):
+        self.value += new_value
+
+    def diff(self, new_value: float):
+        self.value -= new_value
+        return self
+
+
+def test_process_single_dataset_with_simple_widget():
+    widget = SimpleWidget(5.0)
+
+    processing_steps = [
+        {'method': 'sum', 'args': [3.0]},
+        {'method': 'diff', 'args': [1.0]}
+    ]
+
+    output_widget = db.process_single_dataset(widget, processing_steps)
+
+    assert output_widget.value == 7.0
+
+
+def test_process_single_dataset_with_simple_widget_raises_error():
+    widget = SimpleWidget(5.0)
+
+    processing_steps = [
+        {'method': 'sum', 'args': [3.0]},
+        {'method': 'div', 'args': [1.0]}
+    ]
+
+    match_phrase = "'SimpleWidget' object has no attribute 'div'"
+    with pytest.raises(AttributeError, match=match_phrase):
+        _ = db.process_single_dataset(widget, processing_steps)
+
+
 def test_process_single_dataset(mocker):
     # Need to mock a None return value here because otherwise, ds gets
     # complicated ds.first_method().second_method and ugh.
@@ -134,6 +177,72 @@ def test_process_single_dataset_with_output(mocker):
     assert result == test_return_value
     ds.this_method.assert_called_once_with(*processing_steps[0]['args'])
 
+
+# WebComponent
+
+def test_get_and_set():
+    metadata = {'name': 'alf'}
+    wc = db.WebComponent(metadata)
+    assert wc['name'] == 'alf'
+    wc['name'] = 'jim'
+    assert wc['name'] == 'jim'
+    wc['new_item'] = 'shiny'
+    assert wc['new_item'] == 'shiny'
+
+
+def test_select_and_read_data(mocker, tas_card_metadata):
+    card = db.Card(tas_card_metadata)
+    metadata_dir = Path('test_data')
+
+    m2 = mocker.patch('climind.data_manager.processing.DataArchive.read_datasets', return_value=[])
+
+    da = dm.DataArchive.from_directory(metadata_dir)
+
+    card.select_and_read_data(Path('data_dir'), da)
+
+    m2.assert_called_with(Path('data_dir'))
+
+    assert card.datasets == []
+
+
+def test_process_datasets():
+    metadata = {
+        'name': 'test_wc',
+        'processing': [
+            {'method': 'sum', 'args': [1.0]},
+            {'method': 'diff', 'args': [3.0]}
+        ]
+    }
+
+    wc = db.WebComponent(metadata)
+    wc.datasets.append(SimpleWidget(1.0))
+    wc.datasets.append(SimpleWidget(5.0))
+
+    wc.process_datasets()
+
+    assert wc.datasets[0].value == -3.0
+    assert wc.datasets[1].value == -1.0
+
+
+def test_process_datasets_with_bad_method():
+    metadata = {
+        'name': 'test_wc',
+        'processing': [
+            {'method': 'sum', 'args': [1.0]},
+            {'method': 'div', 'args': [3.0]}
+        ]
+    }
+
+    wc = db.WebComponent(metadata)
+    wc.datasets.append(SimpleWidget(1.0))
+    wc.datasets.append(SimpleWidget(5.0))
+
+    match_phrase = "Failed to process WidgetOne with error 'SimpleWidget' object has no attribute 'div'"
+    with pytest.raises(RuntimeError, match=match_phrase):
+        wc.process_datasets()
+
+
+# Paragraphs
 
 def test_paragraph_creation(test_paragraph_metadata):
     paragraph = db.Paragraph(test_paragraph_metadata)
@@ -202,6 +311,8 @@ def test_process_paragraph(mocker, test_paragraph_metadata):
     mock_process_datasets.assert_called_once()
     mock_render.assert_called_once()
 
+
+# Cards
 
 def test_card_creation(card_metadata):
     card = db.Card(card_metadata)
@@ -335,22 +446,7 @@ def test_process_card(mocker, card_metadata):
     mock_make_zip.assert_called_with('formatted_data_dir')
 
 
-def test_select_and_read_data(mocker, tas_card_metadata):
-    card = db.Card(tas_card_metadata)
-    metadata_dir = Path('test_data')
-
-    m2 = mocker.patch('climind.data_manager.processing.DataArchive.read_datasets', return_value=[])
-
-    da = dm.DataArchive.from_directory(metadata_dir)
-
-    card.select_and_read_data(Path('data_dir'), da)
-
-    m2.assert_called_with(Path('data_dir'))
-
-    assert card.datasets == []
-
-
-# testing pages
+# Pages
 
 def test_page_creation(page_metadata):
     page = db.Page(page_metadata)
@@ -404,7 +500,7 @@ def test_page_build_creates_directories_and_webpage(tmpdir, mocker, tas_page_met
     assert (Path(tmpdir) / 'test_dashboard.html')
 
 
-# testing dashboards
+# Dashboards
 
 def test_dashboard_from_json():
     json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators.json'

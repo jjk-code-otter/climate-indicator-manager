@@ -41,21 +41,13 @@ def get_reader_script_name(metadata: CombinedMetadata, **kwargs) -> Optional[str
     """
     chosen_reader_script = None
 
+    if metadata['time_resolution'] not in ['annual', 'monthly', 'irregular']:
+        return chosen_reader_script
+
     if metadata['type'] == 'timeseries':
-
-        if metadata['time_resolution'] == 'irregular':
-            chosen_reader_script = 'read_irregular_ts'
-        if metadata['time_resolution'] == 'monthly':
-            chosen_reader_script = 'read_monthly_ts'
-        elif metadata['time_resolution'] == 'annual':
-            chosen_reader_script = 'read_annual_ts'
-
+        chosen_reader_script = f"read_{metadata['time_resolution']}_ts"
     elif metadata['type'] == 'gridded':
-
-        if metadata['time_resolution'] == 'monthly':
-            chosen_reader_script = 'read_monthly_grid'
-        elif metadata['time_resolution'] == 'annual':
-            chosen_reader_script = 'read_annual_grid'
+        chosen_reader_script = f"read_{metadata['time_resolution']}_grid"
 
         if 'grid_resolution' in kwargs:
             if kwargs['grid_resolution'] == 5:

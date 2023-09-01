@@ -34,31 +34,35 @@ from climind.config.config import DATA_DIR
 DATA_DIR = DATA_DIR / "ManagedData" / "Data"
 
 
-def process_single_dataset(ds: Union[TimeSeriesAnnual, TimeSeriesMonthly],
-                           processing_steps: list) -> Union[TimeSeriesAnnual, TimeSeriesMonthly]:
+def process_single_dataset(ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular],
+                           processing_steps: List[dict]) -> Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]:
     """
     Process the input data set using the methods and arguments provided in a list of processing steps.
     Each processing step is a dictionary containing a 'method' and an 'arguments' entry.
 
     Parameters
     ----------
-    ds: TimeSeriesAnnual or TimeSeriesMonthly
+    ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]
         Data set to be processed
-    processing_steps: list
-        list of steps. Each step must be a dictionary containing a 'method' entry that corresponds to
+    processing_steps: List
+        List of steps. Each step must be a dictionary containing a 'method' entry that corresponds to
         the name of a method in the timeseries class and a 'arguments' entry which contains a list
         of arguments for that method
 
     Returns
     -------
-    Union[TimeSeriesAnnual, TimeSeriesMonthly]
+    Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]
     """
     for step in processing_steps:
         method = step['method']
         arguments = step['args']
+
+        # Apply the method for the object and give it the unrolled arguments
         output = getattr(ds, method)(*arguments)
+
         if output is not None:
             ds = output
+
     return ds
 
 
@@ -76,8 +80,8 @@ class WebComponent:
 
     def select_and_read_data(self, data_dir: Path, archive: DataArchive):
         """
-        Using the specified data archive, select the appropriate subset of data as specified in the card
-        metadata and read in the data sets from the data_dir directory
+        Using the specified DataArchive, select the appropriate subset of data as specified in the Card
+        metadata and read in the data sets from the data_dir directory.
 
         Parameters
         ----------
@@ -102,13 +106,18 @@ class WebComponent:
         Returns
         -------
         None
+
+        Raises
+        ------
+        RuntimeError
+            If any of the processing steps fails to run
         """
         processed_datasets = []
         for ds in self.datasets:
             try:
                 ds = process_single_dataset(ds, self['processing'])
             except Exception as e:
-                print(f"Failed to process {ds.metadata['name']} with error {e}")
+                raise RuntimeError(f"Failed to process {ds.metadata['name']} with error {e}")
             else:
                 processed_datasets.append(ds)
 
@@ -120,7 +129,7 @@ class Paragraph(WebComponent):
     def __init__(self, paragraph_metadata: dict):
         super().__init__(paragraph_metadata)
 
-    def process_paragraph(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021):
+    def process_paragraph(self, data_dir: Path, archive: DataArchive, focus_year: int = 2021) -> None:
         """
         Process and ultimately render the Paragraph object
 
@@ -135,7 +144,7 @@ class Paragraph(WebComponent):
 
         Returns
         -------
-
+        None
         """
         self.select_and_read_data(data_dir, archive)
         self.process_datasets()
@@ -176,7 +185,7 @@ class Paragraph(WebComponent):
 
         self['text'] = paragraph_text
         now = datetime.now()
-        self['updated'] = f'{now}'[0:16]
+        self['updated'] = f'{now}'[0:16]  # Don't need precise time
 
 
 class Card(WebComponent):
@@ -382,8 +391,8 @@ class Page:
             this_card = Card(card_metadata)
             try:
                 this_card.process_card(data_dir, figure_dir, formatted_data_dir, archive)
-            except Exception:
-                print(f"Card processing failed {this_card['title']}")
+            except Exception as e:
+                print(f"Card processing failed {this_card['title']} with error {e}")
             else:
                 if 'hidden' not in card_metadata:
                     processed_cards.append(this_card)
@@ -413,8 +422,8 @@ class Page:
             this_paragraph = Paragraph(paragraph_metadata)
             try:
                 this_paragraph.process_paragraph(data_dir, archive, focus_year=focus_year)
-            except Exception:
-                print("Paragraph processing failed.")
+            except Exception as e:
+                print(f"Paragraph processing failed with error {e}.")
             else:
                 processed_paragraphs.append(this_paragraph)
 
