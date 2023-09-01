@@ -186,7 +186,6 @@ def error_return(dummy):
 
     def fn(a, b):
         raise RuntimeError("A simple error")
-        return a, b
 
     return fn
 
@@ -195,7 +194,7 @@ def test_read(mocker, test_dataset, test_attributes):
     ds = test_dataset
 
     # Mock it so that the get_reader function returns a simple function as specified
-    m = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=simple_return)
+    _ = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=simple_return)
 
     a, b = ds.read_dataset(Path(''))
 
@@ -208,11 +207,11 @@ def test_read_error_handler(mocker, test_dataset, test_attributes):
     ds = test_dataset
 
     # Mock it so that the get_reader function returns a simple function as specified
-    m = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=error_return)
+    _ = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=error_return)
 
     match_phrase = "Error occurred while executing reader_fn: A simple error"
     with pytest.raises(RuntimeError, match=match_phrase):
-        a, b = ds.read_dataset(Path(''))
+        _, _ = ds.read_dataset(Path(''))
 
 
 # DataCollection tests
@@ -296,7 +295,7 @@ def test_data_collection_read_fail(mocker):
     """Specified file does not actually exist, so should fail and raise RuntimeError"""
     data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
     with pytest.raises(RuntimeError, match="Failed to read HadCRUT5 with error message"):
-        datasets = data_collection.read_datasets(Path(''))
+        _ = data_collection.read_datasets(Path(''))
 
 
 def test_rebuild_metadata():

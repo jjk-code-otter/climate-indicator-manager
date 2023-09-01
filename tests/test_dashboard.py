@@ -237,7 +237,7 @@ def test_process_datasets_with_bad_method():
     wc.datasets.append(SimpleWidget(1.0))
     wc.datasets.append(SimpleWidget(5.0))
 
-    match_phrase = f"Failed to process WidgetOne with error 'SimpleWidget' object has no attribute 'div'"
+    match_phrase = "Failed to process WidgetOne with error 'SimpleWidget' object has no attribute 'div'"
     with pytest.raises(RuntimeError, match=match_phrase):
         wc.process_datasets()
 

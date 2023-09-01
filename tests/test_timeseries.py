@@ -38,7 +38,7 @@ def simple_irregular(test_metadata):
     test_metadata['units'] = 'mm'
 
     number_of_times = 520
-    dates = pd.date_range(start=f'1993-01-01', freq='1W', periods=number_of_times)
+    dates = pd.date_range(start='1993-01-01', freq='1W', periods=number_of_times)
 
     years = dates.year.tolist()
     months = dates.month.tolist()
@@ -1040,6 +1040,7 @@ def test_write_dataset_summary_file(simple_annual, simple_annual_time_shifted, t
     all_datasets = [simple_annual, simple_annual_time_shifted]
     filename = tmpdir / 'test.csv'
     df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert isinstance(df, pd.DataFrame)
     assert filename.exists()
 
     # Check file contents are as expected
@@ -1061,6 +1062,7 @@ def test_write_dataset_summary_file_monthly(simple_monthly, simple_monthly_time_
     all_datasets = [simple_monthly, simple_monthly_time_shifted]
     filename = tmpdir / 'test_monthly.csv'
     df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert isinstance(df, pd.DataFrame)
     assert filename.exists()
 
     # Check file contents are as expected
