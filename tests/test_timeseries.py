@@ -112,6 +112,8 @@ def simple_monthly(test_metadata):
     -------
 
     """
+    test_metadata = copy.deepcopy(test_metadata)
+
     years = []
     months = []
     anomalies = []
@@ -133,6 +135,8 @@ def simple_monthly_time_shifted(test_metadata):
     -------
 
     """
+    test_metadata = copy.deepcopy(test_metadata)
+
     years = []
     months = []
     anomalies = []
@@ -198,6 +202,8 @@ def simple_annual(annual_metadata):
     -------
 
     """
+    annual_metadata = copy.deepcopy(annual_metadata)
+
     years = []
     anoms = []
 
@@ -216,6 +222,8 @@ def simple_annual_time_shifted(annual_metadata):
     -------
 
     """
+    annual_metadata = copy.deepcopy(annual_metadata)
+
     years = []
     anoms = []
 
@@ -1017,6 +1025,64 @@ def test_add_year_year_already_exists_raises_warning(simple_annual, uncertainty_
         uncertainty_annual.add_year(test_year, test_value)
 
 
+def test_write_dataset_summary_file(simple_annual, simple_annual_time_shifted, tmpdir):
+    # Returns None with no file creation if there list is empty
+    all_datasets = []
+    filename = tmpdir / 'test.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert df is None
+    assert not (filename.exists())
+
+    simple_annual.metadata['name'] = 'one'
+    simple_annual_time_shifted.metadata['name'] = 'two'
+
+    # Creates a file if the list is not empty
+    all_datasets = [simple_annual, simple_annual_time_shifted]
+    filename = tmpdir / 'test.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert filename.exists()
+
+    # Check file contents are as expected
+    with open(filename) as f:
+        line = f.readline()
+        assert line == 'year,one,two\n'
+        line = f.readline()
+        assert line == '1850,1.8500,\n'
+        for line in f:
+            pass
+        assert line == '2032,,2.0320\n'
+
+
+def test_write_dataset_summary_file_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
+    simple_monthly.metadata['name'] = 'one'
+    simple_monthly_time_shifted.metadata['name'] = 'two'
+
+    # Creates a file if the list is not empty
+    all_datasets = [simple_monthly, simple_monthly_time_shifted]
+    filename = tmpdir / 'test_monthly.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert filename.exists()
+
+    # Check file contents are as expected
+    with open(filename) as f:
+        line = f.readline()
+        assert line == 'year,month,one,two\n'
+        line = f.readline()
+        assert line == '1850,1,1850.0000,\n'
+        for line in f:
+            pass
+        assert line == '2032,12,,2032.0000\n'
+
+
+def test_write_dataset_summary_file_irregular(simple_irregular, tmpdir):
+    simple_irregular.metadata['name'] = 'one'
+    all_datasets = [simple_irregular]
+    filename = tmpdir / 'test_irregular.csv'
+    df = ts.write_dataset_summary_file(all_datasets, filename)
+    assert df is None
+    assert not (filename.exists())
+
+
 def test_equalise_irregular_datasets(simple_irregular, simple_irregular_time_shifted):
     time_units = 'days since 1800-01-01 00:00:00.0'
     simple_irregular.df['time'] = simple_irregular.generate_dates(time_units)
@@ -1075,6 +1141,88 @@ def test_equalise_single_dataset(simple_annual):
     assert len(equalised_combo) == len(simple_annual.df)
     assert equalised_combo['year'][0] == 1850
     assert equalised_combo['year'][2022 - 1850] == 2022
+
+
+def test_write_dataset_summary_file_with_metadata(simple_annual, simple_annual_time_shifted, tmpdir):
+
+    simple_annual.metadata['name'] = 'one'
+    simple_annual_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets =[simple_annual, simple_annual_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '18262,1850,1.8500,\n'
+
+        for line in f:
+            pass
+
+        assert line == 'end data\n'
+
+def test_write_dataset_summary_file_with_metadata_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
+
+    simple_monthly.metadata['name'] = 'one'
+    simple_monthly_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets =[simple_monthly, simple_monthly_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,month,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '18262,1850,1,1850.0000,\n'
+
+        for line in f:
+            pass
+
+        assert line == 'end data\n'
+
+def test_write_dataset_summary_file_with_metadata_irregular(simple_irregular, simple_irregular_time_shifted, tmpdir):
+
+    simple_irregular.metadata['name'] = 'one'
+    simple_irregular_time_shifted.metadata['name'] = 'two'
+    filename = tmpdir / 'test.csv'
+    all_datasets =[simple_irregular, simple_irregular_time_shifted]
+
+    ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
+
+    assert filename.exists()
+
+    line = ''
+    with open(filename, 'r') as f:
+        while line != 'data\n':
+            line = f.readline()
+
+        column_names = f.readline()
+        assert column_names == 'time,year,month,day,one,two\n'
+
+        first_data = f.readline()
+        assert first_data == '70130,1992,1,5,,199201.0000\n'
+
+        for line in f:
+            pass
+
+        assert line == 'end data\n'
 
 
 def test_averages_collection(simple_annual):
