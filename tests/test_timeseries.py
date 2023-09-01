@@ -64,7 +64,7 @@ def simple_irregular_time_shifted(test_metadata):
     test_metadata['units'] = 'mm'
 
     number_of_times = 520
-    dates = pd.date_range(start=f'1992-01-01', freq='1W', periods=number_of_times)
+    dates = pd.date_range(start='1992-01-01', freq='1W', periods=number_of_times)
 
     years = dates.year.tolist()
     months = dates.month.tolist()
@@ -1049,9 +1049,8 @@ def test_write_dataset_summary_file(simple_annual, simple_annual_time_shifted, t
         assert line == 'year,one,two\n'
         line = f.readline()
         assert line == '1850,1.8500,\n'
-        for line in f:
-            pass
-        assert line == '2032,,2.0320\n'
+        last_line = f.readlines()[-1]
+        assert last_line == '2032,,2.0320\n'
 
 
 def test_write_dataset_summary_file_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
@@ -1071,9 +1070,8 @@ def test_write_dataset_summary_file_monthly(simple_monthly, simple_monthly_time_
         assert line == 'year,month,one,two\n'
         line = f.readline()
         assert line == '1850,1,1850.0000,\n'
-        for line in f:
-            pass
-        assert line == '2032,12,,2032.0000\n'
+        last_line = f.readlines()[-1]
+        assert last_line == '2032,12,,2032.0000\n'
 
 
 def test_write_dataset_summary_file_irregular(simple_irregular, tmpdir):
@@ -1146,11 +1144,10 @@ def test_equalise_single_dataset(simple_annual):
 
 
 def test_write_dataset_summary_file_with_metadata(simple_annual, simple_annual_time_shifted, tmpdir):
-
     simple_annual.metadata['name'] = 'one'
     simple_annual_time_shifted.metadata['name'] = 'two'
     filename = tmpdir / 'test.csv'
-    all_datasets =[simple_annual, simple_annual_time_shifted]
+    all_datasets = [simple_annual, simple_annual_time_shifted]
 
     ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
 
@@ -1166,18 +1163,15 @@ def test_write_dataset_summary_file_with_metadata(simple_annual, simple_annual_t
 
         first_data = f.readline()
         assert first_data == '18262,1850,1.8500,\n'
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
 
-        for line in f:
-            pass
-
-        assert line == 'end data\n'
 
 def test_write_dataset_summary_file_with_metadata_monthly(simple_monthly, simple_monthly_time_shifted, tmpdir):
-
     simple_monthly.metadata['name'] = 'one'
     simple_monthly_time_shifted.metadata['name'] = 'two'
     filename = tmpdir / 'test.csv'
-    all_datasets =[simple_monthly, simple_monthly_time_shifted]
+    all_datasets = [simple_monthly, simple_monthly_time_shifted]
 
     ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
 
@@ -1194,17 +1188,15 @@ def test_write_dataset_summary_file_with_metadata_monthly(simple_monthly, simple
         first_data = f.readline()
         assert first_data == '18262,1850,1,1850.0000,\n'
 
-        for line in f:
-            pass
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
 
-        assert line == 'end data\n'
 
 def test_write_dataset_summary_file_with_metadata_irregular(simple_irregular, simple_irregular_time_shifted, tmpdir):
-
     simple_irregular.metadata['name'] = 'one'
     simple_irregular_time_shifted.metadata['name'] = 'two'
     filename = tmpdir / 'test.csv'
-    all_datasets =[simple_irregular, simple_irregular_time_shifted]
+    all_datasets = [simple_irregular, simple_irregular_time_shifted]
 
     ts.write_dataset_summary_file_with_metadata(all_datasets, filename)
 
@@ -1221,10 +1213,8 @@ def test_write_dataset_summary_file_with_metadata_irregular(simple_irregular, si
         first_data = f.readline()
         assert first_data == '70130,1992,1,5,,199201.0000\n'
 
-        for line in f:
-            pass
-
-        assert line == 'end data\n'
+        last_line = f.readlines()[-1]
+        assert last_line == 'end data\n'
 
 
 def test_averages_collection(simple_annual):
