@@ -1166,6 +1166,10 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         wmo_levels = [-110, -90, -70, -50, -30, -10, 10, 30, 50, 70, 90, 110]
         wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
                     '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
+    if var == 'sla':
+        wmo_levels = [-300, -250, -200, -150, -100, -50, 0, 50, 100, 150, 200, 250, 300]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
     else:
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
@@ -1188,6 +1192,8 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     cbar.set_ticklabels(wmo_levels)
     if var == 'pre':
         cbar.set_label(r'Precipitation difference from 1981-2010 average (mm)', rotation=0, fontsize=15)
+    elif var == 'sla':
+        cbar.set_label(r'Sea level difference from long term mean average (mm)', rotation=0, fontsize=15)
     else:
         cbar.set_label(r'Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
 
