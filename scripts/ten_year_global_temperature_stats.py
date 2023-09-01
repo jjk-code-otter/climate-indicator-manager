@@ -50,14 +50,16 @@ if __name__ == "__main__":
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
                                   'name': [  # 'NOAA Interim',
-                                      'Kadow IPCC',
-                                      # 'Berkeley IPCC',
-                                  #    'NOAA Interim IPCC'
+                                             #'Kadow IPCC',
+                                             # 'Berkeley IPCC',
+                                             #    'NOAA Interim IPCC'
                                   ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'time_resolution': 'monthly'})
+                                 'time_resolution': 'monthly',
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim',
+                                          'Berkeley Earth', 'ERA5', 'JRA-55']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
