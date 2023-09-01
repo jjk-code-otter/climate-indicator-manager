@@ -1,0 +1,30 @@
+{
+  "name": "CDS sea level",
+  "display_name": "AVISO CNES",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Copernicus Climate Change Service, Climate Data Store, (2018): Sea level gridded data from satellite observations for the global ocean from 1993 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). DOI: 10.24381/cds.4c328c78 (Accessed on AAAA)"],
+  "citation_url": ["https://doi.org/10.24381/cds.4c328c78"],
+  "data_citation": ["https://doi.org/10.24381/cds.4c328c78"],
+  "acknowledgement": "Contains modified Copernicus Climate Change Service information AAAA",
+  "colour": "#ff0000",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": [""],
+      "filename": [""],
+	  "type": "gridded",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cds_sea_level",
+	  "fetcher": "fetcher_cds"
+    }
+  ]
+}
