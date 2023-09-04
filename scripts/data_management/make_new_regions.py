@@ -29,6 +29,7 @@
 
 import copy
 import json
+from typing import Tuple, List
 
 from shapely.geometry import Polygon
 
@@ -45,36 +46,115 @@ class RegionData:
 
     @staticmethod
     def from_json(json_filename):
+        """Create a RegionData object from a json file"""
         with open(json_filename, 'r') as in_file:
             region_definitions = json.load(in_file)
         return RegionData(region_definitions)
 
-    def get_area_name(self, main_index) -> list:
+    def get_area_name(self, main_index: int) -> list:
+        """
+        Get the area names corresponding to the index
+
+        Parameters
+        ----------
+        main_index: int
+            The index of required area
+
+        Returns
+        -------
+        list
+            List of area names
+        """
         temp_list = [x['name'] for x in self.metadata]
         return temp_list[main_index]
 
-    def get_coordinates(self, main_index) -> list:
+    def get_coordinates(self, main_index: int) -> list:
+        """
+        Get the coordinates corresponding to the index
+
+        Parameters
+        ----------
+        main_index: int
+
+        Returns
+        -------
+        list
+            List of coordinates
+        """
         temp_list = [x['coordinates'] for x in self.metadata]
         return temp_list[main_index]
 
-    def get_region_name_and_country_list(self, main_index):
+    def get_region_name_and_country_list(self, main_index: int) -> Tuple[str, List[str]]:
+        """
+        Given an index, return the corresponding region name and the list of countries for that region
+
+        Parameters
+        ----------
+        main_index: int
+            Index number of the region
+
+        Returns
+        -------
+        Tuple[str, List[str]]
+            Returns the region name and the list of longitude and latitude pairs.
+        """
         region_name = self.metadata[main_index]['name']
         country_list = self.metadata[main_index]['countries']
 
         return region_name, country_list
 
 
-def label_regions(countries, region_name, country_list):
+def label_regions(countries: gp.GeoDataFrame, region_name: str, country_list: List[str]) -> gp.GeoDataFrame:
+    """
+    For each country in the country_list, set the corresponding field in the countries data frame
+    to have the region name
+
+    Parameters
+    ----------
+    countries: gp.GeoDataFrame
+        GeoDataFrame containing all the countries
+    region_name: str
+        The name used to tag the region in the GeoDataFrame
+    country_list: List[str]
+        List of country ISO_A2_EH two letter country codes for all countries in the region.
+
+    Returns
+    -------
+    gp.GeoDataFrame
+        GeoDataFrame in which each country is flagged as being either in the region and the remaineder
+        are set to null.
+    """
     country_count = len(countries)
+
+    # If the country list is empty then use all countries.
+    default = 'Null'
+    if len(country_list) == 0:
+        default = region_name
+
     for i in range(country_count):
-        countries.at[i, 'wmosubregion'] = 'Null'
+        countries.at[i, 'wmosubregion'] = default
         if countries.ISO_A2_EH[i] in country_list:
             countries.at[i, 'wmosubregion'] = region_name
 
     return countries
 
 
-def create_shape_file(main_index):
+def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFrame, gp.GeoDataFrame]:
+    """
+    Given an index and a json file specifying the regions, make a shape file
+
+    Parameters
+    ----------
+    main_index: int
+        Index of the region to extract from the file
+    region_json_file: str
+        Name of the json file to create the shape file from
+
+    Returns
+    -------
+    Tuple[str, gp.GeoDataFrame, gp.GeoDataFrame]
+        the region name, the region as a shape file , the region as a shape file
+    """
     project_dir = DATA_DIR / "ManagedData"
     out_shape_dir = project_dir / "Shape_Files"
 
@@ -87,7 +167,7 @@ def create_shape_file(main_index):
     countries['dummy'] = ''
 
     # Read in the region data and get the area that corresponds to the index
-    region_data = RegionData.from_json('sub_regions.json')
+    region_data = RegionData.from_json(region_json_file)
     region_name, country_list = region_data.get_region_name_and_country_list(main_index)
     area_name = region_data.get_area_name(main_index)
     coordinates = region_data.get_coordinates(main_index)
@@ -110,7 +190,7 @@ def create_shape_file(main_index):
     region_clipped['region'] = area_name
 
     # Save the shape file
-    region_clipped.to_file(out_shape_dir / f'{area_name}')
+#    region_clipped.to_file(out_shape_dir / f'{area_name}')
 
     return area_name, region_clipped, whole_world
 
@@ -127,10 +207,20 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2)
     i1, i2 = 0, 0
 
-    for main_index in range(6):
-        area_name, region_clipped, whole_world = create_shape_file(main_index)
+    #region_json_file = 'sub_regions.json'
+    #output_image = 'LAC_regions'
+    #n_regions = 6
+    #region_selection = [0, 2, 3, 4]
 
-        if main_index in [0, 2, 3, 4]:
+    region_json_file = 'coastal_regions.json'
+    output_image = 'Coastal_regions'
+    n_regions = 4
+    region_selection = [0, 1, 2, 3]
+
+    for main_index in range(n_regions):
+        area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)
+
+        if main_index in region_selection:
             minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
 
             whole_world.plot(ax=axs[i1][i2], color='lightgrey')
@@ -149,7 +239,7 @@ if __name__ == '__main__':
 
     plt.subplots_adjust(hspace=0.15)
     project_dir = DATA_DIR / "ManagedData"
-    plt.savefig(project_dir / 'Figures' / f'LAC_regions.png')
-    plt.savefig(project_dir / 'Figures' / f'LAC_regions.svg')
-    plt.savefig(project_dir / 'Figures' / f'LAC_regions.pdf')
+    plt.savefig(project_dir / 'Figures' / f'{output_image}.png')
+    plt.savefig(project_dir / 'Figures' / f'{output_image}.svg')
+    plt.savefig(project_dir / 'Figures' / f'{output_image}.pdf')
     plt.close()
