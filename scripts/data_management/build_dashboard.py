@@ -34,7 +34,7 @@ from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
 
-    dash2023 = False
+    dash2023 = True
     dash2022 = False
     decadal = False
     monthly = False
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     regional_multiyear = False
     regional_test = False
 
-    run_all = True
+    run_all = False
 
     if monthly or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'monthly.json'

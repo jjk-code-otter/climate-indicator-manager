@@ -26,6 +26,7 @@ from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
 
+
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
     df = df.rename({'tas': 'tas_mean'})
@@ -37,6 +38,7 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.Gr
 
 def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     return read_monthly_grid(filename, metadata)
+
 
 def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
@@ -56,3 +58,17 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(df, metadata)
+
+
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    df = xa.open_dataset(filename[0])
+
+    ntimes = df.tas.data.shape[0]
+
+    years = df.time.dt.year.data.tolist()
+    months = df.time.dt.month.data.tolist()
+    anomalies = np.reshape(df.tas.data, (ntimes)).tolist()
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)

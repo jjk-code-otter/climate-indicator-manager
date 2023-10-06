@@ -183,6 +183,15 @@
           "hidden": true
         },
         {
+          "link_to":  null, "title": "Temperature anomaly map League of Arab States",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2022, 2022]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2022",
+                       "kwargs": {"west": -20, "east":  65, "north": 40, "south": -5}},
+          "hidden": true
+        },
+        {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAAGlobalTemp_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-55_5x5"]},

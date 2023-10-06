@@ -1095,6 +1095,25 @@ class TimeSeriesAnnual(TimeSeries):
 
         return moving_average
 
+    def record_margins(self):
+
+        n_years = len(self.df)
+
+        out_series = copy.deepcopy(self)
+        out_series.df.data[0] = np.nan
+
+        for i in range(1, n_years):
+            over_margin = self.df.data[i] - np.max(self.df.data[0:i])
+            under_margin =  self.df.data[i]- np.min(self.df.data[0:i])
+            if over_margin > 0:
+                out_series.df.data[i] = over_margin
+            elif under_margin < 0:
+                out_series.df.data[i] = under_margin
+            else:
+                out_series.df.data[i] = np.nan
+
+        return out_series
+
     @log_activity
     def select_decade(self, end_year: int = 0):
         """

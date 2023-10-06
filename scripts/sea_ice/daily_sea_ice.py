@@ -267,7 +267,7 @@ def plot_annual_cycle(df, project_dir, image_filename, stdev=False, nh=False):
         xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '2023 actual extent', color='red', fontdict={'fontsize': 18})
 
-        yloc = ylim[0] + 0.13 * (ylim[1] - ylim[0])
+        yloc = ylim[0] + 0.08 * (ylim[1] - ylim[0])
         xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '2023 difference from long-term mean', color='red', fontdict={'fontsize': 18})
     else:
@@ -275,7 +275,7 @@ def plot_annual_cycle(df, project_dir, image_filename, stdev=False, nh=False):
         xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '2023 actual extent', color='red', fontdict={'fontsize': 18})
 
-        yloc = ylim[0] + 0.07 * (ylim[1] - ylim[0])
+        yloc = ylim[0] + 0.05 * (ylim[1] - ylim[0])
         xloc = xlim[0] + 0.62 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '2023 difference from long-term mean', color='red', fontdict={'fontsize': 18})
 

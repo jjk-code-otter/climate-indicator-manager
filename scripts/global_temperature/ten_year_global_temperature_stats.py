@@ -59,7 +59,7 @@ if __name__ == "__main__":
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
                                  'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim',
-                                          'Berkeley Earth', 'ERA5', 'JRA-55']})
+                                          'Berkeley Earth', 'ERA5', 'JRA-55', 'Kadow']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     for ds in all_annual_datasets:
         tens.append(ds.running_mean(10))
         twenties.append(ds.running_mean(20))
-        thirties.append(ds.running_mean(20))
+        thirties.append(ds.running_mean(30))
         dtens.append(ds.running_mean(10).select_decade(2))
 
     for ds in sst_anns:

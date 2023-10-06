@@ -13,7 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import copy
 from pathlib import Path
 import logging
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
                                   'name': [  # 'NOAA Interim',
-                                      'Kadow IPCC',
+                                      #'Kadow IPCC',
                                       # 'Berkeley IPCC',
                                       # 'NOAA Interim IPCC'
                                   ]})
@@ -83,16 +83,44 @@ if __name__ == "__main__":
     lsat_ann_datasets = lsat_ann_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
 
+    all_8110_datasets = []
     all_annual_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
+        pt.rising_tide_plot(figure_dir, ds, f"rising_tide_{ds.metadata['name']}.png")
+
+        annual8110 = ds.make_annual()
+        all_8110_datasets.append(annual8110)
+
         annual = ds.make_annual()
         annual.add_offset(0.69)
         annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
+
+    all_datasets_b = ts_archive.read_datasets(data_dir)
+    all_8110_monthly = []
+    for ds in all_datasets_b:
+        ds.rebaseline(1981,2010)
+        all_8110_monthly.append(ds)
+    pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "rising_multiple.png")
+    pt.wave_multiple_plot(figure_dir, all_8110_monthly, "wave_multiple.png")
+
+    all_datasets_b = ts_archive.read_datasets(data_dir)
+    all_9120_datasets = []
+    for ds in all_datasets_b:
+        ds.rebaseline(1991,2020)
+        annual9120 = ds.make_annual()
+        all_9120_datasets.append(annual9120)
+
+    all_datasets_b = ts_archive.read_datasets(data_dir)
+    all_6190_datasets = []
+    for ds in all_datasets_b:
+        ds.rebaseline(1961,1990)
+        annual6190 = ds.make_annual()
+        all_6190_datasets.append(annual6190)
 
     # Switch order of operations
     all_alt_datasets = []
@@ -129,11 +157,17 @@ if __name__ == "__main__":
         lsat_anns.append(ds)
 
     sst_anns = []
+    sst_mons = []
     for ds in sst_datasets:
         ds.rebaseline(1981, 2010)
+        sst_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
         sst_anns.append(annual)
+
+    pt.rising_tide_multiple_plot(figure_dir, sst_mons, "rising_multiple_sst.png")
+    #pt.wave_multiple_plot(figure_dir, sst_mons, "wave_multiple_sst.png")
+
 
     pt.neat_plot(figure_dir, lsat_anns, 'annual_lsat.png', 'Global mean LSAT')
 
@@ -142,8 +176,17 @@ if __name__ == "__main__":
     pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
 #    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
+    pt.records_plot(figure_dir, all_annual_datasets, 'record_margins.png', 'Record margins')
+
     print()
     print("Single year statistics")
     utils.run_the_numbers(all_annual_datasets, final_year, 'annual_stats', report_dir)
+    utils.run_the_numbers(all_8110_datasets, final_year, 'annual_stats_8110', report_dir)
+    utils.run_the_numbers(all_9120_datasets, final_year, 'annual_stats_9120', report_dir)
+    utils.run_the_numbers(all_6190_datasets, final_year, 'annual_stats_6190', report_dir)
+
+    utils.run_the_numbers(sst_anns, final_year, 'sst_annual_stats', report_dir)
+    utils.run_the_numbers(lsat_anns, final_year, 'lsat_annual_stats', report_dir)
+
     utils.run_the_numbers(all_alt_datasets, final_year, 'alt_stats', report_dir)
 

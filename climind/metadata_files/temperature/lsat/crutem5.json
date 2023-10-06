@@ -1,7 +1,7 @@
 {
   "name": "CRUTEM5",
   "display_name": "CRUTEM5",
-  "version": "5.0.0.0",
+  "version": "5.0.1.0",
   "variable": "lsat",
   "units": "degC",
   "citation": ["Osborn, T. J., P. D. Jones, D. H. Lister, C. P. Morice, I. R. Simpson and I. C. Harris (2020), Land surface air temperature variations across the globe updated to 2019: the CRUTEM5 dataset, J. Geophys. Res. doi: 10.1029/2019JD032352"],

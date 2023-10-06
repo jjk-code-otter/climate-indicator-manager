@@ -37,6 +37,33 @@ def table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
 
     return out_text
 
+def record_margin_table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
+    out_text = ''
+    for year in range(match_year - years_to_show, match_year + 1):
+
+        out_line = f'{year} '
+        for ds in datasets:
+
+            first_year, last_year = ds.get_first_and_last_year()
+            index = year - first_year
+
+            if year > last_year:
+                margin = "XXXXXXXXX"
+            else:
+                subset = ds.df['data'][0: index + 1]
+                latest = ds.df['data'][index]
+                if np.max(subset) == latest:
+                    margin = latest - max(ds.df['data'][0:index])
+                    margin = f"{margin:.2f}     "
+                else:
+                    margin = "---------"
+
+            out_line += f'{margin}  '
+
+        out_text += f'{out_line}\n'
+
+    return out_text
+
 
 def get_values(datasets, match_year):
     all_match_values = []
@@ -109,3 +136,17 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
             output_file.write(f'Based on {len(all_match_values)} data sets.\n')
         else:
             output_file.write('NO DATA\n')
+
+
+def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
+                    match_year: int, title: str, output_dir: Path):
+
+    with open(output_dir / f'{title}_{match_year}.txt', 'w') as output_file:
+        # Table summary of all data sets
+        out_line = 'Year '
+        for ds in datasets:
+            out_line += f"{ds.metadata['name']:10.10} "
+        output_file.write(f'{out_line}\n')
+
+        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=40))
+

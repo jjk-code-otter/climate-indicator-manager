@@ -118,7 +118,7 @@
           "title": "Pacific Decadal Oscillation",
           "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [1990, 2023]}
+            {"method": "select_year_range", "args": [1950, 2023]}
           ],
           "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
         },
