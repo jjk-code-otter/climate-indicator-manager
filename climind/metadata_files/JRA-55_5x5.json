@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['anl_surf125.011_tmp.202301_202312', 'anl_surf125.2023MMMM'] downloaded from ['', ''] at ['2023-09-07 14:04:35']",
+                "Data set created from file ['anl_surf125.011_tmp.202301_202312', 'anl_surf125.2023MMMM'] downloaded from ['', ''] at ['2023-10-06 11:01:38']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -42,9 +42,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-09-07 14:04:35"
+                "2023-10-06 11:01:38"
             ],
-            "last_month": "2023-08-01 00:00:00"
+            "last_month": "2023-09-01 00:00:00"
         }
     ]
 }
