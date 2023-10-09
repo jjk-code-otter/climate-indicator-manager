@@ -88,11 +88,11 @@ def test_fetch_future_year(mocker, tmpdir):
 
 def test_fetch_all(mocker):
     m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
-    fetch('', Path(''), '')
+    fetch('', Path(''), 'era5_2m_tas')
     assert m.call_count == 2023 - 1979 + 1
 
 
 def test_fetch_all_extension(mocker):
     m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
-    fetch('extension', Path(''), '')
+    fetch('extension', Path(''), 'era5_2m_tas')
     assert m.call_count == 2023 - 1959 + 1

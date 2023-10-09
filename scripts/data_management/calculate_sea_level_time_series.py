@@ -24,14 +24,43 @@ import climind.plotters.plot_types as pt
 from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 
+
+def process_africa_sea_level_shape_files(in_shape_dir):
+    subregions = gp.read_file(in_shape_dir / 'Sealevel_Regions_Africa' / 'Africa.shp')
+    subregions = subregions.rename(columns={'subregions': 'region'})
+    return subregions
+
+
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year, long_names,
+                    ocean_only=True) -> None:
+    n_regions = len(region_names)
+
+    for region in range(n_regions):
+        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region, land_only=False, ocean_only=ocean_only)
+        wmo_ra = region + 1
+        monthly_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{monthly_time_series.metadata['name']}"
+        dataset_name = monthly_time_series.metadata['name']
+
+        (regional_data_dir / dataset_name).mkdir(exist_ok=True)
+
+        filename = f"{dataset_name}.csv"
+        metadata_filename = f"{dataset_name}.json"
+
+        monthly_time_series.metadata['variable'] = f'{stub}_{wmo_ra}'
+        monthly_time_series.metadata['long_name'] = long_names[region]
+
+        monthly_time_series.write_csv(regional_data_dir / dataset_name / filename,
+                                      metadata_filename=regional_metadata_dir / metadata_filename)
+
+
 if __name__ == "__main__":
 
-    datasets_to_use = ['CDS sea level']
-    start_year = 1900
+    datasets_to_use = ['CMEMS trend']
+    start_year = 1993
+    final_year = 2022
+
     output_data_dir = "RegionalData"
     output_metadata_dir = "RegionalMetadata"
-
-    final_year = 2022
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -54,7 +83,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select(
         {
-            'variable': 'sealevel',
+            'variable': 'sealeveltrend',
             'type': 'gridded',
             'time_resolution': 'monthly',
             'name': datasets_to_use
@@ -63,9 +92,16 @@ if __name__ == "__main__":
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
-
+    sea_level_subregions = process_africa_sea_level_shape_files(shape_dir)
+    print(sea_level_subregions)
 
     for ds in all_datasets:
-        ts = ds.calculate_regional_average(regions, region_number, land_only=False)
+        sub_region_names = sea_level_subregions.Name
+        long_names = [f'Regional mean sea level for WMO RA 1 {sub_region_names[i]}' for i in range(8)]
+
+        process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'africa_subregion', start_year,
+                        final_year, long_names)
+
+    print(long_names)
 
     print("Got here")

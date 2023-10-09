@@ -441,7 +441,7 @@ class GridMonthly:
         return out_series
 
     def calculate_regional_average_missing(self, regions, region_number, threshold=0.3,
-                                           land_only=True) -> ts.TimeSeriesMonthly:
+                                           land_only=True, ocean_only=False) -> ts.TimeSeriesMonthly:
         """
         Calculate a regional average from the grid. The region is specified by a geopandas
         Geodataframe and the index (region_number) of the chosen shape. By default, the output
@@ -464,14 +464,20 @@ class GridMonthly:
         ts.TimeSeriesMonthly
             Returns time series of area averages.
         """
+        if land_only and ocean_only:
+            raise RuntimeError('Selected both land_only and ocean_only. This combination is not allowed.')
+
+        main_variable_list = list(self.df.keys())
+        main_variable = main_variable_list[0]
+
         mask = regionmask.mask_3D_geopandas(regions,
                                             self.df.longitude,
                                             self.df.latitude, drop=False, overlap=True)
         r1 = mask.sel(region=region_number)
-        selected_variable = self.df.tas_mean.where(r1)
+        selected_variable = self.df[main_variable].where(r1)
 
         # copy the variable array, set values to one and missing data to zero then mask that
-        missing = copy.deepcopy(self.df.tas_mean)
+        missing = copy.deepcopy(self.df[main_variable])
         replacer = (np.isnan(missing.data))
         missing.data[:, :, :] = 1.0
         missing.data[replacer] = 0.0
@@ -481,6 +487,14 @@ class GridMonthly:
             land_110 = regionmask.defined_regions.natural_earth_v5_0_0.land_110
             land_mask = land_110.mask_3D(self.df.longitude, self.df.latitude)
             land_mask = land_mask.sel(region=0)
+            selected_variable = selected_variable.where(land_mask)
+            missing = missing.where(land_mask)
+
+        if ocean_only:
+            land_110 = regionmask.defined_regions.natural_earth_v5_0_0.land_110
+            land_mask = land_110.mask_3D(self.df.longitude, self.df.latitude)
+            land_mask = land_mask.sel(region=0)
+            land_mask.data = ~land_mask.data
             selected_variable = selected_variable.where(land_mask)
             missing = missing.where(land_mask)
 
