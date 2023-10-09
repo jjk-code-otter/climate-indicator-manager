@@ -1229,7 +1229,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
                     transform=ccrs.PlateCarree(),
                     levels=wmo_levels,
-                    colors=wmo_cols, add_colorbar=False,
+                    colors=wmo_cols, #add_colorbar=False,
                     extend='both'
                     )
 
@@ -1361,14 +1361,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        colors=wmo_cols, add_colorbar=False,
+                        colors=wmo_cols, #add_colorbar=False,
                         extend='both'
                         )
     elif grid_type == 'unc':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        cmap='YlGnBu', add_colorbar=False,
+                        cmap='YlGnBu', #add_colorbar=False,
                         extend='max'
                         )
 
