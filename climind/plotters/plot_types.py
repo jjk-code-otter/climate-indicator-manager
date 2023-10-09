@@ -1350,6 +1350,11 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_cols = list(reversed(wmo_cols))
         wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
 
+    if main_variable == 'sealeveltrend':
+        wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
     if grid_type in ['mean', 'rank', 'single']:
@@ -1386,6 +1391,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
+    if main_variable == 'sealeveltrend':
+        label_text = r'Sea level trend (mm/year)'
     cbar.set_label(label_text, rotation=0, fontsize=15)
 
     p.axes.coastlines()

@@ -293,6 +293,12 @@
           "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
         },
         {
+          "link_to":  null, "title": "Regional sea level trends",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing": [],
+          "plotting": {"function": "dashboard_map_single", "title": "Regional sea level change from 1993-August 2022"}
+        },
+        {
           "link_to":  null, "title": "Ocean heat content",
           "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
           "processing":  [{"method": "add_year", "args":  [2022, 66.9148993, 3.9471033]}],
