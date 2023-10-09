@@ -1,0 +1,30 @@
+{
+  "name": "CMEMS trend",
+  "display_name": "CMEMS",
+  "version": "",
+  "variable": "sealeveltrend",
+  "units": "mm/year",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_SL_regional_trends/global_omi_sl_regional_trends/global_omi_sl_regional_trends_19930101_P20230403.nc"],
+      "filename": ["global_omi_sl_regional_trends_19930101_P20230403.nc"],
+	  "type": "gridded",
+      "long_name": "Regional sea level trend",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 2022,
+	  "actual": true,
+	  "derived": true,
+	  "history": [],
+      "reader": "reader_cmems_trend",
+	  "fetcher": "fetcher_cmems_ftp"
+    }
+  ]
+}

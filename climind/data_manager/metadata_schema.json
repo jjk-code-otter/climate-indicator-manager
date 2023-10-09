@@ -26,7 +26,7 @@
       "enum": [
         "1","degC", "zJ", "hPa",
         "ppm", "ppm/year", "ppb", "ppb/year",
-        "mm", "%", "millionkm2", "Gt", "ph", "mwe", "diy"
+        "mm", "mm/year", "%", "millionkm2", "Gt", "ph", "mwe", "diy"
       ]
     },
     "citation": {
