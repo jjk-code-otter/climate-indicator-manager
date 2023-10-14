@@ -1,0 +1,30 @@
+{
+  "name": "Climate Reanalyzer",
+  "display_name": "Climate Reanalyzer",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#0072b2",
+  "zpos": 1,
+  "datasets": [
+     {
+      "url": ["https://climatereanalyzer.org/clim/t2_daily/json/cfsr_world_t2_day.json"],
+	  "filename": ["cfsr_world_t2_day.json"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "irregular",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_climate_reanalyzer",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
