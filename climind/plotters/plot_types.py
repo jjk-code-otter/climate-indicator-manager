@@ -1577,7 +1577,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
                               1979]:
                         colour = 'darkred'
                         zod = -1
-                    if n_months > 7:
+                    if n_months > 8:
                         plt.plot(range(n_months_last_year, 13),
                                  all_accumulators[n_months_last_year - 1:, y2 - first_year],
                                  color=colour, linewidth=2, zorder=zod, alpha=0.2)

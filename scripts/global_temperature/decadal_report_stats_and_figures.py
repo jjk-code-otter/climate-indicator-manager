@@ -27,8 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2023
-    last_digit = final_year - 2020
+    final_year = 2020
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -51,24 +50,26 @@ if __name__ == "__main__":
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
                                   'name': [  # 'NOAA Interim',
-                                             #'Kadow IPCC',
+                                             'Kadow IPCC',
                                              # 'Berkeley IPCC',
-                                             #    'NOAA Interim IPCC'
+                                             'NOAA Interim IPCC'
                                   ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim',
-                                          'Berkeley Earth', 'ERA5', 'JRA-55', 'Kadow']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAAGlobalTemp',
+                                          'Berkeley Earth', 'ERA5', 'JRA-55']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
-                                  'time_resolution': 'monthly'})
+                                  'time_resolution': 'monthly',
+                                  'name': ['HadSST4', 'ERSST v5.0']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
-                                   'time_resolution': 'monthly'})
+                                   'time_resolution': 'monthly',
+                                   'name': ['CRUTEM5', 'NOAA LSAT 5.0', 'Berkeley Earth LSAT']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
@@ -132,14 +133,14 @@ if __name__ == "__main__":
         tens.append(ds.running_mean(10))
         twenties.append(ds.running_mean(20))
         thirties.append(ds.running_mean(30))
-        dtens.append(ds.running_mean(10).select_decade(last_digit))
+        dtens.append(ds.running_mean(10).select_decade(0))
 
     for ds in sst_anns:
         sst_tens.append(ds.running_mean(10))
-        sst_dtens.append(ds.running_mean(10).select_decade(last_digit))
+        sst_dtens.append(ds.running_mean(10).select_decade(0))
     for ds in lsat_anns:
         lsat_tens.append(ds.running_mean(10))
-        lsat_dtens.append(ds.running_mean(10).select_decade(last_digit))
+        lsat_dtens.append(ds.running_mean(10).select_decade(0))
 
     pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', r'10-year Global Mean SST Difference ($\degree$C))')
     pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', r'10-year Global Mean LSAT Difference ($\degree$C))')

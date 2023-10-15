@@ -1,0 +1,97 @@
+{
+  "name": "NOAA LSAT 5.0",
+  "display_name": "NOAA LSAT",
+  "version": "v5.0.0",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": ["Menne, M. J., C. N. Williams, B.E. Gleason, J. J Rennie, and J. H. Lawrimore, 2018: The Global Historical Climatology Network Monthly Temperature Dataset, Version 4. J. Climate, in press. https://doi.org/10.1175/JCLI-D-18-0094.1"],
+  "citation_url": ["https://doi.org/10.1175/JCLI-D-18-0094.1"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.1.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.2.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.3.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.4.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.5.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.6.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.7.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.8.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.9.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.10.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.11.v5.0.0.YYYYMMMM.txt",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/ancillarydata/box.12.v5.0.0.YYYYMMMM.txt"
+      ],
+      "filename": [
+        "box.1.v5.0.0.YYYYMMMM.txt",
+        "box.2.v5.0.0.YYYYMMMM.txt",
+        "box.3.v5.0.0.YYYYMMMM.txt",
+        "box.4.v5.0.0.YYYYMMMM.txt",
+        "box.5.v5.0.0.YYYYMMMM.txt",
+        "box.6.v5.0.0.YYYYMMMM.txt",
+        "box.7.v5.0.0.YYYYMMMM.txt",
+        "box.8.v5.0.0.YYYYMMMM.txt",
+        "box.9.v5.0.0.YYYYMMMM.txt",
+        "box.10.v5.0.0.YYYYMMMM.txt",
+        "box.11.v5.0.0.YYYYMMMM.txt",
+        "box.12.v5.0.0.YYYYMMMM.txt"
+	  ],
+      "type": "gridded",
+      "time_resolution": "monthly",
+      "space_resolution": 5.0,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_grid",
+      "fetcher": "fetcher_url_with_backsearch"
+    },
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.mon.land.90S.90N.v5.0.0.YYYYMMMM.asc",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
+      ],
+      "filename": [
+        "aravg.mon.land.90S.90N.v5.0.0.YYYYMMMM.asc",
+        "aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
+      ],
+      "type": "timeseries",
+      "long_name": "Global mean land temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_noaa_ts",
+      "fetcher": "fetcher_url_with_backsearch"
+    },
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.mon.land.90S.90N.v5.0.0.YYYYMMMM.asc",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5/access/timeseries/aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
+      ],
+      "filename": [
+        "aravg.mon.land.90S.90N.v5.0.0.YYYYMMMM.asc",
+        "aravg.ann.land.90S.90N.v5.0.0.YYYYMMMM.asc"
+      ],
+      "type": "timeseries",
+      "long_name": "Global mean land temperature",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_noaa_ts",
+      "fetcher": "fetcher_url_with_backsearch"
+    }
+  ]
+}
