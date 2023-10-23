@@ -1,6 +1,6 @@
 {
   "name": "CDS sea level",
-  "display_name": "AVISO CNES",
+  "display_name": "Copernicus",
   "version": "",
   "variable": "sealevel",
   "units": "mm",
@@ -13,7 +13,7 @@
   "datasets": [
      {
       "url": [""],
-      "filename": [""],
+      "filename": ["cds_sealevel_YYYY.zip"],
 	  "type": "gridded",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

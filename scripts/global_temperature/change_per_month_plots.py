@@ -51,7 +51,7 @@ if __name__ == "__main__":
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
-                                     'name':['HadCRUT5', 'GISTEMP','NOAA Interim', 'JRA-55', 'ERA5', 'Berkeley Earth']})
+                                     'name':['HadCRUT5', 'GISTEMP','NOAA Interim', 'JRA-55', 'ERA5', 'Berkeley Earth', 'Kadow']})
 
         sst_archive = archive.select({'variable': 'sst',
                                       'type': 'timeseries',
@@ -92,12 +92,16 @@ if __name__ == "__main__":
 
         pt.neat_plot(figure_dir, anns, f'{month:02d}_only.png',
                      f'Global Mean Temperature for {month_word} ($\degree$C)')
+        pt.records_plot(figure_dir, anns, f'{month:02d}_only_records.png',
+                     f'Global Mean Temperature for {month_word} ($\degree$C)')
         pt.dark_plot(figure_dir, anns, f'dark_{month:02d}_only.png',
                      f'Global Mean Temperature for {month_word} ($\degree$C)')
 
         print()
         print(f"Single month ({month_word}) statistics")
         utils.run_the_numbers(anns, final_year, f'{month:02d}_only_stats', report_dir)
+        utils.record_margins(anns, final_year, f'{month:02d}_record_margins', report_dir)
+        utils.record_margins(sst_anns, final_year, f'{month:02d}_sst_record_margins', report_dir)
 
         if month == 1:
             all_datasets = ts_archive.read_datasets(data_dir)

@@ -1,0 +1,38 @@
+{
+  "name": "CMEMS trend",
+  "display_name": "CMEMS",
+  "version": "",
+  "variable": "sealeveltrend",
+  "units": "mm/year",
+  "citation": [
+    "Cazenave, A., Dieng, HB., Meyssignac, B. et al. The rate of sea-level rise. Nature Clim Change 4, 358–361 (2014). https://doi.org/10.1038/nclimate2159",
+    "Prandi, P., Meyssignac, B., Ablain, M. et al. Local sea level trends, accelerations and uncertainties over 1993–2019. Sci Data 8, 1 (2021). https://doi.org/10.1038/s41597-020-00786-7",
+    "Wang, J., Church, J.A., Zhang, X. et al. Reconciling global mean and regional sea level change in projections and observations. Nat Commun 12, 990 (2021). https://doi.org/10.1038/s41467-021-21265-6"
+  ],
+  "citation_url": [
+    "https://doi.org/10.1038/nclimate2159",
+    "https://doi.org/10.1038/s41597-020-00786-7",
+    "https://doi.org/10.1038/s41467-021-21265-6"
+  ],
+  "data_citation": ["https://doi.org/10.48670/moi-00238"],
+  "acknowledgement": "Generated using E.U. Copernicus Marine Service Information; https://doi.org/10.48670/moi-00238",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_SL_regional_trends/global_omi_sl_regional_trends/global_omi_sl_regional_trends_19930101_P20230403.nc"],
+      "filename": ["global_omi_sl_regional_trends_19930101_P20230403.nc"],
+	  "type": "gridded",
+      "long_name": "Regional sea level trend",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 2022,
+	  "actual": true,
+	  "derived": true,
+	  "history": [],
+      "reader": "reader_cmems_trend",
+	  "fetcher": "fetcher_cmems_ftp"
+    }
+  ]
+}

@@ -28,6 +28,7 @@ from climind.definitions import METADATA_DIR
 if __name__ == "__main__":
 
     final_year = 2023
+    last_digit = final_year - 2020
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -59,7 +60,7 @@ if __name__ == "__main__":
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
                                  'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim',
-                                          'Berkeley Earth', 'ERA5', 'JRA-55']})
+                                          'Berkeley Earth', 'ERA5', 'JRA-55', 'Kadow']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
@@ -72,7 +73,7 @@ if __name__ == "__main__":
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
                                        'time_resolution': 'annual',
-                                       'name': 'CLSAT'})
+                                       'name': []})
 
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
@@ -130,15 +131,15 @@ if __name__ == "__main__":
     for ds in all_annual_datasets:
         tens.append(ds.running_mean(10))
         twenties.append(ds.running_mean(20))
-        thirties.append(ds.running_mean(20))
-        dtens.append(ds.running_mean(10).select_decade(2))
+        thirties.append(ds.running_mean(30))
+        dtens.append(ds.running_mean(10).select_decade(last_digit))
 
     for ds in sst_anns:
         sst_tens.append(ds.running_mean(10))
-        sst_dtens.append(ds.running_mean(10).select_decade())
+        sst_dtens.append(ds.running_mean(10).select_decade(last_digit))
     for ds in lsat_anns:
         lsat_tens.append(ds.running_mean(10))
-        lsat_dtens.append(ds.running_mean(10).select_decade())
+        lsat_dtens.append(ds.running_mean(10).select_decade(last_digit))
 
     pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', r'10-year Global Mean SST Difference ($\degree$C))')
     pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', r'10-year Global Mean LSAT Difference ($\degree$C))')

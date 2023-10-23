@@ -124,7 +124,7 @@ def equivalence(key):
 
 
 def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-                  dark: bool = False) -> List[int]:
+                  dark: bool = False, marker = False) -> List[int]:
     """
     Given a list of data sets, plot each one on the provided axis.
 
@@ -157,9 +157,14 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         if len(x_values) > 180:
             linewidth = 1
 
-        axis.plot(x_values, ds.df['data'],
-                  label=f"{ds.metadata['display_name']} ({date_range})",
-                  color=col, zorder=zord, linewidth=linewidth)
+        if marker:
+            axis.plot(x_values, ds.df['data'],
+                      label=f"{ds.metadata['display_name']} ({date_range})",
+                      color=col, zorder=zord, linewidth=linewidth, marker = 'o')
+        else:
+            axis.plot(x_values, ds.df['data'],
+                      label=f"{ds.metadata['display_name']} ({date_range})",
+                      color=col, zorder=zord, linewidth=linewidth)
 
         if 'uncertainty' in ds.df.columns:
             axis.fill_between(x_values,
@@ -172,8 +177,8 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
 
 def get_levels_and_palette(variable: str):
     if variable == 'tas_mean':
-        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_cols = ['#13055e', '#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022', '#47000f']
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
     elif variable == 'pre':
         wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
@@ -185,6 +190,7 @@ def get_levels_and_palette(variable: str):
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
 
     return wmo_levels, wmo_cols
+
 
 def add_labels(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]) -> str:
     """
@@ -404,6 +410,43 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
     plt.figure(figsize=[16, 9])
     zords = add_data_sets(plt.gca(), all_datasets, dark=dark)
+    ds = all_datasets[-1]
+
+    sns.despine(right=True, top=True, left=True)
+
+    add_labels(plt.gca(), ds)
+
+    _, _, yticks = set_yaxis(plt.gca(), ds)
+    _, _, xticks = set_xaxis(plt.gca())
+    plt.yticks(yticks)
+    plt.xticks(xticks)
+
+    after_plot(zords, ds, title)
+
+    plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'))
+    plt.close()
+    return caption
+
+
+def records_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filename: str, title: str,
+                 dark: bool = False) -> str:
+
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    caption = caption_builder(all_datasets)
+
+    plt.figure(figsize=[16, 9])
+
+    record_margins = []
+    for ds in all_datasets:
+        rds = ds.record_margins()
+        rds.df.data = rds.df.data - 0.0
+        record_margins.append(rds)
+
+    zords = add_data_sets(plt.gca(), record_margins, dark=dark, marker=True)
+
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
@@ -680,8 +723,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
-    march_colors = ['#56b4e9', '#009e73', '#000000']
-    september_colors = ['#e69f00', '#d55e00', '#000000']
+    march_colors = ['#56b4e9', '#009e73', '#5473ff']
+    september_colors = ['#e69f00', '#d55e00', '#ff6b54']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -774,8 +817,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
-    february_colors = ['#e69f00', '#d55e00', '#000000']
-    september_colors = ['#56b4e9', '#009e73', '#000000']
+    february_colors = ['#e69f00', '#d55e00', '#ff6b54']
+    september_colors = ['#56b4e9', '#009e73', '#5473ff']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1166,6 +1209,14 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         wmo_levels = [-110, -90, -70, -50, -30, -10, 10, 30, 50, 70, 90, 110]
         wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
                     '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
+    elif var == 'sla':
+        wmo_levels = [-300, -250, -200, -150, -100, -50, 0, 50, 100, 150, 200, 250, 300]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+    elif var == 'sealeveltrend':
+        wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
     else:
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
@@ -1177,7 +1228,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
                     transform=ccrs.PlateCarree(),
                     levels=wmo_levels,
-                    colors=wmo_cols, add_colorbar=False,
+                    colors=wmo_cols,
                     extend='both'
                     )
 
@@ -1188,6 +1239,10 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     cbar.set_ticklabels(wmo_levels)
     if var == 'pre':
         cbar.set_label(r'Precipitation difference from 1981-2010 average (mm)', rotation=0, fontsize=15)
+    elif var == 'sla':
+        cbar.set_label(r'Sea level difference from long term mean average (mm)', rotation=0, fontsize=15)
+    elif var == 'sealeveltrend':
+        cbar.set_label(r'Sea level trend (mm/year)', rotation=0, fontsize=15)
     else:
         cbar.set_label(r'Temperature difference from 1981-2010 average ($\degree$C)', rotation=0, fontsize=15)
 
@@ -1294,20 +1349,25 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_cols = list(reversed(wmo_cols))
         wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
 
+    if main_variable == 'sealeveltrend':
+        wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
     if grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        colors=wmo_cols, add_colorbar=False,
+                        colors=wmo_cols,
                         extend='both'
                         )
     elif grid_type == 'unc':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        cmap='YlGnBu', add_colorbar=False,
+                        cmap='YlGnBu',
                         extend='max'
                         )
 
@@ -1317,9 +1377,11 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
 
+    # Add the datasets used and their last months
     plt.gcf().text(.075, .012, ",".join(last_months),
-                   bbox={'facecolor': 'w', 'edgecolor': None})
+                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
+    # Add a Created tag to let people know when it was created
     current_time = f"Created: {datetime.today()}"
     plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                    bbox={'facecolor': 'w', 'edgecolor': None})
@@ -1328,6 +1390,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
+    if main_variable == 'sealeveltrend':
+        label_text = r'Sea level trend (mm/year)'
     cbar.set_label(label_text, rotation=0, fontsize=15)
 
     p.axes.coastlines()
@@ -1447,6 +1511,259 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
     plt.title(dataset.metadata['display_name'])
 
     plt.savefig(out_dir / image_filename)
+    plt.close()
+
+
+def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
+    """
+    Wave plot with month on the x-axis from January to December and each year shown as a separate line
+    showing the cumulative average for the year-to-date for that year.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path to the directory to which the image will be written.
+    dataset: List[TimeSeriesMonthly]
+        :class:`.TimeSeriesMonthly` to plot.
+    image_filename: str
+        Name of the image file to be written.
+
+    Returns
+    -------
+    None
+    """
+
+    plt.figure(figsize=[9, 9])
+
+    for dataset in all_datasets:
+        first_year, last_year = dataset.get_first_and_last_year()
+
+        df = copy.deepcopy(dataset.df)
+        df = df[df['year'] >= last_year]
+        df = df[df['year'] <= last_year]
+        df = df.reset_index()
+        n_months_last_year = len(df)
+
+        all_accumulators = np.zeros((12, last_year - first_year))
+
+        for year in range(first_year, last_year + 1):
+            df = copy.deepcopy(dataset.df)
+            df = df[df['year'] >= year]
+            df = df[df['year'] <= year]
+            df = df.reset_index()
+
+            accumulator = accumulate(df['data'])
+            n_months = len(df)
+
+            if year < last_year:
+                all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
+
+            if year != 2016 and year != 2023:
+                colour = '#aaaaaa'
+                lthk = 1
+            if year == 2016:
+                colour = '#41b6c4'
+                lthk = 2
+
+            if year == last_year:
+                all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
+                for y2 in range(1950, last_year):
+                    colour = 'orange'
+                    zod = -5
+                    if y2 in [1982, 1986, 1994, 1997, 2002, 2004, 2006, 2009, 2015, 2018, 1972, 1965, 1963, 1976, 2014,
+                              1979]:
+                        colour = 'darkred'
+                        zod = -1
+                    if n_months > 8:
+                        plt.plot(range(n_months_last_year, 13),
+                                 all_accumulators[n_months_last_year - 1:, y2 - first_year],
+                                 color=colour, linewidth=2, zorder=zod, alpha=0.2)
+                colour = 'darkred'
+                lthk = 3
+
+            plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=year)
+
+    # Draw 1.5C line
+    plt.plot([1, 12], [1.5 - 0.69, 1.5 - 0.69], color='black', linewidth=2)
+    plt.fill_between([1, 12], [1.5 - 0.54, 1.5 - 0.54], [1.5 - 0.79, 1.5 - 0.79], color='green', alpha=0.1)
+    plt.gcf().text(0.86, 0.85, r"~1.5$\!^\circ\!$C range", color='green', fontsize=20, ha='right', alpha=0.5)
+
+    import matplotlib.patheffects as PathEffects
+    peb = PathEffects.withStroke(linewidth=1.5, foreground="#555555")
+
+    plt.gcf().text(0.45, 0.710, '2016', fontsize=30, color='#41b6c4')
+    plt.gcf().text(0.50, 0.415, '2023', fontsize=30, color='darkred')
+    plt.gcf().text(0.54, 0.200, 'Other years', fontsize=30, color='#aaaaaa', ha='center', path_effects=[peb])
+
+    plt.gca().set_xlabel('Average from January to Month')
+    plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
+    plt.gca().set_ylim(0.30, 0.85)
+    plt.xticks(np.arange(1, 13, 1),
+               ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
+    plt.title('Year-to-date Global Temperature Anomalies 1850-2023', fontsize=25, y=1.04)
+
+    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, Kadow et al, ERA5, and JRA-55",
+                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+
+    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+
+    plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
+    plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
+    plt.close()
+
+
+def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
+    """
+    Rising tide plot with month on the x-axis from January to December and each year shown as a separate line
+    showing the monthly averages that year.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path to the directory to which the image will be written.
+    dataset: TimeSeriesMonthly
+        :class:`.TimeSeriesMonthly` to plot.
+    image_filename: str
+        Name of the image file to be written.
+
+    Returns
+    -------
+    None
+    """
+    first_year, last_year = dataset.get_first_and_last_year()
+
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    plt.figure(figsize=[9, 9])
+
+    df = copy.deepcopy(dataset.df)
+    df = df[df['year'] >= last_year]
+    df = df[df['year'] <= last_year]
+    df = df.reset_index()
+
+    for year in range(first_year, last_year + 1):
+        df = copy.deepcopy(dataset.df)
+        df = df[df['year'] >= year]
+        df = df[df['year'] <= year]
+        df = df.reset_index()
+
+        accumulator = df['data']
+        n_months = len(df)
+
+        colour = 'lightgrey'
+        lthk = 1
+        if year >= 2015:
+            colour = 'dodgerblue'
+            lthk = 2
+        if year == last_year:
+            colour = 'darkred'
+            lthk = 3
+
+        plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk)
+
+    plt.gca().set_xlabel('Month')
+    plt.gca().set_ylabel(FANCY_UNITS['degC'])
+    plt.gca().set_ylim(-1.5, 1)
+    plt.xticks(np.arange(1, 13, 1),
+               ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
+    plt.title(dataset.metadata['display_name'], fontsize=20)
+
+    plt.savefig(out_dir / image_filename)
+    plt.close()
+
+
+def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
+    """
+    Rising tide plot with month on the x-axis from January to December and each year shown as a separate line
+    showing the monthly averages that year.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path to the directory to which the image will be written.
+    dataset: TimeSeriesMonthly
+        :class:`.TimeSeriesMonthly` to plot.
+    image_filename: str
+        Name of the image file to be written.
+
+    Returns
+    -------
+    None
+    """
+
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    plt.figure(figsize=[9, 9])
+
+    for dataset in all_datasets:
+        first_year, last_year = dataset.get_first_and_last_year()
+        for year in range(first_year, last_year + 1):
+            df = copy.deepcopy(dataset.df)
+            df = df[df['year'] >= year]
+            df = df[df['year'] <= year]
+            df = df.reset_index()
+
+            accumulator = df['data']
+            n_months = len(df)
+
+            colours = ['#ffffcc', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#0c2c84']
+
+            if year < 1970:
+                cindex = 0
+            if year >= 1970 and year < 1980:
+                cindex = 1
+            if year >= 1980 and year < 1990:
+                cindex = 2
+            if year >= 1990 and year < 2000:
+                cindex = 3
+            if year >= 2000 and year < 2010:
+                cindex = 4
+            if year >= 2010 and year < 2020:
+                cindex = 5
+            if year >= 2020:
+                cindex = 6
+
+            colour = colours[cindex]
+
+            lthk = 1
+            if year >= 2035:
+                colour = 'dodgerblue'
+                lthk = 2
+            if year == last_year:
+                colour = 'darkred'
+                lthk = 3
+
+            plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=year)
+
+    plt.gca().set_xlabel('Month')
+    plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
+    plt.gca().set_ylim(-1.5, 1.2)
+    plt.xticks(np.arange(1, 13, 1),
+               ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
+    plt.title('Monthly Global Temperature Anomalies 1850-2023', fontsize=25, y=1.04)
+
+    import matplotlib.patheffects as PathEffects
+
+    pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
+    peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
+
+    plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.41, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.47, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.53, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.57, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.61, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.65, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
+
+    plt.gcf().text(0.75, 0.84, '2023', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+
+    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, Kadow et al, ERA5, and JRA-55",
+                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+
+    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+
+    plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
+    plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
     plt.close()
 
 

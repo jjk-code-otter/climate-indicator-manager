@@ -27,7 +27,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import copy
 import json
 from typing import Tuple, List
 
@@ -51,7 +50,7 @@ class RegionData:
             region_definitions = json.load(in_file)
         return RegionData(region_definitions)
 
-    def get_area_name(self, main_index: int) -> list:
+    def get_area_name(self, main_index: int) -> str:
         """
         Get the area names corresponding to the index
 
@@ -84,62 +83,8 @@ class RegionData:
         temp_list = [x['coordinates'] for x in self.metadata]
         return temp_list[main_index]
 
-    def get_region_name_and_country_list(self, main_index: int) -> Tuple[str, List[str]]:
-        """
-        Given an index, return the corresponding region name and the list of countries for that region
 
-        Parameters
-        ----------
-        main_index: int
-            Index number of the region
-
-        Returns
-        -------
-        Tuple[str, List[str]]
-            Returns the region name and the list of longitude and latitude pairs.
-        """
-        region_name = self.metadata[main_index]['name']
-        country_list = self.metadata[main_index]['countries']
-
-        return region_name, country_list
-
-
-def label_regions(countries: gp.GeoDataFrame, region_name: str, country_list: List[str]) -> gp.GeoDataFrame:
-    """
-    For each country in the country_list, set the corresponding field in the countries data frame
-    to have the region name
-
-    Parameters
-    ----------
-    countries: gp.GeoDataFrame
-        GeoDataFrame containing all the countries
-    region_name: str
-        The name used to tag the region in the GeoDataFrame
-    country_list: List[str]
-        List of country ISO_A2_EH two letter country codes for all countries in the region.
-
-    Returns
-    -------
-    gp.GeoDataFrame
-        GeoDataFrame in which each country is flagged as being either in the region and the remaineder
-        are set to null.
-    """
-    country_count = len(countries)
-
-    # If the country list is empty then use all countries.
-    default = 'Null'
-    if len(country_list) == 0:
-        default = region_name
-
-    for i in range(country_count):
-        countries.at[i, 'wmosubregion'] = default
-        if countries.ISO_A2_EH[i] in country_list:
-            countries.at[i, 'wmosubregion'] = region_name
-
-    return countries
-
-
-def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFrame, gp.GeoDataFrame]:
+def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFrame]:
     """
     Given an index and a json file specifying the regions, make a shape file
 
@@ -158,41 +103,20 @@ def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFram
     project_dir = DATA_DIR / "ManagedData"
     out_shape_dir = project_dir / "Shape_Files"
 
-    # Use natural Earth Shape files.
-    shape_dir = DATA_DIR / "Natural_Earth" / "ne_10m_admin_0_countries"
-    countries = gp.read_file(shape_dir / "ne_10m_admin_0_countries.shp")
-
-    # Add columns
-    countries['wmosubregion'] = ''
-    countries['dummy'] = ''
-
     # Read in the region data and get the area that corresponds to the index
     region_data = RegionData.from_json(region_json_file)
-    region_name, country_list = region_data.get_region_name_and_country_list(main_index)
     area_name = region_data.get_area_name(main_index)
     coordinates = region_data.get_coordinates(main_index)
-
-    # label regions and combine countries into one region
-    countries = label_regions(countries, region_name, country_list)
-    region_shapes = countries.dissolve(by='wmosubregion')
-    # Do same for whole world for the background map
-    whole_world = countries.dissolve(by='dummy')
 
     # Make the coordinates into a GeoDataFrame
     clean_geoms = pd.DataFrame([["Polygon", coordinates]], columns=["field_geom_type", "field_coords"])
     data = Polygon(eval(clean_geoms.field_coords.iloc[0])[0])
-    masks = gp.GeoDataFrame({'name': [area_name], 'geometry': [data]})
-
-    # Select the region of interest, copy it and mask off using coordinates
-    region_shapes = region_shapes.loc[[area_name]]
-    region_clipped = copy.deepcopy(region_shapes)
-    region_clipped.geometry[area_name] = region_shapes.geometry[area_name].intersection(masks.geometry[0])
-    region_clipped['region'] = area_name
+    masks = gp.GeoDataFrame({'wmosubregion': [area_name], 'geometry': [data]})
 
     # Save the shape file
-#    region_clipped.to_file(out_shape_dir / f'{area_name}')
+    masks.to_file(out_shape_dir / f'{area_name}')
 
-    return area_name, region_clipped, whole_world
+    return (area_name, masks)
 
 
 def increment_indices(i1, i2, n1, n2):
@@ -207,35 +131,36 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2)
     i1, i2 = 0, 0
 
-    #region_json_file = 'sub_regions.json'
-    #output_image = 'LAC_regions'
-    #n_regions = 6
-    #region_selection = [0, 2, 3, 4]
+    subregions = gp.read_file(r"C:\Users\johnk\Downloads\Africa.shp")
 
     region_json_file = 'coastal_regions.json'
     output_image = 'Coastal_regions'
     n_regions = 4
-    region_selection = [0, 1, 2, 3]
+
+    # Use natural Earth Shape files.
+    shape_dir = DATA_DIR / "Natural_Earth" / "ne_10m_admin_0_countries"
+    countries = gp.read_file(shape_dir / "ne_10m_admin_0_countries.shp")
+    countries['dummy'] = ''
+    whole_world = countries.dissolve(by='dummy')
 
     for main_index in range(n_regions):
-        area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)
+        area_name, region_clipped = create_shape_file(main_index, region_json_file)
 
-        if main_index in region_selection:
-            minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
+        minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
 
-            whole_world.plot(ax=axs[i1][i2], color='lightgrey')
-            region_clipped.plot(ax=axs[i1][i2], color='lightcoral')
+        whole_world.plot(ax=axs[i1][i2], color='lightgrey')
+        region_clipped.plot(ax=axs[i1][i2], color='lightcoral', alpha=0.5)
 
-            axs[i1, i2].set_title(area_name, fontsize=10)
-            axs[i1, i2].set_xlim(minx - 2, maxx + 2)
-            axs[i1, i2].set_ylim(miny - 2, maxy + 2)
+        axs[i1, i2].set_title(area_name, fontsize=10)
+        axs[i1, i2].set_xlim(minx - 2, maxx + 2)
+        axs[i1, i2].set_ylim(miny - 2, maxy + 2)
 
-            axs[i1][i2].set_xticklabels([])
-            axs[i1][i2].set_yticklabels([])
-            axs[i1][i2].set_xticks([])
-            axs[i1][i2].set_yticks([])
+        axs[i1][i2].set_xticklabels([])
+        axs[i1][i2].set_yticklabels([])
+        axs[i1][i2].set_xticks([])
+        axs[i1][i2].set_yticks([])
 
-            i1, i2 = increment_indices(i1, i2, 2, 2)
+        i1, i2 = increment_indices(i1, i2, 2, 2)
 
     plt.subplots_adjust(hspace=0.15)
     project_dir = DATA_DIR / "ManagedData"

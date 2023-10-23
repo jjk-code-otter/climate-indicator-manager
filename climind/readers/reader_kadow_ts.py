@@ -18,13 +18,40 @@ from pathlib import Path
 from typing import List
 import xarray as xa
 import numpy as np
+import copy
 
 import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
-
+from climind.readers.generic_reader_utils import find_latest, get_latest_filename_and_url
 from climind.data_manager.metadata import CombinedMetadata
 
-from climind.readers.generic_reader import read_ts
+from climind.readers.generic_reader import get_last_modified_time
+
+def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
+    filename_with_wildcards = metadata['filename'][0]
+    filename = [find_latest(out_dir, filename_with_wildcards)]
+
+    last_modified = get_last_modified_time(filename[0])
+
+    construction_metadata = copy.deepcopy(metadata)
+    construction_metadata.dataset['last_modified'] = [last_modified]
+
+    if metadata['type'] == 'timeseries':
+        if metadata['time_resolution'] == 'monthly':
+            return read_monthly_ts(filename, construction_metadata)
+        elif metadata['time_resolution'] == 'annual':
+            return read_annual_ts(filename, construction_metadata)
+        else:
+            raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
+    elif metadata['type'] == 'gridded':
+        if 'grid_resolution' in kwargs:
+            if kwargs['grid_resolution'] == 1:
+                return read_monthly_1x1_grid(filename, construction_metadata)
+            if kwargs['grid_resolution'] == 5:
+                return read_monthly_grid(filename, construction_metadata)
+        else:
+            return read_monthly_grid(filename, construction_metadata)
+
 
 
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
@@ -63,15 +90,16 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     df = xa.open_dataset(filename[0])
 
-    data = df.tas.values[:, 0, 0].tolist()
+    ntimes = df.tas.data.shape[0]
+
     years = df.time.dt.year.data.tolist()
     months = df.time.dt.month.data.tolist()
+    anomalies = np.reshape(df.tas.data, (ntimes)).tolist()
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, data, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
-    monthly = read_monthly_ts(filename, metadata)
-    return monthly.make_annual()
+    return read_monthly_ts(filename, metadata).make_annual()

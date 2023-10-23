@@ -28,7 +28,7 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-final_year = 2022
+final_year = 2023
 
 project_dir = DATA_DIR / "ManagedData"
 metadata_dir = METADATA_DIR
@@ -297,7 +297,7 @@ axs[0][1].set_xticks([])
 axs[1][1].set_xticks([])
 axs[2][1].set_xticks([])
 axs[3][1].set_xticks(np.arange(1960, 2030, 10))
-axs[3][1].set_xlim(1955,2022)
+axs[3][1].set_xlim(1955,final_year+0.99)
 
 plt.subplots_adjust(hspace=0.3)
 

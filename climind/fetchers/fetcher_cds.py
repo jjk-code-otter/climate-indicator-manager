@@ -18,6 +18,7 @@ Fetcher which uses the Copernicus Climate Data Store to download ERA5 gridded da
 it will download *all* data. This will take a while.
 """
 import cdsapi
+import zipfile
 from pathlib import Path
 from datetime import datetime
 
@@ -61,7 +62,7 @@ def pick_months(year: int, now: datetime) -> List[str]:
     return months_to_download
 
 
-def fetch_year(out_dir: Path, year: int) -> None:
+def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
     """
     Fetch a specified year of data and write it to the outdir. If the year is
     incomplete, only recover available months.
@@ -72,12 +73,35 @@ def fetch_year(out_dir: Path, year: int) -> None:
         directory to which the data will be written
     year: int
         the year of data we want
+    variable: str
+        Variable to be extracted - either tas or sealevel
 
     Returns
     -------
     None
     """
-    output_file = out_dir / f'era5_2m_tas_{year}.nc'
+
+    if variable == 'tas':
+        output_file = out_dir / f'era5_2m_tas_{year}.nc'
+        name = 'reanalysis-era5-single-levels-monthly-means'
+        request = {
+            'product_type': 'monthly_averaged_reanalysis',
+            'variable': '2m_temperature',
+            'year': [str(year)],
+            'time': '00:00',
+            'format': 'netcdf',
+        }
+    elif variable == 'sealevel':
+        output_file = out_dir / f'cds_sealevel_{year}.zip'
+        name = 'satellite-sea-level-global'
+        request = {
+            'variable': 'monthly_mean',
+            'version': 'vDT2021',
+            'format': 'zip',
+            'year': [str(year)],
+        }
+    else:
+        raise ValueError(f"Unknown variable {variable}")
 
     now = datetime.now()
 
@@ -95,24 +119,21 @@ def fetch_year(out_dir: Path, year: int) -> None:
         print(f'No months available for {year}')
         return
 
+    request['month'] = months_to_download
+
     print(f'Downloading file for {year}')
     print(str(output_file))
     c = cdsapi.Client()
 
-    c.retrieve(
-        'reanalysis-era5-single-levels-monthly-means',
-        {
-            'product_type': 'monthly_averaged_reanalysis',
-            'variable': '2m_temperature',
-            'year': [str(year)],
-            'month': months_to_download,
-            'time': '00:00',
-            'format': 'netcdf',
-        },
-        str(output_file))
+    c.retrieve(name, request, str(output_file))
+
+    if '.zip' in str(output_file):
+        print(f'Unzipping the directory for {year}.')
+        with zipfile.ZipFile(output_file, 'r') as zip_ref:
+            zip_ref.extractall(out_dir)
 
 
-def fetch(url: str, outdir: Path, _) -> None:
+def fetch(url: str, outdir: Path, filename: str) -> None:
     """
     Fetch all data in the range 1979 to 2022.
 
@@ -131,5 +152,13 @@ def fetch(url: str, outdir: Path, _) -> None:
     if 'extension' in url:
         first_year = 1959
 
+    if 'sealevel' in filename:
+        variable = 'sealevel'
+        first_year = 1993
+    elif 'era5_2m_tas' in filename:
+        variable = 'tas'
+    else:
+        raise ValueError(f'Filename {filename} corresponds to unknown variable')
+
     for year in range(first_year, 2024):
-        fetch_year(outdir, year)
+        fetch_year(outdir, year, variable)
