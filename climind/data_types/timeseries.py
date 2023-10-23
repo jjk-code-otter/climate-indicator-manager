@@ -617,7 +617,7 @@ class TimeSeriesMonthly(TimeSeries):
         climatology.rename(columns={'data': 'climatology'}, inplace=True)
 
         # join climatology to main time series
-        self.df = pd.merge(self.df, climatology, on='month', how='left')
+        self.df = pd.merge(self.df, climatology, on='month', how='left', validate='m:m')
 
         # subtract climatology
         self.df['data'] = self.df['data'] - self.df['climatology']
@@ -1295,7 +1295,7 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
             for att in list_attributes:
                 metadata[att].extend(ds.metadata[att])
 
-    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer'), data_frames)
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'), data_frames)
 
     columns = []
     for col in df_merged.columns:
@@ -1393,9 +1393,9 @@ def write_dataset_summary_file(all_datasets, csv_filename):
     for df, col_name in zip(dataframes, dataset_names):
         if 'data' in df.columns:
             if isinstance(ds, TimeSeriesAnnual):
-                merged_df = pd.merge(combined_df, df[['year', 'data']], on='year', how='left')
+                merged_df = pd.merge(combined_df, df[['year', 'data']], on='year', how='left', validate='m:m')
             if isinstance(ds, TimeSeriesMonthly):
-                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left')
+                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left', validate='m:m')
 
             merged_df.rename(columns={'data': col_name}, inplace=True)
             combined_df = merged_df
@@ -1494,7 +1494,7 @@ def equalise_datasets(
     # for each dataset in the list, merge it with the combined dataframe, rename the data column and
     # update the combined dataframe
     for ds in all_datasets:
-        merged_df = pd.merge(combined_df, ds.df[columns], on=on_columns, how='left')
+        merged_df = pd.merge(combined_df, ds.df[columns], on=on_columns, how='left', validate='m:m')
         merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
         combined_df = merged_df
         columns = [*on_columns, 'data']
