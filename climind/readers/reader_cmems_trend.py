@@ -16,7 +16,7 @@
 
 
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, List
 import itertools
 import xarray as xa
 import numpy as np
@@ -51,7 +51,7 @@ def read_monthly_grid(filename, metadata):
     return gd.GridMonthly(combo, metadata)
 
 
-def read_grid(filename: Path):
+def read_grid(filename: List[Path]):
     df = xa.open_dataset(filename[0])
     df = df.rename({'msl_trend': 'sealeveltrend'})
 

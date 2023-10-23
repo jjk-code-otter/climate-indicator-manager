@@ -445,7 +445,6 @@ def records_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_file
         rds.df.data = rds.df.data - 0.0
         record_margins.append(rds)
 
-#    zords = add_data_sets(plt.gca(), all_datasets, dark=dark)
     zords = add_data_sets(plt.gca(), record_margins, dark=dark, marker=True)
 
     ds = all_datasets[-1]
@@ -1229,7 +1228,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     p = ax.contourf(wrap_lon, dataset.latitude, wrap_data[-1, :, :],
                     transform=ccrs.PlateCarree(),
                     levels=wmo_levels,
-                    colors=wmo_cols, #add_colorbar=False,
+                    colors=wmo_cols,
                     extend='both'
                     )
 
@@ -1361,14 +1360,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        colors=wmo_cols, #add_colorbar=False,
+                        colors=wmo_cols,
                         extend='both'
                         )
     elif grid_type == 'unc':
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
-                        cmap='YlGnBu', #add_colorbar=False,
+                        cmap='YlGnBu',
                         extend='max'
                         )
 
@@ -1559,8 +1558,6 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
             if year < last_year:
                 all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
-            colours = ['#ffffcc', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#0c2c84']
-
             if year != 2016 and year != 2023:
                 colour = '#aaaaaa'
                 lthk = 1
@@ -1592,7 +1589,6 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     plt.gcf().text(0.86, 0.85, r"~1.5$\!^\circ\!$C range", color='green', fontsize=20, ha='right', alpha=0.5)
 
     import matplotlib.patheffects as PathEffects
-    pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
     peb = PathEffects.withStroke(linewidth=1.5, foreground="#555555")
 
     plt.gcf().text(0.45, 0.710, '2016', fontsize=30, color='#41b6c4')
@@ -1729,7 +1725,6 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
             colour = colours[cindex]
 
-            #            colour = 'lightgrey'
             lthk = 1
             if year >= 2035:
                 colour = 'dodgerblue'
