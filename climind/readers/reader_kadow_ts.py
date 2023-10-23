@@ -53,6 +53,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
             return read_monthly_grid(filename, construction_metadata)
 
 
+
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
     df = df.rename({'tas': 'tas_mean'})

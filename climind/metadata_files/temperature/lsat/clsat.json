@@ -2,7 +2,7 @@
   "name": "CLSAT",
   "display_name": "CLSAT",
   "version": "2.0",
-  "variable": "lsat",
+  "variable": "lsatIGNORE",
   "units": "degC",
   "citation": ["Li, Q., Sun, W., Yun, X. et al. An updated evaluation of the global mean land surface air temperature and surface temperature trends based on CLSAT and CMST. Clim Dyn 56, 635–650 (2021). https://doi.org/10.1007/s00382-020-05502-0"],
   "citation_url": ["https://doi.org/10.1007/s00382-020-05502-0"],

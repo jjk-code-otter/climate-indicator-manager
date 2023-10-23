@@ -8,7 +8,7 @@
   "citation_url": ["https://doi.org/10.1038/s41561-020-0582-5"],
   "data_citation": ["Naoto Inoue, Stephan Seitz, johannes.meuer, & Christopher Kadow. (2022). FREVA-CLINT/climatereconstructionAI: v1.0.2 (v1.0.2). Zenodo. https://doi.org/10.5281/zenodo.6475858"],
   "acknowledgement": "",
-  "colour": "#cc79a6",
+  "colour": "#cc79a7",
   "zpos": 10,
   "datasets": [
 	{
@@ -32,6 +32,21 @@
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_kadow_ts",
+	  "fetcher": "fetcher_no_url"
+    },
+	{
+      "url": [""],
+      "filename": ["HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_global_mean_185001-*.nc"],
+      "type": "timeseries",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,
 	  "climatology_end": 1990,
