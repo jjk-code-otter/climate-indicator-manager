@@ -1,8 +1,8 @@
 {
-  "name": "GPCC quantiles 12month",
+  "name": "GPCC quantiles 9month",
   "display_name": "GPCC",
   "version": "",
-  "variable": "precip_quantiles",
+  "variable": "precip_quantiles_9month",
   "units": "quantile",
   "citation": [""],
   "citation_url": [""],
@@ -13,13 +13,13 @@
   "datasets": [
     {
       "url": [
-        "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Quantile/Last12Month/gpcc_quantile_12month_*-YYYYMMMM.nc.gz"
+        "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Quantile/Last9Month/gpcc_quantile_9month_*-YYYYMMMM.nc.gz"
       ],
 	  "filename": [
-        "gpcc_quantile_12month_*-YYYYMMMM.nc.gz"
+        "gpcc_quantile_9month_*-YYYYMMMM.nc.gz"
       ],
       "type": "gridded",
-      "long_name": "12-month Precipitation Quantile",
+      "long_name": "9-month Precipitation Quantile",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.0,
 	  "climatology_start": 1991,

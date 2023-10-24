@@ -115,14 +115,35 @@ def get_ftp_host_and_directory_from_url(url: str) -> Tuple[str, List[str]]:
     return host, working_directory
 
 
-def get_eleven_months_back(y, m):
-    if m == 12:
-        one_year_back = y
-    else:
-        one_year_back = y - 1
-    one_year_back_month = (m - 11) % 12
+def get_n_months_back(y: int, m: int, back:int=12) -> Tuple[int, int]:
+    """
+    Get the year and month that, including the specified month, makes n months
 
-    return one_year_back, one_year_back_month
+    Parameters
+    ----------
+    y: int
+        Year
+    m: int
+        Month
+    back: int
+        Number of months to include
+
+    Returns
+    -------
+    Tuple(int, int)
+    """
+    if back > 12 or back < 1:
+        raise ValueError(f'Back {back} is larger than 12 or less than 1')
+
+    if m - back + 1 >= 1:
+        n_months_back = y
+    else:
+        n_months_back = y - 1
+    n_months_back_month = (m + 1 - back) % 12
+    if n_months_back_month == 0:
+        n_months_back_month = 12
+
+    return n_months_back, n_months_back_month
 
 
 def fill_year_month(instr, y, m):

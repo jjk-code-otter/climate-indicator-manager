@@ -62,19 +62,55 @@ def test_get_ftp_host_and_directory():
         assert working_directory[i] == f'directory{i}'
 
 
-def test_get_eleven_month_back():
-    y, m = utils.get_eleven_months_back(2022, 12)
+def test_get_n_months_back_raises():
+    with pytest.raises(ValueError):
+        _, _ = utils.get_n_months_back(2022, 12, back=13)
+    with pytest.raises(ValueError):
+        _, _ = utils.get_n_months_back(2022, 12, back=-1)
+
+
+def test_get_n_months_back():
+    y, m = utils.get_n_months_back(2022, 12)
     assert y == 2022
     assert m == 1
 
-    y, m = utils.get_eleven_months_back(1985, 3)
+    y, m = utils.get_n_months_back(1985, 3)
     assert y == 1984
     assert m == 4
 
-def test_fill_year_month():
+    for y1, m1 in itertools.product(range(2000, 2005), range(1, 13)):
+        y, m = utils.get_n_months_back(y1, m1, back=1)
+        assert y == y1
+        assert m == m1
 
+    y, m = utils.get_n_months_back(2022, 12, back=3)
+    assert y == 2022
+    assert m == 10
+
+    y, m = utils.get_n_months_back(2022, 2, back=3)
+    assert y == 2021
+    assert m == 12
+
+    y, m = utils.get_n_months_back(2022, 12, back=6)
+    assert y == 2022
+    assert m == 7
+
+    y, m = utils.get_n_months_back(2022, 4, back=6)
+    assert y == 2021
+    assert m == 11
+
+    y, m = utils.get_n_months_back(2022, 12, back=9)
+    assert y == 2022
+    assert m == 4
+
+    y, m = utils.get_n_months_back(2022, 6, back=9)
+    assert y == 2021
+    assert m == 10
+
+
+def test_fill_year_month():
     test_str = 'YYYYMMMM'
-    for year, month in itertools.product(range(1800,2029), range(1,13)):
+    for year, month in itertools.product(range(1800, 2029), range(1, 13)):
         filled = utils.fill_year_month(test_str, year, month)
         assert filled == f'{year}{month:02d}'
 

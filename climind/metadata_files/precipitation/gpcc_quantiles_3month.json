@@ -1,0 +1,34 @@
+{
+  "name": "GPCC quantiles 3month",
+  "display_name": "GPCC",
+  "version": "",
+  "variable": "precip_quantiles_3month",
+  "units": "quantile",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": [
+        "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Quantile/Last3Month/gpcc_quantile_3month_*-YYYYMMMM.nc.gz"
+      ],
+	  "filename": [
+        "gpcc_quantile_3month_*-YYYYMMMM.nc.gz"
+      ],
+      "type": "gridded",
+      "long_name": "3-month Precipitation Quantile",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1991,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gpcc_quantile",
+	  "fetcher": "fetcher_gpcc_quantile"
+    }
+  ]
+}

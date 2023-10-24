@@ -21,7 +21,7 @@ import requests
 import shutil
 from bs4 import BeautifulSoup, SoupStrainer
 
-from climind.fetchers.fetcher_utils import dir_and_filename_from_url, url_from_filename, get_eleven_months_back, \
+from climind.fetchers.fetcher_utils import dir_and_filename_from_url, url_from_filename, get_n_months_back, \
     fill_year_month
 
 
@@ -52,7 +52,19 @@ def fetch(url: str, outdir: Path, _) -> None:
 
         # Construct the filename for the year and month which covers a 12 month period
         filled_url = fill_year_month(url, y, m)
-        y2, m2 = get_eleven_months_back(y, m)
+
+        if '1month' in filled_url:
+            back = 1
+        elif '3month' in filled_url:
+            back = 3
+        elif '6month' in filled_url:
+            back = 6
+        elif '9month' in filled_url:
+            back = 9
+        elif '12month' in filled_url:
+            back = 12
+
+        y2, m2 = get_n_months_back(y, m, back=back)
         filled_url = filled_url.replace('*', f'{y2}{m2:02d}')
 
         dirname, filename = dir_and_filename_from_url(filled_url)
