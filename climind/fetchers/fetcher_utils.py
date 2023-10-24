@@ -113,3 +113,19 @@ def get_ftp_host_and_directory_from_url(url: str) -> Tuple[str, List[str]]:
     host = parsed_url.hostname
 
     return host, working_directory
+
+
+def get_eleven_months_back(y, m):
+    if m == 12:
+        one_year_back = y
+    else:
+        one_year_back = y - 1
+    one_year_back_month = (m - 11) % 12
+
+    return one_year_back, one_year_back_month
+
+
+def fill_year_month(instr, y, m):
+    filled_url = instr.replace('YYYY', f'{y}')
+    filled_url = filled_url.replace('MMMM', f'{m:02d}')
+    return filled_url

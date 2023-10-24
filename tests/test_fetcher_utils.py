@@ -13,6 +13,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import itertools
 
 import pytest
 
@@ -59,3 +60,25 @@ def test_get_ftp_host_and_directory():
     assert host == 'the.host.name'
     for i in range(3):
         assert working_directory[i] == f'directory{i}'
+
+
+def test_get_eleven_month_back():
+    y, m = utils.get_eleven_months_back(2022, 12)
+    assert y == 2022
+    assert m == 1
+
+    y, m = utils.get_eleven_months_back(1985, 3)
+    assert y == 1984
+    assert m == 4
+
+def test_fill_year_month():
+
+    test_str = 'YYYYMMMM'
+    for year, month in itertools.product(range(1800,2029), range(1,13)):
+        filled = utils.fill_year_month(test_str, year, month)
+        assert filled == f'{year}{month:02d}'
+
+    test_str = 'sfawefaergaergMMMMYYYYertftrhsr'
+    for year, month in itertools.product(range(1800, 2029), range(1, 13)):
+        filled = utils.fill_year_month(test_str, year, month)
+        assert filled == f'sfawefaergaerg{month:02d}{year}ertftrhsr'
