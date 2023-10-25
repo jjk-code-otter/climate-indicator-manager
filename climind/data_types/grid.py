@@ -259,6 +259,29 @@ class GridMonthly:
         last_month = datetime(year, month, day)
         return last_month
 
+    def get_start_year(self) -> int:
+        """
+        Get the first year in the dataset
+
+        Returns
+        -------
+        int
+            First year in the dataset
+        """
+        start_year = self.df.time.dt.year.data[0]
+        return start_year
+    def get_end_year(self) -> int:
+        """
+        Get the last year in the dataset
+
+        Returns
+        -------
+        int
+            Last year in the dataset
+        """
+        start_year = self.df.time.dt.year.data[-1]
+        return start_year
+
     def rebaseline(self, first_year: int, final_year: int) -> xa.Dataset:
         """
         Change the baseline of the data to the period between first_year and final_year by

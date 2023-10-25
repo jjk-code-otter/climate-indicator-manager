@@ -1190,6 +1190,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         Title for the plot
     var: str
         Variabel to plot from the dataset
+        Variabel to plot from the dataset
 
     Returns
     -------
@@ -1358,6 +1359,9 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+    if 'precip_quantiles' in main_variable:
+        wmo_levels = [0, 0.1, 0.2, 0.8, 0.9, 1]
+        wmo_cols = ['#543005', '#bf812d', '#e5e5e5', '#35978f', '#003c30']
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
@@ -1397,6 +1401,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     if main_variable == 'sealeveltrend':
         label_text = r'Sea level trend (mm/year)'
+    if 'precip_quantiles' in main_variable:
+        label_text = r'Precipitation quantile relative to 1991-2020'
     cbar.set_label(label_text, rotation=0, fontsize=15)
 
     p.axes.coastlines()
