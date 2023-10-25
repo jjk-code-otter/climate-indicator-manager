@@ -27,10 +27,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-y", help="year for plot", type=int)
     parser.add_argument("-m", help="month for plot", type=int)
+    parser.add_argument("-q", help="how many months in the quantile period", type=int)
     args = parser.parse_args()
 
     plot_year = args.y
     plot_month = args.m
+    how_many_months = args.q
+
+    how_many_months = 3
+
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -42,12 +47,12 @@ if __name__ == "__main__":
     archive = dm.DataArchive.from_directory(metadata_dir)
 
     names = [
-        'GPCC quantiles 12month'
+        f'GPCC quantiles {how_many_months}month'
     ]
 
     for name in names:
         print(name)
-        ts_archive = archive.select({'variable': 'precip_quantiles',
+        ts_archive = archive.select({'variable': f'precip_quantiles_{how_many_months}month',
                                      'type': 'gridded',
                                      'time_resolution': 'monthly',
                                      'name': name})
@@ -56,10 +61,11 @@ if __name__ == "__main__":
 
         ds = all_datasets[0]
 
-        filename = figure_dir / f"map_{plot_year}_{plot_month:02d}_{ds.metadata['name']}"
+        filename = figure_dir / f"{how_many_months}month_quantile_map_{plot_year}_{plot_month:02d}_{ds.metadata['name']}"
         title = f"{ds.metadata['name']} {plot_year}_{plot_month:02d}"
 
-        try:
-            pt.plot_map_by_year_and_month(ds, plot_year, plot_month, filename, title, var='pre_q12month')
-        except:
-            print(f"Not for this month {plot_year}-{plot_month:02d} and data sets {name}")
+        # try:
+        pt.plot_map_by_year_and_month(ds, plot_year, plot_month, filename, title,
+                                      var=f'precip_quantiles_{how_many_months}month')
+        # except:
+        #    print(f"Not for this month {plot_year}-{plot_month:02d} and data sets {name}")

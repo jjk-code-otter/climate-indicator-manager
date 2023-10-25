@@ -27,7 +27,7 @@ import xarray as xa
 
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import CombinedMetadata
-from climind.fetchers.fetcher_utils import get_eleven_months_back, fill_year_month
+from climind.fetchers.fetcher_utils import get_n_months_back, fill_year_month
 from climind.config.config import CLIMATOLOGY
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
@@ -49,11 +49,25 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 
 def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
+
+    if metadata['variable'] == "precip_quantiles_1month":
+        back = 1
+    elif metadata['variable'] == "precip_quantiles_3month":
+        back = 3
+    elif metadata['variable'] == "precip_quantiles_6month":
+        back = 6
+    elif metadata['variable'] == "precip_quantiles_9month":
+        back = 9
+    elif metadata['variable'] == "precip_quantiles_12month":
+        back = 12
+
+    new_variable_name = metadata['variable']
+
     dataset_list = []
     for y1, m1 in itertools.product(range(1982, 2030), range(1, 13)):
         filled_filename = str(filename).replace('YYYY', f'{y1}')
         filled_filename = filled_filename.replace('MMMM', f'{m1:02d}')
-        y2, m2 = get_eleven_months_back(y1, m1)
+        y2, m2 = get_n_months_back(y1, m1, back=back)
         filled_filename = filled_filename.replace('*', f'{y2}{m2:02d}')
         filled_filename = Path(filled_filename)
 
@@ -61,17 +75,19 @@ def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
             df = xa.open_dataset(filled_filename, decode_times=False) # the time is badly specified in some way
 
             variable = f'q_{y2}{m2:02d}-{y1}{m1:02d}_{CLIMATOLOGY[0]}{CLIMATOLOGY[1]}'
+            if back == 1:
+                variable = f'q_{y1}{m1:02d}_19512010'
 
             df = df[[variable]]
-            df = df.rename({variable: 'pre_q12month'})
+            df = df.rename({variable: new_variable_name})
 
             latitudes = np.linspace(-89.5, 89.5, 180)
             longitudes = np.linspace(-179.5, 179.5, 360)
             times = pd.date_range(start=f'{y1}-{m1:02d}-01', freq='1MS', periods=1)
             target_grid = np.zeros((1, 180, 360))
-            target_grid[:, :, :] = np.flip(df['pre_q12month'].data[:, :, :], 1)
+            target_grid[:, :, :] = np.flip(df[new_variable_name].data[:, :, :], 1)
 
-            ds = gd.make_xarray(target_grid, times, latitudes, longitudes, variable='pre_q12month')
+            ds = gd.make_xarray(target_grid, times, latitudes, longitudes, variable=new_variable_name)
 
             dataset_list.append(ds)
 
