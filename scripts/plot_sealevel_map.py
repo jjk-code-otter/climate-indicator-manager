@@ -60,6 +60,6 @@ if __name__ == "__main__":
         title = f"{ds.metadata['name']} {plot_year}_{plot_month:02d}"
 
         try:
-            pt.plot_map_by_year_and_month(ds, plot_year, plot_month, filename, title, var='sla')
+            pt.plot_map_by_year_and_month(ds, plot_year, plot_month, filename, title, var='sealevel')
         except:
             print(f"Not for this month {plot_year}-{plot_month:02d} and data sets {name}")

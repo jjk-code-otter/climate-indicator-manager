@@ -521,6 +521,7 @@ class GridMonthly:
             selected_variable = selected_variable.where(land_mask)
             missing = missing.where(land_mask)
 
+        # Calculate the area weighted average
         weights = np.cos(np.deg2rad(selected_variable.latitude))
         regional_ts = selected_variable.weighted(weights).mean(dim=("latitude", "longitude"))
         missing_ts = missing.weighted(weights).mean(dim=("latitude", "longitude"))

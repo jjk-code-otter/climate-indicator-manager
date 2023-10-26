@@ -40,7 +40,7 @@ if __name__ == "__main__":
     monthly = False
     ocean = False
     cryosphere = False
-    regional = False
+    regional = True
     regional_multiyear = False
     regional_test = False
 

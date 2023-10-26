@@ -1,0 +1,25 @@
+[
+  {
+    "name": "League of Arab States",
+    "countries": ["MR", "EH", "MA", "DZ", "TN", "LY", "EG",
+                  "SO", "SD", "DJ", "KM",
+                  "BH", "IQ", "JO", "KW", "LB", "OM", "PS", "QA", "SA", "SY", "AE", "YE"
+    ],
+    "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
+  },
+  {
+    "name": "North African Arab Countries",
+    "countries": ["MR", "EH", "MA", "DZ", "TN", "LY", "EG"],
+    "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
+  },
+  {
+    "name": "East African Arab Countries",
+    "countries": ["SO", "SD", "DJ", "KM"],
+    "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
+  },
+  {
+    "name": "Middle East Arab Countries",
+    "countries": ["BH", "IQ", "JO", "KW", "LB", "OM", "PS", "QA", "SA", "SY", "AE", "YE"],
+    "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
+  }
+]

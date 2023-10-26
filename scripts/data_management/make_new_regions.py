@@ -190,7 +190,7 @@ def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFram
     region_clipped['region'] = area_name
 
     # Save the shape file
-#    region_clipped.to_file(out_shape_dir / f'{area_name}')
+    region_clipped.to_file(out_shape_dir / f'{area_name}')
 
     return area_name, region_clipped, whole_world
 
@@ -212,10 +212,15 @@ if __name__ == '__main__':
     #n_regions = 6
     #region_selection = [0, 2, 3, 4]
 
-    region_json_file = 'coastal_regions.json'
-    output_image = 'Coastal_regions'
+    region_json_file = 'arab_regions.json'
+    output_image = 'Arab_regions'
     n_regions = 4
     region_selection = [0, 1, 2, 3]
+
+    #region_json_file = 'coastal_regions.json'
+    #output_image = 'Coastal_regions'
+    #n_regions = 4
+    #region_selection = [0, 1, 2, 3]
 
     for main_index in range(n_regions):
         area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)

@@ -57,4 +57,12 @@ def read_grid(filename: Path):
             dataset_list.append(xa.open_dataset(filled_filename))
     combo = xa.concat(dataset_list, dim='time')
     combo['sla'] = combo['sla'] * 1000.0
+
+    times = combo.time.data
+    latitudes = combo.latitude.data
+    longitudes = combo.longitude.data
+    target_grid = combo.sla.data
+
+    combo = gd.make_xarray(target_grid, times, latitudes, longitudes, variable='sealevel')
+
     return combo

@@ -107,7 +107,10 @@ def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
 
     # Want to download the complete file for a completed year in January as well as updates to
     # the partial file for the current year
-    override = (year == now.year or (year == now.year - 1 and now.month == 1))
+    if variable == 'tas':
+        override = (year == now.year or (year == now.year - 1 and now.month == 1))
+    elif variable == 'sealevel':
+        override = (year == now.year or year == (now.year - 1))
 
     if output_file.exists() and not override:
         print(f'File for {year} already exists, not downloading')
@@ -125,9 +128,12 @@ def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
     print(str(output_file))
     c = cdsapi.Client()
 
-    c.retrieve(name, request, str(output_file))
+    try:
+        c.retrieve(name, request, str(output_file))
+    except:
+        print(f"Problem downloading {year}")
 
-    if '.zip' in str(output_file):
+    if '.zip' in str(output_file) and output_file.exists():
         print(f'Unzipping the directory for {year}.')
         with zipfile.ZipFile(output_file, 'r') as zip_ref:
             zip_ref.extractall(out_dir)

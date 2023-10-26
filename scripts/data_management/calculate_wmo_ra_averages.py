@@ -47,6 +47,18 @@ def process_lac_shape_files(in_shape_dir):
     return subregions
 
 
+def process_arab_shape_files(in_shape_dir):
+    additional_regions = ['North African Arab Countries', 'East African Arab Countries', 'Middle East Arab Countries']
+
+    subregions = gp.read_file(in_shape_dir / 'League of Arab States' / 'League of Arab States.shp')
+    for reg in additional_regions:
+        addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
+        subregions = subregions.append(addition, ignore_index=True)
+
+    subregions = subregions.reindex()
+    return subregions
+
+
 def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year, long_names,
                     land_only=True) -> None:
     n_regions = len(region_names)
@@ -74,7 +86,7 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
 
 if __name__ == "__main__":
 
-    test = True
+    test = False
 
     if test:
         start_year = 1850
@@ -89,9 +101,9 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            'HadCRUT5', 'GISTEMP',
-            'NOAAGlobalTemp', 'Berkeley Earth',
-            'ERA5', 'JRA-55'
+            #'HadCRUT5', 'GISTEMP',
+            'NOAA Interim'#, 'Berkeley Earth',
+            #'ERA5', 'JRA-55'
         ]
 
     final_year = 2022
@@ -129,6 +141,10 @@ if __name__ == "__main__":
     lac_subregions = process_lac_shape_files(shape_dir)
     print(lac_subregions)
 
+    # Read in Arab subregions
+    arab_subregions = process_arab_shape_files(shape_dir)
+    print(arab_subregions)
+
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
@@ -150,11 +166,12 @@ if __name__ == "__main__":
 
         region_names = ['Africa', 'Asia', 'South America',
                         'North America', 'South-West Pacific', 'Europe']
-        long_names = [f'Regional mean temperature for WMO RA {i+1} {region_names[i]}' for i in range(6)]
+        long_names = [f'Regional mean temperature for WMO RA {i + 1} {region_names[i]}' for i in range(6)]
         process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra', start_year, final_year, long_names)
 
         # Do land and ocean processing for the RA areas.
-        long_names = [f'Regional mean land and ocean temperature for WMO RA {i+1} {region_names[i]}' for i in range(6)]
+        long_names = [f'Regional mean land and ocean temperature for WMO RA {i + 1} {region_names[i]}' for i in
+                      range(6)]
         process_regions(region_names, continents, regional_data_dir, ds, 'wmo_ra_land_ocean', start_year, final_year,
                         long_names, land_only=False)
 
@@ -168,4 +185,10 @@ if __name__ == "__main__":
                             'Mexico', 'Central America', 'Latin America and Caribbean']
         long_names = [f'Regional mean temperature for {lac_region_names[i]}' for i in range(6)]
         process_regions(lac_region_names, lac_subregions, regional_data_dir, ds, 'lac_subregion', start_year,
+                        final_year, long_names)
+
+        arab_region_names = ['League of Arab States', 'North African Arab Countries', 'East African Arab Countries',
+                             'Middle East Arab Countries']
+        long_names = [f'Regional mean temperature for {arab_region_names[i]}' for i in range(4)]
+        process_regions(arab_region_names, arab_subregions, regional_data_dir, ds, 'arab_subregion', start_year,
                         final_year, long_names)
