@@ -34,7 +34,7 @@ from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
 
-    dash2023 = True
+    dash2023 = False
     dash2022 = False
     decadal = False
     monthly = False
