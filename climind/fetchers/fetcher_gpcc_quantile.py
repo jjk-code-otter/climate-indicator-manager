@@ -25,6 +25,28 @@ from climind.fetchers.fetcher_utils import dir_and_filename_from_url, url_from_f
     fill_year_month
 
 
+def get_time_span(filled_url):
+    for back in [1, 3, 6, 9, 12, 99]:
+        if f'{back}month' in filled_url:
+            break
+    if back == 99:
+        raise ValueError("Filled URL does not match one of the allowed time spans")
+    return back
+
+
+def get_file(filled_url, out_path):
+    try:
+        r = requests.get(filled_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
+        if r.status_code == 200:
+            with open(out_path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+    except requests.exceptions.ConnectionError:
+        print(f"Couldn't connect to {filled_url}")
+
+    return
+
+
 def fetch(url: str, outdir: Path, _) -> None:
     """
     Fetch GPCC quantile data. The script scrapes the directory specified in the URL for a file
@@ -46,40 +68,17 @@ def fetch(url: str, outdir: Path, _) -> None:
     # substitute YYYY and MMMM
     now = datetime.now()
     this_year = now.year
-    this_month = now.month
 
     for y, m in itertools.product(range(1982, this_year + 1), range(1, 13)):
 
         # Construct the filename for the year and month which covers a 12 month period
         filled_url = fill_year_month(url, y, m)
-
-        if '1month' in filled_url:
-            back = 1
-        elif '3month' in filled_url:
-            back = 3
-        elif '6month' in filled_url:
-            back = 6
-        elif '9month' in filled_url:
-            back = 9
-        elif '12month' in filled_url:
-            back = 12
-
+        back = get_time_span(filled_url)
         y2, m2 = get_n_months_back(y, m, back=back)
         filled_url = filled_url.replace('*', f'{y2}{m2:02d}')
-
-        dirname, filename = dir_and_filename_from_url(filled_url)
-
+        _, filename = dir_and_filename_from_url(filled_url)
         out_path = outdir / filename
 
         # Need to scoop up the past two years to make sure we get any updates from first guess to monitoring
         if not (out_path.exists()) or (y >= this_year - 1):
-            try:
-                r = requests.get(filled_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
-
-                if r.status_code == 200:
-                    with open(out_path, 'wb') as f:
-                        r.raw.decode_content = True
-                        shutil.copyfileobj(r.raw, f)
-
-            except requests.exceptions.ConnectionError:
-                print(f"Couldn't connect to {url}")
+            get_file(filled_url, out_path)

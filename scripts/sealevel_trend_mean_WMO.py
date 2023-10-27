@@ -59,6 +59,3 @@ for name in shp_name:
 
     df = pd.DataFrame({"Region": zone_trd.keys(), "trd_mean": trd_mean})
     df.to_csv(out_data_dir / f"CMEMS_trd_mean_{name}.csv", index=False)
-
-    # mean_dict["trd_mean"].append(np.mean(zone_trd))
-    # mean_dict["Name"].append(shp.Name[ishp])

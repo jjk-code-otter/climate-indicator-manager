@@ -31,12 +31,13 @@ def process_africa_sea_level_shape_files(in_shape_dir):
     return subregions
 
 
-def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year, long_names,
-                    ocean_only=True) -> None:
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year,
+                    long_names) -> None:
     n_regions = len(region_names)
 
     for region in range(n_regions):
-        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region, land_only=False, ocean_only=False)
+        monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region, land_only=False,
+                                                                    ocean_only=False)
         wmo_ra = region + 1
         monthly_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{monthly_time_series.metadata['name']}"
         dataset_name = monthly_time_series.metadata['name']
@@ -99,8 +100,8 @@ if __name__ == "__main__":
         sub_region_names = sea_level_subregions.Name
         long_names = [f'Regional mean sea level for WMO RA 1 {sub_region_names[i]}' for i in range(8)]
 
-        process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'sl_africa_subregion', start_year,
-                        final_year, long_names)
+        process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'sl_africa_subregion',
+                        start_year, final_year, long_names)
 
     print(long_names)
 
