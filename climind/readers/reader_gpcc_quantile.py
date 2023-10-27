@@ -15,8 +15,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
-import gzip
-import tempfile
 import copy
 
 from pathlib import Path
@@ -27,7 +25,7 @@ import xarray as xa
 
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import CombinedMetadata
-from climind.fetchers.fetcher_utils import get_n_months_back, fill_year_month
+from climind.fetchers.fetcher_utils import get_n_months_back
 from climind.config.config import CLIMATOLOGY
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
