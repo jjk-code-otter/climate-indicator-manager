@@ -41,12 +41,6 @@
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
-        },
-        {
-          "link_to": "arab_regions", "title": "Arab League",
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
-          "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature"}
         }
       ],
       "paragraphs": [

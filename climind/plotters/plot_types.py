@@ -1015,7 +1015,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure
     """
-    final_year = 2022
+    final_year = 2023
 
     caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
