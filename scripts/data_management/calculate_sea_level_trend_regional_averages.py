@@ -72,11 +72,6 @@ if __name__ == "__main__":
 
     data_dir = project_dir / "Data"
     shape_dir = project_dir / "Shape_Files"
-    fdata_dir = project_dir / "Formatted_Data"
-    figure_dir = project_dir / 'Figures'
-    log_dir = project_dir / 'Logs'
-    report_dir = project_dir / 'Reports'
-    report_dir.mkdir(exist_ok=True)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
@@ -100,7 +95,3 @@ if __name__ == "__main__":
         long_names = [f'Regional mean sea level for WMO RA 1 {sub_region_names[i]}' for i in range(8)]
 
         process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'africa_subregion', long_names)
-
-    print(long_names)
-
-    print("Got here")

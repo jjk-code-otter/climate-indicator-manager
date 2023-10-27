@@ -73,11 +73,6 @@ if __name__ == "__main__":
 
     data_dir = project_dir / "Data"
     shape_dir = project_dir / "Shape_Files"
-    fdata_dir = project_dir / "Formatted_Data"
-    figure_dir = project_dir / 'Figures'
-    log_dir = project_dir / 'Logs'
-    report_dir = project_dir / 'Reports'
-    report_dir.mkdir(exist_ok=True)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
@@ -102,7 +97,3 @@ if __name__ == "__main__":
 
         process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'sl_africa_subregion',
                         start_year, final_year, long_names)
-
-    print(long_names)
-
-    print("Got here")
