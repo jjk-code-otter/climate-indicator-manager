@@ -107,18 +107,25 @@ def equivalence(key):
         'wmo_ra_4': 'North America',
         'wmo_ra_5': 'Southwest Pacific',
         'wmo_ra_6': 'Europe',
+
         'africa_subregion_1': 'North Africa',
         'africa_subregion_2': 'West Africa',
         'africa_subregion_3': 'Central Africa',
         'africa_subregion_4': 'Eastern Africa',
         'africa_subregion_5': 'Southern Africa',
         'africa_subregion_6': 'Indian Ocean',
+
         'lac_subregion_1': 'South America',
         'lac_subregion_2': 'Mexico and Central America',
         'lac_subregion_3': 'Caribbean',
         'lac_subregion_4': 'Mexico',
         'lac_subregion_5': 'Central America',
-        'lac_subregion_6': 'Latin America and Caribbean'
+        'lac_subregion_6': 'Latin America and Caribbean',
+
+        'arab_subregion_1': 'League of Arab States',
+        'arab_subregion_2': 'North Africa LAS',
+        'arab_subregion_3': 'East Africa LAS',
+        'arab_subregion_4': 'Middle East LAS'
     }
     return lookup[key]
 
