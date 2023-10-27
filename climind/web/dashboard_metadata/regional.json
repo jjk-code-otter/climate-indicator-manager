@@ -41,37 +41,43 @@
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+        },
+        {
+          "link_to": "arab_regions", "title": "Arab League",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature"}
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -154,37 +160,37 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -213,7 +219,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -276,7 +282,7 @@
           }
         },
         {
-          "link_to":  null, "title": "Region definitions",
+          "link_to":  null, "title": "LAC Region definitions",
           "selecting": {
             "type": "timeseries",
             "variable": ["none"],
@@ -284,7 +290,7 @@
           },
           "processing": [],
           "plotting": {
-            "function": "show_premade_image", "title": "Region definitions",
+            "function": "show_premade_image", "title": "LAC Region definitions",
             "kwargs": {"original_filename":  "LAC_regions.png", "caption": "Region definitions. Area within each region is indicated in red."}
           }
         }
@@ -292,27 +298,27 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -341,7 +347,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -376,12 +382,12 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -410,7 +416,86 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2022]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        }
+      ]
+    },
+    {
+      "id": "arab_regions",
+      "name": "Arab League",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Arab League",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "North Africa",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "North African Arab League States annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "East Africa",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "Middle East",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature"}
+        },
+        {
+          "link_to":  null, "title": "LAS Region definitions",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "LAS Region definitions",
+            "kwargs": {"original_filename":  "Arab_regions.png", "caption": "Region definitions. Area within each region is indicated in red."}
+          }
+        },
+        {
+          "link_to":  null, "title": "Regional trends LAS",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "trends_plot", "title": "Regional trends LAS",
+            "kwargs": {"order":  ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"]}
+          }
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]

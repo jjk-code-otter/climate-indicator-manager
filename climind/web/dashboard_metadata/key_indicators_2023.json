@@ -46,6 +46,14 @@
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
+        },
+        {
+          "link_to":  null, "title": "Precipitation",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2023, 9]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Precipitation quantiles"}
+
         }
       ],
       "paragraphs": [

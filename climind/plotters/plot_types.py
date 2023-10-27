@@ -107,18 +107,25 @@ def equivalence(key):
         'wmo_ra_4': 'North America',
         'wmo_ra_5': 'Southwest Pacific',
         'wmo_ra_6': 'Europe',
+
         'africa_subregion_1': 'North Africa',
         'africa_subregion_2': 'West Africa',
         'africa_subregion_3': 'Central Africa',
         'africa_subregion_4': 'Eastern Africa',
         'africa_subregion_5': 'Southern Africa',
         'africa_subregion_6': 'Indian Ocean',
+
         'lac_subregion_1': 'South America',
         'lac_subregion_2': 'Mexico and Central America',
         'lac_subregion_3': 'Caribbean',
         'lac_subregion_4': 'Mexico',
         'lac_subregion_5': 'Central America',
-        'lac_subregion_6': 'Latin America and Caribbean'
+        'lac_subregion_6': 'Latin America and Caribbean',
+
+        'arab_subregion_1': 'League of Arab States',
+        'arab_subregion_2': 'North Africa LAS',
+        'arab_subregion_3': 'East Africa LAS',
+        'arab_subregion_4': 'Middle East LAS'
     }
     return lookup[key]
 
@@ -1190,6 +1197,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         Title for the plot
     var: str
         Variabel to plot from the dataset
+        Variabel to plot from the dataset
 
     Returns
     -------
@@ -1209,7 +1217,10 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         wmo_levels = [-110, -90, -70, -50, -30, -10, 10, 30, 50, 70, 90, 110]
         wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
                     '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
-    elif var == 'sla':
+    elif 'precip_quantiles' in var:
+        wmo_levels = [0, 0.1, 0.2, 0.8, 0.9, 1]
+        wmo_cols = ['#543005', '#bf812d', '#e5e5e5', '#35978f', '#003c30']
+    elif var == 'sealevel':
         wmo_levels = [-300, -250, -200, -150, -100, -50, 0, 50, 100, 150, 200, 250, 300]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
@@ -1239,7 +1250,9 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     cbar.set_ticklabels(wmo_levels)
     if var == 'pre':
         cbar.set_label(r'Precipitation difference from 1981-2010 average (mm)', rotation=0, fontsize=15)
-    elif var == 'sla':
+    elif 'precip_quantiles' in var:
+        cbar.set_label(r'Precipitation quantile based on 1991-2020', rotation=0, fontsize=15)
+    elif var == 'sealevel':
         cbar.set_label(r'Sea level difference from long term mean average (mm)', rotation=0, fontsize=15)
     elif var == 'sealeveltrend':
         cbar.set_label(r'Sea level trend (mm/year)', rotation=0, fontsize=15)
@@ -1353,6 +1366,9 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+    if 'precip_quantiles' in main_variable:
+        wmo_levels = [0, 0.1, 0.2, 0.8, 0.9, 1]
+        wmo_cols = ['#543005', '#bf812d', '#e5e5e5', '#35978f', '#003c30']
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
@@ -1392,6 +1408,8 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     if main_variable == 'sealeveltrend':
         label_text = r'Sea level trend (mm/year)'
+    if 'precip_quantiles' in main_variable:
+        label_text = r'Precipitation quantile relative to 1991-2020'
     cbar.set_label(label_text, rotation=0, fontsize=15)
 
     p.axes.coastlines()

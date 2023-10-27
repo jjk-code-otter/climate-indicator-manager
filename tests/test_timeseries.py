@@ -754,6 +754,42 @@ def test_get_string_date_range_monthly(simple_monthly):
 
 
 # Annual tests
+def test_record_margins(simple_annual):
+    margins = simple_annual.record_margins()
+
+    # first element is nan
+    assert np.isnan(margins.df.data[0])
+
+    for i in range(1, len(margins.df.data)):
+        assert pytest.approx(1 / 1000, 0.0001) == margins.df.data[i]
+
+
+def test_record_margins_negative(simple_annual):
+    simple_annual.df.data = -1 * simple_annual.df.data
+    margins = simple_annual.record_margins()
+
+    # first element is nan
+    assert np.isnan(margins.df.data[0])
+
+    for i in range(1, len(margins.df.data)):
+        assert pytest.approx(-1 / 1000, 0.0001) == margins.df.data[i]
+
+def test_record_margins_with_nonrecord(simple_annual):
+    simple_annual.df.data[120] = simple_annual.df.data[118]
+    margins = simple_annual.record_margins()
+
+    # first element is nan
+    assert np.isnan(margins.df.data[0])
+
+    for i in range(1, len(margins.df.data)):
+        if i == 120:
+            assert np.isnan(margins.df.data[i])
+        elif i == 121:
+            assert pytest.approx(2 / 1000, 0.0001) == margins.df.data[i]
+        else:
+            assert pytest.approx(1 / 1000, 0.0001) == margins.df.data[i]
+
+
 def test_make_from_df(uncertainty_annual):
     annual = ts.TimeSeriesAnnual.make_from_df(uncertainty_annual.df, uncertainty_annual.metadata)
     assert isinstance(annual, ts.TimeSeriesAnnual)

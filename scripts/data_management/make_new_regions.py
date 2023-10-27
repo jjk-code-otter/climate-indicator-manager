@@ -190,7 +190,7 @@ def create_shape_file(main_index, region_json_file) -> Tuple[str, gp.GeoDataFram
     region_clipped['region'] = area_name
 
     # Save the shape file
-#    region_clipped.to_file(out_shape_dir / f'{area_name}')
+    region_clipped.to_file(out_shape_dir / f'{area_name}')
 
     return area_name, region_clipped, whole_world
 
@@ -207,39 +207,42 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2)
     i1, i2 = 0, 0
 
-    #region_json_file = 'sub_regions.json'
-    #output_image = 'LAC_regions'
-    #n_regions = 6
-    #region_selection = [0, 2, 3, 4]
+    for set in range(2):
 
-    region_json_file = 'coastal_regions.json'
-    output_image = 'Coastal_regions'
-    n_regions = 4
-    region_selection = [0, 1, 2, 3]
+        if set == 0:
+            region_json_file = 'sub_regions.json'
+            output_image = 'LAC_regions'
+            n_regions = 6
+            region_selection = [0, 2, 3, 4]
+        elif set == 1:
+            region_json_file = 'arab_regions.json'
+            output_image = 'Arab_regions'
+            n_regions = 4
+            region_selection = [0, 1, 2, 3]
 
-    for main_index in range(n_regions):
-        area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)
+        for main_index in range(n_regions):
+            area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)
 
-        if main_index in region_selection:
-            minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
+            if main_index in region_selection:
+                minx, miny, maxx, maxy = region_clipped.geometry.total_bounds
 
-            whole_world.plot(ax=axs[i1][i2], color='lightgrey')
-            region_clipped.plot(ax=axs[i1][i2], color='lightcoral')
+                whole_world.plot(ax=axs[i1][i2], color='lightgrey')
+                region_clipped.plot(ax=axs[i1][i2], color='lightcoral')
 
-            axs[i1, i2].set_title(area_name, fontsize=10)
-            axs[i1, i2].set_xlim(minx - 2, maxx + 2)
-            axs[i1, i2].set_ylim(miny - 2, maxy + 2)
+                axs[i1, i2].set_title(area_name, fontsize=10)
+                axs[i1, i2].set_xlim(minx - 2, maxx + 2)
+                axs[i1, i2].set_ylim(miny - 2, maxy + 2)
 
-            axs[i1][i2].set_xticklabels([])
-            axs[i1][i2].set_yticklabels([])
-            axs[i1][i2].set_xticks([])
-            axs[i1][i2].set_yticks([])
+                axs[i1][i2].set_xticklabels([])
+                axs[i1][i2].set_yticklabels([])
+                axs[i1][i2].set_xticks([])
+                axs[i1][i2].set_yticks([])
 
-            i1, i2 = increment_indices(i1, i2, 2, 2)
+                i1, i2 = increment_indices(i1, i2, 2, 2)
 
-    plt.subplots_adjust(hspace=0.15)
-    project_dir = DATA_DIR / "ManagedData"
-    plt.savefig(project_dir / 'Figures' / f'{output_image}.png')
-    plt.savefig(project_dir / 'Figures' / f'{output_image}.svg')
-    plt.savefig(project_dir / 'Figures' / f'{output_image}.pdf')
-    plt.close()
+        plt.subplots_adjust(hspace=0.15)
+        project_dir = DATA_DIR / "ManagedData"
+        plt.savefig(project_dir / 'Figures' / f'{output_image}.png')
+        plt.savefig(project_dir / 'Figures' / f'{output_image}.svg')
+        plt.savefig(project_dir / 'Figures' / f'{output_image}.pdf')
+        plt.close()

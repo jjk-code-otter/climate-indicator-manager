@@ -31,8 +31,7 @@ def process_africa_sea_level_shape_files(in_shape_dir):
     return subregions
 
 
-def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, start_year, final_year,
-                    long_names) -> None:
+def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, long_names) -> None:
     n_regions = len(region_names)
 
     for region in range(n_regions):
@@ -56,7 +55,7 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
 
 if __name__ == "__main__":
 
-    datasets_to_use = ['CDS sea level']
+    datasets_to_use = ['CMEMS trend']
     start_year = 1993
     final_year = 2022
 
@@ -79,7 +78,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select(
         {
-            'variable': 'sealevel',
+            'variable': 'sealeveltrend',
             'type': 'gridded',
             'time_resolution': 'monthly',
             'name': datasets_to_use
@@ -95,5 +94,4 @@ if __name__ == "__main__":
         sub_region_names = sea_level_subregions.Name
         long_names = [f'Regional mean sea level for WMO RA 1 {sub_region_names[i]}' for i in range(8)]
 
-        process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'sl_africa_subregion',
-                        start_year, final_year, long_names)
+        process_regions(sub_region_names, sea_level_subregions, regional_data_dir, ds, 'africa_subregion', long_names)

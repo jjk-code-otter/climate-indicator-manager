@@ -30,7 +30,7 @@ def fetch(url: str, outdir: Path, _) -> None:
 
     Parameters
     ----------
-    url: srt
+    url: str
         URL of the file to be downloaded, containing wildcards for information that needs to be matched
         on a case by case basis.
     outdir: Path

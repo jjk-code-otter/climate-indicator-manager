@@ -24,7 +24,7 @@
     "units": {
       "description": "Units of the variable",
       "enum": [
-        "1","degC", "zJ", "hPa",
+        "1","degC", "zJ", "hPa", "quantile",
         "ppm", "ppm/year", "ppb", "ppb/year",
         "mm", "mm/year", "%", "millionkm2", "Gt", "ph", "mwe", "diy"
       ]
