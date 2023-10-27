@@ -44,8 +44,6 @@ def get_file(filled_url, out_path):
     except requests.exceptions.ConnectionError:
         print(f"Couldn't connect to {filled_url}")
 
-    return
-
 
 def fetch(url: str, outdir: Path, _) -> None:
     """
