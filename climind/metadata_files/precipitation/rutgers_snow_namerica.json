@@ -1,0 +1,30 @@
+{
+    "name": "Rutgers NAM",
+    "display_name": "Rutgers",
+    "version": "",
+    "variable": "snow_nam",
+    "units": "millionkm2",
+    "citation": [""],
+    "citation_url": [""],
+    "data_citation": [""],
+    "acknowledgement": "",
+    "colour": "#009e73",
+    "zpos": 10,
+    "datasets": [
+        {
+            "url": ["https://climate.rutgers.edu/snowcover/files/moncov.namgnld.txt"],
+            "filename": ["moncov.namgnld.txt"],
+            "type": "timeseries",
+            "long_name": "Northern hemisphere snow cover",
+            "time_resolution": "monthly",
+            "space_resolution": 999,
+            "climatology_start": 1961,
+            "climatology_end": 1990,
+            "actual": true,
+            "derived": false,
+            "history": [],
+            "reader": "reader_rutgers",
+            "fetcher": "fetcher_standard_url"
+        }
+    ]
+}

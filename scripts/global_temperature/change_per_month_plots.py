@@ -102,6 +102,7 @@ if __name__ == "__main__":
         utils.run_the_numbers(anns, final_year, f'{month:02d}_only_stats', report_dir)
         utils.record_margins(anns, final_year, f'{month:02d}_record_margins', report_dir)
         utils.record_margins(sst_anns, final_year, f'{month:02d}_sst_record_margins', report_dir)
+        utils.record_margins(lsat_anns, final_year, f'{month:02d}_lsat_record_margins', report_dir)
 
         if month == 1:
             all_datasets = ts_archive.read_datasets(data_dir)

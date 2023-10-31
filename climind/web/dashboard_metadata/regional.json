@@ -149,6 +149,19 @@
             "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
                                   "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
           }
+        },
+        {
+          "link_to":  null, "title": "Temperature anomalies",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Temperature anomalies",
+            "kwargs": {"original_filename":  "Temperature_anomaly_map_Africa.png", "caption": "Temperature anomalies"}
+          }
         }
       ],
       "paragraphs": [
@@ -207,6 +220,19 @@
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Temperature anomalies RAII",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Temperature anomalies RAII",
+            "kwargs": {"original_filename":  "Temperature_anomaly_map_Asia.png", "caption": "Temperature anomalies RAII"}
           }
         }
       ],
@@ -273,6 +299,19 @@
           "plotting": {
             "function": "trends_plot", "title": "Regional trends LAC",
             "kwargs": {"order":  ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Temperature anomalies LAC",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Temperature anomalies LAC",
+            "kwargs": {"original_filename":  "Temperature_anomaly_map_LAC.png", "caption": "Temperature anomalies LAC"}
           }
         },
         {
@@ -371,6 +410,19 @@
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
+        },
+        {
+          "link_to":  null, "title": "Temperature anomalies SWPacific",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Temperature anomalies SWPacific",
+            "kwargs": {"original_filename":  "Temperature_anomaly_map_SWPacific.png", "caption": "Temperature anomalies SWPacific"}
+          }
         }
       ],
       "paragraphs": [
@@ -404,6 +456,19 @@
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+          }
+        },
+        {
+          "link_to":  null, "title": "Temperature anomalies Europe",
+          "selecting": {
+            "type": "timeseries",
+            "variable": ["none"],
+            "time_resolution": "annual"
+          },
+          "processing": [],
+          "plotting": {
+            "function": "show_premade_image", "title": "Temperature anomalies Europe",
+            "kwargs": {"original_filename":  "Temperature_anomaly_map_Europe.png", "caption": "Temperature anomalies Europe"}
           }
         }
       ],
