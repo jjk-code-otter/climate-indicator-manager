@@ -70,14 +70,15 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             year = columns[0][0:4]
             month = columns[0][5:7]
 
-            years.append(int(year))
-            months.append(int(month))
             if columns[1] != '':
+                years.append(int(year))
+                months.append(int(month))
                 anomalies.append(float(columns[1]))
                 uncertainty.append((float(columns[3])-float(columns[2]))/2.)
             else:
-                anomalies.append(np.nan)
-                uncertainty.append(np.nan)
+                pass
+#                anomalies.append(np.nan)
+#                uncertainty.append(np.nan)
 
     metadata.creation_message()
 

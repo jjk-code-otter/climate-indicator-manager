@@ -69,7 +69,7 @@ def read_nsidc_daily(sea_ice_file, final_year):
     df_rsmpld = df.reindex(t_index, method=None)
     df = df_rsmpld
 
-    df2 = df.rolling(5, center=True).mean()
+    df2 = df.rolling(3, center=True).mean()
     df.Extent = df2.Extent
 
     df.Year = t_index.year
@@ -432,10 +432,12 @@ final_year = 2023
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
+climatology2, climatology_stdev2 = calculate_climatology(1981, 2010, df)
 climatology_min, climatology_max, full_series_mean, full_series_stdev = calculate_historical_stats(final_year, df)
 
 # Copy results back into main dataframe
 df['climatology'] = climatology
+df['climatology2'] = climatology2
 df['cmax'] = climatology_max
 df['cmin'] = climatology_min
 df['anomalies'] = df.Extent - climatology
@@ -481,10 +483,12 @@ final_year = 2023
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
+climatology2, climatology_stdev2 = calculate_climatology(1981, 2010, df)
 climatology_min, climatology_max, full_series_mean, full_series_stdev = calculate_historical_stats(final_year, df)
 
 # Copy results back into main dataframe
 df['climatology'] = climatology
+df['climatology2'] = climatology2
 df['cmax'] = climatology_max
 df['cmin'] = climatology_min
 df['anomalies'] = df.Extent - climatology

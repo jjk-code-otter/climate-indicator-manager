@@ -60,6 +60,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
+                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'Berkeley Earth', 'ERA5', 'JRA-55'],
                                  'time_resolution': 'monthly'})
 
     sst_archive = archive.select({'variable': 'sst',
@@ -181,12 +182,12 @@ if __name__ == "__main__":
     print()
     print("Single year statistics")
     utils.run_the_numbers(all_annual_datasets, final_year, 'annual_stats', report_dir)
-    utils.run_the_numbers(all_8110_datasets, final_year, 'annual_stats_8110', report_dir)
-    utils.run_the_numbers(all_9120_datasets, final_year, 'annual_stats_9120', report_dir)
-    utils.run_the_numbers(all_6190_datasets, final_year, 'annual_stats_6190', report_dir)
+    utils.run_the_numbers(all_8110_datasets, final_year, 'annual_stats_8110', report_dir, ipcc_unc=False)
+    utils.run_the_numbers(all_9120_datasets, final_year, 'annual_stats_9120', report_dir, ipcc_unc=False)
+    utils.run_the_numbers(all_6190_datasets, final_year, 'annual_stats_6190', report_dir, ipcc_unc=False)
 
-    utils.run_the_numbers(sst_anns, final_year, 'sst_annual_stats', report_dir)
-    utils.run_the_numbers(lsat_anns, final_year, 'lsat_annual_stats', report_dir)
+    utils.run_the_numbers(sst_anns, final_year, 'sst_annual_stats', report_dir, ipcc_unc=False)
+    utils.run_the_numbers(lsat_anns, final_year, 'lsat_annual_stats', report_dir, ipcc_unc=False)
 
     utils.run_the_numbers(all_alt_datasets, final_year, 'alt_stats', report_dir)
 

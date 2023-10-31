@@ -37,6 +37,7 @@ def table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
 
     return out_text
 
+
 def record_margin_table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
     out_text = ''
     for year in range(match_year - years_to_show, match_year + 1):
@@ -84,7 +85,7 @@ def get_ranks(datasets, match_year):
 
 
 def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
-                    match_year: int, title: str, output_dir: Path):
+                    match_year: int, title: str, output_dir: Path, ipcc_unc: bool = True):
     """
     Given a list of datasets calculate various statistics relating to ranking and values
 
@@ -119,7 +120,8 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
 
         if len(all_match_values) > 0:
             sd = np.std(all_match_values) * 1.645
-            sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
+            if ipcc_unc:
+                sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
 
             mean_value = np.mean(all_match_values)
             min_value = np.min(all_match_values)
@@ -131,7 +133,7 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
             output_file.write(f'Mean for {match_year}: {mean_value :.2f} +- {sd:.2f} degC '
                               f'[{min_value :.2f}-{max_value :.2f}]\n')
             output_file.write(f'(alt rep) Mean for {match_year}: {mean_value :.2f} '
-                              f'[{mean_value-sd:.2f} - {mean_value+sd:.2f}] degC\n')
+                              f'[{mean_value - sd:.2f} - {mean_value + sd:.2f}] degC\n')
             output_file.write(f'Rank between {min_rank} and {max_rank}\n')
             output_file.write(f'Based on {len(all_match_values)} data sets.\n')
         else:
@@ -139,8 +141,7 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
 
 
 def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
-                    match_year: int, title: str, output_dir: Path):
-
+                   match_year: int, title: str, output_dir: Path):
     with open(output_dir / f'{title}_{match_year}.txt', 'w') as output_file:
         # Table summary of all data sets
         out_line = 'Year '
@@ -148,5 +149,4 @@ def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
             out_line += f"{ds.metadata['name']:10.10} "
         output_file.write(f'{out_line}\n')
 
-        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=40))
-
+        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=60))
