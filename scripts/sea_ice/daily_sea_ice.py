@@ -69,7 +69,7 @@ def read_nsidc_daily(sea_ice_file, final_year):
     df_rsmpld = df.reindex(t_index, method=None)
     df = df_rsmpld
 
-    df2 = df.rolling(3, center=True).mean()
+    df2 = df.rolling(5, center=True, min_periods=1).mean()
     df.Extent = df2.Extent
 
     df.Year = t_index.year
@@ -412,11 +412,11 @@ def plot_simplified_annual_cycle_nh(df, project_dir, image_filename, nh=False):
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
     plt.text(xloc, yloc, 'Record low\n1979-2022', color=col_record, fontdict={'fontsize': 18}, ha='left')
 
-    yloc = ylim[0] + 0.31 * (ylim[1] - ylim[0])
-    xloc = xlim[0] + 0.80 * (xlim[1] - xlim[0])
+    yloc = ylim[0] + 0.325 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.81 * (xlim[1] - xlim[0])
     plt.text(xloc, yloc, '2023 extent', color=col_ext, fontdict={'fontsize': 18})   #red
 
-    plt.gca().set_ylim(-0.5, 16.5)
+    plt.gca().set_ylim(-0.5, 17.5)
 
     plt.savefig(project_dir / 'Figures' / image_filename)
     plt.savefig(project_dir / 'Figures' / image_filename.replace('.png','.svg'))
@@ -504,3 +504,25 @@ plot_timeseries(df, project_dir, 'arctic_daily_long_view.png',
                 'Difference from 1991-2020 average')
 plot_annual_cycle(df, project_dir, 'arctic_daily.png', nh=True)
 plot_simplified_annual_cycle_nh(df, project_dir, 'arctic_daily_simple.png')
+
+all_mins = []
+all_maxs = []
+for year in range(1981,2010):
+    sub_df = df[df['Year'] == year]
+    min_val = np.min(sub_df.Extent)
+    max_val = np.max(sub_df.Extent)
+    all_mins.append(min_val)
+    all_maxs.append(max_val)
+
+print(f"1981-2010 mean min = {np.mean(all_mins)} and mean max = {np.mean(all_maxs)}")
+
+all_mins = []
+all_maxs = []
+for year in range(1991,2020):
+    sub_df = df[df['Year'] == year]
+    min_val = np.min(sub_df.Extent)
+    max_val = np.max(sub_df.Extent)
+    all_mins.append(min_val)
+    all_maxs.append(max_val)
+
+print(f"1991-2020 mean min = {np.mean(all_mins)} and mean max = {np.mean(all_maxs)}")

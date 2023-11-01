@@ -135,6 +135,9 @@ def label_regions(countries: gp.GeoDataFrame, region_name: str, country_list: Li
         countries.at[i, 'wmosubregion'] = default
         if countries.ISO_A2_EH[i] in country_list:
             countries.at[i, 'wmosubregion'] = region_name
+        # Hack needed to find Somaliland as part of Somalia
+        if "SOL" in country_list and countries.SOV_A3[i] == "SOL":
+            countries.at[i, 'wmosubregion'] = region_name
 
     return countries
 
@@ -204,10 +207,11 @@ def increment_indices(i1, i2, n1, n2):
 
 
 if __name__ == '__main__':
-    fig, axs = plt.subplots(2, 2)
-    i1, i2 = 0, 0
 
     for set in range(2):
+
+        fig, axs = plt.subplots(2, 2)
+        i1, i2 = 0, 0
 
         if set == 0:
             region_json_file = 'sub_regions.json'
