@@ -1,0 +1,30 @@
+{
+  "name": "CMEMS",
+  "display_name": "CMEMS",
+  "version": "",
+  "variable": "ph",
+  "units": "ph",
+  "citation": ["Gehlen M., Thi Tuyet Trang Chau, Anna Conchon, Anna Denvil-Sommer, Frédéric Chevallier, Mathieu Vrac, Carlos Mejia (2020). Ocean acidification. In: Copernicus Marine Service Ocean State Report, Issue 4, Journal of Operational Oceanography, 13:sup1, s88–s91; DOI: 10.1080/1755876X.2020.1785097"],
+  "citation_url": ["https://doi.org/10.1080/1755876X.2020.1785097"],
+  "data_citation": ["https://doi.org/10.48670/moi-00224"],
+  "acknowledgement": "",
+  "colour": "#cc79a7",
+  "zpos": 10,
+  "datasets": [
+	{
+      "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_HEALTH_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged_1985_P*.nc"],
+      "filename": ["global_omi_health_carbon_ph_area_averaged_1985_P*.nc"],
+      "type": "timeseries",
+      "long_name": "Global ocean pH",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cmems_ph",
+	  "fetcher": "fetcher_cmems_ftp"
+    }
+  ]
+}

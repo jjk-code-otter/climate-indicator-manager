@@ -209,7 +209,7 @@ def test_read_error_handler(mocker, test_dataset, test_attributes):
     # Mock it so that the get_reader function returns a simple function as specified
     _ = mocker.patch('climind.data_manager.processing.DataSet._get_reader', new=error_return)
 
-    match_phrase = "Error occurred while executing reader_fn: A simple error"
+    match_phrase = r"Error occurred while executing reader_fn: A simple error"
     with pytest.raises(RuntimeError, match=match_phrase):
         _, _ = ds.read_dataset(Path(''))
 
@@ -352,12 +352,49 @@ def test_creation_from_directory():
     metadata_dir = Path('test_data')
     da = dm.DataArchive.from_directory(metadata_dir)
     assert isinstance(da, dm.DataArchive)
+    assert len(da.collections) == 2
+
+    metadata_dir = Path('test_data_2')
+    da = dm.DataArchive.from_directory(metadata_dir)
+    assert isinstance(da, dm.DataArchive)
+    assert len(da.collections) == 1
+
+
+def test_creation_from_directory_list():
+    metadata_dir = [Path('test_data'), Path('test_data_2')]
+    da = dm.DataArchive.from_directory(metadata_dir)
+    assert isinstance(da, dm.DataArchive)
+    assert len(da.collections) == 3
 
 
 def test_select_from_archive():
     metadata_dir = Path('test_data')
     da = dm.DataArchive.from_directory(metadata_dir)
     selected_da = da.select({'type': 'gridded'})
+
+    assert len(da.collections['HadCRUT5'].datasets) == 2
+    assert len(selected_da.collections['HadCRUT5'].datasets) == 1
+
+    assert len(da.collections['GISTEMP'].datasets) == 2
+    assert len(selected_da.collections['GISTEMP'].datasets) == 1
+
+
+def test_select_from_archive_with_list():
+    metadata_dir = [Path('test_data'), Path('test_data_2')]
+    da = dm.DataArchive.from_directory(metadata_dir)
+    selected_da = da.select({'type': 'gridded'})
+
+    assert len(da.collections['HadCRUT5'].datasets) == 2
+    assert len(selected_da.collections['HadCRUT5'].datasets) == 1
+
+    assert len(da.collections['GISTEMP'].datasets) == 2
+    assert len(selected_da.collections['GISTEMP'].datasets) == 1
+
+    metadata_dir = [Path('test_data'), Path('test_data_2')]
+    da = dm.DataArchive.from_directory(metadata_dir)
+    selected_da = da.select({'type': 'timeseries'})
+
+    assert len(da.collections) == 3
 
     assert len(da.collections['HadCRUT5'].datasets) == 2
     assert len(selected_da.collections['HadCRUT5'].datasets) == 1

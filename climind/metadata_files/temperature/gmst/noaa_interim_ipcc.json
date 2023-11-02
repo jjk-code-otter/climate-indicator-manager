@@ -2,7 +2,7 @@
   "name": "NOAA Interim IPCC",
   "display_name": "NOAA Interim IPCC",
   "version": "",
-  "variable": "tas",
+  "variable": "tas IGNORE",
   "units": "degC",
   "citation": ["Vose, R. S., Huang, B., Yin, X., Arndt, D., Easterling, D. R., Lawrimore, J. H., et al. (2021). Implementing full spatial coverage in NOAA’s global temperature analysis. Geophysical Research Letters, 48, e2020GL090873. https://doi.org/10.1029/2020GL090873"],
   "citation_url": ["https://doi.org/10.1029/2020GL090873"],

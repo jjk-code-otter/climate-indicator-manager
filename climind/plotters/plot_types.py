@@ -1095,9 +1095,9 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             min_rank, max_rank = calculate_ranks(all_datasets, final_year)
             mean_value, min_value, max_value = calculate_values(all_datasets, final_year)
 
-            print(f'{names[pos_ind]}  {final_year} {mean_value:.2f} ({min_value:.2f}-{max_value:.2f}), '
-                  f'rank: {min_rank}-{max_rank}')
-            print(f'{start_end[0]}-{start_end[1]} {mean_trend:.2f} ({min_trend:.2f}-{max_trend:.2f})')
+            # print(f'{names[pos_ind]}  {final_year} {mean_value:.2f} ({min_value:.2f}-{max_value:.2f}), '
+            #       f'rank: {min_rank}-{max_rank}')
+            # print(f'{start_end[0]}-{start_end[1]} {mean_trend:.2f} ({min_trend:.2f}-{max_trend:.2f})')
 
             interset_delta = 0.4
             width = (30. - 2 * interset_delta) / float(series_count)

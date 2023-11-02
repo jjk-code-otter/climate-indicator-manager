@@ -495,7 +495,7 @@ class Dashboard:
         metadata: dict
             Dictionary containing the dashboard metadata
         archive: DataArchive
-            Data archive that will be used to populate the dashboard
+            Metadata archive that will be used to populate the dashboard
         """
         self.metadata = metadata
         self.archive = archive
