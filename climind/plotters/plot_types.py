@@ -380,7 +380,7 @@ def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
 
 def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-              image_filename: str, title: str, dark: bool = False) -> str:
+              image_filename: str, title: str, dark: bool = False, yrange: List[float] =None) -> str:
     """
     Create the standard annual plot
 
@@ -422,6 +422,9 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     sns.despine(right=True, top=True, left=True)
 
     add_labels(plt.gca(), ds)
+
+    if yrange is not None:
+        plt.gca().set_ylim(yrange[0], yrange[1])
 
     _, _, yticks = set_yaxis(plt.gca(), ds)
     _, _, xticks = set_xaxis(plt.gca())

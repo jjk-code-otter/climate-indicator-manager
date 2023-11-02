@@ -7,40 +7,40 @@
       "template": "front_page",
       "cards": [
         {
-          "link_to": "wmo_ra_i", "title": "WMO RA I Africa",
+          "link_to": "wmo_ra_i", "title": "WMO RA I Africa main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
-          "link_to": "wmo_ra_ii", "title": "WMO RA II Asia",
+          "link_to": "wmo_ra_ii", "title": "WMO RA II Asia main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
-          "link_to": "wmo_ra_iii", "title": "WMO RA III South America",
+          "link_to": "wmo_ra_iii", "title": "WMO RA III South America main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
-          "link_to": "wmo_ra_iv", "title": "WMO RA IV North America",
+          "link_to": "wmo_ra_iv", "title": "WMO RA IV North America main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
-          "link_to": "wmo_ra_v", "title": "WMO RA V Southwest Pacific",
+          "link_to": "wmo_ra_v", "title": "WMO RA V Southwest Pacific main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
-          "link_to": "wmo_ra_vi", "title": "WMO RA VI Europe",
+          "link_to": "wmo_ra_vi", "title": "WMO RA VI Europe main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         }
       ],
       "paragraphs": [
@@ -94,43 +94,43 @@
           "link_to":  null, "title": "WMO RA I Africa",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "North Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "North Africa"}
+          "plotting": {"function": "neat_plot", "title": "North Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "West Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "West Africa"}
+          "plotting": {"function": "neat_plot", "title": "West Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Central Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Central Africa"}
+          "plotting": {"function": "neat_plot", "title": "Central Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Eastern Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Eastern Africa"}
+          "plotting": {"function": "neat_plot", "title": "Eastern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Southern Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Southern Africa"}
+          "plotting": {"function": "neat_plot", "title": "Southern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Indian Ocean",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Indian Ocean"}
+          "plotting": {"function": "neat_plot", "title": "Indian Ocean", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
@@ -286,31 +286,31 @@
           "link_to":  null, "title": "WMO RA III South America",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Caribbean",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Caribbean"}
+          "plotting": {"function": "neat_plot", "title": "Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Mexico",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Mexico"}
+          "plotting": {"function": "neat_plot", "title": "Mexico", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Central America",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Central America"}
+          "plotting": {"function": "neat_plot", "title": "Central America", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Latin America and the Caribbean",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean"}
+          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
@@ -448,13 +448,13 @@
           "link_to":  null, "title": "WMO RA V Southwest Pacific",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
           "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean)",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
@@ -567,25 +567,25 @@
           "link_to":  null, "title": "Arab League",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "North Africa",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "North African Arab League States annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "North African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "East Africa",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "Middle East",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "LAS Region definitions",
