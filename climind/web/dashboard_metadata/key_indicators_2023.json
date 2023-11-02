@@ -54,6 +54,15 @@
           "processing":  [{"method":  "select_year_and_month", "args": [2023, 9]}],
           "plotting": {"function": "dashboard_map_single", "title": "Precipitation quantiles"}
 
+        },
+        {
+          "link_to": "short_term_climate_drivers", "title":"Short-term Climate Drivers",
+          "selecting": {"type": "timeseries", "variable": "nino34", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Nino 3.4"}
         }
       ],
       "paragraphs": [
@@ -229,12 +238,6 @@
           "plotting": {"function": "neat_plot", "title": "Ocean pH"}
         },
         {
-          "link_to":  null, "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [],
-          "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
-        },
-        {
           "link_to":  null, "title": "Marine heat waves",
           "selecting": {"type": "timeseries", "variable": ["mhw", "mcs"], "time_resolution": "annual"},
           "processing": [],
@@ -287,18 +290,6 @@
           "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
           "processing": [],
           "plotting": {"function": "dashboard_map_single", "title": "Regional sea level change from 1993-August 2022"}
-        },
-        {
-          "link_to":  null, "title": "Ocean heat content",
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
-          "processing":  [{"method": "add_year", "args":  [2022, 66.9148993, 3.9471033]}],
-          "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
-        },
-        {
-          "link_to":  null, "title": "Sea-surface temperature",
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
-          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
       ],
       "paragraphs": [
@@ -331,12 +322,6 @@
           "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
-        },
-        {
-          "link_to":  null, "title": "Sea-surface temperature",
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
-          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         }
       ],
       "paragraphs": [
@@ -392,6 +377,62 @@
           "writing": {"function": "greenland_ice_sheet_monthly"}
         }
       ]
+    },
+    {
+      "id": "short_term_climate_drivers",
+      "name": "Short Term Climate Drivers",
+      "descriptor": "short_term_climate_drivers.html",
+      "template": "topic_page",
+      "cards": [
+        {
+          "link_to": null,
+          "title": "ENSO",
+          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Nino 3.4"}
+        },
+        {
+          "link_to": null,
+          "title": "SOI",
+          "selecting": {"type":  "timeseries", "variable": "soi", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Southern Oscillation Index"}
+        },
+        {
+          "link_to": null,
+          "title": "Pacific Decadal Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1950, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
+        },
+        {
+          "link_to": null,
+          "title": "Arctic Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "ao", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [2010, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Arctic Oscillation"}
+        },
+        {
+          "link_to": null,
+          "title": "Antarctic Oscillation",
+          "selecting": {"type":  "timeseries", "variable": "aao", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [2010, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Antarctic Oscillation"}
+        }
+
+      ],
+      "paragraphs": []
     }
   ]
 }
