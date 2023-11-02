@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-202307.nc'] downloaded from ['']",
+                "Gridded dataset created from file ['HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-*.nc'] downloaded from ['']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file Kadow_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-09-24 11:12:58"
+                "2023-11-02 09:03:42"
             ],
-            "last_month": "2023-07-16 00:00:00"
+            "last_month": "2023-09-16 00:00:00"
         }
     ]
 }
