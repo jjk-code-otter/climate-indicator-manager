@@ -386,7 +386,7 @@
       "cards": [
         {
           "link_to": null,
-          "title": "ENSO",
+          "title": "Nino 3.4",
           "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -396,7 +396,7 @@
         },
         {
           "link_to": null,
-          "title": "SOI",
+          "title": "Southern Oscillation Index",
           "selecting": {"type":  "timeseries", "variable": "soi", "time_resolution": "monthly"},
           "processing": [
             {"method": "select_year_range", "args": [1950, 2023]}
