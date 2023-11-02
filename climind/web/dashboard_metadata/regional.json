@@ -45,6 +45,15 @@
       ],
       "paragraphs": [
         {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
@@ -151,20 +160,32 @@
           }
         },
         {
-          "link_to":  null, "title": "Temperature anomalies",
-          "selecting": {
-            "type": "timeseries",
-            "variable": ["none"],
-            "time_resolution": "annual"
-          },
-          "processing": [],
-          "plotting": {
-            "function": "show_premade_image", "title": "Temperature anomalies",
-            "kwargs": {"original_filename":  "Temperature_anomaly_map_Africa.png", "caption": "Temperature anomalies"}
-          }
+          "link_to":  null, "title": "Temperature anomaly map Africa",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map Africa",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         }
       ],
       "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
@@ -223,20 +244,32 @@
           }
         },
         {
-          "link_to":  null, "title": "Temperature anomalies RAII",
-          "selecting": {
-            "type": "timeseries",
-            "variable": ["none"],
-            "time_resolution": "annual"
-          },
-          "processing": [],
-          "plotting": {
-            "function": "show_premade_image", "title": "Temperature anomalies RAII",
-            "kwargs": {"original_filename":  "Temperature_anomaly_map_Asia.png", "caption": "Temperature anomalies RAII"}
-          }
+          "link_to":  null, "title": "Temperature anomaly map Asia",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": -20, "east":  170, "north": 90, "south": 0}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map Asia",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": -20, "east":  170, "north": 90, "south": 0}}
         }
       ],
       "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
@@ -302,17 +335,20 @@
           }
         },
         {
-          "link_to":  null, "title": "Temperature anomalies LAC",
-          "selecting": {
-            "type": "timeseries",
-            "variable": ["none"],
-            "time_resolution": "annual"
-          },
-          "processing": [],
-          "plotting": {
-            "function": "show_premade_image", "title": "Temperature anomalies LAC",
-            "kwargs": {"original_filename":  "Temperature_anomaly_map_LAC.png", "caption": "Temperature anomalies LAC"}
-          }
+          "link_to":  null, "title": "Temperature anomaly map LAC",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map LAC",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "LAC Region definitions",
@@ -329,6 +365,15 @@
         }
       ],
       "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
@@ -379,6 +424,15 @@
       ],
       "paragraphs": [
         {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
@@ -412,20 +466,32 @@
           }
         },
         {
-          "link_to":  null, "title": "Temperature anomalies SWPacific",
-          "selecting": {
-            "type": "timeseries",
-            "variable": ["none"],
-            "time_resolution": "annual"
-          },
-          "processing": [],
-          "plotting": {
-            "function": "show_premade_image", "title": "Temperature anomalies SWPacific",
-            "kwargs": {"original_filename":  "Temperature_anomaly_map_SWPacific.png", "caption": "Temperature anomalies SWPacific"}
-          }
+          "link_to":  null, "title": "Temperature anomaly map SWPacific",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": 90, "east":  180, "north": 20, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map SWPacific",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": 90, "east":  180, "north": 20, "south": -60}}
         }
       ],
       "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
@@ -459,20 +525,32 @@
           }
         },
         {
-          "link_to":  null, "title": "Temperature anomalies Europe",
-          "selecting": {
-            "type": "timeseries",
-            "variable": ["none"],
-            "time_resolution": "annual"
-          },
-          "processing": [],
-          "plotting": {
-            "function": "show_premade_image", "title": "Temperature anomalies Europe",
-            "kwargs": {"original_filename":  "Temperature_anomaly_map_Europe.png", "caption": "Temperature anomalies Europe"}
-          }
+          "link_to":  null, "title": "Temperature anomaly map Europe",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map Europe",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         }
       ],
       "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2023]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],

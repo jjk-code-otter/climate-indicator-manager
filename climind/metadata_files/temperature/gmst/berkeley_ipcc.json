@@ -2,7 +2,7 @@
   "name": "Berkeley IPCC",
   "display_name": "Berkeley IPCC",
   "version": "",
-  "variable": "tas",
+  "variable": "tas IGNORE",
   "units": "degC",
   "citation": ["Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469–3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"],
   "citation_url": ["https://doi.org/10.5194/essd-12-3469-2020"],

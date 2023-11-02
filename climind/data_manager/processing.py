@@ -25,7 +25,7 @@ objects in a :class:`.DataArchive` need not be the same variable.
 """
 import json
 from jsonschema import validate, RefResolver
-from typing import Callable
+from typing import Callable, List, Union
 from pathlib import Path
 from climind.data_manager.metadata import CollectionMetadata, DatasetMetadata, CombinedMetadata
 from climind.definitions import ROOT_DIR
@@ -165,7 +165,7 @@ class DataSet:
 
         return reader_fn
 
-    def read_dataset(self, out_dir: Path, **kwargs):
+    def read_dataset(self, out_dir: Union[List[Path], Path], **kwargs):
         """
         Read in the dataset and output an object of the appropriate type.
 
@@ -178,12 +178,24 @@ class DataSet:
         -------
             Object of the appropriate type
         """
+        if type(out_dir) is not list:
+            out_dir = [out_dir]
+
         # print(f"Reading {self.metadata['name']} using {self.metadata['reader']}")
         reader_fn = self._get_reader()
-        try:
-            self.data = reader_fn(out_dir, self.metadata, **kwargs)
-        except Exception as e:
-            raise RuntimeError(f"Error occurred while executing reader_fn: {e}")
+        exceptions = []
+        success = False
+        for dir in out_dir:
+            try:
+                self.data = reader_fn(dir, self.metadata, **kwargs)
+                success = True
+            except Exception as e:
+                exceptions.append(str(e))
+
+        if not success:
+            exceptions = ' '.join(exceptions)
+            raise RuntimeError(f"Error occurred while executing reader_fn: {exceptions}")
+
         return self.data
 
 
@@ -398,8 +410,11 @@ class DataCollection:
         list
             Return list of all data sets described in the :class:`DataCollection`.
         """
-        collection_dir = out_dir / self.global_attributes['name']
-        collection_dir.mkdir(exist_ok=True)
+        if type(out_dir) is list:
+            collection_dir = [x / self.global_attributes['name'] for x in out_dir]
+        else:
+            collection_dir = out_dir / self.global_attributes['name']
+            #collection_dir.mkdir(exist_ok=True)
 
         all_datasets = []
 
@@ -480,16 +495,16 @@ class DataArchive:
         return out_arch
 
     @staticmethod
-    def from_directory(path_to_dir: Path):
+    def from_directory(path_to_dir: Union[List[Path], Path]):
         """
         Create a :class:`DataArchive` from a directory of metadata. The directory should contain a
         set of json files each of which contains a set of metadata describing a :class:`DataCollection`
 
         Parameters
         ----------
-        path_to_dir : Path
+        path_to_dir : Path or List[Path]
             Path to the directory containing the metadata files that will be used
-            to populate the :class:`DataArchive`
+            to populate the :class:`DataArchive` or a list of such Paths.
         Returns
         -------
         DataArchive
@@ -498,9 +513,13 @@ class DataArchive:
         """
         out_archive = DataArchive()
 
-        for json_file in path_to_dir.rglob('*.json'):
-            dc = DataCollection.from_file(json_file)
-            out_archive.add_collection(dc)
+        if type(path_to_dir) is not list:
+            path_to_dir = [path_to_dir]
+
+        for single_path in path_to_dir:
+            for json_file in single_path.rglob('*.json'):
+                dc = DataCollection.from_file(json_file)
+                out_archive.add_collection(dc)
 
         return out_archive
 
