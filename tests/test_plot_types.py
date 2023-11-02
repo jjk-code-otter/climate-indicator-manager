@@ -71,7 +71,7 @@ def regional_annual_datasets(annual_metadata):
     -------
 
     """
-    region_names = ['tas', 'wmo_ra_1', 'wmo_ra_2', 'wmo_ra_3', 'wmo_ra_4', 'wmo_ra_5', 'wmo_ra_6']
+    region_names = ['tas', 'wmo_ra_1', 'wmo_ra_2', 'wmo_ra_3', 'wmo_ra_4', 'wmo_ra_5', 'wmo_ra_6', 'tas']
 
     all_datasets = []
 
@@ -80,7 +80,7 @@ def regional_annual_datasets(annual_metadata):
         for i in range(6):
             years = []
             anoms = []
-            for y in range(1900, 2023):
+            for y in range(1900, 2024):
                 years.append(y)
                 anoms.append(0.01 * float(i) * float(y - 1900))
 
@@ -587,10 +587,8 @@ def test_wave_plot(monthly_datalist, tmpdir):
     assert (tmpdir / 'test.png').exists()
 
 
-# def test_trend_plot(regional_annual_datasets, tmpdir):
-#     test_caption = pt.trends_plot(tmpdir, regional_annual_datasets, 'test.png', 'test words',
-#                                   order=["wmo_ra_1", "wmo_ra_2", "wmo_ra_3", "wmo_ra_4", "wmo_ra_5", "wmo_ra_6", "tas"])
-#
-#     assert (tmpdir / 'test.png').exists()
-#
-#     assert 'Figure shows' in test_caption
+def test_trend_plot(regional_annual_datasets, tmpdir):
+    test_caption = pt.trends_plot(tmpdir, regional_annual_datasets, 'test.png', 'test words',
+                                  order=["wmo_ra_1", "wmo_ra_2", "wmo_ra_3", "wmo_ra_4", "wmo_ra_5", "wmo_ra_6", "tas"])
+    assert (tmpdir / 'test.png').exists()
+    assert 'Figure shows' in test_caption

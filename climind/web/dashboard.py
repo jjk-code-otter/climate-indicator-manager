@@ -507,7 +507,7 @@ class Dashboard:
             self.pages.append(Page(page_metadata))
 
     @staticmethod
-    def from_json(json_file: Path, archive_dir: Path):
+    def from_json(json_file: Path, archive_dir: Union[Path, List[Path]]):
         """
         Create a Dashboard from a json file and directory containing dataset metadata
 
