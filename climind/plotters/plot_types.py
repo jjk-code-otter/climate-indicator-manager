@@ -1598,9 +1598,10 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
                         colour = 'darkred'
                         zod = -1
                     if n_months > 8:
-                        plt.plot(range(n_months_last_year, 13),
-                                 all_accumulators[n_months_last_year - 1:, y2 - first_year],
-                                 color=colour, linewidth=2, zorder=zod, alpha=0.2)
+                        pass
+                        # plt.plot(range(n_months_last_year, 13),
+                        #          all_accumulators[n_months_last_year - 1:, y2 - first_year],
+                        #          color=colour, linewidth=2, zorder=zod, alpha=0.2)
                 colour = 'darkred'
                 lthk = 3
 
@@ -1686,7 +1687,7 @@ def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) 
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(FANCY_UNITS['degC'])
-    plt.gca().set_ylim(-1.5, 1)
+    plt.gca().set_ylim(-1.5, 1.5)
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
     plt.title(dataset.metadata['display_name'], fontsize=20)
@@ -1778,7 +1779,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     plt.gcf().text(0.52, 0.61, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
     plt.gcf().text(0.52, 0.65, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.75, 0.84, '2023', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.81, '2023', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
     plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, Kadow et al, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
