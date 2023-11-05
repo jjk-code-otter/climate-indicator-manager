@@ -570,19 +570,19 @@
           "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
-          "link_to":  null, "title": "North Africa",
+          "link_to":  null, "title": "North Africa LAS",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "North African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
-          "link_to":  null, "title": "East Africa",
+          "link_to":  null, "title": "East Africa LAS",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
-          "link_to":  null, "title": "Middle East",
+          "link_to":  null, "title": "Middle East LAS",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}

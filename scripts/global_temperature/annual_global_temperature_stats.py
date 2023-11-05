@@ -103,10 +103,16 @@ if __name__ == "__main__":
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_8110_monthly = []
+    all_running_monthly = []
     for ds in all_datasets_b:
         ds.rebaseline(1981,2010)
         all_8110_monthly.append(ds)
+        ds2 = copy.deepcopy(ds)
+        ds2 = ds2.running_mean(12)
+        all_running_monthly.append(ds2)
+
     pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "rising_multiple.png")
+    pt.rising_tide_multiple_plot(figure_dir, all_running_monthly, "rising_running_multiple.png")
     pt.wave_multiple_plot(figure_dir, all_8110_monthly, "wave_multiple.png")
 
     all_datasets_b = ts_archive.read_datasets(data_dir)

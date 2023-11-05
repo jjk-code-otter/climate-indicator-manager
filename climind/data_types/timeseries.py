@@ -841,6 +841,41 @@ class TimeSeriesMonthly(TimeSeries):
                      f"{end_date.year}.{end_date.month:02d}"
         return date_range
 
+    @log_activity
+    def running_mean(self, run_length: int, centred: bool = False):
+        """
+        Calculate running mean of the data for a specified run length
+
+        Parameters
+        ----------
+        run_length : int
+            length of the run
+        centred: bool
+            Set to True to centre the times associated to the data points, otherwise the time used will be the last
+            time in the n-year run.
+
+        Returns
+        -------
+        TimeSeriesMonthly
+            :class:`TimeSeriesMonthly` containing running averages of length run_length. Where there are too few
+            years to calculate a running average, np.nan appears in the data column of the data frame
+        """
+        moving_average = copy.deepcopy(self)
+        moving_average.df['data'] = moving_average.df['data'].rolling(run_length).mean()
+        if centred:
+            moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
+            moving_average.df.dropna(0, how='any', inplace=True)
+
+        if centred:
+            moving_average.update_history(
+                f'Calculated {run_length}-month moving average centred on the middle month of the period')
+        else:
+            moving_average.update_history(f'Calculated {run_length}-month trailing moving average')
+
+        moving_average.metadata['derived'] = True
+
+        return moving_average
+
 
 class TimeSeriesAnnual(TimeSeries):
     """
