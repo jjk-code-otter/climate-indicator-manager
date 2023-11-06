@@ -28,28 +28,6 @@ from typing import List
 from climind.config.config import DATA_DIR
 from urllib.request import build_opener
 
-def check_file_status(file_path, file_size) -> None:
-    """
-    Writes a status bar on the download. Not used.
-
-    Parameters
-    ----------
-    file_path: str
-        Path of the file
-    file_size: float
-        Size of the file
-
-    Returns
-    -------
-    None
-    """
-    sys.stdout.write('\r')
-    sys.stdout.flush()
-    size = int(os.stat(file_path).st_size)
-    percent_complete = (size / file_size) * 100
-    sys.stdout.write('%.3f %s' % (percent_complete, '% Completed'))
-    sys.stdout.flush()
-
 
 def make_realtime_file_list(first_year: int, final_year: int) -> List[str]:
     """
