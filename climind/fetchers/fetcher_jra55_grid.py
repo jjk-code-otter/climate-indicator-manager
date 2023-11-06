@@ -25,9 +25,8 @@ import os
 import requests
 from dotenv import load_dotenv
 from typing import List
-
 from climind.config.config import DATA_DIR
-
+from urllib.request import build_opener
 
 def check_file_status(file_path, file_size) -> None:
     """
@@ -96,7 +95,7 @@ def make_file_list(first_year, final_year) -> List[str]:
     return filelist
 
 
-def download_file(filename: str, file_base: str, ret) -> None:
+def download_file(filename: str, file_base: str) -> None:
     """
     Download a file.
 
@@ -106,26 +105,20 @@ def download_file(filename: str, file_base: str, ret) -> None:
         URL of the file to be downloaded
     file_base: str
         Name of the output file to which the data will be written
-    ret:
-        Authentication information
 
     Returns
     -------
     None
     """
-    req = requests.get(filename, cookies=ret.cookies, allow_redirects=True, stream=True)
-
-    if req.status_code == 404:
-        print("404 returned for ", file_base)
-        return
-
-    with open(file_base, 'wb') as outfile:
-        chunk_size = 1048576
-        for chunk in req.iter_content(chunk_size=chunk_size):
-            outfile.write(chunk)
+    opener = build_opener()
+    ofile = file_base
+    infile = opener.open(filename)
+    with open(ofile, "wb") as outfile:
+        outfile.write(infile.read())
+        outfile.close()
 
 
-def get_files(filelist: List[str], web_path: str, ret) -> None:
+def get_files(filelist: List[str], web_path: str) -> None:
     """
     For each file in a file list, check if it already exists on the system and if it does
     not, attempt to download it.
@@ -136,8 +129,6 @@ def get_files(filelist: List[str], web_path: str, ret) -> None:
         List of files to be downloaded
     web_path: str
         URL of the directory that contains the files.
-    ret:
-        Authentication information
 
     Returns
     -------
@@ -151,7 +142,10 @@ def get_files(filelist: List[str], web_path: str, ret) -> None:
             print("File already downloaded", file_base)
         else:
             print('Downloading', file_base)
-            download_file(filename, file_base, ret)
+            try:
+                download_file(filename, file_base)
+            except:
+                print('Failed to download', file_base)
 
 
 def fetch(_, out_dir: Path, _filename) -> None:
@@ -175,26 +169,12 @@ def fetch(_, out_dir: Path, _filename) -> None:
     -------
     None
     """
-    load_dotenv()
-
-    email = os.getenv('UCAR_EMAIL')
-    password = os.getenv('UCAR_PSWD')
-
-    url = 'https://rda.ucar.edu/cgi-bin/login'
-
-    values = {'email': email, 'passwd': password, 'action': 'login'}
-    # Authenticate
-    ret = requests.post(url, data=values)
-    if ret.status_code != 200:
-        print('Bad Authentication')
-        print(ret.text)
-        exit(1)
-
     # Real time
     web_path = 'https://data.rda.ucar.edu/ds628.9/'
     filelist = make_realtime_file_list(2020, 2023)
-    get_files(filelist, web_path, ret)
+    get_files(filelist, web_path)
 
+    # Archive
     web_path = 'https://data.rda.ucar.edu/ds628.1/'
     filelist = make_file_list(1958, 2020)
-    get_files(filelist, web_path, ret)
+    get_files(filelist, web_path)
