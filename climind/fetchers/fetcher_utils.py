@@ -19,7 +19,7 @@ a URL.
 """
 import os
 from urllib.parse import urlparse
-
+from datetime import datetime
 from typing import Tuple, List
 
 
@@ -115,7 +115,7 @@ def get_ftp_host_and_directory_from_url(url: str) -> Tuple[str, List[str]]:
     return host, working_directory
 
 
-def get_n_months_back(y: int, m: int, back:int=12) -> Tuple[int, int]:
+def get_n_months_back(y: int, m: int, back: int = 12) -> Tuple[int, int]:
     """
     Get the year and month that, including the specified month, makes n months
 
@@ -150,3 +150,9 @@ def fill_year_month(instr, y, m):
     filled_url = instr.replace('YYYY', f'{y}')
     filled_url = filled_url.replace('MMMM', f'{m:02d}')
     return filled_url
+
+
+def time_tag_string(instr):
+    now = datetime.today()
+    outstr = f'{now.year}{now.month:02d}{now.day:02d}.{instr}'
+    return outstr
