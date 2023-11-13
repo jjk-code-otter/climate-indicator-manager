@@ -17,8 +17,9 @@
 from pathlib import Path
 import requests
 import shutil
+from datetime import datetime
 
-from climind.fetchers.fetcher_utils import filename_from_url
+from climind.fetchers.fetcher_utils import filename_from_url, time_tag_string
 
 
 def fetch(url: str, outdir: Path, filename: str) -> None:
@@ -41,6 +42,8 @@ def fetch(url: str, outdir: Path, filename: str) -> None:
     inferred_filename = filename_from_url(url)
     out_path = outdir / inferred_filename
 
+    time_tagged_out_path = outdir / time_tag_string(inferred_filename)
+
     try:
         r = requests.get(url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
 
@@ -48,6 +51,7 @@ def fetch(url: str, outdir: Path, filename: str) -> None:
             with open(out_path, 'wb') as f:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
+            shutil.copyfile(out_path, time_tagged_out_path)
 
     except requests.exceptions.ConnectionError:
         print(f"Couldn't connect to {url}")
