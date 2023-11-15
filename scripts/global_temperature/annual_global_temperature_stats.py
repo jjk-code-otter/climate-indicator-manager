@@ -63,6 +63,10 @@ if __name__ == "__main__":
                                  'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'Berkeley Earth', 'ERA5', 'JRA-55', 'Kadow'],
                                  'time_resolution': 'monthly'})
 
+    tlt_archive = archive.select({'variable': 'tlt',
+                                  'type': 'timeseries',
+                                  'time_resolution': 'monthly'})
+
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
                                   'time_resolution': 'monthly'})
@@ -83,6 +87,7 @@ if __name__ == "__main__":
     lsat_datasets = lsat_archive.read_datasets(data_dir)
     lsat_ann_datasets = lsat_ann_archive.read_datasets(data_dir)
     sst_datasets = sst_archive.read_datasets(data_dir)
+    tlt_datasets = tlt_archive.read_datasets(data_dir)
 
     all_8110_datasets = []
     all_annual_datasets = []
@@ -114,6 +119,13 @@ if __name__ == "__main__":
     pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "rising_multiple.png")
     pt.rising_tide_multiple_plot(figure_dir, all_running_monthly, "rising_running_multiple.png")
     pt.wave_multiple_plot(figure_dir, all_8110_monthly, "wave_multiple.png")
+
+    all_tlt_datasets = []
+    for ds in tlt_datasets:
+        ds.rebaseline(1981, 2010)
+        all_tlt_datasets.append(ds)
+    pt.rising_tide_multiple_plot(figure_dir, all_tlt_datasets, "tlt_rising_multiple.png")
+    pt.wave_multiple_plot(figure_dir, all_tlt_datasets, "tlt_wave_multiple.png")
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_9120_datasets = []

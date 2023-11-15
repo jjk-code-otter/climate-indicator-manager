@@ -150,11 +150,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'snow' : [
-            {'variable': 'snow',
+        'tlt' : [
+            {'variable': 'tlt',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
-        'Rutgers']
+        'TLT']
     }
 
     for combo in holdall:
@@ -170,7 +170,7 @@ if __name__ == "__main__":
         m = []
         for ds in all_datasets:
             # ds.select_year_range(1980, 2022)
-            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow']:
+            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
                 ds.rebaseline(1981, 2010)
             if variable in ['antarctica']:
                 ds.zero_on_month(2005, 6)

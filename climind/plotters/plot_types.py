@@ -1578,7 +1578,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
             accumulator = accumulate(df['data'])
             n_months = len(df)
 
-            if year < last_year:
+            if year < last_year and n_months == 12:
                 all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
             if year != 2016 and year != 2023:

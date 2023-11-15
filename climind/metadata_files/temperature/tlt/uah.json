@@ -1,0 +1,45 @@
+{
+  "name": "UAH",
+  "display_name": "UAH",
+  "version": "",
+  "variable": "tlt",
+  "units": "degC",
+  "citation": ["Spencer, R.W., Christy, J.R. & Braswell, W.D. UAH Version 6 global satellite temperature products: Methodology and results. Asia-Pacific J Atmos Sci 53, 121–130 (2017). https://doi.org/10.1007/s13143-017-0010-y"],
+  "citation_url": ["https://link.springer.com/article/10.1007/s13143-017-0010-y"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#00FF00",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["https://www.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt"],
+      "filename": ["uahncdc_lt_6.0.txt"],
+	  "type": "timeseries",
+      "long_name": "Global lower troposphere temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_uah",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt"],
+      "filename": ["uahncdc_lt_6.0.txt"],
+	  "type": "timeseries",
+      "long_name": "Global lower troposphere temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_uah",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

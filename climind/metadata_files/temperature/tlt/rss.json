@@ -1,0 +1,45 @@
+{
+  "name": "RSS",
+  "display_name": "RSS",
+  "version": "",
+  "variable": "tlt",
+  "units": "degC",
+  "citation": ["Mears, C. A., and F. J. Wentz, 2009: Construction of the Remote Sensing Systems V3.2 Atmospheric Temperature Records from the MSU and AMSU Microwave Sounders. J. Atmos. Oceanic Technol., 26, 1040–1056, https://doi.org/10.1175/2008JTECHA1176.1."],
+  "citation_url": ["https://journals.ametsoc.org/doi/full/10.1175/2008JTECHA1176.1"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#FF0000",
+  "zpos": 10,
+  "datasets": [
+    {
+      "url": ["http://data.remss.com/msu/monthly_time_series/RSS_Monthly_MSU_AMSU_Channel_TLT_Anomalies_Land_and_Ocean_v04_0.txt"],
+      "filename": ["RSS_Monthly_MSU_AMSU_Channel_TLT_Anomalies_Land_and_Ocean_v04_0.txt"],
+	  "type": "timeseries",
+      "long_name": "Global lower troposphere temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_rss",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["http://data.remss.com/msu/monthly_time_series/RSS_Monthly_MSU_AMSU_Channel_TLT_Anomalies_Land_and_Ocean_v04_0.txt"],
+      "filename": ["RSS_Monthly_MSU_AMSU_Channel_TLT_Anomalies_Land_and_Ocean_v04_0.txt"],
+	  "type": "timeseries",
+      "long_name": "Global lower troposphere temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_rss",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
