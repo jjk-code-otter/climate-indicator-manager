@@ -123,6 +123,7 @@ if __name__ == "__main__":
     all_tlt_datasets = []
     for ds in tlt_datasets:
         ds.rebaseline(1981, 2010)
+        pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
         all_tlt_datasets.append(ds)
     pt.rising_tide_multiple_plot(figure_dir, all_tlt_datasets, "tlt_rising_multiple.png")
     pt.wave_multiple_plot(figure_dir, all_tlt_datasets, "tlt_wave_multiple.png")

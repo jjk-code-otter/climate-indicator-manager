@@ -436,7 +436,7 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
     return caption
 
 
@@ -473,7 +473,7 @@ def records_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_file
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
     return caption
 
 
@@ -560,7 +560,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
     return caption
 
 
@@ -607,7 +607,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
     return caption
 
 
@@ -708,7 +708,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
     return "Figure showing the percentage of ocean area affected by " \
            "marine heatwaves and marine cold spells each year since 1982"
 
@@ -797,7 +797,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
 
     caption = f"Arctic sea ice extent (shown as differences from the " \
               f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average) " \
@@ -900,7 +900,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
 
     caption = f"Antarctic sea ice extent (shown as differences from the " \
               f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average) " \
@@ -988,7 +988,7 @@ def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSe
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
 
     return ''
 
@@ -1139,7 +1139,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.2, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
-    plt.close()
+    plt.close('all')
 
     return caption
 
@@ -1185,7 +1185,7 @@ def quick_and_dirty_map(dataset: xarray.Dataset, image_filename: Path) -> None:
     p.axes.coastlines()
     plt.title("")
     plt.savefig(image_filename, bbox_inches='tight')
-    plt.close()
+    plt.close('all')
 
 
 def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str = 'tas_mean') -> None:
@@ -1270,7 +1270,7 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
     plt.title(f'{title}', pad=20, fontdict={'fontsize': 20})
     plt.savefig(f'{image_filename}.png')
     plt.savefig(f'{image_filename}.pdf')
-    plt.close()
+    plt.close('all')
 
 
 def plot_map_by_year_and_month(dataset: GridMonthly, year: int, month: int, image_filename: Path, title: str,
@@ -1428,7 +1428,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.savefig(out_dir / f'{image_filename}')
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
-    plt.close()
+    plt.close('all')
 
     caption = map_caption_builder(all_datasets, grid_type)
 
@@ -1503,7 +1503,7 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
         accumulator = accumulate(df['data'])
         n_months = len(df)
 
-        if year < last_year:
+        if year < last_year and n_months == 12:
             all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
         colour = 'lightgrey'
@@ -1534,7 +1534,7 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
     plt.title(dataset.metadata['display_name'])
 
     plt.savefig(out_dir / image_filename)
-    plt.close()
+    plt.close('all')
 
 
 def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
@@ -1633,7 +1633,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
-    plt.close()
+    plt.close('all')
 
 
 def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
@@ -1693,7 +1693,7 @@ def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) 
     plt.title(dataset.metadata['display_name'], fontsize=20)
 
     plt.savefig(out_dir / image_filename)
-    plt.close()
+    plt.close('all')
 
 
 def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
@@ -1788,7 +1788,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
-    plt.close()
+    plt.close('all')
 
 
 def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
@@ -1843,7 +1843,7 @@ def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSe
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
 
-    plt.close()
+    plt.close('all')
 
     caption = ''
     return caption

@@ -25,6 +25,16 @@
         },
         {
           "link_to": null,
+          "title": "TLT",
+          "selecting": {"type":  "timeseries", "variable": "tlt", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2010]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Global TLT temperature"}
+        },
+        {
+          "link_to": null,
           "title": "Temperature Anomalies",
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
           "processing": [
@@ -141,7 +151,14 @@
           "plotting": {"function": "neat_plot", "title": "Antarctic Oscillation"}
         }
       ],
-      "paragraphs": []
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": "tlt", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []}],
+          "writing": {"function": "global_anomaly_and_rank"}
+        }
+      ]
     }
   ]
 }
