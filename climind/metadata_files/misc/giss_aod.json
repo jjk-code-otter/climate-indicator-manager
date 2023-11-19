@@ -1,0 +1,30 @@
+{
+  "name": "AOD",
+  "display_name": "GISS AOD",
+  "version": "",
+  "variable": "aod",
+  "units": "aod",
+  "citation": ["Sato, M., J.E. Hansen, M.P. McCormick, and J.B. Pollack 1993: Stratospheric aerosol optical depth, 1850-1990. J. Geophys. Res. 98, 22987-22994."],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "datasets": [
+     {
+      "url": ["https://data.giss.nasa.gov/modelforce/strataer/tau.line_2012.12.txt"],
+      "filename": ["tau.line_2012.12.txt"],
+	  "type": "timeseries",
+      "long_name": "global Aerosol Optical Depth at 550nm",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_giss_aod",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
