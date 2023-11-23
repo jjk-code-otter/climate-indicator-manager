@@ -1,7 +1,7 @@
 {
     "name": "HadCRUT5_5x5",
     "display_name": "HadCRUT5",
-    "version": "5.0.1.0",
+    "version": "5.0.2.0",
     "variable": "tas",
     "units": "degC",
     "citation": [
@@ -33,7 +33,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc'] downloaded from ['https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc']",
+                "Gridded dataset created from file ['HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc'] downloaded from ['https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file HadCRUT5_5x5.nc"
@@ -41,9 +41,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-10-31 16:06:13"
+                "2023-11-23 21:09:26"
             ],
-            "last_month": "2023-09-16 00:00:00"
+            "last_month": "2023-10-16 00:00:00"
         }
     ]
 }

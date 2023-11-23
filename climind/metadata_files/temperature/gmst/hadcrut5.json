@@ -1,7 +1,7 @@
 {
   "name": "HadCRUT5",
   "display_name": "HadCRUT5",
-  "version": "5.0.1.0",
+  "version": "5.0.2.0",
   "variable": "tas",
   "units": "degC",
   "citation": ["Morice, C. P., Kennedy, J. J., Rayner, N. A., Winn, J. P., Hogan, E., Killick, R. E., et al. (2021). An updated assessment of near-surface temperature change from 1850: the HadCRUT5 data set. Journal of Geophysical Research: Atmospheres, 126, e2019JD032361. https://doi.org/10.1029/2019JD032361"],
@@ -12,8 +12,8 @@
   "zpos": 99,
   "datasets": [
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
-	  "filename": ["HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc"],
+	  "filename": ["HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
@@ -27,10 +27,10 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.monthly.csv",
-              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.annual.csv"],
-      "filename": ["HadCRUT.5.0.1.0.analysis.summary_series.global.monthly.csv",
-                   "HadCRUT.5.0.1.0.analysis.summary_series.global.annual.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv",
+              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv"],
+      "filename": ["HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv",
+                   "HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "monthly",
