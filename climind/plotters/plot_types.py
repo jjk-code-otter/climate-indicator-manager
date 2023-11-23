@@ -1354,7 +1354,10 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     plt.figure(figsize=(16, 9))
 
     if region is not None:
-        proj = ccrs.PlateCarree(central_longitude=0)
+        if region[1] > 180:
+            proj = ccrs.PlateCarree(central_longitude=180)
+        else:
+            proj = ccrs.PlateCarree(central_longitude=0)
     else:
         proj = ccrs.EqualEarth(central_longitude=0)
 
@@ -1419,8 +1422,13 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     p.axes.coastlines()
     if region is not None:
-        p.axes.set_extent(region, crs=proj)
-        p.axes.set_aspect('equal')
+        if region[1] > 180:
+            temp_proj = ccrs.PlateCarree()
+            p.axes.set_extent(region, crs=temp_proj)
+            p.axes.set_aspect('equal')
+        else:
+            p.axes.set_extent(region, crs=proj)
+            p.axes.set_aspect('equal')
     else:
         p.axes.set_global()
 
