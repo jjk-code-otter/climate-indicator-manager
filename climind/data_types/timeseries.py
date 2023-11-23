@@ -590,6 +590,15 @@ class TimeSeriesMonthly(TimeSeries):
 
         return annual_series
 
+
+    def calculate_climatology(self, baseline_start_year, baseline_end_year):
+        # select part of series in climatology period
+        climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
+        # calculate monthly climatology
+        climatology = climatology_part.groupby(['month'])['data'].mean().reset_index()
+        climatology.rename(columns={'data': 'climatology'}, inplace=True)
+        return climatology
+
     @log_activity
     def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
@@ -609,6 +618,10 @@ class TimeSeriesMonthly(TimeSeries):
         None
             Action occurs in place
         """
+
+        if 'climatology' in self.df.columns:
+            self.df = self.df.drop('climatology', axis=1)
+
         # select part of series in climatology period
         climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
 

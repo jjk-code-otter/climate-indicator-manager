@@ -55,6 +55,27 @@
 	  "history": [],
       "reader": "reader_era5",
 	  "fetcher": "fetcher_url_with_backsearch"
+    },
+    {
+      "url": [
+        "https://sites.ecmwf.int/data/c3sci/era5-daily/data/era5_daily_series_2t_global_1940-2023.csv",
+        "https://sites.ecmwf.int/data/c3sci/era5-daily/data/era5_daily_sfc_temp_global_anomalies_with_preindustrial_1940-2023.csv"
+      ],
+      "filename": [
+        "era5_daily_series_2t_global_1940-2023.csv",
+        "era5_daily_sfc_temp_global_anomalies_with_preindustrial_1940-2023.csv"
+      ],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "irregular",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_era5",
+	  "fetcher": "fetcher_standard_url"
     }
   ]
 }

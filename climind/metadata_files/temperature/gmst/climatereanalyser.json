@@ -12,14 +12,14 @@
   "zpos": 1,
   "datasets": [
      {
-      "url": ["https://climatereanalyzer.org/clim/t2_daily/json/cfsr_world_t2_day.json"],
+      "url": ["https://climatereanalyzer.org/clim/t2_daily/json_cfsr/cfsr_world_t2_day.json"],
 	  "filename": ["cfsr_world_t2_day.json"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "irregular",
 	  "space_resolution": 999,
-	  "climatology_start": 1991,
-	  "climatology_end": 2020,
+	  "climatology_start": 1979,
+	  "climatology_end": 2000,
 	  "actual": false,
 	  "derived": false,
 	  "history": [],

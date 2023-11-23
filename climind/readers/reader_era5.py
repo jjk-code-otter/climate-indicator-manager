@@ -15,7 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, List
 import itertools
 import xarray as xa
 import numpy as np
@@ -92,6 +92,8 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
             return read_monthly_ts(filename, construction_metadata)
         elif metadata['time_resolution'] == 'annual':
             return read_annual_ts(filename, construction_metadata)
+        elif metadata['time_resolution'] == 'irregular':
+            return read_irregular_ts([filename, out_dir / metadata['filename'][1]], construction_metadata)
         else:
             raise KeyError(f'That time resolution is not known: {metadata["time_resolution"]}')
 
@@ -287,3 +289,48 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
     annual = monthly.make_annual()
 
     return annual
+
+
+def read_irregular_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    years = []
+    months = []
+    days = []
+    extents = []
+
+    clim = np.zeros((12,31))
+
+    with open(filenames[1], 'r') as f:
+        for _ in range(18):
+            f.readline()
+
+        for line in f:
+            columns = line.split(',')
+            split_date = columns[0].split('-')
+
+            month = int(split_date[1])
+            day = int(split_date[2])
+
+            climatology = float(columns[1]) - float(columns[4])
+            clim[month-1, day-1] = climatology
+
+
+    with open(filenames[0], 'r') as f:
+        for _ in range(8):
+            f.readline()
+
+        for line in f:
+            columns = line.split(',')
+            split_date = columns[0].split('-')
+
+            year = int(split_date[0])
+            month = int(split_date[1])
+            day = int(split_date[2])
+
+            years.append(year)
+            months.append(month)
+            days.append(day)
+            extents.append(float(columns[1]) - clim[month-1, day-1])
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesIrregular(years, months, days, extents, metadata=metadata)

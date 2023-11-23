@@ -149,4 +149,4 @@ def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
             out_line += f"{ds.metadata['name']:10.10} "
         output_file.write(f'{out_line}\n')
 
-        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=60))
+        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=20))
