@@ -1359,6 +1359,16 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
     df_merged = df_merged.drop(columns=columns)
     df_merged = df_merged.rename(columns={'combined': 'data'})
 
+    df_merged = df_merged.sort_values(by='year', ascending=True)
+    df_merged = df_merged.reset_index()
+
+    to_drop = []
+    for col in df_merged.columns:
+        if 'index_' in col or 'time_' in col or 'level_' in col:
+            to_drop.append(col)
+
+    df_merged = df_merged.drop(columns=to_drop)
+
     return TimeSeriesAnnual.make_from_df(df_merged, metadata)
 
 

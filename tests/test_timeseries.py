@@ -388,13 +388,17 @@ def test_basic_timeseries_creation_raises_type_error(annual_metadata):
 
 # Free-floating functions
 def test_make_combined_series(annual_datalist):
-    test_result = ts.make_combined_series(annual_datalist)
-
-    assert len(test_result.metadata['history']) == 6
-    assert test_result.df['data'][0] == 1.0
-    assert test_result.df['data'][1] == 3.5
-    assert test_result.df['data'][2022 - 1850] == 3.5
-    assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645) ** 2 + 0.12 ** 2)
+    # Found cases where time ordering of the output depended on the order of the lists so
+    # test now permutes the input dataset list
+    for permutation in list(itertools.permutations(annual_datalist)):
+        test_result = ts.make_combined_series(permutation)
+        assert len(test_result.metadata['history']) == 6
+        assert test_result.df['data'][0] == 1.0
+        assert test_result.df['data'][1] == 3.5
+        assert test_result.df['data'][2022 - 1850] == 3.5
+        assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645) ** 2 + 0.12 ** 2)
+        for i in range(len(test_result.df)):
+            assert test_result.df['year'][i] == 1850+i
 
 
 def test_get_list_of_unique_variables(annual_datalist):
