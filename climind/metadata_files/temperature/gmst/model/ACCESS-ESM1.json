@@ -1,0 +1,73 @@
+{
+  "name": "ACCESS-ESM1-5",
+  "display_name": "ACCESS-ESM1-5",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#cccccc",
+  "zpos": 10,
+  "origin": "model",
+  "datasets": [
+	{
+      "url": ["https://climexp.knmi.nl/CMIP6/Tglobal/global_tas_mon_ACCESS-ESM1-5_ssp126_000.dat"],
+      "filename": ["global_tas_mon_ACCESS-ESM1-5_ssp126_000.dat"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_knmi_gmt",
+	  "fetcher": "fetcher_standard_url"
+    },{
+      "url": ["https://climexp.knmi.nl/CMIP6/Tglobal/global_tas_mon_ACCESS-ESM1-5_ssp245_000.dat"],
+      "filename": ["global_tas_mon_ACCESS-ESM1-5_ssp245_000.dat"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_knmi_gmt",
+	  "fetcher": "fetcher_standard_url"
+    },{
+      "url": ["https://climexp.knmi.nl/CMIP6/Tglobal/global_tas_mon_ACCESS-ESM1-5_ssp370_000.dat"],
+      "filename": ["global_tas_mon_ACCESS-ESM1-5_ssp370_000.dat"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_knmi_gmt",
+	  "fetcher": "fetcher_standard_url"
+    },{
+      "url": ["https://climexp.knmi.nl/CMIP6/Tglobal/global_tas_mon_ACCESS-ESM1-5_ssp585_000.dat"],
+      "filename": ["global_tas_mon_ACCESS-ESM1-5_ssp585_000.dat"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_knmi_gmt",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

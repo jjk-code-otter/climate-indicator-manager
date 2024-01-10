@@ -28,7 +28,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2100
+    final_year = 2040
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -52,21 +52,35 @@ if __name__ == "__main__":
         'variable': 'tas',
         'type': 'timeseries',
         'time_resolution': 'monthly',
-        'origin': 'model'
+        'origin': 'model',
+        'name': 'ACCESS-CM2',
+        'scenario': 'ssp126'
     })
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
     all_annual_datasets = []
+    all_30s = []
+    all_20s = []
+    all_10s = []
     for ds in all_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.rebaseline(1850, 1900)
         annual = ds.make_annual()
-        annual.add_offset(0.69)
-        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
+        all_30s.append(annual.running_trend(30))
+
+        all_20s.append(annual.running_trend(30))
+        all_20s.append(annual.running_mean(30, centred=True))
+        all_20s.append(annual.running_mean(20, centred=True))
+        all_20s.append(annual.running_mean(10, centred=True))
+
+        all_10s.append(annual.running_mean(10, centred=True))
 
 
     pt.neat_plot(figure_dir, all_annual_datasets, 'model_annual.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, all_30s, 'model_30s.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, all_20s, 'model_20s.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.neat_plot(figure_dir, all_10s, 'model_10s.png', r'Global Mean Temperature Difference ($\degree$C)')
 
 

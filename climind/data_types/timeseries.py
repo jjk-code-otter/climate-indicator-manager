@@ -590,7 +590,6 @@ class TimeSeriesMonthly(TimeSeries):
 
         return annual_series
 
-
     def calculate_climatology(self, baseline_start_year, baseline_end_year):
         # select part of series in climatology period
         climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
@@ -1115,6 +1114,35 @@ class TimeSeriesAnnual(TimeSeries):
 
         return moving_average
 
+    def running_trend(self, run_length: int):
+        """
+        Calculate a smoothed series by fitting a straight line to the past 30 years of data and
+        taking the final point as the data value instead
+
+        Parameters
+        ----------
+        run_length: int
+            Number of years for which the trend should be calculated
+
+        Returns
+        -------
+        TimeSeriesAnnual
+            :class:`TimeSeriesAnnual` containing the end point of trends of length run_length. Where there are too few
+            years to calculate a trend, np.nan appears in the data column of the data frame
+        """
+        moving_average = copy.deepcopy(self)
+
+        for i in range(run_length, len(self.df.data)):
+            snippet = self.df.data[i - run_length:i]
+            time = self.get_year_axis()[i - run_length:i]
+            m, b = np.polyfit(time, snippet, 1)
+            moving_average.df.data[i-1] = b + m * time.values[-1]
+
+        moving_average.update_history(f'Calculated smoothed series with {run_length}-year trends')
+        moving_average.metadata['derived'] = True
+
+        return moving_average
+
     @log_activity
     def running_stdev(self, run_length: int, centred: bool = False):
         """
@@ -1159,7 +1187,7 @@ class TimeSeriesAnnual(TimeSeries):
 
         for i in range(1, n_years):
             over_margin = self.df.data[i] - np.max(self.df.data[0:i])
-            under_margin =  self.df.data[i]- np.min(self.df.data[0:i])
+            under_margin = self.df.data[i] - np.min(self.df.data[0:i])
             if over_margin > 0:
                 out_series.df.data[i] = over_margin
             elif under_margin < 0:
@@ -1460,7 +1488,8 @@ def write_dataset_summary_file(all_datasets, csv_filename):
             if isinstance(ds, TimeSeriesAnnual):
                 merged_df = pd.merge(combined_df, df[['year', 'data']], on='year', how='left', validate='m:m')
             if isinstance(ds, TimeSeriesMonthly):
-                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left', validate='m:m')
+                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left',
+                                     validate='m:m')
 
             merged_df.rename(columns={'data': col_name}, inplace=True)
             combined_df = merged_df
