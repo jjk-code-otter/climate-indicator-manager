@@ -50,15 +50,15 @@ if __name__ == "__main__":
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
                                   'name': [  # 'NOAA Interim',
-                                      # 'Kadow IPCC',
+                                      #'Kadow IPCC',
                                       # 'Berkeley IPCC',
-                                      #    'NOAA Interim IPCC'
+                                       #  'NOAA Interim IPCC'
                                   ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim', 'ERA5', 'JRA-55']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim', 'ERA5', 'JRA-55', 'Berkeley Earth']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
@@ -131,6 +131,10 @@ if __name__ == "__main__":
         twenties.append(ds.running_mean(20))
         thirties.append(ds.running_mean(30))
         dtens.append(ds.running_mean(10).select_decade(last_digit))
+
+    fdata_dir = project_dir / "Formatted_Data"
+    for ds in dtens:
+        ds.write_csv(fdata_dir / f"decadal_{ds.metadata['name']}_{ds.metadata['variable']}.csv")
 
     for ds in sst_anns:
         sst_tens.append(ds.running_mean(10))

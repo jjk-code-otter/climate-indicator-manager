@@ -27,8 +27,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv",
-              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv",
+              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv"],
       "filename": ["HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv",
                    "HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv"],
 	  "type": "timeseries",
@@ -44,8 +44,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.monthly.csv",
-              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.annual.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.monthly.csv",
+              "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.1.0.analysis.summary_series.global.annual.csv"],
       "filename": ["HadCRUT.5.0.1.0.analysis.summary_series.global.monthly.csv",
                    "HadCRUT.5.0.1.0.analysis.summary_series.global.annual.csv"],
 	  "type": "timeseries",

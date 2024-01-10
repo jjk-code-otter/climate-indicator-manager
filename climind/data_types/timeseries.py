@@ -988,6 +988,13 @@ class TimeSeriesAnnual(TimeSeries):
         self.update_history(f'Rebaselined to {baseline_start_year}-{baseline_end_year} by subtracting the arithemtic '
                             f'mean for that period from all data values.')
 
+    def time_average(self, start_year, end_year) -> float:
+        # select part of series in climatology period
+        climatology_part = self.df[(self.df['year'] >= start_year) & (self.df['year'] <= end_year)]
+        # calculate monthly climatology
+        climatology = climatology_part['data'].mean()
+        return climatology
+
     @log_activity
     def get_rank_from_year(self, year: int) -> Optional[int]:
         """

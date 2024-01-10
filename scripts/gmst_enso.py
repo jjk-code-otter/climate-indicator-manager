@@ -121,6 +121,9 @@ if __name__ == "__main__":
     #axs[1][0].plot(oni_taxis+0.5, oni.df.data * 0.1, linestyle='--', linewidth=3, color='dodgerblue')
     #axs[1][0].plot(aod_taxis, -2 * aod.df.data, linewidth=3, color='purple')
 
+    for y in range(1980,2025):
+        axs[1].plot([y,y],[-0.5,0.5],linewidth=0.5,color='lightgrey')
+
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,
                         right=0.9,

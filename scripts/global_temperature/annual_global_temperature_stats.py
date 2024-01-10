@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'ERA5', 'JRA-55'],
+                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'ERA5', 'JRA-55', 'Berkeley Earth'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',
@@ -98,6 +98,9 @@ if __name__ == "__main__":
 
         annual8110 = ds.make_annual()
         all_8110_datasets.append(annual8110)
+        a = annual8110.time_average(1980, 1990)
+        b = annual8110.time_average(2012, 2022)
+        print(f"{annual8110.metadata['display_name']} {a-b:.2f}")
 
         annual = ds.make_annual()
         annual.add_offset(0.69)
