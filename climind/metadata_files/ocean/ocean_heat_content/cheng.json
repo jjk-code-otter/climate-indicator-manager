@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["http://www.ocean.iap.ac.cn/ftp/images_files/IAP_OHC_estimate_update.txt"],

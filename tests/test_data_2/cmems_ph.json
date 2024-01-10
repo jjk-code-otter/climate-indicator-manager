@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#cc79a7",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
 	{
       "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_HEALTH_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged_1985_P*.nc"],

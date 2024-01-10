@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#FF0000",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["http://data.remss.com/msu/monthly_time_series/RSS_Monthly_MSU_AMSU_Channel_TLT_Anomalies_Land_and_Ocean_v04_0.txt"],

@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["https://www.cpc.ncep.noaa.gov/products/precip/CWlink/pna/norm.nao.monthly.b5001.current.ascii.table"],

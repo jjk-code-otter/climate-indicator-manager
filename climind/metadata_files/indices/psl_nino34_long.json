@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "dimgrey",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.data"],

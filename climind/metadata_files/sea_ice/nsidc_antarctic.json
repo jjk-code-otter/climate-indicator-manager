@@ -10,6 +10,7 @@
   "acknowledgement": "Fetterer, F., K. Knowles, W. N. Meier, M. Savoie, and A. K. Windnagel. 2017, updated daily. Sea Ice Index, Version 3. 1979-present. Boulder, Colorado USA. NSIDC: National Snow and Ice Data Center. doi: https://doi.org/10.7265/N5K072F8. [AAAA].",
   "colour": "#56b4e9",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/south/monthly/data/S_01_extent_v3.0.csv",

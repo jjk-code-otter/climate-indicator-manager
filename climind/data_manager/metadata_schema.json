@@ -64,6 +64,10 @@
       "description": "Determines order in which lines are plotted",
       "type": "integer"
     },
+    "origin": {
+      "description": "Model or observations",
+      "type": "string"
+    },
     "datasets": {
       "description": "List holding metadata for a range of data sets in this collection",
       "type": "array",

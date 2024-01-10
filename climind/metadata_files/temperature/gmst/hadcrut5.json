@@ -10,6 +10,7 @@
   "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "colour": "dimgrey",
   "zpos": 99,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc"],

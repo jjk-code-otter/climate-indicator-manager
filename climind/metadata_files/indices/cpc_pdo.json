@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/index/ersst.v5.pdo.dat"],

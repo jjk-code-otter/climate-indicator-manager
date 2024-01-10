@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#d6665e",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
 	{
       "url": ["https://dap.ceda.ac.uk/badc/ar6_wg1/data/ch_02/ch2_fig11/v20211207//Figure_2_11c-lower_panel.csv"],

@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#555555",
   "zpos": 99,
+  "origin": "obs",
   "notes": "",
   "datasets": [
      {

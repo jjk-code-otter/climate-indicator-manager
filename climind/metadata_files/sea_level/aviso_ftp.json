@@ -10,6 +10,7 @@
   "acknowledgement": "Generated using AVISO+ Products",
   "colour": "#ff0000",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
