@@ -102,9 +102,9 @@ if __name__ == "__main__":
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
             'Kadow',
-            #'HadCRUT5', 'GISTEMP',
-            #'NOAA Interim', 'Berkeley Earth',
-            #'ERA5', 'JRA-55'
+            'HadCRUT5', 'GISTEMP',
+            'NOAA Interim', 'Berkeley Earth',
+            'ERA5', 'JRA-55'
         ]
 
     final_year = 2023

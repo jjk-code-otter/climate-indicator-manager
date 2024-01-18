@@ -146,10 +146,7 @@ if __name__ == "__main__":
             {'variable': 'iod',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
-            'DMI']
-    }
-
-    holdall = {
+            'DMI'],
         'tlt' : [
             {'variable': 'tlt',
              'type': 'timeseries',
@@ -172,6 +169,8 @@ if __name__ == "__main__":
             # ds.select_year_range(1980, 2022)
             if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
                 ds.rebaseline(1981, 2010)
+            if variable in ['ohc', 'ohc2k']:
+                ds.rebaseline(2006, 2020)
             if variable in ['antarctica']:
                 ds.zero_on_month(2005, 6)
             if variable in ['greenland']:

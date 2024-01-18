@@ -100,7 +100,7 @@ def accumulate(in_array):
 
 def equivalence(key):
     lookup = {
-        'tas': 'Globe',
+        'tas': 'Globe (land and ocean)',
         'wmo_ra_1': 'Africa',
         'wmo_ra_2': 'Asia',
         'wmo_ra_3': 'South America',

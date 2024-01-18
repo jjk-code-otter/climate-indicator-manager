@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'ERA5', 'JRA-55', 'Berkeley Earth'],
+                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'ERA5', 'JRA-55', 'Berkeley Earth', 'Kadow', 'JRA-3Q'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',
@@ -168,8 +168,10 @@ if __name__ == "__main__":
         ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")
 
     lsat_anns = []
+    lsat_mons = []
     for ds in lsat_datasets:
         ds.rebaseline(1981, 2010)
+        lsat_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
         lsat_anns.append(annual)
@@ -189,6 +191,7 @@ if __name__ == "__main__":
         sst_anns.append(annual)
 
     pt.rising_tide_multiple_plot(figure_dir, sst_mons, "rising_multiple_sst.png")
+    pt.rising_tide_multiple_plot(figure_dir, lsat_mons, "rising_multiple_lsat.png")
     #pt.wave_multiple_plot(figure_dir, sst_mons, "wave_multiple_sst.png")
 
 

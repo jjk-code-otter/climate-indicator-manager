@@ -28,7 +28,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2040
+    final_year = 2076
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -53,8 +53,16 @@ if __name__ == "__main__":
         'type': 'timeseries',
         'time_resolution': 'monthly',
         'origin': 'model',
-        'name': 'ACCESS-CM2',
+        'name': 'AWI-CM-1-1-MR',
         'scenario': 'ssp126'
+    })
+
+    ts_archive = archive.select({
+        'variable': 'tas',
+        'type': 'timeseries',
+        'time_resolution': 'monthly',
+        'origin': 'obs',
+        'name': 'HadCRUT5'
     })
 
     all_datasets = ts_archive.read_datasets(data_dir)
@@ -70,10 +78,34 @@ if __name__ == "__main__":
         all_annual_datasets.append(annual)
         all_30s.append(annual.running_trend(30))
 
+        all_20s.append(annual)
+
         all_20s.append(annual.running_trend(30))
+        all_20s[-1].metadata['display_name'] = '30-year trend endpoint'
+        all_20s[-1].metadata['colour'] = 'orange'
+
         all_20s.append(annual.running_mean(30, centred=True))
+        all_20s[-1].metadata['display_name'] = '30-year moving average'
+        all_20s[-1].metadata['colour'] = 'lightblue'
+
         all_20s.append(annual.running_mean(20, centred=True))
+        all_20s[-1].metadata['display_name'] = '20-year moving average'
+        all_20s[-1].metadata['colour'] = 'black'
+        all_20s[-1].metadata['zpos'] = 100
+
         all_20s.append(annual.running_mean(10, centred=True))
+        all_20s[-1].metadata['display_name'] = '10-year moving average'
+        all_20s[-1].metadata['colour'] = 'pink'
+
+        npoints = 30
+        all_20s.append(annual.running_lowess(number_of_points=npoints))
+        all_20s[-1].metadata['display_name'] = f'Running lowess {npoints}-point'
+        all_20s[-1].metadata['colour'] = 'lightgreen'
+
+        npoints = 30
+        all_20s.append(annual.lowess(number_of_points=npoints))
+        all_20s[-1].metadata['display_name'] = f'Lowess {npoints}-point'
+        all_20s[-1].metadata['colour'] = 'purple'
 
         all_10s.append(annual.running_mean(10, centred=True))
 

@@ -51,7 +51,7 @@ if __name__ == "__main__":
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
-                                     'name':['HadCRUT5', 'GISTEMP','NOAA Interim', 'JRA-55', 'ERA5', 'Berkeley Earth', 'Kadow']})
+                                     'name':['HadCRUT5', 'GISTEMP','NOAA Interim', 'JRA-55', 'ERA5', 'Berkeley Earth', 'Kadow', 'JRA-3Q']})
 
         sst_archive = archive.select({'variable': 'sst',
                                       'type': 'timeseries',

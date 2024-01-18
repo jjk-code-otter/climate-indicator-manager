@@ -41,7 +41,7 @@ archive = dm.DataArchive.from_directory(metadata_dir)
 
 tas_archive = archive.select(
     {
-        'variable': 'tas', 'type': 'timeseries', 'time_resolution': 'monthly'
+        'variable': 'tas', 'type': 'timeseries', 'time_resolution': 'monthly', 'origin': 'obs'
     }
 )
 all_tas_datasets = tas_archive.read_datasets(data_dir)
@@ -57,13 +57,21 @@ for ds in all_tas_datasets:
 ohc_archive = archive.select(
     {
         'variable': 'ohc2k', 'type': 'timeseries', 'time_resolution': 'annual',
-        'name': 'GCOS2k'
+        'name': ['Cheng et al 2k v4', 'Levitus2k']
     }
 )
 ohc_annual = ohc_archive.read_datasets(data_dir)
 for ds in ohc_annual:
     ds.rebaseline(2005, 2020)
-    ds.add_year(2022, 96.74878325523227, 8.430242333320507)
+    #ds.add_year(2022, 96.74878325523227, 8.430242333320507)
+
+ph_archive = archive.select(
+    {
+        'variable': 'ph', 'type': 'timeseries', 'time_resolution': 'annual',
+        'name': ['CMEMS']
+    }
+)
+ph_annual = ph_archive.read_datasets(data_dir)
 
 sealevel_archive = archive.select(
     {
@@ -80,6 +88,22 @@ ghg_archive = archive.select(
 )
 ghg_annual = ghg_archive.read_datasets(data_dir)
 
+ch4_archive = archive.select(
+    {
+        'variable': 'ch4', 'type': 'timeseries', 'time_resolution': 'monthly',
+        'name': 'WDCGG CH4'
+    }
+)
+ch4_annual = ch4_archive.read_datasets(data_dir)
+
+n2o_archive = archive.select(
+    {
+        'variable': 'n2o', 'type': 'timeseries', 'time_resolution': 'monthly',
+        'name': 'WDCGG N2O'
+    }
+)
+n2o_annual = n2o_archive.read_datasets(data_dir)
+
 seaice_archive = archive.select(
     {
         'variable': 'arctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'
@@ -89,8 +113,20 @@ seaice_data = seaice_archive.read_datasets(data_dir)
 seaice_annual = []
 for ds in seaice_data:
     ds.rebaseline(1981, 2010)
-    annual = ds.make_annual_by_selecting_month(9)
+    annual = ds.make_annual()#_by_selecting_month(9)
     seaice_annual.append(annual)
+
+seaicesh_archive = archive.select(
+    {
+        'variable': 'antarctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'
+    }
+)
+seaicesh_data = seaicesh_archive.read_datasets(data_dir)
+seaicesh_annual = []
+for ds in seaicesh_data:
+    ds.rebaseline(1981, 2010)
+    annual = ds.make_annual()#_by_selecting_month(9)
+    seaicesh_annual.append(annual)
 
 glacier_archive = archive.select(
     {
@@ -239,7 +275,7 @@ STANDARD_PARAMETER_SET = {
 
 sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
-fig, axs = plt.subplots(4, 2, sharex=True)
+fig, axs = plt.subplots(4, 3, sharex=True)
 fig.set_size_inches(12, 8)
 
 for ds in ghg_annual:
@@ -248,56 +284,87 @@ axs[0][0].set_yticks(np.arange(340, 430, 20))
 axs[0][0].tick_params(labelbottom=False, length=0)
 axs[0][0].set_title('Carbon Dioxide (ppm)', loc='left')
 
-for ds in ohc_annual:
-    axs[1][0].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
-axs[1][0].set_yticks(np.arange(-300.0, 150.0, 100.))
+for ds in ch4_annual:
+    axs[1][0].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+axs[1][0].set_yticks(np.arange(1650, 1950, 50))
 axs[1][0].tick_params(labelbottom=False, length=0)
-axs[1][0].set_title('Ocean Heat Content, change from 2005-2020 (ZJ)', loc='left')
+axs[1][0].set_title('Methane (ppb)', loc='left')
 
-for ds in sealevel_annual:
+for ds in n2o_annual:
     axs[2][0].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[2][0].set_yticks(np.arange(0.0, 120.0, 20.))
+axs[2][0].set_yticks(np.arange(300, 340, 10))
 axs[2][0].tick_params(labelbottom=False, length=0)
-axs[2][0].set_title('Sea Level (mm)', loc='left')
+axs[2][0].set_title('Nitrous Oxide (ppb)', loc='left')
 
 for ds in tas_annual:
     axs[3][0].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
 axs[3][0].set_yticks(np.arange(0.0, 1.5, 0.2))
-axs[3][0].set_title('Global Temperature, change from 1850-1900 ($\!^\circ\!$C)', loc='left')
+axs[3][0].set_title('Global Temperature Change ($\!^\circ\!$C)', loc='left')
 
 axs[0][0].set_xticks([])
 axs[1][0].set_xticks([])
 axs[2][0].set_xticks([])
 axs[3][0].set_xticks(np.arange(1955, 2030, 10))
 
-for ds in seaice_annual:
-    axs[0][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[0][1].set_yticks(np.arange(-3, 2, 0.5))
+# Next column
+for ds in ohc_annual:
+    axs[0][1].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
+axs[0][1].set_yticks(np.arange(-300.0, 150.0, 100.))
 axs[0][1].tick_params(labelbottom=False, length=0)
-axs[0][1].set_title('Arctic September Sea-ice Extent (million km$^2$)', loc='left')
+axs[0][1].set_title('Ocean Heat Content (ZJ)', loc='left')
 
-for ds in glacier_annual:
-    axs[1][1].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
-axs[1][1].set_yticks(np.arange(-30.0, 10.0, 5.))
+for ds in sealevel_annual:
+    axs[1][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+axs[1][1].set_yticks(np.arange(0.0, 120.0, 20.))
 axs[1][1].tick_params(labelbottom=False, length=0)
-axs[1][1].set_title('Cumulative Glacier Mass Balance (m w.e.)', loc='left')
+axs[1][1].set_title('Sea Level (mm)', loc='left')
 
-for ds in greenland_annual:
+for ds in seaice_annual:
     axs[2][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[2][1].set_yticks(np.arange(-5000.0, 3000.0, 1000.))
+axs[2][1].set_yticks(np.arange(-2, 2, 0.5))
 axs[2][1].tick_params(labelbottom=False, length=0)
-axs[2][1].set_title('Cumulative Greenland Ice-sheet Mass Balance (Gt)', loc='left')
+axs[2][1].set_title('Arctic Sea-ice Extent (million km$^2$)', loc='left')
 
-for ds in antarctic_annual:
+for ds in seaicesh_annual:
     axs[3][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[3][1].set_yticks(np.arange(-3000.0, 2000., 1000.))
-axs[3][1].set_title('Cumulative Antarctic Ice-sheet Mass Balance (Gt)', loc='left')
+axs[3][1].set_yticks(np.arange(-2, 2, 0.5))
+axs[3][1].set_title('Antarctic Sea-ice Extent (million km$^2$)', loc='left')
 
 axs[0][1].set_xticks([])
 axs[1][1].set_xticks([])
 axs[2][1].set_xticks([])
 axs[3][1].set_xticks(np.arange(1960, 2030, 10))
 axs[3][1].set_xlim(1955,final_year+0.99)
+
+# Next column
+for ds in glacier_annual:
+    axs[0][2].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
+axs[0][2].set_yticks(np.arange(-30.0, 10.0, 5.))
+axs[0][2].tick_params(labelbottom=False, length=0)
+axs[0][2].set_title('Glacier Ice (m w.e.)', loc='left')
+
+for ds in greenland_annual:
+    axs[1][2].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+axs[1][2].set_yticks(np.arange(-5000.0, 3000.0, 1000.))
+axs[1][2].tick_params(labelbottom=False, length=0)
+axs[1][2].set_title('Greenland Ice Sheet (Gt)', loc='left')
+
+for ds in antarctic_annual:
+    axs[2][2].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+axs[2][2].set_yticks(np.arange(-3000.0, 2000., 1000.))
+axs[2][2].tick_params(labelbottom=False, length=0)
+axs[2][2].set_title('Antarctic Ice Sheet (Gt)', loc='left')
+
+for ds in ph_annual:
+    axs[3][2].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+axs[3][2].set_yticks(np.arange(8.04, 8.125, 0.02))
+axs[3][2].set_title('Ocean pH', loc='left')
+
+axs[0][2].set_xticks([])
+axs[1][2].set_xticks([])
+axs[2][2].set_xticks([])
+axs[3][2].set_xticks(np.arange(1960, 2030, 10))
+axs[3][2].set_xlim(1955,final_year+0.99)
 
 plt.subplots_adjust(hspace=0.3)
 
