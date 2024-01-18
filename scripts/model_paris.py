@@ -105,10 +105,10 @@ if __name__ == "__main__":
 
         all_10s.append(annual.running_mean(10, centred=True))
 
-
-    pt.neat_plot(figure_dir, all_annual_datasets, 'model_annual.png', r'Global Mean Temperature Difference ($\degree$C)')
-    pt.neat_plot(figure_dir, all_30s, 'model_30s.png', r'Global Mean Temperature Difference ($\degree$C)')
-    pt.neat_plot(figure_dir, all_20s, 'model_20s.png', r'Global Mean Temperature Difference ($\degree$C)')
-    pt.neat_plot(figure_dir, all_10s, 'model_10s.png', r'Global Mean Temperature Difference ($\degree$C)')
+    common_title = r'Global Mean Temperature Difference ($\degree$C)'
+    pt.neat_plot(figure_dir, all_annual_datasets, 'model_annual.png', common_title)
+    pt.neat_plot(figure_dir, all_30s, 'model_30s.png', common_title)
+    pt.neat_plot(figure_dir, all_20s, 'model_20s.png', common_title)
+    pt.neat_plot(figure_dir, all_10s, 'model_10s.png', common_title)
 
 
