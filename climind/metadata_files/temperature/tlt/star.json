@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#0000FF",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://www.star.nesdis.noaa.gov/pub/smcd/emb/mscat/data/MSU_AMSU_v5.0/Monthly_Atmospheric_Layer_Mean_Temperature/Global_Mean_Anomaly_Time_Series/NESDIS-STAR_TCDR_TLT_Combined_With_TMT_TUT_TLS_Monthly_S198101-E202311_V5.0_Regional_Means_Anomaly.txt"],

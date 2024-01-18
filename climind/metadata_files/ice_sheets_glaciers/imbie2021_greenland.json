@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#d55e00",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["https://ramadda.data.bas.ac.uk/repository/entry/get/imbie_greenland_2021_Gt.csv?entryid=synth%3A77b64c55-7166-4a06-9def-2e400398e452%3AL2ltYmllX2dyZWVubGFuZF8yMDIxX0d0LmNzdg%3D%3D"],

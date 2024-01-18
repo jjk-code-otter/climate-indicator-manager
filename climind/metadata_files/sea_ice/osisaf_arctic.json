@@ -10,6 +10,7 @@
   "acknowledgement": "The OSI SAF Sea Ice Index v2.1 is made available at https://osisaf-hl.met.no/v2p1-sea-ice-index.  The OSI SAF Sea Ice Index v2p1 is prepared using EUMETSAT OSI SAF Sea Ice Concentration data, with R&D input from the ESA Climate Change Initiative (ESA CCI) (Lavergne et al. 2019)",
   "colour": "#e69f00",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["ftp://osisaf.met.no/prod_test/ice/index/v2p1/nh/osisaf_nh_sie_monthly.txt"],

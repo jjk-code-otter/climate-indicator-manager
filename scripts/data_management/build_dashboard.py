@@ -36,10 +36,12 @@ if __name__ == "__main__":
 
     dash2023 = True
     dash2022 = False
+
     decadal = False
     monthly = False
     ocean = False
     cryosphere = False
+
     regional = True
     regional_multiyear = False
     regional_test = False

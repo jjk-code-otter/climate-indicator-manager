@@ -1,7 +1,7 @@
 {
   "name": "CRUTEM5",
   "display_name": "CRUTEM5",
-  "version": "5.0.1.0",
+  "version": "5.0.2.0",
   "variable": "lsat",
   "units": "degC",
   "citation": ["Osborn, T. J., P. D. Jones, D. H. Lister, C. P. Morice, I. R. Simpson and I. C. Harris (2020), Land surface air temperature variations across the globe updated to 2019: the CRUTEM5 dataset, J. Geophys. Res. doi: 10.1029/2019JD032352"],
@@ -10,10 +10,11 @@
   "acknowledgement": "CRUTEM.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/crutem5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "colour": "dimgrey",
   "zpos": 99,
+  "origin": "obs",
   "datasets": [
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/grids/CRUTEM.5.0.1.0.anomalies.nc"],
-	  "filename": ["CRUTEM.5.0.1.0.anomalies.nc"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/grids/CRUTEM.5.0.2.0.anomalies.nc"],
+	  "filename": ["CRUTEM.5.0.2.0.anomalies.nc"],
       "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
@@ -26,10 +27,10 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
-	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
-      "filename": ["CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
-	               "CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/diagnostics/CRUTEM.5.0.2.0.summary_series.global.monthly.csv",
+	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/diagnostics/CRUTEM.5.0.2.0.summary_series.global.annual.csv"],
+      "filename": ["CRUTEM.5.0.2.0.summary_series.global.monthly.csv",
+	               "CRUTEM.5.0.2.0.summary_series.global.annual.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean land temperature",
 	  "time_resolution": "monthly",
@@ -43,10 +44,10 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
-	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
-      "filename": ["CRUTEM.5.0.1.0.summary_series.global.monthly.csv",
-	               "CRUTEM.5.0.1.0.summary_series.global.annual.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.2.0.summary_series.global.monthly.csv",
+	          "https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.1.0/diagnostics/CRUTEM.5.0.2.0.summary_series.global.annual.csv"],
+      "filename": ["CRUTEM.5.0.2.0.summary_series.global.monthly.csv",
+	               "CRUTEM.5.0.2.0.summary_series.global.annual.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean land temperature",
 	  "time_resolution": "annual",

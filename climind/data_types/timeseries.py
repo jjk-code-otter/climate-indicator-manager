@@ -29,6 +29,7 @@ from datetime import datetime
 import cftime as cf
 from climind.data_manager.metadata import CombinedMetadata
 from climind.definitions import ROOT_DIR
+from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
 def log_activity(in_function: Callable) -> Callable:
@@ -590,7 +591,6 @@ class TimeSeriesMonthly(TimeSeries):
 
         return annual_series
 
-
     def calculate_climatology(self, baseline_start_year, baseline_end_year):
         # select part of series in climatology period
         climatology_part = self.df[(self.df['year'] >= baseline_start_year) & (self.df['year'] <= baseline_end_year)]
@@ -1115,6 +1115,96 @@ class TimeSeriesAnnual(TimeSeries):
 
         return moving_average
 
+    def running_trend(self, run_length: int):
+        """
+        Calculate a smoothed series by fitting a straight line to the past 30 years of data and
+        taking the final point as the data value instead
+
+        Parameters
+        ----------
+        run_length: int
+            Number of years for which the trend should be calculated
+
+        Returns
+        -------
+        TimeSeriesAnnual
+            :class:`TimeSeriesAnnual` containing the end point of trends of length run_length. Where there are too few
+            years to calculate a trend, np.nan appears in the data column of the data frame
+        """
+        moving_average = copy.deepcopy(self)
+        moving_average.df.data[0:run_length] = np.nan
+
+        for i in range(run_length-1, len(self.df.data)):
+            snippet = self.df.data[i - run_length + 1:i + 1]
+            time = self.get_year_axis()[i - run_length + 1:i + 1]
+
+            m, b = np.polyfit(time, snippet, 1)
+            moving_average.df.data[i] = b + m * time.values[-1]
+
+        moving_average.update_history(f'Calculated smoothed series with {run_length}-year trends')
+        moving_average.metadata['derived'] = True
+
+        return moving_average
+
+    def running_lowess(self, number_of_points: int = 10):
+        """
+        Lowess smooth time point t by running a lowess smoother from t=0 to t=t. For a regular lowess
+        smoother see method lowess.
+
+        Parameters
+        ----------
+        number_of_points: int
+            Number of points to use in the lowess smoother
+
+        Returns
+        -------
+
+        """
+        moving_average = copy.deepcopy(self)
+        moving_average.df.data[0:number_of_points] = np.nan
+
+        for i in range(number_of_points, len(self.df.data)):
+            snippet = self.df.data[0:i + 1]
+            time = self.get_year_axis()[0:i + 1]
+
+            fraction_of_data = number_of_points / len(snippet)
+
+            fit = lowess(snippet, time, fraction_of_data)
+            moving_average.df.data[i] = fit[i, 1]
+
+        moving_average.update_history(
+            f'Calculated lowess smoothed series with {fraction_of_data} of data used for each fit')
+        moving_average.metadata['derived'] = True
+        return moving_average
+
+    def lowess(self, number_of_points: int = 10):
+        """
+        Lowess smooth the series
+
+        Parameters
+        ----------
+        number_of_points: int
+            Number of points to use in the lowess smoother
+
+        Returns
+        -------
+
+        """
+        moving_average = copy.deepcopy(self)
+
+        snippet = self.df.data[:]
+        time = self.get_year_axis()[:]
+
+        fraction_of_data = number_of_points / len(snippet)
+
+        fit = lowess(snippet, time, fraction_of_data)
+        moving_average.df.data[:] = fit[:, 1]
+
+        moving_average.update_history(
+            f'Calculated lowess smoothed series with {fraction_of_data} of data used for each fit')
+        moving_average.metadata['derived'] = True
+        return moving_average
+
     @log_activity
     def running_stdev(self, run_length: int, centred: bool = False):
         """
@@ -1159,7 +1249,7 @@ class TimeSeriesAnnual(TimeSeries):
 
         for i in range(1, n_years):
             over_margin = self.df.data[i] - np.max(self.df.data[0:i])
-            under_margin =  self.df.data[i]- np.min(self.df.data[0:i])
+            under_margin = self.df.data[i] - np.min(self.df.data[0:i])
             if over_margin > 0:
                 out_series.df.data[i] = over_margin
             elif under_margin < 0:
@@ -1460,7 +1550,8 @@ def write_dataset_summary_file(all_datasets, csv_filename):
             if isinstance(ds, TimeSeriesAnnual):
                 merged_df = pd.merge(combined_df, df[['year', 'data']], on='year', how='left', validate='m:m')
             if isinstance(ds, TimeSeriesMonthly):
-                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left', validate='m:m')
+                merged_df = pd.merge(combined_df, df[['year', 'month', 'data']], on=['year', 'month'], how='left',
+                                     validate='m:m')
 
             merged_df.rename(columns={'data': col_name}, inplace=True)
             combined_df = merged_df

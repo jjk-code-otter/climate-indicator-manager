@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#56b4e9",
   "zpos": 10,
+  "origin": "obs",
   "notes": "Data from the GRACE and GRACE-FO JPL RL06Mv2 Mascon Solution",
   "datasets": [
      {

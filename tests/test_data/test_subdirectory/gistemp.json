@@ -9,6 +9,7 @@
   "data_citation": [""],
   "colour": "#eeeeee",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz"],

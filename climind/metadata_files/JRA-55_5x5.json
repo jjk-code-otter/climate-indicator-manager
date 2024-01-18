@@ -16,6 +16,7 @@
     "acknowledgement": "",
     "colour": "#d55e00",
     "zpos": 1,
+    "origin": "obs",
     "datasets": [
         {
             "url": [
@@ -33,7 +34,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['anl_surf125.011_tmp.202301_202312', 'anl_surf125.2023MMMM'] downloaded from ['', ''] at ['2023-11-06 14:53:35']",
+                "Data set created from file ['anl_surf125.011_tmp.202401_202412', 'anl_surf125.2024MMMM'] downloaded from ['', ''] at ['2024-01-15 11:20:51']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -42,9 +43,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-11-06 14:53:35"
+                "2024-01-15 11:20:51"
             ],
-            "last_month": "2023-10-01 00:00:00"
+            "last_month": "2023-12-01 00:00:00"
         }
     ]
 }

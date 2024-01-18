@@ -10,6 +10,7 @@
   "acknowledgement": "Generated using AVISO+ Products",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": [""],

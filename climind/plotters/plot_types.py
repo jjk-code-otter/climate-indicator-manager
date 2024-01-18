@@ -100,7 +100,7 @@ def accumulate(in_array):
 
 def equivalence(key):
     lookup = {
-        'tas': 'Globe',
+        'tas': 'Globe (land and ocean)',
         'wmo_ra_1': 'Africa',
         'wmo_ra_2': 'Asia',
         'wmo_ra_3': 'South America',
@@ -1634,10 +1634,10 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
     plt.title('Year-to-date Global Temperature Anomalies 1850-2023', fontsize=25, y=1.04)
 
-    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, Kadow et al, ERA5, and JRA-55",
+    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
-    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
@@ -1789,10 +1789,10 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.gcf().text(0.52, 0.81, '2023', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, Kadow et al, ERA5, and JRA-55",
+    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
-    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)

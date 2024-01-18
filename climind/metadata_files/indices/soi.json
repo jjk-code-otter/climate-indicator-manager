@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": ["https://psl.noaa.gov/data/correlation/soi.data"],

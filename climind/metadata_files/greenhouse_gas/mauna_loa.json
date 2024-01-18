@@ -10,6 +10,7 @@
   "acknowledgement": "Dr. Pieter Tans, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends/) and Dr. Ralph Keeling, Scripps Institution of Oceanography (scrippsco2.ucsd.edu/).",
   "colour": "#009e73",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt"],

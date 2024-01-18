@@ -10,6 +10,7 @@
   "acknowledgement": "Contains modified Copernicus Climate Change Service information AAAA",
   "colour": "#ff0000",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
      {
       "url": [""],

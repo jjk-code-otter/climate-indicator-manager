@@ -10,6 +10,7 @@
   "acknowledgement": "Contains using Copernicus Climate Change Service information [YYYY]. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.",
   "colour": "#0072b2",
   "zpos": 1,
+  "origin": "obs",
   "datasets": [
     {
       "url": [""],

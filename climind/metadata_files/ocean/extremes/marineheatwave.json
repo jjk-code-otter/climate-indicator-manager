@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#d55e00",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://raw.githubusercontent.com/robwschlegel/MHWapp/master/data/annual_summary/OISST_cat_daily_1982-2011_total.csv"],

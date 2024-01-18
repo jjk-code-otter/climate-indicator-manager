@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#cc79a7",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
 	{
       "url": ["https://zenodo.org/record/6475858/files/FREVA-CLINT/climatereconstructionAI-v1.0.2.zip"],

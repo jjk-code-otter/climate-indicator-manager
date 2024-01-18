@@ -10,6 +10,7 @@
   "acknowledgement": "",
   "colour": "#e69f00",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://figshare.com/ndownloader/files/31695008"],

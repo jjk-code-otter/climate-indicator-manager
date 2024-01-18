@@ -16,6 +16,7 @@
     "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are \u00c2\u00a9 British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
     "colour": "dimgrey",
     "zpos": 99,
+    "origin": "obs",
     "datasets": [
         {
             "url": [
@@ -33,7 +34,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Gridded dataset created from file ['HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc'] downloaded from ['https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc']",
+                "Gridded dataset created from file ['HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc'] downloaded from ['https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file HadCRUT5_5x5.nc"
@@ -41,9 +42,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-11-23 21:09:26"
+                "2024-01-15 11:56:27"
             ],
-            "last_month": "2023-10-16 00:00:00"
+            "last_month": "2023-12-16 00:00:00"
         }
     ]
 }

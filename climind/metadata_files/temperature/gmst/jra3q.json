@@ -1,0 +1,46 @@
+{
+  "name": "JRA-3Q",
+  "display_name": "JRA-3Q",
+  "version": "",
+  "variable": "tasIGNORE",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#d55e00",
+  "zpos": 1,
+  "origin": "obs",
+  "datasets": [
+     {
+      "url": [""],
+	  "filename": ["JRA-3Q_tmp2m_global_ts_125_Clim9120.txt"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jra55",
+	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [""],
+      "filename": ["JRA-3Q_tmp2m_global_ts_125_Clim9120.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jra55",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

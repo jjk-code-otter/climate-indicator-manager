@@ -11,11 +11,12 @@
         "https://doi.org/10.1029/2020GL090873"
     ],
     "data_citation": [
-        "R. S. Vose, B. Huang, X. Yin, D. Arndt, D. R. Easterling, J. H. Lawrimore, M. J. Menne, A. Sanchez-Lugo, and H. M. Zhang (2022): NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 5.1 [Global Mean]. NOAA National Centers for Environmental Information. doi.org/10.25921/2tj4-0e21 [2023-11-23 21:27:17]."
+        "R. S. Vose, B. Huang, X. Yin, D. Arndt, D. R. Easterling, J. H. Lawrimore, M. J. Menne, A. Sanchez-Lugo, and H. M. Zhang (2022): NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 5.1 [Global Mean]. NOAA National Centers for Environmental Information. doi.org/10.25921/2tj4-0e21 [2024-01-17 10:19:08]."
     ],
     "acknowledgement": "",
     "colour": "#e69f00",
     "zpos": 10,
+    "origin": "obs",
     "datasets": [
         {
             "url": [
@@ -33,7 +34,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2023-11-23 21:27:17']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2024-01-17 10:19:08']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAA Interim_5x5.nc"
@@ -41,9 +42,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2023-11-23 21:27:17"
+                "2024-01-17 10:19:08"
             ],
-            "last_month": "2023-10-01 00:00:00"
+            "last_month": "2023-12-01 00:00:00"
         }
     ]
 }

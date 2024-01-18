@@ -10,10 +10,11 @@
   "acknowledgement": "",
   "colour": "#cc79a7",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
 	{
       "url": [""],
-      "filename": ["HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-*.nc"],
+      "filename": ["HadCRUT5.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-*.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
@@ -28,7 +29,7 @@
     },
 	{
       "url": [""],
-      "filename": ["HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_global_mean_185001-*.nc"],
+      "filename": ["HadCRUT5.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_global_mean_185001-*.nc"],
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
@@ -43,7 +44,7 @@
     },
 	{
       "url": [""],
-      "filename": ["HadCRUT.5.0.1.0.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_global_mean_185001-*.nc"],
+      "filename": ["HadCRUT5.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_global_mean_185001-*.nc"],
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "annual",

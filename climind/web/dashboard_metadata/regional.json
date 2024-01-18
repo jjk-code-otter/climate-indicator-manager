@@ -8,44 +8,44 @@
       "cards": [
         {
           "link_to": "wmo_ra_i", "title": "WMO RA I Africa main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
           "link_to": "wmo_ra_ii", "title": "WMO RA II Asia main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
           "link_to": "wmo_ra_iii", "title": "WMO RA III South America main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
           "link_to": "wmo_ra_iv", "title": "WMO RA IV North America main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
           "link_to": "wmo_ra_v", "title": "WMO RA V Southwest Pacific main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         },
         {
           "link_to": "wmo_ra_vi", "title": "WMO RA VI Europe main",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
         }
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -54,32 +54,32 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -92,43 +92,43 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA I Africa",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "North Africa",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "North Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "West Africa",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "West Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Central Africa",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Central Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Eastern Africa",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Eastern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Southern Africa",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Southern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Indian Ocean",
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Indian Ocean", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
@@ -137,7 +137,7 @@
           "selecting": {
             "type": "timeseries",
             "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-            "time_resolution": "annual"
+            "time_resolution": "annual", "origin": "obs"
           },
           "processing": [],
           "plotting": {
@@ -150,7 +150,7 @@
           "selecting": {
             "type": "timeseries",
             "variable": ["africa_subregion_1","africa_subregion_2","africa_subregion_3", "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"],
-            "time_resolution": "annual"
+            "time_resolution": "annual", "origin": "obs"
           },
           "processing": [],
           "plotting": {
@@ -162,7 +162,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
@@ -170,7 +170,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
@@ -178,7 +178,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -187,37 +187,37 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -230,13 +230,13 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA II Asia",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -246,7 +246,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly map Asia",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
@@ -254,7 +254,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Asia",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
@@ -262,7 +262,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -271,7 +271,7 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -284,37 +284,37 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA III South America",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Caribbean",
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Mexico",
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Mexico", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Central America",
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Central America", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Latin America and the Caribbean",
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -326,7 +326,7 @@
           "selecting": {
             "type": "timeseries",
             "variable": ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"],
-            "time_resolution": "annual"
+            "time_resolution": "annual", "origin": "obs"
           },
           "processing": [],
           "plotting": {
@@ -337,7 +337,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
@@ -345,7 +345,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
@@ -366,7 +366,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -375,27 +375,27 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -408,13 +408,13 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA IV North America",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -424,7 +424,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -433,7 +433,7 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -446,19 +446,19 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA V Southwest Pacific",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
           "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean)",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -468,7 +468,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly map SWPacific",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
@@ -476,7 +476,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map SWPacific",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
@@ -484,7 +484,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -493,12 +493,12 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -511,13 +511,13 @@
       "cards": [
         {
           "link_to":  null, "title": "WMO RA VI Europe",
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
@@ -527,7 +527,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly map Europe",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
@@ -535,7 +535,7 @@
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Europe",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
@@ -543,7 +543,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -552,7 +552,7 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
@@ -565,25 +565,25 @@
       "cards": [
         {
           "link_to":  null, "title": "Arab League",
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "North Africa LAS",
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "North African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "East Africa LAS",
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "Middle East LAS",
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
@@ -605,7 +605,7 @@
           "selecting": {
             "type": "timeseries",
             "variable": ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"],
-            "time_resolution": "annual"
+            "time_resolution": "annual", "origin": "obs"
           },
           "processing": [],
           "plotting": {
@@ -616,22 +616,22 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2023]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }

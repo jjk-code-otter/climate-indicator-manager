@@ -18,6 +18,7 @@
   "acknowledgement": "",
   "colour": "#e69f00",
   "zpos": 10,
+  "origin": "obs",
   "datasets": [
     {
       "url": ["https://earth.gsfc.nasa.gov/sites/default/files/neptune/files/NH_IceExt_Monthly_1978-2017.txt"],
