@@ -40,10 +40,6 @@ if __name__ == "__main__":
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
 
-    script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
-                        filemode='w', level=logging.INFO)
-
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
