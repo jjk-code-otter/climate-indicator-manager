@@ -52,7 +52,7 @@
           "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
             "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method":  "select_year_and_month", "args": [2023, 12]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Precipitation quantiles"}
+          "plotting": {"function": "dashboard_map_single", "title": "Precipitation quantiles 2023"}
         },
         {
           "link_to": "short_term_climate_drivers", "title":"Short-term Climate Drivers",
