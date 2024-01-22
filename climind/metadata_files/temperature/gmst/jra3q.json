@@ -2,7 +2,7 @@
   "name": "JRA-3Q",
   "display_name": "JRA-3Q",
   "version": "",
-  "variable": "tasIGNORE",
+  "variable": "tas",
   "units": "degC",
   "citation": [""],
   "citation_url": [""],
