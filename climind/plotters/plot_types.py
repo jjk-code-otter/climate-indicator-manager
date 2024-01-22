@@ -131,7 +131,7 @@ def equivalence(key):
 
 
 def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-                  dark: bool = False, marker = False) -> List[int]:
+                  dark: bool = False, marker=False) -> List[int]:
     """
     Given a list of data sets, plot each one on the provided axis.
 
@@ -167,7 +167,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         if marker:
             axis.plot(x_values, ds.df['data'],
                       label=f"{ds.metadata['display_name']} ({date_range})",
-                      color=col, zorder=zord, linewidth=linewidth, marker = 'o')
+                      color=col, zorder=zord, linewidth=linewidth, marker='o')
         else:
             axis.plot(x_values, ds.df['data'],
                       label=f"{ds.metadata['display_name']} ({date_range})",
@@ -380,7 +380,7 @@ def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
 
 def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-              image_filename: str, title: str, dark: bool = False, yrange: List[float] =None) -> str:
+              image_filename: str, title: str, dark: bool = False, yrange: List[float] = None) -> str:
     """
     Create the standard annual plot
 
@@ -442,7 +442,6 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
 def records_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filename: str, title: str,
                  dark: bool = False) -> str:
-
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     caption = caption_builder(all_datasets)
@@ -1465,6 +1464,12 @@ def regional_dashboard_map(out_dir: Path, all_datasets: List[GridAnnual], image_
     return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'mean', region=region_extents)
 
 
+def regional_dashboard_map_single(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
+                                  west=None, east=None, south=None, north=None) -> str:
+    region_extents = [west, east, south, north]
+    return dashboard_map_generic(out_dir, all_datasets, image_filename, title, 'single', region=region_extents)
+
+
 def regional_dashboard_uncertainty_map(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
                                        west=None, east=None, south=None, north=None) -> str:
     region_extents = [west, east, south, north]
@@ -1637,7 +1642,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
@@ -1792,7 +1797,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)

@@ -174,6 +174,14 @@
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
+        },
+        {
+          "link_to":  null, "title": "Precipitation percentile map Africa",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
+                       "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         }
       ],
       "paragraphs": [
@@ -258,6 +266,14 @@
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
+        },
+        {
+          "link_to":  null, "title": "Precipitation percentile map Asia",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
+                       "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
         }
       ],
       "paragraphs": [
@@ -340,6 +356,14 @@
             "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+                       "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Precipitation percentile map LAC",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
@@ -480,6 +504,14 @@
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Precipitation percentile map SW Pacific",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
+                       "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
         }
       ],
       "paragraphs": [
@@ -538,6 +570,14 @@
             "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+                       "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
+        },
+        {
+          "link_to":  null, "title": "Precipitation percentile map Europe",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         }
       ],
