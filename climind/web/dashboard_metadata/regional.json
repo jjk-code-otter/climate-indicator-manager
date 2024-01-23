@@ -182,6 +182,13 @@
           "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
+        },
+        {
+          "link_to":  null, "title": "Sea level trend map Africa",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing":  [],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Regional sea level change from 1993-August 2022",
+                       "kwargs": {"west": -30, "east":  65, "north": 45, "south": -45}}
         }
       ],
       "paragraphs": [
@@ -274,6 +281,13 @@
           "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
+        },
+        {
+          "link_to":  null, "title": "Sea level trend map Asia",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing":  [],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Regional sea level change from 1993-August 2022",
+                       "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
         }
       ],
       "paragraphs": [
@@ -365,6 +379,13 @@
           "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Sea level trend map LAC",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing":  [],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Regional sea level change from 1993-August 2022",
+                       "kwargs": {"west": -120, "east":  -20, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map LAC",
@@ -512,6 +533,13 @@
           "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
+        },
+        {
+          "link_to":  null, "title": "Sea level trend map SW Pacific",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing":  [],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Regional sea level change from 1993-August 2022",
+                       "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
         }
       ],
       "paragraphs": [
@@ -578,6 +606,13 @@
             "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2023",
+                       "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
+        },
+        {
+          "link_to":  null, "title": "Sea level trend map Europe",
+          "selecting": {"type": "gridded", "variable": "sealeveltrend", "time_resolution": "monthly"},
+          "processing":  [],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Regional sea level change from 1993-August 2022",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         }
       ],

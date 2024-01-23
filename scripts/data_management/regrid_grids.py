@@ -31,11 +31,12 @@ if __name__ == "__main__":
             'time_resolution': 'monthly',
             'name': [#'GETQUOCS', 'CMST', 'Vaccaro',
                      #'Kadow CMIP', 'Kadow',
-                    'Kadow'
+                    #'Kadow'
                      #'NOAAGlobalTemp',
                      #'NOAA Interim', 'HadCRUT5',
                      #'Berkeley Earth', 'GISTEMP', 'JRA-55'
                      #'ERA5', 'JRA-55'
+                'JRA-55'
             ]
         }
     )

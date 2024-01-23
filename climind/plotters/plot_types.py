@@ -1229,9 +1229,14 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
     elif var == 'sealeveltrend':
-        wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
-        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        wmo_cols = ['#1F3562','#064D97','#0F6BB1','#3887BF','#569ECA','#82BAD7','#ACCDEB','#CADDF1','#E0EAF9','#F8F7FC',
+                    '#FEF5E9','#FFE5D0','#FAD2A6','#F9B77F','#F4994E','#EE7B2B','#E85F0B','#CD4511','#9D3915','#7F290E']
+        #wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        # wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+        #            '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        #wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#57A2CD', '#AECDE8', '#F8F8F8',
+        #            '#FEF5E9', '#F9D3A7', '#ED9B55', '#CD4511', '#9F3817', '#7F290E']
     else:
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
@@ -1370,9 +1375,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
 
     if main_variable == 'sealeveltrend':
-        wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
-        wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
-                    '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        wmo_cols = ['#1F3562','#064D97','#0F6BB1','#3887BF','#569ECA','#82BAD7','#ACCDEB','#CADDF1','#E0EAF9','#F8F7FC',
+                    '#FEF5E9','#FFE5D0','#FAD2A6','#F9B77F','#F4994E','#EE7B2B','#E85F0B','#CD4511','#9D3915','#7F290E']
+        # wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        # wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
+        #            '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
+        # wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#57A2CD', '#AECDE8', '#F8F8F8',
+        #            '#FEF5E9', '#F9D3A7', '#ED9B55', '#CD4511', '#9D3915', '#7F290E']
     if 'precip_quantiles' in main_variable:
         wmo_levels = [0, 0.1, 0.2, 0.8, 0.9, 1]
         wmo_cols = ['#543005', '#bf812d', '#e5e5e5', '#35978f', '#003c30']
