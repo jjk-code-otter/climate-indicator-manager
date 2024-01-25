@@ -409,6 +409,7 @@
           "title": "Pacific Decadal Oscillation",
           "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
           "processing": [
+            {"method":  "lowess", "args":  []},
             {"method": "select_year_range", "args": [1950, 2023]}
           ],
           "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
@@ -456,18 +457,17 @@
             "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method":  "select_year_and_month", "args": [2023, 12]}],
           "plotting": {"function": "dashboard_map_single", "title": "Precipitation quantiles 2023"}
-        },
-        {
+         },
+         {
           "link_to": null,
           "title": "Annual precipitation anomalies",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
-            {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "select_period", "args": [2023, 1, 2023, 12]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
           "plotting": {"function": "dashboard_map_single", "title": "2023 Annual Precipitation anomaly"}
-        }
+         }
       ],
       "paragraphs": [
         {
