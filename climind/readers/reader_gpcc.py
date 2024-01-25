@@ -37,7 +37,6 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     elif metadata['type'] == 'gridded':
 
         filename = [out_dir / x for x in metadata['filename']]
-        #        filename = out_dir / metadata['filename'][0]
 
         if 'grid_resolution' in kwargs:
             if kwargs['grid_resolution'] == 5:
