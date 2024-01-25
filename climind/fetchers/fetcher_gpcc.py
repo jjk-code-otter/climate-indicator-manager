@@ -29,21 +29,25 @@ def fetch_year(url: str, outdir: Path, year: int):
         inferred_filename = filename_from_url(filled_url)
         out_path = outdir / inferred_filename
 
-        try:
-            r = requests.get(filled_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
+        if not out_path.exists():
+            try:
+                r = requests.get(filled_url, stream=True, headers={'User-agent': 'Mozilla/5.0'})
 
-            if r.status_code == 200:
-                with open(out_path, 'wb') as f:
-                    r.raw.decode_content = True
-                    shutil.copyfileobj(r.raw, f)
+                if r.status_code == 200:
+                    with open(out_path, 'wb') as f:
+                        r.raw.decode_content = True
+                        shutil.copyfileobj(r.raw, f)
 
-        except requests.exceptions.ConnectionError:
-            print(f"Couldn't connect to {filled_url}")
+            except requests.exceptions.ConnectionError:
+                print(f"Couldn't connect to {filled_url}")
 
 def fetch(url: str, outdir: Path, _) -> None:
 
     if 'normals' in url:
         fetch_year(url, outdir, 2222)
-    else:
+    elif 'monitoring' in url:
         for year in range(1982, 2024):
+            fetch_year(url, outdir, year)
+    elif 'first_guess' in url:
+        for year in range(2022, 2024):
             fetch_year(url, outdir, year)

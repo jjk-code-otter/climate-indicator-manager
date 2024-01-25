@@ -24,6 +24,6 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
-    ts_archive = archive.select({'type': 'gridded'})
+    ts_archive = archive.select({'type': 'gridded', 'name': 'GPCC'})
 
     ts_archive.download(data_dir)

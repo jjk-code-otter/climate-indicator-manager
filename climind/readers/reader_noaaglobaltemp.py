@@ -165,7 +165,12 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             columns = line.split()
             years.append(int(columns[0]))
             anomalies.append(float(columns[1]))
-            uncertainties.append(np.sqrt(float(columns[2])))
+
+            variance = float(columns[2])
+            if variance >= 0:
+                uncertainties.append(np.sqrt(variance))
+            else:
+                uncertainties.append(np.nan)
 
     selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 

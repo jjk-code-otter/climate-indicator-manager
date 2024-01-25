@@ -15,14 +15,18 @@
     {
       "url": [
         "https://opendata.dwd.de/climate_environment/GPCC/monitoring_v2022/YYYY/monitoring_v2022_10_YYYY_MMMM.nc.gz",
-        "https://opendata.dwd.de/climate_environment/GPCC/gpcc_normals_v2022/normals_1981_2010_v2022_10.nc.gz"
+        "https://opendata.dwd.de/climate_environment/GPCC/first_guess/YYYY/first_guess_monthly_YYYY_MMMM.nc.gz",
+        "https://opendata.dwd.de/climate_environment/GPCC/gpcc_normals_v2022/normals_1981_2010_v2022_10.nc.gz",
+        "https://opendata.dwd.de/climate_environment/GPCC/gpcc_normals_v2022/normals_1991_2020_v2022_10.nc.gz"
       ],
 	  "filename": [
         "monitoring_v2022_10_YYYY_MMMM.nc.gz",
-        "normals_1981_2010_v2022_10.nc.gz"
+        "first_guess_monthly_YYYY_MMMM.nc.gz",
+        "normals_1981_2010_v2022_10.nc.gz",
+        "normals_1991_2020_v2022_10.nc.gz"
       ],
       "type": "gridded",
-      "long_name": "Precipitation Total",
+      "long_name": "Precipitation",
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.0,
 	  "climatology_start": 1991,

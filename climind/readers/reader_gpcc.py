@@ -27,7 +27,7 @@ import xarray as xa
 
 import climind.data_types.grid as gd
 from climind.data_manager.metadata import CombinedMetadata
-
+from climind.config.config import CLIMATOLOGY
 
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     construction_metadata = copy.deepcopy(metadata)
@@ -36,7 +36,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
     elif metadata['type'] == 'gridded':
 
-        filename = out_dir / metadata['filename'][0]
+        filename = [out_dir / x for x in metadata['filename']]
 
         if 'grid_resolution' in kwargs:
             if kwargs['grid_resolution'] == 5:
@@ -48,10 +48,21 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 
 def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
+    # read appropriate climatology given climatology spec in config file
+    for file in filename:
+        if f"{CLIMATOLOGY[0]}_{CLIMATOLOGY[1]}" in str(file):
+            climatology = xa.open_dataset(file, decode_times=False)
+            climatology = climatology[['precip']]
+            target_climatology = np.zeros((12, 180, 360))
+            target_climatology[:, :, :] = np.flip(climatology.precip.data[:, :, :], 1)
+
     dataset_list = []
     for year, month in itertools.product(range(1982, 2030), range(1, 13)):
-        filled_filename = str(filename).replace('YYYY', f'{year}')
+        filled_filename = str(filename[0]).replace('YYYY', f'{year}')
         filled_filename = Path(filled_filename.replace('MMMM', f'{month:02d}'))
+
+        filled_firstguess = str(filename[1]).replace('YYYY', f'{year}')
+        filled_firstguess = Path(filled_firstguess.replace('MMMM', f'{month:02d}'))
 
         if filled_filename.exists():
             df = xa.open_dataset(filled_filename)
@@ -62,9 +73,23 @@ def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
             times = pd.date_range(start=f'{year}-{month:02d}-01', freq='1MS', periods=1)
             target_grid = np.zeros((1, 180, 360))
             target_grid[:, :, :] = np.flip(df.p.data[:, :, :], 1)
+            target_grid[:, :, :] = target_grid[:, :, :] - target_climatology[month - 1, :, :]
 
             ds = gd.make_xarray(target_grid, times, latitudes, longitudes, variable='pre')
+            dataset_list.append(ds)
 
+        elif not (filled_filename.exists()) and filled_firstguess.exists():
+            df = xa.open_dataset(filled_firstguess, decode_times=False)
+            df = df[['p']]
+
+            latitudes = np.linspace(-89.5, 89.5, 180)
+            longitudes = np.linspace(-179.5, 179.5, 360)
+            times = pd.date_range(start=f'{year}-{month:02d}-01', freq='1MS', periods=1)
+            target_grid = np.zeros((1, 180, 360))
+            target_grid[:, :, :] = np.flip(df.p.data[:, :, :], 1)
+            target_grid[:, :, :] = target_grid[:, :, :] - target_climatology[month - 1, :, :]
+
+            ds = gd.make_xarray(target_grid, times, latitudes, longitudes, variable='pre')
             dataset_list.append(ds)
 
     combo = xa.concat(dataset_list, dim='time')

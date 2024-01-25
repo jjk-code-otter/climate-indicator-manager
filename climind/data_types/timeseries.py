@@ -889,6 +889,38 @@ class TimeSeriesMonthly(TimeSeries):
 
         return moving_average
 
+    def lowess(self, number_of_points: int = 60):
+        """
+        Lowess smooth the series
+
+        Parameters
+        ----------
+        number_of_points: int
+            Number of points to use in the lowess smoother
+
+        Returns
+        -------
+
+        """
+        moving_average = copy.deepcopy(self)
+
+        snippet = self.df.data[:]
+        time = self.get_year_axis()[:]
+
+        fraction_of_data = number_of_points / len(snippet)
+
+        fit = lowess(snippet, time, fraction_of_data)
+        moving_average.df.data.iloc[:] = fit[:, 1]
+
+        # Smoothing is different at ends of series (effectively extrapolation) so terminate half filter width from ends
+        moving_average.df.data.iloc[0: int(number_of_points / 2)] = np.nan
+        moving_average.df.data.iloc[-1 * int(number_of_points / 2):] = np.nan
+
+        moving_average.update_history(
+            f'Calculated lowess smoothed series with {fraction_of_data} of data used for each fit')
+        moving_average.metadata['derived'] = True
+        return moving_average
+
 
 class TimeSeriesAnnual(TimeSeries):
     """
@@ -1134,7 +1166,7 @@ class TimeSeriesAnnual(TimeSeries):
         moving_average = copy.deepcopy(self)
         moving_average.df.data[0:run_length] = np.nan
 
-        for i in range(run_length-1, len(self.df.data)):
+        for i in range(run_length - 1, len(self.df.data)):
             snippet = self.df.data[i - run_length + 1:i + 1]
             time = self.get_year_axis()[i - run_length + 1:i + 1]
 
