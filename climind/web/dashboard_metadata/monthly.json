@@ -51,9 +51,9 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2023, 5]}
+            {"method": "select_year_and_month", "args": [2023, 12]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "May 2023 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "December 2023 Temperature Anomaly"}
         },
         {
           "link_to": null,

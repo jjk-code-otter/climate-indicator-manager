@@ -416,6 +416,15 @@
         },
         {
           "link_to": null,
+          "title": "Indian Ocean Dipole",
+          "selecting": {"type":  "timeseries", "variable": "iod", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1980, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Indian Ocean Dipole"}
+        },
+        {
+          "link_to": null,
           "title": "North Atlantic Oscillation",
           "selecting": {"type":  "timeseries", "variable": "nao", "time_resolution": "monthly"},
           "processing": [

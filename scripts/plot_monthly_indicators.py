@@ -154,6 +154,14 @@ if __name__ == "__main__":
         'TLT']
     }
 
+    holdall = {
+        'iod': [
+            {'variable': 'iod',
+             'type': 'timeseries',
+             'time_resolution': 'monthly'},
+            'IOD']
+    }
+
     for combo in holdall:
 
         selection_metadata = holdall[combo][0]
