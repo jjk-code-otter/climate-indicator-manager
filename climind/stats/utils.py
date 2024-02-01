@@ -150,3 +150,78 @@ def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
         output_file.write(f'{out_line}\n')
 
         output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=20))
+
+
+def get_latitudes(resolution):
+    """
+    Generate a "latitude" array running from -90 + half the resolution to 90 - half the resolution.
+
+    Parameters
+    ----------
+    resolution: float
+        Resolution of the grid
+
+    Returns
+    -------
+    ndarray
+    """
+    return np.arange(-90.0 + resolution / 2., 90.0 + resolution / 2., resolution)
+
+
+def get_n_years_from_n_months(n_months):
+    """
+    For a given number of months, count the number of full years
+
+    Parameters
+    ----------
+    n_months: int
+        Number of months to convert to whole years
+
+    Returns
+    -------
+    int
+        Number of whole years
+    """
+    n_years = int(np.floor(n_months / 12.))
+    return n_years
+
+
+def monthly_to_annual_array(monthly_means):
+    """
+    Calculate 12-month averages from a monthly array of shape (n_months, 3). For use in the IPCC
+    averaging method
+
+    Parameters
+    ----------
+    monthly_means: ndarray(n_months, 3)
+
+    Returns
+    -------
+    ndarray(n_years, 3)
+        Returns the annual averages
+    """
+    annual_means = np.mean(monthly_means.reshape((-1, 12, 3)), axis=1)
+    return annual_means
+
+
+def rolling_average(input_array, window_length):
+    """
+    Calculate a rolling average of specified window_length
+
+    Parameters
+    ----------
+    input_array: ndarray
+        input array for which rolling averages are to be calculated
+    window_length: int
+        length of rolling average window
+
+    Returns
+    -------
+    ndarray
+
+    """
+    out = np.zeros((len(input_array)))
+    out[:] = np.nan
+    for i in range(window_length, len(input_array) + 1):
+        out[i - int(window_length / 2) - 1] = np.mean(input_array[i - window_length:i])
+    return out

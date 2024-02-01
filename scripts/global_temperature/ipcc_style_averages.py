@@ -25,6 +25,8 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from climind.config.config import DATA_DIR
+from climind.stats.utils import (get_latitudes, get_n_years_from_n_months,
+                                 monthly_to_annual_array, rolling_average)
 
 import matplotlib.pyplot as plt
 
@@ -204,8 +206,10 @@ def simple_obs_ingest(filename):
 
     # Determine how many months there are and select only whole years starting from start of array
     n_months = data.shape[0]
-    n_years = int(np.floor(n_months / 12.))
-    data = data[0:n_years * 12, :, :]
+    n_years = get_n_years_from_n_months(n_months)
+    n_months = n_years * 12
+
+    data = data[0:n_months, :, :]
 
     return data
 
@@ -233,7 +237,7 @@ def calculate_spatial_mean(observation_array):
 
     latitudes = np.zeros((n_latitude, n_longitude))
     for x in range(n_longitude):
-        latitudes[:, x] = np.arange(-90.0 + resolution / 2., 90.0 + resolution / 2., resolution)
+        latitudes[:, x] = get_latitudes(resolution)
     weights = np.cos(np.deg2rad(latitudes))
 
     spatial_means = np.zeros((length, 3))
@@ -264,32 +268,9 @@ def calculate_annual_mean(monthly_means):
     -------
 
     """
-    # Apologies for the one line awfulness, but hey! it works.
-    annual_means = np.mean(monthly_means.reshape((-1, 12, 3)), axis=1)
-    return annual_means
+    return monthly_to_annual_array(monthly_means)
 
 
-def rolling_average(input_array, window_length):
-    """
-    Calculate a rolling average of specified window_length
-
-    Parameters
-    ----------
-    input_array: ndarray
-        input array for which rolling averages are to be calculated
-    window_length: int
-        length of rolling average window
-
-    Returns
-    -------
-    ndarray
-
-    """
-    out = np.zeros((len(input_array)))
-    out[:] = np.nan
-    for i in range(window_length, len(input_array) + 1):
-        out[i - int(window_length / 2) - 1] = np.mean(input_array[i - window_length:i])
-    return out
 
 
 startyr = 1850
@@ -321,7 +302,9 @@ for i, obs_filename in enumerate(obs_filenames):
         spatial_mean = calculate_spatial_mean(observed_grid)
         annual_spatial_mean = calculate_annual_mean(spatial_mean)
 
-    all_data[:, i] = annual_spatial_mean[:, 2] - np.mean(annual_spatial_mean[0:52, 2])
+    all_data[:, i] = annual_spatial_mean[:, 2] - np.mean(annual_spatial_mean[0:51, 2])
+
+print(yearvals[0:51])
 
 summary = np.mean(all_data, axis=1)
 
@@ -342,13 +325,6 @@ plt.plot(yearvals, tecadal, color='green')
 plt.show()
 plt.close()
 
-# Print out the freshly calcualted series and the "original" series from the IGCC 2023 paper
-for i in range(endyr - startyr):
-    print(
-        f"{yearvals[i]} {decadal[i]:.7f}, {orig.dec[i]:.7f}, {decadal[i] - orig.dec[i]:.7f} === "
-        f"{summary[i]:.7f}, {orig.ann[i]:.7f} {summary[i] - orig.ann[i]:.7f} ")
-i += 1
-print(f"{yearvals[i]} {decadal[i]:.7f}, {np.nan:.7f}, {np.nan:.7f} === {summary[i]:.7f}, {np.nan:.7f} {np.nan:.7f} ")
 
 # Plot the annual values: freshly calculated and from the IGCC paper
 plt.plot(yearvals, summary)
@@ -361,3 +337,15 @@ plt.plot(yearvals, decadal)
 plt.plot(orig.year, orig.dec)
 plt.show()
 plt.close()
+
+decadal[np.isnan(decadal)] = -9.9999
+orig.dec[np.isnan(orig.dec)] = -9.9999
+orig.ann[np.isnan(orig.ann)] = -9.9999
+
+# Print out the freshly calcualted series and the "original" series from the IGCC 2023 paper
+for i in range(2018 - startyr):
+    print(
+        f"{yearvals[i]} {decadal[i]:.2f}, {orig.dec[i]:.2f}, {decadal[i] - orig.dec[i]:.2f} === "
+        f"{summary[i]:.2f}, {orig.ann[i]:.2f} {summary[i] - orig.ann[i]:.2f} ")
+i += 1
+print(f"{yearvals[i]} {decadal[i]:.2f}, {-9:.2f}, {-9:.2f} === {summary[i]:.2f}, {-9:.2f} {-9:.2f} ")
