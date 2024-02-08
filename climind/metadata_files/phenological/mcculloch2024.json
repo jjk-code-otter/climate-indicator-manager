@@ -1,0 +1,31 @@
+{
+  "name": "McCulloch2024",
+  "display_name": "McCulloch 2024",
+  "version": "",
+  "variable": "coral",
+  "units": "1",
+  "citation": ["McCulloch, M.T., Winter, A., Sherman, C.E. et al. 300 years of sclerosponge thermometry shows global warming has exceeded 1.5C. Nat. Clim. Chang. (2024). https://doi.org/10.1038/s41558-023-01919-7"],
+  "citation_url": ["https://www.nature.com/articles/s41558-023-01919-7"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#ff87a7",
+  "zpos": 10,
+  "origin": "obs",
+  "datasets": [
+    {
+      "url": [""],
+	  "filename": ["Book2.csv"],
+      "type": "timeseries",
+      "long_name": "Coral proxy isotope stuff",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mcculloch",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

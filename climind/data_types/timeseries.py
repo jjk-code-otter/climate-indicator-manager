@@ -314,6 +314,9 @@ class TimeSeriesIrregular(TimeSeries):
         grouped_data = grouped_data['data'].tolist()
         grouped_years = grouped_years['year'].tolist()
 
+        grouped_months = list(map(int, grouped_months))
+        grouped_years = list(map(int, grouped_years))
+
         monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
 
         monthly_series.update_history('Calculated monthly average from values using arithmetic mean '

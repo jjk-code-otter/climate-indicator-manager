@@ -15,7 +15,8 @@
         },
         {
           "link_to": "global_mean_temperature", "title": "Global temperature",
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
@@ -158,7 +159,8 @@
       "cards": [
         {
           "link_to":  null, "title": "Global mean temperature",
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
@@ -182,21 +184,21 @@
         {
           "link_to":  null, "title": "Temperature anomaly map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2023"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
           "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly rank map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5", "Kadow_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5", "Berkeley Earth_5x5"]},
           "processing":  [{"method":  "select_year_range", "args": [1850, 2023]},
                           {"method":  "rank", "args": []},
                           {"method":  "select_year_range", "args": [2023, 2023]}],

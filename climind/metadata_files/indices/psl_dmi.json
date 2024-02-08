@@ -2,7 +2,7 @@
   "name": "DMI",
   "display_name": "NOAA PSL",
   "version": "",
-  "variable": "iod",
+  "variable": "iod IGNORE",
   "units": "degC",
   "citation": [""],
   "citation_url": [""],
