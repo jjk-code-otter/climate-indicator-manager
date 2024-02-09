@@ -80,7 +80,8 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
@@ -207,7 +208,8 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
