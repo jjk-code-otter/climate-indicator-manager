@@ -151,7 +151,7 @@ def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> s
     try:
         min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     except ValueError:
-        return f"No data for {year}"
+        return f"No data for {year}."
 
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
 
@@ -189,7 +189,7 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     try:
         min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     except ValueError:
-        return f"No data for {year}"
+        return f"No data for {year}."
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
     # If this is the highest year in all data sets, leave the text as is
@@ -247,7 +247,7 @@ def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> 
     try:
         min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
     except ValueError:
-        return f"No data for {year}"
+        return f"No data for {year}."
     mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values_ipcc_style(all_datasets, year)
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
@@ -292,7 +292,7 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
 
 def pre_industrial_estimate(all_datasets: List[TimeSeriesAnnual], _) -> str:
     """
-    Write a short paragraph estimating the difference between the modern baselin and
+    Write a short paragraph estimating the difference between the modern baseline and
     1850 to 1900.
 
     Parameters
@@ -749,6 +749,8 @@ def greenland_ice_sheet_monthly(all_datasets: List[TimeSeriesMonthly], year: int
             out_text += f" a greater loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
         elif entry[2] < entry[1] < 0:
             out_text += f" a smaller loss than the average for 2005-{year - 1} of {entry[2]:.2f}Gt. "
+        elif entry[2] == entry[1] and entry[1] < 0:
+            out_text += f" equal to the average loss for 2005-{year -1}. "
         elif entry[1] > 0:
             pass
 

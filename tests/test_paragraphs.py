@@ -103,6 +103,24 @@ def simple_annual(test_dataset_attributes, test_collection_attributes):
 
 
 @pytest.fixture
+def large_annual(test_dataset_attributes, test_collection_attributes):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes))
+    years = []
+    anoms = []
+    for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y))
+    return ts.TimeSeriesAnnual(years, anoms, metadata)
+
+
+@pytest.fixture
 def simple_annual_list(test_dataset_attributes, test_collection_attributes):
     """
     Produces an annual time series from 1850 to 2022.
@@ -215,6 +233,41 @@ def test_fancy_units():
     assert pg.fancy_html_units('numpty') == 'numpty'
 
 
+def test_global_anomaly_and_rank(simple_annual):
+    test_text = pg.global_anomaly_and_rank([simple_annual], 2022)
+
+    assert 'The year 2022 was ranked the 1st warmest on record' in test_text
+    assert 'The anomaly for 2022 was 2.02 [1.90 to 2.14]&deg;C' in test_text
+    assert 'relative to the 1961-1990 average' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+
+def test_global_anomaly_and_rank_missing_value(simple_annual):
+    simple_annual.df.data[2022 - 1850] = None
+    test_text = pg.global_anomaly_and_rank([simple_annual], 2022)
+
+    assert isinstance(test_text, str)
+    assert 'No data for 2022.' == test_text
+
+
+def test_global_anomaly_and_rank_no_data():
+    with pytest.raises(RuntimeError):
+        test_text = pg.global_anomaly_and_rank([], 2022)
+
+
+def test_pre_industrial_estimate(simple_annual):
+    test_text = pg.pre_industrial_estimate([simple_annual], 2022)
+
+    av = np.mean(simple_annual.df.data[0:52])
+    sd = np.std(simple_annual.df.data[0:52]) * 1.645
+
+    assert f'{av:.2f}' in test_text
+    assert f'{2 * sd:.2f}' in test_text
+
+    assert f'Narrow expanded range is {2 * sd / np.sqrt(51):.2f}' in test_text
+    assert f'Wide expanded range is {2 * sd:.2f}' in test_text
+
+
 def test_basic_anomaly_and_rank(simple_annual):
     test_text = pg.basic_anomaly_and_rank([simple_annual], 2022)
 
@@ -231,6 +284,24 @@ def test_basic_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):
     assert 'The year 2022 was ranked the 1st warmest' in test_text
     assert 'The mean value for 2022 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+
+def test_basic_anomaly_and_rank_year_is_missing_data(simple_annual):
+    simple_annual.df.data[2022 - 1850] = None
+    test_text = pg.basic_anomaly_and_rank([simple_annual], 2022)
+
+    assert isinstance(test_text, str)
+    assert 'No data for 2022.' == test_text
+
+
+def test_global_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):
+    test_text = pg.global_anomaly_and_rank([simple_annual], 2023)
+
+    assert 'The most recent available year is 2022.' in test_text
+    assert 'The year 2022 was ranked the 1st warmest on record.' in test_text
+    assert 'The anomaly for 2022 was 2.02' in test_text
+    assert '[1.90 to 2.14]&deg;C relative to the 1961-1990 average' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
 
 
@@ -298,6 +369,12 @@ def test_arctic_ice_paragraph(simple_monthly):
     assert 'Data sets used were: HadCRUT5.'
 
 
+def test_arctic_ice_paragraph_too_early(simple_monthly):
+    test_text = pg.arctic_ice_paragraph([simple_monthly], 2023)
+    assert 'March data are not yet available for 2023.' in test_text
+    assert 'September data are not yet available for 2023.' in test_text
+
+
 def test_antarctic_ice_paragraph(simple_monthly):
     test_text = pg.antarctic_ice_paragraph([simple_monthly], 2022)
 
@@ -306,6 +383,12 @@ def test_antarctic_ice_paragraph(simple_monthly):
     assert 'In September the extent was between 2022.00 and 2022.00&deg;C' in test_text
     assert 'This was the 173rd lowest' in test_text
     assert 'Data sets used were: HadCRUT5.'
+
+
+def test_antarctic_ice_paragraph_too_early(simple_monthly):
+    test_text = pg.antarctic_ice_paragraph([simple_monthly], 2023)
+    assert 'No data available yet for February.' in test_text
+    assert 'No data available yet for September.' in test_text
 
 
 def test_arctic_ice_paragraph_no_dataset_raises():
@@ -330,6 +413,16 @@ def test_glacier(simple_annual):
     assert 'Cumulative glacier loss since 1970 is 0.0&deg;C'
 
 
+def test_glacier_too_early(simple_annual):
+    dummy_data = 172. - np.array(range(173))
+    dummy_data[0] = dummy_data[1] - 0.5
+    simple_annual.df['data'] = dummy_data
+
+    test_text = pg.glacier_paragraph([simple_annual], 2023)
+
+    assert 'The most recent available year is 2022' in test_text
+
+
 def test_glacier_no_dataset_raises():
     with pytest.raises(RuntimeError):
         _ = pg.glacier_paragraph([], 2022)
@@ -349,6 +442,27 @@ def test_greenhouse_gas_paragraph_all_record(mocker):
         all_datasets.append(m)
 
     test_text = pg.co2_paragraph(all_datasets, 2021)
+
+    assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 2.1' in test_text
+    assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
+    assert 'nitrous oxide (N<sub>2</sub>O) at 765.4 &plusmn; 2.1' in test_text
+    assert 'In 2020, greenhouse gas mole fractions reached new highs,' in test_text
+
+
+def test_greenhouse_gas_paragraph_all_record_update(mocker):
+    all_datasets = []
+
+    for variable in ['co2', 'ch4', 'n2o']:
+        m = mocker.MagicMock()
+        m.metadata = {'display_name': 'WDCGG update', 'variable': variable}
+        m.get_first_and_last_year.return_value = (1980, 2020)
+        m.get_rank_from_year.return_value = 1
+        m.get_value_from_year.return_value = 765.432
+        m.get_uncertainty_from_year.return_value = 2.1
+
+        all_datasets.append(m)
+
+    test_text = pg.co2_paragraph_update(all_datasets, 2020)
 
     assert 'carbon dioxide (CO<sub>2</sub>) at 765.4 &plusmn; 2.1' in test_text
     assert 'methane (CH<sub>4</sub>) at 765 &plusmn; 2' in test_text
@@ -485,6 +599,11 @@ def tests_marine_heatwave_paragraph(prepared_mhw_datasets):
     assert '79.8% in 2011.' in test_text
 
 
+def tests_marine_heatwave_paragraph_non_available_year(prepared_mhw_datasets):
+    test_text = pg.marine_heatwave_and_cold_spell_paragraph(prepared_mhw_datasets[0:1], 2022)
+    assert 'The most recent available year is 2021' in test_text
+
+
 def tests_marine_heatwave_no_input_paragraph():
     with pytest.raises(RuntimeError):
         _ = pg.marine_heatwave_and_cold_spell_paragraph([], 2021)
@@ -498,21 +617,25 @@ def test_compare_to_highest_anomaly_and_rank_with_nothing_in_list():
 def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
     # If 2022 is the highest year in all datasets then returns nothing.
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert isinstance(test_text, str)
     assert test_text == ''
 
     simple_annual_list[0].df['data'][2022 - 1850] = 2.0205
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert isinstance(test_text, str)
     assert test_text != ''
     assert '2022 is joint warmest on record together with 2021' in test_text
 
     simple_annual_list[1].df['data'][2022 - 1850] = 2.0205
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert isinstance(test_text, str)
     assert test_text != ''
     assert 'The warmest year on record was 2021 with a value' in test_text
 
     simple_annual_list[1].df['data'][2022 - 1850] = 2.0195
     simple_annual_list[1].df['data'][2021 - 1850] = 2.0195
     test_text = pg.compare_to_highest_anomaly_and_rank(simple_annual_list, 2022)
+    assert isinstance(test_text, str)
     assert test_text != ''
     assert 'The warmest year on record was one of' in test_text
     assert '2020' in test_text
@@ -522,19 +645,64 @@ def test_compare_to_highest_anomaly_and_rank(simple_annual_list):
     assert 'The most recent available year is 2022' in test_text
 
 
-def test_greenland_ice_sheet(simple_annual):
+def test_compare_to_highest_anomaly_and_rank_missing_value(simple_annual):
+    simple_annual.df.data[2022 - 1850] = None
+    test_text = pg.compare_to_highest_anomaly_and_rank([simple_annual], 2022)
+    assert isinstance(test_text, str)
+    assert test_text == 'No data for 2022.'
 
-    test_text = pg.greenland_ice_sheet([simple_annual], 2022)
 
-    print(test_text)
+def test_greenland_ice_sheet(large_annual):
+    large_annual.df.data = -1 * large_annual.df.data
+    test_text = pg.greenland_ice_sheet([large_annual], 2022)
+
+    assert isinstance(test_text, str)
     assert 'There are 1 data sets of Greenland mass balance' in test_text
-    assert 'the mass change between 2021 and 2022 was 0.00Gt' in test_text
+    assert 'the mass change between 2021 and 2022 was -1.00Gt' in test_text
 
 
 def test_greenland_ice_sheet_monthly(simple_monthly):
-
+    simple_monthly.df.data = -1 * simple_monthly.df.data
     test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
 
-    print(test_text)
+    assert isinstance(test_text, str)
     assert 'There are 1 data sets of Greenland mass balance' in test_text
-    assert 'the mass change between 1 September 2021 and 31 August 2022 was 1.00Gt' in test_text
+    assert 'the mass change between 1 September 2021 and 31 August 2022 was -1.00Gt' in test_text
+    assert 'equal to the average loss for 2005-2021' in test_text
+
+
+def test_greenland_ice_sheet_monthly_increasing_loss(simple_monthly):
+    simple_monthly.df.data = -1 * simple_monthly.df.data
+    simple_monthly.df.data[12 * (2022 - 1850):] = -2023.
+    test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
+
+    assert isinstance(test_text, str)
+    assert 'There are 1 data sets of Greenland mass balance' in test_text
+    assert 'the mass change between 1 September 2021 and 31 August 2022 was -2.00Gt' in test_text
+    assert 'a greater loss than the average for 2005-2021 of -1.00Gt.' in test_text
+
+
+def test_greenland_ice_sheet_monthly_decreasing_loss(simple_monthly):
+    simple_monthly.df.data = -1 * simple_monthly.df.data
+    simple_monthly.df.data[12 * (2022 - 1850):] = -2021.5
+    test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
+
+    assert isinstance(test_text, str)
+
+    assert 'There are 1 data sets of Greenland mass balance' in test_text
+    assert 'the mass change between 1 September 2021 and 31 August 2022 was -0.50Gt' in test_text
+    assert 'a smaller loss than the average for 2005-2021 of -1.00Gt.' in test_text
+
+
+def test_precipitation_paragraph():
+    test_text = pg.precip_paragraph()
+    assert isinstance(test_text, str)
+
+
+def test_long_term_trend_paragraph(simple_monthly):
+    test_text = pg.long_term_trend_paragraph([simple_monthly], 2022)
+
+    assert isinstance(test_text, str)
+
+    assert '1.0 &deg;C/yr' in test_text
+    assert 'between 1850 and 2022' in test_text
