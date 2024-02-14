@@ -684,8 +684,8 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
     # specify order of items in legend
     order = np.flip(np.argsort(zords))
     # add legend to plot
-    loc = "upper left"
-    bbox_to_anchor = (0.02, 0.96)
+    loc = "lower left"
+    bbox_to_anchor = (0.02, 0.02)
 
     leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
                      frameon=False, prop={'size': 30}, labelcolor='linecolor',
