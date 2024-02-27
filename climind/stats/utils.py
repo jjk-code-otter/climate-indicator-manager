@@ -38,7 +38,7 @@ def table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
     return out_text
 
 
-def record_margin_table_by_year(datasets, match_year: int, years_to_show: int = 20) -> str:
+def record_margin_table_by_year(datasets, match_year: int, years_to_show: int = 50) -> str:
     out_text = ''
     for year in range(match_year - years_to_show, match_year + 1):
 
@@ -149,7 +149,7 @@ def record_margins(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
             out_line += f"{ds.metadata['name']:10.10} "
         output_file.write(f'{out_line}\n')
 
-        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=20))
+        output_file.write(record_margin_table_by_year(datasets, match_year, years_to_show=50))
 
 
 def get_latitudes(resolution):

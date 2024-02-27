@@ -26,8 +26,8 @@
         },
         {
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
-          "processing":  [{"method": "add_year", "args":  [2022, 66.9148993, 3.9471033]}],
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "processing":  [],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
         },
         {
@@ -236,15 +236,9 @@
       "template": "topic_page",
       "cards": [
         {
-          "link_to":  null, "title": "Ocean heat content",
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
-          "processing":  [{"method": "add_year", "args":  [2022, 66.9148993, 3.9471033]}],
-          "plotting": {"function": "neat_plot", "title": "Ocean heat content"}
-        },
-        {
           "link_to":  null, "title": "Ocean heat content to 2000m",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "GCOS2k"},
-          "processing":  [{"method": "add_year", "args":  [2022, 96.748783, 8.4302423]}],
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "processing":  [],
           "plotting": {"function": "neat_plot", "title": "Ocean heat content to 2000m"}
         },
         {
@@ -262,13 +256,8 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "ohc", "time_resolution": "annual", "name": "GCOS"},
-          "processing": [{"method": "add_year", "args":  [2022, 66.9148993, 3.9471033]}],
-          "writing": {"function": "anomaly_and_rank"}
-        },
-        {
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "GCOS2k"},
-          "processing": [{"method": "add_year", "args":  [2022, 96.748783, 8.4302423]}],
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Miniere","Cheng TEMP"]},
+          "processing": [],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
@@ -280,11 +269,6 @@
           "selecting": {"type": "timeseries", "variable": "mcs", "time_resolution": "annual"},
           "processing": [],
           "writing": {"function": "marine_heatwave_and_cold_spell_paragraph"}
-        },
-        {
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2023]}],
-          "writing": {"function": "long_term_trend_paragraph"}
         }
 
       ]

@@ -151,15 +151,21 @@ if __name__ == "__main__":
             {'variable': 'tlt',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
-        'TLT']
-    }
-
-    holdall = {
+        'TLT'],
         'iod': [
             {'variable': 'iod',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
             'IOD']
+    }
+
+    holdall = {
+        'ohc': [
+            {'variable': 'ohc2k',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Ocean heat content'
+        ]
     }
 
     for combo in holdall:

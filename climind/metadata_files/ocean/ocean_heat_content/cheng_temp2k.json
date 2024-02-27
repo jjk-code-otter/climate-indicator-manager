@@ -1,0 +1,32 @@
+{
+  "name": "Cheng TEMP",
+  "display_name": "Cheng et al. 2017",
+  "version": "",
+  "variable": "ohc2k",
+  "units": "zJ",
+  "citation": ["Cheng, Lijing, John Abraham, Zeke Hausfather, and Kevin E. Trenberth. 'How fast are the oceans warming?.' Science 363, no. 6423 (2019): 128-129. doi:10.1126/science.aav7619"],
+  "citation_url": ["https://doi.org/10.1126/science.aav7619"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#DD4A4C",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["gohc_wmo_state_climate_2024.nc"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 2005,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gcos_temp",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}
