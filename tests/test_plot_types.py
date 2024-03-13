@@ -17,6 +17,7 @@
 import pytest
 import copy
 import itertools
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -260,11 +261,60 @@ def test_add_data_sets(annual_datalist):
     assert len(test_output) == len(annual_datalist)
 
 
+def test_add_data_sets_marker(annual_datalist):
+    plt.figure(figsize=[16, 9])
+    test_output = pt.add_data_sets(plt.gca(), annual_datalist, dark=True, marker=True)
+
+    # check that all the annual datasest were added
+    for i in range(len(annual_datalist)):
+        x_plot, y_plot = plt.gca().lines[i].get_xydata().T
+        for year in range(1850, 2023):
+            assert x_plot[year - 1850] == year
+            assert y_plot[year - 1850] == float(i + 1)
+    plt.close()
+
+    assert len(test_output) == len(annual_datalist)
+
+
+def test_get_levels_and_palette():
+    for variable_name in ['tas_mean', 'pre', 'none']:
+        levels, colours = pt.get_levels_and_palette(variable_name)
+
+        # Check all colours are hex
+        for colour in colours:
+            assert colour[0] == '#'
+            assert len(colour) == 7
+
+        # Check levels are ascending
+        assert all(levels[i] <= levels[i + 1] for i in range(len(levels) - 1))
+
+
 def test_neat_plot(annual_datalist, tmpdir):
     test_caption = pt.neat_plot(tmpdir, annual_datalist, 'test.png', 'Title words')
 
     assert 'Annual Global mean temperature' in test_caption
     assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_records_plot(annual_datalist, tmpdir):
+    test_caption = pt.records_plot(tmpdir, annual_datalist, 'test.png', 'Title words')
+
+    assert 'Annual Global mean temperature' in test_caption
+    assert '(&deg;C, difference from the 1961-1990 average)' in test_caption
+
+    assert (tmpdir / 'test.png').exists()
+    assert (tmpdir / 'test.pdf').exists()
+    assert (tmpdir / 'test.svg').exists()
+
+
+def test_cherry_plot(annual_datalist, tmpdir):
+    test_caption = pt.cherry_plot(tmpdir, annual_datalist, 'test.png', 'Title words')
+
+    assert test_caption == ''
 
     assert (tmpdir / 'test.png').exists()
     assert (tmpdir / 'test.pdf').exists()
@@ -386,6 +436,7 @@ def test_calculate_values(simple_annual_datasets):
     assert min_value == 0.0
     assert max_value == float(2022 - 1850) * 0.01 * 4.0
 
+
 def test_calculate_values_ipcc_style(simple_annual_datasets):
     mean_value, min_value, max_value = pu.calculate_values_ipcc_style(simple_annual_datasets, 2022)
 
@@ -490,6 +541,12 @@ def test_set_xaxis(mocker):
     assert test_hi == pytest.approx(2020, 6)
     assert len(test_ticks) == 4
 
+    mock_axis.get_xlim.return_value = [1989, 1999]
+    test_lo, test_hi, test_ticks = pt.set_xaxis(mock_axis)
+    assert test_lo == pytest.approx(1990, 6)
+    assert test_hi == pytest.approx(1999, 6)
+    assert len(test_ticks) == 10
+
 
 def test_add_labels():
     plt.figure()
@@ -544,10 +601,13 @@ def test_quick_and_dirty_map(simple_monthly_grid, tmpdir):
 
 
 def test_nice_map(simple_monthly_grid, tmpdir):
-    filename = tmpdir / 'test'
-    filename2 = tmpdir / 'test.png'
-    pt.nice_map(simple_monthly_grid.df, filename, 'Words to test title')
-    assert filename2.exists()
+    # Currently doesn't actually test different variables, because these need to match what is in simple_monthly_grid
+    for variable in ['precip', 'precip_quantiles', 'sealevel', 'sealeveltrend', 'none']:
+        filename = tmpdir / f'test_{variable}'
+        filename2 = tmpdir / f'test_{variable}.png'
+        simple_monthly_grid.metadata['variable'] = variable
+        pt.nice_map(simple_monthly_grid.df, filename, 'Words to test title')
+        assert filename2.exists()
 
 
 def test_plot_map_by_year_and_month(simple_monthly_grid, tmpdir):
@@ -592,3 +652,50 @@ def test_trend_plot(regional_annual_datasets, tmpdir):
                                   order=["wmo_ra_1", "wmo_ra_2", "wmo_ra_3", "wmo_ra_4", "wmo_ra_5", "wmo_ra_6", "tas"])
     assert (tmpdir / 'test.png').exists()
     assert 'Figure shows' in test_caption
+
+
+def test_show_premade_image(tmpdir, tmp_path, mocker):
+
+    mpath = Path(tmp_path)
+
+    mocker.patch('climind.config.config.DATA_DIR', mpath)
+
+    actual_path = mpath / 'ManagedData' / 'Figures'
+    actual_path.mkdir(parents=True, exist_ok=True)
+
+    for suffix in ['png','svg','pdf']:
+        actual_file = actual_path / 'original.png'.replace('png', suffix)
+        with open(actual_file, 'w') as f:
+            f.write('dink')
+
+    pt.show_premade_image(Path(tmpdir), [], 'test.png', 'title',
+                          original_filename='original.png', caption='test caption')
+
+    assert (Path(tmpdir) / 'test.png').exists()
+    assert (Path(tmpdir) / 'test.svg').exists()
+    assert (Path(tmpdir) / 'test.pdf').exists()
+
+
+def test_show_premade_image_missing_file(tmpdir, tmp_path, mocker):
+
+    mpath = Path(tmp_path)
+
+    mocker.patch('climind.config.config.DATA_DIR', mpath)
+
+    actual_path = mpath / 'ManagedData' / 'Figures'
+    actual_path.mkdir(parents=True, exist_ok=True)
+
+    for suffix in ['png','svg']:
+        actual_file = actual_path / 'original.png'.replace('png', suffix)
+        with open(actual_file, 'w') as f:
+            f.write('dink')
+
+    with pytest.raises(FileNotFoundError) as msg:
+        pt.show_premade_image(Path(tmpdir), [], 'test.png', 'title',
+                              original_filename='original.png', caption='test caption')
+
+    assert '.pdf version of file' in str(msg.value)
+    assert 'original.pdf does not exist' in str(msg.value)
+
+    assert (Path(tmpdir) / 'test.png').exists()
+    assert (Path(tmpdir) / 'test.svg').exists()

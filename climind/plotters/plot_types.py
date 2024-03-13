@@ -255,10 +255,7 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     if dataset.metadata['variable'] == 'ph':
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.01)
 
-    if dataset.metadata['variable'] in ['co2', 'sealevel']:
-        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
-
-    if dataset.metadata['variable'] in ['mhw', 'mcs']:
+    if dataset.metadata['variable'] in ['co2', 'sealevel', 'mhw', 'mcs']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 10.)
 
     if dataset.metadata['variable'] in ['greenland', 'antarctica']:
@@ -1152,9 +1149,8 @@ def show_premade_image(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     for extension in ['.png', '.svg', '.pdf']:
         source_file = source_dir / original_filename.replace('.png', extension)
 
-        if source_dir.exists():
-            shutil.copy(source_file,
-                        out_dir / image_filename.replace('.png', extension))
+        if source_file.exists():
+            shutil.copy(source_file, out_dir / image_filename.replace('.png', extension))
         else:
             raise FileNotFoundError(f'{extension} version of file {source_file} does not exist')
 
@@ -1230,12 +1226,14 @@ def nice_map(dataset: xarray.Dataset, image_filename: Path, title: str, var: str
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
     elif var == 'sealeveltrend':
         wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        wmo_cols = ['#1F3562','#064D97','#0F6BB1','#3887BF','#569ECA','#82BAD7','#ACCDEB','#CADDF1','#E0EAF9','#F8F7FC',
-                    '#FEF5E9','#FFE5D0','#FAD2A6','#F9B77F','#F4994E','#EE7B2B','#E85F0B','#CD4511','#9D3915','#7F290E']
-        #wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#3887BF', '#569ECA', '#82BAD7', '#ACCDEB', '#CADDF1', '#E0EAF9',
+                    '#F8F7FC',
+                    '#FEF5E9', '#FFE5D0', '#FAD2A6', '#F9B77F', '#F4994E', '#EE7B2B', '#E85F0B', '#CD4511', '#9D3915',
+                    '#7F290E']
+        # wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
         # wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
         #            '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
-        #wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#57A2CD', '#AECDE8', '#F8F8F8',
+        # wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#57A2CD', '#AECDE8', '#F8F8F8',
         #            '#FEF5E9', '#F9D3A7', '#ED9B55', '#CD4511', '#9F3817', '#7F290E']
     else:
         wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
@@ -1376,8 +1374,10 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     if main_variable == 'sealeveltrend':
         wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        wmo_cols = ['#1F3562','#064D97','#0F6BB1','#3887BF','#569ECA','#82BAD7','#ACCDEB','#CADDF1','#E0EAF9','#F8F7FC',
-                    '#FEF5E9','#FFE5D0','#FAD2A6','#F9B77F','#F4994E','#EE7B2B','#E85F0B','#CD4511','#9D3915','#7F290E']
+        wmo_cols = ['#1F3562', '#064D97', '#0F6BB1', '#3887BF', '#569ECA', '#82BAD7', '#ACCDEB', '#CADDF1', '#E0EAF9',
+                    '#F8F7FC',
+                    '#FEF5E9', '#FFE5D0', '#FAD2A6', '#F9B77F', '#F4994E', '#EE7B2B', '#E85F0B', '#CD4511', '#9D3915',
+                    '#7F290E']
         # wmo_levels = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
         # wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
         #            '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
