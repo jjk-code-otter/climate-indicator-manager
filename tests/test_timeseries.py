@@ -150,6 +150,29 @@ def simple_monthly_time_shifted(test_metadata):
 
 
 @pytest.fixture
+def simple_monthly_values_are_months(test_metadata):
+    """
+    Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
+    which the month falls
+    Returns
+    -------
+
+    """
+    test_metadata = copy.deepcopy(test_metadata)
+
+    years = []
+    months = []
+    anomalies = []
+
+    for y, m in itertools.product(range(1850, 2023), range(1, 13)):
+        years.append(y)
+        months.append(m)
+        anomalies.append(float(m))
+
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=test_metadata)
+
+
+@pytest.fixture
 def uncertainty_monthly(test_metadata):
     """
     Produces a monthly time series from 1850 to 2022. Data for each month are equal to the year in
@@ -398,7 +421,7 @@ def test_make_combined_series(annual_datalist):
         assert test_result.df['data'][2022 - 1850] == 3.5
         assert test_result.df['uncertainty'][5] == np.sqrt((np.sqrt(7.0) * 1.645) ** 2 + 0.12 ** 2)
         for i in range(len(test_result.df)):
-            assert test_result.df['year'][i] == 1850+i
+            assert test_result.df['year'][i] == 1850 + i
 
 
 def test_get_list_of_unique_variables(annual_datalist):
@@ -757,6 +780,40 @@ def test_get_string_date_range_monthly(simple_monthly):
     assert test_range == '1850.01-2022.12'
 
 
+def test_calculate_climatology(simple_monthly_values_are_months):
+    test_climatology = simple_monthly_values_are_months.calculate_climatology(1991, 2020)
+
+    for month in range(1, 13):
+        assert test_climatology.month[month - 1] == month
+        assert test_climatology.climatology[month - 1] == float(month)
+
+
+
+def test_running_mean_monthly(simple_monthly_values_are_months):
+    test_running = simple_monthly_values_are_months.running_mean(12)
+    assert test_running.df.data[11] == np.mean([x for x in range(1, 13)])
+    # First 11 entries are NaNs for a 12-month running average
+    for i in range(11):
+        assert np.isnan(test_running.df.data[i])
+
+    test_running = simple_monthly_values_are_months.running_mean(6)
+    assert test_running.df.data[5] == np.mean([x for x in range(1, 7)])
+    # First 5 entries are NaNs for a 6-month running average
+    for i in range(5):
+        assert np.isnan(test_running.df.data[i])
+
+
+def test_running_mean_centred_monthly(simple_monthly_values_are_months):
+    test_running = simple_monthly_values_are_months.running_mean(12, centred=True)
+
+    assert test_running.df.data[11] == np.mean([x for x in range(1, 13)])
+    assert test_running.df.year[11] == 1850
+
+    test_running = simple_monthly_values_are_months.running_mean(24, centred=True)
+    assert test_running.df.data[23] == np.mean([x for x in range(1, 13)])
+    assert test_running.df.year[23] == 1850.5
+
+
 # Annual tests
 def test_record_margins(simple_annual):
     margins = simple_annual.record_margins()
@@ -777,6 +834,7 @@ def test_record_margins_negative(simple_annual):
 
     for i in range(1, len(margins.df.data)):
         assert pytest.approx(-1 / 1000, 0.0001) == margins.df.data[i]
+
 
 def test_record_margins_with_nonrecord(simple_annual):
     simple_annual.df.data[120] = simple_annual.df.data[118]
@@ -1036,6 +1094,29 @@ def test_get_year_axis_annual(simple_annual):
 def test_get_string_date_range_annual(simple_annual):
     test_range = simple_annual.get_string_date_range()
     assert test_range == '1850-2022'
+
+
+def test_time_average(simple_annual):
+    test_climatology = simple_annual.time_average(1991, 2020)
+    assert test_climatology == np.mean([x for x in range(1991,2021)]) / 1000.
+
+
+def test_running_trend(simple_annual):
+    test_moving_average = simple_annual.running_trend(10)
+    for i in range(9):
+        assert np.isnan(test_moving_average.df.data[i])
+    assert test_moving_average.df.data[9] == pytest.approx(1859.0/1000.0, 0.00001)
+
+def test_running_lowess(simple_annual):
+    test_moving_average = simple_annual.running_lowess()
+    for i in range(10):
+        assert np.isnan(test_moving_average.df.data[i])
+    assert test_moving_average.df.data[10] == pytest.approx(1860.0/1000.0, 0.00001)
+
+def test_lowess(simple_annual):
+    test_moving_average = simple_annual.lowess()
+    for i in range(173):
+        assert test_moving_average.df.data[i] == pytest.approx((i+1850)/1000.0, 0.00001)
 
 
 def test_add_year(simple_annual, uncertainty_annual):

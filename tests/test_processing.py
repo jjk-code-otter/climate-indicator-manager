@@ -291,6 +291,21 @@ def test_data_collection_read(mocker):
     assert datasets[1] == 'test'
 
 
+def test_data_collection_read_multiple_dir(mocker):
+    data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))
+    m = mocker.patch("climind.data_manager.processing.DataSet.read_dataset", return_value="test")
+
+    datasets = data_collection.read_datasets([Path(''), Path('')])
+
+    assert m.call_args_list[0][0][0] == [Path('HadCRUT5'), Path('HadCRUT5')]
+    assert m.call_args_list[1][0][0] == [Path('HadCRUT5'), Path('HadCRUT5')]
+
+    assert 2 == m.call_count
+    assert len(datasets) == 2
+    assert datasets[0] == 'test'
+    assert datasets[1] == 'test'
+
+
 def test_data_collection_read_fail(mocker):
     """Specified file does not actually exist, so should fail and raise RuntimeError"""
     data_collection = dm.DataCollection.from_file(Path(HADCRUT5_PATH))

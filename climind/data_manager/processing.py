@@ -396,7 +396,7 @@ class DataCollection:
         for key in self.datasets:
             key.download(collection_dir)
 
-    def read_datasets(self, out_dir: Path, **kwargs) -> list:
+    def read_datasets(self, out_dir: Union[Path, List[Path]], **kwargs) -> list:
         """
         Read all the datasets described by :class:`.DataSet` objects in the :class:`DataCollection`
 
@@ -414,7 +414,6 @@ class DataCollection:
             collection_dir = [x / self.global_attributes['name'] for x in out_dir]
         else:
             collection_dir = out_dir / self.global_attributes['name']
-            #collection_dir.mkdir(exist_ok=True)
 
         all_datasets = []
 

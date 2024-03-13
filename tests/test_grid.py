@@ -119,6 +119,14 @@ def test_select_year_and_month(monthly_grid):
     assert selection.metadata['history'][-1] == 'Selected single month 07/1982'
 
 
+def test_get_start_year_monthly(monthly_grid):
+    assert monthly_grid.get_start_year() == 1850
+
+
+def test_get_end_year_monthly(monthly_grid):
+    assert monthly_grid.get_end_year() == 2022
+
+
 def test_calculate_time_mean(monthly_grid):
     for cumulative in [False, True]:
 
@@ -576,6 +584,21 @@ def shapes():
     return whole_world
 
 
+def test_calculate_regional_average_bad_options(shapes, test_combo):
+    test_grid = np.zeros((12, 36, 72))
+    lats = np.arange(-87.5, 90.0, 5.0)
+    lons = np.arange(-177.5, 180.0, 5.0)
+    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=12)
+
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
+
+    with pytest.raises(RuntimeError):
+        ts = test_grid_monthly.calculate_regional_average_missing(shapes, 0,
+                                                                  land_only=True, ocean_only=True)
+
+
 def test_calculate_regional_average(shapes, test_combo):
     test_grid = np.zeros((12, 36, 72))
 
@@ -640,6 +663,13 @@ def test_calculate_regional_average_missing(shapes, test_combo):
     test_ds = gd.make_xarray(test_grid, times, lats, lons)
     test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
     ts = test_grid_monthly.calculate_regional_average_missing(shapes, 0, land_only=True)
+    for i in range(12):
+        assert ts.df['data'][i] == pytest.approx(1.0, 0.000001)
+
+    test_grid[:, :, :] = 1.0
+    test_ds = gd.make_xarray(test_grid, times, lats, lons)
+    test_grid_monthly = gd.GridMonthly(test_ds, test_combo)
+    ts = test_grid_monthly.calculate_regional_average_missing(shapes, 0, land_only=False, ocean_only=True)
     for i in range(12):
         assert ts.df['data'][i] == pytest.approx(1.0, 0.000001)
 

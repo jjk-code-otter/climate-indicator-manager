@@ -270,6 +270,7 @@ class GridMonthly:
         """
         start_year = self.df.time.dt.year.data[0]
         return start_year
+
     def get_end_year(self) -> int:
         """
         Get the last year in the dataset
