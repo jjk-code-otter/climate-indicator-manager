@@ -677,7 +677,6 @@ def test_greenland_ice_sheet_monthly_increasing_loss(simple_monthly):
     test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
 
     assert isinstance(test_text, str)
-#    assert 'There are 1 data sets of Greenland mass balance' in test_text
     assert 'the mass change between September 2021 and August 2022 was -2.00Gt' in test_text
     assert 'a greater loss than the average for 2005-2021 of -1.00Gt.' in test_text
 
@@ -688,8 +687,6 @@ def test_greenland_ice_sheet_monthly_decreasing_loss(simple_monthly):
     test_text = pg.greenland_ice_sheet_monthly([simple_monthly], 2022)
 
     assert isinstance(test_text, str)
-
-#    assert 'There are 1 data sets of Greenland mass balance' in test_text
     assert 'the mass change between September 2021 and August 2022 was -0.50Gt' in test_text
     assert 'a smaller loss than the average for 2005-2021 of -1.00Gt.' in test_text
 
