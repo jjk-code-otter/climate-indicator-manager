@@ -17,6 +17,7 @@
     "colour": "#e69f00",
     "zpos": 10,
     "origin": "obs",
+    "notes": "",
     "datasets": [
         {
             "url": [

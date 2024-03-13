@@ -11,6 +11,7 @@
   "colour": "#0072b2",
   "zpos": 1,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["https://climatereanalyzer.org/clim/sst_daily/json/oisst2.1_world2_sst_day.json"],

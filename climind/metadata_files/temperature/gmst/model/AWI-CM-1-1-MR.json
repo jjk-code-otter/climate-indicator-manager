@@ -11,6 +11,7 @@
   "colour": "#cccccc",
   "zpos": 10,
   "origin": "model",
+  "notes": "",
   "datasets": [
 	{
       "url": ["https://climexp.knmi.nl/CMIP6/Tglobal/global_tas_mon_AWI-CM-1-1-MR_ssp126_000.dat"],

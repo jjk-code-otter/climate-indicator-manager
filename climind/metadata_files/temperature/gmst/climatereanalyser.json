@@ -11,6 +11,7 @@
   "colour": "#0072b2",
   "zpos": 1,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["https://climatereanalyzer.org/clim/t2_daily/json_cfsr/cfsr_world_t2_day.json"],

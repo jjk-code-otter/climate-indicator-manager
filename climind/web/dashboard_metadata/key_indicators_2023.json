@@ -48,18 +48,17 @@
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
         },
-                {
+        {
           "link_to":  "glaciers_and_ice_sheets", "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to":  "glaciers_and_ice_sheets", "title": "Antarctic ice sheet",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
-
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
@@ -171,15 +170,16 @@
         },
         {
           "link_to":  null, "title": "Land air temperature",
-          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT","CRUTEM5","Berkeley Earth LSAT"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2023]}],
           "plotting": {"function": "neat_plot", "title": "Global land temperature"}
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST"]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2023]}],
           "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
         },
         {
@@ -218,13 +218,15 @@
           "writing": {"function": "global_anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST"]},
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2023]}],
           "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual"},
-          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT","CRUTEM5","Berkeley Earth LSAT"]},
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2023]}],
           "writing": {"function": "anomaly_and_rank"}
         }
       ]
@@ -337,21 +339,18 @@
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing":  [],
           "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
-
         },
         {
           "link_to":  null, "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
-
         },
         {
           "link_to":  null, "title": "Antarctic ice sheet",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
-
         }
       ],
       "paragraphs": [
@@ -361,9 +360,19 @@
           "writing": {"function": "glacier_paragraph"}
         },
         {
-          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly"},
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": "PROMICE"},
           "processing": [],
           "writing": {"function": "greenland_ice_sheet_monthly"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": "Velicogna Greenland"},
+          "processing": [],
+          "writing": {"function": "ice_sheet_monthly_sm_grace_version"}
+        },
+        {
+          "selecting": {"type":  "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": "Velicogna Antarctica"},
+          "processing": [],
+          "writing": {"function": "ice_sheet_monthly_sm_grace_version"}
         }
       ]
     },

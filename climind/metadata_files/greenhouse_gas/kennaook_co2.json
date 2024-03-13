@@ -11,6 +11,7 @@
   "colour": "#56b4e9",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CO2_data_download.csv"],

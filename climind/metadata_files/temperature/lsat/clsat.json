@@ -11,6 +11,7 @@
   "colour": "#56b4e9",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://figshare.com/ndownloader/files/31695002"],

@@ -17,12 +17,23 @@
           "link_to": null,
           "title": "Global temperature",
           "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
-                        "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "ERA5", "JRA-55"]},
+                        "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "ERA5", "JRA-55", "Kadow"]},
           "processing": [
             {"method": "rebaseline", "args": [1981, 2010]},
             {"method": "select_year_range", "args":  [1850, 2023]}
           ],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to": null,
+          "title": "Global temperature long term",
+          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA Interim", "Berkeley Earth", "Kadow"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1850, 1900]},
+            {"method": "select_year_range", "args":  [1850, 2023]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Global mean temperature long term"}
         },
         {
           "link_to": null,

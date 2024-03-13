@@ -11,6 +11,7 @@
   "colour": "dimgrey",
   "zpos": 99,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/netcdf/HadSST.4.0.1.0_median.nc"],

@@ -11,6 +11,7 @@
     "colour": "#009e73",
     "zpos": 10,
     "origin": "obs",
+    "notes": "",
     "datasets": [
         {
             "url": ["https://climate.rutgers.edu/snowcover/files/moncov.namgnld.txt"],

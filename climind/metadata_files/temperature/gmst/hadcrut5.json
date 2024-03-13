@@ -11,6 +11,7 @@
   "colour": "dimgrey",
   "zpos": 99,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc"],

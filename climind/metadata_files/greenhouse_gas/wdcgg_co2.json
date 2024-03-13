@@ -11,6 +11,7 @@
   "colour": "#d55e00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2023/co2_monthly_20231115.csv"],

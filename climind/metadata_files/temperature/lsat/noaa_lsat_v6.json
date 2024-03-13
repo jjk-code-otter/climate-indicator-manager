@@ -1,0 +1,59 @@
+{
+  "name": "NOAA LSAT v6",
+  "display_name": "GHCNv4",
+  "version": "v5.0.0",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": ["Menne, M. J., C. N. Williams, B.E. Gleason, J. J Rennie, and J. H. Lawrimore, 2018: The Global Historical Climatology Network Monthly Temperature Dataset, Version 4. J. Climate, in press. https://doi.org/10.1175/JCLI-D-18-0094.1"],
+  "citation_url": ["https://doi.org/10.1175/JCLI-D-18-0094.1"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#ad8426",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/timeseries/aravg.mon.land.90S.90N.v6.0.0.YYYYMMMM.asc",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/timeseries/aravg.ann.land.90S.90N.v6.0.0.YYYYMMMM.asc"
+      ],
+      "filename": [
+        "aravg.mon.land.90S.90N.v6.0.0.YYYYMMMM.asc",
+        "aravg.ann.land.90S.90N.v6.0.0.YYYYMMMM.asc"
+      ],
+      "type": "timeseries",
+      "long_name": "Global mean land temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_noaa_ts",
+      "fetcher": "fetcher_url_with_backsearch"
+    },
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/timeseries/aravg.mon.land.90S.90N.v6.0.0.YYYYMMMM.asc",
+        "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/timeseries/aravg.ann.land.90S.90N.v6.0.0.YYYYMMMM.asc"
+      ],
+      "filename": [
+        "aravg.mon.land.90S.90N.v6.0.0.YYYYMMMM.asc",
+        "aravg.ann.land.90S.90N.v6.0.0.YYYYMMMM.asc"
+      ],
+      "type": "timeseries",
+      "long_name": "Global mean land temperature",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_noaa_ts",
+      "fetcher": "fetcher_url_with_backsearch"
+    }
+  ]
+}

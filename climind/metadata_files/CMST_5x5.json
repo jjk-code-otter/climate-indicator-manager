@@ -16,6 +16,7 @@
     "acknowledgement": "",
     "colour": "#ff0000",
     "zpos": 10,
+    "notes": "",
     "datasets": [
         {
             "url": [

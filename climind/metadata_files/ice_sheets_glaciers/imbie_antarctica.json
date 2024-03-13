@@ -11,6 +11,7 @@
   "colour": "#e69f00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["http://imbie.org/data-files/imbie_dataset-2018_07_23.xlsx"],

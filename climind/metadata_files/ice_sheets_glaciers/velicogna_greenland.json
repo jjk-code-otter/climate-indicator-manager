@@ -1,0 +1,47 @@
+{
+  "name": "Velicogna Greenland",
+  "display_name": "Velicogna et al.",
+  "version": "",
+  "variable": "greenland",
+  "units": "Gt",
+  "citation": [
+    "Geruo, A., Wahr, J., & Zhong, S. (2013). Computations of the viscoelastic response of a 3-D compressible Earth to surface loading: An application to Glacial Isostatic Adjustment in Antarctica and Canada. Geophysical Journal International, 192(2), 557–572",
+    "Ivins, E. R., T. S. James, J. Wahr, E. J. O Schrama, F. W. Landerer, and K. M. Simon (2013), Antarctic contribution to sea level rise observed by GRACE with improved GIA correction, J. Geophys. Res. Solid Earth, 118, 3126–3141, doi:10.1002/jgrb.50208",
+    "Loomis, B. D., Rachlin, K. E., & Luthcke, S. B. (2019). Improved Earth oblateness rate reveals increased ice sheet losses and mass-driven sea level rise. Geophysical Research Letters, 46, 6910–6917. https://doi.org/10.1029/2019GL082929",
+    "Peltier, W., Argus, D., & Drummond, R. (2015). Space geodesy constrains ice age terminal deglaciation: The global ICE-6G_C (VM5a) model. Journal of Geophysical Research: Solid Earth, 120, 450–487. https://doi.org/10.1002/2014JB011176",
+    "Simpson, M. J., Milne, G. A., Huybrechts, P., & Long, A. J. (2009). Calibrating a glaciological model of the Greenland ice sheet from the Last Glacial Maximum to present-day using field observations of relative sea level and ice extent. Quaternary Science Reviews, 28(17), 1631–1657",
+    "Sutterley, T. C., & Velicogna, I. (2019). Improved estimates of geocenter variability from time-variable gravity and ocean model outputs. Remote Sensing, 11(18), 2108",
+    "Velicogna I., Mohajerani Y., A G., Landerer F., Mouginot J., Noel B., Rignot E., Sutterley T., van den Broeke M., van Wessem J., Wiese D. (2020). Continuity of ice sheet mass loss in Greenland and Antarctica from the GRACE and GRACE Follow-On missions, Geophys. Res. Lett. 47, e2020GL087291"],
+  "citation_url": [
+    "https://doi.org/10.1093/gji/ggs030",
+    "https://doi.org/10.1002/jgrb.50208",
+    "https://doi.org/10.1029/2019GL082929",
+    "https://doi.org/10.1002/2014JB011176",
+    "https://doi.org/10.1016/j.quascirev.2009.03.004",
+    "https://doi.org/10.3390/rs11182108",
+    "https://doi.org/10.1029/2020GL087291"
+  ],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#136491",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "Gravimetric (GRACE) ice mass time series for the Greenland and Antarctic Ice Sheets are calculated using spherical harmonics from JPL RL06v1, following Velicogna et al (2020). The degree-1 geocentre terms are calculated using Sutterley and Velicogna (2019), using Loomis et al (2020) C2.0 and C3.0 coefficients. The GRACE/GRACE-FO data are corrected for the long-term trend of glacial isostatic adjustment (GIA) from the solid earth using the regional IJ05 R2 GIA model (Ivins et al., 2013) over Antarctica and the regional Simpson et al. (2009) GIA model over Greenland. These regional GIA models do not include realistic GIA signal outside the ice sheets. For this reason, outside of Greenland and Antarctica, GIA corrections are based on Geruou et al. (2013) with the ICE6G ice history (Peltier et al., 2015).",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["out_ts_filled_4_261_GIS.txt"],
+	  "type": "timeseries",
+      "long_name": "Greenland ice sheet cumulative mass balance",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_velicogna",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

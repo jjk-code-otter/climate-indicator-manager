@@ -18,6 +18,7 @@
     "acknowledgement": "",
     "colour": "#e69f00",
     "zpos": 10,
+    "notes": "",
     "datasets": [
         {
             "url": [

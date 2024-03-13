@@ -11,6 +11,7 @@
   "colour": "#0072b2",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://raw.githubusercontent.com/robwschlegel/MHWapp/master/data/annual_summary/OISST_MCS_cat_daily_1982-2011_total.csv"],

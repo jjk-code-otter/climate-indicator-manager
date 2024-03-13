@@ -11,6 +11,7 @@
   "colour": "#e69f00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["ftp://osisaf.met.no/prod_test/ice/index/v2p2/sh/osisaf_sh_sie_monthly.txt"],

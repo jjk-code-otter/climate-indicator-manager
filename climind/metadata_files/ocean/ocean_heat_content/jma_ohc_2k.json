@@ -11,6 +11,7 @@
   "colour": "#d55e00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://www.data.jma.go.jp/gmd/kaiyou/data/english/ohc/ohc_global_1955.txt"],

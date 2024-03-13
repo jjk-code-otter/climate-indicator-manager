@@ -253,10 +253,12 @@ p {
                 {% if ds.citation.0 != '' %}
                 <p>
                     Citation{% if ds.citation|length > 1 %}s{% endif %}:
-                    {% for cite in ds.citation %}
-                    <a href="{{ ds.citation_url[loop.index0] }}">{{ cite }}</a>.
-                    {% endfor %}
                 </p>
+                <ul>
+                    {% for cite in ds.citation %}
+                    <li><a href="{{ ds.citation_url[loop.index0] }}">{{ cite }}</a>.</li>
+                    {% endfor %}
+                </ul>
                 {% endif %}
                 {% endif %}
                 {% if ds.data_citation %}
@@ -265,6 +267,9 @@ p {
                     Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
                 </p>
                 {% endif %}
+                {% endif %}
+                {% if ds.notes %}
+                <p>Notes: {{ ds.notes }}</p>
                 {% endif %}
                 {% if ds.acknowledgement %}
                 <p>Acknowledgement: {{ ds.acknowledgement }}</p>

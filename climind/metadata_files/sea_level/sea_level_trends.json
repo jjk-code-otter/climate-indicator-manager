@@ -19,6 +19,7 @@
   "colour": "#009e73",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_SL_regional_trends/global_omi_sl_regional_trends/global_omi_sl_regional_trends_19930101_P20230403.nc"],

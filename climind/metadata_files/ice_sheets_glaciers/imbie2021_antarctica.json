@@ -11,6 +11,7 @@
   "colour": "#d55e00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["https://ramadda.data.bas.ac.uk/repository/entry/get/imbie_antarctica_2021_Gt.csv?entryid=synth%3A77b64c55-7166-4a06-9def-2e400398e452%3AL2ltYmllX2FudGFyY3RpY2FfMjAyMV9HdC5jc3Y%3D"],

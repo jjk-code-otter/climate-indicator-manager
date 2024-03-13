@@ -13,6 +13,7 @@
   "colour": "#ff87a7",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/index.html"],

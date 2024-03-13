@@ -11,6 +11,7 @@
   "colour": "dimgrey",
   "zpos": 99,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/grids/CRUTEM.5.0.2.0.anomalies.nc"],

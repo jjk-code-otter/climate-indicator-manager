@@ -11,6 +11,7 @@
   "colour": "#e69f00",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["http://imbie.org/wp-content/uploads/2012/11/imbie_dataset_greenland_dynamics-2020_02_28.xlsx"],

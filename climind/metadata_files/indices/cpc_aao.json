@@ -11,6 +11,7 @@
   "colour": "#009e73",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
      {
       "url": ["https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/aao/monthly.aao.index.b79.current.ascii.table"],

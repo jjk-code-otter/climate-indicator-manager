@@ -17,6 +17,7 @@
   "colour": "#009e73",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["https://gml.noaa.gov/aftp/data/hats/n2o/combined/GML_global_N2O.txt"],

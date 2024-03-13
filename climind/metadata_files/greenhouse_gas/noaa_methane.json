@@ -11,6 +11,7 @@
   "colour": "#009e73",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
     {
       "url": ["ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_mm_gl.txt"],

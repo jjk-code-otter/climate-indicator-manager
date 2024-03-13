@@ -913,11 +913,13 @@ class TimeSeriesMonthly(TimeSeries):
         fraction_of_data = number_of_points / len(snippet)
 
         fit = lowess(snippet, time, fraction_of_data)
-        moving_average.df.data.iloc[:] = fit[:, 1]
 
         # Smoothing is different at ends of series (effectively extrapolation) so terminate half filter width from ends
-        moving_average.df.data.iloc[0: int(number_of_points / 2)] = np.nan
-        moving_average.df.data.iloc[-1 * int(number_of_points / 2):] = np.nan
+        fit = fit[:, 1]
+        fit[0: int(number_of_points / 2)] = np.nan
+        fit[-1 * int(number_of_points / 2):] = np.nan
+
+        moving_average.df.data = fit
 
         moving_average.update_history(
             f'Calculated lowess smoothed series with {fraction_of_data} of data used for each fit')

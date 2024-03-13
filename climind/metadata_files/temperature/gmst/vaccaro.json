@@ -11,6 +11,7 @@
   "colour": "#32a852",
   "zpos": 10,
   "origin": "obs",
+  "notes": "",
   "datasets": [
 	{
       "url": ["https://zenodo.org/record/4601616/files/HadCRUT4.6.0.0.median.GraphEM.SP60.nc"],
