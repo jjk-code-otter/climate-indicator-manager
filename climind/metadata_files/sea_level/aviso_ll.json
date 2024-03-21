@@ -1,21 +1,21 @@
 {
-  "name": "AVISO ftp",
-  "display_name": "AVISO CNES",
+  "name": "AVISO_LL",
+  "display_name": "AVISO",
   "version": "",
-  "variable": "sealevel ignore",
+  "variable": "sealevel",
   "units": "mm",
   "citation": ["Legeais, J.-F., Ablain, M., Zawadzki, L., Zuo, H., Johannessen, J. A., Scharffenberg, M. G., Fenoglio-Marc, L., Fernandes, M. J., Andersen, O. B., Rudenko, S., Cipollini, P., Quartly, G. D., Passaro, M., Cazenave, A., and Benveniste, J. (2018). An improved and homogeneous altimeter sea level record from the ESA Climate Change Initiative. Earth System Science Data, 10, 281-301. DOI: 10.5194/essd-10-281-2018"],
   "citation_url": ["https://doi.org/10.5194/essd-10-281-2018"],
   "data_citation": [""],
   "acknowledgement": "Generated using AVISO+ Products",
-  "colour": "#ff0000",
+  "colour": "#009e73",
   "zpos": 10,
   "origin": "obs",
   "notes": "",
   "datasets": [
      {
-      "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
-      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
+      "url": [""],
+      "filename": ["reprocessed_gmsl_data29022024.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",
@@ -25,8 +25,8 @@
 	  "actual": true,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_aviso_ftp",
-	  "fetcher": "fetcher_ftp"
+      "reader": "reader_aviso_ll",
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }
