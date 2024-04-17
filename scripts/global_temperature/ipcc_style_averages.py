@@ -15,9 +15,11 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
+Code to calculate the IPCC-style global mean temperature relative to an 1850-1900 baseline
+
 Port from fortran to python from https://github.com/ClimateIndicator/GMST/blob/main/globaltemphadcrupub.f
 Originally written by Blair Trewin. Ported by John Kennedy.
-Note only routines needed to calculate global annual means were ported.
+Note only routines needed to calculate global annual means were ported. The original code did more things.
 """
 
 import xarray as xa
@@ -181,7 +183,7 @@ def annspatcalc(spatmean):
 def simple_obs_ingest(filename):
     """
     Read in the gridded data from netcdf and output a standard ndarray. Note only reads in whole years. Assumes
-    that the first month in a file is January and that there are no missing months.
+    that the first month in a file is January 1850 and that there are no missing months.
 
     Parameters
     ----------
@@ -194,6 +196,8 @@ def simple_obs_ingest(filename):
     """
     df = xa.open_dataset(filename)
 
+    # Each of the groups has a different name for the temperature variable, and slightly different ways of
+    # organising the data in the NetCDF file, so we need to coerce these into a common array format
     if 'tas_mean' in df.variables:
         data = df.tas_mean.data
     elif 'tas' in df.variables:
@@ -218,7 +222,7 @@ def calculate_spatial_mean(observation_array):
     """
     Calculate the spatial mean of the gridded data. Assuming that the data are on a regular lat-lon grid, which runs
     from -90 to 90 degrees and that the areas of the grid correspond to the grid-cell centres. Areas are calculated
-    using the standard cos(latitude) weighting. Three averages are output for each month: northern hemisphre,
+    using the standard cos(latitude) weighting. Three averages are output for each month: northern hemisphere,
     southern hemisphere and the global average (which is just the simple mean of the two).
 
     Parameters
@@ -228,7 +232,8 @@ def calculate_spatial_mean(observation_array):
 
     Returns
     -------
-
+    ndarray(time, 3)
+        Return array which contains the northern hemisphere, southern hemisphere and global averages for each time step
     """
     n_latitude = observation_array.shape[1]
     n_longitude = observation_array.shape[2]
@@ -248,6 +253,9 @@ def calculate_spatial_mean(observation_array):
         nh_mask = (latitudes > 0) & (~np.isnan(selected_obs))
         sh_mask = (latitudes < 0) & (~np.isnan(selected_obs))
 
+        # index 0 is Northern Hemisphere average masked to observed locations
+        # index 1 is Southern Hemisphere average masked to observed locations
+        # index 2 is Global average calculated as simple arithmetic mean of the two hemispheric averages
         spatial_means[time_index, 0] = np.average(selected_obs[nh_mask], weights=weights[nh_mask])
         spatial_means[time_index, 1] = np.average(selected_obs[sh_mask], weights=weights[sh_mask])
         spatial_means[time_index, 2] = (spatial_means[time_index, 0] + spatial_means[time_index, 1]) / 2.0
@@ -266,30 +274,36 @@ def calculate_annual_mean(monthly_means):
 
     Returns
     -------
-
+    ndarray(nyears)
     """
     return monthly_to_annual_array(monthly_means)
-
-
 
 
 startyr = 1850
 endyr = 2023
 length = endyr - startyr + 1
 
+climatology_start = 1850
+climatology_end = 1900
+
+# Set to True to use the functions based on a word-for-word translation of the original fortran
+# Setting it to False uses the more pythonic versions
 original_processing = False
 
 data_dir = DATA_DIR / "ManagedData" / "Data"
 
-obs_filenames = [
-    data_dir / "Berkeley Earth" / "Land_and_Ocean_LatLong1.nc",
-    data_dir / "NOAA Interim" / "NOAAGlobalTemp_v5.1.0_gridded_s185001_e202312_c20240108T150239.nc",
-    data_dir / "HadCRUT5" / "HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc",
-    data_dir / "Kadow" / "HadCRUT5.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-202312.nc",
-]
+berkeley_file = data_dir / "Berkeley Earth" / "Land_and_Ocean_LatLong1.nc"
+noaa_v51_file = data_dir / "NOAA Interim" / "NOAAGlobalTemp_v5.1.0_gridded_s185001_e202312_c20240108T150239.nc"
+noaa_v6_file = data_dir / "NOAA v6" / "NOAAGlobalTemp_v6.0.0_gridded_s185001_e202402_c20240308T152813.nc"
+hadcrut5_file = data_dir / "HadCRUT5" / "HadCRUT.5.0.2.0.analysis.anomalies.ensemble_mean.nc"
+kadow_file = data_dir / "Kadow" / "HadCRUT5.anomalies.Kadow_et_al_2020_20crAI-infilled.ensemble_mean_185001-202312.nc"
 
+obs_filenames = [berkeley_file, noaa_v6_file, hadcrut5_file, kadow_file]
+
+# Set up the basic arrays
 all_data = np.zeros((length, len(obs_filenames)))
 yearvals = np.arange(startyr, endyr + 1, 1)
+climatology_period = (yearvals >= climatology_start) & (yearvals <= climatology_end)
 
 for i, obs_filename in enumerate(obs_filenames):
 
@@ -302,17 +316,18 @@ for i, obs_filename in enumerate(obs_filenames):
         spatial_mean = calculate_spatial_mean(observed_grid)
         annual_spatial_mean = calculate_annual_mean(spatial_mean)
 
-    all_data[:, i] = annual_spatial_mean[:, 2] - np.mean(annual_spatial_mean[0:51, 2])
 
-print(yearvals[0:51])
+    all_data[:, i] = annual_spatial_mean[:, 2] - np.mean(annual_spatial_mean[climatology_period, 2])
 
+#Average together all the datasets and take 10 and 20 year rolling means
 summary = np.mean(all_data, axis=1)
 
 decadal = rolling_average(summary, 10)
 tecadal = rolling_average(summary, 20)
 
-# Read in the series as calculated at some point in time using the original code
+# Read in the series as calculated using the original code
 orig = pd.read_csv('Global indicators paper - decadal means.csv', names=['year', 'miss', 'dec', 'ann'])
+update = pd.read_csv('Global indicators paper - decadal means - April 2024.csv', names=['year', 'miss', 'dec', 'ann'])
 
 # Plot the individual series and the summary
 for i in range(len(obs_filenames)):
@@ -325,27 +340,42 @@ plt.plot(yearvals, tecadal, color='green')
 plt.show()
 plt.close()
 
-
 # Plot the annual values: freshly calculated and from the IGCC paper
-plt.plot(yearvals, summary)
-plt.plot(orig.year, orig.ann)
+plt.plot(yearvals, summary, label='This analysis')
+plt.plot(orig.year, orig.ann, label='IPCC')
+plt.plot(update.year, update.ann, label='IGCC update')
+plt.legend()
 plt.show()
 plt.close()
 
 # Plot the decadal values: freshly calculated and from the IGCC paper
-plt.plot(yearvals, decadal)
-plt.plot(orig.year, orig.dec)
+plt.plot(yearvals, decadal, label='This analysis')
+plt.plot(orig.year, orig.dec, label='IPCC')
+plt.plot(update.year, update.dec, label='IGCC update')
+plt.legend()
 plt.show()
 plt.close()
 
 decadal[np.isnan(decadal)] = -9.9999
 orig.dec[np.isnan(orig.dec)] = -9.9999
 orig.ann[np.isnan(orig.ann)] = -9.9999
+update.dec[np.isnan(update.dec)] = -9.9999
+update.ann[np.isnan(update.ann)] = -9.9999
 
-# Print out the freshly calcualted series and the "original" series from the IGCC 2023 paper
+# Print out the freshly calculated series and the "original" series from the IGCC 2023 paper
+print("Original")
 for i in range(2018 - startyr):
     print(
         f"{yearvals[i]} {decadal[i]:.2f}, {orig.dec[i]:.2f}, {decadal[i] - orig.dec[i]:.2f} === "
         f"{summary[i]:.2f}, {orig.ann[i]:.2f} {summary[i] - orig.ann[i]:.2f} ")
+i += 1
+print(f"{yearvals[i]} {decadal[i]:.2f}, {-9:.2f}, {-9:.2f} === {summary[i]:.2f}, {-9:.2f} {-9:.2f} ")
+
+# Print out the freshly calculated series and the "original" series from the IGCC 2023 paper
+print("Update")
+for i in range(2018 - startyr):
+    print(
+        f"{yearvals[i]} {decadal[i]:.2f}, {update.dec[i]:.2f}, {decadal[i] - update.dec[i]:.4f} === "
+        f"{summary[i]:.2f}, {update.ann[i]:.2f} {summary[i] - update.ann[i]:.4f} ")
 i += 1
 print(f"{yearvals[i]} {decadal[i]:.2f}, {-9:.2f}, {-9:.2f} === {summary[i]:.2f}, {-9:.2f} {-9:.2f} ")
