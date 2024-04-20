@@ -48,8 +48,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     df = xa.open_dataset(filename)
 
-#    conversion = 1.0/1e9
-    conversion = 361e6 * 0.864 * 1e6 / 1e21
+    conversion = 3.1e-7 # Confirmed by Mercator
 
     # Double uncertainties to get 95% range
     if metadata['variable'] == 'ohc':
