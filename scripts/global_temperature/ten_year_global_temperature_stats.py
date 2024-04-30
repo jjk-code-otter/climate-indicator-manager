@@ -115,6 +115,7 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         sst_anns.append(annual)
 
+    fives = []
     tens = []
     twenties = []
     thirties = []
@@ -127,6 +128,7 @@ if __name__ == "__main__":
     lsat_dtens = []
 
     for ds in all_annual_datasets:
+        fives.append(ds.running_mean(5))
         tens.append(ds.running_mean(10))
         twenties.append(ds.running_mean(20))
         thirties.append(ds.running_mean(30))
@@ -145,6 +147,7 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_tens, 'ten_sst.png', r'10-year Global Mean SST Difference ($\degree$C))')
     pt.neat_plot(figure_dir, lsat_tens, 'ten_lsat.png', r'10-year Global Mean LSAT Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, fives, 'five.png', r'5-year Global Mean Temperature Difference ($\degree$C))')
     pt.neat_plot(figure_dir, tens, 'ten.png', r'10-year Global Mean Temperature Difference ($\degree$C))')
     pt.neat_plot(figure_dir, twenties, 'twenty.png', r'20-year Global Mean Temperature Difference ($\degree$C))')
     pt.neat_plot(figure_dir, thirties, 'thirty.png', r'30-year Global Mean Temperature Difference ($\degree$C))')
@@ -156,6 +159,7 @@ if __name__ == "__main__":
     pt.decade_plot(figure_dir, dtens, 'dten.png',
                    r'10-year Global Mean Temperature Difference ($\degree$C))')
 
+    utils.run_the_numbers(fives, final_year, 'fiveyear_stats', report_dir)
     utils.run_the_numbers(tens, final_year, 'tenyear_stats', report_dir)
     utils.run_the_numbers(lsat_tens, final_year, 'lsat_tenyear_stats', report_dir)
     utils.run_the_numbers(sst_tens, final_year, 'sst_tenyear_stats', report_dir)
