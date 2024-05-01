@@ -67,7 +67,7 @@ DATA_DIR = Path(data_dir_env) / 'Proxies'
 
 filenames = ['BHM.txt', 'CPS.txt', 'DA.txt', 'M08.txt', 'OIE.txt', 'PAI.txt', 'PCR.txt']
 
-data = []
+data_list = []
 lows = []
 highs = []
 
@@ -76,10 +76,10 @@ for file in filenames:
     time = this_data_set[:, 0]
     this_data_set = this_data_set[:, 1:]
 
-    # Do some smoothing
+    # Smooth the data by convolving with a binomial filter
     this_data_set = np.apply_along_axis(np.convolve, axis=0, arr=this_data_set, v=binomcoeffs(21), mode='valid')
 
-    # Get summary stats
+    # Get summary stats from the 1000 ensemble members for this model
     this_mean = np.mean(this_data_set, axis=1)
     this_low = np.quantile(this_data_set, 0.05, axis=1)
     this_high = np.quantile(this_data_set, 0.95, axis=1)
@@ -89,23 +89,26 @@ for file in filenames:
     index = (time >= 1850) & (time <= 1900)
     selection = this_mean[index]
     climatology = np.median(selection, axis=0)
+
     this_mean = this_mean - climatology
     this_low = this_low - climatology
     this_high = this_high - climatology
 
-    # Add to data
-    data.append(this_mean)
+    # Add to data list
+    data_list.append(this_mean)
     lows.append(this_low)
     highs.append(this_high)
 
+# Plot each model as a separate line and shaded area
 sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 plt.figure(figsize=[24, 9])
-for i, array in enumerate(data):
+for i, array in enumerate(data_list):
     plt.fill_between(time, lows[i], highs[i], alpha=0.1, color='#f56042')
     plt.plot(time, array, color='#f56042', linewidth=1)
 
 plt.gca().set_xlabel("Year")
 plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
+plt.gca().set_title('Global temperature change of the past 2000 years', pad=5, fontdict={'fontsize': 40}, loc='left')
 
 plt.savefig(Path(data_dir_env) / 'ManagedData' / 'Figures' / 'pages2k.png', bbox_inches='tight')
 plt.savefig(Path(data_dir_env) / 'ManagedData' / 'Figures' / 'pages2k.svg', bbox_inches='tight')

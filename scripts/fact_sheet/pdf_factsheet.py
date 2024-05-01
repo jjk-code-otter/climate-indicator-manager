@@ -212,6 +212,30 @@ def annual_mean(c, x, y, year, value, uncertainty):
     total_block_height = plot_text_block(c, x, y, box_width, phrases, 245, 96, 66)
     return total_block_height
 
+def land_annual_mean(c, x, y, year, value, uncertainty):
+    box_width = 145
+    phrases = [
+        f"{year}",
+        "Land temperature",
+        f"{value:.2f}±{uncertainty:.2f}°C",
+        "above the 1850-1900 average",
+        "Warmest year on record"
+    ]
+    total_block_height = plot_text_block(c, x, y, box_width, phrases, 161, 74, 27)
+    return total_block_height
+
+def ocean_annual_mean(c, x, y, year, value, uncertainty):
+    box_width = 145
+    phrases = [
+        f"Ocean",
+        "temperature",
+        f"{value:.2f}±{uncertainty:.2f}°C",
+        "above the 1850-1900 average",
+        "Warmest year on record"
+    ]
+    total_block_height = plot_text_block(c, x, y, box_width, phrases, 85, 207, 200)
+    return total_block_height
+
 
 def long_term_mean(c, x, y, year1, year2, value, uncertainty):
     box_width = 145
@@ -257,11 +281,11 @@ c.drawString(45, 800, "Key Climate Indicators: Global Temperature")
 c.line(45, 797, 550, 797)
 
 # Add plot of global mean temperatures
-drawing = svg2rlg(figure_dir / 'annual.svg')
+drawing = svg2rlg(figure_dir / 'observed_and_anthro.svg')
 picture_scale = 0.29
 drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
 drawing.scale(picture_scale, picture_scale)
-drawing.drawOn(c, 170, 560)
+drawing.drawOn(c, 200, 560)
 
 # Plot number blocks
 ystart = 800
@@ -283,19 +307,29 @@ ystart = indented_para_with_left_heading(
     f"Global mean temperature measures the change in temperature near the surface of the Earth averaged "
     f"across its surface. Increased concentrations of greenhouse gases in the atmosphere are the primary driver of "
     f"the long-term increase in global mean temperature. Temperatures are measured by weather stations over land "
-    f"and by ships and buoys at sea. Temperatures are typically shown as difference from a long-term average, "
-    f"known as anomalies. Several groups produce their own estimates of global mean temperature. Differences "
+    f"and by ships and buoys at sea. Temperatures are typically shown as difference from a long-term average. "
+    f"Several groups produce their own estimates of global mean temperature. Differences "
     f"between the groups' estimates are small in recent years and indicate how well we know global temperature. "
-    f"Warming of the "
-    f"Earth is not the same everywhere. The land has warmed more rapidly than "
-    f"the ocean and the rate of warming has been highest in the Arctic, which "
-    f"has warmed around two to four times faster than the global mean depending "
-    f"on the time period chosen.",
+    f"Warming of the Earth is not the same everywhere. The land has warmed more rapidly than the ocean and the "
+    f"rate of warming has been highest in the Arctic, which has warmed around two to four times faster than the "
+    f"global mean depending on the time period chosen.",
     color=(245 / 255, 96 / 255, 66 / 255)
 )
 
+# Add plot of land and ocean temperatures
+drawing = svg2rlg(figure_dir / 'land_ocean.svg')
+picture_scale = 0.29
+drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
+drawing.scale(picture_scale, picture_scale)
+drawing.drawOn(c, 45, ystart-drawing.height-10)
+
+tbh1 = land_annual_mean(c, fwidth-2*45, ystart, 2022, 2.11, 0.13)
+tbh2 = ocean_annual_mean(c, fwidth-2*45, ystart-tbh1, 2022, 1.01, 0.13)
+
+ystart = ystart - drawing.height -10
+
 styleN.textColor = Color(105 / 255, 194 / 255, 245 / 255, 1)
-ystart = indented_para_with_right_heading(
+ystart = indented_para_with_left_heading(
     c, 45, ystart, ["What did","IPCC say?"],
     f"Working Group 1 of the IPCC Sixth Assessment report made the following statements regarding "
     f"global temperatures in the Summary for Policy Makers.<br/><b>A.1.2</b> Each of the last four decades has been successively warmer than any decade that preceded "
@@ -317,9 +351,48 @@ ystart = indented_para_with_right_heading(
     color=(105 / 255, 194 / 255, 245 / 255)
 )
 
-styleN.textColor = Color(245 / 255, 194 / 255, 105 / 255, 1)
+
+c.showPage()
+
+
+# Title and underline
+c.setFont('arial_bold', 21, leading=None)
+c.setFillColorRGB(95 / 255, 95 / 255, 95 / 255)
+c.setStrokeColorRGB(95 / 255, 95 / 255, 95 / 255)
+c.drawString(45, 800, "Key Climate Indicators: Global Temperature")
+c.line(45, 797, 550, 797)
+
+ystart = 790
+
+styleN.textColor = Color(245 / 255, 96 / 255, 66 / 255, 1)
 ystart = indented_para_with_left_heading(
-    c, 45, ystart, ["Paris","Agreement"],
+    c, 45, ystart, ["LONG-TERM","TEMPERATURE","CHANGE"],
+    f"Although global temperature records from thermometers only extend back around 170 years, "
+    f"longer temperature series can be compiled using proxies. Proxies are things that are sensitive "
+    f"to changes in temperature and in which temperature variations leave permanent changes. For example, "
+    f"tree rings are wider in years with warmer summers and narrower in colder years. Other proxies include "
+    f"things like isotope ratios in ice cores, stalactites and corals, among many others. "
+    f"Temperatures inferred from proxies aren't as accurate as those from thermometers and they can be "
+    f"sensitive to things other than temperature. Further back in time, it becomes difficult to assign a "
+    f"precise date to a proxy, and this tends to blur out when exactly changes happened. As with instrumental "
+    f"temperatuers, different groups have approached the problem of estimating a global temperature from "
+    f"proxies in very different ways. While these differ, broad scale changes over the past 2000 years can "
+    f"be reconstructed with some degree of verisimilitude.",
+    color=(245 / 255, 96 / 255, 66 / 255)
+)
+
+# Add plot of global mean temperatures
+drawing = svg2rlg(figure_dir / 'pages2k.svg')
+picture_scale = fwidth / drawing.minWidth()
+drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
+drawing.scale(picture_scale, picture_scale)
+drawing.drawOn(c, 45, ystart-drawing.height-10)
+
+ystart = ystart-drawing.height-10
+
+styleN.textColor = Color(154/255, 131/255, 230/255, 1)
+ystart = indented_para_with_right_heading(
+    c, 45, ystart, ["PARIS","AGREEMENT"],
     f"The <b>Paris Agreement</b> aims to hold the increase in the global average temperature "
     f"to well below 2°C above pre-industrial levels and pursue efforts to "
     f"limit the temperature increase to 1.5°C above pre-industrial levels, "
@@ -328,8 +401,9 @@ ystart = indented_para_with_left_heading(
     f"to human-induced or long-term changes in temperature, so a single year that exceeds 1.5°C "
     f"would not signal a breach of the threshold. A 10-year average, on the other hand, may well "
     f"indicate that the threshold had been crossed.",
-    color=(245 / 255, 194 / 255, 105 / 255)
+    color=(154/255, 131/255, 230/255)
 )
+
 
 ystart = ystart - 10
 
@@ -365,39 +439,6 @@ f = Frame(45 + fwidth / 2, ystart - 110, fwidth / 2, 110, showBoundary=bounds_on
           rightPadding=0,
           topPadding=0)
 f.addFromList(story, c)
-
-c.showPage()
-
-
-# Title and underline
-c.setFont('arial_bold', 21, leading=None)
-c.setFillColorRGB(95 / 255, 95 / 255, 95 / 255)
-c.setStrokeColorRGB(95 / 255, 95 / 255, 95 / 255)
-c.drawString(45, 800, "Key Climate Indicators: Global Temperature")
-c.line(45, 797, 550, 797)
-
-ystart = 790
-
-styleN.textColor = Color(245 / 255, 96 / 255, 66 / 255, 1)
-ystart = indented_para_with_left_heading(
-    c, 45, ystart, ["LONG-TERM","TEMPERATURE","CHANGE"],
-    f"The <b>Paris Agreement</b> aims to hold the increase in the global average temperature "
-    f"to well below 2°C above pre-industrial levels and pursue efforts to "
-    f"limit the temperature increase to 1.5°C above pre-industrial levels, "
-    f"recognizing that this would significantly reduce the risks and impacts "
-    f"of climate change. The Paris Agreement is generally understood to refer "
-    f"to human-induced or long-term changes in temperature, so a single year that exceeds 1.5°C "
-    f"would not signal a breach of the threshold. A 10-year average, on the other hand, may well "
-    f"indicate that the threshold had been crossed.",
-    color=(245 / 255, 96 / 255, 66 / 255)
-)
-
-# Add plot of global mean temperatures
-drawing = svg2rlg(figure_dir / 'pages2k.svg')
-picture_scale = fwidth / drawing.minWidth()
-drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
-drawing.scale(picture_scale, picture_scale)
-drawing.drawOn(c, 45, ystart-drawing.height)
 
 
 c.showPage()
