@@ -27,6 +27,21 @@
 	  "history": [],
       "reader": "reader_getquocs_ts",
 	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [""],
+      "filename": ["Book1.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_getquocs_ts",
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

@@ -1,0 +1,51 @@
+{
+  "name": "HadCRUT4",
+  "display_name": "HadCRUT4",
+  "version": "4.6.0.0",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Morice, C. P., J. J. Kennedy, N. A. Rayner, and P. D. Jones (2012), Quantifying uncertainties in global and regional temperature change using an ensemble of observational estimates: The HadCRUT4 dataset, J. Geophys. Res., 117, D08101, doi:10.1029/2011JD017187"],
+  "citation_url": ["https://doi.org/10.1029/2011JD017187"],
+  "data_citation": [""],
+  "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut4 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "colour": "dimgrey",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.monthly_ns_avg.txt",
+              "https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.annual_ns_avg.txt"],
+      "filename": ["HadCRUT.4.6.0.0.monthly_ns_avg.txt",
+                   "HadCRUT.4.6.0.0.annual_ns_avg.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_hadcrut4_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.monthly_ns_avg.txt",
+              "https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.annual_ns_avg.txt"],
+      "filename": ["HadCRUT.4.6.0.0.monthly_ns_avg.txt",
+                   "HadCRUT.4.6.0.0.annual_ns_avg.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_hadcrut4_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

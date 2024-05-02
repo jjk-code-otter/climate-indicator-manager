@@ -27,6 +27,21 @@
 	  "history": [],
       "reader": "reader_vaccaro_ts",
 	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://zenodo.org/records/4601616"],
+      "filename": ["HadCRUT4.6.0.0.median.GraphEM.SP60.GLmean.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_vaccaro_ts",
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

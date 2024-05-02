@@ -79,3 +79,22 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
 
     return gd.GridMonthly(df, metadata)
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    years = []
+    anomalies = []
+
+    with open(filename[0], 'r') as f:
+        f.readline()
+        for line in f:
+            columns = line.split(',')
+            year = columns[0]
+            anom = columns[3]
+
+            years.append(int(year))
+            anomalies.append(float(anom))
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata)
+

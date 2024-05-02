@@ -104,7 +104,7 @@ if __name__ == "__main__":
     anns = []
     for ds in all_datasets:
         ds.rebaseline(1850, 1900)
-        annual =ds.make_annual()
+        annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
         anns.append(annual)
 
@@ -134,15 +134,22 @@ if __name__ == "__main__":
     #     plt.plot(ds.df['year'], ds.df['data'],color='#999999')
 
     for ds in sst_anns:
-        plt.plot(ds.df['year'], ds.df['data'],color='#55cfc8', linewidth=2)
+        plt.plot(ds.df['year'], ds.df['data'], color='#55cfc8', linewidth=2)
 
     for ds in lsat_anns:
-        plt.plot(ds.df['year'], ds.df['data'],color='#a14a1b', linewidth=2)
+        plt.plot(ds.df['year'], ds.df['data'], color='#a14a1b', linewidth=2)
+
+    plt.text(1960, 1.04, 'Land', color='#a14a1b', fontsize=36)
+    plt.text(1990, 0.04, 'Ocean', color='#55cfc8', fontsize=36)
 
     plt.gca().set_xlabel("Year")
     plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
     plt.gca().set_title('Land and ocean warming', pad=5, fontdict={'fontsize': 40},
                         loc='left')
+
+    ylim = plt.gca().get_ylim()
+    yloc = ylim[1] - 0.06 * (ylim[1] - ylim[0])
+    plt.text(plt.gca().get_xlim()[0], yloc, 'Difference from 1850-1900 average', fontdict={'fontsize': 30})
 
     plt.savefig(figure_dir / 'land_ocean.png', bbox_inches='tight')
     plt.savefig(figure_dir / 'land_ocean.svg', bbox_inches='tight')

@@ -20,6 +20,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import climind.data_manager.processing as dm
+from climind.definitions import METADATA_DIR
 
 def binomcoeffs(n):
     return (np.poly1d([0.5, 0.5]) ** n).coeffs
@@ -63,6 +65,38 @@ STANDARD_PARAMETER_SET = {
 }
 
 data_dir_env = os.getenv('DATADIR')
+
+project_dir = Path(data_dir_env) / "ManagedData"
+data_dir = project_dir / "Data"
+figure_dir = project_dir / 'Figures'
+metadata_dir = METADATA_DIR
+
+# Read in the whole archive then select the various subsets needed here
+archive = dm.DataArchive.from_directory(metadata_dir)
+
+# some global temperature data sets are annual only, others are monthly so need to read these separately
+ts_archive = archive.select({'variable': 'tas',
+                             'type': 'timeseries',
+                             'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'Kadow', 'Berkeley Earth'],
+                             'time_resolution': 'monthly'})
+
+all_datasets = ts_archive.read_datasets(data_dir)
+
+anns = []
+for ds in all_datasets:
+    ds.rebaseline(1850, 1900)
+    annual = ds.make_annual()
+    annual.select_year_range(1850, 2023)
+    anns.append(annual)
+
+years=[]
+smoothed_data=[]
+for ds in anns:
+    data = np.apply_along_axis(np.convolve, axis=0, arr=ds.df.data, v=binomcoeffs(21), mode='valid')
+    year = np.apply_along_axis(np.convolve, axis=0, arr=ds.df.year, v=binomcoeffs(21), mode='valid')
+    years.append(year)
+    smoothed_data.append(data)
+
 DATA_DIR = Path(data_dir_env) / 'Proxies'
 
 filenames = ['BHM.txt', 'CPS.txt', 'DA.txt', 'M08.txt', 'OIE.txt', 'PAI.txt', 'PCR.txt']
@@ -105,6 +139,9 @@ plt.figure(figsize=[24, 9])
 for i, array in enumerate(data_list):
     plt.fill_between(time, lows[i], highs[i], alpha=0.1, color='#f56042')
     plt.plot(time, array, color='#f56042', linewidth=1)
+
+for i, y in enumerate(years):
+    plt.plot(y, smoothed_data[i], color='#555555')
 
 plt.gca().set_xlabel("Year")
 plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)

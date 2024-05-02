@@ -1,5 +1,5 @@
 #  Climate indicator manager - a package for managing and building climate indicator dashboards.
-#  Copyright (c) 2023 John Kennedy
+#  Copyright (c) 2022 John Kennedy
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ from pathlib import Path
 from typing import List
 import xarray as xa
 import numpy as np
-import pandas as pd
 
 import climind.data_types.timeseries as ts
 import climind.data_types.grid as gd
@@ -27,19 +26,10 @@ from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
 
+
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
-
-    number_of_months = df.temperature_anomaly.data.shape[0]
-    latitudes = np.linspace(-87.5, 87.5, 36)
-    longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
-
-    target_grid = np.zeros((number_of_months, 36, 72))
-    target_grid[:, :, :] = df.temperature_anomaly.data[:, :, :]
-
-    df = gd.make_xarray(target_grid, times, latitudes, longitudes)
-
+    df = df[['tas_mean']]
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(df, metadata)
@@ -48,19 +38,9 @@ def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.Gr
 def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     return read_monthly_grid(filename, metadata)
 
+
 def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
-
-    number_of_months = df.temperature_anomaly.data.shape[0]
-    latitudes = np.linspace(-87.5, 87.5, 36)
-    longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'1850-01-01', freq='1MS', periods=number_of_months)
-
-    target_grid = np.zeros((number_of_months, 36, 72))
-    target_grid[:, :, :] = df.temperature_anomaly.data[:, :, :]
-
-    df = gd.make_xarray(target_grid, times, latitudes, longitudes)
-
     # regrid to 1x1
     lats = np.arange(-89.5, 90.5, 1.0)
     lons = np.arange(-179.5, 180.5, 1.0)
@@ -76,26 +56,33 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
 
     return gd.GridMonthly(df, metadata)
 
+
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
+    uncertainty = []
 
     with open(filename[0], 'r') as f:
         f.readline()
         for line in f:
             columns = line.split()
-            year = columns[0]
-            month = columns[1:13]
+            year = columns[0][0:4]
+            month = columns[0][5:7]
 
-            for i, m in enumerate(month):
+            if columns[1] != '':
                 years.append(int(year))
-                months.append(int(i+1))
-                anomalies.append(float(m))
+                months.append(int(month))
+                anomalies.append(float(columns[1]))
+                uncertainty.append((float(columns[3])-float(columns[2]))/2.)
+            else:
+                pass
+#                anomalies.append(np.nan)
+#                uncertainty.append(np.nan)
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainty)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:

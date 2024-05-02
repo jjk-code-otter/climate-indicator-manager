@@ -1,0 +1,32 @@
+{
+  "name": "Cowtan and Way",
+  "display_name": "Cowtan and Way",
+  "version": "2",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Cowtan, K. and Way, R.G. (2014), Coverage bias in the HadCRUT4 temperature series and its impact on recent temperature trends. Q.J.R. Meteorol. Soc., 140: 1935-1944. https://doi.org/10.1002/qj.2297"],
+  "citation_url": ["https://doi.org/10.1002/qj.2297"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "dimgrey",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://www-users.york.ac.uk/~kdc3/papers/coverage2013/had4_krig_v2_0_0.txt"],
+      "filename": ["had4_krig_v2_0_0.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cowtan_and_way_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # some global temperature data sets are annual only, others are monthly so need to read these separately
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'Kadow', 'Berkeley Earth'],
+                                 'name': ['HadCRUT5', 'NOAA Interim', 'GISTEMP', 'Kadow', 'Berkeley Earth', 'HadCRUT4', 'HadCRUT5 noninfilled'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
@@ -126,10 +126,18 @@ if __name__ == "__main__":
         plt.fill_between(ds.time, ds.anthropogenic_p05, ds.anthropogenic_p95, color='#ffaa17', alpha=0.2)
         plt.plot(ds.time, ds.anthropogenic_p50, color='#ffaa17', linewidth=3)
 
+    plt.text(1945, 0.65, 'Observed\nannual', color='#f56042', fontsize=36)
+    plt.text(1883, 0.45, 'Human-induced', color='#ffaa17', fontsize=36)
+    plt.text(1970, 1.10, 'Observed\nlong-term', color='#69c2f5', fontsize=36)
+
     plt.gca().set_xlabel("Year")
     plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
     plt.gca().set_title('Global warming metrics', pad=5, fontdict={'fontsize': 40},
                         loc='left')
+
+    ylim = plt.gca().get_ylim()
+    yloc = ylim[1] - 0.06 * (ylim[1] - ylim[0])
+    plt.text(plt.gca().get_xlim()[0], yloc, 'Difference from 1850-1900 average', fontdict={'fontsize': 30})
 
     plt.savefig(figure_dir / 'observed_and_anthro.png', bbox_inches='tight')
     plt.savefig(figure_dir / 'observed_and_anthro.svg', bbox_inches='tight')
