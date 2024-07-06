@@ -160,11 +160,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'ohc': [
-            {'variable': 'ohc2k',
+        'n2o': [
+            {'variable': 'n2o',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Ocean heat content'
+            'Nitrous Oxide'
         ]
     }
 

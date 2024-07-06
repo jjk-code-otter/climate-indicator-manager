@@ -46,7 +46,6 @@ fwidth = 595 - 2 * 45
 
 
 def indented_para_with_left_heading(c, x, ystart, title, para_text, color):
-
     if type(title) is list:
         total_block_height = plot_text_block(
             c, x, ystart, 130, title,
@@ -95,7 +94,7 @@ def indented_para_with_right_heading(c, x, ystart, title, para_text, color):
         head_width = 130
         total_block_height = plot_text_block(
             c, x + fwidth - head_width, ystart, 130, title,
-            255 * color[0], 255 * color[1], 255 * color[2]
+               255 * color[0], 255 * color[1], 255 * color[2]
         )
 
     else:
@@ -112,12 +111,14 @@ def indented_para_with_right_heading(c, x, ystart, title, para_text, color):
     g = s.split(fwidth - head_width, total_block_height)
 
     gw, gh = g[0].wrap(fwidth - head_width, total_block_height)
-    f = Frame(x, ystart - total_block_height - 5, gw, gh, showBoundary=bounds_on, leftPadding=0, bottomPadding=0, rightPadding=0,
+    f = Frame(x, ystart - total_block_height - 5, gw, gh, showBoundary=bounds_on, leftPadding=0, bottomPadding=0,
+              rightPadding=0,
               topPadding=0)
     f.addFromList([g[0]], c)
 
     gw, gh = g[1].wrap(fwidth, total_block_height)
-    f = Frame(x, ystart - total_block_height - gh - 5, gw, gh, showBoundary=bounds_on, leftPadding=0, bottomPadding=0, rightPadding=0,
+    f = Frame(x, ystart - total_block_height - gh - 5, gw, gh, showBoundary=bounds_on, leftPadding=0, bottomPadding=0,
+              rightPadding=0,
               topPadding=0)
     f.addFromList([g[1]], c)
 
@@ -207,10 +208,11 @@ def annual_mean(c, x, y, year, value, uncertainty):
         "Observed warming",
         f"{value:.2f}±{uncertainty:.2f}°C",
         "above the 1850-1900 average",
-        "Warmest year on record"
+        "5th-6th warmest year"
     ]
     total_block_height = plot_text_block(c, x, y, box_width, phrases, 245, 96, 66)
     return total_block_height
+
 
 def land_annual_mean(c, x, y, year, value, uncertainty):
     box_width = 145
@@ -219,10 +221,11 @@ def land_annual_mean(c, x, y, year, value, uncertainty):
         "Land temperature",
         f"{value:.2f}±{uncertainty:.2f}°C",
         "above the 1850-1900 average",
-        "Warmest year on record"
+        "6th-8th warmest year"
     ]
     total_block_height = plot_text_block(c, x, y, box_width, phrases, 161, 74, 27)
     return total_block_height
+
 
 def ocean_annual_mean(c, x, y, year, value, uncertainty):
     box_width = 145
@@ -231,7 +234,7 @@ def ocean_annual_mean(c, x, y, year, value, uncertainty):
         "temperature",
         f"{value:.2f}±{uncertainty:.2f}°C",
         "above the 1850-1900 average",
-        "Warmest year on record"
+        "6th-7th warmest year"
     ]
     total_block_height = plot_text_block(c, x, y, box_width, phrases, 85, 207, 200)
     return total_block_height
@@ -265,8 +268,7 @@ def end_page(c):
     c.setFillColorRGB(95 / 255, 95 / 255, 95 / 255)
     c.setStrokeColorRGB(95 / 255, 95 / 255, 95 / 255)
     c.drawString(15, 10, 'Global Temperature')
-    c.drawString(fwidth-50, 10, '© 2024 John Kennedy')
-
+    c.drawString(fwidth - 50, 10, '© 2024 John Kennedy')
 
 
 doc_dir = DATA_DIR / 'ManagedData' / 'Documents'
@@ -304,53 +306,44 @@ tbh3 = long_term_mean(c, 45, ystart - tbh1 - tbh2, 2013, 2022, 1.15, 0.12)
 # Set up paragraphs
 styles = getSampleStyleSheet()
 styleN = styles['Normal']
-styleN.textColor = Color(154/255, 131/255, 230/255, 1)
-styleN.backColor = Color(154/255, 131/255, 230/255, 0)
+styleN.textColor = Color(154 / 255, 131 / 255, 230 / 255, 1)
+styleN.backColor = Color(154 / 255, 131 / 255, 230 / 255, 0)
 styleH = styles['Heading1']
 
 ystart = ystart - tbh1 - tbh2 - tbh3
-
 
 # Add plot of land and ocean temperatures
 drawing = svg2rlg(figure_dir / 'land_ocean.svg')
 picture_scale = 0.29
 drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
 drawing.scale(picture_scale, picture_scale)
-drawing.drawOn(c, 45, ystart-drawing.height-10)
+drawing.drawOn(c, 45, ystart - drawing.height - 10)
 
-tbh1 = land_annual_mean(c, fwidth-2*45, ystart, 2022, 2.11, 0.13)
-tbh2 = ocean_annual_mean(c, fwidth-2*45, ystart-tbh1, 2022, 1.01, 0.13)
+tbh1 = land_annual_mean(c, fwidth - 2 * 45, ystart, 2022, 2.11, 0.13)
+tbh2 = ocean_annual_mean(c, fwidth - 2 * 45, ystart - tbh1, 2022, 1.01, 0.13)
 
-ystart = ystart - drawing.height -10
-
-
-# # Add plot of land and ocean temperatures
-# drawing = svg2rlg(dash_dir / 'Temperature_anomaly_map.svg')
-# picture_scale = 0.29
-# drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
-# drawing.scale(picture_scale, picture_scale)
-# drawing.drawOn(c, 200, ystart-drawing.height-10)
-#
-# ystart = ystart - drawing.height -10
+ystart = ystart - drawing.height - 10
 
 
 ystart = indented_para_with_left_heading(
     c, 45, ystart, "Basics",
     f"Global mean temperature measures the change in temperature near the surface of the Earth averaged "
-    f"across its surface. Increased concentrations of greenhouse gases in the atmosphere are the primary driver of "
-    f"the long-term increase in global mean temperature. Temperatures are measured by weather stations over land "
-    f"and by ships and buoys at sea. Temperatures are typically shown as difference from a long-term average. "
-    f"Several groups produce their own estimates of global mean temperature. Differences "
-    f"between the groups' estimates are small in recent years and indicate how well we know global temperature. "
-    f"Warming of the Earth is not the same everywhere. The land has warmed more rapidly than the ocean and the "
-    f"rate of warming has been highest in the Arctic, which has warmed around two to four times faster than the "
-    f"global mean depending on the time period chosen.",
-    color=(154/255, 131/255, 230/255)
+    f"across its whole surface. Temperatures are measured by weather stations over land "
+    f"and by ships and buoys at sea. Global temperatures are typically shown as differences from a long-term average, "
+    f"in this case 1850-1900. Several groups produce estimates of global mean temperature. Differences "
+    f"between the estimates are relatively small and indicate how accurately we can measure global temperature. "
+    f"Although it is common to talk of <i>global</i> warming, warming is not the same everywhere. The land has "
+    f"warmed more rapidly than the ocean, for example. The rate of warming has been highest in the Arctic, which "
+    f"has warmed around two to four times faster than the global mean depending on the time period chosen. Increased "
+    f"concentrations of greenhouse gases in the atmosphere are the primary driver of the long-term increase in "
+    f"global mean temperature. Warming from greenhouse gases and cooling from man-made aerosols combined - referred "
+    f"to as human-induced warming - lead to an overall warming that is very similar to the long-term observed change.",
+    color=(154 / 255, 131 / 255, 230 / 255)
 )
 
 styleN.textColor = Color(105 / 255, 194 / 255, 245 / 255, 1)
 ystart = indented_para_with_right_heading(
-    c, 45, ystart, ["What did","IPCC say?"],
+    c, 45, ystart, ["What did", "IPCC say?"],
     f"Working Group 1 of the IPCC Sixth Assessment report made the following statements regarding "
     f"global temperatures in the Summary for Policy Makers.<br/><b>A.1.2</b> Each of the last four decades has been successively warmer than any decade that preceded "
     f"it since 1850. Global surface temperature in the first two decades of the 21st century (2001-2020) was 0.99 "
@@ -371,7 +364,6 @@ ystart = indented_para_with_right_heading(
 end_page(c)
 c.showPage()
 
-
 # Title and underline
 c.setFont('arial_bold', 21, leading=None)
 c.setFillColorRGB(95 / 255, 95 / 255, 95 / 255)
@@ -383,7 +375,7 @@ ystart = 790
 
 styleN.textColor = Color(245 / 255, 96 / 255, 66 / 255, 1)
 ystart = indented_para_with_left_heading(
-    c, 45, ystart, ["LONG-TERM","TEMPERATURE","CHANGE"],
+    c, 45, ystart, ["LONG-TERM", "TEMPERATURE", "CHANGE"],
     f"Although global temperature records from thermometers only extend back around 170 years, "
     f"longer temperature series can be compiled using proxies. Proxies are things that are sensitive "
     f"to changes in temperature and in which temperature variations leave permanent changes. For example, "
@@ -403,40 +395,73 @@ drawing = svg2rlg(figure_dir / 'pages2k.svg')
 picture_scale = fwidth / drawing.minWidth()
 drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
 drawing.scale(picture_scale, picture_scale)
-drawing.drawOn(c, 45, ystart-drawing.height-10)
+drawing.drawOn(c, 45, ystart - drawing.height - 10)
 
-ystart = ystart-drawing.height-10
+ystart = ystart - drawing.height - 10
 
-styleN.textColor = Color(154/255, 131/255, 230/255, 1)
+styleN.textColor = Color(105 / 255, 194 / 255, 245 / 255, 1)
 ystart = indented_para_with_right_heading(
-    c, 45, ystart, ["PARIS","AGREEMENT"],
-    f"The <b>Paris Agreement</b> aims to hold the increase in the global average temperature "
-    f"to well below 2°C above pre-industrial levels and pursue efforts to "
-    f"limit the temperature increase to 1.5°C above pre-industrial levels, "
-    f"recognizing that this would significantly reduce the risks and impacts "
-    f"of climate change. The Paris Agreement is generally understood to refer "
-    f"to human-induced or long-term changes in temperature, so a single year that exceeds 1.5°C "
-    f"would not signal a breach of the threshold. A 10-year average, on the other hand, may well "
-    f"indicate that the threshold had been crossed.",
-    color=(154/255, 131/255, 230/255)
+    c, 45, ystart, ["What did", "IPCC say?"],
+    f"Working Group 1 of the IPCC Sixth Assessment report made the following statements regarding "
+    f"long-term temperature change in the Summary for Policy Makers.<br/>"
+    f"<b>A.2.2</b> Global surface temperature has increased faster since 1970 than in any other 50-year period "
+    f"over at least the last 2000 years (<i>high confidence</i>). Temperatures during the most recent decade "
+    f"(2011–2020) exceed those of the most recent multi-century warm period, around 6500 years ago [0.2°C to 1°C "
+    f"relative to 1850–1900] (<i>medium confidence</i>). Prior to that, the next most recent warm period was "
+    f"about 125,000 years ago, when the multi-century temperature [0.5°C to 1.5°C relative to 1850–1900] overlaps "
+    f"the observations of the most recent decade (<i>medium confidence</i>).",
+    color=(105 / 255, 194 / 255, 245 / 255)
 )
 
+styleN.textColor = Color(154 / 255, 131 / 255, 230 / 255, 1)
+ystart = indented_para_with_left_heading(
+    c, 45, ystart, ["PARIS", "AGREEMENT"],
+    f"The <b><link href='https://unfccc.int/files/meetings/paris_nov_2015/application/pdf/paris_agreement_english_.pdf'>"
+    f"Paris Agreement</link></b> reached in 2015, aims to strengthen the global response to the threat of climate "
+    f"change, in the context of sustainable development and efforts to eradicate poverty, including by"
+    f"holding the increase in the global average temperature to well below 2°C above pre-industrial levels and "
+    f"pursuing efforts to limit the temperature increase to 1.5 °C above pre-industrial levels, recognizing that "
+    f"this would significantly reduce the risks and impacts of climate change. The Paris Agreement is generally "
+    f"understood to refer to human-induced or long-term changes in temperature, so a single year that exceeds 1.5°C "
+    f"would not signal a breach of the threshold. However, the agreement as worded allows a number of "
+    f"interpretations.",
+    color=(154 / 255, 131 / 255, 230 / 255)
+)
 
-ystart = ystart - 10
+end_page(c)
+c.showPage()
+
+ystart = 800
+
+# Add plot of land and ocean temperatures
+drawing = svg2rlg(figure_dir / 'pastel_map.svg')
+picture_scale = 0.29
+drawing.width, drawing.height = drawing.minWidth() * picture_scale, drawing.height * picture_scale
+drawing.scale(picture_scale, picture_scale)
+drawing.drawOn(c, 230, ystart-drawing.height-10)
+ystart = ystart - drawing.height -10
 
 styleN.textColor = Color(55 / 255, 55 / 255, 55 / 255, 1)
 story = []
 story.append(Paragraph("Data sources", styleH))
-story.append(Paragraph("<link href='https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv'>HadCRUT5</link>", style=styleN))
-story.append(Paragraph("<link href='https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.mon.land_ocean.90S.90N.v5.1.0.202312.asc'>NOAAGlobalTemp</link>", style=styleN))
-story.append(Paragraph("<link href='https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv'>GISTEMP</link>", style=styleN))
-story.append(Paragraph("<link href='https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt'>Berkeley Earth</link>", style=styleN))
-story.append(Paragraph("<link href='https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/2023/12/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_202312_1991-2020_v01.1.csv'>ERA5</link>", style=styleN))
+story.append(Paragraph(
+    "<link href='https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/HadCRUT.5.0.2.0.analysis.summary_series.global.monthly.csv'>HadCRUT5</link>",
+    style=styleN))
+story.append(Paragraph(
+    "<link href='https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v5.1/access/timeseries/aravg.mon.land_ocean.90S.90N.v5.1.0.202312.asc'>NOAAGlobalTemp</link>",
+    style=styleN))
+story.append(Paragraph("<link href='https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv'>GISTEMP</link>",
+                       style=styleN))
+story.append(Paragraph(
+    "<link href='https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt'>Berkeley Earth</link>",
+    style=styleN))
+story.append(Paragraph(
+    "<link href='https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/2023/12/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_202312_1991-2020_v01.1.csv'>ERA5</link>",
+    style=styleN))
 story.append(Paragraph("<link href=''>JRA55</link>", style=styleN))
 
 story.append(Paragraph("<link href='https://doi.org/10.6084/m9.figshare.c.4507043'>PAGES2k</link>", style=styleN))
 story.append(Paragraph("<link href='https://zenodo.org/records/8430424'>Forster et al. (2023)</link>", style=styleN))
-
 
 f = Frame(45, ystart - 150, fwidth / 2, 150, showBoundary=bounds_on, leftPadding=0, bottomPadding=0, rightPadding=0,
           topPadding=0)

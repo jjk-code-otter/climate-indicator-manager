@@ -191,6 +191,13 @@ def get_levels_and_palette(variable: str):
         wmo_cols = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#f5f5f5',
                     '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
         wmo_levels = [-110, -90, -70, -50, -30, -10, 10, 30, 50, 70, 90, 110]
+    elif variable == 'pastel':
+        wmo_cols = ['#fa5332', '#fc6749', '#fc785d', '#ff917a', '#ffa694', '#ffc4b8', '#ffdfd9',
+                    '#d9dfff', '#b8c4ff', '#94a6ff', '#7a91ff', '#5d78fc', '#4967fc', '#2254fa']
+        wmo_cols = ['#fa5332', '#fc8d2b', '#fcb36a', '#ffd17a', '#ffe494', '#fff6b8', '#feffd9',
+                    '#d9fcff', '#b8ecff', '#94d2ff', '#7abfff', '#5d97fc', '#497ffc', '#2254fa']
+        wmo_cols.reverse()
+        wmo_levels = [-5, -3, -2, -1, -0.5, -0.25, 0, 0.25, 0.5, 1, 2, 3, 5]
     else:
         wmo_cols = ['#2a0ad9', '#264dff', '#3fa0ff', '#72daff', '#aaf7ff', '#e0ffff',
                     '#ffffbf', '#fee098', '#ffad73', '#f76e5e', '#d82632', '#a50022']
@@ -284,6 +291,9 @@ def set_xaxis(axis) -> Tuple[float, float, np.ndarray]:
         xlo, xhi, xticks = set_lo_hi_ticks(xlims, 10.)
     if len(xticks) < 3:
         xlo, xhi, xticks = set_lo_hi_ticks(xlims, 1.)
+
+    if len(xticks) > 50:
+        xlo, xhi, xticks = set_lo_hi_ticks(xlims, 200.)
 
     return xlo, xhi, xticks
 
@@ -1303,6 +1313,85 @@ def plot_map_by_year_and_month(dataset: GridMonthly, year: int, month: int, imag
                                           f'{year}-{month:02d}-28'))
 
     nice_map(selection, image_filename, title, var=var)
+
+
+def dashboard_map_pastel(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str) -> str:
+    """
+    Plot generic style map for the dashboard. Type must be one of "mean", "rank", or "unc".
+
+    Parameters
+    ----------
+    out_dir: Path
+        Output directory to which the image will be written
+    all_datasets: List[GridAnnual]
+        List of :class:`.GridAnnual` datasets to be plotted
+    image_filename: str
+        Filename for output file
+    title: str
+        Title for the plot
+    grid_type: str
+        Indicates how the datasets in the input list should be combined, 'mean', 'rank' or 'unc'
+    region: list
+        four member list specifying the western, eastern, southern, and northern extents of the region to be plotted.
+
+    Returns
+    -------
+    str
+        Caption for the figure
+    """
+    dataset = process_datasets(all_datasets, 'median')
+
+    last_months = []
+    for ds in all_datasets:
+        year_month = "-".join(ds.metadata['last_month'].split('-')[0:2])
+        last_months.append(f"{ds.metadata['display_name']} to {year_month}")
+    ds = all_datasets[-1]
+
+    main_variable_list = list(dataset.df.keys())
+    main_variable = main_variable_list[0]
+
+    data = dataset.df[main_variable]
+    lon = dataset.df.coords['longitude']
+    lon_idx = data.dims.index('longitude')
+    wrap_data, wrap_lon = add_cyclic_point(data.values, coord=lon, axis=lon_idx)
+
+    sns.set(STANDARD_PARAMETER_SET)
+    plt.figure(figsize=(16, 9))
+
+    proj = ccrs.EqualEarth(central_longitude=0)
+
+    wmo_levels, wmo_cols = get_levels_and_palette('pastel')
+
+    fig = plt.figure(figsize=(16, 9))
+    ax = fig.add_subplot(111, projection=proj, aspect='auto')
+    p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                    transform=ccrs.PlateCarree(),
+                    levels=wmo_levels,
+                    colors=wmo_cols,
+                    extend='both'
+                    )
+
+    cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
+
+    cbar.ax.tick_params(labelsize=15)
+    cbar.set_ticks(wmo_levels)
+    cbar.set_ticklabels(wmo_levels)
+
+    label_text = f"Temperature difference from " \
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+    cbar.set_label(label_text, rotation=0, fontsize=15)
+
+    p.axes.coastlines(color='#777777', linewidth=2)
+    p.axes.set_global()
+
+    plt.savefig(out_dir / f'{image_filename}', bbox_inches='tight')
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'), bbox_inches='tight')
+    plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'), bbox_inches='tight')
+    plt.close('all')
+
+    caption = map_caption_builder(all_datasets, 'mean')
+
+    return caption
 
 
 def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_filename: str, title: str,
