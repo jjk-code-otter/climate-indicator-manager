@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>climind.stats package &mdash; Climind 1.0 documentation</title>
+  <title>climind.stats package &mdash; Climind 1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -169,6 +169,7 @@ year (March and September).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of datasets on which the assessment will be based</p></li>
 <li><p><strong>year</strong> (<em>int</em>) – Chosen year to focus on</p></li>
+<li><p><strong>update</strong> (<em>bool</em>) – If set to True treat this as an update</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -192,11 +193,14 @@ year (March and September).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.stats.paragraphs.dataset_name_list">
-<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">dataset_name_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.dataset_name_list" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">dataset_name_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.dataset_name_list" title="Permalink to this definition"></a></dt>
 <dd><p>Given a list of dataset, return a comma-and-and separated list of the names.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em><em>]</em>) – List of data sets whose names you want in a list</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em><em>]</em>) – List of data sets whose names you want in a list</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – If year is specified, the name list will specify to what month data are available if the year is incomplete.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A list of the dataset names separated by commas and, where appropriate, ‘and’</p>
@@ -245,6 +249,19 @@ year (March and September).</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="climind.stats.paragraphs.global_anomaly_and_rank">
+<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">global_anomaly_and_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.global_anomaly_and_rank" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_datasets</strong> – </p></li>
+<li><p><strong>year</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="climind.stats.paragraphs.greenland_ice_sheet">
 <span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">greenland_ice_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.greenland_ice_sheet" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -256,7 +273,7 @@ year (March and September).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.stats.paragraphs.long_term_trend_paragraph">
-<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">long_term_trend_paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.long_term_trend_paragraph" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">long_term_trend_paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.long_term_trend_paragraph" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -294,6 +311,25 @@ value and rank for that month.</p>
 <dt class="sig sig-object py" id="climind.stats.paragraphs.ordinal">
 <span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">ordinal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.stats.paragraphs.ordinal" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.stats.paragraphs.pre_industrial_estimate">
+<span class="sig-prename descclassname"><span class="pre">climind.stats.paragraphs.</span></span><span class="sig-name descname"><span class="pre">pre_industrial_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.paragraphs.pre_industrial_estimate" title="Permalink to this definition"></a></dt>
+<dd><p>Write a short paragraph estimating the difference between the modern baselin and
+1850 to 1900.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of all the data sets to be analysed</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns a paragraph of text stating an estimate of the pre-industrial temperature
+from these data sets</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.stats.paragraphs.rank_ranges">
@@ -356,7 +392,7 @@ include years after the year of interest if it is not the most recent year in th
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.stats.utils.table_by_year">
-<span class="sig-prename descclassname"><span class="pre">climind.stats.utils.</span></span><span class="sig-name descname"><span class="pre">table_by_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">years_to_show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.utils.table_by_year" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.stats.utils.</span></span><span class="sig-name descname"><span class="pre">table_by_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">years_to_show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.stats.utils.table_by_year" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </div>
@@ -370,7 +406,7 @@ include years after the year of interest if it is not the most recent year in th
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, John Kennedy.</p>
+    <p>&#169; Copyright 2024, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

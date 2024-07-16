@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; Climind 1.0 documentation</title>
+  <title>Index &mdash; Climind 1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -68,6 +68,7 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -87,6 +88,8 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.accumulate">accumulate() (in module climind.plotters.plot_types)</a>
+</li>
       <li><a href="climind.data_manager.html#climind.data_manager.processing.DataArchive.add_collection">add_collection() (climind.data_manager.processing.DataArchive method)</a>
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.add_data_sets">add_data_sets() (in module climind.plotters.plot_types)</a>
@@ -115,6 +118,8 @@
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.arctic_sea_ice_plot">arctic_sea_ice_plot() (in module climind.plotters.plot_types)</a>
 </li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection">AveragesCollection (class in climind.data_types.timeseries)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -124,6 +129,8 @@
       <li><a href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata">BaseMetadata (class in climind.data_manager.metadata)</a>
 </li>
       <li><a href="climind.stats.html#climind.stats.paragraphs.basic_anomaly_and_rank">basic_anomaly_and_rank() (in module climind.stats.paragraphs)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.best_estimate">best_estimate() (climind.data_types.timeseries.AveragesCollection method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -147,15 +154,25 @@
 </li>
       <li><a href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average">calculate_regional_average() (climind.data_types.grid.GridMonthly method)</a>
 </li>
+      <li><a href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average_missing">calculate_regional_average_missing() (climind.data_types.grid.GridMonthly method)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_time_mean">calculate_time_mean() (climind.data_types.grid.GridMonthly method)</a>
+</li>
       <li><a href="climind.plotters.html#climind.plotters.plot_utils.calculate_trends">calculate_trends() (in module climind.plotters.plot_utils)</a>
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_utils.calculate_values">calculate_values() (in module climind.plotters.plot_utils)</a>
+</li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_utils.calculate_values_ipcc_style">calculate_values_ipcc_style() (in module climind.plotters.plot_utils)</a>
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_utils.caption_builder">caption_builder() (in module climind.plotters.plot_utils)</a>
 </li>
       <li><a href="climind.web.html#climind.web.dashboard.Card">Card (class in climind.web.dashboard)</a>
 </li>
       <li><a href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.check_file_status">check_file_status() (in module climind.fetchers.fetcher_jra55_grid)</a>
+</li>
+      <li><a href="climind.config.html#climind.config.config.check_setup">check_setup() (in module climind.config.config)</a>
+</li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.cherry_plot">cherry_plot() (in module climind.plotters.plot_types)</a>
 </li>
       <li><a href="climind.web.html#climind.web.extract_from_word.clean_awkward_characters">clean_awkward_characters() (in module climind.web.extract_from_word)</a>
 </li>
@@ -404,6 +421,8 @@
         <li><a href="climind.readers.html#module-climind.readers.reader_clsat">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     climind.readers.reader_cmems_ph
 
@@ -411,8 +430,6 @@
         <li><a href="climind.readers.html#module-climind.readers.reader_cmems_ph">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     climind.readers.reader_era5
 
@@ -677,6 +694,10 @@
 </li>
       <li><a href="climind.stats.html#climind.stats.paragraphs.compare_to_highest_anomaly_and_rank">compare_to_highest_anomaly_and_rank() (in module climind.stats.paragraphs)</a>
 </li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.count">count() (climind.data_types.timeseries.AveragesCollection method)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.create_common_dataframe">create_common_dataframe() (in module climind.data_types.timeseries)</a>
+</li>
       <li><a href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.creation_message">creation_message() (climind.data_manager.metadata.CombinedMetadata method)</a>
 
       <ul>
@@ -697,6 +718,8 @@
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_generic">dashboard_map_generic() (in module climind.plotters.plot_types)</a>
 </li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_single">dashboard_map_single() (in module climind.plotters.plot_types)</a>
+</li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.dashboard_rank_map">dashboard_rank_map() (in module climind.plotters.plot_types)</a>
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.dashboard_uncertainty_map">dashboard_uncertainty_map() (in module climind.plotters.plot_types)</a>
@@ -707,10 +730,10 @@
 </li>
       <li><a href="climind.data_manager.html#climind.data_manager.processing.DataSet">DataSet (class in climind.data_manager.processing)</a>
 </li>
-      <li><a href="climind.stats.html#climind.stats.paragraphs.dataset_name_list">dataset_name_list() (in module climind.stats.paragraphs)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.stats.html#climind.stats.paragraphs.dataset_name_list">dataset_name_list() (in module climind.stats.paragraphs)</a>
+</li>
       <li><a href="climind.data_manager.html#climind.data_manager.metadata.DatasetMetadata">DatasetMetadata (class in climind.data_manager.metadata)</a>
 </li>
       <li><a href="climind.data_manager.html#climind.data_manager.processing.DataCollection.datasets">datasets (climind.data_manager.processing.DataCollection attribute)</a>
@@ -734,6 +757,18 @@
 </li>
       </ul></li>
       <li><a href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.download_file">download_file() (in module climind.fetchers.fetcher_jra55_grid)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.equalise_datasets">equalise_datasets() (in module climind.data_types.timeseries)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.equivalence">equivalence() (in module climind.plotters.plot_types)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -839,6 +874,8 @@
         <li><a href="climind.readers.html#climind.readers.reader_noaaglobaltemp.get_latest_filename_and_url">(in module climind.readers.reader_noaaglobaltemp)</a>
 </li>
       </ul></li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.get_levels_and_palette">get_levels_and_palette() (in module climind.plotters.plot_types)</a>
+</li>
       <li><a href="climind.data_types.html#climind.data_types.timeseries.get_list_of_unique_variables">get_list_of_unique_variables() (in module climind.data_types.timeseries)</a>
 </li>
       <li><a href="climind.readers.html#climind.readers.generic_reader.get_module">get_module() (in module climind.readers.generic_reader)</a>
@@ -867,9 +904,11 @@
       </ul></li>
       <li><a href="climind.data_types.html#climind.data_types.grid.GridAnnual.get_start_year">get_start_year() (climind.data_types.grid.GridAnnual method)</a>
 </li>
-      <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_string_date_range">get_string_date_range() (climind.data_types.timeseries.TimeSeriesAnnual method)</a>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.get_string_date_range">get_string_date_range() (climind.data_types.timeseries.TimeSeries method)</a>
 
       <ul>
+        <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_string_date_range">(climind.data_types.timeseries.TimeSeriesAnnual method)</a>
+</li>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.get_string_date_range">(climind.data_types.timeseries.TimeSeriesIrregular method)</a>
 </li>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_string_date_range">(climind.data_types.timeseries.TimeSeriesMonthly method)</a>
@@ -901,6 +940,8 @@
 </li>
       <li><a href="climind.stats.html#climind.stats.paragraphs.glacier_paragraph">glacier_paragraph() (in module climind.stats.paragraphs)</a>
 </li>
+      <li><a href="climind.stats.html#climind.stats.paragraphs.global_anomaly_and_rank">global_anomaly_and_rank() (in module climind.stats.paragraphs)</a>
+</li>
       <li><a href="climind.data_manager.html#climind.data_manager.processing.DataCollection.global_attributes">global_attributes (climind.data_manager.processing.DataCollection attribute)</a>
 </li>
       <li><a href="climind.data_manager.html#climind.data_manager.processing.DataSet.global_metadata">global_metadata (climind.data_manager.processing.DataSet attribute)</a>
@@ -921,15 +962,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="climind.data_manager.html#climind.data_manager.metadata.list_match">list_match() (in module climind.data_manager.metadata)</a>
 </li>
-      <li><a href="climind.data_types.html#climind.data_types.grid.log_activity">log_activity() (in module climind.data_types.grid)</a>
-
-      <ul>
-        <li><a href="climind.data_types.html#climind.data_types.timeseries.log_activity">(in module climind.data_types.timeseries)</a>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.log_activity">log_activity() (in module climind.data_types.timeseries)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="climind.stats.html#climind.stats.paragraphs.long_term_trend_paragraph">long_term_trend_paragraph() (in module climind.stats.paragraphs)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.lower_range">lower_range() (climind.data_types.timeseries.AveragesCollection method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -989,9 +1028,11 @@
 </li>
       <li><a href="climind.data_types.html#climind.data_types.grid.median_of_datasets">median_of_datasets() (in module climind.data_types.grid)</a>
 </li>
-      <li><a href="climind.data_manager.html#climind.data_manager.processing.DataSet.metadata">metadata (climind.data_manager.processing.DataSet attribute)</a>
+      <li><a href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.metadata">metadata (climind.data_manager.metadata.BaseMetadata attribute)</a>
 
       <ul>
+        <li><a href="climind.data_manager.html#climind.data_manager.processing.DataSet.metadata">(climind.data_manager.processing.DataSet attribute)</a>
+</li>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.metadata">(climind.data_types.timeseries.TimeSeriesAnnual attribute)</a>
 </li>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.metadata">(climind.data_types.timeseries.TimeSeriesMonthly attribute)</a>
@@ -1190,10 +1231,14 @@
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.plot_map_by_year_and_month">plot_map_by_year_and_month() (in module climind.plotters.plot_types)</a>
 </li>
-      <li><a href="climind.web.html#climind.web.dashboard.Card.process_card">process_card() (climind.web.dashboard.Card method)</a>
+      <li><a href="climind.stats.html#climind.stats.paragraphs.pre_industrial_estimate">pre_industrial_estimate() (in module climind.stats.paragraphs)</a>
+</li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.preindustrial_summary_plot">preindustrial_summary_plot() (in module climind.plotters.plot_types)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.web.html#climind.web.dashboard.Card.process_card">process_card() (climind.web.dashboard.Card method)</a>
+</li>
       <li><a href="climind.web.html#climind.web.dashboard.Card.process_datasets">process_datasets() (climind.web.dashboard.Card method)</a>
 
       <ul>
@@ -1222,6 +1267,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.range">range() (climind.data_types.timeseries.AveragesCollection method)</a>
+</li>
       <li><a href="climind.data_types.html#climind.data_types.grid.range_of_datasets">range_of_datasets() (in module climind.data_types.grid)</a>
 </li>
       <li><a href="climind.data_types.html#climind.data_types.grid.GridAnnual.rank">rank() (climind.data_types.grid.GridAnnual method)</a>
@@ -1308,6 +1355,12 @@
         <li><a href="climind.readers.html#climind.readers.reader_jra55.read_grid">(in module climind.readers.reader_jra55)</a>
 </li>
       </ul></li>
+      <li><a href="climind.readers.html#climind.readers.reader_nsidc.read_irregular_ts">read_irregular_ts() (in module climind.readers.reader_nsidc)</a>
+
+      <ul>
+        <li><a href="climind.readers.html#climind.readers.reader_osisaf.read_irregular_ts">(in module climind.readers.reader_osisaf)</a>
+</li>
+      </ul></li>
       <li><a href="climind.readers.html#climind.readers.reader_berkeley.read_monthly_1x1_grid">read_monthly_1x1_grid() (in module climind.readers.reader_berkeley)</a>
 
       <ul>
@@ -1320,6 +1373,8 @@
         <li><a href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_1x1_grid">(in module climind.readers.reader_hadcrut_ts)</a>
 </li>
         <li><a href="climind.readers.html#climind.readers.reader_jra55.read_monthly_1x1_grid">(in module climind.readers.reader_jra55)</a>
+</li>
+        <li><a href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_1x1_grid">(in module climind.readers.reader_noaa_interim_ts)</a>
 </li>
         <li><a href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_monthly_1x1_grid">(in module climind.readers.reader_noaaglobaltemp)</a>
 </li>
@@ -1339,6 +1394,8 @@
 </li>
         <li><a href="climind.readers.html#climind.readers.reader_jra55.read_monthly_5x5_grid">(in module climind.readers.reader_jra55)</a>
 </li>
+        <li><a href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_5x5_grid">(in module climind.readers.reader_noaa_interim_ts)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1356,6 +1413,8 @@
         <li><a href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_grid">(in module climind.readers.reader_hadcrut_ts)</a>
 </li>
         <li><a href="climind.readers.html#climind.readers.reader_jra55.read_monthly_grid">(in module climind.readers.reader_jra55)</a>
+</li>
+        <li><a href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_grid">(in module climind.readers.reader_noaa_interim_ts)</a>
 </li>
         <li><a href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_monthly_grid">(in module climind.readers.reader_noaaglobaltemp)</a>
 </li>
@@ -1422,6 +1481,8 @@
         <li><a href="climind.readers.html#climind.readers.reader_wdcgg_ts_update.read_monthly_ts">(in module climind.readers.reader_wdcgg_ts_update)</a>
 </li>
       </ul></li>
+      <li><a href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_one_month">read_one_month() (in module climind.readers.reader_noaa_interim_ts)</a>
+</li>
       <li><a href="climind.readers.html#climind.readers.generic_reader.read_ts">read_ts() (in module climind.readers.generic_reader)</a>
 
       <ul>
@@ -1443,9 +1504,15 @@
       <ul>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.rebaseline">(climind.data_types.timeseries.TimeSeriesAnnual method)</a>
 </li>
+        <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.rebaseline">(climind.data_types.timeseries.TimeSeriesIrregular method)</a>
+</li>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.rebaseline">(climind.data_types.timeseries.TimeSeriesMonthly method)</a>
 </li>
       </ul></li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.regional_dashboard_map">regional_dashboard_map() (in module climind.plotters.plot_types)</a>
+</li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.regional_dashboard_uncertainty_map">regional_dashboard_uncertainty_map() (in module climind.plotters.plot_types)</a>
+</li>
       <li><a href="climind.web.html#climind.web.dashboard.Paragraph.render">render() (climind.web.dashboard.Paragraph method)</a>
 </li>
       <li><a href="climind.stats.html#climind.stats.utils.run_the_numbers">run_the_numbers() (in module climind.stats.utils)</a>
@@ -1453,6 +1520,8 @@
       <li><a href="climind.data_types.html#climind.data_types.grid.GridAnnual.running_average">running_average() (climind.data_types.grid.GridAnnual method)</a>
 </li>
       <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_mean">running_mean() (climind.data_types.timeseries.TimeSeriesAnnual method)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_stdev">running_stdev() (climind.data_types.timeseries.TimeSeriesAnnual method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1466,19 +1535,25 @@
 </li>
       <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.select_decade">select_decade() (climind.data_types.timeseries.TimeSeriesAnnual method)</a>
 </li>
+      <li><a href="climind.data_types.html#climind.data_types.grid.GridMonthly.select_period">select_period() (climind.data_types.grid.GridMonthly method)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.grid.GridMonthly.select_year_and_month">select_year_and_month() (climind.data_types.grid.GridMonthly method)</a>
+</li>
       <li><a href="climind.data_types.html#climind.data_types.grid.GridAnnual.select_year_range">select_year_range() (climind.data_types.grid.GridAnnual method)</a>
 
       <ul>
         <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.select_year_range">(climind.data_types.timeseries.TimeSeries method)</a>
 </li>
       </ul></li>
-      <li><a href="climind.plotters.html#climind.plotters.plot_utils.set_lo_hi_ticks">set_lo_hi_ticks() (in module climind.plotters.plot_utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.plotters.html#climind.plotters.plot_utils.set_lo_hi_ticks">set_lo_hi_ticks() (in module climind.plotters.plot_utils)</a>
+</li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.set_xaxis">set_xaxis() (in module climind.plotters.plot_types)</a>
 </li>
       <li><a href="climind.plotters.html#climind.plotters.plot_types.set_yaxis">set_yaxis() (in module climind.plotters.plot_types)</a>
+</li>
+      <li><a href="climind.plotters.html#climind.plotters.plot_types.show_premade_image">show_premade_image() (in module climind.plotters.plot_types)</a>
 </li>
       <li><a href="climind.data_types.html#climind.data_types.grid.simple_regrid">simple_regrid() (in module climind.data_types.grid)</a>
 </li>
@@ -1526,6 +1601,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.upper_range">upper_range() (climind.data_types.timeseries.AveragesCollection method)</a>
+</li>
       <li><a href="climind.fetchers.html#climind.fetchers.fetcher_utils.url_from_filename">url_from_filename() (in module climind.fetchers.fetcher_utils)</a>
 </li>
   </ul></td>
@@ -1548,11 +1625,17 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.write_dataset_summary_file">write_dataset_summary_file() (in module climind.data_types.timeseries)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.write_dataset_summary_file_with_metadata">write_dataset_summary_file_with_metadata() (in module climind.data_types.timeseries)</a>
+</li>
       <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.write_generic_csv">write_generic_csv() (climind.data_types.timeseries.TimeSeries method)</a>
 </li>
       <li><a href="climind.data_types.html#climind.data_types.grid.GridAnnual.write_grid">write_grid() (climind.data_types.grid.GridAnnual method)</a>
 </li>
       <li><a href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.write_metadata">write_metadata() (climind.data_manager.metadata.CombinedMetadata method)</a>
+</li>
+      <li><a href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.write_simple_csv">write_simple_csv() (climind.data_types.timeseries.TimeSeriesAnnual method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1574,7 +1657,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, John Kennedy.</p>
+    <p>&#169; Copyright 2024, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

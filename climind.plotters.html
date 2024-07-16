@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>climind.plotters package &mdash; Climind 1.0 documentation</title>
+  <title>climind.plotters package &mdash; Climind 1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -71,20 +71,47 @@
              
   <div class="section" id="module-climind.plotters">
 <span id="climind-plotters-package"></span><h1>climind.plotters package<a class="headerlink" href="#module-climind.plotters" title="Permalink to this heading"></a></h1>
+<p>The plotters module contains the code for plotting datasets. The plotting code
+itself is in plot_types which has functions for plotting
+<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries" title="climind.data_types.timeseries.TimeSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeries</span></code></a> data of varying time resolutions
+and also <a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> data. The plots all return a
+string which is the caption of the plot. The plots follow a template, with the following
+inputs:</p>
+<ul class="simple">
+<li><p>out_dir</p></li>
+<li><p>list of data sets</p></li>
+<li><p>image filename</p></li>
+<li><p>title for the plot</p></li>
+</ul>
+<p>plot_utils contains a set of functions which support the plotting code including
+calculation of trends, ranks, setting tick marks, building captions and so on.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </div>
 <div class="section" id="module-climind.plotters.plot_types">
 <span id="climind-plotters-plot-types-module"></span><h2>climind.plotters.plot_types module<a class="headerlink" href="#module-climind.plotters.plot_types" title="Permalink to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.accumulate">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">accumulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.accumulate" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the accumulated mean for an array so that the nth value is
+the mean of the first n values in the input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in_array</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.add_data_sets">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">add_data_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_types.add_data_sets" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">add_data_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_types.add_data_sets" title="Permalink to this definition"></a></dt>
 <dd><p>Given a list of data sets, plot each one on the provided axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>axis</strong> (<em>Matplotlib axis</em>) – Set of Matplotlib axes for plotting on</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – list of data sets to be plotted on the axes</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em><em>]</em>) – list of data sets to be plotted on the axes</p></li>
+<li><p><strong>dark</strong> (<em>bool</em>) – Set to True to plot in the dark style (charcoal background, light coloured lines)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -98,13 +125,42 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.add_labels">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">add_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.add_labels" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">add_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.add_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Add labels to the x and y axes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>Matplotlib axis</em>) – set of matplotlib axes</p></li>
+<li><p><strong>dataset</strong> (<em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em>) – Data set which will be used to specify the units on the y axis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Units of the y-axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.after_plot">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">after_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.after_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">after_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.after_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Add fancy stuff to the plots after all the data lines have been plotted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zords</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – List of the zorders of the data sets</p></li>
+<li><p><strong>ds</strong> (<em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em>) – Example dataset of the datasets plotted, used to determine where to plot the legend and the
+climatology period</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.antarctic_sea_ice_plot">
@@ -114,7 +170,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the image will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of data sets to be plotted</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of data sets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> to be plotted</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – File name for the image, should end in .png.</p></li>
 </ul>
 </dd>
@@ -135,7 +191,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the image will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of data sets to be plotted</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of data sets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> to be plotted</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – File name for the image, should end in .png.</p></li>
 </ul>
 </dd>
@@ -149,9 +205,31 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="climind.plotters.plot_types.dark_plot">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">dark_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.dark_plot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="climind.plotters.plot_types.cherry_plot">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">cherry_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.cherry_plot" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.dark_plot">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">dark_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.dark_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the data sets in the dark style - charcoal background with light coloured lines. Tron like.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the plot will be written</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em><em>]</em>) – List of datasets to be plotted</p></li>
+<li><p><strong>image_filename</strong> (<em>str</em>) – Name for the file to be written. Should end with .png</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Caption for the figure</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.dashboard_map">
@@ -160,7 +238,31 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.dashboard_map_generic">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">dashboard_map_generic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.dashboard_map_generic" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">dashboard_map_generic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.dashboard_map_generic" title="Permalink to this definition"></a></dt>
+<dd><p>Plot generic style map for the dashboard. Type must be one of “mean”, “rank”, or “unc”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Output directory to which the image will be written</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em>) – List of <a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridAnnual</span></code></a> datasets to be plotted</p></li>
+<li><p><strong>image_filename</strong> (<em>str</em>) – Filename for output file</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
+<li><p><strong>grid_type</strong> (<em>str</em>) – Indicates how the datasets in the input list should be combined, ‘mean’, ‘rank’ or ‘unc’</p></li>
+<li><p><strong>region</strong> (<em>list</em>) – four member list specifying the western, eastern, southern, and northern extents of the region to be plotted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Caption for the figure</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.dashboard_map_single">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">dashboard_map_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.dashboard_map_single" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -181,7 +283,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which the image will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of datasets to be plotted.</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of datasets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> to be plotted.</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – Name for the image file, should end in .png</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the image, will appear at the top of the figure</p></li>
 </ul>
@@ -196,6 +298,16 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.equivalence">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">equivalence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.equivalence" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.get_levels_and_palette">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">get_levels_and_palette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.get_levels_and_palette" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.marine_heatwave_plot">
 <span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">marine_heatwave_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.marine_heatwave_plot" title="Permalink to this definition"></a></dt>
 <dd><p>Marine heatwave and coldspell plot, which shows the ocean area affected by marine heatwaves and coldspells
@@ -204,7 +316,7 @@ annually since the early 1980s</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which the image will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of data sets to plot</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of data sets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> to plot</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – File name for the image, should end in .png</p></li>
 </ul>
 </dd>
@@ -225,7 +337,7 @@ annually since the early 1980s</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Path of directory to which the image will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of datasets to plot</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>]</em>) – List of datasets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> to plot</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – File name for the image</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title which will appear at the top of the figure.</p></li>
 </ul>
@@ -241,13 +353,13 @@ annually since the early 1980s</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.neat_plot">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">neat_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.neat_plot" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">neat_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.neat_plot" title="Permalink to this definition"></a></dt>
 <dd><p>Create the standard annual plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the figure will be written</p></li>
-<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – list of datasets to be plotted</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em><em>]</em>) – list of datasets to be plotted</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – filename for the figure. Must end in .png</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – title for the plot</p></li>
 <li><p><strong>dark</strong> (<em>bool</em>) – set to True to plot using a dark background</p></li>
@@ -264,27 +376,116 @@ annually since the early 1980s</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.nice_map">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">nice_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tas_mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.nice_map" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">nice_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tas_mean'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.nice_map" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a nice looking map (relatively speaking) of the last field in an xarray dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>xarray.Dataset</em>) – Data set to be plotted</p></li>
+<li><p><strong>image_filename</strong> (<em>Path</em>) – Name for output file</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – Variabel to plot from the dataset</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.plot_map_by_year_and_month">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">plot_map_by_year_and_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tas_mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.plot_map_by_year_and_month" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">plot_map_by_year_and_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><span class="pre">GridMonthly</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tas_mean'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.plot_map_by_year_and_month" title="Permalink to this definition"></a></dt>
+<dd><p>Plot map for specified year and month</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><em>GridMonthly</em></a>) – <a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly" title="climind.data_types.grid.GridMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridMonthly</span></code></a> to be plotted</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – Year to be plotted</p></li>
+<li><p><strong>month</strong> (<em>int</em>) – Month in year to be plotted</p></li>
+<li><p><strong>image_filename</strong> (<em>Path</em>) – Path to output file</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – Variable to be plotted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.preindustrial_summary_plot">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">preindustrial_summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.preindustrial_summary_plot" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.quick_and_dirty_map">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">quick_and_dirty_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.quick_and_dirty_map" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">quick_and_dirty_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.quick_and_dirty_map" title="Permalink to this definition"></a></dt>
+<dd><p>Quick and very rough map plotter which plots the last field in an xarray Dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>xarray.Dataset</em>) – xarray Dataset to be plotted.</p></li>
+<li><p><strong>image_filename</strong> (<em>Path</em>) – Path for the output file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.regional_dashboard_map">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">regional_dashboard_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">west</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">east</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">south</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">north</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.regional_dashboard_map" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.regional_dashboard_uncertainty_map">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">regional_dashboard_uncertainty_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">west</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">east</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">south</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">north</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.regional_dashboard_uncertainty_map" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.set_xaxis">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">set_xaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.set_xaxis" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">set_xaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_types.set_xaxis" title="Permalink to this definition"></a></dt>
+<dd><p>Work out the extents of the x axis and the tick values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axis</strong> (<em>Matplotlib axis</em>) – The axis on which everything is being plotted</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The lowest and highest points on the y axis and an array of tick values for the major ticks on the y axis.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.set_yaxis">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">set_yaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.set_yaxis" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">set_yaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_types.set_yaxis" title="Permalink to this definition"></a></dt>
+<dd><p>Work out the extents of the y axis and the tick values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>Matplotlib axis</em>) – Matplotlib axis</p></li>
+<li><p><strong>dataset</strong> (<em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em>) – Time series which contains one of the datasets being plotted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The lowest and highest points on the y axis and an array of tick values for the major ticks on the y axis.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_types.show_premade_image">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">show_premade_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.show_premade_image" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -297,7 +498,7 @@ timeseries.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_dir</strong> (<em>Path</em>) – Path of the directory to which the figure will be written</p></li>
-<li><p><strong>in_all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of data sets to be plotted</p></li>
+<li><p><strong>in_all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of data sets of type <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> to be plotted</p></li>
 <li><p><strong>image_filename</strong> (<em>str</em>) – File name for the output figure</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title of the figure, appears at the top of the figure</p></li>
 <li><p><strong>order</strong> (<em>list</em>) – The order in which the variables will be plotted, from left to right, in each sub-block</p></li>
@@ -314,26 +515,55 @@ timeseries.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_types.wave_plot">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">wave_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_types.wave_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_types.</span></span><span class="sig-name descname"><span class="pre">wave_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_filename</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.plotters.plot_types.wave_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Wave plot with month on the x-axis from January to December and each year shown as a separate line
+showing the cumulative average for the year-to-date for that year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_dir</strong> (<em>Path</em>) – Path to the directory to which the image will be written.</p></li>
+<li><p><strong>dataset</strong> (<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a>) – <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a> to plot.</p></li>
+<li><p><strong>image_filename</strong> (<em>str</em>) – Name of the image file to be written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-climind.plotters.plot_utils">
 <span id="climind-plotters-plot-utils-module"></span><h2>climind.plotters.plot_utils module<a class="headerlink" href="#module-climind.plotters.plot_utils" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.calculate_highest_year_and_values">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_highest_year_and_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_highest_year_and_values" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_highest_year_and_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_highest_year_and_values" title="Permalink to this definition"></a></dt>
+<dd><p>From the list of <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> get the year that ranks first in each data set. Then, for
+each of those years get the highest and lowest data value from all of the data sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – List of <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> data sets</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The first returned element is a list of years that rank first in the data sets. The second element is
+a list with the same length as the first. Each element in the list is two-element list holding the
+lowest and highest values found in any of the datasets for the corresponding year in the first list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[List[int], List[List[float]]]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.calculate_ranks">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_ranks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_ranks" title="Permalink to this definition"></a></dt>
-<dd><p>given a set of data sets, return the min and max ranks from the data sets.</p>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_ranks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_ranks" title="Permalink to this definition"></a></dt>
+<dd><p>given a set of data sets, return the min and max ranks from the data sets for a given year.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>all_datasets</strong> (<em>list</em>) – list of data sets</p></li>
-<li><p><strong>y1</strong> (<em>int</em>) – year to calculate trends for</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – year to calculate ranks for</p></li>
 <li><p><strong>ascending</strong> (<em>bool</em>) – Set to true to rank low (1st) to high (nth) rather than high (1st) to low (nth)</p></li>
 </ul>
 </dd>
@@ -348,15 +578,15 @@ timeseries.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.calculate_trends">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_trends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_trends" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_trends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend_start_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend_end_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_trends" title="Permalink to this definition"></a></dt>
 <dd><p>given a set of data sets, return the mean, min and max trends from the data sets calculated
 using OLS between the chosen years.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>all_datasets</strong> (<em>list</em>) – list of data sets</p></li>
-<li><p><strong>y1</strong> (<em>int</em>) – first year for trend</p></li>
-<li><p><strong>y2</strong> (<em>int</em>) – last year for trend</p></li>
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em>) – list of <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> data sets</p></li>
+<li><p><strong>trend_start_year</strong> (<em>int</em>) – first year for trend</p></li>
+<li><p><strong>trend_end_year</strong> (<em>int</em>) – last year for trend</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -370,13 +600,33 @@ using OLS between the chosen years.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.calculate_values">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_values" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_values" title="Permalink to this definition"></a></dt>
 <dd><p>given a set of data sets, return the mean min and max values from the data sets for specified year.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>all_datasets</strong> (<em>list</em>) – list of data sets</p></li>
-<li><p><strong>y1</strong> (<em>int</em>) – year to calculate values for</p></li>
+<li><p><strong>all_datasets</strong> (<em>list</em>) – list of <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> data sets</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – year to calculate values for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return the mean, min and max values for the chosen year from all_datasets</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="climind.plotters.plot_utils.calculate_values_ipcc_style">
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_values_ipcc_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.calculate_values_ipcc_style" title="Permalink to this definition"></a></dt>
+<dd><p>given a set of data sets, return the mean min and max values from the data sets for specified year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_datasets</strong> (<em>list</em>) – list of <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a> data sets</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – year to calculate values for</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -408,26 +658,30 @@ using OLS between the chosen years.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.get_first_and_last_years">
 <span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">get_first_and_last_years</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.get_first_and_last_years" title="Permalink to this definition"></a></dt>
-<dd><p>Extract the first and last years from a list of data sets
-:param all_datasets: List containing the data sets for which we want the first and last years
-:type all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]])</p>
+<dd><p>Extract the first and last years from a list of data sets</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>First and last years</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>]</em><em>]</em><em>)</em>) – List containing the data sets for which we want the first and last years</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Tuple[int, int]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>First and last years</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, int]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.plotters.plot_utils.map_caption_builder">
-<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">map_caption_builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.map_caption_builder" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.plotters.plot_utils.</span></span><span class="sig-name descname"><span class="pre">map_caption_builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><span class="pre">GridAnnual</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.plotters.plot_utils.map_caption_builder" title="Permalink to this definition"></a></dt>
 <dd><p>Write a caption for the standard map plots.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em><em>]</em>) – List of datasets used in the plot</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_datasets</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual" title="climind.data_types.grid.GridAnnual"><em>GridAnnual</em></a><em>]</em><em>]</em>) – List of datasets used in the plot</p></li>
+<li><p><strong>grid_type</strong> (<em>str</em>) – Type is one of ‘mean’, ‘rank’ or ‘unc’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Caption for the collection of data sets</p>
@@ -463,7 +717,7 @@ using OLS between the chosen years.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, John Kennedy.</p>
+    <p>&#169; Copyright 2024, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

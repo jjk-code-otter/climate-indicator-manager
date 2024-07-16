@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>climind.data_manager package &mdash; Climind 1.0 documentation</title>
+  <title>climind.data_manager package &mdash; Climind 1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -71,25 +71,58 @@
              
   <div class="section" id="module-climind.data_manager">
 <span id="climind-data-manager-package"></span><h1>climind.data_manager package<a class="headerlink" href="#module-climind.data_manager" title="Permalink to this heading"></a></h1>
+<p>The scripts and files in the data manager module, are used to create and process
+the metadata entities that underpin the dashboards.</p>
+<p>There are basic metadata classes (<a class="reference internal" href="#climind.data_manager.metadata.BaseMetadata" title="climind.data_manager.metadata.BaseMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a>, <a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a>
+and <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a>)
+which contain metadata and allow for simple tasks like checking whether the metadata
+they contain matches what’s in a dictionary.</p>
+<p>Then there are classes (<a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a>, <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a>, <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a>)
+that use the metadata classes
+to define data sets, collections of related data sets and data archives. These classes
+allow you to select subsets of data, download data sets and read them in.</p>
+<p>The metadata themselves are stored in json files in the climind.metadata_files directory.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </div>
 <div class="section" id="module-climind.data_manager.metadata">
 <span id="climind-data-manager-metadata-module"></span><h2>climind.data_manager.metadata module<a class="headerlink" href="#module-climind.data_manager.metadata" title="Permalink to this heading"></a></h2>
+<p>These metadata classes contain all the information about the datasets that are manipulated
+by the packages. The <a class="reference internal" href="#climind.data_manager.metadata.BaseMetadata" title="climind.data_manager.metadata.BaseMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a> class contains much of the functionality, with
+<a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a> and <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> inheriting that functionality and
+differing chiefly in the schemas used to validate their contents. The <a class="reference internal" href="#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a>
+class comprises a <a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a> object and a <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> object.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.data_manager.metadata.BaseMetadata">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">BaseMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.BaseMetadata" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Simple class to store metadata and find matches</p>
+<p>Simple class to store metadata and find matches. Metadata items can be set and recovered using a
+dictionary-like syntax:</p>
+<p><cite>metadata_object[‘key’] = value</cite></p>
+<p><cite>value = metadata_object[‘key’]</cite></p>
+<p>And testing if a key-value pair exists is also dict-like</p>
+<p><cite>key in metadata_object</cite></p>
+<p>Create a <a class="reference internal" href="#climind.data_manager.metadata.BaseMetadata" title="climind.data_manager.metadata.BaseMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a> object from a dictionary containing the metaadata in key-value pairs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the metadata</p>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="climind.data_manager.metadata.BaseMetadata.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#climind.data_manager.metadata.BaseMetadata.metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Contains the metadata information in key value pairs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.metadata.BaseMetadata.fill_string">
 <span class="sig-name descname"><span class="pre">fill_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string_to_replace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.BaseMetadata.fill_string" title="Permalink to this definition"></a></dt>
-<dd><p>Replace string_to_replace with the replacement value in all elements</p>
+<dd><p>Replace string_to_replace with the replacement value in all elements of the metadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -108,7 +141,7 @@
 <span class="sig-name descname"><span class="pre">match_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#climind.data_manager.metadata.BaseMetadata.match_metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Check if metadata match contents of dictionary, metadata_to_match. Only
 definite non-matches are rejected. If a key is not found in the
-dictionary this not counted as a non-match.</p>
+dictionary this is not counted as a non-match.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata_to_match</strong> (<em>dict</em>) – Key-value or key-list pairs for match</p>
@@ -122,9 +155,13 @@ dictionary this not counted as a non-match.</p>
 <dt class="sig sig-object py" id="climind.data_manager.metadata.CollectionMetadata">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">CollectionMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.CollectionMetadata" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.data_manager.metadata.BaseMetadata" title="climind.data_manager.metadata.BaseMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a></p>
+<p>Class to store collection-level metadata, containing information that refers to all
+data sets in the collection.</p>
+<p>Create <a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a> from a dictionary containing metadata. Metadata are
+validated using the metadata_schema.json file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the metadata</p>
+<dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing metadata in key value pairs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -133,6 +170,8 @@ dictionary this not counted as a non-match.</p>
 <dt class="sig sig-object py" id="climind.data_manager.metadata.CombinedMetadata">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">CombinedMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><span class="pre">DatasetMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><span class="pre">CollectionMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.CombinedMetadata" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><a class="reference internal" href="#climind.data_manager.metadata.CombinedMetadata" title="climind.data_manager.metadata.CombinedMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a> combines <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> and <a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a> in one single
+object so that both sets of metadata elements are available in one container.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.metadata.CombinedMetadata.creation_message">
 <span class="sig-name descname"><span class="pre">creation_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.metadata.CombinedMetadata.creation_message" title="Permalink to this definition"></a></dt>
@@ -183,28 +222,37 @@ between the required metadata_to_match and the metadata.</p>
 <dt class="sig sig-object py" id="climind.data_manager.metadata.DatasetMetadata">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">DatasetMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.DatasetMetadata" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.data_manager.metadata.BaseMetadata" title="climind.data_manager.metadata.BaseMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a></p>
+<p>Class to store dataset-level metadata, containing information that refers specifically
+to a single data set.</p>
+<p>Create <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> from a dictionary containing metadata. Metadata are
+validated using the dataset_schema.json file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the metadata</p>
+<dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing metadata in key value pairs.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.metadata.DatasetMetadata.creation_message">
-<span class="sig-name descname"><span class="pre">creation_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.metadata.DatasetMetadata.creation_message" title="Permalink to this definition"></a></dt>
-<dd><p>Add creation message to the history</p>
+<span class="sig-name descname"><span class="pre">creation_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.metadata.DatasetMetadata.creation_message" title="Permalink to this definition"></a></dt>
+<dd><p>Add creation message to the history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.data_manager.metadata.list_match">
-<span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">list_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#climind.data_manager.metadata.list_match" title="Permalink to this definition"></a></dt>
-<dd><p>If att matches any item in mtm return True, otherwise False</p>
+<span class="sig-prename descclassname"><span class="pre">climind.data_manager.metadata.</span></span><span class="sig-name descname"><span class="pre">list_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#climind.data_manager.metadata.list_match" title="Permalink to this definition"></a></dt>
+<dd><p>If attribute matches any item in list_to_match return True, otherwise False</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>list_to_match</strong> (<em>list</em>) – List of metadata to match</p></li>
-<li><p><strong>attribute</strong> – attribute to check against</p></li>
+<li><p><strong>attribute</strong> (<em>str</em>) – attribute to check against</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -219,15 +267,26 @@ between the required metadata_to_match and the metadata.</p>
 </div>
 <div class="section" id="module-climind.data_manager.processing">
 <span id="climind-data-manager-processing-module"></span><h2>climind.data_manager.processing module<a class="headerlink" href="#module-climind.data_manager.processing" title="Permalink to this heading"></a></h2>
+<p>The classes and functions in this script describe groupings of metadata. The basic building
+block is a <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a>, which specifies a file (or files) which contains the data for a single
+data set. <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects are grouped into <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> objects, which gather
+together all the individual data sets which are derived from a single product. For example,
+HadCRUT5 is a product and so it has a corresponding DataCollection made up of several <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a>
+objects. Finally, a <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> contains one or more <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> objects. All
+<a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects in a <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> will be the same variable. However, <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a>
+objects in a <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> need not be the same variable.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.processing.</span></span><span class="sig-name descname"><span class="pre">DataArchive</span></span><a class="headerlink" href="#climind.data_manager.processing.DataArchive" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A grouping of multiple DataCollections</p>
+<p>A set of <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> objects. A class:<cite>DataArchive</cite> is the starting point for
+the analysis. Particular <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects are selected from the class:<cite>DataArchive</cite>
+before plotting or summarising the data.</p>
+<p>Create a <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> object, initially empty.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.collections">
 <span class="sig-name descname"><span class="pre">collections</span></span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.collections" title="Permalink to this definition"></a></dt>
-<dd><p>A dictionary containing the collections in the archive</p>
+<dd><p>A dictionary containing the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> objects in the archive</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>dict</p>
@@ -238,10 +297,10 @@ between the required metadata_to_match and the metadata.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.add_collection">
 <span class="sig-name descname"><span class="pre">add_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><span class="pre">DataCollection</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.add_collection" title="Permalink to this definition"></a></dt>
-<dd><p>Add a DataCollection to the archive</p>
+<dd><p>Add a <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> to the archive</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data_collection</strong> (<a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><em>DataCollection</em></a>) – DataCollection to be added to the DataCollection</p>
+<dd class="field-odd"><p><strong>data_collection</strong> (<a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><em>DataCollection</em></a>) – <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> to be added to the <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a></p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>None</p>
@@ -252,7 +311,7 @@ between the required metadata_to_match and the metadata.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.download">
 <span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.download" title="Permalink to this definition"></a></dt>
-<dd><p>Download all files in the data archive</p>
+<dd><p>Download all files in the <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the files should be downloaded</p>
@@ -266,11 +325,19 @@ between the required metadata_to_match and the metadata.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.from_directory">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.from_directory" title="Permalink to this definition"></a></dt>
-<dd><p>Create a data archive from a directory of metadata. The directory should contain a
-set of json files each of which contains a set of metadata</p>
+<dd><p>Create a <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> from a directory of metadata. The directory should contain a
+set of json files each of which contains a set of metadata describing a <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path_to_dir</strong> (<em>Path</em>) – </p>
+<dd class="field-odd"><p><strong>path_to_dir</strong> (<em>Path</em>) – Path to the directory containing the metadata files that will be used
+to populate the <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> containing all <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> objects described in the
+metadata files</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive">DataArchive</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -278,7 +345,7 @@ set of json files each of which contains a set of metadata</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.read_datasets">
 <span class="sig-name descname"><span class="pre">read_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.read_datasets" title="Permalink to this definition"></a></dt>
-<dd><p>Read all the datasets in the archive</p>
+<dd><p>Read all the datasets in the <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>out_dir</strong> (<em>Path</em>) – Path of directory containing the data</p>
@@ -295,14 +362,14 @@ set of json files each of which contains a set of metadata</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataArchive.select">
 <span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataArchive.select" title="Permalink to this definition"></a></dt>
-<dd><p>Select datasets from the archive that meet the metadata requirements specified
+<dd><p>Select datasets from the <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> that meet the metadata requirements specified
 in the metadata_to_match dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata_to_match</strong> (<em>dict</em>) – Metadata to be matched. For each requirement, there should be a key-value pair</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns data archive containing only data that match the metadata_to_match</p>
+<dd class="field-even"><p>Returns <a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataArchive</span></code></a> containing only data that match the metadata_to_match</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive">DataArchive</a></p>
@@ -316,8 +383,10 @@ in the metadata_to_match dictionary.</p>
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.processing.</span></span><span class="sig-name descname"><span class="pre">DataCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataCollection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A grouping of data sets derived from a single source. e.g. HadCRUT5. This could include, for example,
-monthly and annual time series and the gridded data.</p>
+<p>A grouping of <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects derived from a single product or source. e.g. HadCRUT5.
+This could include, for example, monthly and annual time series along with the
+gridded data.</p>
+<p>Create <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> from a metadata dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – </p>
@@ -326,7 +395,8 @@ monthly and annual time series and the gridded data.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.global_attributes">
 <span class="sig-name descname"><span class="pre">global_attributes</span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.global_attributes" title="Permalink to this definition"></a></dt>
-<dd><p>Metadata containing the attributes that apply to all DataSets in the DataCollection</p>
+<dd><p>Metadata containing the attributes that apply to all DataSets in the
+<a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata">CollectionMetadata</a></p>
@@ -337,10 +407,10 @@ monthly and annual time series and the gridded data.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.datasets">
 <span class="sig-name descname"><span class="pre">datasets</span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.datasets" title="Permalink to this definition"></a></dt>
-<dd><p>List containing all the DataSets</p>
+<dd><p>List containing all the <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects in this collection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet">DataSet</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -348,7 +418,7 @@ monthly and annual time series and the gridded data.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.add_dataset">
 <span class="sig-name descname"><span class="pre">add_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><span class="pre">DataSet</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.add_dataset" title="Permalink to this definition"></a></dt>
-<dd><p>Add dataset to collection</p>
+<dd><p>Add <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> object to <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>ds</strong> (<a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><em>DataSet</em></a>) – DataSet to be added</p>
@@ -362,7 +432,7 @@ monthly and annual time series and the gridded data.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.download">
 <span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.download" title="Permalink to this definition"></a></dt>
-<dd><p>Download all the data sets in the collection</p>
+<dd><p>Download all the data sets described by <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects in the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data_dir</strong> (<em>Path</em>) – Location to which the datasets should be downloaded</p>
@@ -376,22 +446,32 @@ monthly and annual time series and the gridded data.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.from_file">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.from_file" title="Permalink to this definition"></a></dt>
-<dd><p>Given a file path create the DataCollection from metadata in that file
-:param filename: Filename of the metadata file in json format
-:type filename: Path</p>
+<dd><p>Given a file path create the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> from metadata in that file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>Path</em>) – Filename of the metadata file in json format</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataCollection containing all the <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects specified by the
+metadata file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection">DataCollection</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.get_collection_dir">
 <span class="sig-name descname"><span class="pre">get_collection_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.get_collection_dir" title="Permalink to this definition"></a></dt>
-<dd><p>Get the Path to the directory where the data for this collection are stored.
+<dd><p>Get the Path to the directory where the data for this <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> are stored.
 If the directory does not exist, then create it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data_dir</strong> (<em>Path</em>) – Path to the general data directory for managed data in the project</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Path to the directory for this DataCollection</p>
+<dd class="field-even"><p>Path to the directory for this <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Path</p>
@@ -403,15 +483,15 @@ If the directory does not exist, then create it.</p>
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.match_metadata">
 <span class="sig-name descname"><span class="pre">match_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.match_metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Given a dictionary of metadata keys and required values for each key,
-return a DataCollection which contains only data sets matching the specified
+return a <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> which contains only data sets matching the specified
 metadata</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>metadata_to_match</strong> (<em>dict</em>) – Dictionary containing key:value pairs that specify the data sets required
-in the output DataCollection</p>
+in the output <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Return DataCollection that matches the metadata_to_match</p>
+<dd class="field-even"><p>Return <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> that matches the metadata_to_match</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection">DataCollection</a></p>
@@ -422,13 +502,13 @@ in the output DataCollection</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.read_datasets">
 <span class="sig-name descname"><span class="pre">read_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.read_datasets" title="Permalink to this definition"></a></dt>
-<dd><p>Read all the datasets in the DataCollection</p>
+<dd><p>Read all the datasets described by <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> objects in the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>out_dir</strong> (<em>Path</em>) – Directory in which the datasets are found</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Return list of all data sets described in the DataCollection</p>
+<dd class="field-even"><p>Return list of all data sets described in the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list</p>
@@ -438,11 +518,14 @@ in the output DataCollection</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataCollection.to_file">
-<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.to_file" title="Permalink to this definition"></a></dt>
-<dd><p>Write the collection metadata to file in json format.</p>
+<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataCollection.to_file" title="Permalink to this definition"></a></dt>
+<dd><p>Write the <a class="reference internal" href="#climind.data_manager.processing.DataCollection" title="climind.data_manager.processing.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataCollection</span></code></a> metadata to file in json format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> (<em>Path</em>) – Path to the file to be written</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -453,13 +536,17 @@ in the output DataCollection</p>
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataSet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.data_manager.processing.</span></span><span class="sig-name descname"><span class="pre">DataSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><span class="pre">DatasetMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><span class="pre">CollectionMetadata</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.data_manager.processing.DataSet" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A single dataset that may be split across multiple files. For example, monthly global mean
-temperature from Berkeley Earth</p>
+<p>A <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> contains <em>metadata</em> for a single dataset (one that might be split across multiple
+files). For example, NSIDC monthly sea ice extent data is a single data set provided
+in 12 files, one for each month. In contrast, HadCRUT5 monthly global mean temperature
+is a single file. Both of these would be described by a <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a>. They can be used to
+read in the actual data.</p>
+<p>Create a <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> from <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> and <code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metadata</strong> (<a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><em>DatasetMetadata</em></a>) – DatasetMetadata containing the dataset metadata.</p></li>
-<li><p><strong>global_metadata</strong> (<a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><em>CollectionMetadata</em></a>) – CollectionMetadata containing the global metadata</p></li>
+<li><p><strong>metadata</strong> (<a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><em>DatasetMetadata</em></a>) – <a class="reference internal" href="#climind.data_manager.metadata.DatasetMetadata" title="climind.data_manager.metadata.DatasetMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a> containing the dataset metadata.</p></li>
+<li><p><strong>global_metadata</strong> (<a class="reference internal" href="#climind.data_manager.metadata.CollectionMetadata" title="climind.data_manager.metadata.CollectionMetadata"><em>CollectionMetadata</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">CollectionMetadata</span></code> containing the global metadata</p></li>
 </ul>
 </dd>
 </dl>
@@ -499,7 +586,8 @@ temperature from Berkeley Earth</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataSet.download">
 <span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataSet.download" title="Permalink to this definition"></a></dt>
-<dd><p>Download the data set using its “fetcher”</p>
+<dd><p>Download the data set using its “fetcher” function. Fetcher functions are contained in the fetchers
+package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>out_dir</strong> (<em>Path</em>) – Directory to which the data set will be downloaded</p>
@@ -513,14 +601,15 @@ temperature from Berkeley Earth</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.data_manager.processing.DataSet.match_metadata">
 <span class="sig-name descname"><span class="pre">match_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata_to_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#climind.data_manager.processing.DataSet.match_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Check if DataSet attributes match contents of dictionary, metadata_to_match.
-Only items that are in the attributes are checked.</p>
+<dd><p>Check if there is a mismatch between attributes of <a class="reference internal" href="#climind.data_manager.processing.DataSet" title="climind.data_manager.processing.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a> and the contents of a dictionary,
+metadata_to_match. Only items that are in the attributes are checked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>metadata_to_match</strong> (<em>dict</em>) – Dictionary of key-value or key-list pairs to match.</p>
+<dd class="field-odd"><p><strong>metadata_to_match</strong> (<em>dict</em>) – Dictionary of key-value or key-list pairs to match. If a key-list is provided then each element of the
+list is checked and a mismatch only occurs if all of the items in the list cause a mismatch.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Return True unless there is a mismatch</p>
+<dd class="field-even"><p>Return True unless there is a mismatch in which case return False</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>
@@ -548,13 +637,13 @@ Only items that are in the attributes are checked.</p>
 <dt class="sig sig-object py" id="climind.data_manager.processing.get_function">
 <span class="sig-prename descclassname"><span class="pre">climind.data_manager.processing.</span></span><span class="sig-name descname"><span class="pre">get_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#climind.data_manager.processing.get_function" title="Permalink to this definition"></a></dt>
 <dd><p>For a particular module and script in that module, return the function with
-a specified name</p>
+a specified name as a callable object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module_path</strong> (<em>str</em>) – The path to the module</p></li>
+<li><p><strong>module_path</strong> (<em>str</em>) – The path to the module written using dot separation between directories</p></li>
 <li><p><strong>script_name</strong> (<em>str</em>) – The name of the script</p></li>
-<li><p><strong>function_name</strong> (<em>str</em>) – The name of the function</p></li>
+<li><p><strong>function_name</strong> (<em>str</em>) – The name of the function in the script to be returned</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -578,7 +667,7 @@ the specified script name in the specified module path</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, John Kennedy.</p>
+    <p>&#169; Copyright 2024, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
