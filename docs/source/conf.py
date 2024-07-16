@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('../../climind'))
 # -- Project information -----------------------------------------------------
 
 project = 'Climind'
-copyright = '2023, John Kennedy'
+copyright = '2024, John Kennedy'
 author = 'John Kennedy'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0'
+release = '1.1'
 
 # -- General configuration ---------------------------------------------------
 
