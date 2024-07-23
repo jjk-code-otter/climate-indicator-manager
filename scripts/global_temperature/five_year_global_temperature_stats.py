@@ -26,7 +26,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2023
+    final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim',
-                                          'Berkeley Earth', 'ERA5', 'JRA-55']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6',
+                                          'Berkeley Earth', 'ERA5', 'JRA-3Q']})
 
     nice_archive = archive.select({'variable': 'arctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'})
     sice_archive = archive.select({'variable': 'antarctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'})

@@ -137,11 +137,11 @@ for file in filenames:
 sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 plt.figure(figsize=[24, 9])
 for i, array in enumerate(data_list):
-    plt.fill_between(time, lows[i], highs[i], alpha=0.1, color='#f56042')
-    plt.plot(time, array, color='#f56042', linewidth=1)
+    plt.fill_between(time, lows[i], highs[i], alpha=0.1, color='#60b048')
+    plt.plot(time, array, color='#60b048', linewidth=1)
 
 for i, y in enumerate(years):
-    plt.plot(y, smoothed_data[i], color='#555555')
+    plt.plot(y, smoothed_data[i], color='#f56042')
 
 plt.gca().set_xlabel("Year")
 plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)

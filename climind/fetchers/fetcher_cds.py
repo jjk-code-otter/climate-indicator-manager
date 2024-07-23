@@ -166,5 +166,5 @@ def fetch(url: str, outdir: Path, filename: str) -> None:
     else:
         raise ValueError(f'Filename {filename} corresponds to unknown variable')
 
-    for year in range(first_year, 2024):
+    for year in range(first_year, 2025):
         fetch_year(outdir, year, variable)

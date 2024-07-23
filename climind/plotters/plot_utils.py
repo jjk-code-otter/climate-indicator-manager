@@ -327,7 +327,7 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], grid_type: str) -
         caption += f", difference from the {ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average"
     caption += ") "
 
-    caption += f" for 2023. "
+    caption += f" for 2024. "
     caption += f"Data shown are the {calculation} of the following {number_to_word[len(all_datasets)]} data sets: "
 
     dataset_names_for_caption = []

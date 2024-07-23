@@ -9,7 +9,8 @@
       "cards": [
         {
           "link_to":  null, "title": "Global mean temperature",
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2020]},
@@ -64,28 +65,28 @@
         {
           "link_to":  null, "title": "5yr Temperature anomaly map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5" ,"ERA5_5x5", "JRA-3Q_5x5"]},
           "processing":  [{"method": "running_average", "args": [5]},
-                          {"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_map", "title": "5-year Temperature Anomalies 2019-2023"}
+                          {"method": "select_year_range", "args": [2024, 2024]}],
+          "plotting": {"function": "dashboard_map", "title": "5-year Temperature Anomalies 2020-2024"}
         },
         {
           "link_to":  null, "title": "5yr Temperature anomaly uncertainty map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-3Q_5x5"]},
           "processing":  [{"method": "running_average", "args": [5]},
-                          {"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_uncertainty_map", "title": "5-year Temperature Anomalies Uncertainty 2019-2023"}
+                          {"method": "select_year_range", "args": [2024, 2024]}],
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "5-year Temperature Anomalies Uncertainty 2020-2024"}
         },
         {
           "link_to":  null, "title": "5yr Temperature anomaly rank map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
-            "name": ["HadCRUT5_5x5", "NOAA Interim_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-55_5x5"]},
-          "processing":  [{"method":  "select_year_range", "args": [1850, 2023]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth_5x5", "ERA5_5x5", "JRA-3Q_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2024]},
                           {"method": "running_average", "args": [5]},
                           {"method":  "rank", "args": []},
-                          {"method":  "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "dashboard_rank_map", "title": "5-year Temperature Anomalies Ranking 2019-2023"}
+                          {"method":  "select_year_range", "args": [2024, 2024]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "5-year Temperature Anomalies Ranking 2020-2024"}
         }
       ],
       "paragraphs": []

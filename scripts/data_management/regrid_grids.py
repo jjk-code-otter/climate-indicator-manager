@@ -33,10 +33,9 @@ if __name__ == "__main__":
                      #'Kadow CMIP', 'Kadow',
                     #'Kadow'
                      #'NOAAGlobalTemp',
-                     #'NOAA Interim', 'HadCRUT5',
-                     #'Berkeley Earth', 'GISTEMP', 'JRA-55'
-                     #'ERA5', 'JRA-55'
-                'JRA-55'
+                     'NOAA v6', 'HadCRUT5',
+                     'Berkeley Earth', 'GISTEMP', 'JRA-55'
+                     'ERA5', 'JRA-3Q'
             ]
         }
     )

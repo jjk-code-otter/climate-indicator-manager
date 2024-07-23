@@ -2,7 +2,7 @@
   "name": "Law Dome CH4",
   "display_name": "Law Dome",
   "version": "",
-  "variable": "ch4",
+  "variable": "ch4 IGNORE",
   "units": "ppb",
   "citation": ["MacFarling Meure, C., D. Etheridge, C. Trudinger, P. Steele, R. Langenfelds, T. van Ommen, A. Smith, and J. Elkins (2006), Law Dome CO2, CH4 and N2O ice core records extended to 2000 years BP, Geophys. Res. Lett., 33, L14810, doi:10.1029/2006GL026152."],
   "citation_url": ["https://doi.org/10.1029/2006GL026152"],

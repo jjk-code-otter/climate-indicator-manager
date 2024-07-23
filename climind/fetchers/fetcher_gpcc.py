@@ -46,8 +46,8 @@ def fetch(url: str, outdir: Path, _) -> None:
     if 'normals' in url:
         fetch_year(url, outdir, 2222)
     elif 'monitoring' in url:
-        for year in range(1982, 2024):
+        for year in range(1982, 2025):
             fetch_year(url, outdir, year)
     elif 'first_guess' in url:
-        for year in range(2022, 2024):
+        for year in range(2022, 2025):
             fetch_year(url, outdir, year)

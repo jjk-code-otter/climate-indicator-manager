@@ -43,7 +43,7 @@
             ],
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
-            "last_month": "2023-12-01 00:00:00"
+            "last_month": "2024-06-01 00:00:00"
         }
     ]
 }

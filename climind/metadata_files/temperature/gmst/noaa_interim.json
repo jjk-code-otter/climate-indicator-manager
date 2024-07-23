@@ -1,6 +1,6 @@
 {
   "name": "NOAA Interim",
-  "display_name": "NOAAGlobalTemp",
+  "display_name": "NOAAGlobalTemp v5.1",
   "version": "v5.1.0",
   "variable": "tas",
   "units": "degC",

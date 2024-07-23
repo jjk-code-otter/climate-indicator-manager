@@ -855,22 +855,26 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], _) -> str:
     return out_text
 
 
-def precip_paragraph(*_) -> str:
-    out_text = "Accumulated precipitation totals in 2023 were above the long-term average in East and Central Asia "
-    out_text += "and parts of northern Asia; the western Indian summer monsoon region; "
-    out_text += "parts of the Maritime Continent; northern New Zealand; parts of West, Central, "
-    out_text += "Southern and East Africa; West, Central and Southeast Europe; southern Scandinavia; "
-    out_text += "the western Middle East; northwest, southwest and southeast North America; Greater Antilles; "
-    out_text += "and parts of southeast South America."
+def precip_paragraph(_, year) -> str:
 
-    out_text += "Regions with a marked rainfall deficit included: southeast South America, the Amazon Basin, and "
-    out_text += "much of Central America; southern Canada; the western Mediterranean region and Southwest Europe; "
-    out_text += "parts of northwest, central, and southern Africa; parts of central Asia; "
-    out_text += "the eastern Indian Monsoon region; parts of southeast Asia and the Maritime Continent; "
-    out_text += "southwest and coastal north Australia; and many of the Pacific Islands."
+    if year == 2023:
+        out_text = "Accumulated precipitation totals in 2023 were above the long-term average in East and Central Asia "
+        out_text += "and parts of northern Asia; the western Indian summer monsoon region; "
+        out_text += "parts of the Maritime Continent; northern New Zealand; parts of West, Central, "
+        out_text += "Southern and East Africa; West, Central and Southeast Europe; southern Scandinavia; "
+        out_text += "the western Middle East; northwest, southwest and southeast North America; Greater Antilles; "
+        out_text += "and parts of southeast South America."
 
-    out_text += "The onset of the West African Monsoon was around normal. The start of the Gu rain season "
-    out_text += "(April to June) in the Greater Horn of Africa brought unusually large rainfalls "
-    out_text += "amounts in some areas."
+        out_text += "Regions with a marked rainfall deficit included: southeast South America, the Amazon Basin, and "
+        out_text += "much of Central America; southern Canada; the western Mediterranean region and Southwest Europe; "
+        out_text += "parts of northwest, central, and southern Africa; parts of central Asia; "
+        out_text += "the eastern Indian Monsoon region; parts of southeast Asia and the Maritime Continent; "
+        out_text += "southwest and coastal north Australia; and many of the Pacific Islands."
+
+        out_text += "The onset of the West African Monsoon was around normal. The start of the Gu rain season "
+        out_text += "(April to June) in the Greater Horn of Africa brought unusually large rainfalls "
+        out_text += "amounts in some areas."
+    elif year == 2024:
+        out_text = 'Nothing to see here yet.'
 
     return out_text

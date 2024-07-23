@@ -1373,13 +1373,13 @@ def dashboard_map_pastel(out_dir: Path, all_datasets: List[GridAnnual], image_fi
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 
-    cbar.ax.tick_params(labelsize=15)
+    cbar.ax.tick_params(labelsize=23, color='dimgrey', labelcolor='dimgrey')
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
 
     label_text = f"Temperature difference from " \
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
-    cbar.set_label(label_text, rotation=0, fontsize=15)
+    cbar.set_label(label_text, rotation=0, fontsize=23, color='dimgrey')
 
     p.axes.coastlines(color='#777777', linewidth=2)
     p.axes.set_global()
@@ -1641,7 +1641,7 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(FANCY_UNITS['degC'])
-    plt.gca().set_ylim(0.20, 0.85)
+    plt.gca().set_ylim(0.20, 1.00)
     plt.xticks(np.arange(1, 13, 1))
     plt.title(dataset.metadata['display_name'])
 
@@ -1733,10 +1733,10 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
 
     plt.gca().set_xlabel('Average from January to Month')
     plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
-    plt.gca().set_ylim(0.30, 0.85)
+    plt.gca().set_ylim(0.30, 1.00)
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
-    plt.title('Year-to-date Global Temperature Anomalies 1850-2023', fontsize=25, y=1.04)
+    plt.title('Year-to-date Global Temperature Anomalies 1850-2024', fontsize=25, y=1.04)
 
     plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
@@ -1862,9 +1862,9 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
-            if year >= 2035:
-                colour = 'dodgerblue'
-                lthk = 2
+            if year >= 2023:
+                colour = 'darkred'
+                lthk = 3
             if year == last_year:
                 colour = 'darkred'
                 lthk = 3
@@ -1873,10 +1873,10 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
-    plt.gca().set_ylim(-1.5, 1.2)
+    plt.gca().set_ylim(-1.5, 1.3)
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
-    plt.title('Monthly Global Temperature Anomalies 1850-2023', fontsize=25, y=1.04)
+    plt.title('Monthly Global Temperature Anomalies 1850-2024', fontsize=25, y=1.04)
 
     import matplotlib.patheffects as PathEffects
 
@@ -1891,12 +1891,12 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     plt.gcf().text(0.52, 0.61, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
     plt.gcf().text(0.52, 0.65, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.52, 0.81, '2023', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.81, '2023-2024', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp, GISTEMP, Berkeley Earth, ERA5, and JRA-55",
-                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+    plt.gcf().text(.075, .012, "With HadCRUT5, NOAAGlobalTemp v5.1 & v6, GISTEMP, Berkeley Earth, Kadow, Calvert, ERA5, JRA-55, JRA-3Q",
+                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)

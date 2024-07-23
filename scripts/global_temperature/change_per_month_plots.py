@@ -27,7 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2023
+    final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -51,7 +51,14 @@ if __name__ == "__main__":
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
-                                     'name':['HadCRUT5', 'GISTEMP','NOAA Interim', 'JRA-55', 'ERA5', 'Berkeley Earth', 'Kadow', 'JRA-3Q', 'NOAA v6']})
+                                     'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
+                                              'Kadow', 'JRA-3Q', 'NOAA v6', 'Calvert 2024', 'NOAA Interim']})
+
+        long_ts_archive = archive.select({'variable': 'tas',
+                                          'type': 'timeseries',
+                                          'time_resolution': 'monthly',
+                                          'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
+                                                   'NOAA Interim']})
 
         sst_archive = archive.select({'variable': 'sst',
                                       'type': 'timeseries',
@@ -62,8 +69,25 @@ if __name__ == "__main__":
                                        'time_resolution': 'monthly'})
 
         all_datasets = ts_archive.read_datasets(data_dir)
+        run_datasets = long_ts_archive.read_datasets(data_dir)
         lsat_datasets = lsat_archive.read_datasets(data_dir)
         sst_datasets = sst_archive.read_datasets(data_dir)
+
+        owns = []
+        runs = []
+        run_all = []
+        for ds in run_datasets:
+            ds.rebaseline(1850, 1900)
+            annual = ds.make_annual_by_selecting_month(month)
+            owns.append(annual)
+            ds = ds.running_mean(12)
+            run_all.append(ds)
+            annual = ds.make_annual_by_selecting_month(month)
+            annual.select_year_range(1851, final_year)
+            runs.append(annual)
+
+        if month == 1:
+            pt.neat_plot(figure_dir, run_all, '12_month_running_mean.png', f'Global mean temperature 12-month running mean')
 
         anns = []
         for ds in all_datasets:
@@ -93,13 +117,16 @@ if __name__ == "__main__":
         pt.neat_plot(figure_dir, anns, f'{month:02d}_only.png',
                      f'Global Mean Temperature for {month_word} ($\degree$C)')
         pt.records_plot(figure_dir, anns, f'{month:02d}_only_records.png',
-                     f'Global Mean Temperature for {month_word} ($\degree$C)')
+                        f'Global Mean Temperature for {month_word} ($\degree$C)')
         pt.dark_plot(figure_dir, anns, f'dark_{month:02d}_only.png',
                      f'Global Mean Temperature for {month_word} ($\degree$C)')
 
         print()
         print(f"Single month ({month_word}) statistics")
         utils.run_the_numbers(anns, final_year, f'{month:02d}_only_stats', report_dir)
+        utils.run_the_numbers(runs, final_year, f'running_{month:02d}_only_stats', report_dir)
+        utils.run_the_numbers(owns, final_year, f'own_{month:02d}_only_stats', report_dir)
+
         utils.record_margins(anns, final_year, f'{month:02d}_record_margins', report_dir)
         utils.record_margins(sst_anns, final_year, f'{month:02d}_sst_record_margins', report_dir)
         utils.record_margins(lsat_anns, final_year, f'{month:02d}_lsat_record_margins', report_dir)
@@ -109,6 +136,14 @@ if __name__ == "__main__":
             m = []
             for ds in all_datasets:
                 ds.rebaseline(1981, 2010)
-                ds.select_year_range(2014, 2023)
+                ds.select_year_range(2014, 2024)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
+
+            all_datasets = long_ts_archive.read_datasets(data_dir)
+            m = []
+            for ds in all_datasets:
+                ds.rebaseline(1850, 1900)
+                ds.select_year_range(2014, 2024)
+                m.append(ds)
+            pt.monthly_plot(figure_dir, m, f'own_monthly.png', 'Monthly global mean')

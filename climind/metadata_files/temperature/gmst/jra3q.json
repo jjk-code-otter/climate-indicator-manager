@@ -2,7 +2,7 @@
   "name": "JRA-3Q",
   "display_name": "JRA-3Q",
   "version": "",
-  "variable": "tasIGNORE",
+  "variable": "tas",
   "units": "degC",
   "citation": [""],
   "citation_url": [""],
@@ -13,6 +13,21 @@
   "origin": "obs",
   "notes": "",
   "datasets": [
+     {
+      "url": ["", ""],
+	  "filename": ["anl_surf125.YYYYMMMM", "anl_surf125.YYYYMMMM.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.25,
+	  "climatology_start": 1981,
+	  "climatology_end": 2010,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jra3q",
+	  "fetcher": "fetcher_jra3q_grid"
+     },
      {
       "url": [""],
 	  "filename": ["JRA-3Q_tmp2m_global_ts_125_Clim9120.txt"],

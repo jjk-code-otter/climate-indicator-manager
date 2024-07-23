@@ -159,14 +159,14 @@ if __name__ == "__main__":
             'IOD']
     }
 
-    holdall = {
-        'n2o': [
-            {'variable': 'n2o',
-             'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Nitrous Oxide'
-        ]
-    }
+    # holdall = {
+    #     'n2o': [
+    #         {'variable': 'n2o',
+    #          'type': 'timeseries',
+    #          'time_resolution': 'annual'},
+    #         'Nitrous Oxide'
+    #     ]
+    # }
 
     for combo in holdall:
 

@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA Interim', 'Berkeley Earth', 'Kadow'],
+                                 'name': ['HadCRUT5', 'NOAA Interim', 'Berkeley Earth', 'Kadow', 'NOAA v6', 'Calvert 2024'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
@@ -65,6 +65,7 @@ if __name__ == "__main__":
         pt.rising_tide_plot(figure_dir, ds, f"own_rising_tide_{ds.metadata['name']}.png")
 
         annual8110 = ds.make_annual()
+        annual8110.select_year_range(1850, final_year)
         all_8110_datasets.append(annual8110)
         tens.append(annual8110.running_mean(10))
         twentys.append(annual8110.running_mean(20))
@@ -81,6 +82,8 @@ if __name__ == "__main__":
 
     pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "own_rising_multiple.png")
     pt.wave_multiple_plot(figure_dir, all_8110_monthly, "own_wave_multiple.png")
+
+    pt.neat_plot(figure_dir, all_8110_datasets, 'own_annual.png', 'Global mean temperature')
 
     print()
     print("Single year statistics")

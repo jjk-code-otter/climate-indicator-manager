@@ -31,7 +31,7 @@ import pandas as pd
 
 if __name__ == "__main__":
 
-    final_year = 2022
+    final_year = 2023
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR

@@ -108,23 +108,28 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         anns.append(annual)
 
+    print("LSAT")
     lsat_anns = []
     for ds in lsat_datasets:
         ds.rebaseline(1850, 1900)
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
+        print(annual.get_value_from_year(2023))
         lsat_anns.append(annual)
 
     for ds in lsat_ann_datasets:
         ds.rebaseline(1850, 1900)
         ds.select_year_range(1850, final_year)
+        print(ds.get_value_from_year(2023))
         lsat_anns.append(ds)
 
+    print("SST")
     sst_anns = []
     for ds in sst_datasets:
         ds.rebaseline(1850, 1900)
         annual = ds.make_annual()
         annual.select_year_range(1850, final_year)
+        print(annual.get_value_from_year(2023))
         sst_anns.append(annual)
 
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
