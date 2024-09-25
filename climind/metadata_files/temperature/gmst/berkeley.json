@@ -44,8 +44,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt"],
-	  "filename": ["Land_and_Ocean_complete.txt"],
+      "url": ["https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_summary.txt"],
+	  "filename": ["Land_and_Ocean_summary.txt"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",

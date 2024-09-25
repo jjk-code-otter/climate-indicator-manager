@@ -15,46 +15,44 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import pandas as pd
 from typing import List
-
+import xarray as xa
 import climind.data_types.timeseries as ts
 
 from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
+from datetime import timedelta, datetime
+
+
+def convert_partial_year(number):
+    year = int(number)
+    d = timedelta(days=(number - year) * 365)
+    day_one = datetime(year, 1, 1)
+    date = d + day_one
+    return date
+
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
-    years = []
     anomalies = []
+    years = []
+    months = []
+    days = []
 
     with open(filename[0], 'r') as f:
-        if metadata['name'] != 'AVISO 2m':
+        for i in range(52):
             f.readline()
 
         for line in f:
             columns = line.split()
 
-            # This is "decimal year" which we convert in a rough and ready way
-            decimal_year = float(columns[0])
-            year_int = int(decimal_year)
-            diny = 1 + int(365. * (decimal_year - year_int))
-
-            years.append(f'{year_int} {diny:03d}')
-
-            anom = float(columns[1])
-            if metadata['name'] == 'AVISO 2m':
-                anom = anom * 1000.
-
-            anomalies.append(anom)
-
-    dates = pd.to_datetime(years, format='%Y %j')
-    years = dates.year.tolist()
-    months = dates.month.tolist()
-    days = dates.day.tolist()
+            converted_date = convert_partial_year(float(columns[2]))
+            anomalies.append(float(columns[11]) + 37.64)
+            years.append(converted_date.year)
+            months.append(converted_date.month)
+            days.append(converted_date.day)
 
     metadata.creation_message()
-    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies,
-                                       metadata=metadata)
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)
 
     return outseries

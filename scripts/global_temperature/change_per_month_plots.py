@@ -51,8 +51,10 @@ if __name__ == "__main__":
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
-                                     'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
-                                              'Kadow', 'JRA-3Q', 'NOAA v6', 'Calvert 2024', 'NOAA Interim']})
+                                     'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth',
+                                              'JRA-3Q']})
+                                     # 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
+                                     #          'Kadow', 'JRA-3Q', 'Calvert 2024', 'NOAA Interim']})
 
         long_ts_archive = archive.select({'variable': 'tas',
                                           'type': 'timeseries',

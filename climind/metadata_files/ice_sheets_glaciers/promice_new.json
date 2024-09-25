@@ -1,8 +1,8 @@
 {
-  "name": "PROMICE",
+  "name": "PROMICE2",
   "display_name": "Mankoff et al. 2021",
   "version": "",
-  "variable": "greenland ignore",
+  "variable": "greenland",
   "units": "Gt",
   "citation": ["Mankoff, K. D., Fettweis, X., Langen, P. L., Stendel, M., Kjeldsen, K. K., Karlsson, N. B., Noël, B., van den Broeke, M. R., Solgaard, A., Colgan, W., Box, J. E., Simonsen, S. B., King, M. D., Ahlstrøm, A. P., Andersen, S. B., and Fausto, R. S.: Greenland ice sheet mass balance from 1840 through next week, Earth Syst. Sci. Data, 13, 5001–5025, https://doi.org/10.5194/essd-13-5001-2021, 2021. doi: 10.5194/essd-13-5001-2021"],
   "citation_url": ["https://doi.org/10.5194/essd-13-5001-2021"],
@@ -14,7 +14,7 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["https://dataverse.geus.dk/api/access/datafile/"],
+      "url": ["https://thredds.geus.dk/thredds/fileServer/MassBalance/MB_SMB_D_BMB.csv/"],
       "filename": ["MB_SMB_D_BMB.csv"],
       "notes": "Filename should be MB_SMB_D_BMB.csv",
 	  "type": "timeseries",
@@ -27,10 +27,10 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_promice",
-	  "fetcher": "fetcher_promice"
+	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://dataverse.geus.dk/api/access/datafile/"],
+      "url": ["https://thredds.geus.dk/thredds/fileServer/MassBalance/MB_SMB_D_BMB_ann.csv"],
       "filename": ["MB_SMB_D_BMB_ann.csv"],
       "notes": "Filename should be MB_SMB_D_BMB_ann.csv",
 	  "type": "timeseries",
@@ -43,7 +43,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_promice",
-	  "fetcher": "fetcher_promice"
+	  "fetcher": "fetcher_standard_url"
     }
   ]
 }

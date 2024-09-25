@@ -1,0 +1,42 @@
+{
+  "name": "SILS",
+  "display_name": "SILS",
+  "version": "",
+  "variable": "sunspot",
+  "units": "1",
+  "citation": [
+    ""
+  ],
+  "citation_url": [
+    ""
+  ],
+  "data_citation": [
+    "SILSO, World Data Center - Sunspot Number and Long-term Solar Observations, Royal Observatory of Belgium, on-line Sunspot Number catalogue: http://www.sidc.be/SILSO/, ‘1749-present’"
+  ],
+  "acknowledgement": "Source: WDC-SILSO, Royal Observatory of Belgium, Brussels. SILSO data is under CC BY-NC4.0 license https://creativecommons.org/licenses/by-nc/4.0/",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://www.sidc.be/SILSO/DATA/SN_y_tot_V2.0.txt"
+      ],
+      "filename": [
+        "SN_y_tot_V2.0.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "annual mean sunspot number",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1950,
+      "climatology_end": 2000,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_sils",
+      "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

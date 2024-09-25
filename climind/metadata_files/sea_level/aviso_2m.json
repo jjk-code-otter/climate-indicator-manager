@@ -1,6 +1,6 @@
 {
-  "name": "AVISO ftp",
-  "display_name": "AVISO CNES",
+  "name": "AVISO 2m",
+  "display_name": "AVISO 2m",
   "version": "",
   "variable": "sealevel",
   "units": "mm",
@@ -8,14 +8,14 @@
   "citation_url": ["https://doi.org/10.5194/essd-10-281-2018"],
   "data_citation": [""],
   "acknowledgement": "Generated using AVISO+ Products",
-  "colour": "#ff0000",
+  "colour": "#ff9e73",
   "zpos": 10,
   "origin": "obs",
   "notes": "",
   "datasets": [
      {
-      "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
-      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
+      "url": ["https://data.aviso.altimetry.fr/aviso-gateway/data/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m.txt"],
+      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m.txt"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",
@@ -25,8 +25,8 @@
 	  "actual": true,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_aviso_ftp",
-	  "fetcher": "fetcher_ftp"
+      "reader": "reader_aviso",
+	  "fetcher": "fetcher_standard_url"
     }
   ]
 }

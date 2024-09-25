@@ -15,7 +15,8 @@
         },
         {
           "link_to": "global_mean_temperature", "title": "Global temperature",
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
@@ -66,7 +67,8 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},
@@ -145,7 +147,8 @@
       "cards": [
         {
           "link_to":  null, "title": "Global mean temperature",
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2023]},

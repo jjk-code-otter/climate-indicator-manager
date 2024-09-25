@@ -28,7 +28,6 @@ def read_chunk(f, search_string):
     values = []
 
     for line in f:
-        print(line)
         if line == '			\n' or line == '\n':
             break
         columns = line.split()

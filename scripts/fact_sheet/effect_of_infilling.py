@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     h5_infilled_archive = archive.select({'variable': 'tas',
                                           'type': 'timeseries',
-                                          'name': ['HadCRUT5', 'Kadow'],
+                                          'name': ['HadCRUT5', 'Kadow', 'Calvert 2024'],
                                           'time_resolution': 'monthly'})
 
     h5_archive = archive.select({'variable': 'tas',

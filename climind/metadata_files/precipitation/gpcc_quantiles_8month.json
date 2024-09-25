@@ -1,0 +1,36 @@
+{
+  "name": "GPCC quantiles 8month",
+  "display_name": "GPCC",
+  "version": "",
+  "variable": "precip_quantiles_8month",
+  "units": "quantile",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        ""
+      ],
+	  "filename": [
+        "gpcc_quantile_8month_*-YYYYMMMM.nc.gz"
+      ],
+      "type": "gridded",
+      "long_name": "8-month Precipitation Quantile",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1991,
+	  "climatology_end": 2010,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gpcc_quantile",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

@@ -133,7 +133,22 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
-    monthly = read_monthly_ts(filename, metadata)
-    annual = monthly.make_annual()
+    years = []
+    anomalies = []
+    uncertainties = []
 
-    return annual
+    with open(filename[0], 'r') as f:
+        for _ in range(58):
+            f.readline()
+
+        for line in f:
+            columns = line.split()
+            if len(columns) < 2:
+                break
+            years.append(int(columns[0]))
+            anomalies.append(float(columns[1]))
+            uncertainties.append(float(columns[2]))
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata, uncertainty=uncertainties)

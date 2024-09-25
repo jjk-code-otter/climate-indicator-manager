@@ -1,0 +1,32 @@
+{
+  "name": "Greenwich",
+  "display_name": "Greenwich",
+  "version": "",
+  "variable": "sunspot",
+  "units": "1",
+  "citation": [""],
+  "citation_url": ["https://solarscience.msfc.nasa.gov/greenwch.shtml"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://cdn.serc.carleton.edu/files/introgeo/teachingwdata/examples/GreenwichSSNvstime.txt"],
+      "filename": ["GreenwichSSNvstime.txt"],
+	  "type": "timeseries",
+      "long_name": "annual mean sunspot number",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_greenwich",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

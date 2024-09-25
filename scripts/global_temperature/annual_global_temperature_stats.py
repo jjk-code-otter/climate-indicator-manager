@@ -56,11 +56,13 @@ if __name__ == "__main__":
                                       #'Kadow IPCC',
                                       # 'Berkeley IPCC',
                                       # 'NOAA Interim IPCC'
+                                      #'GETQUOCS'
                                   ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-55', 'Berkeley Earth', 'NOAA Interim', 'JRA-3Q', 'Kadow', 'Calvert 2024'],
+                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
+                                          #'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',

@@ -17,14 +17,15 @@
 from climind.config.config import DATA_DIR, CLIMATOLOGY
 from climind.definitions import METADATA_DIR
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import pandas as pd
 import seaborn as sns
 
 STANDARD_PARAMETER_SET = {
     'axes.axisbelow': False,
-    'axes.labelsize': 20,
-    'xtick.labelsize': 15,
-    'ytick.labelsize': 15,
+    'axes.labelsize': 23,
+    'xtick.labelsize': 23,
+    'ytick.labelsize': 23,
     'axes.edgecolor': 'lightgrey',
     'axes.facecolor': 'None',
 
@@ -302,9 +303,12 @@ def plot_simplified_annual_cycle(df, project_dir, image_filename, nh=False):
     col_record = '#007478'
     col_clim = '#00393b'
 
-    for year in range(1979, 2023):
+    for year in range(1979, 2024):
         df2 = df[df['Year'] == year]
         df3 = df[df['Year'] == final_year]
+
+        df2 = df2[~((df2['Month'] == 2) & (df2['Day'] == 29))]
+        df3 = df3[~((df3['Month'] == 2) & (df3['Day'] == 29))]
 
         extract = df2.groupby([df2.index.month, df2.index.day]).first()
         extract = extract.Extent[zip(df3.index.month, df3.index.day)]
@@ -328,7 +332,7 @@ def plot_simplified_annual_cycle(df, project_dir, image_filename, nh=False):
 
     plt.gca().set_xlabel('Date')
     plt.gca().set_ylabel('million km$^2$')
-    plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35,
+    plt.gca().set_title('Daily Antarctic Sea-ice Extent 1979-2024 (million km$^2$)', pad=35,
                         fontdict={'fontsize': 35},
                         loc='left')
 
@@ -337,7 +341,7 @@ def plot_simplified_annual_cycle(df, project_dir, image_filename, nh=False):
 
     yloc = ylim[0] + 0.35 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, 'Record high\n1979-2022', color=col_record, fontdict={'fontsize': 18}, ha='left')
+    plt.text(xloc, yloc, 'Record high\n1979-2023', color=col_record, fontdict={'fontsize': 18}, ha='left')
 
     yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
@@ -345,11 +349,11 @@ def plot_simplified_annual_cycle(df, project_dir, image_filename, nh=False):
 
     yloc = ylim[0] + 0.160 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, 'Record low\n1979-2022', color=col_record, fontdict={'fontsize': 18}, ha='left')
+    plt.text(xloc, yloc, 'Record low\n1979-2023', color=col_record, fontdict={'fontsize': 18}, ha='left')
 
     yloc = ylim[0] + 0.618 * (ylim[1] - ylim[0])
-    xloc = xlim[0] + 0.64 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, '2023 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+    xloc = xlim[0] + 0.60 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})   #red
 
     plt.gca().set_ylim(-0.5, 22)
 
@@ -367,9 +371,12 @@ def plot_simplified_annual_cycle_nh(df, project_dir, image_filename, nh=False):
     col_record = '#007478'
     col_clim = '#00393b'
 
-    for year in range(1979, 2023):
+    for year in range(1979, 2024):
         df2 = df[df['Year'] == year]
         df3 = df[df['Year'] == final_year]
+
+        df2 = df2[~((df2['Month'] == 2) & (df2['Day'] == 29))]
+        df3 = df3[~((df3['Month'] == 2) & (df3['Day'] == 29))]
 
         extract = df2.groupby([df2.index.month, df2.index.day]).first()
         extract = extract.Extent[zip(df3.index.month, df3.index.day)]
@@ -393,7 +400,7 @@ def plot_simplified_annual_cycle_nh(df, project_dir, image_filename, nh=False):
 
     plt.gca().set_xlabel('Date')
     plt.gca().set_ylabel('million km$^2$')
-    plt.gca().set_title('Daily Arctic Sea-ice Extent 1979-2023 (million km$^2$)', pad=35,
+    plt.gca().set_title('Daily Arctic Sea-ice Extent 1979-2024 (million km$^2$)', pad=35,
                         fontdict={'fontsize': 35},
                         loc='left')
 
@@ -402,7 +409,7 @@ def plot_simplified_annual_cycle_nh(df, project_dir, image_filename, nh=False):
 
     yloc = ylim[0] + 0.570 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, 'Record high\n1979-2022', color=col_record, fontdict={'fontsize': 18}, ha='left')
+    plt.text(xloc, yloc, 'Record high\n1979-2023', color=col_record, fontdict={'fontsize': 18}, ha='left')
 
     yloc = ylim[0] + 0.51 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
@@ -410,11 +417,127 @@ def plot_simplified_annual_cycle_nh(df, project_dir, image_filename, nh=False):
 
     yloc = ylim[0] + 0.450 * (ylim[1] - ylim[0])
     xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, 'Record low\n1979-2022', color=col_record, fontdict={'fontsize': 18}, ha='left')
+    plt.text(xloc, yloc, 'Record low\n1979-2023', color=col_record, fontdict={'fontsize': 18}, ha='left')
 
-    yloc = ylim[0] + 0.325 * (ylim[1] - ylim[0])
-    xloc = xlim[0] + 0.81 * (xlim[1] - xlim[0])
-    plt.text(xloc, yloc, '2023 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+    yloc = ylim[0] + 0.2 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.55 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+
+    plt.gca().set_ylim(-0.5, 17.5)
+
+    plt.savefig(project_dir / 'Figures' / image_filename)
+    plt.savefig(project_dir / 'Figures' / image_filename.replace('.png','.svg'))
+    plt.close()
+
+def plot_simplified_annual_cycle_grey(df, project_dir, image_filename, nh=False):
+    # Plot annual cycle plot
+    plt.figure(figsize=(16, 9))
+
+    col_ext = '#204e96' #'#d13100'
+    col_all = '#999999'
+    col_clim = '#555555'
+
+    for year in range(1979, 2024):
+        df2 = df[df['Year'] == year]
+        df3 = df[df['Year'] == final_year]
+
+        df2 = df2[~((df2['Month'] == 2) & (df2['Day'] == 29))]
+        df3 = df3[~((df3['Month'] == 2) & (df3['Day'] == 29))]
+
+        extract = df2.groupby([df2.index.month, df2.index.day]).first()
+        extract = extract.Extent[zip(df3.index.month, df3.index.day)]
+        extract.index = df3.index
+
+
+        plt.plot(extract, color=col_all, linewidth=0.5, alpha=0.5)
+
+    # Annual cycle
+
+    plt.plot(df[df['Year'] == final_year].Extent, color=col_ext, linewidth=3)
+
+    plt.plot(df[df['Year'] == final_year].climatology, color=col_clim, linewidth=3)
+
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+    plt.gca().set_yticks([0, 5, 10, 15, 20, 25])
+
+    plt.gca().set_ylabel('million km$^2$')
+    plt.gca().set_title('Daily Antarctic sea-ice extent through the year 1979-2024', pad=35,
+                        fontdict={'fontsize': 35},
+                        loc='left')
+
+    ylim = plt.gca().get_ylim()
+    xlim = plt.gca().get_xlim()
+
+    yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
+
+    yloc = ylim[0] + 0.618 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.60 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+
+    yloc = ylim[0] + 0.543 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.900 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})   #red
+
+    plt.gca().set_ylim(-0.5, 22)
+
+    plt.savefig(project_dir / 'Figures' / image_filename)
+    plt.savefig(project_dir / 'Figures' / image_filename.replace('.png','.svg'))
+    plt.close()
+
+
+def plot_simplified_annual_cycle_nh_grey(df, project_dir, image_filename, nh=False):
+    # Plot annual cycle plot
+    plt.figure(figsize=(16, 9))
+
+    col_ext = '#204e96' #'#d13100'
+    col_all = '#999999'
+    col_clim = '#555555'
+
+    for year in range(1979, 2024):
+        df2 = df[df['Year'] == year]
+        df3 = df[df['Year'] == final_year]
+
+        df2 = df2[~((df2['Month'] == 2) & (df2['Day'] == 29))]
+        df3 = df3[~((df3['Month'] == 2) & (df3['Day'] == 29))]
+
+        extract = df2.groupby([df2.index.month, df2.index.day]).first()
+        extract = extract.Extent[zip(df3.index.month, df3.index.day)]
+        extract.index = df3.index
+
+        plt.plot(extract, color=col_all, linewidth=0.5, alpha=0.5)
+
+    # Annual cycle
+    plt.plot(df[df['Year'] == final_year].Extent, color=col_ext, linewidth=3)
+    plt.plot(df[df['Year'] == final_year].climatology, color=col_clim, linewidth=3)
+
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+    plt.gca().set_yticks([0, 5, 10, 15, 20, 25])
+
+    plt.gca().set_ylabel('million km$^2$')
+    plt.gca().set_title('Daily Arctic sea-ice extent through the year 1979-2024', pad=35,
+                        fontdict={'fontsize': 35},
+                        loc='left')
+
+    ylim = plt.gca().get_ylim()
+    xlim = plt.gca().get_xlim()
+
+    yloc = ylim[0] + 0.51 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
+
+    yloc = ylim[0] + 0.17 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.75 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+
+    yloc = ylim[0] + 0.34 * (ylim[1] - ylim[0])
+    xloc = xlim[0] + 0.86 * (xlim[1] - xlim[0])
+    plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})   #red
 
     plt.gca().set_ylim(-0.5, 17.5)
 
@@ -428,7 +551,7 @@ data_dir = project_dir / "Data"
 
 sea_ice_file = data_dir / "NSIDC SH" / "S_seaice_extent_daily_v3.0.csv"
 
-final_year = 2023
+final_year = 2024
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
@@ -453,6 +576,7 @@ plot_annual_cycle(df, project_dir, 'antarctic_daily.png')
 plot_annual_cycle(df, project_dir, 'antarctic_daily_stdev.png', stdev=True)
 
 plot_simplified_annual_cycle(df, project_dir, 'antarctic_daily_simple.png')
+plot_simplified_annual_cycle_grey(df, project_dir, 'antarctic_daily_grey.png')
 
 df['anomalies2'] = df.Extent - full_series_mean
 df['standard_deviations2'] = df.anomalies2 / full_series_stdev
@@ -479,7 +603,7 @@ plt.close()
 
 sea_ice_file = data_dir / "NSIDC" / "N_seaice_extent_daily_v3.0.csv"
 
-final_year = 2023
+final_year = 2024
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
@@ -504,6 +628,8 @@ plot_timeseries(df, project_dir, 'arctic_daily_long_view.png',
                 'Difference from 1991-2020 average')
 plot_annual_cycle(df, project_dir, 'arctic_daily.png', nh=True)
 plot_simplified_annual_cycle_nh(df, project_dir, 'arctic_daily_simple.png')
+
+plot_simplified_annual_cycle_nh_grey(df, project_dir, 'arctic_daily_grey.png')
 
 all_mins = []
 all_maxs = []

@@ -38,16 +38,25 @@ if __name__ == "__main__":
     dash2023 = False
     dash2022 = False
 
-    decadal = True
+    decadal = False
     monthly = False
     ocean = False
     cryosphere = False
+
+    comprehensive = False
 
     regional = False
     regional_multiyear = False
     regional_test = False
 
     run_all = False
+
+    if comprehensive or run_all:
+        json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2023_comprehensive.json'
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / 'ManagedData' / 'ComprehensiveDashboard'
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2023)
 
     if monthly or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'monthly.json'

@@ -1,0 +1,32 @@
+{
+  "name": "NASA Sealevel",
+  "display_name": "NASA",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Beckley, B. D., Callahan, P. S., Hancock, D. W., Mitchum, G. T., & Ray, R. D. (2017). On the 'cal-mode' correction to TOPEX satellite altimetry and its effect on the global mean sea level time series. Journal of Geophysical Research: Oceans, 122. https://doi.org/10.1002/2017JC013090"],
+  "citation_url": ["https://doi.org/10.1002/2017JC013090"],
+  "data_citation": ["GSFC. 2021. Global Mean Sea Level Trend from Integrated Multi-Mission Ocean Altimeters TOPEX/Poseidon, Jason-1, OSTM/Jason-2, and Jason-3 Version 5.1. Ver. 5.1 PO.DAAC, CA, USA. Dataset accessed [YYYY-MM-DD] at https://doi.org/10.5067/GMSLM-TJ151."],
+  "acknowledgement": "",
+  "colour": "#56b4e9",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://climate.nasa.gov/vital-signs/sea-level/?intent=121"],
+      "filename": ["GMSL_TPJAOS_5.1.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_nasa_sealevel",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

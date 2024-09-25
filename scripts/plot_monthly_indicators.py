@@ -24,8 +24,7 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-
-    final_year = 2022
+    final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -147,11 +146,11 @@ if __name__ == "__main__":
              'type': 'timeseries',
              'time_resolution': 'monthly'},
             'DMI'],
-        'tlt' : [
+        'tlt': [
             {'variable': 'tlt',
              'type': 'timeseries',
              'time_resolution': 'monthly'},
-        'TLT'],
+            'TLT'],
         'iod': [
             {'variable': 'iod',
              'type': 'timeseries',
@@ -159,38 +158,50 @@ if __name__ == "__main__":
             'IOD']
     }
 
-    # holdall = {
-    #     'n2o': [
-    #         {'variable': 'n2o',
-    #          'type': 'timeseries',
-    #          'time_resolution': 'annual'},
-    #         'Nitrous Oxide'
-    #     ]
-    # }
+    holdall = {
+        'co2': [
+            {'variable': 'co2',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Atmospheric concentration of Carbon Dioxide'
+        ],
+        'ch4': [
+            {'variable': 'ch4',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Atmospheric concentration of Methane'
+        ],
+        'n2o': [
+            {'variable': 'n2o',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Atmospheric concentration of Nitrous Oxide'
+        ]
+    }
 
-    for combo in holdall:
+for combo in holdall:
 
-        selection_metadata = holdall[combo][0]
-        variable = selection_metadata['variable']
-        plot_title = holdall[combo][1]
-        time_resolution = selection_metadata['time_resolution']
+    selection_metadata = holdall[combo][0]
+    variable = selection_metadata['variable']
+    plot_title = holdall[combo][1]
+    time_resolution = selection_metadata['time_resolution']
 
-        ts_archive = archive.select(selection_metadata)
-        all_datasets = ts_archive.read_datasets(data_dir)
+    ts_archive = archive.select(selection_metadata)
+    all_datasets = ts_archive.read_datasets(data_dir)
 
-        m = []
-        for ds in all_datasets:
-            # ds.select_year_range(1980, 2022)
-            if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
-                ds.rebaseline(1981, 2010)
-            if variable in ['ohc', 'ohc2k']:
-                ds.rebaseline(2006, 2020)
-            if variable in ['antarctica']:
-                ds.zero_on_month(2005, 6)
-            if variable in ['greenland']:
-                ds.zero_on_month(2005, 7)
-            m.append(ds)
-        if time_resolution == 'monthly':
-            pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)
-        else:
-            pt.neat_plot(figure_dir, m, f'{variable}_annual.png', plot_title)
+    m = []
+    for ds in all_datasets:
+        # ds.select_year_range(1980, 2022)
+        if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
+            ds.rebaseline(1981, 2010)
+        if variable in ['ohc', 'ohc2k']:
+            ds.rebaseline(2006, 2020)
+        if variable in ['antarctica']:
+            ds.zero_on_month(2005, 6)
+        if variable in ['greenland']:
+            ds.zero_on_month(2005, 7)
+        m.append(ds)
+    if time_resolution == 'monthly':
+        pt.monthly_plot(figure_dir, m, f'{variable}_monthly.png', plot_title)
+    else:
+        pt.neat_plot(figure_dir, m, f'{variable}_annual.png', plot_title)

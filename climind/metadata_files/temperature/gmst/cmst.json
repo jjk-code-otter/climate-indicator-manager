@@ -31,6 +31,25 @@
       "history": [],
       "reader": "reader_cmst",
       "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [
+        ""
+      ],
+      "filename": [
+        "China-MST2.0-Imax.nc"
+      ],
+      "type": "timeseries",
+      "long_name": "Near surface temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_cmst",
+      "fetcher": "fetcher_no_url"
     }
   ]
 }

@@ -83,7 +83,6 @@ class TimeSeries(ABC):
         else:
             self.metadata = metadata
 
-    @log_activity
     def select_year_range(self, start_year: int, end_year: int):
         """
         Select consecutive years in the specified range and throw away the rest.
@@ -106,7 +105,6 @@ class TimeSeries(ABC):
         self.update_history(f'Selected years within the range {start_year} to {end_year}.')
         return self
 
-    @log_activity
     def manually_set_baseline(self, baseline_start_year: int, baseline_end_year: int) -> None:
         """
         Manually set baseline. This changes the baseline in the metadata, but does not change the
@@ -158,7 +156,6 @@ class TimeSeries(ABC):
         """
         self.metadata['history'].append(message)
 
-    @log_activity
     def add_offset(self, offset: float) -> None:
         """
         Add an offset to the data set.
@@ -293,7 +290,6 @@ class TimeSeriesIrregular(TimeSeries):
         out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
         return out_str
 
-    @log_activity
     def make_monthly(self):
         """
         Calculate a :class:`TimeSeriesMonthly` from the :class:`TimeSeriesIrregular`. The monthly average is
@@ -417,7 +413,6 @@ class TimeSeriesIrregular(TimeSeries):
                      f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
         return date_range
 
-    @log_activity
     def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
@@ -536,7 +531,6 @@ class TimeSeriesMonthly(TimeSeries):
         else:
             return TimeSeriesMonthly(years, months, data, metadata)
 
-    @log_activity
     def make_annual(self, cumulative: bool = False):
         """
         Calculate a :class:`TimeSeriesAnnual` from the :class:`TimeSeriesMonthly`. The annual average is
@@ -569,7 +563,6 @@ class TimeSeriesMonthly(TimeSeries):
 
         return annual_series
 
-    @log_activity
     def make_annual_by_selecting_month(self, month: int):
         """
         Calculate a :class:`TimeSeriesAnnual` from the :class:`TimeSeriesMonthly`. The annual value is
@@ -602,7 +595,6 @@ class TimeSeriesMonthly(TimeSeries):
         climatology.rename(columns={'data': 'climatology'}, inplace=True)
         return climatology
 
-    @log_activity
     def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
@@ -704,7 +696,6 @@ class TimeSeriesMonthly(TimeSeries):
 
         return out_value
 
-    @log_activity
     def zero_on_month(self, year: int, month: int) -> None:
         """
         Zero data set on the value for a single month in a single year by substracting the value for that month
@@ -730,7 +721,6 @@ class TimeSeriesMonthly(TimeSeries):
         self.add_offset(zero_value)
         self.manually_set_baseline(year, year)
 
-    @log_activity
     def get_rank_from_year_and_month(self, year: int, month: int, versus_all_months=False) -> Optional[int]:
         """
         Given a year and month, extract the rank of the data for that month. Ties are given the
@@ -857,7 +847,6 @@ class TimeSeriesMonthly(TimeSeries):
                      f"{end_date.year}.{end_date.month:02d}"
         return date_range
 
-    @log_activity
     def running_mean(self, run_length: int, centred: bool = False):
         """
         Calculate running mean of the data for a specified run length
@@ -916,8 +905,8 @@ class TimeSeriesMonthly(TimeSeries):
 
         # Smoothing is different at ends of series (effectively extrapolation) so terminate half filter width from ends
         fit = fit[:, 1]
-        fit[0: int(number_of_points / 2)] = np.nan
-        fit[-1 * int(number_of_points / 2):] = np.nan
+        # fit[0: int(number_of_points / 2)] = np.nan
+        # fit[-1 * int(number_of_points / 2):] = np.nan
 
         moving_average.df.data = fit
 
@@ -991,7 +980,6 @@ class TimeSeriesAnnual(TimeSeries):
         else:
             return TimeSeriesAnnual(years, data, metadata)
 
-    @log_activity
     def rebaseline(self, baseline_start_year: int, baseline_end_year: int) -> None:
         """
         Shift the :class:`TimeSeriesAnnual` to a new baseline, specified by start and end years (inclusive).
@@ -1032,7 +1020,6 @@ class TimeSeriesAnnual(TimeSeries):
         climatology = climatology_part['data'].mean()
         return climatology
 
-    @log_activity
     def get_rank_from_year(self, year: int) -> Optional[int]:
         """
         Given a year, extract the rank of the data for that year. Ties are given the
@@ -1054,7 +1041,6 @@ class TimeSeriesAnnual(TimeSeries):
             return None
         return int(rank.iloc[0])
 
-    @log_activity
     def get_value_from_year(self, year: int) -> Optional[float]:
         """
         Get the data value for a specified year.
@@ -1074,7 +1060,6 @@ class TimeSeriesAnnual(TimeSeries):
             return None
         return val.iloc[0]
 
-    @log_activity
     def get_uncertainty_from_year(self, year: int) -> Optional[float]:
         """
         Get the data value for a specified year.
@@ -1096,7 +1081,6 @@ class TimeSeriesAnnual(TimeSeries):
             return None
         return val.iloc[0]
 
-    @log_activity
     def get_year_from_rank(self, rank: int) -> List[int]:
         """
         Given a particular rank, extract a list of years which match that rank.
@@ -1117,7 +1101,6 @@ class TimeSeriesAnnual(TimeSeries):
         years = self.df[ranked['data'] == rank]['year'].tolist()
         return years
 
-    @log_activity
     def running_mean(self, run_length: int, centred: bool = False):
         """
         Calculate running mean of the data for a specified run length
@@ -1242,7 +1225,6 @@ class TimeSeriesAnnual(TimeSeries):
         moving_average.metadata['derived'] = True
         return moving_average
 
-    @log_activity
     def running_stdev(self, run_length: int, centred: bool = False):
         """
         Calculate running standard deviation of the data for a specified run length
@@ -1296,7 +1278,6 @@ class TimeSeriesAnnual(TimeSeries):
 
         return out_series
 
-    @log_activity
     def select_decade(self, end_year: int = 0):
         """
         Select every tenth year from the :class:`TimesSeriesAnnual`, the last digit of the years can
@@ -1448,7 +1429,7 @@ def get_start_and_end_year(all_datasets: List[TimeSeriesAnnual]) -> Tuple[Option
     return min(first_years), max(last_years)
 
 
-def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnual:
+def make_combined_series(all_datasets: List[TimeSeriesAnnual], augmented_uncertainty=True) -> TimeSeriesAnnual:
     """
     Combine a list of datasets into a single :class:`TimeSeriesAnnual` by taking the arithmetic mean
     of all available datasets for each year. Merges the metadata for all the input time series.
@@ -1457,6 +1438,8 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
     ----------
     all_datasets: List[TimeSeriesAnnual]
         List of datasets to be combined
+    augmented_uncertainty: bool
+        Set to True if you want to add an additional uncertainty from the baseline
     Returns
     -------
     TimeSeriesAnnual
@@ -1484,11 +1467,22 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual]) -> TimeSeriesAnnu
         if 'data' in col:
             columns.append(col)
 
-    df_merged['combined'] = df_merged[columns].mean(axis=1)
-    df_merged['uncertainty'] = df_merged[columns].std(axis=1)
+    unc_columns = []
+    for col in df_merged.columns:
+        if 'uncertainty' in col:
+            unc_columns.append(col)
 
-    df_merged['uncertainty'] = df_merged['uncertainty'] * 1.645
-    df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty'] ** 2 + 0.12 ** 2)
+    df_merged['combined'] = df_merged[columns].mean(axis=1)
+    df_merged['uncertainty_a'] = df_merged[columns].std(axis=1)
+    if len(columns) == 1:
+        df_merged['uncertainty_a'] = 0.0
+    df_merged['uncertainty_a'] = df_merged['uncertainty_a'] * 1.645
+
+    if augmented_uncertainty:
+        df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty_a'] ** 2 + 0.12 ** 2)
+    else:
+        df_merged['uncertainty_b'] = df_merged[unc_columns].max(axis=1)
+        df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty_a'] ** 2 + df_merged['uncertainty_b'] ** 2 )
 
     df_merged = df_merged.drop(columns=columns)
     df_merged = df_merged.rename(columns={'combined': 'data'})

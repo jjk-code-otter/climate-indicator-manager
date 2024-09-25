@@ -44,8 +44,11 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"],
-	  "filename": ["GLB.Ts+dSST.csv"],
+      "url": [
+        "https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv",
+        "https://data.giss.nasa.gov/gistemp/uncertainty/v1.2.1/totalCI_ERA.csv"
+      ],
+	  "filename": ["GLB.Ts+dSST.csv", "totalCI_ERA.csv"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",

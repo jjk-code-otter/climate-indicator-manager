@@ -54,6 +54,8 @@ def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
         back = 3
     elif metadata['variable'] == "precip_quantiles_6month":
         back = 6
+    elif metadata['variable'] == "precip_quantiles_8month":
+        back = 8
     elif metadata['variable'] == "precip_quantiles_9month":
         back = 9
     elif metadata['variable'] == "precip_quantiles_12month":

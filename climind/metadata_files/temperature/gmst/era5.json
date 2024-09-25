@@ -60,11 +60,11 @@
     },
     {
       "url": [
-        "https://sites.ecmwf.int/data/c3sci/era5-daily/data/era5_daily_series_2t_global_1940-2023.csv",
+        "https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv",
         "https://sites.ecmwf.int/data/c3sci/era5-daily/data/era5_daily_sfc_temp_global_anomalies_with_preindustrial_1940-2023.csv"
       ],
       "filename": [
-        "era5_daily_series_2t_global_1940-2023.csv",
+        "era5_daily_series_2t_global.csv",
         "era5_daily_sfc_temp_global_anomalies_with_preindustrial_1940-2023.csv"
       ],
 	  "type": "timeseries",

@@ -61,9 +61,9 @@ if __name__ == "__main__":
     ts_archive = archive.select({'type': 'timeseries', 'name': ['WGMS']})
     ts_archive.download(data_dir)
 
-    # Greenland ice sheet
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['PROMICE','GRACE Greenland']})
-    ts_archive.download(data_dir)
+    # # Greenland ice sheet
+    # ts_archive = archive.select({'type': 'timeseries', 'name': ['PROMICE2','GRACE Greenland']})
+    # ts_archive.download(data_dir)
 
     # Indices
     ts_archive = archive.select(
