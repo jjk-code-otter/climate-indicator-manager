@@ -22,7 +22,7 @@
 	  "space_resolution": 999,
 	  "climatology_start": 1993,
 	  "climatology_end": 1993,
-	  "actual": true,
+	  "actual": false,
 	  "derived": false,
 	  "history": [],
       "reader": "reader_aviso_ftp",

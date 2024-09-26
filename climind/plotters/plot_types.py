@@ -361,8 +361,11 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, 
     if ds.metadata['actual']:
         subtitle = ''
     else:
-        subtitle = f"Compared to {ds.metadata['climatology_start']}-" \
-                   f"{ds.metadata['climatology_end']} average"
+        if ds.metadata['climatology_start'] == ds.metadata['climatology_end']:
+            subtitle = f"Change since {ds.metadata['climatology_start']}"
+        else:
+            subtitle = f"Difference from {ds.metadata['climatology_start']}-" \
+                       f"{ds.metadata['climatology_end']} average"
 
     if created:
         current_time = f"Created: {datetime.today()}"
@@ -878,7 +881,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     # march_colors = ['#56b4e9', '#009e73', '#5473ff']
     # september_colors = ['#e69f00', '#d55e00', '#ff6b54']
     march_colors = ['#204e96', '#23abd1', '#008F90']
-    september_colors = ['#f5a729', '#ED1C24', '#F36F21']
+    september_colors = ['#f5a729', '#EE4391', '#F36F21']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -931,7 +934,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
 
-    title = f'Arctic sea-ice extent ({plot_units})'
+    title = f'Arctic sea-ice extent in March and September'
     subtitle = f"Difference from {ds.metadata['climatology_start']}-" \
                f"{ds.metadata['climatology_end']} average"
 
@@ -1639,7 +1642,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         cbar.ax.get_xaxis().labelpad = 15
 
     # Add the datasets used and their last months
-    plt.gcf().text(.075, .012, "Source:" + ",".join(last_months),
+    plt.gcf().text(.175, .012, "Source:" + ",".join(last_months),
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=25)
 
     # # Add a Created tag to let people know when it was created
@@ -1670,7 +1673,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         p.axes.set_global()
 
     plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
-    plt.savefig(out_dir / f'{image_filename}')
+    plt.savefig(out_dir / f'{image_filename}', bbox_inches=Bbox([[1.4, 0], [15.0, 9]]))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
     plt.close('all')

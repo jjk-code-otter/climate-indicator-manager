@@ -28,13 +28,13 @@
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
           "processing":  [],
-          "plotting": {"function": "wmo_plot", "title": "Ocean heat content"}
+          "plotting": {"function": "wmo_plot", "title": "Ocean heat content 0-2000m"}
         },
         {
           "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [],
-          "plotting": {"function": "wmo_monthly_plot", "title": "Global mean sea level change"}
+          "plotting": {"function": "wmo_monthly_plot", "title": "Global mean sea level"}
         },
         {
           "link_to": "sea_ice_extent", "title": "Sea ice",
@@ -50,15 +50,15 @@
         },
         {
           "link_to":  "glaciers_and_ice_sheets", "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["IMBIE 2021 Greenland", "Velicogna Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to":  "glaciers_and_ice_sheets", "title": "Antarctic ice sheet",
           "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Antarctic ice sheet cumulative mass balance"}
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
@@ -142,25 +142,26 @@
           "link_to":  null, "title": "Nitrous Oxide spark",
           "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "annual", "name": "WDCGG N2O"},
           "processing": [],
-          "plotting": {"function": "spark_line", "title": "Atmospheric nitrous oxide concentration"}
+          "plotting": {"function": "spark_line", "title": "Atmospheric nitrous oxide concentration"},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Carbon dioxide growth rate",
           "selecting": {"type": "timeseries", "variable": "co2rate", "time_resolution": "annual", "name": "WDCGG CO2 growth"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Carbon dioxide growth rate"}
+          "plotting": {"function": "wmo_plot", "title": "Carbon dioxide growth rate"}
         },
         {
           "link_to":  null, "title": "Methane growth rate",
           "selecting": {"type": "timeseries", "variable": "ch4rate", "time_resolution": "annual", "name": "WDCGG CH4 growth"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Methane growth rate"}
+          "plotting": {"function": "wmo_plot", "title": "Methane growth rate"}
         },
         {
           "link_to":  null, "title": "Nitrous oxide growth rate",
           "selecting": {"type": "timeseries", "variable": "n2orate", "time_resolution": "annual", "name": "WDCGG N2O growth"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Nitrous oxide growth rate"}
+          "plotting": {"function": "wmo_plot", "title": "Nitrous oxide growth rate"}
         }
       ],
       "paragraphs": [
@@ -186,21 +187,33 @@
                           {"method": "select_year_range", "args":  [1850,2024]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+          "plotting": {"function": "wmo_plot", "title": "Global mean temperature"}
+        },
+        {
+          "link_to": null, "title": "Global temperature spark",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "spark_line", "title": "Global mean temperature"},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Land air temperature",
           "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6","CRUTEM5","Berkeley Earth LSAT"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2024]}],
-          "plotting": {"function": "neat_plot", "title": "Global land temperature"}
+          "plotting": {"function": "wmo_plot", "title": "Global land temperature"}
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
           "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2024]}],
-          "plotting": {"function": "neat_plot", "title": "Global sea-surface temperature"}
+          "plotting": {"function": "wmo_plot", "title": "Global sea-surface temperature"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly map",
@@ -261,13 +274,20 @@
           "link_to":  null, "title": "Ocean heat content to 2000m",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
           "processing":  [],
-          "plotting": {"function": "neat_plot", "title": "Ocean heat content to 2000m"}
+          "plotting": {"function": "wmo_plot", "title": "Ocean heat content to 2000m"}
+        },
+        {
+          "link_to": null, "title": "Ocean Indicators spark",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
+          "processing":  [],
+          "plotting": {"function": "spark_line", "title": "Ocean heat content"},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Ocean pH",
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Ocean pH"}
+          "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
         },
         {
           "link_to":  null, "title": "Marine heat waves",
@@ -306,6 +326,13 @@
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Global mean sea level change"}
+        },
+        {
+          "link_to": null, "title": "Sea level spark",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
+          "processing": [],
+          "plotting": {"function": "spark_line", "title": "Global mean sea level change"},
+          "hidden":  true
         }
       ],
       "paragraphs": [
@@ -358,19 +385,25 @@
           "link_to":  null, "title": "Glacier mass balance",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing":  [],
-          "plotting": {"function": "neat_plot", "title": "Glacier cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Glacier cumulative mass balance"}
+        },
+        {
+          "link_to":  null, "title": "Glacier mass balance spark",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing":  [],
+          "plotting": {"function": "spark_line", "title": "Glacier cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Greenland ice sheet",
           "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Antarctic ice sheet",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica"]},
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
         }
       ],
       "paragraphs": [
@@ -405,12 +438,12 @@
         {
           "link_to": null,
           "title": "Nino 3.4",
-          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly"},
+          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Nino 3.4"}
+          "plotting": {"function": "wmo_plot", "title": "Nino 3.4"}
         },
         {
           "link_to": null,
@@ -419,7 +452,7 @@
           "processing": [
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Southern Oscillation Index"}
+          "plotting": {"function": "wmo_plot", "title": "Southern Oscillation Index"}
         },
         {
           "link_to": null,
@@ -429,7 +462,7 @@
             {"method":  "lowess", "args":  []},
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
+          "plotting": {"function": "wmo_plot", "title": "Pacific Decadal Oscillation"}
         },
         {
           "link_to": null,
@@ -438,7 +471,7 @@
           "processing": [
             {"method": "select_year_range", "args": [1980, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Indian Ocean Dipole"}
+          "plotting": {"function": "wmo_plot", "title": "Indian Ocean Dipole"}
         },
         {
           "link_to": null,
@@ -447,7 +480,7 @@
           "processing": [
             {"method": "select_year_range", "args": [2010, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "North Atlantic Oscillation"}
+          "plotting": {"function": "wmo_plot", "title": "North Atlantic Oscillation"}
         },
         {
           "link_to": null,
@@ -456,7 +489,7 @@
           "processing": [
             {"method": "select_year_range", "args": [2010, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Arctic Oscillation"}
+          "plotting": {"function": "wmo_plot", "title": "Arctic Oscillation"}
         },
         {
           "link_to": null,
@@ -465,7 +498,7 @@
           "processing": [
             {"method": "select_year_range", "args": [2010, 2024]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Antarctic Oscillation"}
+          "plotting": {"function": "wmo_plot", "title": "Antarctic Oscillation"}
         }
 
       ],
