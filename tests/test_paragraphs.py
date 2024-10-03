@@ -692,7 +692,7 @@ def test_greenland_ice_sheet_monthly_decreasing_loss(simple_monthly):
 
 
 def test_precipitation_paragraph():
-    test_text = pg.precip_paragraph()
+    test_text = pg.precip_paragraph('', 2024)
     assert isinstance(test_text, str)
 
 

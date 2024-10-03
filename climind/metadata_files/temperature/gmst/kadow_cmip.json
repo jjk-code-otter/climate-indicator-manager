@@ -3,7 +3,7 @@
   "name": "Kadow CMIP",
   "display_name": "Kadow et al.",
   "version": "",
-  "variable": "tas",
+  "variable": "tas IGNORE",
   "units": "degC",
   "citation": ["Kadow, C., Hall, D.M. & Ulbrich, U. Artificial intelligence reconstructs missing climate information. Nat. Geosci. (2020). https://doi.org/10.1038/s41561-020-0582-5"],
   "citation_url": ["https://doi.org/10.1038/s41561-020-0582-5"],

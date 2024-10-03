@@ -391,7 +391,8 @@
           "link_to":  null, "title": "Glacier mass balance spark",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing":  [],
-          "plotting": {"function": "spark_line", "title": "Glacier cumulative mass balance"}
+          "plotting": {"function": "spark_line", "title": "Glacier cumulative mass balance"},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Greenland ice sheet",

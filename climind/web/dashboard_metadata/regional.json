@@ -142,7 +142,10 @@
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Continental trends",
-            "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
+            "kwargs":  {
+              "order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
+              "print_trends": true
+            }
           }
         },
         {
@@ -656,7 +659,10 @@
           "processing": [],
           "plotting": {
             "function": "trends_plot", "title": "Regional trends LAS",
-            "kwargs": {"order":  ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"]}
+            "kwargs": {
+              "order":  ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"],
+              "print_trends": true
+            }
           }
         },
         {

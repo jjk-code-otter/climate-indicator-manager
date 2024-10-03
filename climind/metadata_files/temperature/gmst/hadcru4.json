@@ -2,7 +2,7 @@
   "name": "HadCRUT4",
   "display_name": "HadCRUT4",
   "version": "4.6.0.0",
-  "variable": "tas",
+  "variable": "tas IGNORE",
   "units": "degC",
   "citation": ["Morice, C. P., J. J. Kennedy, N. A. Rayner, and P. D. Jones (2012), Quantifying uncertainties in global and regional temperature change using an ensemble of observational estimates: The HadCRUT4 dataset, J. Geophys. Res., 117, D08101, doi:10.1029/2011JD017187"],
   "citation_url": ["https://doi.org/10.1029/2011JD017187"],

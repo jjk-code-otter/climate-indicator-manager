@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Tuple, List
 import itertools
 import xarray as xa
+import pandas as pd
 import numpy as np
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
@@ -250,7 +251,21 @@ def read_grid(filename: str):
     for year in range(1959, 2030):
         filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
         if filled_filename.exists():
-            dataset_list.append(xa.open_dataset(filled_filename))
+            ds = xa.open_dataset(filled_filename)
+
+            # CDS netcdf conversion does awful things to the data, which we need to fix
+            if 'date' in ds:
+                date_list = ds['date'].values
+                years = [int(str(x)[0:4]) for x in date_list]
+                months = [int(str(x)[4:6]) for x in date_list]
+                days = [int(str(x)[6:]) for x in date_list]
+                times = pd.date_range(start=f'{years[0]}-01-01', freq='1MS', periods=len(years))
+                ds = ds.transpose("latitude", "longitude", "date")
+                ds["date"] = ("date", times)
+                ds = ds.rename({'date': 'time'})
+
+            dataset_list.append(ds)
+
     combo = xa.concat(dataset_list, dim='time')
 
     return combo

@@ -2,7 +2,7 @@
   "name": "Vaccaro",
   "display_name": "Vaccaro et al.",
   "version": "",
-  "variable": "tas",
+  "variable": "tas IGNORE",
   "units": "degC",
   "citation": ["Vaccaro, A., Emile-Geay, J., Guillot, D., Verna, R., Morice, C., Kennedy, J., & Rajaratnam, B. (2021). Climate Field Completion via Markov Random Fields: Application to the HadCRUT4.6 Temperature Dataset, Journal of Climate, 34(10), 4169-4188 https://doi.org/10.1175/JCLI-D-19-0814.1"],
   "citation_url": ["https://doi.org/10.1175/JCLI-D-19-0814.1"],

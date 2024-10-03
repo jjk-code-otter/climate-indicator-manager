@@ -85,11 +85,12 @@ def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
         output_file = out_dir / f'era5_2m_tas_{year}.nc'
         name = 'reanalysis-era5-single-levels-monthly-means'
         request = {
-            'product_type': 'monthly_averaged_reanalysis',
-            'variable': '2m_temperature',
+            'product_type': ['monthly_averaged_reanalysis'],
+            'variable': ['2m_temperature'],
             'year': [str(year)],
-            'time': '00:00',
+            'time': ['00:00'],
             'format': 'netcdf',
+            'download_format': 'unarchived'
         }
     elif variable == 'sealevel':
         output_file = out_dir / f'cds_sealevel_{year}.zip'

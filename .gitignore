@@ -9,6 +9,9 @@ __pycache__/
 # Sphinx documentation
 docs/build/
 
+# External scripts
+scripts/external_scripts/*py
+
 # Environments
 climind/fetchers/.env
 .venv

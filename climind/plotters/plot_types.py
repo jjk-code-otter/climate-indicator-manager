@@ -1141,7 +1141,7 @@ def cherry_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSe
 
 
 def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
-                image_filename: str, title: str, order: list = []) -> str:
+                image_filename: str, title: str, order: list = [], print_trends: bool = False) -> str:
     """
     Trend figure which shows the mean and range of the trends from the input data sets over four 30-year periods:
     1901-1930, 1931-1960, 1961-1990 and 1991-present. This is set up to work with WMO RA and Africa Subregion
@@ -1166,7 +1166,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
         Caption for the figure
     """
     final_year = 2023
-    print_trends = False
+    #print_trends = True
 
     caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \

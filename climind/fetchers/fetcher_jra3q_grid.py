@@ -178,9 +178,9 @@ def fetch(_, out_dir: Path, _filename) -> None:
     None
     """
     # Real time
-    # web_path = 'https://data.rda.ucar.edu/ds640.3/'
-    # filelist = make_realtime_file_list(2022, 2024)
-    # get_files(filelist, web_path, process=False)  # These are already monthly, so don't process
+    web_path = 'https://data.rda.ucar.edu/ds640.3/'
+    filelist = make_realtime_file_list(2022, 2024)
+    get_files(filelist, web_path, process=False)  # These are already monthly, so don't process
 
     # Archive
     web_path = 'https://data.rda.ucar.edu/ds640.0/'

@@ -129,7 +129,7 @@ p {
 
             <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey" style="padding-bottom:10px">
                 <p>
-                    <img src="figures/{{ item.figure_name }}" width=100% alt="{{ item.caption }}"
+                    <img src="figures/{{ item.figure_name|replace('png','svg') }}" width=100% alt="{{ item.caption }}"
                          title="Graph of {{ item.title }}">
                 </p>
                 <h3>{{ item.title }}</h3>
