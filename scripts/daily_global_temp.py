@@ -168,7 +168,7 @@ STANDARD_PARAMETER_SET = {
     'ytick.right': False
 }
 
-final_year = 2023
+final_year = 2024
 
 project_dir = DATA_DIR / "ManagedData"
 metadata_dir = METADATA_DIR
@@ -214,10 +214,21 @@ era_extract_2023 = er.select_year_range(2023, 2023)
 er = read_era_actual()
 era_extract_2024 = er.select_year_range(2024, 2024)
 
+times = pd.date_range(start=f'2024-01-01', freq='1D', periods=365)
+
+sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+plt.figure(figsize=(16, 9))
+plt.plot(times[0:282], jra_extract_2024.df.data, color='blue', linewidth=3, label='JRA-3Q')
+plt.plot(times[0:280], era_extract_2024.df.data, color='orange', linewidth=3, label='ERA5')
+plt.legend()
+plt.savefig(figure_dir / 'daily.png')
+
+
 sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 plt.figure(figsize=(16, 9))
 
-times = pd.date_range(start=f'2024-01-01', freq='1D', periods=365)
+
+
 
 for erts in er_ensemble:
     chosen24 = copy.deepcopy(erts)
@@ -229,9 +240,9 @@ for erts in er_ensemble:
     plt.plot(times[0:208], chosen24.df.data-np.max(chosen24.df.data), color='black',alpha=0.3, linewidth=3)
 
 plt.plot(times, jra_extract_2023.df.data - np.max(jra_extract_2024.df.data), color='blue')
-plt.plot(times[0:204], jra_extract_2024.df.data - np.max(jra_extract_2024.df.data), color='blue', linewidth=3)
+plt.plot(times[0:282], jra_extract_2024.df.data - np.max(jra_extract_2024.df.data), color='blue', linewidth=3)
 plt.plot(times, era_extract_2023.df.data - np.max(era_extract_2024.df.data), color='orange')
-plt.plot(times[0:204], era_extract_2024.df.data - np.max(era_extract_2024.df.data), color='orange', linewidth=3)
+plt.plot(times[0:280], era_extract_2024.df.data - np.max(era_extract_2024.df.data), color='orange', linewidth=3)
 
 from datetime import date
 plt.gca().set_xlim(date(2024, 7, 1),date(2024,7, 31))

@@ -140,6 +140,7 @@ delta = 0.3
 xpos = 5 + delta
 p = Polygon([[0+xpos,0+ypos],[0.25+xpos,0+ypos],[0.25+xpos,0.25+ypos],[0+xpos,0.25+ypos]], facecolor=colours[0], transform=fig.dpi_scale_trans, clip_on=False)
 ax.add_patch(p)
+ax.text(xpos - 0.05, 0.125+ypos, 'Climate Service implementation level:', transform=fig.dpi_scale_trans, va='center', ha='right')
 ax.text(0.3+xpos, 0.125+ypos, 'Less than basic', transform=fig.dpi_scale_trans, va='center')
 
 xpos = 6.5+ delta

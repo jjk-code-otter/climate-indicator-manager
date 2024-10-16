@@ -29,10 +29,13 @@ import numpy as np
 from typing import List, Union, Tuple
 
 from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
-    get_list_of_unique_variables, superset_dataset_list, AveragesCollection
+    get_list_of_unique_variables, superset_dataset_list, AveragesCollection, get_start_and_end_year
 from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder
+from climind.stats.paragraphs import get_last_month
+from matplotlib.patches import Polygon
+import matplotlib.dates as mdates
 
 FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
                "zJ": "zJ",
@@ -131,7 +134,7 @@ def equivalence(key):
 
 
 def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-                  dark: bool = False, marker=False, wmo=False) -> List[int]:
+                  dark: bool = False, marker=False, wmo=False, uncertainty=True) -> List[int]:
     """
     Given a list of data sets, plot each one on the provided axis.
 
@@ -160,6 +163,13 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
                 "#f5a729", "#7ab64a", "#23abd1",  # Secondary colours
                 "#008F90", "#00AE4D", "#869519", "#98411E", "#A18972"  # Additional colours (natural shades)
             ]
+            # wmo_standard_colors[0] = "#fcb679"  # JK Orange
+            # wmo_standard_colors[1] = "#fcb679"  # JK Orange
+            # wmo_standard_colors[2] = "#fcb679"  # JK Orange
+            # wmo_standard_colors[3] = "#fcb679"  # JK Orange
+            # wmo_standard_colors[4] = "#fcb679"  # JK Orange
+            # wmo_standard_colors[5] = "#fcb679"  # JK Orange
+
             col = wmo_standard_colors[i]
         zord = ds.metadata['zpos']
         zords.append(zord)
@@ -174,6 +184,9 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         if wmo:
             linewidth = 3
             label = f"{ds.metadata['display_name']}"
+        if wmo and ds.metadata['variable'] == 'tas':
+            lyear, lmonth = get_last_month(ds.metadata['last_month'])
+            label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
 
         if marker:
             axis.plot(x_values, ds.df['data'],
@@ -184,7 +197,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
                       label=label,
                       color=col, zorder=zord, linewidth=linewidth)
 
-        if 'uncertainty' in ds.df.columns:
+        if 'uncertainty' in ds.df.columns and uncertainty:
             axis.fill_between(x_values,
                               ds.df['data'] + ds.df['uncertainty'],
                               ds.df['data'] - ds.df['uncertainty'],
@@ -309,7 +322,7 @@ def set_xaxis(axis) -> Tuple[float, float, np.ndarray]:
     return xlo, xhi, xticks
 
 
-def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular],
+def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
                title: str, legend=True, created=True) -> None:
     """
     Add fancy stuff to the plots after all the data lines have been plotted.
@@ -328,6 +341,8 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, 
     -------
     None
     """
+    ds = all_datasets[-1]
+
     plt.tick_params(
         axis='y',  # changes apply to the x-axis
         which='both',  # both major and minor ticks are affected
@@ -372,8 +387,10 @@ def after_plot(zords: List[int], ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, 
         plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                        bbox={'facecolor': 'w', 'edgecolor': None})
 
+    first_year, last_year = get_start_and_end_year(all_datasets)
+
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(title, pad=35, fontdict={'fontsize': 40}, loc='left')
+    plt.gca().set_title(f'{title} {first_year}-{last_year}', pad=35, fontdict={'fontsize': 40}, loc='left')
 
 
 # time series
@@ -403,7 +420,8 @@ def dark_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
 
 
 def spark_line(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-               image_filename: str, title: str, dark: bool = False, yrange: List[float] = None) -> str:
+               image_filename: str, title: str, dark: bool = False, yrange: List[float] = None,
+               color_override=None) -> str:
     NON_STANDARD_PARAMETER_SET = copy.deepcopy(STANDARD_PARAMETER_SET)
     NON_STANDARD_PARAMETER_SET['axes.grid'] = False
 
@@ -418,12 +436,150 @@ def spark_line(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSer
     axs.spines['bottom'].set_visible(False)
     axs.spines['left'].set_visible(False)
 
+    if color_override is not None:
+        for line in plt.gca().get_lines():
+            line.set_color(color_override)
+
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close('all')
 
+    sns.set(font='Franklin Gothic Heavy', rc=STANDARD_PARAMETER_SET)
+
     return ''
+
+
+def simplified_line(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
+                    image_filename: str, title: str, dark: bool = False, yrange: List[float] = None,
+                    color_override=None) -> str:
+    main_colour = '#fcb679'
+    if color_override is not None:
+        main_colour = color_override
+
+    ORANGE_PARAMETER_SET = {
+        'axes.axisbelow': False,
+        'axes.labelsize': 35,
+        'xtick.labelsize': 35,
+        'ytick.labelsize': 35,
+        'axes.edgecolor': main_colour,
+        'axes.facecolor': 'None',
+
+        'axes.grid.axis': 'y',
+        'grid.color': '#fcb679',
+        'grid.alpha': 0.5,
+
+        'axes.labelcolor': main_colour,
+        'axes.linewidth': 4,
+        'axes.labelpad': 24,
+
+        'axes.spines.left': True,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+
+        'figure.facecolor': 'white',
+        'lines.solid_capstyle': 'round',
+        'patch.edgecolor': 'w',
+        'patch.force_edgecolor': True,
+        'text.color': main_colour,
+
+        'xtick.bottom': True,
+        'xtick.color': main_colour,
+        'xtick.direction': 'out',
+        'xtick.top': False,
+        'xtick.labelbottom': True,
+        'xtick.major.width': 4,
+        'xtick.major.pad': 11,
+
+        'ytick.major.width': 4,
+        'ytick.color': main_colour,
+        'ytick.direction': 'out',
+        'ytick.left': True,
+        'ytick.right': False,
+        'ytick.major.pad': 11,
+    }
+
+    ORANGE_PARAMETER_SET['axes.grid'] = False
+
+    start_years = []
+    end_years = []
+    for ds in all_datasets:
+        s, e = ds.get_first_and_last_year()
+        start_years.append(s)
+        end_years.append(e)
+
+    start_year = np.min(start_years)
+    end_year = np.max(end_years)
+
+    sns.set(font='Franklin Gothic Heavy', rc=ORANGE_PARAMETER_SET)
+    fig, axs = plt.subplots(1)
+    fig.set_size_inches(16, 9)
+    fig.tight_layout()
+    zords = add_data_sets(plt.gca(), all_datasets, wmo=True, uncertainty=False)
+    axs.spines['top'].set_visible(False)
+    axs.spines['right'].set_visible(False)
+
+    axs.spines['bottom'].set_bounds(start_year, end_year)
+
+    if color_override is not None:
+        for line in plt.gca().get_lines():
+            line.set_color(color_override)
+
+    plt.xticks([start_year, end_year])
+
+    if all_datasets[0].metadata["variable"] == 'tas':
+        axs.spines['left'].set_bounds(0, 1.5)
+        plt.yticks([0, 1.5])
+    elif all_datasets[0].metadata["variable"] == 'co2':
+        axs.spines['left'].set_bounds(340, 420)
+        plt.yticks([340, 420])
+    elif all_datasets[0].metadata["variable"] == 'ohc2k':
+        axs.spines['left'].set_bounds(-350, 150)
+        plt.yticks([-350, 150])
+    elif all_datasets[0].metadata["variable"] == 'sealevel':
+        axs.spines['left'].set_bounds(0, 115)
+        plt.yticks([0, 115])
+    elif all_datasets[0].metadata["variable"] == 'mhw':
+        axs.spines['left'].set_bounds(45, 100)
+        plt.yticks([45, 100])
+    elif all_datasets[0].metadata["variable"] == 'arctic_ice':
+        axs.spines['left'].set_bounds(-2, 2.5)
+        plt.yticks([-2, 2.5])
+    elif all_datasets[0].metadata["variable"] == 'glacier':
+        axs.spines['left'].set_bounds(-27, 5)
+        plt.yticks([-27, 5])
+    elif all_datasets[0].metadata["variable"] == 'greenland':
+        axs.spines['left'].set_bounds(-5000, 2000)
+        plt.yticks([-5000, 2000])
+    elif all_datasets[0].metadata["variable"] == 'antarctica':
+        axs.spines['left'].set_bounds(-3000, 1000)
+        plt.yticks([-3000, 1000])
+    elif all_datasets[0].metadata["variable"] == 'nino34':
+        axs.spines['left'].set_bounds(-3, 3)
+        plt.yticks([-3, 3])
+
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
+    plt.savefig(out_dir / image_filename.replace('png', 'svg'), bbox_inches='tight', transparent=True)
+    plt.close('all')
+
+    sns.set(font='Franklin Gothic Heavy', rc=STANDARD_PARAMETER_SET)
+
+    caption = 'Source: '
+    display_names = []
+    total_length = 8
+    for ds in all_datasets:
+        if total_length > 40:
+            display_names.append('<br>' + ds.metadata['display_name'])
+            total_length = len(ds.metadata['display_name'])
+        else:
+            display_names.append(ds.metadata['display_name'])
+            total_length += len(ds.metadata['display_name']) + 2
+
+    #    display_names = [x.metadata['display_name'] for x in all_datasets]
+    caption += ', '.join(display_names)
+
+    return caption
 
 
 def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
@@ -478,7 +634,7 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     plt.yticks(yticks)
     plt.xticks(xticks)
 
-    after_plot(zords, ds, title)
+    after_plot(zords, all_datasets, title)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -530,7 +686,7 @@ def wmo_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSerie
     plt.yticks(yticks)
     plt.xticks(xticks)
 
-    after_plot(zords, ds, title, legend=True, created=False)
+    after_plot(zords, all_datasets, title, legend=True, created=False)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -566,7 +722,7 @@ def records_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_file
     plt.yticks(yticks)
     plt.xticks(xticks)
 
-    after_plot(zords, ds, title)
+    after_plot(zords, all_datasets, title)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -700,7 +856,7 @@ def monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_fil
     plt.yticks(yticks)
     plt.xticks(xticks)
 
-    after_plot(zords, ds, title)
+    after_plot(zords, all_datasets, title)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -747,7 +903,7 @@ def wmo_monthly_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image
     plt.yticks(yticks)
     plt.xticks(xticks)
 
-    after_plot(zords, ds, title, created=False)
+    after_plot(zords, all_datasets, title, created=False)
 
     plt.savefig(out_dir / image_filename, bbox_inches=Bbox([[0.8, 0], [14.5, 9]]))
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
@@ -1166,7 +1322,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
         Caption for the figure
     """
     final_year = 2023
-    #print_trends = True
+    # print_trends = True
 
     caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
               f'Coloured bars show the mean trend for each region and the black vertical lines indicate the range ' \
@@ -1306,6 +1462,220 @@ def show_premade_image(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             raise FileNotFoundError(f'{extension} version of file {source_file} does not exist')
 
     return caption
+
+
+def daily_sea_ice_plot(out_dir: Path,
+                              all_datasets: List[TimeSeriesIrregular],
+                              image_filename: str, title: str) -> str:
+
+    final_year = 2024
+
+    # Plot annual cycle plot
+    plt.figure(figsize=(16, 9))
+
+    col_ext = '#204e96'
+    col_all = '#999999'
+    col_clim = '#555555'
+
+    start_date, end_date = all_datasets[0].get_start_and_end_dates()
+
+    ds = all_datasets[0]
+    ds.fill_daily()
+    ds.df.data = ds.df.rolling(5, center=True, min_periods=1).mean().data
+    climatology, _ = ds.get_climatology(1991, 2020)
+
+    md = ds.metadata
+    df = ds.df
+    df['climatology'] = climatology
+
+    for year in range(1979, 2024):
+        df2 = df[df['year'] == year]
+        df3 = df[df['year'] == final_year]
+
+        df2 = df2[~((df2['month'] == 2) & (df2['day'] == 29))]
+        df3 = df3[~((df3['month'] == 2) & (df3['day'] == 29))]
+
+        extract = df2.groupby([df2.index.month, df2.index.day]).first()
+        extract = extract.data[zip(df3.index.month, df3.index.day)]
+        extract.index = df3.index
+
+        plt.plot(extract, color=col_all, linewidth=0.5, alpha=0.5)
+
+    # Annual cycle
+    plt.plot(df[df['year'] == final_year].data, color=col_ext, linewidth=3)
+    plt.plot(df[df['year'] == final_year].climatology, color=col_clim, linewidth=3)
+
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+    plt.gca().set_yticks([0, 5, 10, 15, 20, 25])
+
+    plt.gca().set_ylabel('million km$^2$')
+
+    if md['variable'] == 'arctic_ice':
+        inclusion = 'Arctic'
+    else:
+        inclusion = 'Antarctic'
+    plt.gca().set_title(f'Daily {inclusion} sea-ice extent through the year {start_date.year}-{end_date.year}', pad=35,
+                        fontdict={'fontsize': 35},
+                        loc='left')
+
+    ylim = plt.gca().get_ylim()
+    xlim = plt.gca().get_xlim()
+
+    if md['variable'] == 'arctic_ice':
+        yloc = ylim[0] + 0.51 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
+
+        yloc = ylim[0] + 0.17 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.75 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})   #red
+
+        yloc = ylim[0] + 0.34 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.86 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})   #red
+
+        plt.gca().set_ylim(-0.5, 17.5)
+    else:
+        yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
+
+        yloc = ylim[0] + 0.618 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.60 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, '2024 extent', color=col_ext, fontdict={'fontsize': 18})  # red
+
+        yloc = ylim[0] + 0.543 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.900 * (xlim[1] - xlim[0])
+        plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})  # red
+
+        plt.gca().set_ylim(-0.5, 22)
+
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('.png','.svg'))
+    plt.close()
+
+    caption = (f'Daily {inclusion} sea ice extent throughout the year, {start_date.year}-{end_date.year}. Grey lines '
+               f'show individual years. {end_date.year} is highlighted in blue and the 1991-2020 average in black. Data '
+               f'are from {md["display_name"]}')
+
+    return caption
+
+
+def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str) -> str:
+    STANDARD_PARAMETER_SET['xtick.bottom'] = False
+    STANDARD_PARAMETER_SET['xtick.labelbottom'] = False
+    STANDARD_PARAMETER_SET['ytick.left'] = False
+    STANDARD_PARAMETER_SET['ytick.labelleft'] = False
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    fig = plt.figure(figsize=[16, 6])
+
+    n_time_x = len(all_datasets[0].df.data)
+
+    n_datasets = len(all_datasets)
+
+    plt.plot(np.arange(n_time_x), np.arange(n_time_x), linewidth=0)
+
+    ax = plt.gca()
+
+    for j, ds in enumerate(all_datasets):
+        n_time = len(ds.df.data)
+        for i in range(n_time_x - 24, n_time):
+
+            year = ds.df.year[i]
+            month = ds.df.month[i]
+
+            rank = ds.get_rank_from_year_and_month(year, month)
+
+            color = '#ffffff'
+            tcolor = '#000000'
+            if rank == 1:
+                color = '#bb0000'
+                tcolor = '#ffffff'
+            if rank == 2:
+                color = '#fc6f03'
+            if rank >= 3 and rank <= 5:
+                color = '#fcd703'
+            if rank <= 10 and rank > 5:
+                color = '#fff9a3'
+
+            coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+            p = Polygon(coords, color=color)
+            ax.add_patch(p)
+            ax.text(i + 0.5, j + 0.5, f'{rank}', ha='center', va='center', color=tcolor, fontsize=24)
+
+            months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+            if j == 0:
+                ax.text(i + 0.5, -0.3, months[month - 1], ha='center', va='center', fontsize=24, color='black')
+
+            if month == 1 and j == 0:
+                plt.plot([i, i], [0, n_datasets], linewidth=2, color='black', zorder=99)
+                ax.text(i + 0.25, j - 0.9, f'{year}', fontsize=24, color='black')
+
+        ax.text(n_time_x - 24.5, j + 0.5, ds.metadata['display_name'], ha='right', va='center', fontsize=24,
+                color='black')
+
+    plt.plot(
+        [n_time_x - 24, n_time_x + 4, n_time_x + 4, n_time_x - 24, n_time_x - 24],
+        [0, 0, n_datasets, n_datasets, 0],
+        color='black',
+        linewidth=4, zorder=99
+    )
+
+    i = n_time_x - 23 + 2.5
+    j = n_datasets + 0.25
+    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+    color = '#bb0000'
+    p = Polygon(coords, color=color, clip_on=False)
+    ax.add_patch(p)
+    ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
+    ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
+
+    i = n_time_x - 18. + 2.5
+    j = n_datasets + 0.25
+    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+    color = '#fc6f03'
+    p = Polygon(coords, color=color, clip_on=False)
+    ax.add_patch(p)
+    ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+    ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
+
+    i = n_time_x - 11.2 + 2.5
+    j = n_datasets + 0.25
+    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+    color = '#fcd703'
+    p = Polygon(coords, color=color, clip_on=False)
+    ax.add_patch(p)
+    ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+    ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
+
+    i = n_time_x - 7.5 + 2.5
+    j = n_datasets + 0.25
+    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+    color = '#fff9a3'
+    p = Polygon(coords, color=color, clip_on=False)
+    ax.add_patch(p)
+    ax.text(i + 0.5, j + 0.5, '10', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+    ax.text(i + 1.2, j + 0.5, 'TOP 10', fontsize=24, color='black', va='center', clip_on=False)
+
+    ax.text(n_time_x - 31, n_datasets + 0.3, 'GLOBALTEMPERATURE\nRANKINGS 2023-2024', color='#000000', fontsize=32,
+            clip_on=False)
+
+    ax.set_ylim(0, n_datasets)
+    ax.set_xlim(n_time_x - 24, n_time_x + 4)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    plt.tight_layout()
+    plt.savefig(out_dir / image_filename)
+    plt.savefig(out_dir / image_filename.replace('.png', '.svg'))
+    plt.close()
+
+    return ""
 
 
 # Maps
@@ -1637,12 +2007,13 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     else:
         cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
         cbar.ax.get_xaxis().set_ticks([])
-        for j, lab in enumerate(['Very dry', 'Dry', '', 'Wet', 'Very wet']):
-            cbar.ax.text(0.1 + j * 0.2, -0.45, lab, ha='center', va='center', color=wmo_cols[j], fontsize=25)
+        for j, lab in enumerate(['Very dry\n<10%', 'Dry\n<20%', '', 'Wet\n>80%', 'Very wet\n>90%']):
+            cbar.ax.text(0.1 + j * 0.2, -0.85, lab, ha='center', va='center', color=wmo_cols[j], fontsize=25)
         cbar.ax.get_xaxis().labelpad = 15
+        plt.gcf().text(0.5,0.002, "Relative to precipitation totals from 1991 to 2020", ha='center', fontsize=25)
 
     # Add the datasets used and their last months
-    plt.gcf().text(.175, .012, "Source:" + ",".join(last_months),
+    plt.gcf().text(.05, .002, "Source:" + ",".join(last_months),
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=25)
 
     # # Add a Created tag to let people know when it was created
@@ -2184,9 +2555,10 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.gcf().text(0.52, 0.81, '2023-2024', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(.075, .012,
-                   "With HadCRUT5, NOAAGlobalTemp v5.1 & v6, GISTEMP, Berkeley Earth, Kadow, Calvert, ERA5, JRA-55, JRA-3Q",
-                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
+    sources = [x.metadata['display_name'] for x in all_datasets]
+    sources = ', '.join(sources)
+
+    plt.gcf().text(.075, .012, f"With {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
     plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 

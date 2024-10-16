@@ -26,17 +26,17 @@ if __name__ == "__main__":
 
     # Global mean temperature
     #ts_archive = archive.select(
-    #    {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim', 'Berkeley Earth', 'ERA5']})
+    #    {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
     #ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT']})
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']})#, 'NOAA LSAT']})#
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST']})
+        {'type': 'timeseries', 'name': ['HadSST4']})#, 'ERSST']})
     ts_archive.download(data_dir)
 
     # Sea level

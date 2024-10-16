@@ -154,4 +154,4 @@ def get_and_process_year_2014on(year, month):
 #     except:
 #         pass
 
-get_and_process_year_2014on(2024, 7)
+get_and_process_year_2014on(2024, 10)

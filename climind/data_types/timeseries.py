@@ -282,13 +282,49 @@ class TimeSeriesIrregular(TimeSeries):
             dico['uncertainty'] = uncertainty
         self.df = pd.DataFrame(dico)
 
-        self.df['date'] = pd.to_datetime(dict(year=self.df['year'],
-                                              month=self.df['month'],
-                                              day=self.df['day']))
+        self.df['date'] = pd.to_datetime(
+            dict(
+                year=self.df['year'],
+                month=self.df['month'],
+                day=self.df['day']
+            )
+        )
 
     def __str__(self) -> str:
         out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
         return out_str
+
+    def fill_daily(self):
+        self.df = self.df.set_index('date')
+
+        start_date, end_date = self.get_start_and_end_dates()
+
+        start_year = start_date.year
+        final_year = end_date.year
+
+        t_index = pd.DatetimeIndex(pd.date_range(start=f'{start_year}-01-01', end=f'{final_year}-12-31', freq='D'))
+
+        df_rsmpld = self.df.reindex(t_index, method=None)
+        self.df = df_rsmpld
+
+        self.df.year = t_index.year
+        self.df.month = t_index.month
+        self.df.day = t_index.day
+
+    def get_climatology(self, climatology_start_year, climatology_end_year):
+        # Calculate climatology and fill out repeating climatology to full length of series
+        df2 = self.df[self.df['year'] >= climatology_start_year]
+        df2 = df2[df2['year'] <= climatology_end_year]
+
+        climatology = df2.groupby([df2.index.month, df2.index.day]).mean()
+        climatology = climatology.data[zip(self.df.index.month, self.df.index.day)]
+        climatology.index = self.df.index
+
+        climatology_stdev = df2.groupby([df2.index.month, df2.index.day]).std()
+        climatology_stdev = climatology_stdev.data[zip(self.df.index.month, self.df.index.day)]
+        climatology_stdev.index = self.df.index
+
+        return climatology, climatology_stdev
 
     def make_monthly(self):
         """
@@ -1482,7 +1518,7 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual], augmented_uncerta
         df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty_a'] ** 2 + 0.12 ** 2)
     else:
         df_merged['uncertainty_b'] = df_merged[unc_columns].max(axis=1)
-        df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty_a'] ** 2 + df_merged['uncertainty_b'] ** 2 )
+        df_merged['uncertainty'] = np.sqrt(df_merged['uncertainty_a'] ** 2 + df_merged['uncertainty_b'] ** 2)
 
     df_merged = df_merged.drop(columns=columns)
     df_merged = df_merged.rename(columns={'combined': 'data'})

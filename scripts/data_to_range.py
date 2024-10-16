@@ -107,6 +107,92 @@ print("CO2 monthly...")
 print(outstr)
 
 
+ohc_archive = archive.select(
+    {
+        'variable': 'ohc2k', 'type': 'timeseries', 'time_resolution': 'annual',
+        'name': 'Miniere'
+    }
+)
+ohc_annual = ohc_archive.read_datasets(data_dir)
+for ds in ohc_annual:
+    ds.rebaseline(2005, 2020)
+    # ds.add_year(2022, 96.74878325523227, 8.430242333320507)
+outstr = convert_to_percentages(ohc_annual[0])
+print("OHC annual...")
+print(outstr)
+
+sealevel_archive = archive.select(
+    {
+        'variable': 'sealevel', 'type': 'timeseries', 'name': ['AVISO ftp']
+    }
+)
+sealevel_annual = sealevel_archive.read_datasets(data_dir)
+for ds in sealevel_annual:
+    ds.select_year_range(1993,2023)
+outstr = convert_to_percentages(sealevel_annual[0])
+print("Sea level annual...")
+print(outstr)
+
+
+mhw_archive = archive.select(
+    {
+        "type": "timeseries", "variable": "mhw", "time_resolution": "annual"
+    }
+)
+mhw_annual = mhw_archive.read_datasets(data_dir)
+outstr = convert_to_percentages(mhw_annual[0])
+print("Mean heatwave annual...")
+print(outstr)
+
+
+glacier_archive = archive.select(
+    {
+        'variable': 'glacier', 'type': 'timeseries', 'time_resolution': 'annual'
+    }
+)
+glacier_annual = glacier_archive.read_datasets(data_dir)
+outstr = convert_to_percentages(glacier_annual[0])
+print("Glacier annual...")
+print(outstr)
+
+greenland_archive = archive.select(
+    {
+        'variable': 'greenland', 'type': 'timeseries', 'time_resolution': 'monthly', 'name': 'IMBIE 2021 Greenland'
+    }
+)
+greenland_annual = greenland_archive.read_datasets(data_dir)
+for ds in greenland_annual:
+    ds.zero_on_month(2005, 7)
+outstr = convert_to_percentages(greenland_annual[0])
+print("Greenland annual...")
+print(outstr)
+
+antarctic_archive = archive.select(
+    {
+        'variable': 'antarctica', 'type': 'timeseries', 'time_resolution': 'monthly', 'name': 'IMBIE 2021 Antarctica'
+    }
+)
+antarctic_annual = antarctic_archive.read_datasets(data_dir)
+for ds in antarctic_annual:
+    ds.zero_on_month(2005, 6)
+outstr = convert_to_percentages(antarctic_annual[0])
+print("Antarctic annual...")
+print(outstr)
+
+nino_archive = archive.select(
+    {
+        'variable': 'nino34', 'type': 'timeseries', 'time_resolution': 'monthly', 'name': 'Nino34'
+    }
+)
+nino_annual = nino_archive.read_datasets(data_dir)
+for ds in nino_annual:
+    ds.rebaseline(1991, 2020)
+    ds.select_year_range(1950, 2024)
+outstr = convert_to_percentages(nino_annual[0])
+print("Nino annual...")
+print(outstr)
+
+
 
 assert False
 

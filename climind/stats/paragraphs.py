@@ -856,7 +856,6 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], _) -> str:
 
 
 def precip_paragraph(_, year) -> str:
-
     if year == 2023:
         out_text = "Accumulated precipitation totals in 2023 were above the long-term average in East and Central Asia "
         out_text += "and parts of northern Asia; the western Indian summer monsoon region; "
@@ -877,4 +876,33 @@ def precip_paragraph(_, year) -> str:
     elif year == 2024:
         out_text = 'Nothing to see here yet.'
 
+    return out_text
+
+
+def convert_to_percentages(ts, min_screen=90, max_screen=40):
+    n_years = len(ts.df.data)
+
+    years = np.array(ts.get_year_axis())
+    datas = np.array(ts.df.data)
+
+    year0 = years[0]
+    yearz = years[-1]
+
+    max_data = np.max(datas)
+    min_data = np.min(datas)
+
+    outstr = '100,0 0, 0'
+    for i in range(n_years):
+        year = 100 * (years[i] - year0) / (yearz - year0)
+        data = min_screen + (max_screen - min_screen) * (datas[i] - min_data) / (max_data - min_data)
+
+        outstr += f' {year:.2f}, {data:.2f}'
+
+    return outstr
+
+
+def svg_background(all_datasets, year):
+    out_text = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" style="background-color:var(--dashblue);">'
+    out_text += '<polygon points="'+convert_to_percentages(all_datasets[0])+'"  style="fill:var(--dashorange);stroke:var(--dashwhite);stroke-width:0" />'
+    out_text += '</svg>'
     return out_text

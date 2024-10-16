@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_meta.name }}</title>
+  <link rel="icon" type="image/x-icon" href="../favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    /* Basic styles for the body and html */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Futuristic font and text alignment/spacing styles */
+    h1 {
+      margin: 0;
+      font-family: 'Bungee', sans-serif;
+	  color: white;
+      font-size: 6em;
+      position: relative;
+      left: 15px;  /* 10px from the left */
+      top: 15px;   /* 15px from the top */
+      text-align: left;
+      line-height: 1.0;
+      z-index: 2;
+    }
+
+	p {
+	  color: #2c7c9e;
+	  font-size: 2em;
+	}
+
+	.datafoot {
+      font-family: 'Bungee', sans-serif;
+      color: white;
+      font-size: 2em;
+      position: absolute;
+      right: 15px;  /* 10px from the left */
+      bottom: 15px;   /* 15px from the top */
+      text-align: left;
+      line-height: 1.0;
+      z-index: 2;
+	}
+
+	.datafootleft {
+      font-family: 'Bungee', sans-serif;
+      color: white;
+      font-size: 2em;
+      position: absolute;
+      left: 15px;  /* 10px from the left */
+      bottom: 15px;   /* 15px from the top */
+      text-align: left;
+      line-height: 1.0;
+      z-index: 2;
+	}
+
+    /* Each section fills the entire height of the viewport */
+    .section {
+      position: relative;
+      width: 100%;
+      height: 100vh; /* Full viewport height */
+	  z-index: 1;
+    }
+
+    /* Section 3 with jagged top edge */
+    .section-3 {
+      background-color: #caff9e; /* Light Green */
+    }
+
+	svg {
+	  fill: #A58EAB;
+      height: 100%;
+	  left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+	  z-index: -1;
+    }
+
+	/* Button styles */
+    .button-container {
+      position: absolute;
+	  text-align: center;
+      top: 200px;
+      left: 90px;
+	  width:80%;
+	  height: 70vh;
+      z-index: 3; /* Ensure buttons are above the background */
+    }
+
+    .para-container {
+      position: absolute;
+      top: 100px;
+      left: 90px;
+	  width:80%;
+	  height: 90vh;
+      z-index: 3; /* Ensure buttons are above the background */
+    }
+
+	.small-img {
+		width: 95%;
+	}
+
+    .button {
+	  padding: 7px;
+      width: 240px;
+      height: 240px;
+      margin: 20px;
+      background-color: white;
+      border: 2px solid white;
+      border-radius: 10px; /* Rounded corners */
+      text-align: center;
+      line-height: 60px; /* Vertical center */
+      font-family: 'Bungee', sans-serif;
+      font-size: 2em;
+      text-decoration: none;
+      color: #fcb679;
+      transition: background-color 0.5s, color 0.5s, width 0.2s;
+    }
+
+    .mini-button {
+	  float: left;
+      width: 90px;
+      height: 90px;
+      margin: 10px;
+      background-color: white;
+      border: 2px solid white;
+      border-radius: 10px; /* Rounded corners */
+      color: #fcb679;
+    }
+
+	@media only screen and (max-width: 600px) {
+	  .button-container {
+		width: 90%;
+	    top: 100px;
+		left: 5%;
+	  }
+
+	  .para-container {
+		top: 65px;
+		left: 20px;
+	  }
+
+      .button {
+	    width: 90%;
+	    padding: 7px;
+		font-size: 2em;
+		line-height: 0.9;
+		margin: 10px;
+      }
+
+	  .mini-button {
+	    width: 45px;
+		height: 45px;
+		margin: 5px;
+	  }
+
+	  h1 {
+		font-size: 2em;
+	  }
+
+	  p {
+		font-size: 1em;
+	  }
+
+	  .datafoot {
+	    font-size: 1em;
+	  }
+
+	  .small-img {
+		width: 90%;
+	  }
+
+    }
+
+
+  </style>
+</head>
+<body  style="background-color:#73C183;">
+
+  <div class="section">
+    {% for item in paragraphs %}
+      {{ item.text }}
+    {% endfor %}
+
+    <h1>{{ page_meta.name }}</h1>
+
+    {% for item in paragraphs %}
+	  <div class="datafoot" style="color:#A58EAB;">{{ item.dataset_metadata.long_name }}: HadCRUT5</div>
+	{% endfor %}
+
+	<div class="datafootleft" style="color:#A58EAB;"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a></div>
+
+	<div class="button-container">
+    {% for item in cards %}
+      <a href="{{ item.link_to  }}.html" class="button w3-third"  style="color:#A58EAB;">{{ item.title }} <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}"></a>
+    {% endfor %}
+
+    </div>
+  </div>
+
+</body>
+</html>

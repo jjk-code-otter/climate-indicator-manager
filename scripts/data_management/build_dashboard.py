@@ -34,6 +34,7 @@ from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
 
+    minimal = True
     dash2024 = True
     dash2023 = False
     dash2022 = False
@@ -50,6 +51,14 @@ if __name__ == "__main__":
     regional_test = False
 
     run_all = False
+
+    if minimal:
+        json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'Minimal_2024.json'
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / 'ManagedData' / 'Minimal'
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2024)
+
 
     if comprehensive or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2023_comprehensive.json'

@@ -25,6 +25,17 @@
           "plotting": {"function": "wmo_plot", "title": "Global mean temperature"}
         },
         {
+          "link_to": "null", "title": "Global temperature monthly",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
+          "processing":  [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args":  [2023,2024]}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Global mean temperature"},
+          "hidden": true
+        },
+        {
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
           "processing":  [],
@@ -33,7 +44,7 @@
         {
           "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [],
+          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
           "plotting": {"function": "wmo_monthly_plot", "title": "Global mean sea level"}
         },
         {
@@ -62,10 +73,10 @@
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_8month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 8month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2024, 8]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Aug 2024"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2024, 9]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Sep 2024"}
         },
         {
           "link_to": "short_term_climate_drivers", "title":"Short-term Climate Drivers",
@@ -80,7 +91,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2024]},
@@ -111,6 +122,13 @@
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+        },
+        {
+          "link_to":  null, "title": "Carbon dioxide simplified",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "simplified_line", "title": "Atmospheric carbon dioxide concentration", "args":  [], "kwargs":  {"color_override": "#862FE0"}},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Carbon dioxide spark",
@@ -181,7 +199,7 @@
         {
           "link_to":  null, "title": "Global mean temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2024]},
@@ -199,6 +217,18 @@
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "spark_line", "title": "Global mean temperature"},
+          "hidden": true
+        },
+        {
+          "link_to": null, "title": "Global temperature simplified",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "simplified_line", "title": "Global mean temperature", "args":  [], "kwargs":  {"color_override": "#fc6603"}},
           "hidden": true
         },
         {
@@ -242,7 +272,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-55", "ERA5"]},
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2024]},
@@ -277,6 +307,13 @@
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content to 2000m"}
         },
         {
+          "link_to":  null, "title": "Ocean heat content simplified",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "processing":  [],
+          "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#88E032"}},
+          "hidden": true
+        },
+        {
           "link_to": null, "title": "Ocean Indicators spark",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
           "processing":  [],
@@ -294,6 +331,20 @@
           "selecting": {"type": "timeseries", "variable": ["mhw", "mcs"], "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "marine_heatwave_plot", "title": "Marine heatwaves and cold spells"}
+        },
+        {
+          "link_to":  null, "title": "Marine heat waves spark",
+          "selecting": {"type": "timeseries", "variable": ["mhw"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "spark_line", "title": "Marine heatwaves and cold spells"},
+          "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Marine heat waves simplified",
+          "selecting": {"type": "timeseries", "variable": ["mhw"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "simplified_line", "title": "Marine heatwaves and cold spells", "args":  [], "kwargs":  {"color_override": "#eb0000"}},
+          "hidden": true
         }
       ],
       "paragraphs": [
@@ -324,8 +375,15 @@
         {
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [],
+          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
           "plotting": {"function": "wmo_monthly_plot", "title": "Global mean sea level change"}
+        },
+        {
+          "link_to":  null, "title": "Sea level simplified",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
+          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#FFC341"}},
+          "hidden": true
         },
         {
           "link_to": null, "title": "Sea level spark",
@@ -360,6 +418,48 @@
           "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Arctic daily sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "irregular", "name": "NSIDC"},
+          "processing":  [],
+          "plotting": {"function": "daily_sea_ice_plot", "title": "Arctic daily sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic daily sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "irregular", "name": "NSIDC SH"},
+          "processing":  [],
+          "plotting": {"function": "daily_sea_ice_plot", "title": "Antarctic daily sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Arctic sea ice spark",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing":  [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual_by_selecting_month", "args": [9]}
+          ],
+          "plotting": {"function": "spark_line", "title": "Arctic sea-ice extent"},
+          "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Arctic sea ice simplified",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing":  [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual_by_selecting_month", "args": [9]}
+          ],
+          "plotting": {"function": "simplified_line", "title": "Arctic sea-ice extent", "args":  [], "kwargs":  {"color_override": "#fc6603"}},
+          "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Antarctic sea ice spark",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "processing":  [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual_by_selecting_month", "args": [9]}
+          ],
+          "plotting": {"function": "spark_line", "title": "Antarctic sea-ice extent"},
+          "hidden": true
         }
       ],
       "paragraphs": [
@@ -395,16 +495,51 @@
           "hidden": true
         },
         {
+          "link_to":  null, "title": "Glacier mass balance simplified",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing":  [],
+          "plotting": {"function": "simplified_line", "title": "Glacier cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#862FE0"}},
+          "hidden": true
+        },
+        {
           "link_to":  null, "title": "Greenland ice sheet",
           "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "wmo_monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
+          "link_to":  null, "title": "Greenland ice sheet simplified",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "simplified_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#FFC341"}},
+          "hidden": true
+        },
+        {
           "link_to":  null, "title": "Antarctic ice sheet",
           "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "wmo_monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic ice sheet simplified",
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
+          "plotting": {"function": "simplified_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#88E032"}},
+          "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Greenland ice sheet spark",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["IMBIE 2021 Greenland"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "spark_line", "title": "Greenland ice sheet cumulative mass balance"},
+          "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Antarctic ice sheet spark",
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
+          "plotting": {"function": "spark_line", "title": "Antarctic ice sheet cumulative mass balance"},
+          "hidden": true
         }
       ],
       "paragraphs": [
@@ -445,6 +580,28 @@
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
           "plotting": {"function": "wmo_plot", "title": "Nino 3.4"}
+        },
+        {
+          "link_to": null,
+          "title": "Nino 3.4 spark",
+          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args": [1950, 2024]}
+          ],
+          "plotting": {"function": "spark_line", "title": "Nino 3.4"},
+          "hidden": true
+        },
+        {
+          "link_to": null,
+          "title": "Nino 3.4 simplified",
+          "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_year_range", "args": [1950, 2024]}
+          ],
+          "plotting": {"function": "simplified_line", "title": "Nino 3.4", "args":  [], "kwargs":  {"color_override": "#eb0000"}},
+          "hidden": true
         },
         {
           "link_to": null,
@@ -513,20 +670,20 @@
       "cards": [
          {
           "link_to":  null, "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_8month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 8month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2024, 8]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Aug 2024"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2024, 9]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Sep 2024"}
          },
          {
           "link_to": null,
           "title": "Annual precipitation anomalies",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_period", "args": [2024, 1, 2024, 8]},
+            {"method": "select_period", "args": [2024, 1, 2024, 9]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "2024 8-month Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "2024 9-month Precipitation anomaly"}
          }
       ],
       "paragraphs": [
