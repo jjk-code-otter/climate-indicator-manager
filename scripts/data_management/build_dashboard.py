@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = False
+    regional = True
     regional_multiyear = False
     regional_test = False
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
         dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
         dash_dir.mkdir(exist_ok=True)
-        dash.build(Path(dash_dir), focus_year=2023)
+        dash.build(Path(dash_dir), focus_year=2024)
 
     if regional_multiyear or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_multiyear.json'

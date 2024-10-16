@@ -80,6 +80,43 @@ STANDARD_PARAMETER_SET = {
     'ytick.right': False
 }
 
+DARK_PARAMETER_SET = {
+    'axes.axisbelow': False,
+    'axes.labelsize': 23,
+    'xtick.labelsize': 23,
+    'ytick.labelsize': 23,
+    'axes.edgecolor': 'lightgrey',
+    'axes.facecolor': 'None',
+
+    'axes.grid.axis': 'y',
+    'grid.color': '#696969',
+    'grid.alpha': 0.5,
+
+    'axes.labelcolor': 'dimgrey',
+
+    'axes.spines.left': False,
+    'axes.spines.right': False,
+    'axes.spines.top': False,
+
+    'figure.facecolor': '#000000',
+    'lines.solid_capstyle': 'round',
+    'patch.edgecolor': 'w',
+    'patch.force_edgecolor': True,
+    'text.color': '#d3d3d3',
+
+    'xtick.bottom': True,
+    'xtick.color': '#d3d3d3',
+    'xtick.direction': 'out',
+    'xtick.top': False,
+    'xtick.labelbottom': True,
+
+    'ytick.major.width': 0.4,
+    'ytick.color': '#d3d3d3',
+    'ytick.direction': 'out',
+    'ytick.left': False,
+    'ytick.right': False
+}
+
 
 def accumulate(in_array):
     """
@@ -606,15 +643,8 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
         Caption for the figure is returned
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-
     if dark:
-        this_parameter_set = copy.deepcopy(STANDARD_PARAMETER_SET)
-        this_parameter_set['grid.color'] = '#696969'
-        this_parameter_set['figure.facecolor'] = '#000000'
-        this_parameter_set['text.color'] = '#d3d3d3'
-        this_parameter_set['xtick.color'] = '#d3d3d3'
-        this_parameter_set['ytick.color'] = '#d3d3d3'
-        sns.set(font='Franklin Gothic Book', rc=this_parameter_set)
+        sns.set(font='Franklin Gothic Book', rc=DARK_PARAMETER_SET)
 
     caption = caption_builder(all_datasets)
 
@@ -640,6 +670,7 @@ def neat_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeri
     plt.savefig(out_dir / image_filename.replace('png', 'pdf'))
     plt.savefig(out_dir / image_filename.replace('png', 'svg'))
     plt.close('all')
+
     return caption
 
 

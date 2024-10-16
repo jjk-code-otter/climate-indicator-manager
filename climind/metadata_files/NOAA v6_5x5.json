@@ -1,6 +1,6 @@
 {
     "name": "NOAA v6_5x5",
-    "display_name": "NOAAGlobalTemp",
+    "display_name": "NOAAGlobalTemp v6",
     "version": "v6.0.0",
     "variable": "tas",
     "units": "degC",
@@ -14,7 +14,7 @@
         ""
     ],
     "acknowledgement": "",
-    "colour": "#ad8426",
+    "colour": "#e69f00",
     "zpos": 10,
     "origin": "obs",
     "notes": "",
@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2024-07-17 00:56:14']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2024-10-16 18:59:02']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAA v6_5x5.nc"
@@ -43,9 +43,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2024-07-17 00:56:14"
+                "2024-10-16 18:59:02"
             ],
-            "last_month": "2024-06-01 00:00:00"
+            "last_month": "2024-08-01 00:00:00"
         }
     ]
 }

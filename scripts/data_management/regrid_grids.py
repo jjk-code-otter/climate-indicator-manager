@@ -34,9 +34,9 @@ if __name__ == "__main__":
                      #'Kadow'
                      #'NOAAGlobalTemp',
                      #'HadCRUT5'
-                     #'NOAA v6', 'HadCRUT5',
+                     'NOAA v6', 'HadCRUT5',
                      #'Berkeley Earth'#, 'GISTEMP', 'JRA-3Q'
-                     'ERA5'#, 'JRA-3Q'
+                     #'ERA5', 'JRA-3Q'
             ]
         }
     )
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                           name=new_name)
 
         try:
-            annual = annual.select_year_range(2023, 2023)
+            annual = annual.select_year_range(2024, 2024)
             all_annual.append(annual)
             cap = pt.dashboard_map(project_dir / 'Figures', [annual], f"{annual.metadata['name']}.png", title='Spam')
 
