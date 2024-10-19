@@ -8,7 +8,7 @@
   "citation_url": ["https://doi.org/10.1002/2017JC013090"],
   "data_citation": ["GSFC. 2021. Global Mean Sea Level Trend from Integrated Multi-Mission Ocean Altimeters TOPEX/Poseidon, Jason-1, OSTM/Jason-2, and Jason-3 Version 5.1. Ver. 5.1 PO.DAAC, CA, USA. Dataset accessed [YYYY-MM-DD] at https://doi.org/10.5067/GMSLM-TJ151."],
   "acknowledgement": "",
-  "colour": "#56b4e9",
+  "colour": "#1f78b4",
   "zpos": 10,
   "origin": "obs",
   "notes": "",

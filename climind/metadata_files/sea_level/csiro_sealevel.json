@@ -1,0 +1,32 @@
+{
+  "name": "CSIRO",
+  "display_name": "CSIRO",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Watson, C.W., N.J. White, J.A. Church, M.A. King, R.J. Burgette and B. Legresy. (2015). Unabated global mean sea-level rise over the satellite altimeter era. Nature Climate Change. http://dx.doi.org/10.1038/nclimate2635"],
+  "citation_url": ["http://dx.doi.org/10.1038/nclimate2635"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#b2df8a",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["ftp://ftp.csiro.au/legresy/gmsl_files/CSIRO_Alt.csv"],
+      "filename": ["CSIRO_Alt.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_csiro_sealevel",
+	  "fetcher": "fetcher_ftp"
+    }
+  ]
+}

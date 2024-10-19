@@ -1,0 +1,32 @@
+{
+  "name": "Colorado",
+  "display_name": "Colorado",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": [""],
+  "citation_url": ["https://sealevel.colorado.edu/"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#33a02c",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://sealevel.colorado.edu/files/2023_rel2/gmsl_2023rel2_seasons_rmvd.txt"],
+      "filename": ["gmsl_2023rel2_seasons_rmvd.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_colorado_sealevel",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

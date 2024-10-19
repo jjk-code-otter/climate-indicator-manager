@@ -1,0 +1,32 @@
+{
+  "name": "NOAA sealevel",
+  "display_name": "NOAA",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#a6cee3",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://www.star.nesdis.noaa.gov/socd/lsa/SeaLevelRise/slr/slr_sla_gbl_free_all_66.csv"],
+      "filename": ["slr_sla_gbl_free_all_66.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaa_sealevel",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

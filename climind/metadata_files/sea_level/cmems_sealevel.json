@@ -1,0 +1,32 @@
+{
+  "name": "CMEMS sea level",
+  "display_name": "CMEMS",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": ["https://doi.org/10.48670/moi-00237"],
+  "acknowledgement": "Generated using E.U. Copernicus Marine Service Information ",
+  "colour": "#fb9a99",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://data.marine.copernicus.eu/product/OMI_CLIMATE_SL_GLOBAL_area_averaged_anomalies/files?path=OMI_CLIMATE_SL_GLOBAL_area_averaged_anomalies%2F&subdataset=omi_climate_sl_global_area_averaged_anomalies_202406"],
+      "filename": ["omi_climate_sl_global_area_averaged_anomalies_19930101_P20240228.nc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cmems_sealevel",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

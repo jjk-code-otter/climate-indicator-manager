@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta property="og:title" content="Hallowe'en Slimate Gnashboard" />
+  <meta property="og:description" content="Spooky slimate data exuded from a seasonal gnashboard presented in lurid horrifying colours. You have been warned. Enter at your own peril. (or somebody else's)" />
+  <meta property="og:url" content="https://www.jkclimate.fr/Halloween/dashboard.html" />
+  <meta property="og:image" content="https://www.jkclimate.fr/Halloween/sm_card.png" />
+
+  <meta name="twitter:title" content="Hallowe'en Slimate Gnashboard">
+  <meta name="twitter:description" content="Spooky slimate data exuded from a seasonal gnashboard presented in lurid horrifying colours. You have been warned. Enter at your own peril (or somebody else's).">
+  <meta name="twitter:image" content="https://www.jkclimate.fr/Halloween/sm_card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="A pair of pumpkins, one big, one small">
+
   <title>{{ page_meta.name }}</title>
   <link rel="icon" type="image/x-icon" href="../favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
@@ -135,7 +147,32 @@
       color: #fcb679;
     }
 
+	.pumpkin {
+	  position:relative;
+	  margin: 0;
+	  position: relative;
+	  float: right;
+	  top: 10px;
+	  text-align: right;
+	  line-height: 1.0;
+	  z-index: 2;
+	  height:100%;
+	}
+
+	@media only screen and (max-width: 1371px) {
+	  .button-container {
+		top: 300px;
+	  }
+    }
+
+	@media only screen and (max-width: 960px) {
+	  .pumpkin {
+		display: none;
+	  }
+    }
+
 	@media only screen and (max-width: 600px) {
+
 	  .button-container {
 		width: 90%;
 	    top: 100px;
@@ -188,6 +225,7 @@
     {% for item in paragraphs %}
       {{ item.text }}
     {% endfor %}
+    <div class="pumpkin"><img src="pumpking2.svg" style="width:100%;"></div>
 
     <h1>{{ page_meta.name }}</h1>
 
