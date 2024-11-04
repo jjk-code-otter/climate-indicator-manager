@@ -28,6 +28,13 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
+
+def stripe(ax, time, data, time_start, time_end):
+
+    ax.plot(time, data)
+
+
+
 final_year = 2024
 
 project_dir = DATA_DIR / "ManagedData"
@@ -373,6 +380,7 @@ sns.despine(right=True, top=True, left=True, bottom=True)
 plt.savefig(figure_dir / "multi_indicator_all.png", dpi=300)
 plt.savefig(figure_dir / "multi_indicator_all.svg", dpi=300)
 plt.savefig(figure_dir / "multi_indicator_all.pdf", dpi=300)
+plt.close()
 
 # PLOT
 STANDARD_PARAMETER_SET = {
@@ -560,3 +568,70 @@ plt.savefig(figure_dir / "multi_indicator_six.png", dpi=300)
 plt.savefig(figure_dir / "multi_indicator_six.svg", dpi=300)
 plt.savefig(figure_dir / "multi_indicator_six.pdf", dpi=300)
 
+plt.close()
+
+
+STANDARD_PARAMETER_SET = {
+    'axes.axisbelow': False,
+    'axes.labelsize': 10,
+    'xtick.labelsize': 10,
+    'ytick.labelsize': 10,
+    'axes.edgecolor': 'None',
+    'axes.facecolor': 'None',
+
+    'axes.grid.axis': 'y',
+    'grid.color': 'None',
+    'grid.alpha': 0.5,
+
+    'axes.labelcolor': 'None',
+
+    'axes.spines.left': False,
+    'axes.spines.right': False,
+    'axes.spines.top': False,
+
+    'figure.facecolor': 'white',
+    'lines.solid_capstyle': 'round',
+    'patch.edgecolor': 'w',
+    'patch.force_edgecolor': True,
+    'text.color': 'dimgrey',
+
+    'xtick.bottom': True,
+    'xtick.color': 'None',
+    'xtick.direction': 'out',
+    'xtick.top': False,
+    'xtick.labelbottom': True,
+
+    'ytick.major.width': 0.4,
+    'ytick.color': 'None',
+    'ytick.direction': 'out',
+    'ytick.left': False,
+    'ytick.right': False
+}
+
+sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+fig, axs = plt.subplots(7, 2, sharex=True, gridspec_kw={'width_ratios': [5, 1]})
+fig.set_size_inches(16, 12)
+
+for ds in ghg_annual:
+    axs[0][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+
+for ds in tas_annual:
+    axs[1][1].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
+
+for ds in ohc_annual:
+    axs[2][1].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
+
+for ds in sealevel_annual:
+    axs[3][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+
+for ds in ph_annual:
+    axs[4][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+
+for ds in seaice_annual:
+    axs[5][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+
+for ds in glacier_annual:
+    axs[6][1].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
+
+plt.show()

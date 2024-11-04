@@ -136,6 +136,14 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
                               f'[{mean_value - sd:.2f} - {mean_value + sd:.2f}] degC\n')
             output_file.write(f'Rank between {min_rank} and {max_rank}\n')
             output_file.write(f'Based on {len(all_match_values)} data sets.\n')
+
+            output_file.write('\n')
+            output_file.write(f'Mean for {match_year}: {mean_value :.4f} +- {sd:.4f} degC '
+                              f'[{min_value :.4f}-{max_value :.4f}]\n')
+            output_file.write(f'(alt rep) Mean for {match_year}: {mean_value :.4f} '
+                              f'[{mean_value - sd:.4f} - {mean_value + sd:.4f}] degC\n')
+            output_file.write(f'Rank between {min_rank} and {max_rank}\n')
+            output_file.write(f'Based on {len(all_match_values)} data sets.\n')
         else:
             output_file.write('NO DATA\n')
 

@@ -44,4 +44,4 @@ if __name__ == "__main__":
     for ds in all_datasets:
         ds.select_year_range(1970,2024)
 
-    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '')
+    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True)

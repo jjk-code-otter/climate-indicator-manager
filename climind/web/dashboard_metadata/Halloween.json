@@ -3,7 +3,7 @@
   "pages": [
     {
       "id": "dashboard",
-      "name": "Climate dashboard",
+      "name": "Hallowe'en slimate<br>gnashboard",
       "descriptor": "key_indicator.html",
       "template": "spark_front_page",
       "cards": [
@@ -11,7 +11,7 @@
           "link_to": "greenhouse_gases", "title": "CO2",
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
-          "plotting": {"function": "spark_line", "title": "CO<sub>2</sub>", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "CO<sub>2</sub>", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "global_mean_temperature", "title": "GMT",
@@ -22,25 +22,25 @@
                           {"method": "select_year_range", "args":  [1850,2024]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "plotting": {"function": "spark_line", "title": "GMT", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "GMT", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "ocean_heat_content", "title": "OHC",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
           "processing":  [],
-          "plotting": {"function": "spark_line", "title": "OHC", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "OHC", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "sea_level", "title": "GMSL",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
-          "plotting": {"function": "spark_line", "title": "GMSL", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "GMSL", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "mhw", "title": "MHW",
           "selecting": {"type": "timeseries", "variable": "mhw", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "spark_line", "title": "MHW", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "MHW", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "sea_ice_extent", "title": "sea ice",
@@ -49,25 +49,25 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual_by_selecting_month", "args": [9]}
           ],
-          "plotting": {"function": "spark_line", "title": "sea ice", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "sea ice", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "glaciers", "title":"Glaciers",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "spark_line", "title": "Glaciers", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "Glaciers", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to":  "greenland", "title": "GIS",
           "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["IMBIE 2021 Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "spark_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to":  "antarctica", "title": "AIS",
           "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "spark_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
           "link_to": "enso", "title":"enso",
@@ -76,7 +76,7 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
-          "plotting": {"function": "spark_line", "title": "ENSO", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "spark_line", "title": "ENSO", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         }
       ],
       "paragraphs": [
@@ -94,16 +94,16 @@
     },
     {
       "id": "greenhouse_gases",
-      "name": "Carbon dioxide",
+      "name": "Car-burn die-off-cide",
       "descriptor": "greenhouse_gases.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "CO2", "plot_title":"Carbon Dioxide CO2 (ppm)"},
+      "properties": {"color": "#862FE0", "short": "CO2", "plot_title":"Carbon Dioxide CO2 (ppm)"},
       "cards": [
         {
           "link_to":  null, "title": "carbon dioxide",
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
           "processing": [],
-          "plotting": {"function": "simplified_line", "title": "Atmospheric carbon dioxide concentration", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Atmospheric carbon dioxide concentration", "args":  [], "kwargs":  {"color_override": "#862FE0"}}
         }
       ],
       "paragraphs": [
@@ -116,10 +116,10 @@
     },
     {
       "id": "global_mean_temperature",
-      "name": "Global mean temperature",
+      "name": "Gooball mean temperature",
       "descriptor": "global_temperature.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "GMT", "plot_title":"Global Mean Temperature (°C)"},
+      "properties": {"color": "#fc6603", "short": "GMT", "plot_title":"Global Mean Temperature (°C)"},
       "cards": [
         {
           "link_to": null, "title": "Global temperature",
@@ -130,7 +130,7 @@
                           {"method": "select_year_range", "args":  [1850,2024]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "plotting": {"function": "simplified_line", "title": "Global mean temperature", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Global mean temperature", "args":  [], "kwargs":  {"color_override": "#fc6603"}}
         }
       ],
       "paragraphs": [
@@ -148,16 +148,16 @@
     },
     {
       "id": "ocean_heat_content",
-      "name": "Ocean heat content",
+      "name": "Ocean Meat Content",
       "descriptor": "ocean_indicators.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "OHC", "plot_title":"Ocean heat content (zJ)"},
+      "properties": {"color": "#88E032", "short": "OHC", "plot_title":"Ocean heat content (zJ)"},
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
           "processing":  [],
-          "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#88E032"}}
         }
       ],
       "paragraphs": [
@@ -170,16 +170,16 @@
     },
     {
       "id": "sea_level",
-      "name": "Global mean sea level",
+      "name": "Global meanie Sea devil",
       "descriptor": "ocean_indicators.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "GMSL", "plot_title":"Global mean sea level (mm)"},
+      "properties": {"color": "#FFC341", "short": "GMSL", "plot_title":"Global mean sea level (mm)"},
       "cards": [
         {
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
-          "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#FFC341"}}
         }
       ],
       "paragraphs": [
@@ -192,16 +192,16 @@
     },
     {
       "id": "mhw",
-      "name": "Marine heatwaves",
+      "name": "Marine eat-graves",
       "descriptor": "mhw.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "MHW", "plot_title":"Marine heatwaves (%ocean)"},
+      "properties": {"color": "#eb0000", "short": "MHW", "plot_title":"Marine heatwaves (%ocean)"},
       "cards": [
         {
           "link_to":  null, "title": "Marine heat wave",
           "selecting": {"type": "timeseries", "variable": "mhw", "time_resolution": "annual"},
           "processing": [],
-          "plotting": {"function": "simplified_line", "title": "MHW", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "MHW", "args":  [], "kwargs":  {"color_override": "#eb0000"}}
         }
       ],
       "paragraphs": [
@@ -214,10 +214,10 @@
     },
     {
       "id": "sea_ice_extent",
-      "name": "Arctic sea-ice extent",
+      "name": "Argh-tic see-eyes extend!",
       "descriptor": "sea_ice_extent.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "sea ice", "plot_title":"September Arctic ice extent (million km<sup>2</sup>)"},
+      "properties": {"color": "#fc6603", "short": "sea ice", "plot_title":"September Arctic ice extent (million km<sup>2</sup>)"},
       "cards": [
         {
           "link_to":  null, "title": "Arctic sea ice",
@@ -226,7 +226,7 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual_by_selecting_month", "args": [9]}
           ],
-          "plotting": {"function": "simplified_line", "title": "Arctic sea-ice extent", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Arctic sea-ice extent", "args":  [], "kwargs":  {"color_override": "#fc6603"}}
         }
       ],
       "paragraphs": [
@@ -242,16 +242,16 @@
     },
     {
       "id": "glaciers",
-      "name": "Glacier cumulative mass balance",
+      "name": "Glacier doom-ulative mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "glaciers", "plot_title":"Glacier mass balance (m w.e.)"},
+      "properties": {"color": "#862FE0", "short": "glaciers", "plot_title":"Glacier mass balance (m w.e.)"},
       "cards": [
         {
           "link_to":  null, "title": "Glacier mass balance",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing":  [],
-          "plotting": {"function": "simplified_line", "title": "Glacier cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Glacier cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#862FE0"}}
         }
       ],
       "paragraphs": [
@@ -264,16 +264,16 @@
     },
     {
       "id": "greenland",
-      "name": "Greenland Ice Sheet mass balance",
+      "name": "Screamland Ice Sheet mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "GIS", "plot_title":"Greenland mass balance (Gt)"},
+      "properties": {"color": "#FFC341", "short": "GIS", "plot_title":"Greenland mass balance (Gt)"},
       "cards": [
         {
           "link_to":  null, "title": "Greenland ice sheet",
           "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "simplified_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#FFC341"}}
         }
       ],
       "paragraphs": [
@@ -286,16 +286,16 @@
     },
     {
       "id": "antarctica",
-      "name": "Antarctic ice sheet mass balance",
+      "name": "A-dark-ditch ice sheet mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "AIS", "plot_title":"Antarctic mass balance (Gt)"},
+      "properties": {"color": "#88E032", "short": "AIS", "plot_title":"Antarctic mass balance (Gt)"},
       "cards": [
         {
           "link_to":  null, "title": "Antarctic ice sheet",
           "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "simplified_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#88E032"}}
         }
       ],
       "paragraphs": [
@@ -308,10 +308,10 @@
     },
     {
       "id": "enso",
-      "name": "Niño 3.4 index",
+      "name": "Niño 3.4 in-dexter",
       "descriptor": "short_term_climate_drivers.html",
       "template": "spark_topic_page",
-      "properties": {"color": "#fcb679", "short": "ENSO", "plot_title":"Niño 3.4 index (°C)"},
+      "properties": {"color": "#eb0000", "short": "ENSO", "plot_title":"Niño 3.4 index (°C)"},
       "cards": [
         {
           "link_to": null,
@@ -321,7 +321,7 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "select_year_range", "args": [1950, 2024]}
           ],
-          "plotting": {"function": "simplified_line", "title": "Nino 3.4", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
+          "plotting": {"function": "simplified_line", "title": "Nino 3.4", "args":  [], "kwargs":  {"color_override": "#eb0000"}}
         }
       ],
       "paragraphs": [

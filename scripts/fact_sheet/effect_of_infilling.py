@@ -156,7 +156,7 @@ if __name__ == "__main__":
     plt.gca().set_xlabel("Year")
     plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
 
-    plt.gca().set_ylim(-0.22, 0.27)
+    plt.gca().set_ylim(-0.22, 0.33)
 
     plt.gca().set_title('Global mean temperature',
                         pad=35, fontdict={'fontsize': 40}, loc='left')

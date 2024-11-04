@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2023/n2o_monthly_20231115.csv"],
-      "filename": ["n2o_monthly_20231115.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2024/n2o_monthly_20241028.csv"],
+      "filename": ["n2o_monthly_20241028.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of nitrous oxide",
 	  "time_resolution": "monthly",
@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2023/n2o_annual_20231115.csv"],
-      "filename": ["n2o_annual_20231115.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2024/n2o_annual_20241028.csv"],
+      "filename": ["n2o_annual_20241028.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of nitrous oxide",
 	  "time_resolution": "annual",

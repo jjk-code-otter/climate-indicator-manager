@@ -10,9 +10,9 @@
   <link rel="stylesheet" href="variables.css">
   <style>
     :root {
-      --dashwhite: #000000;
+      --dashwhite: #ffffff;
       --dashorange: {{ page_meta.properties.color }};
-      --dashblue: #000000;
+      --dashblue: #c9efff;
       --dashgreen: #caff9e;
       --dashdarkblue: #2c7c9e;
     }
@@ -38,7 +38,7 @@
       <div class="button w3-third">
 	    <div class="plottitle">{{ page_meta.properties.plot_title }}</div>
 	    <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}" alt="{{ item.caption }}">
-		<div style="font-size:0.5em;float:left;line-height:20px;"><a href="acknowledgements.html#gmt">{{ item.caption }}</a></div>
+		<div style="font-size:0.5em;float:left;line-height:20px;"><a href="acknowledgements.html#{{ page_meta.properties.short.lower() }}">{{ item.caption }}</a></div>
 		<a href="formatted_data/{{ item.csv_name }}" class="getter" download>.csv</a>
 		<a href="figures/{{ item.figure_name }}" class="getter" download>.png</a>
 		<a href="figures/{{ item.figure_name|replace('png','svg') }}" class="getter" download>.svg</a>

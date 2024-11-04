@@ -51,8 +51,7 @@
           "title": "TLT",
           "selecting": {"type":  "timeseries", "variable": "tlt", "time_resolution": "monthly"},
           "processing": [
-            {"method": "rebaseline", "args": [1991, 2010]},
-            {"method": "make_annual", "args": []}
+            {"method": "rebaseline", "args": [1991, 2010]}
           ],
           "plotting": {"function": "neat_plot", "title": "Global TLT temperature"}
         },

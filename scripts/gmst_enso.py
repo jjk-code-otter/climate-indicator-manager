@@ -65,7 +65,7 @@ STANDARD_PARAMETER_SET = {
 }
 
 if __name__ == "__main__":
-    final_year = 2022
+    final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -85,11 +85,11 @@ if __name__ == "__main__":
     gmst = gmst[0]
     gmst.rebaseline(1981, 2010)
     gmst.add_offset(0.69)
-    gmst = gmst.select_year_range(1980, 2023)
+    gmst = gmst.select_year_range(1980, 2024)
 
     oni_archive = archive.select({'variable': 'oni', 'time_resolution': 'monthly', 'type': 'timeseries'})
     oni = oni_archive.read_datasets(data_dir)[0]
-    oni = oni.select_year_range(1980, 2023)
+    oni = oni.select_year_range(1980, 2024)
 
     aod_archive = archive.select({'variable': 'aod', 'time_resolution': 'monthly', 'type': 'timeseries'})
     aod = aod_archive.read_datasets(data_dir)[0]
@@ -131,12 +131,12 @@ if __name__ == "__main__":
                         wspace=0.1,
                         hspace=0.3)
 
-    axs[0].set_xlim(1980, 2024)
-    axs[0].set_ylim(0.1, 1.6)
+    axs[0].set_xlim(1980, 2025)
+    axs[0].set_ylim(0.1, 1.8)
     axs[0].set_title(f'Global mean temperature ({gmst.metadata["display_name"]})', loc='left', fontsize=24)
     axs[0].set_ylabel('Anomaly')
 
-    axs[1].set_xlim(1980, 2024)
+    axs[1].set_xlim(1980, 2025)
     axs[1].set_ylim(-0.5, 0.5)
     axs[1].set_title('Detrended', loc='left', fontsize=24)
     axs[1].set_ylabel('Anomaly')

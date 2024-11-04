@@ -86,7 +86,7 @@
     }
 
 	svg {
-	  fill: #A58EAB;
+	  fill: #fcb679;
       height: 100%;
 	  left: 0;
       position: absolute;
@@ -99,7 +99,7 @@
     .button-container {
       position: absolute;
 	  text-align: center;
-      top: 200px;
+      top: 100px;
       left: 90px;
 	  width:80%;
 	  height: 70vh;
@@ -219,7 +219,7 @@
 
   </style>
 </head>
-<body  style="background-color:#73C183;">
+<body  style="background-color:#c9efff;">
 
   <div class="section">
     {% for item in paragraphs %}
@@ -230,14 +230,14 @@
     <h1>{{ page_meta.name }}</h1>
 
     {% for item in paragraphs %}
-	  <div class="datafoot" style="color:#A58EAB;">{{ item.dataset_metadata.long_name }}: HadCRUT5</div>
+	  <div class="datafoot" style="color:#fcb679;">{{ item.dataset_metadata.long_name }}: HadCRUT5</div>
 	{% endfor %}
 
-	<div class="datafootleft" style="color:#A58EAB;"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a></div>
+	<div class="datafootleft" style="color:#fcb679;"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a></div>
 
 	<div class="button-container">
     {% for item in cards %}
-      <a href="{{ item.link_to  }}.html" class="button w3-third"  style="color:#A58EAB;">{{ item.title }} <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}"></a>
+      <a href="{{ item.link_to  }}.html" class="button w3-third"  style="color:#fcb679;">{{ item.title }} <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}"></a>
     {% endfor %}
 
     </div>

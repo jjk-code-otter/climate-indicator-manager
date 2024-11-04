@@ -28,7 +28,7 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-final_year = 2022
+final_year = 2023
 
 project_dir = DATA_DIR / "ManagedData"
 metadata_dir = METADATA_DIR

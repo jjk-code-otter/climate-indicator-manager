@@ -467,7 +467,7 @@ def spark_line(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSer
     fig.set_size_inches(16 / 9, 9 / 9)
     fig.tight_layout()
     fig.subplots_adjust(left=0.0, bottom=0.0, right=1, top=1)
-    zords = add_data_sets(plt.gca(), all_datasets, wmo=True)
+    zords = add_data_sets(plt.gca(), all_datasets, wmo=True, uncertainty=False)
     axs.spines['top'].set_visible(False)
     axs.spines['right'].set_visible(False)
     axs.spines['bottom'].set_visible(False)
@@ -1594,7 +1594,7 @@ def daily_sea_ice_plot(out_dir: Path,
     return caption
 
 
-def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str) -> str:
+def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str, overlay=True) -> str:
     STANDARD_PARAMETER_SET['xtick.bottom'] = False
     STANDARD_PARAMETER_SET['xtick.labelbottom'] = False
     STANDARD_PARAMETER_SET['ytick.left'] = False
@@ -1602,6 +1602,9 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     fig = plt.figure(figsize=[16, 6])
+
+
+    n_months = 24
 
     n_time_x = len(all_datasets[0].df.data)
 
@@ -1611,9 +1614,11 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     ax = plt.gca()
 
+    first_year = None
+
     for j, ds in enumerate(all_datasets):
         n_time = len(ds.df.data)
-        for i in range(n_time_x - 24, n_time):
+        for i in range(n_time_x - n_months, n_time):
 
             year = ds.df.year[i]
             month = ds.df.month[i]
@@ -1635,67 +1640,75 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
             p = Polygon(coords, color=color)
             ax.add_patch(p)
-            ax.text(i + 0.5, j + 0.5, f'{rank}', ha='center', va='center', color=tcolor, fontsize=24)
+            if overlay:
+                ax.text(i + 0.5, j + 0.5, f'{rank}', ha='center', va='center', color=tcolor, fontsize=24)
 
             months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
-            if j == 0:
+            if j == 0 and overlay:
                 ax.text(i + 0.5, -0.3, months[month - 1], ha='center', va='center', fontsize=24, color='black')
 
             if month == 1 and j == 0:
+                if first_year is None:
+                    first_year = year
                 plt.plot([i, i], [0, n_datasets], linewidth=2, color='black', zorder=99)
                 ax.text(i + 0.25, j - 0.9, f'{year}', fontsize=24, color='black')
 
-        ax.text(n_time_x - 24.5, j + 0.5, ds.metadata['display_name'], ha='right', va='center', fontsize=24,
+        ax.text(n_time_x - (n_months+0.5), j + 0.5, ds.metadata['display_name'], ha='right', va='center', fontsize=24,
                 color='black')
 
     plt.plot(
-        [n_time_x - 24, n_time_x + 4, n_time_x + 4, n_time_x - 24, n_time_x - 24],
+        [n_time_x - n_months, n_time_x + 4, n_time_x + 4, n_time_x - n_months, n_time_x - n_months],
         [0, 0, n_datasets, n_datasets, 0],
         color='black',
         linewidth=4, zorder=99
     )
 
-    i = n_time_x - 23 + 2.5
-    j = n_datasets + 0.25
-    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
-    color = '#bb0000'
-    p = Polygon(coords, color=color, clip_on=False)
-    ax.add_patch(p)
-    ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
-    ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
+    if overlay:
+        i = n_time_x - (n_months-1) + 2.5
+        j = n_datasets + 0.25
+        coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+        color = '#bb0000'
+        p = Polygon(coords, color=color, clip_on=False)
+        ax.add_patch(p)
+        if overlay:
+            ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
+        ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-    i = n_time_x - 18. + 2.5
-    j = n_datasets + 0.25
-    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
-    color = '#fc6f03'
-    p = Polygon(coords, color=color, clip_on=False)
-    ax.add_patch(p)
-    ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
-    ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
+        i = n_time_x - 18. + 2.5
+        j = n_datasets + 0.25
+        coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+        color = '#fc6f03'
+        p = Polygon(coords, color=color, clip_on=False)
+        ax.add_patch(p)
+        if overlay:
+            ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+        ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-    i = n_time_x - 11.2 + 2.5
-    j = n_datasets + 0.25
-    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
-    color = '#fcd703'
-    p = Polygon(coords, color=color, clip_on=False)
-    ax.add_patch(p)
-    ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
-    ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
+        i = n_time_x - 11.2 + 2.5
+        j = n_datasets + 0.25
+        coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+        color = '#fcd703'
+        p = Polygon(coords, color=color, clip_on=False)
+        ax.add_patch(p)
+        if overlay:
+            ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+        ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
 
-    i = n_time_x - 7.5 + 2.5
-    j = n_datasets + 0.25
-    coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
-    color = '#fff9a3'
-    p = Polygon(coords, color=color, clip_on=False)
-    ax.add_patch(p)
-    ax.text(i + 0.5, j + 0.5, '10', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
-    ax.text(i + 1.2, j + 0.5, 'TOP 10', fontsize=24, color='black', va='center', clip_on=False)
+        i = n_time_x - 7.5 + 2.5
+        j = n_datasets + 0.25
+        coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
+        color = '#fff9a3'
+        p = Polygon(coords, color=color, clip_on=False)
+        ax.add_patch(p)
+        if overlay:
+            ax.text(i + 0.5, j + 0.5, '10', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
+        ax.text(i + 1.2, j + 0.5, 'TOP 10', fontsize=24, color='black', va='center', clip_on=False)
 
-    ax.text(n_time_x - 31, n_datasets + 0.3, 'GLOBALTEMPERATURE\nRANKINGS 2023-2024', color='#000000', fontsize=32,
+    ax.text(n_time_x - (n_months+7), n_datasets + 0.3, f'GLOBALTEMPERATURE\nRANKINGS {first_year}-2024', color='#000000', fontsize=32,
             clip_on=False)
 
     ax.set_ylim(0, n_datasets)
-    ax.set_xlim(n_time_x - 24, n_time_x + 4)
+    ax.set_xlim(n_time_x - n_months, n_time_x + 4)
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)

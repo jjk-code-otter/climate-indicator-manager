@@ -87,6 +87,8 @@ if __name__ == "__main__":
             annual = ds.make_annual_by_selecting_month(month)
             annual.select_year_range(1851, final_year)
             runs.append(annual)
+            if annual.metadata['name'] == 'NOAA v6':
+                print(ds.df.data.tolist())
 
         if month == 1:
             pt.neat_plot(figure_dir, run_all, '12_month_running_mean.png', f'Global mean temperature 12-month running mean')

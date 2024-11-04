@@ -17,7 +17,7 @@ import copy
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import numpy as np
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 import climind.stats.utils as utils
@@ -178,4 +178,53 @@ if __name__ == "__main__":
 
     plt.savefig(figure_dir / 'NNV_annual.png', bbox_inches='tight')
     plt.savefig(figure_dir / 'NNV_annual.svg', bbox_inches='tight')
+    plt.close()
+
+
+    # Trend version
+    plt.figure(figsize=[16, 9])
+
+    colors = ['#bae4bc', '#bb0000', '#7bccc4', '#43a2ca', '#0868ac']
+    colors = ['#84e3d6', '#ff6021', '#7bccc4', '#43a2ca', '#0868ac']
+    lw = [3, 5, 3, 3, 3]
+    zod = [1, 2, 1, 1, 1]
+    plt.fill_between([1900, 1930], [-1.20, -1.20], [0.0, 0.0], color='lightgrey', alpha=0.5)
+    plt.text(1915, 0.05, 'Sippel et al.', ha='center', fontsize=20)
+    plt.text(1947, 0.05, 'World War 2\nWarm Anomaly', ha='center', fontsize=20)
+
+    plt.fill_between([1939, 1945], [-1.20, -1.20], [0.0, 0.0], color='lightgrey', alpha=0.2)
+
+    sns.despine(right=True, top=True, left=True)
+    for i, ds in enumerate(all_annual_datasets):
+        plt.plot(ds.df.year, ds.df.data, color=colors[i], linewidth=2, label=ds.metadata['display_name'],
+                 zorder=zod[i])
+
+        selector = (ds.df.year >= 1910) & (ds.df.year <= 1945)
+        results = np.polyfit(ds.df.year[selector], ds.df.data[selector], 1)
+
+        plt.plot([1910,1945],[results[1] + 1910 * results[0], results[1] + 1945 * results[0]], color=colors[i], linewidth=4, label=None, zorder=zod[i]+5)
+
+
+    plt.legend()
+    # get handles and labels
+    handles, labels = plt.gca().get_legend_handles_labels()
+    # add legend to plot
+    order = [1, 0, 2, 3, 4]
+    leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
+                     frameon=False, prop={'size': 20}, labelcolor='linecolor',
+                     handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.75, 0.35))
+    for line in leg.get_lines():
+        line.set_linewidth(3.0)
+    for item in leg.legendHandles:
+        item.set_visible(False)
+
+    plt.title('New analysis suggest less early 20th century warming', fontsize=35, loc='left')
+    plt.text(plt.gca().get_xlim()[0], 0.8, r'Global temperature difference from 1981-2010 average ($\!^\circ\!$C)', fontdict={'fontsize': 24})
+
+    plt.gca().set_ylim(-1.1, 0.9)
+    plt.yticks([-1, -0.5, 0, 0.5])
+    plt.xticks([1850, 1900, 1950, 2000])
+
+    plt.savefig(figure_dir / 'NNV_annual_trend.png', bbox_inches='tight')
+    plt.savefig(figure_dir / 'NNV_annual_trend.svg', bbox_inches='tight')
     plt.close()
