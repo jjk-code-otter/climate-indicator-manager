@@ -2,7 +2,7 @@
   "name": "GETQUOCS",
   "display_name": "GETQUOCS",
   "version": "",
-  "variable": "tas IGNORE",
+  "variable": "tas",
   "units": "degC",
   "citation": ["Ilyas, M., Nychka, D., Brierley, C., and Guillas, S.: Global ensemble of temperatures over 1850–2018: quantification of uncertainties in observations, coverage, and spatial modeling (GETQUOCS), Atmos. Meas. Tech., 14, 7103–7121, https://doi.org/10.5194/amt-14-7103-2021, 2021."],
   "citation_url": ["https://doi.org/10.5194/amt-14-7103-2021"],

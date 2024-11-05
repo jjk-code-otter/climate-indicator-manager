@@ -27,10 +27,12 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-
 if __name__ == "__main__":
 
     final_year = 2024
+    holdouts = ['HadCRUT5']  # Datasets which haven't been updated from month 1 to month 2 yet
+    month2 = 9
+    month1 = 8
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -51,19 +53,17 @@ if __name__ == "__main__":
 
     # some global temperature data sets are annual only, others are monthly so need to read these separately
 
-
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
                                  'time_resolution': 'monthly'})
 
-
     all_datasets = ts_archive.read_datasets(data_dir)
     to_august_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
-        ds = ds.running_mean(8)
-        annual = ds.make_annual_by_selecting_month(8)
+        ds = ds.running_mean(month1)
+        annual = ds.make_annual_by_selecting_month(month1)
         annual.add_offset(0.69)
         to_august_datasets.append(annual)
 
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     to_september_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
-        ds = ds.running_mean(9)
-        annual = ds.make_annual_by_selecting_month(9)
+        ds = ds.running_mean(month2)
+        annual = ds.make_annual_by_selecting_month(month2)
         annual.add_offset(0.69)
         to_september_datasets.append(annual)
 
@@ -80,12 +80,12 @@ if __name__ == "__main__":
     to_part_datasets = []
     for ds in all_datasets:
         ds.rebaseline(1981, 2010)
-        if ds.metadata['name'] in ['HadCRUT5','Berkeley Earth']:
-            ds = ds.running_mean(8)
-            annual = ds.make_annual_by_selecting_month(8)
+        if ds.metadata['name'] in holdouts:
+            ds = ds.running_mean(month1)
+            annual = ds.make_annual_by_selecting_month(month1)
         else:
-            ds = ds.running_mean(9)
-            annual = ds.make_annual_by_selecting_month(9)
+            ds = ds.running_mean(month2)
+            annual = ds.make_annual_by_selecting_month(month2)
         annual.add_offset(0.69)
         to_part_datasets.append(annual)
 
@@ -106,12 +106,11 @@ if __name__ == "__main__":
     fixed_count_pos = 0
     fixed_count_neg = 0
 
-
-    for year in range(1950,2024):
+    for year in range(1950, final_year):
 
         collect_aug = {}
         for ds in to_august_datasets:
-            if ds.metadata['name'] not in ['HadCRUT5','Berkeley Earth']:
+            if ds.metadata['name'] not in holdouts:
                 collect_aug[ds.metadata['name']] = ds.get_value_from_year(year)
 
         collect_part = []
@@ -121,25 +120,25 @@ if __name__ == "__main__":
 
         collect_all = []
         for ds in to_september_datasets:
-            if ds.metadata['name'] not in ['HadCRUT5','Berkeley Earth']:
+            if ds.metadata['name'] not in holdouts:
                 collect_aug[ds.metadata['name']] = collect_aug[ds.metadata['name']] - ds.get_value_from_year(year)
             collect_all.append(ds.get_value_from_year(year))
         collect_all = np.mean(collect_all)
 
         offset = 0.0
+        offset_count = 0
         for key in collect_aug:
             offset += collect_aug[key]
-        offset /= 4.
+            offset_count += 1
+        offset /= offset_count
 
         fixed_part = []
         for ds in to_part_datasets:
-            if ds.metadata['name'] in ['HadCRUT5','Berkeley Earth']:
+            if ds.metadata['name'] in holdouts:
                 fixed_part.append(ds.get_value_from_year(year) - offset)
             else:
                 fixed_part.append(ds.get_value_from_year(year))
         fixed_part = np.mean(fixed_part)
-
-
 
         ts_diff.append(collect_part - collect_all)
         taxis.append(year)
@@ -177,43 +176,45 @@ if __name__ == "__main__":
 
         fixed_countall += 1
 
-    print(f"{countmismatch} out of {countall} = {100*countmismatch/countall}%")
-    print(f"positive {count_pos} {100*count_pos/countall}%, negative {count_neg} {100*count_neg/countall}%")
+    print(f"{countmismatch} out of {countall} = {100 * countmismatch / countall}%")
+    print(f"positive {count_pos} {100 * count_pos / countall}%, negative {count_neg} {100 * count_neg / countall}%")
     print(f"Mean difference = {np.mean(ts_diff)}")
     print(f"Std difference = {np.std(ts_diff)}")
 
-    print(f"{fixed_countmismatch} out of {fixed_countall} = {100*fixed_countmismatch/fixed_countall}%")
-    print(f"positive {fixed_count_pos} {100*fixed_count_pos/fixed_countall}%, negative {fixed_count_neg} {100*fixed_count_neg/fixed_countall}%")
+    print(f"{fixed_countmismatch} out of {fixed_countall} = {100 * fixed_countmismatch / fixed_countall}%")
+    print(
+        f"positive {fixed_count_pos} {100 * fixed_count_pos / fixed_countall}%, negative {fixed_count_neg} {100 * fixed_count_neg / fixed_countall}%")
     print(f"Mean difference = {np.mean(fixed_ts_diff)}")
     print(f"Std difference = {np.std(fixed_ts_diff)}")
 
-
     collect_aug = {}
     for ds in to_august_datasets:
-        if ds.metadata['name'] not in ['HadCRUT5', 'Berkeley Earth']:
-            collect_aug[ds.metadata['name']] = ds.get_value_from_year(2024)
+        if ds.metadata['name'] not in holdouts:
+            collect_aug[ds.metadata['name']] = ds.get_value_from_year(final_year)
     collect_all = []
     for ds in to_september_datasets:
-        if ds.metadata['name'] not in ['HadCRUT5','Berkeley Earth']:
-            collect_aug[ds.metadata['name']] = collect_aug[ds.metadata['name']] - ds.get_value_from_year(2024)
+        if ds.metadata['name'] not in holdouts:
+            collect_aug[ds.metadata['name']] = collect_aug[ds.metadata['name']] - ds.get_value_from_year(final_year)
     offset = 0.0
+    offset_count = 0
     for key in collect_aug:
         offset += collect_aug[key]
-    offset /= 4.
+        offset_count += 1
+    offset /= offset_count
 
     collect_fcst = []
     for ds in to_august_datasets:
-        if ds.metadata['name'] in ['HadCRUT5', 'Berkeley Earth']:
-            collect_fcst.append(ds.get_value_from_year(2024) - offset)
+        if ds.metadata['name'] in holdouts:
+            collect_fcst.append(ds.get_value_from_year(final_year) - offset)
     for ds in to_september_datasets:
-        if ds.metadata['name'] not in ['HadCRUT5','Berkeley Earth']:
-            collect_fcst.append(ds.get_value_from_year(2024))
+        if ds.metadata['name'] not in holdouts:
+            collect_fcst.append(ds.get_value_from_year(final_year))
 
     print(f"{np.mean(collect_fcst)}")
     print(f"Offset {offset}")
 
-
     import matplotlib.pyplot as plt
+
     plt.plot(taxis, ts_diff)
     plt.plot(fixed_taxis, fixed_ts_diff)
     plt.savefig(figure_dir / 'differences.png')

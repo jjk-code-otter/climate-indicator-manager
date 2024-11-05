@@ -43,9 +43,9 @@
         },
         {
           "link_to": "sea_level", "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["CMEMS sea level", "AVISO ftp", "NASA Sealevel", "Colorado", "NOAA sealevel", "CSIRO"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
-          "plotting": {"function": "monthly_plot", "title": "Global mean sea level"}
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
         },
         {
           "link_to": "sea_ice_extent", "title": "Sea ice",
@@ -374,9 +374,9 @@
       "cards": [
         {
           "link_to":  null, "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["CMEMS sea level", "AVISO ftp", "NASA Sealevel", "Colorado", "NOAA sealevel", "CSIRO"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
-          "plotting": {"function": "monthly_plot", "title": "Global mean sea level change"}
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "plotting": {"function": "wmo_plot", "title": "Global mean sea level change"}
         },
         {
           "link_to":  null, "title": "Sea level simplified",
@@ -396,7 +396,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2024]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2023]}],
           "writing": {"function": "long_term_trend_paragraph"}
         }
       ]

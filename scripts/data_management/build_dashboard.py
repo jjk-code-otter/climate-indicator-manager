@@ -34,8 +34,8 @@ from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
 
-    minimal = True
-    dash2024 = False
+    minimal = False
+    dash2024 = True
     dash2023 = False
     dash2022 = False
 

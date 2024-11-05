@@ -151,12 +151,12 @@ if __name__ == "__main__":
         label = ds.metadata['display_name']+'-HadCRUT4'
         plt.plot(ds.df['year'], ds.df['data'] - h4_anns[0].df['data'][0:len(ds.df['data'])], linewidth=3, label=label)
 
-    plt.legend(loc='upper right', fontsize=24)
+    plt.legend(loc='upper left', fontsize=24, ncol=2, frameon=False)
 
     plt.gca().set_xlabel("Year")
     plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
 
-    plt.gca().set_ylim(-0.22, 0.33)
+    plt.gca().set_ylim(-0.22, 0.22)
 
     plt.gca().set_title('Global mean temperature',
                         pad=35, fontdict={'fontsize': 40}, loc='left')

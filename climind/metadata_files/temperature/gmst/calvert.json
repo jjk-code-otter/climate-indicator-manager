@@ -2,7 +2,7 @@
   "name": "Calvert 2024",
   "display_name": "Calvert 2024",
   "version": "",
-  "variable": "tas IGNORE",
+  "variable": "tas",
   "units": "degC",
   "citation": ["Calvert, B.T.T.. (2024) Improving global temperature datasets to better account for non-uniform warming. Quarterly Journal of the Royal Meteorological Society, 1–31. Available from: https://doi.org/10.1002/qj.4791"],
   "citation_url": ["https://doi.org/10.1002/qj.4791"],
