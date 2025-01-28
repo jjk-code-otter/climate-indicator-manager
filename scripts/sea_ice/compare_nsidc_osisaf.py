@@ -13,9 +13,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-import logging
+import copy
 from pathlib import Path
+import numpy as np
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -24,7 +24,7 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-    final_year = 2022
+    final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -34,10 +34,6 @@ if __name__ == "__main__":
     log_dir = project_dir / 'Logs'
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
-
-    script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
-                        filemode='w', level=logging.INFO)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
@@ -69,11 +65,25 @@ if __name__ == "__main__":
         for ds in all_datasets:
             print(ds.metadata['display_name'])
             # get annual max and min and dates
-            this_year = ds.select_year_range(2023, 2023)
-            index =ds.df.data.idxmax()
-            print(ds.df.loc[[index]])
-            index =ds.df.data.idxmin()
-            print(ds.df.loc[[index]])
+
+            oot = ds.df.rolling(5, center=True, min_periods=1).mean()
+            ds.df.data = oot.data
+
+            all_years_max = []
+            all_years_min = []
+            for y in range(1991, 2021):
+                copy_ds = copy.deepcopy(ds)
+                this_year = copy_ds.select_year_range(y, y)
+                all_years_max.append(np.max(copy_ds.df.data))
+                all_years_min.append(np.min(copy_ds.df.data))
+
+            print(f"Climatological max extent {np.mean(all_years_max)}")
+            print(f"Climatological min extent {np.mean(all_years_min)}")
+
+            copy_ds = copy.deepcopy(ds)
+            this_year = copy_ds.select_year_range(final_year, final_year)
+            print(f"{final_year} Max = {np.max(copy_ds.df.data)}, which is {np.max(copy_ds.df.data)-np.mean(all_years_max)}")
+            print(f"{final_year} Min = {np.min(copy_ds.df.data)}, which is {np.min(copy_ds.df.data)-np.mean(all_years_min)}")
 
 
-    print()
+        print("\n\n")

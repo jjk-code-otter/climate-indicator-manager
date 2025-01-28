@@ -27,7 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         utils.record_margins(sst_anns, final_year, f'{month:02d}_sst_record_margins', report_dir)
         utils.record_margins(lsat_anns, final_year, f'{month:02d}_lsat_record_margins', report_dir)
 
-        if month == 1:
+        if month == 12:
             all_datasets = ts_archive.read_datasets(data_dir)
             m = []
             for ds in all_datasets:

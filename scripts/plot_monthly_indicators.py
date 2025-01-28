@@ -159,24 +159,30 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'co2': [
-            {'variable': 'co2',
+        'ozone_hole': [
+            {'variable': 'ozone_hole',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Atmospheric concentration of Carbon Dioxide'
+            'Average ozone hole area'
         ],
-        'ch4': [
-            {'variable': 'ch4',
+        'ozone_minimum': [
+            {'variable': 'ozone_minimum',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Atmospheric concentration of Methane'
+            'Average minimum ozone'
         ],
-        'n2o': [
-            {'variable': 'n2o',
+        'max_ozone_hole': [
+            {'variable': 'max_ozone_hole',
              'type': 'timeseries',
              'time_resolution': 'annual'},
-            'Atmospheric concentration of Nitrous Oxide'
-        ]
+            'Annual maximum ozone hole area'
+        ],
+        'min_ozone_minimum': [
+            {'variable': 'min_ozone_minimum',
+             'type': 'timeseries',
+             'time_resolution': 'annual'},
+            'Annual minimum ozone'
+        ],
     }
 
 for combo in holdall:

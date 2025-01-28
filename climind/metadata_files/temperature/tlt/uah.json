@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["https://www.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt"],
-      "filename": ["uahncdc_lt_6.0.txt"],
+      "url": ["https://www.nsstc.uah.edu/data/msu/v6.1/tlt/uahncdc_lt_6.1.txt"],
+      "filename": ["uahncdc_lt_6.1.txt"],
 	  "type": "timeseries",
       "long_name": "Global lower troposphere temperature",
 	  "time_resolution": "monthly",
@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt"],
-      "filename": ["uahncdc_lt_6.0.txt"],
+      "url": ["https://www.nsstc.uah.edu/data/msu/v6.1/tlt/uahncdc_lt_6.1.txt"],
+      "filename": ["uahncdc_lt_6.1.txt"],
 	  "type": "timeseries",
       "long_name": "Global lower troposphere temperature",
 	  "time_resolution": "annual",

@@ -33,7 +33,7 @@
         {
           "link_to": "sea_level", "title": "GMSL",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
           "plotting": {"function": "spark_line", "title": "GMSL", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
         },
         {
@@ -155,7 +155,7 @@
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing":  [],
           "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
         }
@@ -178,14 +178,14 @@
         {
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
           "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#fcb679"}}
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2024]}],
           "writing": {"function": "svg_background"}
         }
       ]

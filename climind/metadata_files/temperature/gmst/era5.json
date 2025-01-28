@@ -30,7 +30,7 @@
     },
     {
       "url": ["https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/YYYY/MMMM/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
-	  "filename": ["ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
+	  "filename": ["C3S_Bulletin_temp_202411_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_data.csv"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "monthly",
@@ -41,11 +41,11 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_era5",
-	  "fetcher": "fetcher_url_with_backsearch"
+	  "fetcher": "fetcher_no_url"
     },
     {
       "url": ["https://climate.copernicus.eu/sites/default/files/ftp-data/temperature/YYYY/MMMM/ERA5_1991-2020/ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
-      "filename": ["ts_1month_anomaly_Global_ERA5_2t_YYYYMMMM_1991-2020_v01.1.csv"],
+      "filename": ["C3S_Bulletin_temp_202411_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_data.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",
@@ -56,7 +56,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_era5",
-	  "fetcher": "fetcher_url_with_backsearch"
+	  "fetcher": "fetcher_no_url"
     },
     {
       "url": [

@@ -86,6 +86,8 @@ sealevel_archive = archive.select(
     }
 )
 sealevel_annual = sealevel_archive.read_datasets(data_dir)
+for ds in sealevel_annual:
+    ds.select_year_range(1993,2023)
 
 ghg_archive = archive.select(
     {
@@ -293,19 +295,19 @@ axs[0][0].set_title('Carbon Dioxide (ppm)', loc='left')
 
 for ds in ch4_annual:
     axs[1][0].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[1][0].set_yticks(np.arange(1650, 1950, 50))
+axs[1][0].set_yticks(np.arange(1650, 1951, 50))
 axs[1][0].tick_params(labelbottom=False, length=0)
 axs[1][0].set_title('Methane (ppb)', loc='left')
 
 for ds in n2o_annual:
     axs[2][0].plot(ds.get_year_axis(), ds.df['data'], color='C0', zorder=99)
-axs[2][0].set_yticks(np.arange(300, 340, 10))
+axs[2][0].set_yticks(np.arange(300, 350, 10))
 axs[2][0].tick_params(labelbottom=False, length=0)
 axs[2][0].set_title('Nitrous Oxide (ppb)', loc='left')
 
 for ds in tas_annual:
     axs[3][0].plot(ds.df['year'], ds.df['data'], color='C0', zorder=99)
-axs[3][0].set_yticks(np.arange(0.0, 1.5, 0.2))
+axs[3][0].set_yticks(np.arange(0.0, 1.7, 0.2))
 axs[3][0].set_title('Global Temperature Change ($\!^\circ\!$C)', loc='left')
 
 axs[0][0].set_xticks([])

@@ -29,14 +29,15 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'gridded',
             'time_resolution': 'monthly',
-            'name': [#'GETQUOCS', 'CMST', 'Vaccaro',
+            'name': [#'GETQUOCS'#, 'CMST', 'Vaccaro',
                      #'Kadow CMIP', 'Kadow',
-                     #'Kadow'
-                     #'NOAAGlobalTemp',
-                     #'HadCRUT5'
-                     'NOAA v6', 'HadCRUT5',
-                     #'Berkeley Earth'#, 'GISTEMP', 'JRA-3Q'
-                     #'ERA5', 'JRA-3Q'
+                     #'Kadow',
+                     'NOAA v6',
+                     #'HadCRUT5',
+                     #'Berkeley Earth',
+                     #'GISTEMP',
+                     #'JRA-3Q'
+                     #'ERA5'
             ]
         }
     )

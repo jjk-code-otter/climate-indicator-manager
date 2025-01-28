@@ -1,51 +1,51 @@
 {
-    "name": "NOAA v6_5x5",
-    "display_name": "NOAAGlobalTemp v6",
-    "version": "v6.0.0",
-    "variable": "tas",
-    "units": "degC",
-    "citation": [
+  "name": "NOAA v6_5x5",
+  "display_name": "NOAAGlobalTemp v6",
+  "version": "v6.0.0",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [
+    "Yin, X., and Coauthors, 2024: NOAAGlobalTemp Version 6: An AI-Based Global Surface Temperature Dataset. Bull. Amer. Meteor. Soc., 105, E2184–E2193, https://doi.org/10.1175/BAMS-D-24-0012.1."
+  ],
+  "citation_url": [
+    "https://doi.org/10.1175/BAMS-D-24-0012.1"
+  ],
+  "data_citation": [
+    "Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed AAAA."
+  ],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
         ""
-    ],
-    "citation_url": [
-        ""
-    ],
-    "data_citation": [
-        ""
-    ],
-    "acknowledgement": "",
-    "colour": "#e69f00",
-    "zpos": 10,
-    "origin": "obs",
-    "notes": "",
-    "datasets": [
-        {
-            "url": [
-                ""
-            ],
-            "filename": [
-                "NOAA v6_5x5.nc"
-            ],
-            "type": "gridded",
-            "long_name": "Near surface temperature",
-            "time_resolution": "annual",
-            "space_resolution": 5.0,
-            "climatology_start": 1991,
-            "climatology_end": 2020,
-            "actual": false,
-            "derived": true,
-            "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2024-10-16 18:59:02']",
-                "Rebaselined to 1991-2020",
-                "Calculated annual average",
-                "Wrote to file NOAA v6_5x5.nc"
-            ],
-            "reader": "reader_standard_grid",
-            "fetcher": "fetcher_no_url",
-            "last_modified": [
-                "2024-10-16 18:59:02"
-            ],
-            "last_month": "2024-08-01 00:00:00"
-        }
-    ]
+      ],
+      "filename": [
+        "NOAA v6_5x5.nc"
+      ],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+      "time_resolution": "annual",
+      "space_resolution": 5.0,
+      "climatology_start": 1991,
+      "climatology_end": 2020,
+      "actual": false,
+      "derived": true,
+      "history": [
+        "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2025-01-17 10:52:14']",
+        "Rebaselined to 1991-2020",
+        "Calculated annual average",
+        "Wrote to file NOAA v6_5x5.nc"
+      ],
+      "reader": "reader_standard_grid",
+      "fetcher": "fetcher_no_url",
+      "last_modified": [
+        "2025-01-17 10:52:14"
+      ],
+      "last_month": "2024-12-01 00:00:00"
+    }
+  ]
 }

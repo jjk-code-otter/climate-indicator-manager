@@ -9,7 +9,7 @@
       "cards": [
         {
           "link_to": "greenhouse_gases", "title": "Greenhouse gases",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
@@ -25,6 +25,16 @@
           "plotting": {"function": "wmo_plot", "title": "Global mean temperature"}
         },
         {
+          "link_to": "null", "title": "Global temperature modern",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2024]}],
+          "plotting": {"function": "wmo_plot", "title": "Global mean temperature"},
+          "hidden": true
+        },
+        {
           "link_to": "null", "title": "Global temperature monthly",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
           "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
@@ -37,14 +47,14 @@
         },
         {
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing":  [],
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content 0-2000m"}
         },
         {
           "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
         },
         {
@@ -61,7 +71,7 @@
         },
         {
           "link_to":  "glaciers_and_ice_sheets", "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
@@ -73,10 +83,10 @@
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Sep 2024"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2024, 12]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Annual precipitation categories 2024"}
         },
         {
           "link_to": "short_term_climate_drivers", "title":"Short-term Climate Drivers",
@@ -119,13 +129,13 @@
       "cards": [
         {
           "link_to":  null, "title": "Carbon dioxide",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
           "link_to":  null, "title": "Carbon dioxide simplified",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "simplified_line", "title": "Atmospheric carbon dioxide concentration", "args":  [], "kwargs":  {"color_override": "#862FE0"}},
           "hidden": true
@@ -139,7 +149,7 @@
         },
         {
           "link_to":  null, "title": "Methane",
-          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": "WDCGG CH4"},
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "annual", "name": "WDCGG CH4"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric methane concentration"}
         },
@@ -152,7 +162,7 @@
         },
         {
           "link_to":  null, "title": "Nitrous Oxide",
-          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": "WDCGG N2O"},
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "annual", "name": "WDCGG N2O"},
           "processing": [],
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         },
@@ -302,13 +312,13 @@
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content to 2000m",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing":  [],
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content to 2000m"}
         },
         {
           "link_to":  null, "title": "Ocean heat content simplified",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing":  [],
           "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#88E032"}},
           "hidden": true
@@ -325,6 +335,13 @@
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
+        },
+        {
+          "link_to":  null, "title": "Ocean pH spark",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "spark_line", "title": "Ocean pH"},
+          "hidden": true
         },
         {
           "link_to":  null, "title": "Marine heat waves",
@@ -349,7 +366,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Miniere","Cheng TEMP"]},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual","name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing": [],
           "writing": {"function": "anomaly_and_rank"}
         },
@@ -375,13 +392,13 @@
         {
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level change"}
         },
         {
           "link_to":  null, "title": "Sea level simplified",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
           "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#FFC341"}},
           "hidden": true
         },
@@ -396,7 +413,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2024]}],
           "writing": {"function": "long_term_trend_paragraph"}
         }
       ]
@@ -503,13 +520,13 @@
         },
         {
           "link_to":  null, "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "wmo_monthly_plot", "title": "Greenland ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Greenland ice sheet simplified",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "simplified_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#FFC341"}},
           "hidden": true
@@ -518,7 +535,7 @@
           "link_to":  null, "title": "Antarctic ice sheet",
           "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "wmo_monthly_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Antarctic ice sheet cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Antarctic ice sheet simplified",
@@ -670,20 +687,20 @@
       "cards": [
          {
           "link_to":  null, "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Precipitation worldwide Jan-Sep 2024"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2024, 12]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Annual precipitation categories 2024"}
          },
          {
           "link_to": null,
           "title": "Annual precipitation anomalies",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_period", "args": [2024, 1, 2024, 9]},
+            {"method": "select_period", "args": [2024, 1, 2024, 12]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "2024 9-month Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "2024 Precipitation anomaly"}
          }
       ],
       "paragraphs": [

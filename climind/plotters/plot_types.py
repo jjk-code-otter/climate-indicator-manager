@@ -48,7 +48,7 @@ STANDARD_PARAMETER_SET = {
     'axes.labelsize': 23,
     'xtick.labelsize': 23,
     'ytick.labelsize': 23,
-    'axes.edgecolor': 'lightgrey',
+    'axes.edgecolor': 'dimgrey',
     'axes.facecolor': 'None',
 
     'axes.grid.axis': 'y',
@@ -56,6 +56,7 @@ STANDARD_PARAMETER_SET = {
     'grid.alpha': 0.5,
 
     'axes.labelcolor': 'dimgrey',
+    'axes.labelpad': 4,
 
     'axes.spines.left': False,
     'axes.spines.right': False,
@@ -165,7 +166,8 @@ def equivalence(key):
         'arab_subregion_1': 'League of Arab States',
         'arab_subregion_2': 'North Africa LAS',
         'arab_subregion_3': 'East Africa LAS',
-        'arab_subregion_4': 'Middle East LAS'
+        'arab_subregion_4': 'Arabian Peninsula LAS',
+        'arab_subregion_5': 'Near East LAS'
     }
     return lookup[key]
 
@@ -209,6 +211,8 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
 
             col = wmo_standard_colors[i]
         zord = ds.metadata['zpos']
+        if wmo:
+            zord = 100-i
         zords.append(zord)
 
         x_values = ds.get_year_axis()
@@ -238,7 +242,7 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             axis.fill_between(x_values,
                               ds.df['data'] + ds.df['uncertainty'],
                               ds.df['data'] - ds.df['uncertainty'],
-                              color=col, alpha=0.1)
+                              color=col, alpha=0.3)
 
     return zords
 
@@ -314,10 +318,10 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1.0)
 
-    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate']:
+    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
-    if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4']:
+    if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4', 'ozone_minimum', 'min_ozone_minimum']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.0)
 
     if dataset.metadata['variable'] == 'ph':
@@ -348,9 +352,11 @@ def set_xaxis(axis) -> Tuple[float, float, np.ndarray]:
     """
     xlims = axis.get_xlim()
     xlo, xhi, xticks = set_lo_hi_ticks(xlims, 20.)
-    if len(xticks) < 3:
+    if len(xticks) < 5:
         xlo, xhi, xticks = set_lo_hi_ticks(xlims, 10.)
-    if len(xticks) < 3:
+    if len(xticks) < 4:
+        xlo, xhi, xticks = set_lo_hi_ticks(xlims, 5.)
+    if len(xticks) < 4:
         xlo, xhi, xticks = set_lo_hi_ticks(xlims, 1.)
 
     if len(xticks) > 50:
@@ -426,8 +432,12 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
 
     first_year, last_year = get_start_and_end_year(all_datasets)
 
+    full_title = f'{title} {first_year}-{last_year}'
+    if len(full_title) > 53:
+        full_title = f'{title}'
+
     plt.text(plt.gca().get_xlim()[0], yloc, subtitle, fontdict={'fontsize': 30})
-    plt.gca().set_title(f'{title} {first_year}-{last_year}', pad=35, fontdict={'fontsize': 40}, loc='left')
+    plt.gca().set_title(full_title, pad=35, fontdict={'fontsize': 40}, loc='left')
 
 
 # time series
@@ -702,7 +712,12 @@ def wmo_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSerie
     caption = caption_builder(all_datasets)
 
     plt.figure(figsize=[16, 9])
-    zords = add_data_sets(plt.gca(), all_datasets, wmo=True)
+
+    if all_datasets[0].metadata['variable'] == 'tas':
+        zords = add_data_sets(plt.gca(), all_datasets, wmo=True, uncertainty=False)
+    else:
+        zords = add_data_sets(plt.gca(), all_datasets, wmo=True)
+
     ds = all_datasets[-1]
 
     sns.despine(right=True, top=True, left=True)
@@ -1352,7 +1367,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure
     """
-    final_year = 2023
+    final_year = 2024
     # print_trends = True
 
     caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
@@ -1657,7 +1672,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
                 color='black')
 
     plt.plot(
-        [n_time_x - n_months, n_time_x + 4, n_time_x + 4, n_time_x - n_months, n_time_x - n_months],
+        [n_time_x - n_months, n_time_x , n_time_x , n_time_x - n_months, n_time_x - n_months],
         [0, 0, n_datasets, n_datasets, 0],
         color='black',
         linewidth=4, zorder=99
@@ -1708,7 +1723,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             clip_on=False)
 
     ax.set_ylim(0, n_datasets)
-    ax.set_xlim(n_time_x - n_months, n_time_x + 4)
+    ax.set_xlim(n_time_x - n_months, n_time_x)
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
@@ -2045,7 +2060,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
 
     if 'precip_quantiles' not in main_variable:
         cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
-        cbar.ax.tick_params(labelsize=15)
+        cbar.ax.tick_params(labelsize=25)
         cbar.set_ticks(wmo_levels)
         cbar.set_ticklabels(wmo_levels)
     else:
@@ -2056,9 +2071,9 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         cbar.ax.get_xaxis().labelpad = 15
         plt.gcf().text(0.5,0.002, "Relative to precipitation totals from 1991 to 2020", ha='center', fontsize=25)
 
-    # Add the datasets used and their last months
-    plt.gcf().text(.05, .002, "Source:" + ",".join(last_months),
-                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=25)
+    # # Add the datasets used and their last months
+    # plt.gcf().text(.05, .002, "Source:" + ",".join(last_months),
+    #                bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=25)
 
     # # Add a Created tag to let people know when it was created
     # current_time = f"Created: {datetime.today()}"
@@ -2073,7 +2088,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         label_text = r'Sea level trend (mm/year)'
     if 'precip_quantiles' in main_variable:
         label_text = ''
-    cbar.set_label(label_text, rotation=0, fontsize=15)
+    cbar.set_label(label_text, rotation=0, fontsize=25)
 
     p.axes.coastlines()
     if region is not None:
@@ -2199,18 +2214,16 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 
-    cbar.ax.tick_params(labelsize=15)
+    cbar.ax.tick_params(labelsize=25)
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
 
-    # Add the datasets used and their last months
-    plt.gcf().text(.075, .012, ",".join(last_months),
-                   bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
-
-    # Add a Created tag to let people know when it was created
-    current_time = f"Created: {datetime.today()}"
-    plt.gcf().text(.90, .012, current_time[0:28], ha='right',
-                   bbox={'facecolor': 'w', 'edgecolor': None})
+    # # Add the datasets used and their last months
+    # plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+    #
+    # # Add a Created tag to let people know when it was created
+    # current_time = f"Created: {datetime.today()}"
+    # plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
@@ -2220,7 +2233,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
         label_text = r'Sea level trend (mm/year)'
     if 'precip_quantiles' in main_variable:
         label_text = r'Precipitation quantile relative to 1991-2020'
-    cbar.set_label(label_text, rotation=0, fontsize=15)
+    cbar.set_label(label_text, rotation=0, fontsize=25)
 
     p.axes.coastlines()
     if region is not None:
@@ -2234,7 +2247,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     else:
         p.axes.set_global()
 
-    plt.title(f'{title}', pad=20, fontdict={'fontsize': 20})
+    plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
     plt.savefig(out_dir / f'{image_filename}')
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
@@ -2397,10 +2410,10 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
             if year < last_year and n_months == 12:
                 all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
-            if year != 2016 and year != 2023:
+            if year not in [2016, 2023]:
                 colour = '#aaaaaa'
                 lthk = 1
-            if year == 2016:
+            if year in [2016]:
                 colour = '#41b6c4'
                 lthk = 2
 
@@ -2432,7 +2445,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     peb = PathEffects.withStroke(linewidth=1.5, foreground="#555555")
 
     plt.gcf().text(0.87, 0.43, '2016', fontsize=30, color='#41b6c4')
-    plt.gcf().text(0.6, 0.710, '2024', fontsize=30, color='darkred')
+    plt.gcf().text(0.87, 0.710, '2024', fontsize=30, color='darkred')
     plt.gcf().text(0.87, 0.610, '2023', fontsize=30, color='darkred')
     plt.gcf().text(0.54, 0.200, 'Other years', fontsize=30, color='#aaaaaa', ha='center', path_effects=[peb])
 
@@ -2494,7 +2507,7 @@ def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) 
 
         colour = 'lightgrey'
         lthk = 1
-        if year >= 2015:
+        if year in [2016, 1998, 1983, 1973, 1966]:
             colour = 'dodgerblue'
             lthk = 2
         if year == last_year:
@@ -2568,7 +2581,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
-            if year >= 2023:
+            if year >= 2024:
                 colour = 'darkred'
                 lthk = 3
             if year == last_year:
@@ -2597,7 +2610,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     plt.gcf().text(0.52, 0.61, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
     plt.gcf().text(0.52, 0.65, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.52, 0.81, '2023-2024', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.81, '2024', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
     sources = [x.metadata['display_name'] for x in all_datasets]
     sources = ', '.join(sources)

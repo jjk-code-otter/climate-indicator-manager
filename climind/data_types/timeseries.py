@@ -585,7 +585,10 @@ class TimeSeriesMonthly(TimeSeries):
         if cumulative:
             grouped = self.df.groupby(['year'])['data'].sum().reset_index()
         else:
-            grouped = self.df.groupby(['year'])['data'].mean().reset_index()
+            if 'uncertainty' in self.df.columns:
+                grouped = self.df.groupby(['year'])[['data', 'uncertainty']].mean().reset_index()
+            else:
+                grouped = self.df.groupby(['year'])['data'].mean().reset_index()
         annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
 
         if cumulative:

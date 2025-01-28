@@ -1,0 +1,32 @@
+{
+  "name": "ozone hole area",
+  "display_name": "NASA Ozone Watch",
+  "version": "",
+  "variable": "max_ozone_hole",
+  "units": "millionkm2",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://ozonewatch.gsfc.nasa.gov/statistics/ytd_data.txt"],
+      "filename": ["ytd_data.txt"],
+	  "type": "timeseries",
+      "long_name": "Annual maximum of daily ozone hole area",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_ozone_watch",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

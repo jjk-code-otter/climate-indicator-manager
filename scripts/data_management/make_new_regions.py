@@ -221,8 +221,8 @@ if __name__ == '__main__':
         elif set == 1:
             region_json_file = 'arab_regions.json'
             output_image = 'Arab_regions'
-            n_regions = 4
-            region_selection = [0, 1, 2, 3]
+            n_regions = 5
+            region_selection = [1, 2, 3, 4]
 
         for main_index in range(n_regions):
             area_name, region_clipped, whole_world = create_shape_file(main_index, region_json_file)

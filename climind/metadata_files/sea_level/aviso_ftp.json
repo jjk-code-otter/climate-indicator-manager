@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
-      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter6m_NRT.nc"],
+      "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m_NRT.nc"],
+      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m_NRT.nc"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

@@ -85,8 +85,7 @@ def get_latest_filename_and_url(filename: Path, url: str) -> Tuple[str, str]:
 def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
     construction_metadata = copy.deepcopy(metadata)
     if metadata['type'] == 'timeseries':
-        filename_with_wildcards = metadata['filename'][0]
-        filename = find_latest(out_dir, filename_with_wildcards)
+        filename = out_dir / metadata['filename'][0]
         construction_metadata.dataset['last_modified'] = [get_last_modified_time(filename)]
 
         if metadata['time_resolution'] == 'monthly':
@@ -248,8 +247,10 @@ def read_monthly_grid(filename: str, metadata) -> gd.GridMonthly:
 
 def read_grid(filename: str):
     dataset_list = []
-    for year in range(1959, 2030):
+    for year in range(2024, 2030):
         filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
+        if year == 2024:
+            filled_filename = filename.parents[0] / 'era5_2m_tas_1940_2024.nc'
         if filled_filename.exists():
             ds = xa.open_dataset(filled_filename)
 
@@ -263,10 +264,13 @@ def read_grid(filename: str):
                 ds = ds.transpose("latitude", "longitude", "date")
                 ds["date"] = ("date", times)
                 ds = ds.rename({'date': 'time'})
+            if 'valid_time' in ds:
+                ds = ds.rename({'valid_time': 'time'})
 
             dataset_list.append(ds)
 
-    combo = xa.concat(dataset_list, dim='time')
+    combo = xa.concat(dataset_list, dim='time', coords='minimal')
+    combo = combo.sel(time=slice('1979-01-01', '2030-01-01'))
 
     return combo
 
@@ -277,17 +281,17 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeries
     anomalies = []
 
     with open(filename, 'r') as f:
-        for _ in range(9):
+        for _ in range(12):
             f.readline()
 
         for line in f:
             columns = line.split(',')
             year = columns[0][0:4]
-            month = columns[0][4:6]
+            month = columns[0][5:7]
 
             years.append(int(year))
             months.append(int(month))
-            anomalies.append(float(columns[1]))
+            anomalies.append(float(columns[3]))
 
     selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
 

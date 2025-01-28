@@ -31,8 +31,8 @@ if __name__ == "__main__":
 
     final_year = 2024
     holdouts = ['HadCRUT5']  # Datasets which haven't been updated from month 1 to month 2 yet
-    month2 = 9
-    month1 = 8
+    month2 = 12
+    month1 = 11
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR

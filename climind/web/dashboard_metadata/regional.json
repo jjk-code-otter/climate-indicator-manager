@@ -10,42 +10,43 @@
           "link_to": "wmo_ra_i", "title": "WMO RA I Africa main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         },
         {
           "link_to": "wmo_ra_ii", "title": "WMO RA II Asia main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         },
         {
           "link_to": "wmo_ra_iii", "title": "WMO RA III South America main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         },
         {
           "link_to": "wmo_ra_iv", "title": "WMO RA IV North America main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         },
         {
           "link_to": "wmo_ra_v", "title": "WMO RA V Southwest Pacific main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         },
         {
           "link_to": "wmo_ra_vi", "title": "WMO RA VI Europe main",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature", "kwargs":  {"yrange": [-2.5, 1.15]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual land temperature", "kwargs":  {"yrange": [-2.5, 1.55]}}
         }
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
@@ -94,54 +95,54 @@
           "link_to":  null, "title": "WMO RA I Africa",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "North Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "North Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "North Africa land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "West Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "West Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "West Africa land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Central Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Central Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "Central Africa land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Eastern Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Eastern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "Eastern Africa land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Southern Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Southern Africa", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "Southern Africa land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Indian Ocean",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Indian Ocean", "kwargs":  {"yrange": [-2.1, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "Indian Ocean land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
           "selecting": {
             "type": "timeseries",
             "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
-            "time_resolution": "annual", "origin": "obs"
+            "time_resolution": "annual", "origin": "obs", "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {
               "order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"],
               "print_trends": true
@@ -157,7 +158,7 @@
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Regional trends Africa",
+            "function": "trends_plot", "title": "Regional land temperature trends Africa",
             "kwargs": {"order":  ["africa_subregion_1","africa_subregion_2","africa_subregion_3",
                                   "africa_subregion_4","africa_subregion_5","africa_subregion_6", "wmo_ra_1"]}
           }
@@ -167,7 +168,7 @@
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2023",
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         },
         {
@@ -175,14 +176,14 @@
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Africa",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2024, 12]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         }
@@ -244,14 +245,15 @@
           "link_to":  null, "title": "WMO RA II Asia",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual land temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
+            "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         },
@@ -273,8 +275,8 @@
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Asia",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
@@ -307,38 +309,39 @@
           "link_to":  null, "title": "WMO RA III South America",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Caribbean",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
+          "plotting": {"function": "neat_plot", "title": "Caribbean land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Mexico",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Mexico", "kwargs":  {"yrange": [-2.1, 1.2]}}
+          "plotting": {"function": "neat_plot", "title": "Mexico land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Central America",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Central America", "kwargs":  {"yrange": [-2.1, 1.2]}}
+          "plotting": {"function": "neat_plot", "title": "Central America land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Latin America and the Caribbean",
           "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean", "kwargs":  {"yrange": [-2.1, 1.2]}}
+          "plotting": {"function": "neat_plot", "title": "Latin America and the Caribbean land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
+           "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         },
@@ -351,7 +354,7 @@
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Regional trends LAC",
+            "function": "trends_plot", "title": "Regional land temperature trends LAC",
             "kwargs": {"order":  ["wmo_ra_3","lac_subregion_3","lac_subregion_4","lac_subregion_5"]}
           }
         },
@@ -359,7 +362,7 @@
           "link_to":  null, "title": "Temperature anomaly map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2023, 2024]}],
+          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
           "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
@@ -367,14 +370,14 @@
           "link_to":  null, "title": "Temperature anomaly uncertainty map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2023, 2024]}],
+          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
           "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map LAC",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
@@ -440,14 +443,15 @@
           "link_to":  null, "title": "WMO RA IV North America",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA IV North America annual land temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
+            "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         }
@@ -479,7 +483,7 @@
           "link_to":  null, "title": "WMO RA V Southwest Pacific",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual temperature", "kwargs":  {"yrange": [-1.6, 0.8]}}
+          "plotting": {"function": "neat_plot", "title": "WMO RA V Southwest Pacific annual land temperature", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
           "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean)",
@@ -489,10 +493,11 @@
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
+            "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         },
@@ -514,8 +519,8 @@
         },
         {
           "link_to":  null, "title": "Precipitation percentile map SW Pacific",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
@@ -553,14 +558,15 @@
           "link_to":  null, "title": "WMO RA VI Europe",
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual temperature"}
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual land temperature"}
         },
         {
           "link_to":  null, "title": "Continental trends",
-          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs"},
+          "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
+            "display_name": ["HadCRUT5", "NOAAGlobalTemp v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Continental trends",
+            "function": "trends_plot", "title": "Continental land temperature trends",
             "kwargs":  {"order": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"]}
           }
         },
@@ -576,14 +582,14 @@
           "link_to":  null, "title": "Temperature anomaly uncertainty map Europe",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2023, 2023]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2023",
+          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Europe",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
@@ -631,10 +637,16 @@
           "plotting": {"function": "neat_plot", "title": "East African Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
-          "link_to":  null, "title": "Middle East LAS",
+          "link_to":  null, "title": "Arabian Peninsula LAS",
           "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
-          "plotting": {"function": "neat_plot", "title": "Middle East Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
+          "plotting": {"function": "neat_plot", "title": "Arabian Peninsula Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
+        },
+        {
+          "link_to":  null, "title": "Near East LAS",
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_5", "time_resolution": "annual", "origin": "obs"},
+          "processing": [],
+          "plotting": {"function": "neat_plot", "title": "Near East Arab League States annual temperature", "kwargs":  {"yrange": [-2.2, 1.5]}}
         },
         {
           "link_to":  null, "title": "LAS Region definitions",
@@ -653,14 +665,14 @@
           "link_to":  null, "title": "Regional trends LAS",
           "selecting": {
             "type": "timeseries",
-            "variable": ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"],
+            "variable": ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4", "arab_subregion_5"],
             "time_resolution": "annual", "origin": "obs"
           },
           "processing": [],
           "plotting": {
-            "function": "trends_plot", "title": "Regional trends LAS",
+            "function": "trends_plot", "title": "Regional land temperature trends LAS",
             "kwargs": {
-              "order":  ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4"],
+              "order":  ["arab_subregion_1", "arab_subregion_2", "arab_subregion_3", "arab_subregion_4", "arab_subregion_5"],
               "print_trends": true
             }
           }
@@ -683,8 +695,8 @@
         },
         {
           "link_to":  null, "title": "Precipitation percentile map LAS",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
           "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
           "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
                        "kwargs": {"west": -20, "east":  65, "north": 40, "south": -15}}
@@ -708,6 +720,11 @@
         },
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual", "origin": "obs"},
+          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arab_subregion_5", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }

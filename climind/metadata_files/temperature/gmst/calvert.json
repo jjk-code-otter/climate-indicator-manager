@@ -30,7 +30,7 @@
     },
     {
       "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.2"],
-      "filename": ["HadCRU_MLE_v1.2_timeseries_monthly_summary.txt"],
+      "filename": ["HadCRU_MLE_v1.2_timeseries_annual_summary.txt"],
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "annual",

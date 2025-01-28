@@ -15,7 +15,7 @@
   "datasets": [
 	{
       "url": ["ftp://my.cmems-du.eu/Core/GLOBAL_OMI_HEALTH_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged/global_omi_health_carbon_ph_area_averaged_1985_P*.nc"],
-      "filename": ["global_omi_health_carbon_ph_area_averaged_1985_P*.nc"],
+      "filename": ["ph_wmo_state_climate_18122024.nc"],
       "type": "timeseries",
       "long_name": "Global ocean pH",
 	  "time_resolution": "annual",

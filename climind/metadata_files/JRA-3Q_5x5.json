@@ -1,52 +1,52 @@
 {
-    "name": "JRA-3Q_5x5",
-    "display_name": "JRA-3Q",
-    "version": "",
-    "variable": "tas",
-    "units": "degC",
-    "citation": [
+  "name": "JRA-3Q_5x5",
+  "display_name": "JRA-3Q",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [
+    "Kosaka, Y.; Kobayashi, S.; Harada, Y.; Kobayashi, C.; Naoe, H.; Yoshimoto, K.; Harada, M.; Goto, N.; Chiba, J.; Miyaoka, K.; Sekiguchi, R.; Deushi, M.; Kamahori, H.; Nakaegawa, T.; Tanaka, T. Y.; Tokuhiro, T.; Sato, Y.; Matsushita, Y.; Onogi, K. The JRA-3Q Reanalysis. J. Meteorol. Soc. Jpn. Ser II 2024, 102 (1), 49–109. https://doi.org/10.2151/jmsj.2024-004"
+  ],
+  "citation_url": [
+    "https://doi.org/10.2151/jmsj.2024-004"
+  ],
+  "data_citation": [
+    "Japan Meteorological Agency. 2023, updated monthly. Japanese Reanalysis for Three Quarters of a Century (JRA-3Q). Research Data Archive at the National Center for Atmospheric Research, Computational and Information Systems Laboratory. https://doi.org/10.5065/AVTZ-1H78. Accessed AAAA."
+  ],
+  "acknowledgement": "",
+  "colour": "#d55e00",
+  "zpos": 1,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
         ""
-    ],
-    "citation_url": [
-        ""
-    ],
-    "data_citation": [
-        ""
-    ],
-    "acknowledgement": "",
-    "colour": "#d55e00",
-    "zpos": 1,
-    "origin": "obs",
-    "notes": "",
-    "datasets": [
-        {
-            "url": [
-                ""
-            ],
-            "filename": [
-                "JRA-3Q_5x5.nc"
-            ],
-            "type": "gridded",
-            "long_name": "Near surface temperature",
-            "time_resolution": "annual",
-            "space_resolution": 1.25,
-            "climatology_start": 1991,
-            "climatology_end": 2020,
-            "actual": false,
-            "derived": true,
-            "history": [
-                "Data set created from file ['anl_surf125.2024MMMM', 'anl_surf125.2024MMMM.nc'] downloaded from ['', ''] at ['2024-10-16 15:06:36']",
-                "Regridded to 5 degree latitude-longitude resolution",
-                "Rebaselined to 1991-2020",
-                "Calculated annual average",
-                "Wrote to file JRA-3Q_5x5.nc"
-            ],
-            "reader": "reader_standard_grid",
-            "fetcher": "fetcher_no_url",
-            "last_modified": [
-                "2024-10-16 15:06:36"
-            ],
-            "last_month": "2024-09-01 00:00:00"
-        }
-    ]
+      ],
+      "filename": [
+        "JRA-3Q_5x5.nc"
+      ],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+      "time_resolution": "annual",
+      "space_resolution": 1.25,
+      "climatology_start": 1991,
+      "climatology_end": 2020,
+      "actual": false,
+      "derived": true,
+      "history": [
+        "Data set created from file ['anl_surf125.2025MMMM', 'anl_surf125.2025MMMM.nc'] downloaded from ['', ''] at ['2025-01-13 12:57:43']",
+        "Regridded to 5 degree latitude-longitude resolution",
+        "Rebaselined to 1991-2020",
+        "Calculated annual average",
+        "Wrote to file JRA-3Q_5x5.nc"
+      ],
+      "reader": "reader_standard_grid",
+      "fetcher": "fetcher_no_url",
+      "last_modified": [
+        "2025-01-13 12:57:43"
+      ],
+      "last_month": "2024-12-01 00:00:00"
+    }
+  ]
 }

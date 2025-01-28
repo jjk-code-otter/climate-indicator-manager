@@ -1,0 +1,32 @@
+{
+  "name": "COBE-STEMP3",
+  "display_name": "COBE3",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#ff0000",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://climate.mri-jma.go.jp/pub/archives/Ishii-et-al_COBE-SST3/gm/gm_cobe-stemp3"],
+	  "filename": ["gm_cobe-stemp3"],
+      "type": "timeseries",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 99,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cobe_stemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

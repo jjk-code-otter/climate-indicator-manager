@@ -58,7 +58,12 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA Interim', 'ERA5', 'JRA-55', 'Berkeley Earth']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'JRA-3Q', 'Berkeley Earth']})
+
+    ipcc_archive = archive.select({'variable': 'tas',
+                                 'type': 'timeseries',
+                                 'time_resolution': 'monthly',
+                                 'name': ['HadCRUT5', 'NOAA v6', 'Kadow', 'Berkeley IPCC']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
@@ -74,6 +79,7 @@ if __name__ == "__main__":
                                        'name': []})
 
     all_datasets = ts_archive.read_datasets(data_dir)
+    ipcc_datasets = ipcc_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
 
     lsat_datasets = lsat_archive.read_datasets(data_dir)
@@ -95,6 +101,13 @@ if __name__ == "__main__":
         ds.manually_set_baseline(1850, 1900)
         ds.select_year_range(1850, final_year)
         all_annual_datasets.append(ds)
+
+    all_ipcc_datasets = []
+    for ds in ipcc_datasets:
+        ds.rebaseline(1850, 1900)
+        annual = ds.make_annual()
+        annual.select_year_range(1850, final_year)
+        all_ipcc_datasets.append(annual)
 
     lsat_anns = []
     for ds in lsat_datasets:
@@ -121,6 +134,12 @@ if __name__ == "__main__":
     thirties = []
     dtens = []
 
+    ipcc_fives = []
+    ipcc_tens = []
+    ipcc_twenties = []
+    ipcc_thirties = []
+    ipcc_dtens = []
+
     sst_tens = []
     sst_dtens = []
 
@@ -133,6 +152,13 @@ if __name__ == "__main__":
         twenties.append(ds.running_mean(20))
         thirties.append(ds.running_mean(30))
         dtens.append(ds.running_mean(10).select_decade(last_digit))
+
+    for ds in all_ipcc_datasets:
+        ipcc_fives.append(ds.running_mean(5))
+        ipcc_tens.append(ds.running_mean(10))
+        ipcc_twenties.append(ds.running_mean(20))
+        ipcc_thirties.append(ds.running_mean(30))
+        ipcc_dtens.append(ds.running_mean(10).select_decade(last_digit))
 
     fdata_dir = project_dir / "Formatted_Data"
     for ds in dtens:
@@ -152,6 +178,9 @@ if __name__ == "__main__":
     pt.neat_plot(figure_dir, twenties, 'twenty.png', r'20-year Global Mean Temperature Difference ($\degree$C))')
     pt.neat_plot(figure_dir, thirties, 'thirty.png', r'30-year Global Mean Temperature Difference ($\degree$C))')
 
+    pt.neat_plot(figure_dir, ipcc_tens, 'ipcc_ten.png', r'10-year Global Mean Temperature Difference ($\degree$C))')
+    pt.neat_plot(figure_dir, ipcc_twenties, 'ipcc_twenty.png', r'20-year Global Mean Temperature Difference ($\degree$C))')
+
     pt.decade_plot(figure_dir, sst_dtens, 'dten_sst.png',
                    r'10-year Global Mean SST Difference ($\degree$C))')
     pt.decade_plot(figure_dir, lsat_dtens, 'dten_lsat.png',
@@ -165,3 +194,6 @@ if __name__ == "__main__":
     utils.run_the_numbers(sst_tens, final_year, 'sst_tenyear_stats', report_dir)
     utils.run_the_numbers(twenties, final_year, 'twentyyear_stats', report_dir)
     utils.run_the_numbers(thirties, final_year, 'thirtyyear_stats', report_dir)
+
+    utils.run_the_numbers(ipcc_tens, final_year, 'ipcc_tenyear_stats', report_dir)
+    utils.run_the_numbers(ipcc_twenties, final_year, 'ipcc_twentyyear_stats', report_dir)

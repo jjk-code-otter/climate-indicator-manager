@@ -19,8 +19,13 @@
     "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
   },
   {
-    "name": "Middle East Arab Countries",
-    "countries": ["BH", "IQ", "JO", "KW", "LB", "OM", "PS", "QA", "SA", "SY", "AE", "YE"],
+    "name": "Arabian Peninsula Arab Countries",
+    "countries": ["BH", "KW", "OM", "QA", "SA", "AE", "YE"],
+    "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
+  },
+  {
+    "name": "Near East Arab Countries",
+    "countries": ["IQ", "JO", "LB", "PS", "SY"],
     "coordinates": "[[[-20, 40], [65, 50], [65, -20], [-20, -20], [-20, 40]]]"
   }
 ]

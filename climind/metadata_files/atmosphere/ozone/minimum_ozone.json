@@ -1,0 +1,32 @@
+{
+  "name": "minimum ozone",
+  "display_name": "NASA Ozone Watch",
+  "version": "",
+  "variable": "min_ozone_minimum",
+  "units": "DU",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://ozonewatch.gsfc.nasa.gov/statistics/ytd_data.txt"],
+      "filename": ["ytd_data.txt"],
+	  "type": "timeseries",
+      "long_name": "Annual minimum of daily minimum ozone",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_ozone_watch",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

@@ -14,7 +14,7 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["https://thredds.geus.dk/thredds/fileServer/MassBalance/MB_SMB_D_BMB.csv/"],
+      "url": ["https://thredds.geus.dk/thredds/fileServer/MassBalance/MB_SMB_D_BMB.csv"],
       "filename": ["MB_SMB_D_BMB.csv"],
       "notes": "Filename should be MB_SMB_D_BMB.csv",
 	  "type": "timeseries",

@@ -57,7 +57,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
     df = df.rename({'tas': 'tas_mean'})
-    df.tas_mean.data = np.roll(df.tas_mean.data, 36, 2)
+    #df.tas_mean.data = np.roll(df.tas_mean.data, 36, 2)
     metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
                            f"downloaded from {metadata['url']}"]
     return gd.GridMonthly(df, metadata)

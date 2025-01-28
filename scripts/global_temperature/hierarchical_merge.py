@@ -90,7 +90,7 @@ if __name__ == "__main__":
             'variable': 'tas',
             'type': 'timeseries',
             'time_resolution': 'annual',
-            'name': ['GETQUOCS', 'HadCRUT5', 'Berkeley Earth', 'GISTEMP', 'Berkeley IPCC']
+            'name': ['GETQUOCS', 'HadCRUT5', 'Berkeley Earth', 'GISTEMP', 'Berkeley IPCC', 'Calvert 2024']
         }
     )
 
@@ -100,7 +100,7 @@ if __name__ == "__main__":
          'name': ['DCENT',
                   'CMST',
                   'NOAA v6', 'ERA5', 'JRA-55',
-                  'NOAA Interim', 'JRA-3Q', 'Kadow', 'Calvert 2024', 'Vaccaro', 'Cowtan and Way'],
+                  'NOAA Interim', 'JRA-3Q', 'Kadow', 'Vaccaro', 'Cowtan and Way', 'COBE-STEMP3'],
          'time_resolution': 'monthly'
          }
     )
@@ -125,6 +125,7 @@ if __name__ == "__main__":
     group_rean = []
     group_berk = []
     group_dcent = []
+    group_cobe = []
 
     group_ipcc = []
 
@@ -150,7 +151,6 @@ if __name__ == "__main__":
     for ds in all_ann_datasets:
         if ds.metadata['name'] in ['HadCRUT5', 'NOAA Interim', 'Berkeley IPCC','Kadow']:
             group_ipcc.append(ds)
-
         if ds.metadata['name'] in ['HadCRUT5', 'Kadow', 'Calvert 2024']:
             group_had5.append(ds)
             color = 'red'
@@ -166,6 +166,9 @@ if __name__ == "__main__":
         elif ds.metadata['name'] in ['DCENT']:
             group_dcent.append(ds)
             color = 'black'
+        elif ds.metadata['name'] in ['COBE-STEMP3']:
+            group_cobe.append(ds)
+            color = 'darkgreen'
         elif ds.metadata['name'] in ['CMST']:
             group_cmst.append(ds)
             color = '#598ade'
@@ -188,14 +191,14 @@ if __name__ == "__main__":
     berk = make_combined_series(group_berk, augmented_uncertainty=False)
     cmst = make_combined_series(group_cmst, augmented_uncertainty=False)
     dcent = make_combined_series(group_dcent, augmented_uncertainty=False)
+    cobe = make_combined_series(group_cobe, augmented_uncertainty=False)
 
     ipcc = make_combined_series(group_ipcc, augmented_uncertainty=False)
 
-    had_berk = make_combined_series([had5, berk])
-    noaa_cmst = make_combined_series([noaa, cmst])
+    had_berk = make_combined_series([had5, berk], augmented_uncertainty=False)
+    noaa_cmst = make_combined_series([noaa, cmst], augmented_uncertainty=False)
 
-    #combo_combo = make_combined_series([had_berk, noaa_cmst, rean], augmented_uncertainty=False)
-    combo_combo = make_combined_series([had_berk, noaa_cmst, rean, dcent], augmented_uncertainty=False)
+    combo_combo = make_combined_series([had_berk, noaa_cmst, rean, dcent, cobe], augmented_uncertainty=False)
 
     wee_plotter(axs[1], had5, 'red', 2, 1)
     wee_plotter(axs[1], had4, 'orange', 2, 1)
@@ -204,6 +207,7 @@ if __name__ == "__main__":
     wee_plotter(axs[1], berk, 'grey', 2, 1)
     wee_plotter(axs[1], cmst, '#598ade', 2, 1)
     wee_plotter(axs[1], dcent, 'black', 2, 1)
+    wee_plotter(axs[1], cobe, 'darkgreen', 2, 1)
 
     axs[1].text(1850, 0.72, 'HadCRUT5 group', color='red')
     axs[1].text(1850, 0.72 + dy, 'HadCRUT4 group', color='orange')
@@ -212,9 +216,9 @@ if __name__ == "__main__":
     axs[1].text(1850, 0.72 + 4 * dy, 'Berkeley Earth', color='grey')
     axs[1].text(1850, 0.72 + 5 * dy, 'CMST', color='#598ade')
     axs[1].text(1850, 0.72 + 6 * dy, 'DCENT', color='black')
+    axs[1].text(1850, 0.72 + 7 * dy, 'COBE', color='darkgreen')
 
     wee_plotter(axs[2], combo_combo, 'darkgreen', 2, 1.0)
-#    axs[1].plot(combo_combo.df.year, combo_combo.df.data, color='darkgreen', linewidth=2)
 
     axs[2].plot(ipcc.df.year, ipcc.df.data, color='black')
 

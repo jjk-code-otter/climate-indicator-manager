@@ -1,0 +1,32 @@
+{
+  "name": "Copernicus_OHC",
+  "display_name": "Copernicus",
+  "version": "",
+  "variable": "ohc2k",
+  "units": "zJ",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#86CFA5",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["gohc_wmo_state_climate_22012025_Jm2.nc"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 2005,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gcos_temp",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

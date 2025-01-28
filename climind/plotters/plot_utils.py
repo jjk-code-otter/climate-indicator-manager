@@ -337,4 +337,7 @@ def map_caption_builder(all_datasets: List[Union[GridAnnual]], grid_type: str) -
     caption += ', '.join(dataset_names_for_caption)
     caption += '.'
 
+    if 'precip' in ds.metadata['variable']:
+        caption += ' White areas indicate where there were too few data to reliably estimate the percentiles.'
+
     return caption

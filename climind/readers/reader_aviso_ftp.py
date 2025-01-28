@@ -17,6 +17,8 @@
 from pathlib import Path
 from typing import List
 import xarray as xa
+from scipy.signal import savgol_filter
+
 import climind.data_types.timeseries as ts
 
 from climind.data_manager.metadata import CombinedMetadata
@@ -34,15 +36,17 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     for i in range(len(msl_correction)):
         anomalies[i] = (anomalies[i] - msl_correction[i])
 
-    for i in range(len(anomalies)):
-        anomalies[i] = anomalies[i] * 1000.
+    anomalies = [x*1000 for x in anomalies]
+    anomalies = savgol_filter(anomalies, 9, 1)
+
+    uncertainty = df.envelop.values.tolist()
+    uncertainty = [x * 1000 for x in uncertainty]
 
     years = df.time.dt.year.data.tolist()
     months = df.time.dt.month.data.tolist()
     days = df.time.dt.day.data.tolist()
 
     metadata.creation_message()
-    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies,
-                                       metadata=metadata)
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, uncertainty=uncertainty, metadata=metadata)
 
     return outseries

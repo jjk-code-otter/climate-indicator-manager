@@ -48,7 +48,8 @@ def process_lac_shape_files(in_shape_dir):
 
 
 def process_arab_shape_files(in_shape_dir):
-    additional_regions = ['North African Arab Countries', 'East African Arab Countries', 'Middle East Arab Countries']
+    additional_regions = ['North African Arab Countries', 'East African Arab Countries',
+                          'Arabian Peninsula Arab Countries', 'Near East Arab Countries']
 
     subregions = gp.read_file(in_shape_dir / 'League of Arab States' / 'League of Arab States.shp')
     for reg in additional_regions:
@@ -101,11 +102,11 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            'HadCRUT5',
+            #'HadCRUT5',
             #'GISTEMP',
-            'NOAA v6',
+            #'NOAA v6',
             #'Berkeley Earth',
-            #'ERA5',
+            'ERA5',
             #'JRA-3Q'
         ]
 
@@ -191,7 +192,7 @@ if __name__ == "__main__":
                         final_year, long_names)
 
         arab_region_names = ['League of Arab States', 'North African Arab Countries', 'East African Arab Countries',
-                             'Middle East Arab Countries']
-        long_names = [f'Regional mean temperature for {arab_region_names[i]}' for i in range(4)]
+                             'Arabian Peninsula Arab Countries', 'Near East Arab Countries']
+        long_names = [f'Regional mean temperature for {arab_region_names[i]}' for i in range(5)]
         process_regions(arab_region_names, arab_subregions, regional_data_dir, ds, 'arab_subregion', start_year,
                         final_year, long_names)

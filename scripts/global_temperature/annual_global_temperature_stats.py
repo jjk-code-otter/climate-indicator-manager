@@ -29,7 +29,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
-                                          #'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024'],
+#                                          ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',

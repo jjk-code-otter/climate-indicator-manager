@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = False
+    regional = True
     regional_multiyear = False
     regional_test = False
 
