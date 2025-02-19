@@ -93,12 +93,12 @@ if __name__ == "__main__":
         all_20s[-1].metadata['display_name'] = '10-year moving average'
         all_20s[-1].metadata['colour'] = 'pink'
 
-        npoints = 30
+        npoints = 20
         all_20s.append(annual.running_lowess(number_of_points=npoints))
         all_20s[-1].metadata['display_name'] = f'Running lowess {npoints}-point'
         all_20s[-1].metadata['colour'] = 'lightgreen'
 
-        npoints = 30
+        npoints = 20
         all_20s.append(annual.lowess(number_of_points=npoints))
         all_20s[-1].metadata['display_name'] = f'Lowess {npoints}-point'
         all_20s[-1].metadata['colour'] = 'purple'

@@ -89,10 +89,10 @@ if __name__ == "__main__":
     all_antarctic = ts_antarctic_archive.read_datasets(data_dir)
 
     for ds in all_arctic:
-        ds.rebaseline(1981, 2010)
+        ds.rebaseline(1991, 2020)
 
     for ds in all_antarctic:
-        ds.rebaseline(1981, 2010)
+        ds.rebaseline(1991, 2020)
 
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
@@ -112,9 +112,10 @@ if __name__ == "__main__":
         x_values = ds.get_year_axis()
         axs[0].plot(x_values, ds.df['data'], color=wmo_standard_colors[i], label=ds.metadata['display_name'], zorder=100-i)
 
-    axs[0].set_yticks([-3,-2,-1,0,1])
+    axs[0].set_yticks([-3,-2,-1,0,1,2])
     axs[0].set_xticks([1980, 1990, 2000, 2010, 2020])
     axs[0].set_title('Arctic sea-ice extent 1979-2024 (million km$^2$)', pad=25, loc='left', fontsize=30)
+    axs[0].set_ylim(-3.05,2.3)
     ylim = axs[0].get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
     axs[0].text(axs[0].get_xlim()[0], yloc, 'Difference from 1991-2020 average', fontdict={'fontsize': 90/4})
@@ -123,9 +124,10 @@ if __name__ == "__main__":
         x_values = ds.get_year_axis()
         axs[1].plot(x_values, ds.df['data'], color=wmo_standard_colors[i], label=ds.metadata['display_name'], zorder=100-i)
 
-    axs[1].set_yticks([-3,-2,-1,0,1])
+    axs[1].set_yticks([-3,-2,-1,0,1,2])
     axs[1].set_xticks([1980, 1990, 2000, 2010, 2020])
     axs[1].set_title('Antarctic sea-ice extent 1979-2024 (million km$^2$)', pad=5, loc='left', fontsize=30)
+    axs[1].set_ylim(-3.05, 2.3)
     ylim = axs[1].get_ylim()
     yloc = ylim[1] - 0.081 * (ylim[1] - ylim[0])
     axs[1].text(axs[1].get_xlim()[0], yloc, 'Difference from 1991-2020 average', fontdict={'fontsize': 90/4})
