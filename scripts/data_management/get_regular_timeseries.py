@@ -25,9 +25,10 @@ if __name__ == "__main__":
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
     # Global mean temperature
-    #ts_archive = archive.select(
-    #    {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
-    #ts_archive.download(data_dir)
+    ts_archive = archive.select(
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'Berkeley Earth', 'ERA5']})
+#        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
+    ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
@@ -44,10 +45,10 @@ if __name__ == "__main__":
     ts_archive.download(data_dir)
 
     # Ocean heat 700 and 2000m
-    ts_archive = archive.select({'type': 'timeseries',
-                                 'name': ['Cheng et al v4', 'Cheng et al 2k v4', 'Ishii', 'Ishii2k', 'Levitus',
-                                          'Levitus2k']})
-    ts_archive.download(data_dir)
+    # ts_archive = archive.select({'type': 'timeseries',
+    #                              'name': ['Cheng et al v4', 'Cheng et al 2k v4', 'Ishii', 'Ishii2k', 'Levitus',
+    #                                       'Levitus2k']})
+    # ts_archive.download(data_dir)
 
     # Arctic sea ice extent
     ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC', 'OSI SAF', 'OSI SAF v2p2']})
@@ -75,6 +76,6 @@ if __name__ == "__main__":
     ts_archive.download(data_dir)
 
     # Marine heatwaves
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['MHW','MCS']})
-    ts_archive.download(data_dir)
+    # ts_archive = archive.select({'type': 'timeseries', 'name': ['MHW','MCS']})
+    # ts_archive.download(data_dir)
 

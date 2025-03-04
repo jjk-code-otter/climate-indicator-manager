@@ -9,42 +9,48 @@
       "cards": [
         {
           "link_to":  null, "title": "Carbon dioxide",
-          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": ["WDCGG","Mauna Loa", "Kennaook Cape Grim CO2"]},
           "processing": [],
-          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric carbon dioxide concentration, Mauna Loa"}
         },
         {
-          "link_to": null,
-          "title": "Global temperature",
-          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
-                        "name": ["HadCRUT5", "NOAA Interim", "GISTEMP", "Berkeley Earth", "ERA5", "JRA-55", "Kadow"]},
-          "processing": [
-            {"method": "rebaseline", "args": [1981, 2010]},
-            {"method": "select_year_range", "args":  [1850, 2023]}
-          ],
-          "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+          "link_to":  null, "title": "Methane",
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "monthly", "name": ["WDCGG CH4","NOAA CH4", "Kennaook Cape Grim CH4"]},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric methane concentration"}
+        },
+        {
+          "link_to":  null, "title": "Nitrous Oxide",
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "monthly", "name": ["WDCGG N2O", "Kennaook Cape Grim N2O"]},
+          "processing": [],
+          "plotting": {"function": "monthly_plot", "title": "Atmospheric nitrous oxide concentration"}
         },
         {
           "link_to": null,
           "title": "Global temperature long term",
           "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
-                        "name": ["HadCRUT5", "NOAA Interim", "Berkeley Earth", "Kadow"]},
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "GISTEMP", "ERA5", "JRA-3Q"]},
           "processing": [
-            {"method": "rebaseline", "args": [1850, 1900]},
-            {"method": "select_year_range", "args":  [1850, 2023]}
+            {"method": "rebaseline", "args": [1981, 2010]},
+            {"method": "add_offset", "args": [0.69]},
+            {"method": "manually_set_baseline", "args": [1850, 1900]},
+            {"method": "select_year_range", "args":  [1970, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Global mean temperature long term"}
         },
         {
           "link_to": null,
-          "title": "Global annual temperature",
-          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs"},
+          "title": "Global 12-month temperature",
+          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "GISTEMP", "ERA5", "JRA-3Q"]},
           "processing": [
             {"method": "rebaseline", "args": [1981, 2010]},
-            {"method": "make_annual", "args":  []},
-            {"method": "select_year_range", "args":  [1850, 2023]}
+            {"method": "running_mean", "args":  [12]},
+            {"method": "add_offset", "args": [0.69]},
+            {"method": "manually_set_baseline", "args": [1850, 1900]},
+            {"method": "select_year_range", "args":  [1970, 2025]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Global annual mean temperature"}
+          "plotting": {"function": "neat_plot", "title": "Global 12-month rolling average temperature"}
         },
         {
           "link_to": null,
@@ -58,12 +64,12 @@
         {
           "link_to": null,
           "title": "Temperature Anomalies",
-          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2023, 12]}
+            {"method": "select_year_and_month", "args": [2024, 12]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "December 2023 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "December 2024 Temperature Anomaly"}
         },
         {
           "link_to": null,
@@ -71,10 +77,21 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "GISTEMP"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2023, 3, 2023, 5]},
+            {"method": "select_period", "args": [2024, 9, 2024, 11]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Spring 2023 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2024 temperature anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Annual Temperature Anomalies",
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "select_period", "args": [2024, 1, 2024, 12]},
+            {"method": "calculate_time_mean", "args":  []}
+          ],
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average Jan-Dec 2024 temperature anomaly"}
         },
         {
           "link_to": null,
@@ -82,9 +99,9 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2023, 5]}
+            {"method": "select_year_and_month", "args": [2024, 12]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "May 2023 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "December 2024 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -92,10 +109,10 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2023, 3, 2023, 5]},
+            {"method": "select_period", "args": [2024, 9, 2024, 11]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Spring 2023 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2024 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -103,17 +120,53 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2022, 1, 2022, 12]},
+            {"method": "select_period", "args": [2024, 1, 2024, 12]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "2022 Annual Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "2024 Annual Precipitation anomaly"}
+        },
+        {
+          "link_to": null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
+          "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
+        },
+        {
+          "link_to": null, "title": "Arctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
+          "plotting": {"function": "wmo_plot", "title": "Arctic sea-ice extent"}
+        },
+        {
+          "link_to": null, "title": "Antarctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
+          "plotting": {"function": "wmo_plot", "title": "Antarctic sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Arctic daily sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "irregular", "name": "NSIDC"},
+          "processing":  [],
+          "plotting": {"function": "daily_sea_ice_plot", "title": "Arctic daily sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic daily sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "irregular", "name": "NSIDC SH"},
+          "processing":  [],
+          "plotting": {"function": "daily_sea_ice_plot", "title": "Antarctic daily sea-ice extent"}
+        },
+        {
+          "link_to":  null, "title": "Greenland ice sheet",
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
+          "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to": null,
           "title": "Indian Ocean Dipole",
           "selecting": {"type":  "timeseries", "variable": "iod", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [1990, 2023]}
+            {"method": "select_year_range", "args": [1990, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Dipole Mode Index"}
         },
@@ -122,7 +175,7 @@
           "title": "ONI",
           "selecting": {"type":  "timeseries", "variable": "oni", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [1950, 2023]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Oceanic Nino Index"}
         },
@@ -132,7 +185,7 @@
           "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_range", "args": [1950, 2023]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Nino 3.4"}
         },
@@ -141,7 +194,7 @@
           "title": "SOI",
           "selecting": {"type":  "timeseries", "variable": "soi", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [1950, 2023]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Southern Oscillation Index"}
         },
@@ -150,7 +203,7 @@
           "title": "Pacific Decadal Oscillation",
           "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [1950, 2023]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Pacific Decadal Oscillation"}
         },
@@ -159,7 +212,7 @@
           "title": "Arctic Oscillation",
           "selecting": {"type":  "timeseries", "variable": "ao", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [2010, 2023]}
+            {"method": "select_year_range", "args": [2010, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Arctic Oscillation"}
         },
@@ -168,7 +221,7 @@
           "title": "Antarctic Oscillation",
           "selecting": {"type":  "timeseries", "variable": "aao", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_year_range", "args": [2010, 2023]}
+            {"method": "select_year_range", "args": [2010, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Antarctic Oscillation"}
         }

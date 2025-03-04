@@ -143,15 +143,16 @@ if __name__ == "__main__":
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
     plt.figure(figsize=[16, 9])
 
-    for ds in h5_infilled_anns:
+    linestyles = ['solid','solid','dashed']
+    for i, ds in enumerate(h5_infilled_anns):
         label = ds.metadata['display_name']+' minus non-infilled HadCRUT5'
-        plt.plot(ds.df['year'], ds.df['data'] - h5_anns[0].df['data'], linewidth=3, label=label)
+        plt.plot(ds.df['year'], ds.df['data'] - h5_anns[0].df['data'], linewidth=3, label=label, linestyle=linestyles[i])
 
-    for ds in h4_infilled_anns:
-        label = ds.metadata['display_name']+' minus HadCRUT4'
-        plt.plot(ds.df['year'], ds.df['data'] - h4_anns[0].df['data'][0:len(ds.df['data'])], linewidth=3, label=label)
+#    for ds in h4_infilled_anns:
+#        label = ds.metadata['display_name']+' minus HadCRUT4'
+#        plt.plot(ds.df['year'], ds.df['data'] - h4_anns[0].df['data'][0:len(ds.df['data'])], linewidth=3, label=label)
 
-    plt.legend(loc='upper left', fontsize=20, ncol=2, frameon=False)
+    plt.legend(loc='upper left', fontsize=20, ncol=1, frameon=False)
 
     plt.gca().set_xlabel("Year")
     plt.gca().set_ylabel(r"$\!^\circ\!$C", rotation=90, labelpad=10)
