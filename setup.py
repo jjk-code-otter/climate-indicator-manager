@@ -32,7 +32,7 @@ setup(
                       'python-dotenv', 'regionmask', 'geopandas', 'shapely',
                       'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx'],
     # version number
-    version='1.2.0',
+    version='1.3.0',
     # The license can be anything you like
     license='GNU General Public License v3.0',
     description='A python package for managing climate indicator information',
