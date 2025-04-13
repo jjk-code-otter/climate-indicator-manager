@@ -2147,6 +2147,9 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         label_text = r'Sea level trend (mm/year)'
     if 'precip_quantiles' in main_variable:
         label_text = ''
+    if main_variable == 'pre':
+        label_text = f"Precipitation difference from " \
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average (mm)"
     cbar.set_label(label_text, rotation=0, fontsize=25)
 
     p.axes.coastlines()

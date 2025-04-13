@@ -31,7 +31,7 @@
 	  "time_resolution": "monthly",
 	  "space_resolution": 1.0,
 	  "climatology_start": 1991,
-	  "climatology_end": 2010,
+	  "climatology_end": 2020,
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
