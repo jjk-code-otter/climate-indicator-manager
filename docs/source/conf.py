@@ -22,7 +22,7 @@ copyright = '2024, John Kennedy'
 author = 'John Kennedy'
 
 # The full version, including alpha/beta/rc tags
-release = '1.2'
+release = '1.3'
 
 # -- General configuration ---------------------------------------------------
 
