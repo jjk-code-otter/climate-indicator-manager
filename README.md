@@ -63,7 +63,8 @@ linux. In windows, do the following:
 3. Click on "Environment Variables..."
 4. Under "User variables for Username" click "New..."
 5. For "Variable name" type DATADIR
-6. For "Variable value" type the pathname for the directory you want the data to go in.
+6. For "Variable value" type the pathname for the directory you want the data to go in or navigate to the approriate directory using browse.
+7. Make sure that the directory exists.
 
 In addition, if you want to download JRA-55 data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
 valid username and password combo for each of these services. These values should be stored in a file called .env in
