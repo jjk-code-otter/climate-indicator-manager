@@ -25,7 +25,9 @@ and reproduced.
 Installation
 ============
 
-Download the code from the repository using your preferred method.
+Download the code from the repository using your preferred method. I use
+
+`git clone https://github.com/jjk-code-otter/climate-indicator-manager.git`
 
 An environment.yml file contains the details of the necessary conda environment. To 
 setup the environment you will need to install Anaconda and then run
