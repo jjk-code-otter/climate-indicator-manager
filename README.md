@@ -28,7 +28,7 @@ Installation
 Download the code from the repository using your preferred method.
 
 An environment.yml file contains the details of the necessary conda environment. To 
-setup the environment run
+setup the environment you will need to install Anaconda and then run
 
 `conda env create -f <path_to_yaml_file>`
 
