@@ -81,7 +81,7 @@ def regional_annual_datasets(annual_metadata):
         for i in range(6):
             years = []
             anoms = []
-            for y in range(1900, 2024):
+            for y in range(1900, 2025):
                 years.append(y)
                 anoms.append(0.01 * float(i) * float(y - 1900))
 
@@ -573,6 +573,7 @@ def test_map_caption(simple_annual_datasets):
         ds.metadata['climatology_end'] = 1990
         ds.metadata['name'] = f'dataset{i}'
         ds.metadata['display_name'] = f'dataset{i}'
+        ds.metadata['variable'] = 'tas'
         i += 1
 
     test_caption = pu.map_caption_builder(simple_annual_datasets, 'mean')

@@ -4,7 +4,7 @@
     {
       "id": "dashboard",
       "name": "Monthly monitoring",
-      "descriptor": "key_indicator.html",
+      "descriptor": "monthly_key_indicators.html",
       "template": "front_page",
       "cards": [
         {
@@ -27,22 +27,22 @@
         },
         {
           "link_to": null,
-          "title": "Global temperature long term",
+          "title": "Monthly global temperature",
           "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
-                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "GISTEMP", "ERA5", "JRA-3Q"]},
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "Berkeley Earth Hires", "GISTEMP", "ERA5", "JRA-3Q"]},
           "processing": [
             {"method": "rebaseline", "args": [1981, 2010]},
             {"method": "add_offset", "args": [0.69]},
             {"method": "manually_set_baseline", "args": [1850, 1900]},
-            {"method": "select_year_range", "args":  [1970, 2025]}
+            {"method": "select_year_range", "args":  [2010, 2025]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Global mean temperature long term"}
+          "plotting": {"function": "neat_plot", "title": "Monthly global mean temperature"}
         },
         {
           "link_to": null,
           "title": "Global 12-month temperature",
           "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
-                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "GISTEMP", "ERA5", "JRA-3Q"]},
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth", "Berkeley Earth Hires", "GISTEMP", "ERA5", "JRA-3Q"]},
           "processing": [
             {"method": "rebaseline", "args": [1981, 2010]},
             {"method": "running_mean", "args":  [12]},
@@ -54,12 +54,34 @@
         },
         {
           "link_to": null,
-          "title": "TLT",
-          "selecting": {"type":  "timeseries", "variable": "tlt", "time_resolution": "monthly"},
+          "title": "Global temperature average year-to-date",
+          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth Hires", "GISTEMP", "ERA5", "JRA-3Q"]},
           "processing": [
-            {"method": "rebaseline", "args": [1991, 2010]}
+            {"method": "rebaseline", "args": [1981, 2010]}
           ],
-          "plotting": {"function": "neat_plot", "title": "Global TLT temperature"}
+          "plotting": {"function": "wave_multiple_plot", "title": "Year to date"}
+        },
+        {
+          "link_to": null,
+          "title": "Global temperature year by year comparison",
+          "selecting": {"type":  "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA v6", "Berkeley Earth Hires", "GISTEMP", "ERA5", "JRA-3Q"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1981, 2010]}
+          ],
+          "plotting": {"function": "rising_tide_multiple_plot", "title": "Year to date"}
+        },
+        {
+          "link_to": null,
+          "title": "Monthly global sea-surface temperature",
+          "selecting": {"type":  "timeseries", "variable": "sst", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["ERSST v6", "HadSST4", "DCENT SST", "COBE SST 3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1981, 2010]},
+            {"method": "select_year_range", "args":  [2010, 2025]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Monthly global mean sea surface temperature"}
         },
         {
           "link_to": null,
@@ -67,31 +89,31 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2024, 12]}
+            {"method": "select_year_and_month", "args": [2025, 6]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "December 2024 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "June 2025 Temperature Anomaly"}
         },
         {
           "link_to": null,
           "title": "Seasonal Temperature Anomalies",
-          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "GISTEMP"},
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 9, 2024, 11]},
+            {"method": "select_period", "args": [2025, 3, 2025, 5]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2024 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Spring 2025 temperature anomaly"}
         },
         {
           "link_to": null,
           "title": "Annual Temperature Anomalies",
-          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "HadCRUT5"},
+          "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 1, 2024, 12]},
+            {"method": "select_period", "args": [2024, 7, 2025, 6]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average Jan-Dec 2024 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average July 2024 - June 2025 temperature anomaly"}
         },
         {
           "link_to": null,
@@ -99,9 +121,9 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2024, 12]}
+            {"method": "select_year_and_month", "args": [2025, 6]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "December 2024 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "June 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -109,10 +131,10 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 9, 2024, 11]},
+            {"method": "select_period", "args": [2025, 3, 2025, 5]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2024 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Spring 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -120,15 +142,24 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 1, 2024, 12]},
+            {"method": "select_period", "args": [2024, 7, 2025, 6]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "2024 Annual Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average July 2024 - June 2025 precipitation anomaly"}
+        },
+        {
+          "link_to": null,
+          "title": "Lower Troposhere Temperature",
+          "selecting": {"type":  "timeseries", "variable": "tlt", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2010]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Global TLT temperature"}
         },
         {
           "link_to": null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2024]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
         },
         {
@@ -145,13 +176,13 @@
         },
         {
           "link_to":  null, "title": "Arctic daily sea ice",
-          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "irregular", "name": "NSIDC"},
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "irregular", "name": "JAXA NH"},
           "processing":  [],
           "plotting": {"function": "daily_sea_ice_plot", "title": "Arctic daily sea-ice extent"}
         },
         {
           "link_to":  null, "title": "Antarctic daily sea ice",
-          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "irregular", "name": "NSIDC SH"},
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "irregular", "name": "JAXA SH"},
           "processing":  [],
           "plotting": {"function": "daily_sea_ice_plot", "title": "Antarctic daily sea-ice extent"}
         },
@@ -178,6 +209,15 @@
             {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "neat_plot", "title": "Oceanic Nino Index"}
+        },
+        {
+          "link_to": null,
+          "title": "Relative ONI",
+          "selecting": {"type":  "timeseries", "variable": "roni", "time_resolution": "monthly"},
+          "processing": [
+            {"method": "select_year_range", "args": [1950, 2025]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Relative Oceanic Nino Index"}
         },
         {
           "link_to": null,
@@ -227,12 +267,6 @@
         }
       ],
       "paragraphs": [
-        {
-          "selecting": {"type": "timeseries", "variable": "tlt", "time_resolution": "monthly"},
-          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
-                          {"method": "make_annual", "args": []}],
-          "writing": {"function": "global_anomaly_and_rank"}
-        }
       ]
     }
   ]

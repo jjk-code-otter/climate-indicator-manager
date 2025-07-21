@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": ["https://climate.nasa.gov/vital-signs/sea-level/?intent=121"],
-      "filename": ["GMSL_TPJAOS_5.1.txt"],
+      "filename": ["GMSL_TPJAOS_5.2.txt"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

@@ -13,6 +13,21 @@
   "origin": "obs",
   "notes": "",
   "datasets": [
+    {
+      "url": ["https://www.wdc-climate.de/WDCC/ui/download/transferGeneric?acronym=HadCRU_MLE_GridMon_v1.2&rmin=6&rmax=6"],
+      "filename": ["HadCRU_MLE_v1.2_gridded_monthly_anomalies_summary.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+      "space_resolution": 5,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_calvert",
+	  "fetcher": "fetcher_no_url"
+    },
 	{
       "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.2"],
       "filename": ["HadCRU_MLE_v1.2_timeseries_monthly_summary.txt"],

@@ -1,0 +1,34 @@
+{
+  "name": "DCENT_MLE",
+  "display_name": "DCENT MLE",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Chan, Duo; Gebbie, Geoffrey; Huybers, Peter; Kent, Elizabeth, 2024, DCENT: Dynamically Consistent ENsemble of Temperature at the earth surface, Scientific Data (2024)."],
+  "citation_url": [""],
+  "data_citation": ["Chan, Duo; Gebbie, Geoffrey; Huybers, Peter; Kent, Elizabeth, 2024, DCENT: Dynamically Consistent ENsemble of Temperature at the earth surface, https://doi.org/10.7910/DVN/NU4UGW, Harvard Dataverse, V1"],
+  "acknowledgement": "",
+  "colour": "purple",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://www.wdc-climate.de/WDCC/ui/download/transferGeneric?acronym=DCENT_MLE_v1_0_grm&rmin=6&rmax=6"],
+	  "filename": [
+        "DCENT_MLE_v1.0_gridded_monthly_anomalies_summary.nc"
+      ],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 5.0,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_calvert",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

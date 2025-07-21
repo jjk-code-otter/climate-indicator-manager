@@ -1,0 +1,47 @@
+{
+  "name": "JAXA NH",
+  "display_name": "JAXA",
+  "version": "",
+  "variable": "arctic_ice",
+  "units": "millionkm2",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#555555",
+  "zpos": 1,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_NHM_201.txt"],
+      "filename": ["JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_NHM_201.txt"],
+	  "type": "timeseries",
+      "long_name": "Arctic sea-ice extent",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jaxa",
+	  "fetcher": "fetcher_ftp"
+    },
+    {
+      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_NHM_201.txt"],
+      "filename": ["JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_NHM_201.txt"],
+	  "type": "timeseries",
+      "long_name": "Arctic sea-ice extent",
+	  "time_resolution": "irregular",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jaxa",
+	  "fetcher": "fetcher_ftp"
+    }
+  ]
+}

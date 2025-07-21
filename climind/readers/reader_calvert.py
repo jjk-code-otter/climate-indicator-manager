@@ -27,6 +27,36 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
+def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
+    df = xa.open_dataset(filename[0])
+    df = df[['surface_temperature_anomaly_median']]
+    metadata['history'] = [f"Gridded dataset created from file {metadata['filename']} "
+                           f"downloaded from {metadata['url']}"]
+    return gd.GridMonthly(df, metadata)
+
+
+def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
+    return read_monthly_grid(filename, metadata)
+
+
+def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kwargs) -> gd.GridMonthly:
+    df = xa.open_dataset(filename[0])
+    # regrid to 1x1
+    lats = np.arange(-89.5, 90.5, 1.0)
+    lons = np.arange(-179.5, 180.5, 1.0)
+
+    # Copy 5-degree grid cell value into all one degree cells
+    grid = np.repeat(df.surface_temperature_anomaly_median, 5, 1)
+    grid = np.repeat(grid, 5, 2)
+
+    df = gd.make_xarray(grid, df.time.data, lats, lons)
+
+    metadata.creation_message()
+    metadata['history'].append("Regridded to 1 degree latitude-longitude resolution")
+
+    return gd.GridMonthly(df, metadata)
+
+
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []

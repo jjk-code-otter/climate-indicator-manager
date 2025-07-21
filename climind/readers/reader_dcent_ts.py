@@ -28,7 +28,7 @@ from climind.readers.generic_reader import read_ts
 
 def read_monthly_grid(filename: List[Path], metadata: CombinedMetadata) -> gd.GridMonthly:
     df = xa.open_dataset(filename[0])
-    if metadata['variable'] == 'tas':
+    if metadata['variable'] == 'temperature':
         df = df[['temperature']]
     elif metadata['variable'] == 'sst':
         df = df[['sst']]
@@ -51,7 +51,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
     lons = np.arange(-179.5, 180.5, 1.0)
 
     # Copy 5-degree grid cell value into all one degree cells
-    grid = np.repeat(df.tas_mean, 5, 1)
+    grid = np.repeat(df.temperature, 5, 1)
     grid = np.repeat(grid, 5, 2)
 
     df = gd.make_xarray(grid, df.time.data, lats, lons)

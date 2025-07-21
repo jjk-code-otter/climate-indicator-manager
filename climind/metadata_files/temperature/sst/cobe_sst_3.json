@@ -1,0 +1,47 @@
+{
+  "name": "COBE SST 3",
+  "display_name": "COBE SST 3",
+  "version": "3",
+  "variable": "sst",
+  "units": "degC",
+  "citation": ["ISHII, M., A. NISHIMURA, S. YASUI, S. HIRAHARA, Historical High-Resolution Daily SST Analysis (COBE-SST3) with Consistency to Monthly Land Surface Air Temperature, Journal of the Meteorological Society of Japan. Ser. II, 2025, Volume 103, Issue 1, Pages 17-44, https://doi.org/10.2151/jmsj.2025-002"],
+  "citation_url": ["https://doi.org/10.2151/jmsj.2025-002"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#ff0000",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://climate.mri-jma.go.jp/pub/archives/Ishii-et-al_COBE-SST3/gm/gm_cobe-sst3"],
+      "filename": ["gm_cobe-sst3"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cobe_stemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://climate.mri-jma.go.jp/pub/archives/Ishii-et-al_COBE-SST3/gm/annual_gm_cobe-sst3"],
+      "filename": ["annual_gm_cobe-sst3"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cobe_stemp_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

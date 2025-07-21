@@ -1,5 +1,5 @@
 #  Climate indicator manager - a package for managing and building climate indicator dashboards.
-#  Copyright (c) 2024 John Kennedy
+#  Copyright (c) 2022 John Kennedy
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -14,34 +14,25 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
 import climind.data_manager.processing as dm
-import climind.plotters.plot_types as pt
-import climind.stats.utils as utils
-
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-    final_year = 2025
-
     project_dir = DATA_DIR / "ManagedData"
-    metadata_dir = METADATA_DIR
-
     data_dir = project_dir / "Data"
-    figure_dir = project_dir / 'Figures'
-    report_dir = project_dir / 'Reports'
-    report_dir.mkdir(exist_ok=True)
 
-    archive = dm.DataArchive.from_directory(metadata_dir)
-    ts_archive = archive.select({'variable': 'tas',
-                                 'type': 'timeseries',
-                                 'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires','JRA-3Q']})
+    archive = dm.DataArchive.from_directory(METADATA_DIR)
 
-    all_datasets = ts_archive.read_datasets(data_dir)
+    # Global mean temperature
+    ts_archive = archive.select(
+        {'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['ERA5']})
+    ts_archive.download(data_dir)
 
-    for ds in all_datasets:
-        ds.select_year_range(1970,2025)
+    # Arctic sea ice extent
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC', 'OSI SAF v2p2']})
+    ts_archive.download(data_dir)
 
-    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True)
+    # Antarctic sea ice extent
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC SH', 'OSI SAF SH v2p2']})
+    ts_archive.download(data_dir)

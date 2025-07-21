@@ -87,15 +87,17 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
 
 if __name__ == "__main__":
 
-    test = False
+    test = True
 
     if test:
         start_year = 1850
         output_data_dir = "RegionalTestData"
         output_metadata_dir = "RegionalTestMetadata"
         datasets_to_use = [
-            'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim', 'Kadow', 'HadCRUT5',
-            'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55'
+            'DCENT_MLE'
+            # 'Calvert 2024', 'DCENT', 'GloSAT',
+            # 'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim', 'Kadow', 'HadCRUT5',
+            # 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55', 'JRA-3Q', 'NOAA v6'
         ]
     else:
         start_year = 1900

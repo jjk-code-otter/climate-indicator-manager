@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/netcdf/HadSST.4.0.1.0_median.nc"],
-	  "filename": ["HadSST.4.0.1.0_median.nc"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_median.nc"],
+	  "filename": ["HadSST.4.1.1.0_median.nc"],
       "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
@@ -28,9 +28,9 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/csv/HadSST.4.0.1.0_monthly_GLOBE.csv", 
-	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/csv/HadSST.4.0.1.0_annual_GLOBE.csv"],
-      "filename": ["HadSST.4.0.1.0_monthly_GLOBE.csv","HadSST.4.0.1.0_annual_GLOBE.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_monthly_GLOBE.csv",
+	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_annual_GLOBE.csv"],
+      "filename": ["HadSST.4.1.1.0_monthly_GLOBE.csv","HadSST.4.1.1.0_annual_GLOBE.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "monthly",
@@ -44,9 +44,9 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/csv/HadSST.4.0.1.0_monthly_GLOBE.csv", 
-	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/csv/HadSST.4.0.1.0_annual_GLOBE.csv"],
-      "filename": ["HadSST.4.0.1.0_monthly_GLOBE.csv", "HadSST.4.0.1.0_annual_GLOBE.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_monthly_GLOBE.csv",
+	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_annual_GLOBE.csv"],
+      "filename": ["HadSST.4.1.1.0_monthly_GLOBE.csv", "HadSST.4.1.1.0_annual_GLOBE.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "annual",

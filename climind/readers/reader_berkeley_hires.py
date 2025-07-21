@@ -13,11 +13,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import itertools
 from pathlib import Path
+import xarray as xa
+import pandas as pd
+import numpy as np
 from typing import List
 
 import climind.data_types.timeseries as ts
+import climind.data_types.grid as gd
+
 from climind.data_manager.metadata import CombinedMetadata
 
 from climind.readers.generic_reader import read_ts
@@ -30,24 +35,42 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     uncertainties = []
 
     with open(filename[0], 'r') as f:
-        f.readline()
-        for line in f:
-            columns = line.split(',')
-            year = columns[0]
-            month = columns[1]
+        for _ in range(95):
+            f.readline()
 
-            years.append(int(year))
-            months.append(int(month))
+        for line in f:
+            columns = line.split()
+            if len(columns) < 2:
+                break
+            years.append(int(columns[0]))
+            months.append(int(columns[1]))
             anomalies.append(float(columns[2]))
             uncertainties.append(float(columns[3]))
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, uncertainty=uncertainties, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata, uncertainty=uncertainties)
 
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
-    monthly = read_monthly_ts(filename, metadata)
-    annual = monthly.make_annual()
+    years = []
+    anomalies = []
+    uncertainties = []
 
-    return annual
+    with open(filename[0], 'r') as f:
+        for _ in range(95):
+            f.readline()
+
+        for line in f:
+            columns = line.split()
+            if len(columns) < 2:
+                break
+
+            if int(columns[1]) == 6:
+                years.append(int(columns[0]))
+                anomalies.append(float(columns[4]))
+                uncertainties.append(float(columns[5]))
+
+    metadata.creation_message()
+
+    return ts.TimeSeriesAnnual(years, anomalies, metadata=metadata, uncertainty=uncertainties)
