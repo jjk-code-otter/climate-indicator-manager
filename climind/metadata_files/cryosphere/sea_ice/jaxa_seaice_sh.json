@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_SHM_201.txt"],
-      "filename": ["JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_SHM_201.txt"],
+      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/"],
+      "filename": ["JASMES_CLIMATE_SIE_5DAVG_PS_SHM.txt"],
 	  "type": "timeseries",
       "long_name": "Antarctic sea-ice extent",
 	  "time_resolution": "monthly",
@@ -26,11 +26,11 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_jaxa",
-	  "fetcher": "fetcher_ftp"
+	  "fetcher": "fetcher_jaxa"
     },
     {
-      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_SHM_201.txt"],
-      "filename": ["JASMES_CLIMATE_SIE_19781101_20250717_5DAVG_PS_SHM_201.txt"],
+      "url": ["ftp://apollo.eorc.jaxa.jp/pub/JASMES/Polar_XXkm/sie/"],
+      "filename": ["JASMES_CLIMATE_SIE_5DAVG_PS_SHM.txt"],
 	  "type": "timeseries",
       "long_name": "Antarctic sea-ice extent",
 	  "time_resolution": "irregular",
@@ -41,7 +41,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_jaxa",
-	  "fetcher": "fetcher_ftp"
+	  "fetcher": "fetcher_jaxa"
     }
   ]
 }
