@@ -35,12 +35,13 @@ from climind.web.dashboard import Dashboard
 if __name__ == "__main__":
 
     minimal = False
+    dash2025 = True
     dash2024 = False
     dash2023 = False
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
 
@@ -81,6 +82,13 @@ if __name__ == "__main__":
         dash_dir = DATA_DIR / 'ManagedData' / 'MonthlyDashboard'
         dash_dir.mkdir(exist_ok=True)
         dash.build(Path(dash_dir), focus_year=2023)
+
+    if dash2025 or run_all:
+        json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2025.json'
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2025'
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if dash2024 or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2024.json'

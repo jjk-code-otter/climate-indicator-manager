@@ -1145,8 +1145,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     # march_colors = ['#56b4e9', '#009e73', '#5473ff']
     # september_colors = ['#e69f00', '#d55e00', '#ff6b54']
-    march_colors = ['#204e96', '#23abd1', '#008F90']
-    september_colors = ['#f5a729', '#EE4391', '#F36F21']
+    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
+    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1238,9 +1238,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
         Caption for the figure
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-
-    february_colors = ['#f5a729', '#ED1C24', '#F36F21']
-    september_colors = ['#204e96', '#23abd1', '#008F90']
+    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380']
+    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):

@@ -835,22 +835,44 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
-def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], _) -> str:
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year:int) -> str:
     all_trends = []
+    all_initial_trends = []
+    all_recent_trends = []
+    all_semi_recent_trends = []
+
     out_text = ""
     for ds in all_datasets:
         times = ds.df['year'] + (ds.df['month'] - 1) / 12.
         data = ds.df['data']
 
         result = np.polyfit(times, data, 1)
-        trend = result[0]
-        all_trends.append(trend)
+        trend1 = result[0]
+        all_trends.append(trend1)
+
+        selection = times < 2003
+        result = np.polyfit(times[selection], data[selection], 1)
+        trend2= result[0]
+        all_initial_trends.append(trend2)
+
+        selection = times >= (year - 9)
+        result = np.polyfit(times[selection], data[selection], 1)
+        trend3 = result[0]
+        all_recent_trends.append(trend3)
+
+        selection = (times >= 2015) & (times < 2025)
+        result = np.polyfit(times[selection], data[selection], 1)
+        trend4 = result[0]
+        all_semi_recent_trends.append(trend4)
 
         first_year, last_year = ds.get_first_and_last_year()
 
         units = fancy_html_units(ds.metadata['units'])
-        out_text += f"The rate of change in the {ds.metadata['display_name']} data set is {trend:.1f} {units}/yr " \
-                    f"between {first_year} and {last_year}."
+        out_text += (f"The rate of change in the {ds.metadata['display_name']} data set is {trend1:.2f} {units}/yr "
+                     f"between {first_year} and {last_year}. The rate of change in the past decade {year-9}-{year} is "
+                     f"{trend3:.2f} {units}/yr which is higher than the trend for the first decade of the satellite "
+                     f"record 1993-2002 which was {trend2:.2f} {units}/yr. The trend for 2015-2014 was {trend4:.2f} "
+                     f"{units}/yr.\n")
 
     return out_text
 
@@ -875,6 +897,8 @@ def precip_paragraph(_, year) -> str:
         out_text += "amounts in some areas."
     elif year == 2024:
         out_text = 'Nothing to see here yet.'
+    elif year == 2025:
+        out_text = 'Nothing to see here yet'
 
     return out_text
 

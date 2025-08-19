@@ -1,0 +1,47 @@
+{
+  "name": "Berkeley Earth Hires LSAT",
+  "display_name": "Berkeley Earth Hires",
+  "version": "",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": ["experimental"],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://storage.googleapis.com/berkeley-earth-temperature-hr/global/Land_TAVG_monthly.txt"],
+      "filename": ["Land_TAVG_monthly.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean land temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_berkeley_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://storage.googleapis.com/berkeley-earth-temperature-hr/global/Land_TAVG_monthly.txt"],
+      "filename": ["Land_TAVG_monthly.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean land temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_berkeley_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
