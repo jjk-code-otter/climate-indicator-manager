@@ -250,7 +250,7 @@ def read_grid(filename: str):
     for year in range(2024, 2030):
         filled_filename = Path(str(filename).replace('YYYY', f'{year}'))
         if year == 2024:
-            filled_filename = filename.parents[0] / 'era5_2m_tas_1940_2024.nc'
+            filled_filename = filename.parents[0] / 'era5_2m_tas_1940_2025.nc'
         if filled_filename.exists():
             ds = xa.open_dataset(filled_filename)
 

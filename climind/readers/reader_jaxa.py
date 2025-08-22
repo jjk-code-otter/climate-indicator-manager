@@ -16,6 +16,7 @@
 
 from pathlib import Path
 from typing import List
+import numpy as np
 
 import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
@@ -23,31 +24,33 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+def read_monthly_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    ts = read_irregular_ts(filenames, metadata)
+    ts = ts.make_monthly()
+    return ts
+
+
+def read_irregular_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     years = []
     months = []
-    anomalies = []
-    uncertainties = []
+    days = []
+    extents = []
 
-    with open(filename[0], 'r') as f:
-        f.readline()
+    with open(filenames[0], 'r') as f:
         for line in f:
-            columns = line.split(',')
-            year = columns[0]
-            month = columns[1]
+            columns = line.split()
 
-            years.append(int(year))
-            months.append(int(month))
-            anomalies.append(float(columns[2]))
-            uncertainties.append(float(columns[3]))
+            year = int(columns[2])
+            month = int(columns[0])
+            day = int(columns[1])
+            data = float(columns[3])
+
+            if data != -9999:
+                years.append(year)
+                months.append(month)
+                days.append(day)
+                extents.append(data/1e6)
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, uncertainty=uncertainties, metadata=metadata)
-
-
-def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
-    monthly = read_monthly_ts(filename, metadata)
-    annual = monthly.make_annual()
-
-    return annual
+    return ts.TimeSeriesIrregular(years, months, days, extents, metadata=metadata)

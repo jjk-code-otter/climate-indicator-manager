@@ -66,7 +66,7 @@ STANDARD_PARAMETER_SET = {
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     axs[0].set_yticks([-3,-2,-1,0,1,2])
     axs[0].set_xticks([1980, 1990, 2000, 2010, 2020])
-    axs[0].set_title('Arctic sea-ice extent 1979-2024 (million km$^2$)', pad=25, loc='left', fontsize=30)
+    axs[0].set_title('Arctic sea-ice extent 1979-2025 (million km$^2$)', pad=25, loc='left', fontsize=30)
     axs[0].set_ylim(-3.05,2.3)
     ylim = axs[0].get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
@@ -126,7 +126,7 @@ if __name__ == "__main__":
 
     axs[1].set_yticks([-3,-2,-1,0,1,2])
     axs[1].set_xticks([1980, 1990, 2000, 2010, 2020])
-    axs[1].set_title('Antarctic sea-ice extent 1979-2024 (million km$^2$)', pad=5, loc='left', fontsize=30)
+    axs[1].set_title('Antarctic sea-ice extent 1979-2025 (million km$^2$)', pad=5, loc='left', fontsize=30)
     axs[1].set_ylim(-3.05, 2.3)
     ylim = axs[1].get_ylim()
     yloc = ylim[1] - 0.081 * (ylim[1] - ylim[0])

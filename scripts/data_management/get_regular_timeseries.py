@@ -26,17 +26,20 @@ if __name__ == "__main__":
 
     # Global mean temperature
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']})
+        #{'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'Berkeley Earth', 'ERA5']})
     ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT']})#
+        #{'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']})#
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6']})#
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST']})
+        #{'type': 'timeseries', 'name': ['HadSST4']})
+        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']})
     ts_archive.download(data_dir)
 
     # Sea level
@@ -44,17 +47,17 @@ if __name__ == "__main__":
     ts_archive.download(data_dir)
 
     # Ocean heat 700 and 2000m
-    # ts_archive = archive.select({'type': 'timeseries',
-    #                              'name': ['Cheng et al v4', 'Cheng et al 2k v4', 'Ishii', 'Ishii2k', 'Levitus',
-    #                                       'Levitus2k']})
-    # ts_archive.download(data_dir)
+    ts_archive = archive.select({'type': 'timeseries',
+                                 'name': ['Cheng et al v4', 'Cheng et al 2k v4', 'Ishii', 'Ishii2k', 'Levitus',
+                                          'Levitus2k']})
+    ts_archive.download(data_dir)
 
     # Arctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC', 'OSI SAF v2p2']})
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p2']})
     ts_archive.download(data_dir)
 
     # Antarctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC SH', 'OSI SAF SH v2p2']})
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2']})
     ts_archive.download(data_dir)
 
     # Glaciers
@@ -72,6 +75,22 @@ if __name__ == "__main__":
 
     # Snow
     ts_archive = archive.select({'type': 'timeseries', 'name': ['Rutgers NH','Rutgers NAM']})
+    ts_archive.download(data_dir)
+
+    # TLT
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['UAH', 'RSS']})
+    ts_archive.download(data_dir)
+
+    # CO2
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['Mauna Loa','Kennaook Cape Grim CO2']})
+    ts_archive.download(data_dir)
+
+    # CH4
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['NOAA CH4','Kennaook Cape Grim CH4']})
+    ts_archive.download(data_dir)
+
+    # N2O
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['Kennaook Cape Grim N2O']})
     ts_archive.download(data_dir)
 
     # Marine heatwaves

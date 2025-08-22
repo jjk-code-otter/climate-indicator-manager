@@ -37,7 +37,10 @@ def read_monthly_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.Tim
                 columns = line.split(',')
                 year = columns[0]
                 month = columns[1]
-                data = float(columns[4])
+                if len(columns) == 7:
+                    data = float(columns[5])
+                else:
+                    data = float(columns[4])
 
                 years.append(int(year))
                 months.append(int(month))

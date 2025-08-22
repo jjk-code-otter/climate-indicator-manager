@@ -1,0 +1,32 @@
+{
+  "name": "Relative ONI",
+  "display_name": "NOAA CPC",
+  "version": "",
+  "variable": "roni",
+  "units": "degC",
+  "citation": ["https://www.ncei.noaa.gov/access/monitoring/ao/"],
+  "citation_url": ["https://www.ncei.noaa.gov/access/monitoring/ao/"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://www.cpc.ncep.noaa.gov/data/indices/RONI.ascii.txt"],
+      "filename": ["RONI.ascii.txt"],
+	  "type": "timeseries",
+      "long_name": "Relative Oceanic Nino Index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_roni",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

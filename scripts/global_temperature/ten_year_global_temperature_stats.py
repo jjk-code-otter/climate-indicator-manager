@@ -26,7 +26,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
     last_digit = final_year - 2020
 
     project_dir = DATA_DIR / "ManagedData"

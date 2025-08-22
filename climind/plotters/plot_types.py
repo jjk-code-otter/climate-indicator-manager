@@ -405,9 +405,13 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
         if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
             loc = "upper right"
             bbox_to_anchor = (0.96, 0.96)
+        ncol = 1
+        if len(handles) > 6:
+            ncol = 2
         leg = plt.legend([handles[idx] for idx in order], [labels[idx] for idx in order],
                          frameon=False, prop={'size': 20}, labelcolor='linecolor',
-                         handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
+                         handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor,
+                         ncol=ncol)
         for line in leg.get_lines():
             line.set_linewidth(3.0)
         for item in leg.legendHandles:
@@ -1141,8 +1145,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     # march_colors = ['#56b4e9', '#009e73', '#5473ff']
     # september_colors = ['#e69f00', '#d55e00', '#ff6b54']
-    march_colors = ['#204e96', '#23abd1', '#008F90']
-    september_colors = ['#f5a729', '#EE4391', '#F36F21']
+    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
+    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1234,9 +1238,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
         Caption for the figure
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-
-    february_colors = ['#f5a729', '#ED1C24', '#F36F21']
-    september_colors = ['#204e96', '#23abd1', '#008F90']
+    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380']
+    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1504,7 +1507,11 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
             all_datasets = superset[pos_ind]
 
             mean_trend, min_trend, max_trend = calculate_trends(all_datasets, y1, y2)
-            min_rank, max_rank = calculate_ranks(all_datasets, final_year)
+            try:
+                min_rank, max_rank = calculate_ranks(all_datasets, final_year)
+            except ValueError:
+                min_rank = None
+                max_rank = None
             mean_value, min_value, max_value = calculate_values(all_datasets, final_year)
 
             if print_trends:
@@ -1574,6 +1581,8 @@ def daily_sea_ice_plot(out_dir: Path,
                        image_filename: str, title: str) -> str:
     final_year = 2025
 
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
     # Plot annual cycle plot
     plt.figure(figsize=(16, 9))
 
@@ -1628,11 +1637,11 @@ def daily_sea_ice_plot(out_dir: Path,
     xlim = plt.gca().get_xlim()
 
     if md['variable'] == 'arctic_ice':
-        yloc = ylim[0] + 0.51 * (ylim[1] - ylim[0])
+        yloc = ylim[0] + 0.51 * (ylim[1] - ylim[0]) - 0.5
         xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
 
-        yloc = ylim[0] + 0.5 * (ylim[1] - ylim[0])
+        yloc = ylim[0] + 0.5 * (ylim[1] - ylim[0]) - 1
         xloc = xlim[0] + 0.1 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '2025 extent', color=col_ext, fontdict={'fontsize': 18})  # red
 
@@ -1642,7 +1651,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
         plt.gca().set_ylim(-0.5, 17.5)
     else:
-        yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0])
+        yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0]) - 0.5
         xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
 
@@ -1677,9 +1686,9 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     fig = plt.figure(figsize=[16, 6])
 
-    n_months = 24
+    n_months = 28
 
-    n_time_x = len(all_datasets[0].df.data)
+    n_time_x = len(all_datasets[1].df.data)
 
     n_datasets = len(all_datasets)
 
@@ -1717,14 +1726,14 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
                 ax.text(i + 0.5, j + 0.5, f'{rank}', ha='center', va='center', color=tcolor, fontsize=24)
 
             months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
-            if j == 0 and overlay:
+            if j == 1 and overlay:
                 ax.text(i + 0.5, -0.3, months[month - 1], ha='center', va='center', fontsize=24, color='black')
 
-            if month == 1 and j == 0:
+            if month == 1 and j == 1:
                 if first_year is None:
                     first_year = year
                 plt.plot([i, i], [0, n_datasets], linewidth=2, color='black', zorder=99)
-                ax.text(i + 0.25, j - 0.9, f'{year}', fontsize=24, color='black')
+                ax.text(i + 0.25, 0 - 0.9, f'{year}', fontsize=24, color='black')
 
         ax.text(n_time_x - (n_months + 0.5), j + 0.5, ds.metadata['display_name'], ha='right', va='center', fontsize=24,
                 color='black')
@@ -1747,7 +1756,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - 18. + 2.5
+        i = n_time_x - (n_months - 6) + 2.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fc6f03'
@@ -1757,7 +1766,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - 11.2 + 2.5
+        i = n_time_x - (n_months - 13) + 2.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fcd703'
@@ -1767,7 +1776,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - 7.5 + 2.5
+        i = n_time_x - (n_months - 17) + 2.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fff9a3'
@@ -1777,7 +1786,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '10', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 10', fontsize=24, color='black', va='center', clip_on=False)
 
-    ax.text(n_time_x - (n_months + 7), n_datasets + 0.3, f'GLOBALTEMPERATURE\nRANKINGS {first_year}-2024',
+    ax.text(n_time_x - (n_months + 8.5), n_datasets + 0.3, f'GLOBALTEMPERATURE\nRANKINGS {first_year}-2025',
             color='#000000', fontsize=32,
             clip_on=False)
 
@@ -2428,7 +2437,7 @@ def wave_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None
     plt.close('all')
 
 
-def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
+def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename, title) -> None:
     """
     Wave plot with month on the x-axis from January to December and each year shown as a separate line
     showing the cumulative average for the year-to-date for that year.
@@ -2447,7 +2456,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     None
     """
 
-    plt.figure(figsize=[9, 9])
+    plt.figure(figsize=[16, 9])
 
     for dataset in all_datasets:
         first_year, last_year = dataset.get_first_and_last_year()
@@ -2472,14 +2481,14 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
             if year < last_year and n_months == 12:
                 all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
-            if year not in [2016, 2023]:
+            if year not in [2016, 2023, 2024]:
                 colour = '#aaaaaa'
                 lthk = 1
-            if year in [2016]:
+            if year in [2016, 2023, 2024]:
                 colour = '#41b6c4'
                 lthk = 2
 
-            if year == last_year or year == 2023:
+            if year == last_year and year > 2024:
                 all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
                 for y2 in range(1950, last_year):
                     colour = 'orange'
@@ -2501,32 +2510,37 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     # Draw 1.5C line
     plt.plot([1, 12], [1.5 - 0.69, 1.5 - 0.69], color='black', linewidth=2)
     plt.fill_between([1, 12], [1.5 - 0.54, 1.5 - 0.54], [1.5 - 0.79, 1.5 - 0.79], color='green', alpha=0.2)
-    plt.gcf().text(0.86, 0.80, r"~1.5$\!^\circ\!$C range", color='darkgreen', fontsize=20, ha='right', alpha=0.8)
+    plt.gcf().text(0.86, 0.76, r"~1.5$\!^\circ\!$C range", color='darkgreen', fontsize=20, ha='right', alpha=0.8)
 
     import matplotlib.patheffects as PathEffects
     peb = PathEffects.withStroke(linewidth=1.5, foreground="#555555")
 
-    plt.gcf().text(0.87, 0.43, '2016', fontsize=30, color='#41b6c4')
-    plt.gcf().text(0.87, 0.710, '2024', fontsize=30, color='darkred')
-    plt.gcf().text(0.87, 0.610, '2023', fontsize=30, color='darkred')
+    plt.gcf().text(0.87, 0.41, '2016', fontsize=30, color='#41b6c4')
+    plt.gcf().text(0.87, 0.58, '2023', fontsize=30, color='#41b6c4')
+    plt.gcf().text(0.87, 0.70, '2024', fontsize=30, color='#41b6c4')
+    plt.gcf().text(0.20, 0.82, '2025', fontsize=30, color='darkred')
+
     plt.gcf().text(0.54, 0.200, 'Other years', fontsize=30, color='#aaaaaa', ha='center', path_effects=[peb])
 
     plt.gca().set_xlabel('Average from January to Month')
     plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
-    plt.gca().set_ylim(0.30, 1.00)
+    plt.gca().set_ylim(0.30, 1.05)
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
-    plt.title('Year-to-date Global Temperature Anomalies 1850-2024', fontsize=25, y=1.04)
+    plt.title('Year-to-date Global Temperature Anomalies 1850-2025', fontsize=25, y=0.95)
 
     plt.gcf().text(.075, .012,
-                   "With HadCRUT5, NOAAGlobalTemp v5.1 and v6, GISTEMP, Berkeley Earth, Kadow, Calvert, ERA5, JRA-55, JRA-3Q",
+                   "With HadCRUT5, NOAAGlobalTemp v6, GISTEMP, Berkeley Earth, ERA5, JRA-3Q",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
+    plt.savefig(out_dir / image_filename.replace('.png', '.pdf'), bbox_inches='tight', pad_inches=0.2)
     plt.close('all')
+
+    return ''
 
 
 def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) -> None:
@@ -2589,7 +2603,7 @@ def rising_tide_plot(out_dir: Path, dataset: TimeSeriesMonthly, image_filename) 
     plt.close('all')
 
 
-def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename) -> None:
+def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename, title) -> None:
     """
     Rising tide plot with month on the x-axis from January to December and each year shown as a separate line
     showing the monthly averages that year.
@@ -2610,7 +2624,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
-    plt.figure(figsize=[9, 9])
+    plt.figure(figsize=[16, 9])
 
     for dataset in all_datasets:
         first_year, last_year = dataset.get_first_and_last_year()
@@ -2643,21 +2657,21 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
-            if year >= 2024:
+            if year >= 2025:
                 colour = 'darkred'
                 lthk = 3
-            if year == last_year:
-                colour = 'darkred'
-                lthk = 3
+            # if year == last_year:
+            #     colour = 'darkred'
+            #     lthk = 3
 
             plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=year)
 
     plt.gca().set_xlabel('Month')
     plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
-    plt.gca().set_ylim(-1.5, 1.3)
+    plt.gca().set_ylim(-1.5, 1.4)
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
-    plt.title('Monthly Global Temperature Anomalies 1850-2024', fontsize=25, y=1.04)
+    plt.title('Monthly Global Temperature Anomalies 1850-2025', fontsize=25, y=0.95)
 
     import matplotlib.patheffects as PathEffects
 
@@ -2665,26 +2679,27 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
 
     plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.41, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.47, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.53, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.57, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
-    plt.gcf().text(0.52, 0.61, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
-    plt.gcf().text(0.52, 0.65, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.50, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
+    plt.gcf().text(0.52, 0.55, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.59, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.52, 0.67, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.52, 0.81, '2024', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.42, 0.78, '2025', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
     sources = [x.metadata['display_name'] for x in all_datasets]
     sources = ', '.join(sources)
 
     plt.gcf().text(.075, .012, f"With {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
     plt.close('all')
 
+    return ''
 
 def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
                                image_filename: str, title: str) -> str:

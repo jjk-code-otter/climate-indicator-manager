@@ -26,7 +26,6 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-
 if __name__ == "__main__":
 
     final_year = 2025
@@ -52,17 +51,17 @@ if __name__ == "__main__":
     ann_archive = archive.select({'variable': 'tas',
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
-                                  'name': [  # 'NOAA Interim',
-                                      #'Kadow IPCC',
+                                  'name': [  #'ClimTraceGMST' # 'NOAA Interim',
+                                      # 'Kadow IPCC',
                                       # 'Berkeley IPCC',
                                       # 'NOAA Interim IPCC'
-                                      #'GETQUOCS'
+                                      # 'GETQUOCS'
                                   ]})
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
-#                                          ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
+                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
+                                 #                                          ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',
@@ -102,7 +101,7 @@ if __name__ == "__main__":
         all_8110_datasets.append(annual8110)
         a = annual8110.time_average(1980, 1990)
         b = annual8110.time_average(2012, 2022)
-        print(f"{annual8110.metadata['display_name']} {a-b:.2f}")
+        print(f"{annual8110.metadata['display_name']} {a - b:.2f}")
 
         annual = ds.make_annual()
         annual.add_offset(0.69)
@@ -111,39 +110,40 @@ if __name__ == "__main__":
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
 
+
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_8110_monthly = []
     all_running_monthly = []
     for ds in all_datasets_b:
-        ds.rebaseline(1981,2010)
+        ds.rebaseline(1981, 2010)
         all_8110_monthly.append(ds)
         ds2 = copy.deepcopy(ds)
         ds2 = ds2.running_mean(12)
         all_running_monthly.append(ds2)
 
-    pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "rising_multiple.png")
-    pt.rising_tide_multiple_plot(figure_dir, all_running_monthly, "rising_running_multiple.png")
-    pt.wave_multiple_plot(figure_dir, all_8110_monthly, "wave_multiple.png")
+    pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "rising_multiple.png", "")
+    pt.rising_tide_multiple_plot(figure_dir, all_running_monthly, "rising_running_multiple.png", "")
+    pt.wave_multiple_plot(figure_dir, all_8110_monthly, "wave_multiple.png", "")
 
     all_tlt_datasets = []
     for ds in tlt_datasets:
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
         all_tlt_datasets.append(ds)
-    pt.rising_tide_multiple_plot(figure_dir, all_tlt_datasets, "tlt_rising_multiple.png")
-    pt.wave_multiple_plot(figure_dir, all_tlt_datasets, "tlt_wave_multiple.png")
+    pt.rising_tide_multiple_plot(figure_dir, all_tlt_datasets, "tlt_rising_multiple.png", "")
+    pt.wave_multiple_plot(figure_dir, all_tlt_datasets, "tlt_wave_multiple.png", "")
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_9120_datasets = []
     for ds in all_datasets_b:
-        ds.rebaseline(1991,2020)
+        ds.rebaseline(1991, 2020)
         annual9120 = ds.make_annual()
         all_9120_datasets.append(annual9120)
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_6190_datasets = []
     for ds in all_datasets_b:
-        ds.rebaseline(1961,1990)
+        ds.rebaseline(1961, 1990)
         annual6190 = ds.make_annual()
         all_6190_datasets.append(annual6190)
 
@@ -192,17 +192,16 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         sst_anns.append(annual)
 
-    pt.rising_tide_multiple_plot(figure_dir, sst_mons, "rising_multiple_sst.png")
-    pt.rising_tide_multiple_plot(figure_dir, lsat_mons, "rising_multiple_lsat.png")
-    #pt.wave_multiple_plot(figure_dir, sst_mons, "wave_multiple_sst.png")
-
+    pt.rising_tide_multiple_plot(figure_dir, sst_mons, "rising_multiple_sst.png", "")
+    pt.rising_tide_multiple_plot(figure_dir, lsat_mons, "rising_multiple_lsat.png", "")
+    # pt.wave_multiple_plot(figure_dir, sst_mons, "wave_multiple_sst.png")
 
     pt.neat_plot(figure_dir, lsat_anns, 'annual_lsat.png', 'Global mean LSAT')
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
     pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
-#    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
+    #    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
     pt.records_plot(figure_dir, all_annual_datasets, 'record_margins.png', 'Record margins')
 
@@ -217,4 +216,3 @@ if __name__ == "__main__":
     utils.run_the_numbers(lsat_anns, final_year, 'lsat_annual_stats', report_dir, ipcc_unc=False)
 
     utils.run_the_numbers(all_alt_datasets, final_year, 'alt_stats', report_dir)
-

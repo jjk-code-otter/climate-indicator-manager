@@ -78,8 +78,12 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     anomalies = []
 
     with open(filename[0], 'r') as f:
-        for _ in range(35):
-            f.readline()
+        if metadata['name'] == 'Berkeley Earth Hires LSAT':
+            for _ in range(51):
+                f.readline()
+        else:
+            for _ in range(35):
+                f.readline()
 
         for line in f:
             columns = line.split()

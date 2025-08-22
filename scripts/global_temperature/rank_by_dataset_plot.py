@@ -23,7 +23,7 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     metadata_dir = METADATA_DIR
@@ -37,11 +37,11 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth','JRA-3Q']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires','JRA-3Q']})
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
     for ds in all_datasets:
-        ds.select_year_range(1970,2024)
+        ds.select_year_range(1970,2025)
 
     pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True)

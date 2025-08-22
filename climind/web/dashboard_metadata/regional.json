@@ -55,6 +55,16 @@
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin": "obs",
+                        "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1961, 1990]},
+            {"method": "make_annual", "args": []},
+            {"method": "select_year_range", "args":  [1850,2024]}
+          ],
+          "writing": {"function": "anomaly_and_rank_plus_new_base"}
+        },
+        {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
