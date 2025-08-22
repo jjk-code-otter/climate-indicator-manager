@@ -105,7 +105,7 @@ to the unique name given to the data set. This can be found in the metadata file
 Pre-pocessing the data
 ======================
 
-The gridded data need to be pre-processed by running:
+The gridded data need to be pre-processed by running the following from the `scripts` directory:
 
 `python regrid_grids.py`
 
