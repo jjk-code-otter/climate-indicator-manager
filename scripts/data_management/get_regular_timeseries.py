@@ -26,18 +26,17 @@ if __name__ == "__main__":
 
     # Global mean temperature
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'Berkeley Earth', 'ERA5']})
-#        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth', 'ERA5']})
     ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']})#, 'NOAA LSAT']})#
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT']})#
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadSST4']})#, 'ERSST']})
+        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST']})
     ts_archive.download(data_dir)
 
     # Sea level
@@ -51,20 +50,20 @@ if __name__ == "__main__":
     # ts_archive.download(data_dir)
 
     # Arctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC', 'OSI SAF', 'OSI SAF v2p2']})
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC', 'OSI SAF v2p2']})
     ts_archive.download(data_dir)
 
     # Antarctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC SH', 'OSI SAF SH', 'OSI SAF SH v2p2']})
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['NSIDC SH', 'OSI SAF SH v2p2']})
     ts_archive.download(data_dir)
 
     # Glaciers
     ts_archive = archive.select({'type': 'timeseries', 'name': ['WGMS']})
     ts_archive.download(data_dir)
 
-    # # Greenland ice sheet
-    # ts_archive = archive.select({'type': 'timeseries', 'name': ['PROMICE2','GRACE Greenland']})
-    # ts_archive.download(data_dir)
+    # Greenland ice sheet
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['PROMICE2','GRACE Greenland']})
+    ts_archive.download(data_dir)
 
     # Indices
     ts_archive = archive.select(
@@ -76,6 +75,6 @@ if __name__ == "__main__":
     ts_archive.download(data_dir)
 
     # Marine heatwaves
-    # ts_archive = archive.select({'type': 'timeseries', 'name': ['MHW','MCS']})
-    # ts_archive.download(data_dir)
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['MHW','MCS']})
+    ts_archive.download(data_dir)
 
