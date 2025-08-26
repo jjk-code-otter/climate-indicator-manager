@@ -87,8 +87,6 @@ if __name__ == "__main__":
             annual = ds.make_annual_by_selecting_month(month)
             annual.select_year_range(1851, final_year)
             runs.append(annual)
-            if annual.metadata['name'] == 'NOAA v6':
-                print(ds.df.data.tolist())
 
         if month == 1:
             pt.neat_plot(figure_dir, run_all, '12_month_running_mean.png', f'Global mean temperature 12-month running mean')
@@ -119,11 +117,11 @@ if __name__ == "__main__":
         pt.neat_plot(figure_dir, sst_anns, f'sst_{month:02d}_only.png', f'Global mean SST for {month_word}')
 
         pt.neat_plot(figure_dir, anns, f'{month:02d}_only.png',
-                     f'Global Mean Temperature for {month_word} ($\degree$C)')
+                     f'Global Mean Temperature for {month_word} ($\\degree$C)')
         pt.records_plot(figure_dir, anns, f'{month:02d}_only_records.png',
-                        f'Global Mean Temperature for {month_word} ($\degree$C)')
+                        f'Global Mean Temperature for {month_word} ($\\degree$C)')
         pt.dark_plot(figure_dir, anns, f'dark_{month:02d}_only.png',
-                     f'Global Mean Temperature for {month_word} ($\degree$C)')
+                     f'Global Mean Temperature for {month_word} ($\\degree$C)')
 
         print()
         print(f"Single month ({month_word}) statistics")

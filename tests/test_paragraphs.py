@@ -701,5 +701,5 @@ def test_long_term_trend_paragraph(simple_monthly):
 
     assert isinstance(test_text, str)
 
-    assert '1.0 &deg;C/yr' in test_text
+    assert '1.00 &deg;C/yr' in test_text
     assert 'between 1850 and 2022' in test_text

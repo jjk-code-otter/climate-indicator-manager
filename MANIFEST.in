@@ -1,4 +1,7 @@
 include climind/metadata_files/*.json
+include climind/metadata_files/*/*.json
+include climind/metadata_files/*/*/*.json
+include climind/metadata_files/*/*/*/*.json
 include climind/data_manager/metadata_schema.json
 include climind/data_manager/dataset_schema.json
 include climind/data_types/jinja_templates/badc_boilerplate.jinja2

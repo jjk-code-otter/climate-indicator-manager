@@ -17,6 +17,8 @@ import copy
 from pathlib import Path
 import logging
 
+from pyparsing import dbl_quoted_string
+
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 import climind.stats.utils as utils
@@ -80,6 +82,10 @@ if __name__ == "__main__":
                                        'type': 'timeseries',
                                        'time_resolution': 'annual',
                                        'name': 'CLSAT'})
+
+    print(archive.collections)
+    print(ts_archive.collections)
+    print(data_dir)
 
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)

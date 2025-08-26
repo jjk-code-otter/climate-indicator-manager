@@ -414,7 +414,7 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
                          ncol=ncol)
         for line in leg.get_lines():
             line.set_linewidth(3.0)
-        for item in leg.legendHandles:
+        for item in leg.legend_handles:
             item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -905,7 +905,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
                      handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1103,7 +1103,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1193,7 +1193,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1295,7 +1295,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -2016,7 +2016,7 @@ def dashboard_map_pastel(out_dir: Path, all_datasets: List[GridAnnual], image_fi
     cbar.set_ticklabels(wmo_levels)
 
     label_text = f"Temperature difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\\degree$C)"
     cbar.set_label(label_text, rotation=0, fontsize=23, color='dimgrey')
 
     p.axes.coastlines(color='#777777', linewidth=2)
@@ -2149,9 +2149,9 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     #                bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\\degree$C)"
     if grid_type == 'unc':
-        label_text = r'Temperature anomaly half-range ($\degree$C)'
+        label_text = r'Temperature anomaly half-range ($\\degree$C)'
     if main_variable == 'sealeveltrend':
         label_text = r'Sea level trend (mm/year)'
     if 'precip_quantiles' in main_variable:

@@ -66,7 +66,8 @@ def test_fetch_year(mocker, tmpdir):
     m = mocker.patch("cdsapi.Client")
     fetch_year(Path(tmpdir), 1999)
 
-    assert m.retrieve.called_once()
+    m.assert_called_once()
+#    assert m.retrieve.called_once()
 
 
 def test_fetch_year_bad_variable(tmpdir):
