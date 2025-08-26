@@ -35,7 +35,7 @@ from climind.web.dashboard import Dashboard
 if __name__ == "__main__":
 
     minimal = False
-    dash2025 = True
+    dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = False
+    regional = True
     regional_multiyear = False
     regional_test = False
 

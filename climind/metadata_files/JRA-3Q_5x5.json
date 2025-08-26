@@ -11,7 +11,7 @@
         "https://doi.org/10.2151/jmsj.2024-004"
     ],
     "data_citation": [
-        "Japan Meteorological Agency. 2023, updated monthly. Japanese Reanalysis for Three Quarters of a Century (JRA-3Q). Research Data Archive at the National Center for Atmospheric Research, Computational and Information Systems Laboratory. https://doi.org/10.5065/AVTZ-1H78. Accessed 2025-08-19 10:27:49."
+        "Japan Meteorological Agency. 2023, updated monthly. Japanese Reanalysis for Three Quarters of a Century (JRA-3Q). Research Data Archive at the National Center for Atmospheric Research, Computational and Information Systems Laboratory. https://doi.org/10.5065/AVTZ-1H78. Accessed 2025-08-19 10:27:50."
     ],
     "acknowledgement": "",
     "colour": "#d55e00",
@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['anl_surf125.2025MMMM', 'anl_surf125.2025MMMM.nc'] downloaded from ['', ''] at ['2025-08-19 10:27:49']",
+                "Data set created from file ['anl_surf125.2025MMMM', 'anl_surf125.2025MMMM.nc'] downloaded from ['', ''] at ['2025-08-19 10:27:50']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -44,7 +44,7 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2025-08-19 10:27:49"
+                "2025-08-19 10:27:50"
             ],
             "last_month": "2025-07-01 00:00:00"
         }

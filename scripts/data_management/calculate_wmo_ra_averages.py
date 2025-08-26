@@ -87,7 +87,7 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
 
 if __name__ == "__main__":
 
-    test = True
+    test = False
 
     if test:
         start_year = 1850
@@ -104,12 +104,12 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            #'HadCRUT5',
-            #'GISTEMP',
-            #'NOAA v6',
-            #'Berkeley Earth',
+            'HadCRUT5',
+            'GISTEMP',
+            'NOAA v6',
+            'Berkeley Earth',
             'ERA5',
-            #'JRA-3Q'
+            'JRA-3Q'
         ]
 
     final_year = 2024
