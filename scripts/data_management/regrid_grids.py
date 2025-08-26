@@ -32,12 +32,12 @@ if __name__ == "__main__":
             'name': [#'GETQUOCS'#, 'CMST', 'Vaccaro',
                      #'Kadow CMIP', 'Kadow',
                      #'Kadow',
-                     'NOAA v6',
-                     'HadCRUT5',
+                     #'NOAA v6',
+                     #'HadCRUT5',
                      'Berkeley Earth',
-                     'GISTEMP',
-                     'JRA-3Q',
-                     'ERA5'
+                     #'GISTEMP',
+                     #'JRA-3Q',
+                     #'ERA5'
             ]
         }
     )

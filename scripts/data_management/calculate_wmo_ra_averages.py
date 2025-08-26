@@ -41,7 +41,7 @@ def process_lac_shape_files(in_shape_dir):
     subregions = gp.read_file(in_shape_dir / 'South America' / 'South America.shp')
     for reg in additional_regions:
         addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
-        subregions = subregions.append(addition, ignore_index=True)
+        subregions = subregions._append(addition, ignore_index=True)
 
     subregions = subregions.reindex()
     return subregions
@@ -54,7 +54,7 @@ def process_arab_shape_files(in_shape_dir):
     subregions = gp.read_file(in_shape_dir / 'League of Arab States' / 'League of Arab States.shp')
     for reg in additional_regions:
         addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
-        subregions = subregions.append(addition, ignore_index=True)
+        subregions = subregions._append(addition, ignore_index=True)
 
     subregions = subregions.reindex()
     return subregions
@@ -105,11 +105,11 @@ if __name__ == "__main__":
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
             'HadCRUT5',
-            'GISTEMP',
-            'NOAA v6',
-            'Berkeley Earth',
-            'ERA5',
-            'JRA-3Q'
+            #'GISTEMP',
+            #'NOAA v6',
+            #'Berkeley Earth',
+            #'ERA5',
+            #'JRA-3Q'
         ]
 
     final_year = 2024
