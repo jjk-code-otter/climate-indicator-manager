@@ -25,6 +25,7 @@ objects in a :class:`.DataArchive` need not be the same variable.
 """
 import json
 from urllib.parse import parse_qs
+import os
 
 from jsonschema import validate, RefResolver
 from typing import Callable, List, Union
@@ -518,7 +519,25 @@ class DataArchive:
             path_to_dir = [path_to_dir]
 
         for single_path in path_to_dir:
-            for json_file in single_path.rglob('*.json'):
+
+            unreadable_dirs = []
+            unreadable_files = []
+
+            for dirpath, dirnames, filenames in os.walk(single_path):
+                for dirname in dirnames:
+                    dirname = os.path.join(dirpath, dirname)
+                    if not os.access(dirname, os.R_OK):
+                        unreadable_dirs.append(dirname)
+                for filename in filenames:
+                    filename = os.path.join(dirpath, filename)
+                    print(filename)
+                    if not os.access(filename, os.R_OK):
+                        unreadable_files.append(filename)
+
+            print('Unreadable directories:\n{0}'.format('\n'.join(unreadable_dirs)))
+            print('Unreadable files:\n{0}'.format('\n'.join(unreadable_files)))
+
+            for json_file in single_path.rglob('*.json', recurse_symlinks=True):
                 dc = DataCollection.from_file(json_file)
                 out_archive.add_collection(dc)
 

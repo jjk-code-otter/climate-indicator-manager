@@ -14,16 +14,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from xml.etree.ElementTree import QName
 import climind.data_manager.processing as dm
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
+from pathlib import Path
+import os
 
 if __name__ == "__main__":
     project_dir = DATA_DIR / "ManagedData"
     data_dir = project_dir / "Data"
 
-    archive = dm.DataArchive.from_directory(METADATA_DIR)
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
 
+    archive = dm.DataArchive.from_directory(METADATA_DIR)
+    
     ts_archive = archive.select({'type': 'timeseries', 'name': ['Berkeley Earth Hires LSAT']})
 
     ts_archive.download(data_dir)
