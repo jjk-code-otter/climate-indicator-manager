@@ -29,20 +29,20 @@ Download the code from the repository using your preferred method. I use
 
 `git clone https://github.com/jjk-code-otter/climate-indicator-manager.git`
 
-An environment.yml file contains the details of the necessary conda environment. To 
-setup the environment you will need to install Anaconda and then run
+Checkout the branch `jjk-upgrade`
 
-`conda env create -f <path_to_yaml_file>`
+`git checkout jjk-upgrade`
 
-The environment (called `wmo`) can then be activated by typing
+Next create a new conda environment using python 3.13 (I called mine `wmo_plus`) 
+as the base then activate the environment
 
-`conda activate wmo`
+`conda activate wmo_plus`
 
-Navigate to the root directory of the repository and type
+then 
 
 `pip install .`
 
-This should install the package. 
+This should install the necessary dependencies. It might take a while.
 
 You will need to download a couple of different files if you want to calculate regional 
 averages from gridded data. These include
