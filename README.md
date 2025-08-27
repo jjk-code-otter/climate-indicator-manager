@@ -36,6 +36,8 @@ Checkout the branch `jjk-upgrade`
 Next create a new conda environment using python 3.13 (I called mine `wmo_plus`) 
 as the base then activate the environment
 
+`conda create -n "wmo_plus" python=3.13.5`
+
 `conda activate wmo_plus`
 
 then 
