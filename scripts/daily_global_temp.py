@@ -16,6 +16,7 @@
 
 import copy
 from pathlib import Path
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -171,6 +172,8 @@ STANDARD_PARAMETER_SET = {
 final_year = 2024
 
 project_dir = DATA_DIR / "ManagedData"
+ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
+METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
 metadata_dir = METADATA_DIR
 
 data_dir = project_dir / "Data"

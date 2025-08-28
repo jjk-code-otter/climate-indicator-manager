@@ -118,6 +118,10 @@ Navigate to the `scripts/global_temperature` directory and run
 
 `annual_global_temperature_stats.py`
 
+This generates output in the `DATADIR` in the `ManagedData` subdirectory. 
+Principle outputs appear in `Figures` - which holds all the graphs - and
+`reports` which contains the numerical outputs in a digest form.
+
 Pre-processing the data
 =======================
 
@@ -193,7 +197,6 @@ Diverse other scripts
 
 As well as these main scripts, described above, there are others which perform the following tasks:
 
-* `annual_global_temperature_stats.py` which generates some annual plots and statistics
 * `arctic_sea_ice_plot.py` which generates some sea ice plots used in the State of the Climate report
 * `change_per_month_plots.py` which generates some plots based on monthly global mean temperature as well as some stats.
 * `five_year_global_temperature_stats.py` which generates some plots and stats based on 5-year running averages of

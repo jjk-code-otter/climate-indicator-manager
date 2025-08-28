@@ -27,10 +27,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
+import os
 import copy
 import json
 from typing import Tuple, List
 
+from fontTools.unicodedata import script_name
 from shapely.geometry import Polygon
 
 import matplotlib.pyplot as plt
@@ -208,18 +211,20 @@ def increment_indices(i1, i2, n1, n2):
 
 if __name__ == '__main__':
 
+    script_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+
     for set in range(2):
 
         fig, axs = plt.subplots(2, 2)
         i1, i2 = 0, 0
 
         if set == 0:
-            region_json_file = 'sub_regions.json'
+            region_json_file = script_dir / 'sub_regions.json'
             output_image = 'LAC_regions'
             n_regions = 6
             region_selection = [0, 2, 3, 4]
         elif set == 1:
-            region_json_file = 'arab_regions.json'
+            region_json_file = script_dir / 'arab_regions.json'
             output_image = 'Arab_regions'
             n_regions = 5
             region_selection = [1, 2, 3, 4]

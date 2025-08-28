@@ -26,6 +26,7 @@ import xarray as xa
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import os
 from climind.config.config import DATA_DIR
 from climind.stats.utils import (get_latitudes, get_n_years_from_n_months,
                                  monthly_to_annual_array, rolling_average)
