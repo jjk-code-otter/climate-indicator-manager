@@ -14,6 +14,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
+import os
 import climind.data_manager.processing as dm
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
@@ -22,24 +24,27 @@ if __name__ == "__main__":
     project_dir = DATA_DIR / "ManagedData"
     data_dir = project_dir / "Data"
 
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
+
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
     # Global mean temperature
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']})
-        #{'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'Berkeley Earth', 'ERA5']})
+        #{'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']})
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'Berkeley Earth', 'ERA5', 'Berkeley Earth Hires']})
     ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
-        #{'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']})#
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6']})#
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']})#
+        #{'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6']})#
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
-        #{'type': 'timeseries', 'name': ['HadSST4']})
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']})
+        {'type': 'timeseries', 'name': ['HadSST4']})
+        #{'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']})
     ts_archive.download(data_dir)
 
     # Sea level

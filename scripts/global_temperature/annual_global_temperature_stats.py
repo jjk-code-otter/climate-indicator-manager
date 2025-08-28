@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 from pathlib import Path
+import os
 import logging
 
 from pyparsing import dbl_quoted_string
@@ -33,6 +34,8 @@ if __name__ == "__main__":
     final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"
@@ -62,26 +65,29 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
-                                 #                                          ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
+                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5'],
+                                 # ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',
                                   'type': 'timeseries',
-                                  'time_resolution': 'monthly'})
+                                  'time_resolution': 'monthly',
+                                  'name': ['RSS', 'UAH']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
-                                  'time_resolution': 'monthly'})
+                                  'time_resolution': 'monthly',
+                                  'name': ['HadSST4']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
-                                   'time_resolution': 'monthly'})
+                                   'time_resolution': 'monthly',
+                                   'name': ['CRUTEM5', 'Berkeley Earth LSAT']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
                                        'time_resolution': 'annual',
-                                       'name': 'CLSAT'})
+                                       'name': ''})
 
     print(archive.collections)
     print(ts_archive.collections)
@@ -206,7 +212,7 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
-    pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.wmo_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
     #    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
     pt.records_plot(figure_dir, all_annual_datasets, 'record_margins.png', 'Record margins')

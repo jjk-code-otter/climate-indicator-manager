@@ -28,11 +28,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import os
 from climind.definitions import ROOT_DIR, METADATA_DIR
 from climind.config.config import DATA_DIR
 from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
+
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    ROOT_DIR = (ROOT_DIR / "..").resolve()
+    METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
     minimal = False
     dash2025 = False
