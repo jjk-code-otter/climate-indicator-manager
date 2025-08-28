@@ -84,7 +84,7 @@ CMEMS_PSWD=yetanotherpassword
 All three of these services are free to register, but you will have to set up the credentials online.
 
 Similarly to access the data from the Copernicus Climate Change service, you will need an API key. 
-The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/api-how-to
+The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/how-to-api
 
 Downloading data
 ================
