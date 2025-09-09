@@ -773,9 +773,22 @@ def ice_sheet_monthly_sm_grace_version(all_datasets: List[TimeSeriesMonthly], ye
     """
     summary = []
     for ds in all_datasets:
-        this_year = (ds.get_value(year, 8) + ds.get_value(year, 9)) / 2
-        last_year = (ds.get_value(year - 1, 8) + ds.get_value(year - 1, 9)) / 2
-        if this_year is not None and last_year is not None:
+
+        this_year_1 = ds.get_value(year, 8)
+        this_year_2 = ds.get_value(year, 9)
+        last_year_1 = ds.get_value(year - 1, 8)
+        last_year_2 = ds.get_value(year - 1, 9)
+
+        if (
+                this_year_1 is not None and
+                last_year_1 is not None and
+                this_year_2 is not None and
+                last_year_2 is not None
+        ):
+
+            this_year = (this_year_1 + this_year_2) / 2
+            last_year = (last_year_1 + last_year_2) / 2
+
             this_difference = this_year - last_year
             ds_copy = copy.deepcopy(ds)
             subset = ds_copy.select_year_range(2005, year - 1)
@@ -835,7 +848,7 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
-def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year:int) -> str:
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
     all_trends = []
     all_initial_trends = []
     all_recent_trends = []
@@ -852,7 +865,7 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year:int) -
 
         selection = times < 2003
         result = np.polyfit(times[selection], data[selection], 1)
-        trend2= result[0]
+        trend2 = result[0]
         all_initial_trends.append(trend2)
 
         selection = times >= (year - 9)
@@ -869,7 +882,7 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year:int) -
 
         units = fancy_html_units(ds.metadata['units'])
         out_text += (f"The rate of change in the {ds.metadata['display_name']} data set is {trend1:.2f} {units}/yr "
-                     f"between {first_year} and {last_year}. The rate of change in the past decade {year-9}-{year} is "
+                     f"between {first_year} and {last_year}. The rate of change in the past decade {year - 9}-{year} is "
                      f"{trend3:.2f} {units}/yr which is higher than the trend for the first decade of the satellite "
                      f"record 1993-2002 which was {trend2:.2f} {units}/yr. The trend for 2015-2014 was {trend4:.2f} "
                      f"{units}/yr.\n")
@@ -927,6 +940,7 @@ def convert_to_percentages(ts, min_screen=90, max_screen=40):
 
 def svg_background(all_datasets, year):
     out_text = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" style="background-color:var(--dashblue);">'
-    out_text += '<polygon points="'+convert_to_percentages(all_datasets[0])+'"  style="fill:var(--dashorange);stroke:var(--dashwhite);stroke-width:0" />'
+    out_text += '<polygon points="' + convert_to_percentages(
+        all_datasets[0]) + '"  style="fill:var(--dashorange);stroke:var(--dashwhite);stroke-width:0" />'
     out_text += '</svg>'
     return out_text

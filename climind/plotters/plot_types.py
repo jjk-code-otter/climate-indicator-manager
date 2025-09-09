@@ -220,9 +220,12 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
         if wmo:
             linewidth = 3
             label = f"{ds.metadata['display_name']}"
-        if wmo and ds.metadata['variable'] == 'tas':
+        if wmo and (ds.metadata['variable'] in ['tas']):
             lyear, lmonth = get_last_month(ds.metadata['last_month'])
             label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
+
+        if wmo and (ds.metadata['variable'] in ['sealevel']):
+            label = f"{ds.metadata['display_name']} ({date_range})"
 
         if marker:
             axis.plot(x_values, ds.df['data'], label=label, color=col, zorder=zord, linewidth=linewidth, marker='o')
