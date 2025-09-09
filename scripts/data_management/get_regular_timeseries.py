@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     # Global mean temperature
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']}
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']}
     )
     ts_archive.download(data_dir)
 

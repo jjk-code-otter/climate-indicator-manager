@@ -375,8 +375,8 @@ class TimeSeriesIrregular(TimeSeries):
 
         n_time = len(self.df['time'])
 
-        start_date = self.df['time'][0]
-        end_date = self.df['time'][n_time - 1]
+        start_date = self.df['time'].iloc[0]
+        end_date = self.df['time'].iloc[n_time - 1]
 
         return start_date, end_date
 

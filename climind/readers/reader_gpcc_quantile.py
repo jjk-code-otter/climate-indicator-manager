@@ -70,10 +70,8 @@ def read_monthly_1x1_grid(filename, metadata) -> gd.GridMonthly:
         y2, m2 = get_n_months_back(y1, m1, back=back)
         filled_filename = filled_filename.replace('*', f'{y2}{m2:02d}')
         filled_filename = Path(filled_filename)
-
         if filled_filename.exists():
             df = xa.open_dataset(filled_filename, decode_times=False) # the time is badly specified in some way
-
             variable = f'q_{y2}{m2:02d}-{y1}{m1:02d}_{CLIMATOLOGY[0]}{CLIMATOLOGY[1]}'
             if back == 1:
                 variable = f'q_{y1}{m1:02d}_19512010'

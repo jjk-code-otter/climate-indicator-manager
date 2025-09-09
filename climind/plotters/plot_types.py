@@ -1594,7 +1594,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
     ds = all_datasets[0]
     ds.fill_daily()
-    ds.df.data = ds.df.rolling(5, center=True, min_periods=1).mean().data
+    ds.df.data = ds.df.data.rolling(5, center=True, min_periods=1).mean()
     climatology, _ = ds.get_climatology(1991, 2020)
 
     md = ds.metadata
