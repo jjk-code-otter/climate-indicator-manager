@@ -89,10 +89,6 @@ if __name__ == "__main__":
                                        'time_resolution': 'annual',
                                        'name': ''})
 
-    print(archive.collections)
-    print(ts_archive.collections)
-    print(data_dir)
-
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
     alt_datasets = ts_archive.read_datasets(data_dir)
