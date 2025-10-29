@@ -14,7 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from xml.etree.ElementTree import QName
 import climind.data_manager.processing as dm
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
@@ -30,6 +29,6 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
     
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['DCENT_I']})
+    ts_archive = archive.select({'type': 'timeseries', 'name': ['CRUTEM5']})
 
     ts_archive.download(data_dir)

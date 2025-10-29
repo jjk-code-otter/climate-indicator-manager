@@ -65,7 +65,10 @@ def read_grid(filename: List[Path]):
                 backend_kwargs=dict(filter_by_keys={'typeOfLevel': 'heightAboveGround'})
             )
             field = field.expand_dims('time')
-            field = field.rename({'t2m': 'tas_mean', 'latitude': 'lat', 'longitude': 'lon'})
+            if 't2m' in field:
+                field = field.rename({'t2m': 'tas_mean', 'latitude': 'lat', 'longitude': 'lon'})
+            elif 'mean2t' in field:
+                field = field.rename({'mean2t': 'tas_mean', 'latitude': 'lat', 'longitude': 'lon'})
 
             # build a sensible file from the chaotic nonsense in the grib files
             latitudes = field.lat.data

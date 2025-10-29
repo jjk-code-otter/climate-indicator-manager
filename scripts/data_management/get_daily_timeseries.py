@@ -34,9 +34,9 @@ if __name__ == "__main__":
     ts_archive.download(data_dir)
 
     # Arctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC v4', 'OSI SAF v2p2', 'JAXA NH']})
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC v4', 'OSI SAF v2p2', 'OSI SAF v2p3', 'JAXA NH']})
     ts_archive.download(data_dir)
 
     # Antarctic sea ice extent
-    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2', 'JAXA SH']})
+    ts_archive = archive.select({'type': 'timeseries', 'time_resolution': 'irregular', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2', 'OSI SAF SH v2p3', 'JAXA SH']})
     ts_archive.download(data_dir)

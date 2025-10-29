@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_cds"
     },
     {
-      "url": ["https://climate.copernicus.eu/sites/default/files/2025-09/C3S_Bulletin_temp_202508_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
-      "filename": ["C3S_Bulletin_temp_202508_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
+      "url": ["https://climate.copernicus.eu/sites/default/files/2025-10/C3S_Bulletin_temp_202509_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
+      "filename": ["C3S_Bulletin_temp_202509_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
       "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "monthly",
@@ -44,8 +44,8 @@
 	  "fetcher": "fetcher_no_url"
     },
     {
-      "url": ["https://climate.copernicus.eu/sites/default/files/2025-09/C3S_Bulletin_temp_202508_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
-      "filename": ["C3S_Bulletin_temp_202508_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
+      "url": ["https://climate.copernicus.eu/sites/default/files/2025-10/C3S_Bulletin_temp_202509_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
+      "filename": ["C3S_Bulletin_temp_202509_Fig1b_timeseries_anomalies_ref1991-2020_global_allmonths_DATA.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean temperature",
 	  "time_resolution": "annual",

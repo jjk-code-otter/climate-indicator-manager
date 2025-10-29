@@ -11,7 +11,7 @@
         "https://doi.org/10.1175/BAMS-D-24-0012.1"
     ],
     "data_citation": [
-        "Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed 2025-08-19 10:17:24."
+        "Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed 2025-10-29 11:06:52."
     ],
     "acknowledgement": "",
     "colour": "#e69f00",
@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2025-08-19 10:17:24']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2025-10-29 11:06:52']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
                 "Wrote to file NOAA v6_5x5.nc"
@@ -43,9 +43,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2025-08-19 10:17:24"
+                "2025-10-29 11:06:52"
             ],
-            "last_month": "2025-07-01 00:00:00"
+            "last_month": "2025-08-01 00:00:00"
         }
     ]
 }

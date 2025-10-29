@@ -31,19 +31,22 @@ if __name__ == "__main__":
 
     # Global mean temperature
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']}
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'ERA5']}
+        #{'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']}
     )
     ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6']}
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']}
+        #{'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6']}
     )
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']}
+        {'type': 'timeseries', 'name': ['HadSST4']}
+        #{'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']}
     )
     ts_archive.download(data_dir)
 
@@ -86,7 +89,7 @@ if __name__ == "__main__":
 
     # Indices
     ts_archive = archive.select(
-        {'type': 'timeseries', 'variable': ['aao', 'ao', 'nao', 'pdo', 'oni', 'iod', 'nino34', 'soi']}
+        {'type': 'timeseries', 'variable': ['aao', 'ao', 'nao', 'pdo', 'oni', 'iod', 'nino34', 'soi', 'roni']}
     )
     ts_archive.download(data_dir)
 

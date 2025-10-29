@@ -32,7 +32,7 @@ from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, T
     get_list_of_unique_variables, superset_dataset_list, AveragesCollection, get_start_and_end_year
 from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
-    caption_builder, map_caption_builder
+    caption_builder, map_caption_builder, get_first_and_last_years
 from climind.stats.paragraphs import get_last_month
 from matplotlib.patches import Polygon
 import matplotlib.dates as mdates
@@ -219,7 +219,15 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             linewidth = 1
         if wmo:
             linewidth = 3
-            label = f"{ds.metadata['display_name']}"
+            if isinstance(ds, TimeSeriesMonthly):
+                lyear, lmonth = get_last_month(ds.metadata['last_month'])
+                label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
+            elif isinstance(ds, TimeSeriesAnnual):
+                fyear, lyear = ds.get_first_and_last_year()
+                label = f"{ds.metadata['display_name']} ({fyear:04d}-{lyear:04d})"
+            else:
+                label = f"{ds.metadata['display_name']}"
+
         if wmo and (ds.metadata['variable'] in ['tas']):
             lyear, lmonth = get_last_month(ds.metadata['last_month'])
             label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
@@ -1148,8 +1156,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     # march_colors = ['#56b4e9', '#009e73', '#5473ff']
     # september_colors = ['#e69f00', '#d55e00', '#ff6b54']
-    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
-    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380']
+    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9', '#6d84d1']
+    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380', '#d1776d']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1241,8 +1249,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
         Caption for the figure
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380']
-    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
+    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380', '#d1776d']
+    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9', '#6d84d1']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1689,7 +1697,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     fig = plt.figure(figsize=[16, 6])
 
-    n_months = 28
+    n_months = 32
 
     n_time_x = len(all_datasets[1].df.data)
 
@@ -1749,7 +1757,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
     )
 
     if overlay:
-        i = n_time_x - (n_months - 1) + 2.5
+        i = n_time_x - (n_months - 1) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#bb0000'
@@ -1759,7 +1767,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 6) + 2.5
+        i = n_time_x - (n_months - 7) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fc6f03'
@@ -1769,7 +1777,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 13) + 2.5
+        i = n_time_x - (n_months - 15) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fcd703'
@@ -1779,7 +1787,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 17) + 2.5
+        i = n_time_x - (n_months - 19) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fff9a3'
@@ -2292,15 +2300,17 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
 
-    # # Add the datasets used and their last months
-    # plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
-    #
-    # # Add a Created tag to let people know when it was created
-    # current_time = f"Created: {datetime.today()}"
-    # plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # Add the datasets used and their last months
+    plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+
+    # Add a Created tag to let people know when it was created
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+    if grid_type == 'rank':
+        label_text = r'Ranking group'
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     if main_variable == 'sealeveltrend':

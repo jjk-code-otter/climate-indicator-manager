@@ -30,10 +30,10 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
-    holdouts = ['HadCRUT5']  # Datasets which haven't been updated from month 1 to month 2 yet
-    month2 = 12
-    month1 = 11
+    final_year = 2025
+    holdouts = ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v6', 'JRA-3Q', 'GISTEMP']  # Datasets which haven't been updated from month 1 to month 2 yet
+    month2 = 9
+    month1 = 8
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
+                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
