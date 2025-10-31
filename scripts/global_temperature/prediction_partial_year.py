@@ -31,7 +31,7 @@ from climind.definitions import METADATA_DIR
 if __name__ == "__main__":
 
     final_year = 2025
-    holdouts = ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v6', 'JRA-3Q', 'GISTEMP']  # Datasets which haven't been updated from month 1 to month 2 yet
+    holdouts = ['NOAA v6']  # Datasets which haven't been updated from month 1 to month 2 yet
     month2 = 9
     month1 = 8
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
+                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)

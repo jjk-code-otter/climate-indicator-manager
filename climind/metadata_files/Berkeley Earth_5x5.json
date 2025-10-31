@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['Land_and_Ocean_LatLong1.nc'] downloaded from ['https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Gridded/Land_and_Ocean_LatLong1.nc'] at ['2025-01-13 12:31:52']",
+                "Data set created from file ['Land_and_Ocean_LatLong1.nc'] downloaded from ['https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Gridded/Land_and_Ocean_LatLong1.nc'] at ['2025-10-31 10:53:11']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -44,9 +44,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2025-01-13 12:31:52"
+                "2025-10-31 10:53:11"
             ],
-            "last_month": "2024-12-01 00:00:00"
+            "last_month": "2025-09-01 00:00:00"
         }
     ]
 }

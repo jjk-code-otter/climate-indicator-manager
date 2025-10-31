@@ -39,14 +39,16 @@ if __name__ == "__main__":
     ROOT_DIR = (ROOT_DIR / "..").resolve()
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
+    interactive = True
+
     minimal = False
-    dash2025 = True
+    dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
 
@@ -59,6 +61,13 @@ if __name__ == "__main__":
     regional_test = False
 
     run_all = False
+
+    if interactive:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "interactive_dashboard.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Interactive"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if minimal:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'Minimal_2024.json'

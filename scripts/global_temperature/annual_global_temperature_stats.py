@@ -18,8 +18,6 @@ from pathlib import Path
 import os
 import logging
 
-from pyparsing import dbl_quoted_string
-
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 import climind.stats.utils as utils
@@ -65,7 +63,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5'],
+                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth', 'HadCRUT5'],
                                  # ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 

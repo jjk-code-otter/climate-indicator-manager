@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ page_meta.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<style>
+h1, h2, h3, h4, h5, h6 {
+		font-weight: 600;
+	}
+h3 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+p {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+.button_link {
+  background-color: #777777;
+  color: white;
+  padding: 14px 25px;
+  margin-bottom: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5px;
+}
+.navbar {
+  margin-bottom: 12px;
+  margin-top: 0px;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: black;
+  padding: 8px 10px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #ddd;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 8px 10px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+</style>
+
+<script>
+        function copyText(invar) {
+
+            /* Copy text into clipboard */
+            navigator.clipboard.writeText
+                (invar);
+        }
+
+</script>
+<body>
+
+<div class="w3-container w3-padding-32 w3-light-grey">
+
+    <div class="w3-card navbar w3-margin-bottom ">
+        <a href="dashboard.html">Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                {% for id in menu_items %}
+                <a href="{{ id[0] }}.html">{{ id[1] }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <h1>{{ page_meta.name }}</h1>
+        </div>
+    </div>
+
+    {% for card_row in cards | batch(3) %}
+    <div class="w3-row-padding" style="margin:0 -16px">
+
+        {% for item in card_row %}
+        {% if item is not none %}
+        <div class="w3-third">
+
+            <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey" style="padding-bottom:10px">
+                <div>
+                    {{ item.caption[0] }}
+                </div>
+                <h3>{{ item.title }}</h3>
+                <p>
+                <div style="float: left;">
+                    Image: <a href="{{ item.caption[1] }}" target="_blank" aria-label="Figure in png format">png</a><br>
+                    Formatted data: <a href="formatted_data/{{ item.csv_name }}"
+                                       aria-label="Bundle of csv data in a zip file">csv</a>
+                    (<a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
+                        aria-label="external link to data format description">format</a>)<br>
+                    <a href="#{{ item.title }}"
+                       aria-label="link to references, acknowledgements and processing details">References and
+                        processing</a><br>
+                </div>
+                <div style="float: right;">
+                    {% if item.link_to is not none %}
+                    <a href="{{ item.link_to  }}.html" class="button_link w3-right ">Click for more indicators</a>
+                    {% endif %}
+                </div>
+                </p>
+            </div>
+
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+
+    {% if page_meta.descriptor %}
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                <h1>Introduction</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                {% include page_meta.descriptor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                <h1>Key messages</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                {% for item in paragraphs %}
+                <h2>{{ item.dataset_metadata.long_name }}</h2>
+                <p>
+                    {{ item.text }}
+                </p>
+                <p style="font-size: 10pt; color: lightgrey;">
+                    Paragraph updated: {{ item.updated }}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                <h1>Dataset and processing details</h1>
+            </div>
+        </div>
+    </div>
+
+    {% for item in cards %}
+    <div class="w3-container" style="margin:0 -16px">
+        <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey">
+            <div class="w3-content">
+                <h2><a id="{{ item.title }}">{{ item.title }}</a></h2>
+
+                {% if item.selecting.variable is string %}
+                {% include item.selecting.variable + '.html' ignore missing %}
+                {% else %}
+                {% for var in item.selecting.variable %}
+                {% include var + '.html' ignore missing %}
+                {% endfor %}
+                {% endif %}
+
+                <p>
+                    The data in the above plot are available in a zip file containing a csv file for each data set.
+                </p>
+                <p>
+                    Data file: <a href="formatted_data/{{ item.csv_name }}"
+                                  aria-label="Bundle of csv data in a zip file">{{ item.csv_name }}</a>
+                    <br>Checksum: {{ item.csv_checksum }}
+                    <button onclick="copyText('{{ item.csv_checksum }}')">Copy</button>
+                    <br>Format: <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"
+                                   aria-label="extrenal link to data format description">BADC CSV format</a><br>
+                </p>
+
+                {% for ds in item.dataset_metadata %}
+                <h3>{{ ds.display_name }}</h3>
+                <p>
+                    {% for this_url in ds.url %}
+                    <a href="{{ this_url }}" target="_blank"
+                       aria-label="Link to original data file for {{ ds.display_name }}">Original data file (external
+                        link)</a>
+                    {% endfor %}
+                </p>
+                {% if ds.citation %}
+                {% if ds.citation.0 != '' %}
+                <p>
+                    Citation{% if ds.citation|length > 1 %}s{% endif %}:
+                </p>
+                <ul>
+                    {% for cite in ds.citation %}
+                    <li><a href="{{ ds.citation_url[loop.index0] }}">{{ cite }}</a>.</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endif %}
+                {% if ds.data_citation %}
+                {% if ds.data_citation.0 != '' %}
+                <p>
+                    Data citation: {% for citation in ds.data_citation %}{{ citation }}{% endfor %}
+                </p>
+                {% endif %}
+                {% endif %}
+                {% if ds.notes %}
+                <p>Notes: {{ ds.notes }}</p>
+                {% endif %}
+                {% if ds.acknowledgement %}
+                <p>Acknowledgement: {{ ds.acknowledgement }}</p>
+                {% endif %}
+                <p>To produce the plot, the following processing steps were performed:</p>
+                <ul>
+                    {% for step in ds.history %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <p>
+        Page created on {{ page_meta.created }} using
+        <a href="https://github.com/jjk-code-otter/climate-indicator-manager">{{ page_meta.code_version }}</a>
+    </p>
+
+</div>
+
+
+</body>
+</html>

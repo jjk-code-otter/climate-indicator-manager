@@ -27,9 +27,18 @@ from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
 from typing import List, Union, Tuple
+import datawrapper as dw
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
-    get_list_of_unique_variables, superset_dataset_list, AveragesCollection, get_start_and_end_year
+from climind.data_types.timeseries import (
+    TimeSeriesMonthly,
+    TimeSeriesAnnual,
+    TimeSeriesIrregular,
+    get_list_of_unique_variables,
+    superset_dataset_list,
+    AveragesCollection,
+    get_start_and_end_year,
+    equalise_datasets
+)
 from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
     caption_builder, map_caption_builder, get_first_and_last_years
@@ -239,9 +248,10 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             axis.plot(x_values, ds.df['data'], label=label, color=col, zorder=zord, linewidth=linewidth, marker='o')
         elif subrange is not None:
             axis.plot(x_values, ds.df['data'], label=None, color=None, zorder=zord, linewidth=None, alpha=0.0)
-            selection = ( (x_values >= subrange[0]) & (x_values <= subrange[1]) )
+            selection = ((x_values >= subrange[0]) & (x_values <= subrange[1]))
             if np.count_nonzero(selection) > 0:
-                axis.plot(x_values[selection], ds.df['data'][selection], label=label, color=col, zorder=zord, linewidth=linewidth)
+                axis.plot(x_values[selection], ds.df['data'][selection], label=label, color=col, zorder=zord,
+                          linewidth=linewidth)
             else:
                 zords = zords[:-1]
         else:
@@ -730,10 +740,11 @@ def animated_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, Time
 
     start_year, end_year = get_start_and_end_year(all_datasets)
 
-    for plot_to_year in range(start_year+1, end_year+1):
+    for plot_to_year in range(start_year + 1, end_year + 1):
 
         plt.figure(figsize=[16, 9])
-        zords = add_data_sets(plt.gca(), all_datasets, dark=dark, uncertainty=False, subrange=[start_year, plot_to_year])
+        zords = add_data_sets(plt.gca(), all_datasets, dark=dark, uncertainty=False,
+                              subrange=[start_year, plot_to_year])
         ds = all_datasets[-1]
 
         sns.despine(right=True, top=True, left=True)
@@ -750,7 +761,7 @@ def animated_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, Time
 
         after_plot(zords, all_datasets, title)
 
-        plt.savefig(out_dir / f'{image_filename}_{plot_to_year-start_year:03d}',
+        plt.savefig(out_dir / f'{image_filename}_{plot_to_year - start_year:03d}',
                     bbox_inches=Bbox([[0.8, 0], [14.5, 9]]), transparent=True, dpi=300)
 
         plt.close('all')
@@ -2169,7 +2180,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
         label_text = ''
     if main_variable == 'pre':
         label_text = f"Precipitation difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average (mm)"
+                     f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average (mm)"
     cbar.set_label(label_text, rotation=0, fontsize=25)
 
     p.axes.coastlines()
@@ -2546,7 +2557,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
                    "With HadCRUT5, NOAAGlobalTemp v6, GISTEMP, Berkeley Earth, ERA5, JRA-3Q",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
@@ -2706,13 +2717,14 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.gcf().text(.075, .012, f"With {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
     plt.close('all')
 
     return ''
+
 
 def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
                                image_filename: str, title: str) -> str:
@@ -2769,4 +2781,58 @@ def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSe
     plt.close('all')
 
     caption = ''
+    return caption
+
+
+def interactive_widget(
+        out_dir: Path,
+        in_all_datasets: List[Union[TimeSeriesAnnual]],
+        image_filename: str,
+        title: str,
+        id=None
+):
+    if id is None:
+        raise RuntimeError("ID is None")
+
+    cp_all_datasets = copy.deepcopy(in_all_datasets)
+
+    chart = dw.get_chart(id)
+
+    to_drop = ['uncertainty', 'climatology']
+    for ds in cp_all_datasets:
+        for v in to_drop:
+            if v in ds.df.columns:
+                ds.df = ds.df.drop(columns=[v])
+
+    if len(cp_all_datasets) == 1:
+        df = cp_all_datasets[0].df
+    else:
+        df = equalise_datasets(cp_all_datasets)
+
+    to_drop = ['month', 'day']
+    for v in to_drop:
+        if v in df.columns:
+            df = df.drop(columns=[v])
+
+    if 'date' in df.columns:
+        df['year'] = df['date']
+        df = df.drop(columns=['date'])
+
+    if 'time' in df.columns:
+        df['year'] = df['time']
+        df = df.drop(columns=['time'])
+
+    if len(cp_all_datasets) == 1:
+        df = df.rename(columns={'data': cp_all_datasets[0].metadata['display_name']})
+
+    chart.data = df
+
+    chart.update()
+    chart.publish()
+
+    iframe_code = chart.get_iframe_code(responsive=True)
+    png_url = chart.get_png_url()
+
+    caption = [iframe_code, png_url]
+
     return caption

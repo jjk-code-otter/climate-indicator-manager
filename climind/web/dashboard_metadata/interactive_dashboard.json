@@ -1,0 +1,55 @@
+{
+  "name": "Key Indicators",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Key Climate Indicators",
+      "descriptor": "key_indicator.html",
+      "template": "interactive_front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Greenhouse gases",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "LpDOm"}}
+        },
+        {
+          "link_to": null, "title": "Global temperature",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2025]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "xkCQU"}}
+        },
+        {
+          "link_to": null, "title": "Ocean Indicators",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
+          "processing":  [],
+          "plotting": {"function": "interactive_widget", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "r8dK2"}}
+        },
+        {
+          "link_to": null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
+          "plotting": {"function": "interactive_widget", "title": "Global mean sea level", "kwargs": {"id":  "DHI0W"}}
+        },
+        {
+          "link_to": null, "title": "Sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
+          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
+          "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "eM0CH"}}
+        },
+        {
+          "link_to": null, "title":"Glaciers",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Glacier cumulative mass balance", "kwargs": {"id":  "akAo7"}}
+        }
+      ],
+      "paragraphs": []
+    }
+  ]
+}

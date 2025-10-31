@@ -39,7 +39,7 @@ if __name__ == "__main__":
                      #'Kadow',
                      'NOAA v6',
                      'HadCRUT5',
-                     'Berkeley Earth Hires',
+                     'Berkeley Earth',
                      'GISTEMP',
                      'JRA-3Q',
                      'ERA5'
