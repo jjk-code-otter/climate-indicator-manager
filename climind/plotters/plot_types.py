@@ -2195,7 +2195,11 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     else:
         p.axes.set_global()
 
-    plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
+    if len(title) < 60:
+        plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
+    else:
+        plt.title(f'{title}', pad=20, fontdict={'fontsize': 24})
+
     plt.savefig(out_dir / f'{image_filename}', bbox_inches=Bbox([[1.4, 0], [15.0, 9]]))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))

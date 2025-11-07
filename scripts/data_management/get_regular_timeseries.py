@@ -65,13 +65,13 @@ if __name__ == "__main__":
 
     # Arctic sea ice extent
     ts_archive = archive.select(
-        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p2']}
+        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p2', 'OSI SAF v2p3']}
     )
     ts_archive.download(data_dir)
 
     # Antarctic sea ice extent
     ts_archive = archive.select(
-        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2']}
+        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2', 'OSI SAF SH v2p3']}
     )
     ts_archive.download(data_dir)
 

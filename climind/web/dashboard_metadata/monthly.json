@@ -86,16 +86,18 @@
         {
           "link_to": null,
           "title": "Temperature Anomalies",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 9]}
+            {"method": "select_year_and_month", "args": [2025, 10]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "September 2025 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "October 2025 Temperature Anomaly"}
         },
         {
           "link_to": null,
           "title": "Seasonal Temperature Anomalies",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -107,27 +109,30 @@
         {
           "link_to": null,
           "title": "Annual Temperature Anomalies",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 10, 2025, 9]},
+            {"method": "select_period", "args": [2024, 11, 2025, 10]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average October 2024 - September 2025 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average November 2024 - October 2025 temperature anomaly"}
         },
         {
           "link_to": null,
           "title": "Precipitation",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 9]}
+            {"method": "select_year_and_month", "args": [2025, 10]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "September 2025 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "October 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
           "title": "Seasonal precipitation anomalies",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -139,13 +144,14 @@
         {
           "link_to": null,
           "title": "Annual precipitation anomalies",
+          "format": "png",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 10, 2025, 9]},
+            {"method": "select_period", "args": [2024, 11, 2025, 10]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average October 2024 - September 2025 precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average November 2024 - October 2025 precipitation anomaly"}
         },
         {
           "link_to": null,

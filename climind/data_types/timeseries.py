@@ -567,6 +567,11 @@ class TimeSeriesMonthly(TimeSeries):
         else:
             return TimeSeriesMonthly(years, months, data, metadata)
 
+    def change_end_month(self, year, month):
+        self.df = self.df[self.df.year*100+self.df.month < year*100+month+1]
+        _, end_date = self.get_start_and_end_dates()
+        self.metadata.dataset['last_month'] = str(end_date)
+
     def make_annual(self, cumulative: bool = False):
         """
         Calculate a :class:`TimeSeriesAnnual` from the :class:`TimeSeriesMonthly`. The annual average is

@@ -32,7 +32,7 @@ from climind.readers.generic_reader import read_ts
 def read_grid(filename: List[Path]):
     dataset_list = []
     returned_filename = None
-    for year, month in itertools.product(range(1958, 2022), range(1, 13)):
+    for year, month in itertools.product(range(1948, 2022), range(1, 13)):
 
         filled_filename = str(filename[1]).replace('YYYY', f'{year}')
         filled_filename = filled_filename.replace('MMMM', f'{month:02d}')
@@ -131,7 +131,7 @@ def read_monthly_5x5_grid(filename: List[Path], metadata: CombinedMetadata, **kw
 
     latitudes = np.linspace(-87.5, 87.5, 36)
     longitudes = np.linspace(-177.5, 177.5, 72)
-    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=number_of_months)
+    times = pd.date_range(start=f'{1948}-{1:02d}-01', freq='1MS', periods=number_of_months)
 
     ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
 
@@ -169,7 +169,7 @@ def read_monthly_1x1_grid(filename: List[Path], metadata: CombinedMetadata, **kw
 
     latitudes = np.linspace(-89.5, 89.5, 180)
     longitudes = np.linspace(-179.5, 179.5, 360)
-    times = pd.date_range(start=f'{1958}-{1:02d}-01', freq='1MS', periods=number_of_months)
+    times = pd.date_range(start=f'{1948}-{1:02d}-01', freq='1MS', periods=number_of_months)
 
     ds = gd.make_xarray(target_grid, times, latitudes, longitudes)
 

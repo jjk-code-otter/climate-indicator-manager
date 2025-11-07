@@ -27,6 +27,9 @@ from climind.readers.generic_reader import read_ts
 def read_monthly_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     ts = read_irregular_ts(filenames, metadata)
     ts = ts.make_monthly()
+    ts.df.drop(ts.df.tail(1).index, inplace=True) # Clip the last month because it is always incomplete except for one day
+    _, end_date = ts.get_start_and_end_dates()
+    ts.metadata.dataset['last_month'] = str(end_date)
     return ts
 
 

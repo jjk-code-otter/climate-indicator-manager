@@ -201,6 +201,8 @@ class Card(WebComponent):
         card_metadata: dict
             dictionary containing the metadata for the card
         """
+        if 'format' not in card_metadata:
+            card_metadata['format'] = 'svg'
         super().__init__(card_metadata)
 
     def process_card(self, data_dir: Path, figure_dir: Path, formatted_data_dir: Path, archive: DataArchive):

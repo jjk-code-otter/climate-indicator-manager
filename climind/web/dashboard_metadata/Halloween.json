@@ -5,7 +5,8 @@
       "id": "dashboard",
       "name": "Hallowe'en slimate<br>gnashboard",
       "descriptor": "key_indicator.html",
-      "template": "spark_front_page",
+      "template": "halloween_front_page",
+      "properties": {"color": "#A58EAB", "basecolor":  "#73c183"},
       "cards": [
         {
           "link_to": "greenhouse_gases", "title": "CO2",
@@ -19,7 +20,7 @@
           "name": ["HadCRUT5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "spark_line", "title": "GMT", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
@@ -33,7 +34,7 @@
         {
           "link_to": "sea_level", "title": "GMSL",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
           "plotting": {"function": "spark_line", "title": "GMSL", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         },
         {
@@ -74,7 +75,7 @@
           "selecting": {"type": "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_range", "args": [1950, 2024]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "spark_line", "title": "ENSO", "args":  [], "kwargs":  {"color_override": "#A58EAB"}}
         }
@@ -85,7 +86,7 @@
           "name": ["HadCRUT5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "writing": {"function": "svg_background"}
@@ -96,7 +97,7 @@
       "id": "greenhouse_gases",
       "name": "Car-burn die-off-cide",
       "descriptor": "greenhouse_gases.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#862FE0", "short": "CO2", "plot_title":"Carbon Dioxide CO2 (ppm)"},
       "cards": [
         {
@@ -109,7 +110,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "monthly", "name": "WDCGG"},
-          "processing": [{"method": "select_year_range", "args": [1850, 2024]}],
+          "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
           "writing": {"function": "svg_background"}
         }
       ]
@@ -118,7 +119,7 @@
       "id": "global_mean_temperature",
       "name": "Gooball mean temperature",
       "descriptor": "global_temperature.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#fc6603", "short": "GMT", "plot_title":"Global Mean Temperature (°C)"},
       "cards": [
         {
@@ -127,7 +128,7 @@
           "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "JRA-3Q", "ERA5"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "plotting": {"function": "simplified_line", "title": "Global mean temperature", "args":  [], "kwargs":  {"color_override": "#fc6603"}}
@@ -139,7 +140,7 @@
           "name": ["HadCRUT5"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
-                          {"method": "select_year_range", "args":  [1850,2024]},
+                          {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
           "writing": {"function": "svg_background"}
@@ -150,12 +151,12 @@
       "id": "ocean_heat_content",
       "name": "Ocean Meat Content",
       "descriptor": "ocean_indicators.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#88E032", "short": "OHC", "plot_title":"Ocean heat content (zJ)"},
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
           "processing":  [],
           "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#88E032"}}
         }
@@ -172,20 +173,20 @@
       "id": "sea_level",
       "name": "Global meanie Sea devil",
       "descriptor": "ocean_indicators.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#FFC341", "short": "GMSL", "plot_title":"Global mean sea level (mm)"},
       "cards": [
         {
           "link_to":  null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1993,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
           "plotting": {"function": "simplified_line", "title": "Global mean sea level change", "args":  [], "kwargs":  {"color_override": "#FFC341"}}
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
-          "processing": [{"method": "select_year_range", "args":  [1850,2023]}],
+          "processing": [{"method": "select_year_range", "args":  [1850,2025]}],
           "writing": {"function": "svg_background"}
         }
       ]
@@ -194,7 +195,7 @@
       "id": "mhw",
       "name": "Marine eat-graves",
       "descriptor": "mhw.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#eb0000", "short": "MHW", "plot_title":"Marine heatwaves (%ocean)"},
       "cards": [
         {
@@ -216,7 +217,7 @@
       "id": "sea_ice_extent",
       "name": "Argh-tic see-eyes extend!",
       "descriptor": "sea_ice_extent.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#fc6603", "short": "sea ice", "plot_title":"September Arctic ice extent (million km<sup>2</sup>)"},
       "cards": [
         {
@@ -244,7 +245,7 @@
       "id": "glaciers",
       "name": "Glacier doom-ulative mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#862FE0", "short": "glaciers", "plot_title":"Glacier mass balance (m w.e.)"},
       "cards": [
         {
@@ -266,7 +267,7 @@
       "id": "greenland",
       "name": "Screamland Ice Sheet mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#FFC341", "short": "GIS", "plot_title":"Greenland mass balance (Gt)"},
       "cards": [
         {
@@ -288,7 +289,7 @@
       "id": "antarctica",
       "name": "A-dark-ditch ice sheet mass balance",
       "descriptor": "glaciers_and_ice_sheets.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#88E032", "short": "AIS", "plot_title":"Antarctic mass balance (Gt)"},
       "cards": [
         {
@@ -310,7 +311,7 @@
       "id": "enso",
       "name": "Niño 3.4 in-dexter",
       "descriptor": "short_term_climate_drivers.html",
-      "template": "spark_topic_page",
+      "template": "halloween_topic_page",
       "properties": {"color": "#eb0000", "short": "ENSO", "plot_title":"Niño 3.4 index (°C)"},
       "cards": [
         {
@@ -319,7 +320,7 @@
           "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_range", "args": [1950, 2024]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "simplified_line", "title": "Nino 3.4", "args":  [], "kwargs":  {"color_override": "#eb0000"}}
         }
@@ -329,7 +330,7 @@
           "selecting": {"type":  "timeseries", "variable": "nino34", "time_resolution": "monthly", "name": "Nino34"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_range", "args": [1950, 2024]}
+            {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "writing": {"function": "svg_background"}
         }

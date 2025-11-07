@@ -105,15 +105,15 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            'HadCRUT5',
+            #'HadCRUT5',
             #'GISTEMP',
             #'NOAA v6',
             #'Berkeley Earth',
             #'ERA5',
-            #'JRA-3Q'
+            'JRA-3Q'
         ]
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -50,7 +50,7 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
@@ -60,38 +60,38 @@
           "processing": [
             {"method": "rebaseline", "args": [1961, 1990]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -177,24 +177,24 @@
           "link_to":  null, "title": "Temperature anomaly map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Africa",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Africa",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 12]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": -20, "east":  55, "north": 45, "south": -45}}
         }
       ],
@@ -205,43 +205,43 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_2", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_3", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_4", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "africa_subregion_6", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -271,24 +271,24 @@
           "link_to":  null, "title": "Temperature anomaly map Asia",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Asia",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Asia",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": 20, "east":  180, "north": 90, "south": -10}}
         }
       ],
@@ -299,13 +299,13 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -372,24 +372,24 @@
           "link_to":  null, "title": "Temperature anomaly map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map LAC",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map LAC",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": -120, "east":  -30, "north": 30, "south": -60}}
         },
         {
@@ -413,33 +413,33 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_3", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_4", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "lac_subregion_6", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -473,13 +473,13 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_4", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -515,24 +515,24 @@
           "link_to":  null, "title": "Temperature anomaly map SWPacific",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map SWPacific",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map SW Pacific",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": 75, "east":  230, "north": 30, "south": -60}}
         }
       ],
@@ -543,18 +543,18 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -584,24 +584,24 @@
           "link_to":  null, "title": "Temperature anomaly map Europe",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map Europe",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map Europe",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": -30, "east":  70, "north": 90, "south": 30}}
         }
       ],
@@ -612,13 +612,13 @@
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []},
-            {"method": "select_year_range", "args":  [1850,2024]}
+            {"method": "select_year_range", "args":  [1850,2025]}
           ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]
@@ -691,51 +691,51 @@
           "link_to":  null, "title": "Temperature anomaly map LAS",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_map", "title": "Annual Temperature Anomalies 2025",
                        "kwargs": {"west": -20, "east":  65, "north": 40, "south": -15}}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map LAS",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual",
             "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "ERA5_5x5", "JRA-3Q_5x5", "Berkeley Earth_5x5"]},
-          "processing":  [{"method": "select_year_range", "args": [2024, 2024]}],
-          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2024",
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "regional_dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025",
                        "kwargs": {"west": -20, "east":  65, "north": 40, "south": -15}}
         },
         {
           "link_to":  null, "title": "Precipitation percentile map LAS",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 12month"]},
-          "processing":  [{"method": "select_year_and_month", "args": [2024, 9]}],
-          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2024",
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 9month"]},
+          "processing":  [{"method": "select_year_and_month", "args": [2025, 9]}],
+          "plotting": {"function": "regional_dashboard_map_single", "title": "Precipitation quantiles 2025",
                        "kwargs": {"west": -20, "east":  65, "north": 40, "south": -15}}
         }
       ],
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_1", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_2", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_3", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_4", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arab_subregion_5", "time_resolution": "annual", "origin": "obs"},
-          "processing": [ {"method": "select_year_range", "args":  [1850,2024]} ],
+          "processing": [ {"method": "select_year_range", "args":  [1850,2025]} ],
           "writing": {"function": "anomaly_and_rank_plus_new_base"}
         }
       ]

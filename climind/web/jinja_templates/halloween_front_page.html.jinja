@@ -19,6 +19,16 @@
   <link rel="icon" type="image/x-icon" href="../favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="variables.css">
+  <style>
+    :root {
+      --dashwhite: #000000;
+      --dashorange: {{ page_meta.properties.color }};
+      --dashblue: {{ page_meta.properties.basecolor }};
+      --dashgreen: #caff9e;
+      --dashdarkblue: #2c7c9e;
+    }
+  </style>
   <style>
     /* Basic styles for the body and html */
     body, html {
@@ -82,11 +92,11 @@
 
     /* Section 3 with jagged top edge */
     .section-3 {
-      background-color: #caff9e; /* Light Green */
+      background-color: #73c183; /* Light Green */
     }
 
 	svg {
-	  fill: #fcb679;
+	  fill: #73c183;
       height: 100%;
 	  left: 0;
       position: absolute;
@@ -99,7 +109,7 @@
     .button-container {
       position: absolute;
 	  text-align: center;
-      top: 100px;
+      top: 200px;
       left: 90px;
 	  width:80%;
 	  height: 70vh;
@@ -230,14 +240,14 @@
     <h1>{{ page_meta.name }}</h1>
 
     {% for item in paragraphs %}
-	  <div class="datafoot" style="color:#fcb679;">{{ item.dataset_metadata.long_name }}: HadCRUT5</div>
+	  <div class="datafoot" style="color:#A58EAB;">{{ item.dataset_metadata.long_name }}: HadCRUT5</div>
 	{% endfor %}
 
-	<div class="datafootleft" style="color:#fcb679;"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a></div>
+	<div class="datafootleft" style="color:#A58EAB;"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a></div>
 
 	<div class="button-container">
     {% for item in cards %}
-      <a href="{{ item.link_to  }}.html" class="button w3-third"  style="color:#fcb679;">{{ item.title }} <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}"></a>
+      <a href="{{ item.link_to  }}.html" class="button w3-third"  style="color:#A58EAB;">{{ item.title }} <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}"></a>
     {% endfor %}
 
     </div>

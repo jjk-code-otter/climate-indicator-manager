@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth', 'HadCRUT5'],
+                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5'],
                                  # ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
@@ -75,12 +75,12 @@ if __name__ == "__main__":
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
                                   'time_resolution': 'monthly',
-                                  'name': ['HadSST4']})
+                                  'name': ['HadSST4', 'ERSST v6']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly',
-                                   'name': ['CRUTEM5', 'Berkeley Earth LSAT']})
+                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v6']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
@@ -99,6 +99,9 @@ if __name__ == "__main__":
     all_8110_datasets = []
     all_annual_datasets = []
     for ds in all_datasets:
+        #ds.change_end_month(2025, 8)
+        print(ds.get_start_and_end_dates())
+
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
         pt.rising_tide_plot(figure_dir, ds, f"rising_tide_{ds.metadata['name']}.png")
@@ -177,10 +180,16 @@ if __name__ == "__main__":
 
     lsat_anns = []
     lsat_mons = []
+    print()
     for ds in lsat_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.change_end_month(2025, 8)
+        print(ds.metadata['name'], ds.get_start_and_end_dates())
+        ds.rebaseline(1995, 2014)
+
         lsat_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
+        annual.add_offset(1.27)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         lsat_anns.append(annual)
 
@@ -191,10 +200,15 @@ if __name__ == "__main__":
 
     sst_anns = []
     sst_mons = []
+    print()
     for ds in sst_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.change_end_month(2025, 8)
+        print(ds.metadata['name'], ds.get_start_and_end_dates())
+        ds.rebaseline(1995, 2014)
         sst_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
+        annual.add_offset(0.67)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         sst_anns.append(annual)
 

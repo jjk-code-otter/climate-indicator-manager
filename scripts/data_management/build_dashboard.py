@@ -39,7 +39,7 @@ if __name__ == "__main__":
     ROOT_DIR = (ROOT_DIR / "..").resolve()
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
-    interactive = True
+    interactive = False
 
     minimal = False
     dash2025 = False
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = False
+    monthly = True
     ocean = False
     cryosphere = False
 

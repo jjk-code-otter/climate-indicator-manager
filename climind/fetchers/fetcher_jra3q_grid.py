@@ -72,7 +72,7 @@ def make_file_list(first_year, final_year) -> List[str]:
     month_lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     for year, month in itertools.product(range(first_year, final_year + 1), range(1, 13)):
         month_length = month_lengths[month - 1]
-        if month == 2 and year in [1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]:
+        if month == 2 and year in [1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020]:
             month_length = 29
         filelist.append(
             f'anl_surf125/{year}{month:02d}/jra3q.anl_surf125.0_0_0.tmp2m-hgt-an-ll125.{year}{month:02d}0100_{year}{month:02d}{month_length:02d}18.nc')
@@ -184,7 +184,8 @@ def fetch(_, out_dir: Path, _filename) -> None:
 
     # Archive
     web_path = 'https://data.rda.ucar.edu/ds640.0/'
-    filelist = make_file_list(1958, 2021)
-    output_filelist = make_realtime_file_list(1958, 2021)
+    new_web_path = 'https://amst-fiona.nationalresearchplatform.org:8443/ncar/gdex/d640000/'
+    filelist = make_file_list(1948, 2021)
+    output_filelist = make_realtime_file_list(1948, 2021)
     output_filelist = [i+'.nc' for i in output_filelist]
-    get_files(filelist, web_path, process=True, output_filelist=output_filelist)  # These are not monthly, so process
+    get_files(filelist, new_web_path, process=True, output_filelist=output_filelist)  # These are not monthly, so process
