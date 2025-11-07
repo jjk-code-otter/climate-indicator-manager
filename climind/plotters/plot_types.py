@@ -27,12 +27,21 @@ from matplotlib.transforms import Bbox
 import seaborn as sns
 import numpy as np
 from typing import List, Union, Tuple
+import datawrapper as dw
 
-from climind.data_types.timeseries import TimeSeriesMonthly, TimeSeriesAnnual, TimeSeriesIrregular, \
-    get_list_of_unique_variables, superset_dataset_list, AveragesCollection, get_start_and_end_year
+from climind.data_types.timeseries import (
+    TimeSeriesMonthly,
+    TimeSeriesAnnual,
+    TimeSeriesIrregular,
+    get_list_of_unique_variables,
+    superset_dataset_list,
+    AveragesCollection,
+    get_start_and_end_year,
+    equalise_datasets
+)
 from climind.data_types.grid import GridMonthly, GridAnnual, process_datasets
 from climind.plotters.plot_utils import calculate_trends, calculate_ranks, calculate_values, set_lo_hi_ticks, \
-    caption_builder, map_caption_builder
+    caption_builder, map_caption_builder, get_first_and_last_years
 from climind.stats.paragraphs import get_last_month
 from matplotlib.patches import Polygon
 import matplotlib.dates as mdates
@@ -219,18 +228,30 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             linewidth = 1
         if wmo:
             linewidth = 3
-            label = f"{ds.metadata['display_name']}"
-        if wmo and ds.metadata['variable'] == 'tas':
+            if isinstance(ds, TimeSeriesMonthly):
+                lyear, lmonth = get_last_month(ds.metadata['last_month'])
+                label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
+            elif isinstance(ds, TimeSeriesAnnual):
+                fyear, lyear = ds.get_first_and_last_year()
+                label = f"{ds.metadata['display_name']} ({fyear:04d}-{lyear:04d})"
+            else:
+                label = f"{ds.metadata['display_name']}"
+
+        if wmo and (ds.metadata['variable'] in ['tas']):
             lyear, lmonth = get_last_month(ds.metadata['last_month'])
             label = f"{ds.metadata['display_name']} ({date_range}.{lmonth:02d})"
+
+        if wmo and (ds.metadata['variable'] in ['sealevel']):
+            label = f"{ds.metadata['display_name']} ({date_range})"
 
         if marker:
             axis.plot(x_values, ds.df['data'], label=label, color=col, zorder=zord, linewidth=linewidth, marker='o')
         elif subrange is not None:
             axis.plot(x_values, ds.df['data'], label=None, color=None, zorder=zord, linewidth=None, alpha=0.0)
-            selection = ( (x_values >= subrange[0]) & (x_values <= subrange[1]) )
+            selection = ((x_values >= subrange[0]) & (x_values <= subrange[1]))
             if np.count_nonzero(selection) > 0:
-                axis.plot(x_values[selection], ds.df['data'][selection], label=label, color=col, zorder=zord, linewidth=linewidth)
+                axis.plot(x_values[selection], ds.df['data'][selection], label=label, color=col, zorder=zord,
+                          linewidth=linewidth)
             else:
                 zords = zords[:-1]
         else:
@@ -414,7 +435,7 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
                          ncol=ncol)
         for line in leg.get_lines():
             line.set_linewidth(3.0)
-        for item in leg.legendHandles:
+        for item in leg.legend_handles:
             item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -719,10 +740,11 @@ def animated_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, Time
 
     start_year, end_year = get_start_and_end_year(all_datasets)
 
-    for plot_to_year in range(start_year+1, end_year+1):
+    for plot_to_year in range(start_year + 1, end_year + 1):
 
         plt.figure(figsize=[16, 9])
-        zords = add_data_sets(plt.gca(), all_datasets, dark=dark, uncertainty=False, subrange=[start_year, plot_to_year])
+        zords = add_data_sets(plt.gca(), all_datasets, dark=dark, uncertainty=False,
+                              subrange=[start_year, plot_to_year])
         ds = all_datasets[-1]
 
         sns.despine(right=True, top=True, left=True)
@@ -739,7 +761,7 @@ def animated_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, Time
 
         after_plot(zords, all_datasets, title)
 
-        plt.savefig(out_dir / f'{image_filename}_{plot_to_year-start_year:03d}',
+        plt.savefig(out_dir / f'{image_filename}_{plot_to_year - start_year:03d}',
                     bbox_inches=Bbox([[0.8, 0], [14.5, 9]]), transparent=True, dpi=300)
 
         plt.close('all')
@@ -905,7 +927,7 @@ def decade_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], image_filen
                      handlelength=0, handletextpad=0.3, loc="upper left", bbox_to_anchor=(0.02, 0.96))
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1103,7 +1125,7 @@ def marine_heatwave_plot(out_dir: Path, all_datasets: List[TimeSeriesAnnual], im
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1145,8 +1167,8 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
 
     # march_colors = ['#56b4e9', '#009e73', '#5473ff']
     # september_colors = ['#e69f00', '#d55e00', '#ff6b54']
-    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
-    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380']
+    march_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9', '#6d84d1']
+    september_colors = ['#f5a729', '#EE4391', '#F36F21', '#edc380', '#d1776d']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1193,7 +1215,7 @@ def arctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], im
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1238,8 +1260,8 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
         Caption for the figure
     """
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
-    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380']
-    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9']
+    february_colors = ['#f5a729', '#ED1C24', '#F36F21', '#edc380', '#d1776d']
+    september_colors = ['#204e96', '#23abd1', '#008F90', '#598bd9', '#6d84d1']
 
     plt.figure(figsize=[16, 9])
     for i, ds in enumerate(all_datasets):
@@ -1295,7 +1317,7 @@ def antarctic_sea_ice_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly],
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
     ylim = plt.gca().get_ylim()
@@ -1594,7 +1616,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
     ds = all_datasets[0]
     ds.fill_daily()
-    ds.df.data = ds.df.rolling(5, center=True, min_periods=1).mean().data
+    ds.df.data = ds.df.data.rolling(5, center=True, min_periods=1).mean()
     climatology, _ = ds.get_climatology(1991, 2020)
 
     md = ds.metadata
@@ -1686,7 +1708,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     fig = plt.figure(figsize=[16, 6])
 
-    n_months = 28
+    n_months = 32
 
     n_time_x = len(all_datasets[1].df.data)
 
@@ -1746,7 +1768,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
     )
 
     if overlay:
-        i = n_time_x - (n_months - 1) + 2.5
+        i = n_time_x - (n_months - 1) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#bb0000'
@@ -1756,7 +1778,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 6) + 2.5
+        i = n_time_x - (n_months - 7) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fc6f03'
@@ -1766,7 +1788,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 13) + 2.5
+        i = n_time_x - (n_months - 15) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fcd703'
@@ -1776,7 +1798,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 17) + 2.5
+        i = n_time_x - (n_months - 19) + 3.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fff9a3'
@@ -2016,7 +2038,7 @@ def dashboard_map_pastel(out_dir: Path, all_datasets: List[GridAnnual], image_fi
     cbar.set_ticklabels(wmo_levels)
 
     label_text = f"Temperature difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\\degree$C)"
     cbar.set_label(label_text, rotation=0, fontsize=23, color='dimgrey')
 
     p.axes.coastlines(color='#777777', linewidth=2)
@@ -2149,16 +2171,16 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     #                bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\\degree$C)"
     if grid_type == 'unc':
-        label_text = r'Temperature anomaly half-range ($\degree$C)'
+        label_text = r'Temperature anomaly half-range ($\\degree$C)'
     if main_variable == 'sealeveltrend':
         label_text = r'Sea level trend (mm/year)'
     if 'precip_quantiles' in main_variable:
         label_text = ''
     if main_variable == 'pre':
         label_text = f"Precipitation difference from " \
-                 f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average (mm)"
+                     f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average (mm)"
     cbar.set_label(label_text, rotation=0, fontsize=25)
 
     p.axes.coastlines()
@@ -2173,7 +2195,11 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     else:
         p.axes.set_global()
 
-    plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
+    if len(title) < 60:
+        plt.title(f'{title}', pad=20, fontdict={'fontsize': 35})
+    else:
+        plt.title(f'{title}', pad=20, fontdict={'fontsize': 24})
+
     plt.savefig(out_dir / f'{image_filename}', bbox_inches=Bbox([[1.4, 0], [15.0, 9]]))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.pdf'))
     plt.savefig(out_dir / f'{image_filename}'.replace('.png', '.svg'))
@@ -2289,15 +2315,17 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     cbar.set_ticks(wmo_levels)
     cbar.set_ticklabels(wmo_levels)
 
-    # # Add the datasets used and their last months
-    # plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
-    #
-    # # Add a Created tag to let people know when it was created
-    # current_time = f"Created: {datetime.today()}"
-    # plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # Add the datasets used and their last months
+    plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+
+    # Add a Created tag to let people know when it was created
+    current_time = f"Created: {datetime.today()}"
+    plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
+    if grid_type == 'rank':
+        label_text = r'Ranking group'
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     if main_variable == 'sealeveltrend':
@@ -2533,7 +2561,7 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
                    "With HadCRUT5, NOAAGlobalTemp v6, GISTEMP, Berkeley Earth, ERA5, JRA-3Q",
                    bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
@@ -2693,13 +2721,14 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     plt.gcf().text(.075, .012, f"With {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
 
-    #plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
     plt.close('all')
 
     return ''
+
 
 def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSeriesAnnual]],
                                image_filename: str, title: str) -> str:
@@ -2756,4 +2785,58 @@ def preindustrial_summary_plot(out_dir: Path, in_all_datasets: List[Union[TimeSe
     plt.close('all')
 
     caption = ''
+    return caption
+
+
+def interactive_widget(
+        out_dir: Path,
+        in_all_datasets: List[Union[TimeSeriesAnnual]],
+        image_filename: str,
+        title: str,
+        id=None
+):
+    if id is None:
+        raise RuntimeError("ID is None")
+
+    cp_all_datasets = copy.deepcopy(in_all_datasets)
+
+    chart = dw.get_chart(id)
+
+    to_drop = ['uncertainty', 'climatology']
+    for ds in cp_all_datasets:
+        for v in to_drop:
+            if v in ds.df.columns:
+                ds.df = ds.df.drop(columns=[v])
+
+    if len(cp_all_datasets) == 1:
+        df = cp_all_datasets[0].df
+    else:
+        df = equalise_datasets(cp_all_datasets)
+
+    to_drop = ['month', 'day']
+    for v in to_drop:
+        if v in df.columns:
+            df = df.drop(columns=[v])
+
+    if 'date' in df.columns:
+        df['year'] = df['date']
+        df = df.drop(columns=['date'])
+
+    if 'time' in df.columns:
+        df['year'] = df['time']
+        df = df.drop(columns=['time'])
+
+    if len(cp_all_datasets) == 1:
+        df = df.rename(columns={'data': cp_all_datasets[0].metadata['display_name']})
+
+    chart.data = df
+
+    chart.update()
+    chart.publish()
+
+    iframe_code = chart.get_iframe_code(responsive=True)
+    png_url = chart.get_png_url()
+
+    caption = [iframe_code, png_url]
+
     return caption

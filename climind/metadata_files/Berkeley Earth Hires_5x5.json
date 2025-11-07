@@ -1,20 +1,20 @@
 {
-    "name": "GISTEMP_5x5",
-    "display_name": "GISTEMP",
-    "version": "v4",
+    "name": "Berkeley Earth Hires_5x5",
+    "display_name": "Berkeley Earth",
+    "version": "",
     "variable": "tas",
     "units": "degC",
     "citation": [
-        "Lenssen, N., G. Schmidt, J. Hansen, M. Menne, A. Persin, R. Ruedy, and D. Zyss, 2019: Improvements in the GISTEMP uncertainty model. J. Geophys. Res. Atmos., 124, no. 12, 6307-6326, doi:10.1029/2018JD029522"
+        "Rohde, R. A. and Hausfather, Z.: The Berkeley Earth Land/Ocean Temperature Record, Earth Syst. Sci. Data, 12, 3469-3479, https://doi.org/10.5194/essd-12-3469-2020, 2020"
     ],
     "citation_url": [
-        "https://doi.org/10.1029/2018JD029522"
+        "https://doi.org/10.5194/essd-12-3469-2020"
     ],
     "data_citation": [
-        "GISTEMP Team, 2022: GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies. Dataset accessed 2025-10-14 10:45:25 at data.giss.nasa.gov/gistemp/."
+        ""
     ],
     "acknowledgement": "",
-    "colour": "#56b4e9",
+    "colour": "#559e73",
     "zpos": 10,
     "origin": "obs",
     "notes": "",
@@ -24,7 +24,7 @@
                 ""
             ],
             "filename": [
-                "GISTEMP_5x5.nc"
+                "Berkeley Earth Hires_5x5.nc"
             ],
             "type": "gridded",
             "long_name": "Near surface temperature",
@@ -35,18 +35,18 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['gistemp1200_GHCNv4_ERSSTv5.nc.gz'] downloaded from ['https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz'] at ['2025-10-14 10:45:25']",
+                "Data set created from file ['Global_TAVG_Gridded_1deg.nc'] downloaded from ['https://storage.googleapis.com/berkeley-earth-temperature-hr/global/gridded/Global_TAVG_Gridded_1deg.nc'] at ['2025-10-29 10:50:48']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
-                "Wrote to file GISTEMP_5x5.nc"
+                "Wrote to file Berkeley Earth Hires_5x5.nc"
             ],
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2025-10-14 10:45:25"
+                "2025-10-29 10:50:48"
             ],
-            "last_month": "2025-09-15 00:00:00"
+            "last_month": "2025-09-01 00:00:00"
         }
     ]
 }

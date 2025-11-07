@@ -28,11 +28,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import os
 from climind.definitions import ROOT_DIR, METADATA_DIR
 from climind.config.config import DATA_DIR
 from climind.web.dashboard import Dashboard
 
 if __name__ == "__main__":
+
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    ROOT_DIR = (ROOT_DIR / "..").resolve()
+    METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
+
+    interactive = False
 
     minimal = False
     dash2025 = False
@@ -41,7 +48,7 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = False
+    monthly = True
     ocean = False
     cryosphere = False
 
@@ -49,11 +56,18 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = True
+    regional = False
     regional_multiyear = False
     regional_test = False
 
     run_all = False
+
+    if interactive:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "interactive_dashboard.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Interactive"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if minimal:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'Minimal_2024.json'

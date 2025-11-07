@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 from pathlib import Path
+import os
 import logging
 import numpy as np
 
@@ -29,12 +30,14 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
-    holdouts = ['HadCRUT5']  # Datasets which haven't been updated from month 1 to month 2 yet
-    month2 = 12
-    month1 = 11
+    final_year = 2025
+    holdouts = ['NOAA v6']  # Datasets which haven't been updated from month 1 to month 2 yet
+    month2 = 9
+    month1 = 8
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"

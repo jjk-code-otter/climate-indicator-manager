@@ -24,6 +24,9 @@ objects. Finally, a :class:`DataArchive` contains one or more :class:`DataCollec
 objects in a :class:`.DataArchive` need not be the same variable.
 """
 import json
+from urllib.parse import parse_qs
+import os
+
 from jsonschema import validate, RefResolver
 from typing import Callable, List, Union
 from pathlib import Path
@@ -516,7 +519,7 @@ class DataArchive:
             path_to_dir = [path_to_dir]
 
         for single_path in path_to_dir:
-            for json_file in single_path.rglob('*.json'):
+            for json_file in single_path.rglob('*.json', recurse_symlinks=True):
                 dc = DataCollection.from_file(json_file)
                 out_archive.add_collection(dc)
 

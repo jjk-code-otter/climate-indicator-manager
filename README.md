@@ -29,20 +29,18 @@ Download the code from the repository using your preferred method. I use
 
 `git clone https://github.com/jjk-code-otter/climate-indicator-manager.git`
 
-An environment.yml file contains the details of the necessary conda environment. To 
-setup the environment you will need to install Anaconda and then run
+Next create a new conda environment using python 3.13 (I called mine `wmo_plus`) 
+as the base then activate the environment
 
-`conda env create -f <path_to_yaml_file>`
+`conda create -n "wmo_plus" python=3.13.5`
 
-The environment (called `wmo`) can then be activated by typing
+`conda activate wmo_plus`
 
-`conda activate wmo`
-
-Navigate to the root directory of the repository and type
+then install the package using
 
 `pip install .`
 
-This should install the package. 
+This should install the necessary dependencies. It might take a while.
 
 You will need to download a couple of different files if you want to calculate regional 
 averages from gridded data. These include
@@ -66,7 +64,11 @@ linux. In windows, do the following:
 6. For "Variable value" type the pathname for the directory you want the data to go in or navigate to the approriate directory using browse.
 7. Make sure that the directory exists.
 
-In addition, if you want to download JRA-55 data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
+In the `DATADIR` create a directory called `Natural_Earth` and put the Natural Earth shape files in there. 
+In `DATADIR` again, create a directory called `Shape_Files` and put the WMO RA shape files and 
+subregion files in it.
+
+In addition, if you want to download JRA-3Q data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
 valid username and password combo for each of these services. These values should be stored in a file called .env in
 the `fetchers` directory of the repository. It should contain two lines for each of the data services:
 
@@ -82,45 +84,76 @@ CMEMS_PSWD=yetanotherpassword
 All three of these services are free to register, but you will have to set up the credentials online.
 
 Similarly to access the data from the Copernicus Climate Change service, you will need an API key. 
-The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/api-how-to
+The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/how-to-api
 
 Downloading data
 ================
 
-The first thing to do is to download the data. There are two main scripts for downloading data in the scripts
-directory. `get_timeseries.py` will download the data which are in the form of time series. `get_grids.py` will download
-the gridded data.
+The first thing to do is to download the data. There are two main scripts for downloading 
+data in the scripts directory. `get_timeseries.py` will download individual datasets which 
+are in the form of time series. `get_grids.py` will download the gridded data.
 
-The volume of gridded data is considerably larger than the volume of time series data. For some datasets, the whole
-gridded dataset is downloaded each time this is run, but for the reanalyses the full dataset is only downloaded once
-with subsequent runs of the get_grids.py script only downloading months that have not already been downloaded. The
-gridded data are used to calculate custom area averages (such as the WMO Regional Association averages) and for 
-plotting maps of the data. The key global indicators are all time series.
+A collection of regularly updated timeseries can be downloaded by running 
+`get_regular_timeseries.py`. This is great when it works, but typically at least on dataset
+will fail to download in a way that stops the code from running. I temporarily comment out 
+problematic datasets and rerun the script.
 
-Some datasets are not available online (the JRA-55 global mean temperature for example) so you will have to obtain 
-these from somewhere else or remove them from the processing. Any extra files such as these should be 
-copied into the `$DATADIR/ManagedData/Data/` directory in an appropriately named subdirectory that corresponds 
-to the unique name given to the data set. This can be found in the metadata file for the data set (see below).
+The volume of gridded data is considerably larger than the volume of time series data. For 
+some datasets, the whole gridded dataset is downloaded each time this is run, but for the 
+reanalyses the full dataset is only downloaded once with subsequent runs of the get_grids.py 
+script only downloading months that have not already been downloaded. The gridded data are 
+used to calculate custom area averages (such as the WMO Regional Association averages) and 
+for plotting maps of the data. The key global indicators are all time series.
 
-Pre-pocessing the data
-======================
+Some datasets are not available online (the JRA-55 global mean temperature for example) so 
+you will have to obtain these from somewhere else or remove them from the processing. Any 
+extra files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory 
+in an appropriately named subdirectory that corresponds to the unique name given to the 
+data set. This can be found in the metadata file for the data set (see below).
 
-The gridded data need to be pre-processed by running the following from the `scripts` directory:
+Calculating the WMO composite global mean temperature
+=====================================================
+
+Navigate to the `scripts/global_temperature` directory and run
+
+`annual_global_temperature_stats.py`
+
+This generates output in the `DATADIR` in the `ManagedData` subdirectory. 
+Principle outputs appear in `Figures` - which holds all the graphs - and
+`reports` which contains the numerical outputs in a digest form.
+
+Pre-processing the data
+=======================
+
+For the dashboards, the gridded data need to be pre-processed by running the following from 
+the `scripts` directory:
 
 `python regrid_grids.py`
 
-which calculates annual average grids on a consistent 5-degree latitude longitude grid for all the gridded data sets.
+which calculates annual average grids on a consistent 5-degree latitude longitude grid for 
+all the gridded data sets. This allows them to be combined into a single estimate for mapping.
 
-In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
-scripts directory and run:
+In order to generate area averages from the gridded data for specified sub regions, you will 
+need to navigate to the scripts directory and run:
 
-`python make_new_regions.py` (you only need to run this the first time to generate the shape files for subregion)
+`python make_new_regions.py` 
+
+you only need to run this the first time to generate the shape files for subregion. If you 
+happen to rerun it, you will likely encounter permission issues - you can't write over the 
+existing shape files. If you do need to rerun - say because the definitions have changed - then 
+you will have to delete the shapefiles created by the code before running it again. 
+
+Regional area averages are calculated using
 
 `python calculate_wmo_ra_averages.py`
 
-This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
-six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
-load and process a lot of reanalysis data.
+You will need to manually specify the end year and which datasets to use in the calculation.
+The script reads in each of the gridded data sets, regrids it to a standard resolution and then 
+calculates the area averages for the six WMO Regional Association areas, the six African 
+subregions and other subregions defined by the WMO Regional State of the Climate authors. It can 
+take a while to run because it has to load and process a lot of data. The first time 
+it runs, it will likely download a shape file of coastlines from natural earth used to identify 
+land and ocean areas.
 
 
 Building the website
@@ -130,13 +163,14 @@ To build the websites, navigate to the scripts directory and run
 
 `python build_dashboard.py`
 
-This builds all the webpages, produces the figures for each web page and prepares the formatted data sets. These are 
-written to the `DATADIR/ManagedData` directory with one directory created for each dashboard. Currently the code is 
-set up to generate four dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, 
-and regional indicators to 2022.
+This builds all the webpages, produces the figures for each web page and prepares 
+the formatted data sets. These are written to the `DATADIR/ManagedData` directory with 
+one directory created for each dashboard. Currently the code is set up to generate four 
+dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, and regional 
+indicators to 2022.
 
-To display a dashboard on the web, the files in the appropriate directory will need to be copied to an appropriate 
-web server.
+To display a dashboard on the web, the files in the appropriate directory will need to be 
+copied to an appropriate web server.
 
 
 Navigating the website
@@ -163,7 +197,6 @@ Diverse other scripts
 
 As well as these main scripts, described above, there are others which perform the following tasks:
 
-* `annual_global_temperature_stats.py` which generates some annual plots and statistics
 * `arctic_sea_ice_plot.py` which generates some sea ice plots used in the State of the Climate report
 * `change_per_month_plots.py` which generates some plots based on monthly global mean temperature as well as some stats.
 * `five_year_global_temperature_stats.py` which generates some plots and stats based on 5-year running averages of

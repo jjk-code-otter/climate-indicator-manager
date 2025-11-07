@@ -229,7 +229,7 @@ class TimeSeries(ABC):
         with open(filename, 'w') as f:
             f.write(rendered)
             f.write(self.df.to_csv(index=False,
-                                   line_terminator='\n',
+                                   lineterminator='\n',
                                    float_format='%.4f',
                                    header=False,
                                    columns=columns_to_write))
@@ -375,8 +375,8 @@ class TimeSeriesIrregular(TimeSeries):
 
         n_time = len(self.df['time'])
 
-        start_date = self.df['time'][0]
-        end_date = self.df['time'][n_time - 1]
+        start_date = self.df['time'].iloc[0]
+        end_date = self.df['time'].iloc[n_time - 1]
 
         return start_date, end_date
 
@@ -566,6 +566,11 @@ class TimeSeriesMonthly(TimeSeries):
             return TimeSeriesMonthly(years, months, data, metadata, uncertainty=uncertainty)
         else:
             return TimeSeriesMonthly(years, months, data, metadata)
+
+    def change_end_month(self, year, month):
+        self.df = self.df[self.df.year*100+self.df.month < year*100+month+1]
+        _, end_date = self.get_start_and_end_dates()
+        self.metadata.dataset['last_month'] = str(end_date)
 
     def make_annual(self, cumulative: bool = False):
         """
@@ -908,7 +913,7 @@ class TimeSeriesMonthly(TimeSeries):
         moving_average.df['data'] = moving_average.df['data'].rolling(run_length).mean()
         if centred:
             moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
-            moving_average.df.dropna(0, how='any', inplace=True)
+            moving_average.df.dropna(how='any', inplace=True)
 
         if centred:
             moving_average.update_history(
@@ -1162,7 +1167,7 @@ class TimeSeriesAnnual(TimeSeries):
         moving_average.df['data'] = moving_average.df['data'].rolling(run_length).mean()
         if centred:
             moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
-            moving_average.df.dropna(0, how='any', inplace=True)
+            moving_average.df.dropna(how='any', inplace=True)
 
         if centred:
             moving_average.update_history(
@@ -1286,7 +1291,7 @@ class TimeSeriesAnnual(TimeSeries):
         moving_average.df['data'] = moving_average.df['data'].rolling(run_length).std()
         if centred:
             moving_average.df['year'] = moving_average.df['year'].rolling(run_length).mean()
-            moving_average.df.dropna(0, how='any', inplace=True)
+            moving_average.df.dropna(how='any', inplace=True)
 
         if centred:
             moving_average.update_history(
@@ -1303,17 +1308,17 @@ class TimeSeriesAnnual(TimeSeries):
         n_years = len(self.df)
 
         out_series = copy.deepcopy(self)
-        out_series.df.data[0] = np.nan
+        out_series.df.loc[0, "data"] = np.nan
 
         for i in range(1, n_years):
             over_margin = self.df.data[i] - np.max(self.df.data[0:i])
             under_margin = self.df.data[i] - np.min(self.df.data[0:i])
             if over_margin > 0:
-                out_series.df.data[i] = over_margin
+                out_series.df.loc[i, "data"] = over_margin
             elif under_margin < 0:
-                out_series.df.data[i] = under_margin
+                out_series.df.loc[i, "data"] = under_margin
             else:
-                out_series.df.data[i] = np.nan
+                out_series.df.loc[i, "data"] = np.nan
 
         return out_series
 
@@ -1435,7 +1440,8 @@ class TimeSeriesAnnual(TimeSeries):
             dict_to_add = {'year': year, 'data': value}
             if uncertainty is not None:
                 dict_to_add['uncertainty'] = uncertainty
-            self.df = self.df.append([dict_to_add], ignore_index=True)
+            mini_df = pd.DataFrame([dict_to_add])
+            self.df = pd.concat([self.df, mini_df], ignore_index=True)
         else:
             warnings.warn(f"Year {year} already exists. No change")
 
@@ -1494,12 +1500,18 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual], augmented_uncerta
 
     list_attributes = ['citation', 'citation_url', 'data_citation', 'url', 'filename', 'history']
     for i, ds in enumerate(all_datasets):
-        data_frames.append(ds.df)
+        dfi = copy.deepcopy(ds.df)
+        dfi = dfi.rename(columns={'data': f'data_{ds.metadata["name"]}'})
+        if 'index' in dfi.columns:
+            dfi = dfi.drop(columns=['index'])
+        if 'time' in dfi.columns:
+            dfi = dfi.drop(columns=['time'])
+        data_frames.append(dfi)
         if i > 0:
             for att in list_attributes:
                 metadata[att].extend(ds.metadata[att])
 
-    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'), data_frames)
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'), data_frames,)
 
     columns = []
     for col in df_merged.columns:
@@ -1795,7 +1807,7 @@ def write_dataset_summary_file_with_metadata(
     with open(csv_filename, 'w') as f:
         f.write(rendered)
         f.write(common_datasets.to_csv(index=False,
-                                       line_terminator='\n',
+                                       lineterminator='\n',
                                        float_format='%.4f',
                                        header=False,
                                        columns=columns_to_write))

@@ -14,6 +14,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
+import os
+
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 import climind.data_manager.processing as dm
@@ -21,9 +24,11 @@ import climind.data_manager.processing as dm
 if __name__ == "__main__":
     project_dir = DATA_DIR / "ManagedData"
     data_dir = project_dir / "Data"
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
-    ts_archive = archive.select({'type': 'gridded', 'name': ['JRA-3Q']})
+    ts_archive = archive.select({'type': 'gridded', 'name': ['GPCC']})
 
     ts_archive.download(data_dir)

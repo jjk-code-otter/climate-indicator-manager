@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import os
 import logging
 import geopandas as gp
 
@@ -41,7 +42,7 @@ def process_lac_shape_files(in_shape_dir):
     subregions = gp.read_file(in_shape_dir / 'South America' / 'South America.shp')
     for reg in additional_regions:
         addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
-        subregions = subregions.append(addition, ignore_index=True)
+        subregions = subregions._append(addition, ignore_index=True)
 
     subregions = subregions.reindex()
     return subregions
@@ -54,7 +55,7 @@ def process_arab_shape_files(in_shape_dir):
     subregions = gp.read_file(in_shape_dir / 'League of Arab States' / 'League of Arab States.shp')
     for reg in additional_regions:
         addition = gp.read_file(in_shape_dir / reg / f'{reg}.shp')
-        subregions = subregions.append(addition, ignore_index=True)
+        subregions = subregions._append(addition, ignore_index=True)
 
     subregions = subregions.reindex()
     return subregions
@@ -104,17 +105,19 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            'HadCRUT5',
-            'GISTEMP',
-            'NOAA v6',
-            'Berkeley Earth',
-            'ERA5',
+            #'HadCRUT5',
+            #'GISTEMP',
+            #'NOAA v6',
+            #'Berkeley Earth',
+            #'ERA5',
             'JRA-3Q'
         ]
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     regional_data_dir = project_dir / output_data_dir

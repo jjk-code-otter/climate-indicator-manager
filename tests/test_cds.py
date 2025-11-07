@@ -16,7 +16,7 @@
 
 import pytest
 from pathlib import Path
-from climind.fetchers.fetcher_cds import pick_months, fetch_year, fetch
+from climind.fetchers.fetcher_cds import pick_months, fetch_to_year, fetch
 from datetime import datetime
 
 
@@ -64,50 +64,37 @@ def test_january_empty_list_after_seventh():
 
 def test_fetch_year(mocker, tmpdir):
     m = mocker.patch("cdsapi.Client")
-    fetch_year(Path(tmpdir), 1999)
+    fetch_to_year(Path(tmpdir), 1999)
 
-    assert m.retrieve.called_once()
+    m.assert_called_once()
+#    assert m.retrieve.called_once()
 
 
 def test_fetch_year_bad_variable(tmpdir):
     with pytest.raises(ValueError):
-        fetch_year(Path(tmpdir), 1999, variable='badvariable')
-
-
-def test_fetch_existing_year(mocker, tmpdir):
-    m = mocker.patch("cdsapi.Client")
-
-    with open(Path(tmpdir) / 'era5_2m_tas_1999.nc', 'w') as f:
-        f.write('')
-    fetch_year(Path(tmpdir), 1999)
-    m.retrieve.assert_not_called()
-
-    with open(Path(tmpdir) / 'cds_sealevel_1999.zip', 'w') as f:
-        f.write('')
-    fetch_year(Path(tmpdir), 1999, variable='sealevel')
-    m.retrieve.assert_not_called()
+        fetch_to_year(Path(tmpdir), 1999, variable='badvariable')
 
 
 def test_fetch_future_year(mocker, tmpdir):
     m = mocker.patch("cdsapi.Client")
-    fetch_year(Path(tmpdir), 2077)
+    fetch_to_year(Path(tmpdir), 2077)
     m.retrieve.assert_not_called()
 
-    fetch_year(Path(tmpdir), 2077, variable='sealevel')
+    fetch_to_year(Path(tmpdir), 2077, variable='sealevel')
     m.retrieve.assert_not_called()
 
 
 def test_fetch_all(mocker):
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('', Path(''), 'era5_2m_tas')
-    assert m.call_count == 2024 - 1979 + 1
+    assert m.call_count == 1
 
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('', Path(''), 'sealevel')
-    assert m.call_count == 2024 - 1993 + 1
+    assert m.call_count == 1
 
 
 def test_fetch_all_extension(mocker):
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('extension', Path(''), 'era5_2m_tas')
-    assert m.call_count == 2024 - 1959 + 1
+    assert m.call_count == 1

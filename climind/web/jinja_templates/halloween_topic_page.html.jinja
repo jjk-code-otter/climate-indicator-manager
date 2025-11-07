@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_meta.name }}</title>
+  <link rel="icon" type="image/x-icon" href="../favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="variables.css">
+  <style>
+    :root {
+      --dashwhite: #000000;
+      --dashorange: {{ page_meta.properties.color }};
+      --dashblue: #000000;
+      --dashgreen: #caff9e;
+      --dashdarkblue: #2c7c9e;
+    }
+ </style>
+</head>
+<body  style="background-color:var(--dashblue);">
+
+  <!-- Section 1 (Full screen height) -->
+  <div class="section">
+    {% for item in paragraphs %}
+      {{ item.text }}
+    {% endfor %}
+
+    <h1>{{ page_meta.name }}</h1>
+    {% for item in paragraphs %}
+	  <div class="datafoot" style="color:var(--dashorange);">{{ item.dataset_metadata.long_name }}: {{ item.dataset_metadata.display_name }}</div>
+	{% endfor %}
+
+	<div class="datafootleft" style="color:var(--dashorange);"><a href="../index.html">home</a> - <a href="dashboard.html">dashboard</a> - {{ page_meta.properties.short }}</div>
+
+	<div class="button-container">
+	{% for item in cards %}
+      <div class="button w3-third">
+	    <div class="plottitle">{{ page_meta.properties.plot_title }}</div>
+	    <img width=100% src="figures/{{ item.figure_name|replace('png','svg') }}" alt="{{ item.caption }}">
+		<div style="font-size:0.5em;float:left;line-height:20px;"><a href="acknowledgements.html#{{ page_meta.properties.short.lower() }}">{{ item.caption }}</a></div>
+		<a href="formatted_data/{{ item.csv_name }}" class="getter" download>.csv</a>
+		<a href="figures/{{ item.figure_name }}" class="getter" download>.png</a>
+		<a href="figures/{{ item.figure_name|replace('png','svg') }}" class="getter" download>.svg</a>
+	  </div>
+	{% endfor %}
+    </div>
+  </div>
+
+  <div class="section">
+  </div>
+
+</body>
+</html>

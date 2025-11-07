@@ -1,7 +1,7 @@
 {
   "name": "HadSST4",
   "display_name": "HadSST4",
-  "version": "4.0.1.0",
+  "version": "4.2.0.0",
   "variable": "sst",
   "units": "degC",
   "citation": ["Kennedy, J. J., Rayner, N. A., Atkinson, C. P., and Killick, R. E. (2019). An ensemble data set of sea-surface temperature change from 1850: the Met Office Hadley Centre HadSST.4.0.0.0 data set. Journal of Geophysical Research: Atmospheres, 124. https://doi.org/10.1029/2018JD029867"],
@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_median.nc"],
-	  "filename": ["HadSST.4.1.1.0_median.nc"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.2.0.0_median.nc"],
+	  "filename": ["HadSST.4.2.0.0_median.nc"],
       "type": "gridded",
 	  "time_resolution": "monthly",
 	  "space_resolution": 5.0,
@@ -28,9 +28,9 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_monthly_GLOBE.csv",
-	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_annual_GLOBE.csv"],
-      "filename": ["HadSST.4.1.1.0_monthly_GLOBE.csv","HadSST.4.1.1.0_annual_GLOBE.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.2.0.0_monthly_GLOBE.csv",
+	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.2.0.0_annual_GLOBE.csv"],
+      "filename": ["HadSST.4.2.0.0_monthly_GLOBE.csv","HadSST.4.2.0.0_annual_GLOBE.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "monthly",
@@ -44,9 +44,9 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_monthly_GLOBE.csv",
-	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.1.1.0_annual_GLOBE.csv"],
-      "filename": ["HadSST.4.1.1.0_monthly_GLOBE.csv", "HadSST.4.1.1.0_annual_GLOBE.csv"],
+      "url": ["https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.2.0.0_monthly_GLOBE.csv",
+	          "https://www.metoffice.gov.uk/hadobs/hadsst4/data/data/HadSST.4.2.0.0_annual_GLOBE.csv"],
+      "filename": ["HadSST.4.2.0.0_monthly_GLOBE.csv", "HadSST.4.2.0.0_annual_GLOBE.csv"],
 	  "type": "timeseries",
       "long_name": "Global mean sea-surface temperature",
 	  "time_resolution": "annual",

@@ -62,7 +62,7 @@ def pick_months(year: int, now: datetime) -> List[str]:
     return months_to_download
 
 
-def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
+def fetch_to_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
     """
     Fetch a specified year of data and write it to the outdir. If the year is
     incomplete, only recover available months.
@@ -82,14 +82,19 @@ def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
     """
 
     if variable == 'tas':
-        output_file = out_dir / f'era5_2m_tas_{year}.nc'
+        output_file = out_dir / f'era5_2m_tas_1940_{year}.nc'
         name = 'reanalysis-era5-single-levels-monthly-means'
+
+        years = [str(x) for x in range(1940, year + 1)]
+        months = [f"{x:02d}" for x in range(1, 13)]
+
         request = {
             'product_type': ['monthly_averaged_reanalysis'],
             'variable': ['2m_temperature'],
-            'year': [str(year)],
+            'year': years,
+            'month': months,
             'time': ['00:00'],
-            'format': 'netcdf',
+            'data_format': 'netcdf',
             'download_format': 'unarchived'
         }
     elif variable == 'sealevel':
@@ -104,28 +109,7 @@ def fetch_year(out_dir: Path, year: int, variable: str = 'tas') -> None:
     else:
         raise ValueError(f"Unknown variable {variable}")
 
-    now = datetime.now()
-
-    # Want to download the complete file for a completed year in January as well as updates to
-    # the partial file for the current year
-    if variable == 'tas':
-        override = (year == now.year or (year == now.year - 1 and now.month == 1))
-    elif variable == 'sealevel':
-        override = (year == now.year or year == (now.year - 1))
-
-    if output_file.exists() and not override:
-        print(f'File for {year} already exists, not downloading')
-        return
-
-    months_to_download = pick_months(year, now)
-
-    if len(months_to_download) == 0:
-        print(f'No months available for {year}')
-        return
-
-    request['month'] = months_to_download
-
-    print(f'Downloading file for {year}')
+    print(f'Downloading file to {year}')
     print(str(output_file))
     c = cdsapi.Client()
 
@@ -155,17 +139,12 @@ def fetch(url: str, outdir: Path, filename: str) -> None:
     -------
     None
     """
-    first_year = 1979
-    if 'extension' in url:
-        first_year = 1959
 
     if 'sealevel' in filename:
         variable = 'sealevel'
-        first_year = 1993
     elif 'era5_2m_tas' in filename:
         variable = 'tas'
     else:
         raise ValueError(f'Filename {filename} corresponds to unknown variable')
 
-    for year in range(first_year, 2025):
-        fetch_year(outdir, year, variable)
+    fetch_to_year(outdir, 2025, variable)

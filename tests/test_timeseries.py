@@ -476,16 +476,16 @@ def test_update_history_irregular(simple_irregular):
 def test_irregular_start_and_end_dates(simple_irregular):
     start_date, end_date = simple_irregular.get_start_and_end_dates()
 
-    assert start_date == date(1993, 1, 3)
-    assert end_date == date(2002, 12, 15)
+    assert start_date == pd.Timestamp('1993-01-03 00:00:00')
+    assert end_date == pd.Timestamp('2002-12-15 00:00:00')
 
 
 def test_irregular_select_year_range(simple_irregular):
     simple_irregular = simple_irregular.select_year_range(1995, 2000)
     start_date, end_date = simple_irregular.get_start_and_end_dates()
 
-    assert start_date == date(1995, 1, 1)
-    assert end_date == date(2000, 12, 31)
+    assert start_date == pd.Timestamp('1995-01-01 00:00:00')
+    assert end_date == pd.Timestamp('2000-12-31 00:00:00')
 
 
 def test_irregular_get_first_and_last_year(simple_irregular):

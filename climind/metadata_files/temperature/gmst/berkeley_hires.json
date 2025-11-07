@@ -1,6 +1,6 @@
 {
   "name": "Berkeley Earth Hires",
-  "display_name": "Berkeley Earth (experimental)",
+  "display_name": "Berkeley Earth Hires",
   "version": "",
   "variable": "tas",
   "units": "degC",
@@ -41,6 +41,21 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_berkeley_hires",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://storage.googleapis.com/berkeley-earth-temperature-hr/global/gridded/Global_TAVG_Gridded_1deg.nc"],
+	  "filename": ["Global_TAVG_Gridded_1deg.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 1.0,
+	  "climatology_start": 1951,
+	  "climatology_end": 1980,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_berkeley",
 	  "fetcher": "fetcher_standard_url"
     }
   ]

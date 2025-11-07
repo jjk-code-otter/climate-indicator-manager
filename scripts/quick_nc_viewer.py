@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import os
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
@@ -27,6 +28,8 @@ from climind.definitions import METADATA_DIR
 if __name__ == '__main__':
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"

@@ -18,7 +18,7 @@
         ""
       ],
 	  "filename": [
-        "gpcc_quantile_8month_*-YYYYMMMM.nc.gz"
+        "gpcc_quantile_8month_*-YYYYMMMM.nc"
       ],
       "type": "gridded",
       "long_name": "8-month Precipitation Quantile",

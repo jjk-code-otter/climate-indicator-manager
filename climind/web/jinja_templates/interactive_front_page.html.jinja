@@ -127,18 +127,13 @@ p {
         <div class="w3-third">
 
             <div class="w3-card w3-container w3-white w3-margin-bottom w3-text-dark-grey" style="padding-bottom:10px">
-                <p>
-                    <img src="figures/{{ item.figure_name|replace('png', item.format ) }}" width=100% alt="{{ item.caption }}"
-                         title="Graph of {{ item.title }}">
-                </p>
+                <div>
+                    {{ item.caption[0] }}
+                </div>
                 <h3>{{ item.title }}</h3>
                 <p>
                 <div style="float: left;">
-                    Image: <a href="figures/{{ item.figure_name }}" target="_blank" aria-label="Figure in png format">png</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','pdf') }}" target="_blank"
-                        aria-label="Figure in pdf format">pdf</a>-<a
-                        href="figures/{{ item.figure_name|replace('png','svg') }}" target="_blank"
-                        aria-label="Figure in svg format">svg</a><br>
+                    Image: <a href="{{ item.caption[1] }}" target="_blank" aria-label="Figure in png format">png</a><br>
                     Formatted data: <a href="formatted_data/{{ item.csv_name }}"
                                        aria-label="Bundle of csv data in a zip file">csv</a>
                     (<a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank"

@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 from pathlib import Path
+import os
 import logging
 
 import climind.data_manager.processing as dm
@@ -31,6 +32,8 @@ if __name__ == "__main__":
     final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"
@@ -60,26 +63,29 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
-                                 #                                          ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
+                                 'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5'],
+                                 # ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
     tlt_archive = archive.select({'variable': 'tlt',
                                   'type': 'timeseries',
-                                  'time_resolution': 'monthly'})
+                                  'time_resolution': 'monthly',
+                                  'name': ['RSS', 'UAH']})
 
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
-                                  'time_resolution': 'monthly'})
+                                  'time_resolution': 'monthly',
+                                  'name': ['HadSST4', 'ERSST v6']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
-                                   'time_resolution': 'monthly'})
+                                   'time_resolution': 'monthly',
+                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v6']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
                                        'time_resolution': 'annual',
-                                       'name': 'CLSAT'})
+                                       'name': ''})
 
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
@@ -93,6 +99,9 @@ if __name__ == "__main__":
     all_8110_datasets = []
     all_annual_datasets = []
     for ds in all_datasets:
+        #ds.change_end_month(2025, 8)
+        print(ds.get_start_and_end_dates())
+
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"wave_{ds.metadata['name']}.png")
         pt.rising_tide_plot(figure_dir, ds, f"rising_tide_{ds.metadata['name']}.png")
@@ -171,10 +180,16 @@ if __name__ == "__main__":
 
     lsat_anns = []
     lsat_mons = []
+    print()
     for ds in lsat_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.change_end_month(2025, 8)
+        print(ds.metadata['name'], ds.get_start_and_end_dates())
+        ds.rebaseline(1995, 2014)
+
         lsat_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
+        annual.add_offset(1.27)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         lsat_anns.append(annual)
 
@@ -185,10 +200,15 @@ if __name__ == "__main__":
 
     sst_anns = []
     sst_mons = []
+    print()
     for ds in sst_datasets:
-        ds.rebaseline(1981, 2010)
+        ds.change_end_month(2025, 8)
+        print(ds.metadata['name'], ds.get_start_and_end_dates())
+        ds.rebaseline(1995, 2014)
         sst_mons.append(copy.deepcopy(ds))
         annual = ds.make_annual()
+        annual.add_offset(0.67)
+        annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         sst_anns.append(annual)
 
@@ -200,7 +220,7 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, sst_anns, 'annual_sst.png', 'Global mean SST')
 
-    pt.neat_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
+    pt.wmo_plot(figure_dir, all_annual_datasets, 'annual.png', r'Global Mean Temperature Difference ($\degree$C)')
     #    pt.dark_plot(figure_dir, all_annual_datasets, 'annualdark.png', 'Global Mean Temperature Difference ($\degree$C)')
 
     pt.records_plot(figure_dir, all_annual_datasets, 'record_margins.png', 'Record margins')

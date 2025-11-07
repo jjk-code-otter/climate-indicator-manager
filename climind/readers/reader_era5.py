@@ -20,11 +20,36 @@ import itertools
 import xarray as xa
 import pandas as pd
 import numpy as np
+from datetime import datetime
 import climind.data_types.grid as gd
 import climind.data_types.timeseries as ts
 import copy
 from climind.readers.generic_reader import get_last_modified_time
 from climind.data_manager.metadata import CombinedMetadata
+
+
+def back_search(unfilled_fname):
+    now = datetime.now()
+    y = now.year
+    m = now.month
+    nsteps = 24
+
+    for _ in range(1, nsteps + 1):
+
+        filled_fname = unfilled_fname.replace('MLML', f'{m:02d}')
+        filled_fname = filled_fname.replace('YLYL', f'{y:04d}')
+        filled_fname = filled_fname.replace('VVVV', '')
+
+        if Path(filled_fname).exists():
+            filled_fname = Path(filled_fname)
+            return filled_fname
+
+        m -= 1
+        if m == 0:
+            y -= 1
+            m = 12
+
+    raise RuntimeError(f'No file matching {unfilled_fname} for past 24 months')
 
 
 def find_latest(out_dir: Path, filename_with_wildcards: str) -> Path:
@@ -270,17 +295,21 @@ def read_grid(filename: str):
             dataset_list.append(ds)
 
     combo = xa.concat(dataset_list, dim='time', coords='minimal')
-    combo = combo.sel(time=slice('1979-01-01', '2030-01-01'))
+    combo = combo.sel(time=slice('1940-01-01', '2030-01-01'))
 
     return combo
 
 
 def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+
+    filled_fname = back_search(str(filename))
+    metadata['last_modified'] = [get_last_modified_time(filled_fname)]
+
     years = []
     months = []
     anomalies = []
 
-    with open(filename, 'r') as f:
+    with open(filled_fname, 'r') as f:
         for _ in range(12):
             f.readline()
 
@@ -293,7 +322,8 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeries
             months.append(int(month))
             anomalies.append(float(columns[3]))
 
-    selected_file, selected_url = get_latest_filename_and_url(filename, metadata['url'][0])
+    selected_file = filled_fname.name
+    selected_url = metadata['url'][0]
 
     metadata['filename'][0] = selected_file
     metadata['url'][0] = selected_url

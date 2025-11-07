@@ -65,8 +65,18 @@ def fetch(url: str, out_dir: Path, _) -> None:
 
     for _ in range(1, nsteps + 1):
 
+        ly = y
+        lm = m - 1
+        if lm == 0:
+            lm = 12
+            ly = y - 1
+
         filled_url = url.replace('YYYY', f'{y}')
         filled_url = filled_url.replace('MMMM', f'{m:02d}')
+
+        filled_url = filled_url.replace('MLML', f'{lm:02d}')
+        filled_url = filled_url.replace('YLYL', f'{ly:04d}')
+
         filled_url = filled_url.replace('VVVV', '')
 
         print(filled_url)

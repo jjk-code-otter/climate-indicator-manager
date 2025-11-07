@@ -1,0 +1,56 @@
+{
+  "name": "DCENT_I",
+  "display_name": "DCENT-I",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [
+    "Chan, D., Gebbie, G., Huybers, P. & Kent, E. C. DCENT: Dynamically Consistent ENsemble of Temperature at the Earth Surface. https://doi.org/10.7910/DVN/NU4UGW (2024).",
+    "Chan, D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. https://doi.org/10.7910/DVN/ZY0WM8 (2025)."
+  ],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#A5B309",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://dataverse.harvard.edu/api/access/datafile/11910224"],
+	  "filename": ["DCENT_I_1.0.0.0_mean_spread.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 5.0,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dcenti_ts",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": [
+        "https://www.dropbox.com/scl/fi/7swmbcuq1u7igieyttums/DCENT_DCENT-I_annual_statistics.nc?rlkey=z5poco9ofqxttv0jl0j5q866p&st=96fwa885&dl=1",
+        "https://www.dropbox.com/scl/fi/c8ohkby3kbq98jyx7c7i1/DCENT_DCENT_I_GMST_annual_statistics.txt?rlkey=wt7436fexkijiqfltnvt43681&st=px7uqc2n&dl=1"
+      ],
+	  "filename": [
+        "DCENT_DCENT-I_annual_statistics.nc",
+        "DCENT_DCENT_I_GMST_annual_statistics.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 99,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dcenti_ts",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

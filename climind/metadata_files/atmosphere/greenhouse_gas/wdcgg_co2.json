@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2024/co2_monthly_20241028.csv"],
-      "filename": ["co2_monthly_20241028.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2025/co2_monthly_20251016.csv"],
+      "filename": ["co2_monthly_20251016.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of carbon dioxide",
 	  "time_resolution": "monthly",
@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2024/co2_annual_20241028.csv"],
-      "filename": ["co2_annual_20241028.csv"],
+      "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2025/co2_annual_20251016.csv"],
+      "filename": ["co2_annual_20251016.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of carbon dioxide",
 	  "time_resolution": "annual",

@@ -131,7 +131,7 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2)
     i1, i2 = 0, 0
 
-    subregions = gp.read_file(r"C:\Users\johnk\Downloads\Africa.shp")
+    subregions = gp.read_file(r"Africa.shp")
 
     region_json_file = 'coastal_regions.json'
     output_image = 'Coastal_regions'

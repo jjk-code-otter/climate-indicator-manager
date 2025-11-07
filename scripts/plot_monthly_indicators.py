@@ -16,6 +16,7 @@
 
 import logging
 from pathlib import Path
+import os
 
 import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
@@ -27,6 +28,8 @@ if __name__ == "__main__":
     final_year = 2024
 
     project_dir = DATA_DIR / "ManagedData"
+    ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
+    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
     metadata_dir = METADATA_DIR
 
     data_dir = project_dir / "Data"

@@ -2,7 +2,7 @@
   "name": "OSI SAF SH v2p3",
   "display_name": "OSI SAF v2.3",
   "version": "2.3",
-  "variable": "antarctic_ice_ignore",
+  "variable": "antarctic_ice",
   "units": "millionkm2",
   "citation": ["Lavergne, T., Sorensen, A. M., Kern, S., Tonboe, R., Notz, D., Aaboe, S., Bell, L., Dybkjar, G., Eastwood, S., Gabarro, C., Heygster, G., Killie, M. A., Brandt Kreiner, M., Lavelle, J., Saldo, R., Sandven, S., and Pedersen, L. T.: Version 2 of the EUMETSAT OSI SAF and ESA CCI sea-ice concentration climate data records, The Cryosphere, 13, 49-78, doi:10.5194/tc-13-49-2019, 2019."],
   "citation_url": ["https://doi.org/10.5194/tc-13-49-2019"],

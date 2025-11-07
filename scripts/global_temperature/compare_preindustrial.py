@@ -16,6 +16,7 @@
 
 import copy
 from pathlib import Path
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -31,6 +32,8 @@ from climind.definitions import METADATA_DIR
 final_year = 2023
 
 project_dir = DATA_DIR / "ManagedData"
+ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
 metadata_dir = METADATA_DIR
 
 data_dir = project_dir / "Data"
