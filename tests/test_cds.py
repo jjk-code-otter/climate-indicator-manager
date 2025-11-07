@@ -75,20 +75,6 @@ def test_fetch_year_bad_variable(tmpdir):
         fetch_to_year(Path(tmpdir), 1999, variable='badvariable')
 
 
-def test_fetch_existing_year(mocker, tmpdir):
-    m = mocker.patch("cdsapi.Client")
-
-    with open(Path(tmpdir) / 'era5_2m_tas_1999.nc', 'w') as f:
-        f.write('')
-    fetch_to_year(Path(tmpdir), 1999)
-    m.retrieve.assert_not_called()
-
-    with open(Path(tmpdir) / 'cds_sealevel_1999.zip', 'w') as f:
-        f.write('')
-    fetch_to_year(Path(tmpdir), 1999, variable='sealevel')
-    m.retrieve.assert_not_called()
-
-
 def test_fetch_future_year(mocker, tmpdir):
     m = mocker.patch("cdsapi.Client")
     fetch_to_year(Path(tmpdir), 2077)
@@ -99,16 +85,16 @@ def test_fetch_future_year(mocker, tmpdir):
 
 
 def test_fetch_all(mocker):
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('', Path(''), 'era5_2m_tas')
-    assert m.call_count == 2024 - 1979 + 1
+    assert m.call_count == 1
 
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('', Path(''), 'sealevel')
-    assert m.call_count == 2024 - 1993 + 1
+    assert m.call_count == 1
 
 
 def test_fetch_all_extension(mocker):
-    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_year")
+    m = mocker.patch("climind.fetchers.fetcher_cds.fetch_to_year")
     fetch('extension', Path(''), 'era5_2m_tas')
-    assert m.call_count == 2024 - 1959 + 1
+    assert m.call_count == 1

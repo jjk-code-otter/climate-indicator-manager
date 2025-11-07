@@ -139,13 +139,9 @@ def fetch(url: str, outdir: Path, filename: str) -> None:
     -------
     None
     """
-    first_year = 1979
-    if 'extension' in url:
-        first_year = 1959
 
     if 'sealevel' in filename:
         variable = 'sealevel'
-        first_year = 1993
     elif 'era5_2m_tas' in filename:
         variable = 'tas'
     else:
