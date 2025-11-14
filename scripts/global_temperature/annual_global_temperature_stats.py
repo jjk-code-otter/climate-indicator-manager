@@ -182,7 +182,7 @@ if __name__ == "__main__":
     lsat_mons = []
     print()
     for ds in lsat_datasets:
-        ds.change_end_month(2025, 8)
+        #ds.change_end_month(2025, 8)
         print(ds.metadata['name'], ds.get_start_and_end_dates())
         ds.rebaseline(1995, 2014)
 
@@ -202,7 +202,7 @@ if __name__ == "__main__":
     sst_mons = []
     print()
     for ds in sst_datasets:
-        ds.change_end_month(2025, 8)
+        #ds.change_end_month(2025, 8)
         print(ds.metadata['name'], ds.get_start_and_end_dates())
         ds.rebaseline(1995, 2014)
         sst_mons.append(copy.deepcopy(ds))
