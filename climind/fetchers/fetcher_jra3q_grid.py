@@ -94,6 +94,7 @@ def process_file(file_base: str) -> None:
     if Path(file_base).exists():
         ds = xa.open_dataset(file_base)
         ds = ds.mean('time')
+        ds.encoding = {'time':'ignore'}
         ds.to_netcdf(file_base)
 
 
@@ -152,8 +153,8 @@ def get_files(filelist: List[str], web_path: str, process: bool = False, output_
             print(f'Downloading {filename} to {file_base}')
             try:
                 download_file(filename, file_base, process)
-            except:
-                print(f'Failed to download {filename} to {file_base}')
+            except Exception as e:
+                print(f'Failed to download or process {filename} to {file_base}. Exception: {e}')
 
 
 def fetch(_, out_dir: Path, _filename) -> None:
@@ -179,8 +180,9 @@ def fetch(_, out_dir: Path, _filename) -> None:
     """
     # Real time
     web_path = 'https://data-osdf.rda.ucar.edu/ncar/rda/d640003/'
+    new_web_path = "https://osdf-director.osg-htc.org/ncar/gdex/d640003/"
     filelist = make_realtime_file_list(2022, 2025)
-    get_files(filelist, web_path, process=False)  # These are already monthly, so don't process
+    get_files(filelist, new_web_path, process=False)  # These are already monthly, so don't process
 
     # Archive
     web_path = 'https://data.rda.ucar.edu/ds640.0/'
