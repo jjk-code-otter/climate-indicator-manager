@@ -31,7 +31,7 @@ setup(
                       'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
                       'python-dotenv', 'regionmask', 'geopandas', 'shapely',
                       'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx','statsmodels',
-                      'netCDF4', 'h5netcdf', 'pytest-mock'],
+                      'netCDF4', 'h5netcdf', 'pytest-mock','datawrapper'],
     # version number
     version='1.3.0',
     # The license can be anything you like
