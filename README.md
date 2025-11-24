@@ -81,7 +81,8 @@ CMEMS_USER=athirdusername
 CMEMS_PSWD=yetanotherpassword
 ```
 
-All three of these services are free to register, but you will have to set up the credentials online.
+All three of these services are free to register, but you will have to set up the credentials online and then store 
+those credentials at some location in your file system.
 
 Similarly to access the data from the Copernicus Climate Change service, you will need an API key. 
 The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/how-to-api
@@ -90,29 +91,37 @@ Downloading data
 ================
 
 The first thing to do is to download the data. There are two main scripts for downloading 
-data in the scripts directory. `get_timeseries.py` will download individual datasets which 
-are in the form of time series. `get_grids.py` will download the gridded data.
+data and both of these are in the `scripts/data_management` directory. `get_timeseries.py` will download individual 
+datasets which are in the form of time series. `get_grids.py` will download the gridded data.
+
+To download a particular dataset, change the `name` of the dataset in the `archive.select` call. Multiple datasets 
+can be downloaded at once using a list of names. The "correct" names of the datasets are given in the metadata files. 
 
 A collection of regularly updated timeseries can be downloaded by running 
-`get_regular_timeseries.py`. This is great when it works, but typically at least on dataset
+`get_regular_timeseries.py` and daily timeseries can be downloaded by running `get_daily_timeseries.py`. 
+This is great when it works, but typically at least one dataset
 will fail to download in a way that stops the code from running. I temporarily comment out 
 problematic datasets and rerun the script.
 
 The volume of gridded data is considerably larger than the volume of time series data. For 
-some datasets, the whole gridded dataset is downloaded each time this is run, but for the 
-reanalyses the full dataset is only downloaded once with subsequent runs of the get_grids.py 
+some datasets, the whole gridded dataset is downloaded each time this is run, but for some of the 
+reanalyses the full dataset is only downloaded once with subsequent runs of the `get_grids.py` 
 script only downloading months that have not already been downloaded. The gridded data are 
 used to calculate custom area averages (such as the WMO Regional Association averages) and 
 for plotting maps of the data. The key global indicators are all time series.
 
-Some datasets are not available online (the JRA-55 global mean temperature for example) so 
+Some datasets are not available online (the JRA-55 and JRA-3Q global mean temperature for example) so 
 you will have to obtain these from somewhere else or remove them from the processing. Any 
-extra files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory 
+extra dataset files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory 
 in an appropriately named subdirectory that corresponds to the unique name given to the 
 data set. This can be found in the metadata file for the data set (see below).
 
 Calculating the WMO composite global mean temperature
 =====================================================
+
+To calculate this, you will first need to download the six datasets used in the composite global mean: 
+"HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "ERA5" and "JRA-3Q". These can be downloaded using 
+`get_timeseries.py`.
 
 Navigate to the `scripts/global_temperature` directory and run
 
