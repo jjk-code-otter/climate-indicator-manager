@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../../climind'))
 # -- Project information -----------------------------------------------------
 
 project = 'Climind'
-copyright = '2024, John Kennedy'
+copyright = '2025, John Kennedy'
 author = 'John Kennedy'
 
 # The full version, including alpha/beta/rc tags
@@ -29,13 +29,13 @@ release = '1.3'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.napoleon']
+extensions = ['sphinx.ext.apidoc', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon']
 
 autodoc_mock_imports = ['pytest', 'numpy', 'requests', 'beautifulsoup4',
                         'pandas', 'jsonschema', 'matplotlib', 'seaborn', 'xarray',
                         'python-dotenv', 'regionmask', 'geopandas', 'shapely',
-                        'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx']
+                        'cdsapi', 'cartopy', 'cftime', 'jinja2', 'python-docx','statsmodels',
+                      'netCDF4', 'h5netcdf', 'pytest-mock','datawrapper', 'scipy']
 
 autoclass_content = 'both'
 

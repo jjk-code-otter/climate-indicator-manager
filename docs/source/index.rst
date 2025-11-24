@@ -12,7 +12,7 @@ Climind documentation
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
    :hidden:
 
@@ -25,11 +25,10 @@ Other pages
 * :ref:`modindex`
 
 
-
 A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
-climate indicators.
+climate indicators, as well as creating dashboards based on these indicators.
 
-It is built on a collection of metadata files which describe the location and content of individual data collections and
+It is built on a collection of metadata fies which describe the location and content of individual data collections and
 data sets from those collections. For example, a *collection* might be something like "HadCRUT" and an individual
 *dataset* would be the file containing the monthly global mean temperatures calculated by the providers of "HadCRUT".
 
@@ -50,22 +49,22 @@ and reproduced.
 Installation
 ============
 
-Download the code from the repository using your preferred method.
+Download the code from the repository using your preferred method. I use
 
-An environment.yml file contains the details of the necessary conda environment. To
-setup the environment run
+`git clone https://github.com/jjk-code-otter/climate-indicator-manager.git`
 
-`conda env create -f <path_to_yaml_file>`
+Next create a new conda environment using python 3.13 (I called mine `wmo_plus`)
+as the base then activate the environment
 
-The environment (called `wmo`) can then be activated by typing
+`conda create -n "wmo_plus" python=3.13.5`
 
-`conda activate wmo`
+`conda activate wmo_plus`
 
-Navigate to the root directory of the repository and type
+then install the package using
 
 `pip install .`
 
-This should install the package.
+This should install the necessary dependencies. It might take a while.
 
 You will need to download a couple of different files if you want to calculate regional
 averages from gridded data. These include
@@ -74,7 +73,6 @@ averages from gridded data. These include
   I don't know of an online source for these so you will have to ask a friendly person
   at the WMO.
 - The Natural Earth country files https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip
-
 
 Set up
 ======
@@ -87,85 +85,157 @@ linux. In windows, do the following:
 3. Click on "Environment Variables..."
 4. Under "User variables for Username" click "New..."
 5. For "Variable name" type DATADIR
-6. For "Variable value" type the pathname for the directory you want the data to go in.
+6. For "Variable value" type the pathname for the directory you want the data to go in or navigate to the approriate directory using browse.
+7. Make sure that the directory exists.
 
-In addition, if you want to download JRA-55 data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
+In the `DATADIR` create a directory called `Natural_Earth` and put the Natural Earth shape files in there.
+In `DATADIR` again, create a directory called `Shape_Files` and put the WMO RA shape files and
+subregion files in it.
+
+In addition, if you want to download JRA-3Q data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
 valid username and password combo for each of these services. These values should be stored in a file called .env in
-the `fetchers` directory of the repository. It should contain two lines for each of the data services:
+the `fetchers` directory of the repository. It should contain two lines for each of the data services::
 
-.. code-block::
-
-   UCAR_EMAIL=youremail@domain.com
-   UCAR_PSWD=yourpasswordhere
-   PODAAC_PSWD=anotherpasswordhere
-   PODAAC_USER=anotherusernamehere
-   CMEMS_USER=athirdusername
-   CMEMS_PSWD=yetanotherpassword
+  UCAR_EMAIL=youremail@domain.com
+  UCAR_PSWD=yourpasswordhere
+  PODAAC_PSWD=anotherpasswordhere
+  PODAAC_USER=anotherusernamehere
+  CMEMS_USER=athirdusername
+  CMEMS_PSWD=yetanotherpassword
 
 
-All three of these services are free to register, but you will have to set up the credentials online.
+All three of these services are free to register, but you will have to set up the credentials online and then store
+those credentials at some location in your file system.
+
+Similarly to access the data from the Copernicus Climate Change service, you will need an API key.
+The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/how-to-api
 
 Downloading data
 ================
 
-The first thing to do is to download the data. There are two main scripts for downloading data in the scripts
-directory. `get_timeseries.py` will download the data which are in the form of time series. `get_grids.py` will download
-the gridded data.
+The first thing to do is to download the data. There are two main scripts for downloading
+data and both of these are in the `scripts/data_management` directory. `get_timeseries.py` will download individual
+datasets which are in the form of time series. `get_grids.py` will download the gridded data.
 
-The volume of gridded data is considerably larger than the volume of time series data. For some datasets, the whole
-gridded dataset is downloaded each time this is run, but for the reanalyses the full dataset is only downloaded once
-with subsequent runs of the get_grids.py script only downloading months that have not already been downloaded. The
-gridded data are used to calculate custom area averages (such as the WMO Regional Association averages) and for
-plotting maps of the data. The key global indicators are all time series.
+To download a particular dataset, change the `name` of the dataset in the `archive.select` call. Multiple datasets
+can be downloaded at once using a list of names. The "correct" names of the datasets are given in the metadata files.
 
-Some datasets are not available online (the JRA-55 global mean temperature for example) so you will have to obtain
-these from somewhere else or remove them from the processing. Any extra files such as these should be
-copied into the `$DATADIR/ManagedData/Data/` directory in an appropriately named subdirectory that corresponds
-to the unique name given to the data set. This can be found in the metadata file for the data set (see below).
+A collection of regularly updated timeseries can be downloaded by running
+`get_regular_timeseries.py` and daily timeseries can be downloaded by running `get_daily_timeseries.py`.
+This is great when it works, but typically at least one dataset
+will fail to download in a way that stops the code from running. I temporarily comment out
+problematic datasets and rerun the script.
 
-Processing the data
-===================
+The volume of gridded data is considerably larger than the volume of time series data. For
+some datasets, the whole gridded dataset is downloaded each time this is run, but for some of the
+reanalyses the full dataset is only downloaded once with subsequent runs of the `get_grids.py`
+script only downloading months that have not already been downloaded. The gridded data are
+used to calculate custom area averages (such as the WMO Regional Association averages) and
+for plotting maps of the data. The key global indicators are all time series.
 
-The gridded data need to be pre-processed by running:
+Some datasets are not available online (the JRA-55 and JRA-3Q global mean temperature for example) so
+you will have to obtain these from somewhere else or remove them from the processing. Any
+extra dataset files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory
+in an appropriately named subdirectory that corresponds to the unique name given to the
+data set. This can be found in the metadata file for the data set (see below).
+
+Calculating the WMO composite global mean temperature
+=====================================================
+
+To calculate this, you will first need to download the six datasets used in the composite global mean:
+"HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "ERA5" and "JRA-3Q". These can be downloaded using
+`get_timeseries.py`.
+
+Navigate to the `scripts/global_temperature` directory and run
+
+`annual_global_temperature_stats.py`
+
+This generates output in the `DATADIR` in the `ManagedData` subdirectory.
+Principle outputs appear in `Figures` - which holds all the graphs - and
+`reports` which contains the numerical outputs in a digest form.
+
+Pre-processing the data
+=======================
+
+For the dashboards, the gridded data need to be pre-processed by running the following from
+the `scripts` directory:
 
 `python regrid_grids.py`
 
-which calculates annual average grids on a consistent 5-degree latitude longitude grid for all the gridded data sets.
+which calculates annual average grids on a consistent 5-degree latitude longitude grid for
+all the gridded data sets. This allows them to be combined into a single estimate for mapping.
 
-In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
-scripts directory and run:
+In order to generate area averages from the gridded data for specified subregions, you will
+need to navigate to the scripts directory and run:
 
-`python make_new_regions.py` (you only need to run this the first time to generate the shape files for subregion)
+`python make_new_regions.py`
+
+You only need to run this the first time to generate the shape files for subregion. If you
+happen to rerun it, you will likely encounter permission issues - you can't write over the
+existing shape files. If you do need to rerun - say because the definitions have changed - then
+you will have to delete (or move) the shapefiles created by the code before running it again.
+
+Regional area averages are then calculated using:
 
 `python calculate_wmo_ra_averages.py`
 
-This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
-six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
-load and process a lot of reanalysis data.
+You will need to manually specify the end year and which datasets to use in the calculation. The
+regional reports use the main six datasets "HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "ERA5", and "JRA-3Q".
+The script reads in each of the gridded data sets, regrids it to a standard (1x1) resolution and then
+calculates the area averages for the six WMO Regional Association areas, the six African
+subregions and other subregions defined by the WMO Regional State of the Climate authors. It can
+take a while to run because it has to load and process a lot of data. The first time
+it runs, it will likely download a shape file of coastlines from natural earth used to identify
+land and ocean areas.
 
 
 Building the website
 ====================
 
-To build the websites, navigate to the scripts directory and run
+To build the websites, download all the necessary data then navigate to the scripts directory and run:
 
 `python build_dashboard.py`
 
-This builds all the webpages, produces the figures for each web page and prepares the formatted data sets. These are
-written to the `DATADIR/ManagedData` directory with one directory created for each dashboard. Currently the code is
-set up to generate four dashboards: key indicators to 2021, key indicators to 2022, ocean indicators,
-and regional indicators to 2022.
+This builds all the webpages, produces the figures for each web page and prepares
+the formatted data sets. These are written to the `DATADIR/ManagedData` directory with
+one directory created for each dashboard. Currently the code is set up to generate four
+dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, and regional
+indicators to 2022.
 
-To display a dashboard on the web, the files in the appropriate directory will need to be copied to an appropriate
-web server.
+To display a dashboard on the web, the files in the appropriate directory will need to be
+copied to an appropriate web server.
+
+The dashboard code is written in such a way that it will generate any information that doesn't cause
+an error. The basic dashboards are based on "cards" which are processed one at a time and then used
+to populate the webpages. If a card fails to process a warning will be printed to the screen but it will
+keep running and that card simply won't appear on the dashboard.
+
+
+Navigating the website
+======================
+
+Each dashboard consists of a set of "cards" at the top of the page. These each contain:
+
+- an image,
+- a set of links to images in different formats (png, svg, and pdf)
+- a link to a zip file of all the datasets in csv format.
+- a link to "References and processing" which takes you to details of:
+  - the datasets used and their references
+  - the data file and a checksum for assessing data integrity of the download
+  - the processing applied to each dataset
+
+In some cases there will also be:
+
+- a caption and a button saying "Copy caption" which will save the caption to your clipboard.
+- a button inviting you to "Click for more indicators". Clicking such a button will take you to a page with related indicators.
+
 
 Diverse other scripts
 =====================
 
 As well as these main scripts, described above, there are others which perform the following tasks:
 
-* `annual_global_temperature_stats.py` which generates some annual plots and statistics
-* `arctic_sea_ice_plot.py` which generates some sea ice plots
+* `arctic_sea_ice_plot.py` which generates some sea ice plots used in the State of the Climate report
 * `change_per_month_plots.py` which generates some plots based on monthly global mean temperature as well as some stats.
 * `five_year_global_temperature_stats.py` which generates some plots and stats based on 5-year running averages of
   global temperature
@@ -173,7 +243,7 @@ As well as these main scripts, described above, there are others which perform t
 * `plot_monthly_indicators.py` which generates a set of plots for a range of indicators (not all monthly).
 * `plot_monthly_maps.py` which allows for the plotting of monthly temperature anomaly maps.
 * `ten_year_global_temperature_stats.py` which generates some plots and stats based on 10-year running averages of
-  global temperature
+  global temperature for use in the decadal state of the climate report.
 
 Adding data sets for an existing variable
 =========================================
@@ -184,39 +254,37 @@ To add a dataset for an existing variable, you need to
 * write a fetcher function in the `fetchers` directory. This should correspond to the "reader" entry in the collection metadata. This is only necessary if the file(s) can't be downloaded as a simple http(s) or ftp(s) request. For example, some datasets do not have a static URL, or there are a large number of files, or there is an API for accessing the data.
 
 The form of these files should be clear from the other files and function in the respective
-directories, or by perusal of the schemas in the `data_manager` directory. An example metadata file looks like this:
+directories, or by perusal of the schemas in the `data_manager` directory. An example metadata file looks like this::
 
-.. code-block::
-
-   {
-     "name": "HadCRUT5",
-     "display_name": "HadCRUT5",
-     "version": "5.0.1.0",
-     "variable": "tas",
-     "units": "degC",
-     "citation": ["Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
-     "data_citation": [""],
-     "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
-     "colour": "dimgrey",
-     "zpos": 99,
-     "datasets": [
-       {
-         "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
-         "filename": ["HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
-         "type": "gridded",
-         "long_name": "Near surface temperature",
-         "time_resolution": "monthly",
-         "space_resolution": 5.0,
-         "climatology_start": 1961,
-         "climatology_end": 1990,
-         "actual": false,
-         "derived": false,
-         "history": [],
-         "reader": "reader_hadcrut_ts",
-         "fetcher": "fetcher_standard_url"
-       }
-     ]
-   }
+    {
+      "name": "HadCRUT5",
+      "display_name": "HadCRUT5",
+      "version": "5.0.1.0",
+      "variable": "tas",
+      "units": "degC",
+      "citation": ["Morice, C.P. et al. (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361"],
+      "data_citation": [""],
+      "acknowledgement": "HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "colour": "dimgrey",
+      "zpos": 99,
+      "datasets": [
+        {
+          "url": ["https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/analysis/HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
+          "filename": ["HadCRUT.5.0.1.0.analysis.anomalies.ensemble_mean.nc"],
+          "type": "gridded",
+          "long_name": "Near surface temperature",
+          "time_resolution": "monthly",
+          "space_resolution": 5.0,
+          "climatology_start": 1961,
+          "climatology_end": 1990,
+          "actual": false,
+          "derived": false,
+          "history": [],
+          "reader": "reader_hadcrut_ts",
+          "fetcher": "fetcher_standard_url"
+        }
+      ]
+    }
 
 
 The metadata describes a collection of data, in this case "HadCRUT5". HadCRUT5 consists of a number of data sets (only one is listed here) which are listed
@@ -275,26 +343,22 @@ A dashboard is created using a dashboard metadata file. These are located in `cl
 each correspond to an html webpage. Each Page consists of a set of Cards and Paragraphs (the capital letters indicate these are represented as classes
 in the underlying code). For examples, please see the `climind/web/dashboard_metadata` directory.
 
-A dashboard metadata file:
+A dashboard metadata file::
 
-.. code-block::
+  {
+    "name": "Key Indicators",
+    "pages": [ ... ]
+  }
 
-   {
-     "name": "Key Indicators",
-     "pages": [ ... ]
-   }
+The `pages` entry consists of a list of Pages which look something like::
 
-The `pages` entry consists of a list of Pages which look something like:
-
-.. code-block::
-
-   {
-     "id": "dashboard",
-     "name": "Key Climate Indicators",
-     "template": "front_page",
-     "cards": [ ... ],
-     "paragraphs": [ ... ]
-   },
+  {
+    "id": "dashboard",
+    "name": "Key Climate Indicators",
+    "template": "front_page",
+    "cards": [ ... ],
+    "paragraphs": [ ... ]
+  },
 
 The `template` can be either a `front_page` or a `topic_page`. The front page is intended to be a clean landing page
 for users. More information is provided on topic pages, including e.g. figure captions.
@@ -302,20 +366,19 @@ for users. More information is provided on topic pages, including e.g. figure ca
 The `cards` entry is made up of one or more cards and the `paragraphs` entry of one or more paragraphs.
 
 A Card, contains an image, links to the image in other format, links to the data in a standard format and a link to another Page.
-The metadata entries look like this:
+The metadata entries look like this::
 
-.. code-block::
 
-   {
-     "link_to": "global_mean_temperature", "title": "Global temperature",
-     "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
-     "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
-                     {"method": "make_annual", "args": []},
-                     {"method": "select_year_range", "args":  [1850,2021]},
-                     {"method": "add_offset", "args": [0.69]},
-                     {"method": "manually_set_baseline", "args": [1850, 1900]}],
-     "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
-   }
+  {
+  "link_to": "global_mean_temperature", "title": "Global temperature",
+  "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+  "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                  {"method": "make_annual", "args": []},
+                  {"method": "select_year_range", "args":  [1850,2021]},
+                  {"method": "add_offset", "args": [0.69]},
+                  {"method": "manually_set_baseline", "args": [1850, 1900]}],
+  "plotting": {"function": "neat_plot", "title": "Global mean temperature"}
+  }
 
 
 The entries say which other page the Card can `link_to` using the `id` of a page and what the `title` of the page should be.
@@ -325,34 +388,30 @@ relevant data type (at the moment `TimeSeriesMonthly` or `TimeSeriesAnnual`) and
 `plotting` specifies the function to the be used to plot the data (`neat_plot` being the standard type for annual plots) and can also
 be used to pass additional arguments to the plot function. Plotting functions are found in `climind/plotters/plot_types.py`
 
-A Paragraph is similar to a Card, except the output is a paragraph of text. An entry looks something like:
+A Paragraph is similar to a Card, except the output is a paragraph of text. An entry looks something like::
 
-.. code-block::
-
-   {
-     "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
-     "processing": [{"method": "rebaseline", "args": [1981, 2010]},
-                     {"method": "make_annual", "args": []},
-                     {"method": "select_year_range", "args":  [1850,2021]},
-                     {"method": "add_offset", "args": [0.69]},
-                     {"method": "manually_set_baseline", "args": [1850, 1900]}],
-     "writing": {"function": "anomaly_and_rank"}
-   }
+    {
+      "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly"},
+      "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                      {"method": "make_annual", "args": []},
+                      {"method": "select_year_range", "args":  [1850,2021]},
+                      {"method": "add_offset", "args": [0.69]},
+                      {"method": "manually_set_baseline", "args": [1850, 1900]}],
+      "writing": {"function": "anomaly_and_rank"}
+    }
 
 
 `selecting` and `processing` behave as they did for Cards, `writing` is similar to `plotting` and produces the main output. Paragraph writers
 are found in `climind/stats/paragraphs.py`.
 
-Once the dashboard metadata is complete, add an entry to `climind/scripts/build_dashboard.py` along the lines of:
+Once the dashboard metadata is complete, add an entry to `climind/scripts/build_dashboard.py` along the lines of::
 
-.. code-block::
+  json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'new_dashboard.json'
+  dash = Dashboard.from_json(json_file, METADATA_DIR)
 
-   json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'new_dashboard.json'
-   dash = Dashboard.from_json(json_file, METADATA_DIR)
-
-   dash_dir = DATA_DIR / 'ManagedData' / 'NewDashboard'
-   dash_dir.mkdir(exist_ok=True)
-   dash.build(Path(dash_dir))
+  dash_dir = DATA_DIR / 'ManagedData' / 'NewDashboard'
+  dash_dir.mkdir(exist_ok=True)
+  dash.build(Path(dash_dir))
 
 The `json_file` is the dashboard metadata file. The `dash_dir` is the directory where you want to build the dashboard. `dash.build()` builds the dashboard.
 
@@ -385,7 +444,5 @@ sections. Hyperlinks can be added and these will be rendered in the webpages.
 Individual variable descriptions can also be added here. The method is similar. A Heading1 style heading which matches
 the `variable` name from the metadata file, followed by `normal` style text. Sub-headings do not work for variables. These
 are intended to be short descriptions of the variables.
-
-
 
 

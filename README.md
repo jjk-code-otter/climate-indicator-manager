@@ -142,22 +142,23 @@ the `scripts` directory:
 which calculates annual average grids on a consistent 5-degree latitude longitude grid for 
 all the gridded data sets. This allows them to be combined into a single estimate for mapping.
 
-In order to generate area averages from the gridded data for specified sub regions, you will 
+In order to generate area averages from the gridded data for specified subregions, you will 
 need to navigate to the scripts directory and run:
 
 `python make_new_regions.py` 
 
-you only need to run this the first time to generate the shape files for subregion. If you 
+You only need to run this the first time to generate the shape files for subregion. If you 
 happen to rerun it, you will likely encounter permission issues - you can't write over the 
 existing shape files. If you do need to rerun - say because the definitions have changed - then 
-you will have to delete the shapefiles created by the code before running it again. 
+you will have to delete (or move) the shapefiles created by the code before running it again. 
 
-Regional area averages are calculated using
+Regional area averages are then calculated using:
 
 `python calculate_wmo_ra_averages.py`
 
-You will need to manually specify the end year and which datasets to use in the calculation.
-The script reads in each of the gridded data sets, regrids it to a standard resolution and then 
+You will need to manually specify the end year and which datasets to use in the calculation. The 
+regional reports use the main six datasets "HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "ERA5", and "JRA-3Q". 
+The script reads in each of the gridded data sets, regrids it to a standard (1x1) resolution and then 
 calculates the area averages for the six WMO Regional Association areas, the six African 
 subregions and other subregions defined by the WMO Regional State of the Climate authors. It can 
 take a while to run because it has to load and process a lot of data. The first time 
@@ -168,7 +169,7 @@ land and ocean areas.
 Building the website
 ====================
 
-To build the websites, navigate to the scripts directory and run
+To build the websites, download all the necessary data then navigate to the scripts directory and run:
 
 `python build_dashboard.py`
 
@@ -180,6 +181,11 @@ indicators to 2022.
 
 To display a dashboard on the web, the files in the appropriate directory will need to be 
 copied to an appropriate web server.
+
+The dashboard code is written in such a way that it will generate any information that doesn't cause 
+an error. The basic dashboards are based on "cards" which are processed one at a time and then used 
+to populate the webpages. If a card fails to process a warning will be printed to the screen but it will 
+keep running and that card simply won't appear on the dashboard.
 
 
 Navigating the website
