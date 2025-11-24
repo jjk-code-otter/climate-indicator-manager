@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.data_manager.processing &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.data_manager.processing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.data_manager.processing</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The classes and functions in this script describe groupings of metadata. The basic building</span>
+<span class="sd">block is a :class:`DataSet`, which specifies a file (or files) which contains the data for a single</span>
+<span class="sd">data set. :class:`DataSet` objects are grouped into :class:`DataCollection` objects, which gather</span>
+<span class="sd">together all the individual data sets which are derived from a single product. For example,</span>
+<span class="sd">HadCRUT5 is a product and so it has a corresponding DataCollection made up of several :class:`DataSet`</span>
+<span class="sd">objects. Finally, a :class:`DataArchive` contains one or more :class:`DataCollection` objects. All</span>
+<span class="sd">:class:`.DataSet` objects in a :class:`.DataCollection` will be the same variable. However, :class:`.DataCollection`</span>
+<span class="sd">objects in a :class:`.DataArchive` need not be the same variable.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_qs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">RefResolver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_manager.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CollectionMetadata</span><span class="p">,</span> <span class="n">DatasetMetadata</span><span class="p">,</span> <span class="n">CombinedMetadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROOT_DIR</span>
+
+
+<div class="viewcode-block" id="get_function">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.get_function">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_function</span><span class="p">(</span><span class="n">module_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">script_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a particular module and script in that module, return the function with</span>
+<span class="sd">    a specified name as a callable object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    module_path: str</span>
+<span class="sd">        The path to the module written using dot separation between directories</span>
+<span class="sd">    script_name: str</span>
+<span class="sd">        The name of the script</span>
+<span class="sd">    function_name: str</span>
+<span class="sd">        The name of the function in the script to be returned</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Callable</span>
+<span class="sd">        Returns the function with the specified function name from the script with</span>
+<span class="sd">        the specified script name in the specified module path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_path</span><span class="p">,</span> <span class="n">script_name</span><span class="p">])</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">fromlist</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+    <span class="n">chosen_fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">function_name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">chosen_fn</span></div>
+
+
+
+<div class="viewcode-block" id="DataSet">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataSet">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataSet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`.DataSet` contains *metadata* for a single dataset (one that might be split across multiple</span>
+<span class="sd">    files). For example, NSIDC monthly sea ice extent data is a single data set provided</span>
+<span class="sd">    in 12 files, one for each month. In contrast, HadCRUT5 monthly global mean temperature</span>
+<span class="sd">    is a single file. Both of these would be described by a :class:`.DataSet`. They can be used to</span>
+<span class="sd">    read in the actual data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">DatasetMetadata</span><span class="p">,</span> <span class="n">global_metadata</span><span class="p">:</span> <span class="n">CollectionMetadata</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`.DataSet` from :class:`.DatasetMetadata` and :class:`CollectionMetadata`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata : DatasetMetadata</span>
+<span class="sd">            :class:`.DatasetMetadata` containing the dataset metadata.</span>
+<span class="sd">        global_metadata : CollectionMetadata</span>
+<span class="sd">            :class:`CollectionMetadata` containing the global metadata</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the data set</span>
+<span class="sd">        metadata : dict</span>
+<span class="sd">            Dictionary of attributes</span>
+<span class="sd">        global_metadata : dict</span>
+<span class="sd">            Dictionary of global attributes inherited from collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">CombinedMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">global_metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">out_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_str</span>
+
+<div class="viewcode-block" id="DataSet.match_metadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataSet.match_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">match_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_to_match</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if there is a mismatch between attributes of :class:`DataSet` and the contents of a dictionary,</span>
+<span class="sd">        metadata_to_match. Only items that are in the attributes are checked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata_to_match : dict</span>
+<span class="sd">            Dictionary of key-value or key-list pairs to match. If a key-list is provided then each element of the</span>
+<span class="sd">            list is checked and a mismatch only occurs if all of the items in the list cause a mismatch.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Return True unless there is a mismatch in which case return False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataSet.download">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataSet.download">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download the data set using its &quot;fetcher&quot; function. Fetcher functions are contained in the fetchers</span>
+<span class="sd">        package.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_dir : Path</span>
+<span class="sd">            Directory to which the data set will be downloaded</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fetch_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fetcher</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> to filename </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fetch_fn</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_fetcher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the fetcher function for this dataset. This is the function</span>
+<span class="sd">        specified in the dataset metadata which downloads the datasets files</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Callable</span>
+<span class="sd">            Function that will, given appropriate inputs, download the dataset files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fetcher_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;fetcher&#39;</span><span class="p">]</span>
+        <span class="n">fetch_fn</span> <span class="o">=</span> <span class="n">get_function</span><span class="p">(</span><span class="s1">&#39;climind.fetchers&#39;</span><span class="p">,</span> <span class="n">fetcher_name</span><span class="p">,</span> <span class="s1">&#39;fetch&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fetch_fn</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_reader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the reader function for this dataset. This is the function</span>
+<span class="sd">        specified in the dataset metadata which reads in the dataset and converts</span>
+<span class="sd">        it to an appropriate internal representation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Callable</span>
+<span class="sd">            Function that will, given appropriate inputs, read in a data file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reader_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;reader&#39;</span><span class="p">]</span>
+        <span class="n">reader_fn</span> <span class="o">=</span> <span class="n">get_function</span><span class="p">(</span><span class="s1">&#39;climind.readers&#39;</span><span class="p">,</span> <span class="n">reader_name</span><span class="p">,</span> <span class="s1">&#39;read_ts&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reader_fn</span>
+
+<div class="viewcode-block" id="DataSet.read_dataset">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataSet.read_dataset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the dataset and output an object of the appropriate type.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_dir : Path</span>
+<span class="sd">            Directory in which the data are to be found (dictated by the Collection)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            Object of the appropriate type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_dir</span><span class="p">]</span>
+
+        <span class="c1"># print(f&quot;Reading {self.metadata[&#39;name&#39;]} using {self.metadata[&#39;reader&#39;]}&quot;)</span>
+        <span class="n">reader_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_reader</span><span class="p">()</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">out_dir</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">reader_fn</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">exceptions</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error occurred while executing reader_fn: </span><span class="si">{</span><span class="n">exceptions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DataCollection">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataCollection</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A grouping of :class:`DataSet` objects derived from a single product or source. e.g. HadCRUT5.</span>
+<span class="sd">    This could include, for example, monthly and annual time series along with the</span>
+<span class="sd">    gridded data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create :class:`.DataCollection` from a metadata dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata : dict</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        global_attributes : CollectionMetadata</span>
+<span class="sd">            Metadata containing the attributes that apply to all DataSets in the</span>
+<span class="sd">            :class:`.DataCollection`</span>
+<span class="sd">        datasets : List[DataSet]</span>
+<span class="sd">            List containing all the :class:`.DataSet` objects in this collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">global_attributes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># copy all metadata except datasets into global attributes and create</span>
+        <span class="c1"># the collection metadata</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;datasets&#39;</span><span class="p">:</span>
+                <span class="n">global_attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span> <span class="o">=</span> <span class="n">CollectionMetadata</span><span class="p">(</span><span class="n">global_attributes</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;datasets&#39;</span><span class="p">:</span>
+                <span class="c1"># for each dataset in the datasets section create a DataSet</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">]:</span>
+                    <span class="c1"># Combine global metadata with individual dataset metadata</span>
+                    <span class="n">dataset_metadata</span> <span class="o">=</span> <span class="n">DatasetMetadata</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">DataSet</span><span class="p">(</span><span class="n">dataset_metadata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                  <span class="sa">f</span><span class="s2">&quot;version:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="n">out_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_str</span>
+
+<div class="viewcode-block" id="DataCollection.from_file">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.from_file">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a file path create the :class:`.DataCollection` from metadata in that file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : Path</span>
+<span class="sd">            Filename of the metadata file in json format</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataCollection</span>
+<span class="sd">            DataCollection containing all the :class:`.DataSet` objects specified by the</span>
+<span class="sd">            metadata file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_from_file</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;climind&#39;</span> <span class="o">/</span> <span class="s1">&#39;data_manager&#39;</span> <span class="o">/</span> <span class="s1">&#39;metadata_schema.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">RefResolver</span><span class="p">(</span><span class="n">schema_path</span><span class="o">.</span><span class="n">as_uri</span><span class="p">(),</span> <span class="n">metadata_schema</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">metadata_from_file</span><span class="p">,</span> <span class="n">metadata_schema</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="n">resolver</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">metadata_from_file</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rebuild_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the metadata for the :class:`.DataCollection`, bringing together global and dataset metadata</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary containing all the metadata from the :class:`.DataCollection`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rebuilt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="n">rebuilt</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="n">rebuilt</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;climind&#39;</span> <span class="o">/</span> <span class="s1">&#39;data_manager&#39;</span> <span class="o">/</span> <span class="s1">&#39;metadata_schema.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">RefResolver</span><span class="p">(</span><span class="n">schema_path</span><span class="o">.</span><span class="n">as_uri</span><span class="p">(),</span> <span class="n">metadata_schema</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">rebuilt</span><span class="p">,</span> <span class="n">metadata_schema</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="n">resolver</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rebuilt</span>
+
+<div class="viewcode-block" id="DataCollection.to_file">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.to_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the :class:`.DataCollection` metadata to file in json format.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: Path</span>
+<span class="sd">            Path to the file to be written</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rebuilt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_metadata</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rebuilt</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataCollection.add_dataset">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.add_dataset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add :class:`.DataSet` object to :class:`.DataCollection`</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ds : DataSet</span>
+<span class="sd">            DataSet to be added</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataCollection.match_metadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.match_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">match_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_to_match</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a dictionary of metadata keys and required values for each key,</span>
+<span class="sd">        return a :class:`DataCollection` which contains only data sets matching the specified</span>
+<span class="sd">        metadata</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata_to_match : dict</span>
+<span class="sd">            Dictionary containing key:value pairs that specify the data sets required</span>
+<span class="sd">            in the output :class:`DataCollection`</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataCollection</span>
+<span class="sd">            Return :class:`DataCollection` that matches the metadata_to_match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">out_collection</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="n">at_least_one_match</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">):</span>
+                <span class="n">out_collection</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+                <span class="n">at_least_one_match</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_one_match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">out_collection</span></div>
+
+
+<div class="viewcode-block" id="DataCollection.get_collection_dir">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.get_collection_dir">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_collection_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the Path to the directory where the data for this :class:`.DataCollection` are stored.</span>
+<span class="sd">        If the directory does not exist, then create it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path to the general data directory for managed data in the project</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        Path</span>
+<span class="sd">            Path to the directory for this :class:`DataCollection`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collection_dir</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">collection_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">collection_dir</span></div>
+
+
+<div class="viewcode-block" id="DataCollection.download">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.download">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download all the data sets described by :class:`.DataSet` objects in the :class:`.DataCollection`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir : Path</span>
+<span class="sd">            Location to which the datasets should be downloaded</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collection_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_collection_dir</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="n">key</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">collection_dir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataCollection.read_datasets">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataCollection.read_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read all the datasets described by :class:`.DataSet` objects in the :class:`DataCollection`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_dir : Path</span>
+<span class="sd">            Directory in which the datasets are found</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            Return list of all data sets described in the :class:`DataCollection`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">collection_dir</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out_dir</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">collection_dir</span> <span class="o">=</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+        <span class="n">all_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">read_in_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_dataset</span><span class="p">(</span><span class="n">collection_dir</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with error message </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">read_in_dataset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_datasets</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DataArchive">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataArchive</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A set of :class:`DataCollection` objects. A class:`DataArchive` is the starting point for</span>
+<span class="sd">    the analysis. Particular :class:`DataSet` objects are selected from the class:`DataArchive`</span>
+<span class="sd">    before plotting or summarising the data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`DataArchive` object, initially empty.</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        collections : dict</span>
+<span class="sd">            A dictionary containing the :class:`.DataCollection` objects in the archive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collections</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">:</span>
+            <span class="n">out_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">out_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">out_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">return</span> <span class="n">out_str</span>
+
+<div class="viewcode-block" id="DataArchive.add_collection">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive.add_collection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_collection</span><span class="p">:</span> <span class="n">DataCollection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a :class:`DataCollection` to the archive</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_collection : DataCollection</span>
+<span class="sd">            :class:`DataCollection` to be added to the :class:`DataArchive`</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="n">data_collection</span><span class="o">.</span><span class="n">global_attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">data_collection</span></div>
+
+
+<div class="viewcode-block" id="DataArchive.select">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive.select">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_to_match</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select datasets from the :class:`DataArchive` that meet the metadata requirements specified</span>
+<span class="sd">        in the metadata_to_match dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata_to_match : dict</span>
+<span class="sd">            Metadata to be matched. For each requirement, there should be a key-value pair</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataArchive</span>
+<span class="sd">            Returns :class:`DataArchive` containing only data that match the metadata_to_match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">out_arch</span> <span class="o">=</span> <span class="n">DataArchive</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">:</span>
+            <span class="n">selected_collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">selected_collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">out_arch</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">selected_collection</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_arch</span></div>
+
+
+<div class="viewcode-block" id="DataArchive.from_directory">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive.from_directory">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_directory</span><span class="p">(</span><span class="n">path_to_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">Path</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`DataArchive` from a directory of metadata. The directory should contain a</span>
+<span class="sd">        set of json files each of which contains a set of metadata describing a :class:`DataCollection`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_to_dir : Path or List[Path]</span>
+<span class="sd">            Path to the directory containing the metadata files that will be used</span>
+<span class="sd">            to populate the :class:`DataArchive` or a list of such Paths.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataArchive</span>
+<span class="sd">            :class:`DataArchive` containing all :class:`DataCollection` objects described in the</span>
+<span class="sd">            metadata files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_archive</span> <span class="o">=</span> <span class="n">DataArchive</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">path_to_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">path_to_dir</span> <span class="o">=</span> <span class="p">[</span><span class="n">path_to_dir</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">single_path</span> <span class="ow">in</span> <span class="n">path_to_dir</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">json_file</span> <span class="ow">in</span> <span class="n">single_path</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s1">&#39;*.json&#39;</span><span class="p">,</span> <span class="n">recurse_symlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="n">dc</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+                <span class="n">out_archive</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_archive</span></div>
+
+
+<div class="viewcode-block" id="DataArchive.download">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive.download">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download all files in the :class:`DataArchive`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_dir : Path</span>
+<span class="sd">            Directory to which the files should be downloaded</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataArchive.read_datasets">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.processing.DataArchive.read_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read all the datasets in the :class:`DataArchive`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_dir : Path</span>
+<span class="sd">            Path of directory containing the data</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List of datasets specified by metadata in the archive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">:</span>
+            <span class="n">these_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">read_datasets</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">these_datasets</span><span class="p">:</span>
+                <span class="n">all_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_datasets</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

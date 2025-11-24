@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts package &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">scripts package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#scripts-carbon-budget-module">scripts.carbon_budget module</a></li>
+<li><a class="reference internal" href="#scripts-cherry-module">scripts.cherry module</a></li>
+<li><a class="reference internal" href="#scripts-compare-nino-years-module">scripts.compare_nino_years module</a></li>
+<li><a class="reference internal" href="#scripts-daily-global-temp-module">scripts.daily_global_temp module</a></li>
+<li><a class="reference internal" href="#scripts-data-to-range-module">scripts.data_to_range module</a></li>
+<li><a class="reference internal" href="#scripts-generate-summary-file-with-metadata-module">scripts.generate_summary_file_with_metadata module</a></li>
+<li><a class="reference internal" href="#scripts-gmst-enso-module">scripts.gmst_enso module</a></li>
+<li><a class="reference internal" href="#scripts-greenhouse-gases-module">scripts.greenhouse_gases module</a></li>
+<li><a class="reference internal" href="#scripts-interactives-module">scripts.interactives module</a></li>
+<li><a class="reference internal" href="#scripts-ipcc-update-module">scripts.ipcc_update module</a></li>
+<li><a class="reference internal" href="#scripts-jra3q-daily-module">scripts.jra3q_daily module</a></li>
+<li><a class="reference internal" href="#scripts-jra55-daily-module">scripts.jra55_daily module</a></li>
+<li><a class="reference internal" href="#scripts-marine-heatwave-plot-module">scripts.marine_heatwave_plot module</a></li>
+<li><a class="reference internal" href="#scripts-model-paris-module">scripts.model_paris module</a></li>
+<li><a class="reference internal" href="#scripts-multi-indicator-module">scripts.multi_indicator module</a></li>
+<li><a class="reference internal" href="#scripts-nino-stacks-module">scripts.nino_stacks module</a></li>
+<li><a class="reference internal" href="#scripts-ohc-trends-module">scripts.ohc_trends module</a></li>
+<li><a class="reference internal" href="#scripts-plot-monthly-indicators-module">scripts.plot_monthly_indicators module</a></li>
+<li><a class="reference internal" href="#scripts-plot-monthly-maps-module">scripts.plot_monthly_maps module</a></li>
+<li><a class="reference internal" href="#scripts-plot-precip-map-module">scripts.plot_precip_map module</a></li>
+<li><a class="reference internal" href="#scripts-plot-precip-quantile-map-module">scripts.plot_precip_quantile_map module</a></li>
+<li><a class="reference internal" href="#scripts-plot-sealevel-map-module">scripts.plot_sealevel_map module</a></li>
+<li><a class="reference internal" href="#scripts-plot-sealevel-trend-map-module">scripts.plot_sealevel_trend_map module</a></li>
+<li><a class="reference internal" href="#scripts-pseudo-world-module">scripts.pseudo_world module</a></li>
+<li><a class="reference internal" href="#scripts-quick-nc-viewer-module">scripts.quick_nc_viewer module</a></li>
+<li><a class="reference internal" href="#scripts-sealevel-trend-mean-wmo-module">scripts.sealevel_trend_mean_WMO module</a></li>
+<li><a class="reference internal" href="#scripts-snow-plot-module">scripts.snow_plot module</a></li>
+<li><a class="reference internal" href="#scripts-thirty-year-changes-module">scripts.thirty_year_changes module</a></li>
+<li><a class="reference internal" href="#scripts-thresholds-module">scripts.thresholds module</a></li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">scripts package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/scripts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scripts-package">
+<h1>scripts package<a class="headerlink" href="#scripts-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scripts.data_management.html">scripts.data_management package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-build-dashboard-module">scripts.data_management.build_dashboard module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-calculate-sea-level-time-series-module">scripts.data_management.calculate_sea_level_time_series module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-calculate-sea-level-trend-regional-averages-module">scripts.data_management.calculate_sea_level_trend_regional_averages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-calculate-wmo-ra-averages-module">scripts.data_management.calculate_wmo_ra_averages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-get-daily-timeseries-module">scripts.data_management.get_daily_timeseries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-get-grids-module">scripts.data_management.get_grids module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-get-regular-timeseries-module">scripts.data_management.get_regular_timeseries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-get-timeseries-module">scripts.data_management.get_timeseries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-gui-module">scripts.data_management.gui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-make-new-regions-module">scripts.data_management.make_new_regions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-make-qr-codes-module">scripts.data_management.make_qr_codes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-make-sea-level-regions-module">scripts.data_management.make_sea_level_regions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-map-wmo-regions-module">scripts.data_management.map_wmo_regions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#scripts-data-management-regrid-grids-module">scripts.data_management.regrid_grids module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.data_management.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.external_scripts.html">scripts.external_scripts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.external_scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.external_scripts.html#scripts-external-scripts-wmo-map-bars-module">scripts.external_scripts.WMO_map_bars module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.external_scripts.html#scripts-external-scripts-wmo-plt-cfg-module">scripts.external_scripts.WMO_plt_cfg module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.external_scripts.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.fact_sheet.html">scripts.fact_sheet package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-effect-of-infilling-module">scripts.fact_sheet.effect_of_infilling module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-land-ocean-module">scripts.fact_sheet.land_ocean module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-observed-and-anthro-module">scripts.fact_sheet.observed_and_anthro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-pdf-factsheet-module">scripts.fact_sheet.pdf_factsheet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-plot-pages-2k-module">scripts.fact_sheet.plot_pages_2k module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#scripts-fact-sheet-temperature-map-module">scripts.fact_sheet.temperature_map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.fact_sheet.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.global_temperature.html">scripts.global_temperature package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-animated-plot-module">scripts.global_temperature.animated_plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-annual-global-own-baselines-module">scripts.global_temperature.annual_global_own_baselines module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-annual-global-temperature-stats-module">scripts.global_temperature.annual_global_temperature_stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-change-per-month-plots-module">scripts.global_temperature.change_per_month_plots module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-climatology-difference-module">scripts.global_temperature.climatology_difference module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-compare-preindustrial-module">scripts.global_temperature.compare_preindustrial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-coral-module">scripts.global_temperature.coral module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-decadal-report-stats-and-figures-module">scripts.global_temperature.decadal_report_stats_and_figures module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-five-year-global-temperature-stats-module">scripts.global_temperature.five_year_global_temperature_stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-global-temperature-stats-module">scripts.global_temperature.global_temperature_stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-hierarchical-merge-module">scripts.global_temperature.hierarchical_merge module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-ipcc-style-averages-module">scripts.global_temperature.ipcc_style_averages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-nature-news-and-views-module">scripts.global_temperature.nature_news_and_views module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-prediction-partial-year-module">scripts.global_temperature.prediction_partial_year module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-rank-by-dataset-plot-module">scripts.global_temperature.rank_by_dataset_plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#scripts-global-temperature-ten-year-global-temperature-stats-module">scripts.global_temperature.ten_year_global_temperature_stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.global_temperature.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.precipitation.html">scripts.precipitation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.precipitation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.precipitation.html#scripts-precipitation-el-nino-composite-module">scripts.precipitation.el_nino_composite module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.precipitation.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.sea_ice.html">scripts.sea_ice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-arctic-sea-ice-plot-module">scripts.sea_ice.arctic_sea_ice_plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-climate-service-pies-module">scripts.sea_ice.climate_service_pies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-combined-arctic-antarctic-module">scripts.sea_ice.combined_arctic_antarctic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-compare-actual-anomaly-ice-module">scripts.sea_ice.compare_actual_anomaly_ice module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-compare-nsidc-osisaf-module">scripts.sea_ice.compare_nsidc_osisaf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#scripts-sea-ice-daily-sea-ice-module">scripts.sea_ice.daily_sea_ice module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.sea_ice.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-carbon-budget-module">
+<h2>scripts.carbon_budget module<a class="headerlink" href="#scripts-carbon-budget-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-cherry-module">
+<h2>scripts.cherry module<a class="headerlink" href="#scripts-cherry-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-compare-nino-years-module">
+<h2>scripts.compare_nino_years module<a class="headerlink" href="#scripts-compare-nino-years-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-daily-global-temp-module">
+<h2>scripts.daily_global_temp module<a class="headerlink" href="#scripts-daily-global-temp-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-data-to-range-module">
+<h2>scripts.data_to_range module<a class="headerlink" href="#scripts-data-to-range-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-generate-summary-file-with-metadata-module">
+<h2>scripts.generate_summary_file_with_metadata module<a class="headerlink" href="#scripts-generate-summary-file-with-metadata-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-gmst-enso-module">
+<h2>scripts.gmst_enso module<a class="headerlink" href="#scripts-gmst-enso-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-greenhouse-gases-module">
+<h2>scripts.greenhouse_gases module<a class="headerlink" href="#scripts-greenhouse-gases-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-interactives-module">
+<h2>scripts.interactives module<a class="headerlink" href="#scripts-interactives-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-ipcc-update-module">
+<h2>scripts.ipcc_update module<a class="headerlink" href="#scripts-ipcc-update-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-jra3q-daily-module">
+<h2>scripts.jra3q_daily module<a class="headerlink" href="#scripts-jra3q-daily-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-jra55-daily-module">
+<h2>scripts.jra55_daily module<a class="headerlink" href="#scripts-jra55-daily-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-marine-heatwave-plot-module">
+<h2>scripts.marine_heatwave_plot module<a class="headerlink" href="#scripts-marine-heatwave-plot-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-model-paris-module">
+<h2>scripts.model_paris module<a class="headerlink" href="#scripts-model-paris-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-multi-indicator-module">
+<h2>scripts.multi_indicator module<a class="headerlink" href="#scripts-multi-indicator-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-nino-stacks-module">
+<h2>scripts.nino_stacks module<a class="headerlink" href="#scripts-nino-stacks-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-ohc-trends-module">
+<h2>scripts.ohc_trends module<a class="headerlink" href="#scripts-ohc-trends-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-monthly-indicators-module">
+<h2>scripts.plot_monthly_indicators module<a class="headerlink" href="#scripts-plot-monthly-indicators-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-monthly-maps-module">
+<h2>scripts.plot_monthly_maps module<a class="headerlink" href="#scripts-plot-monthly-maps-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-precip-map-module">
+<h2>scripts.plot_precip_map module<a class="headerlink" href="#scripts-plot-precip-map-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-precip-quantile-map-module">
+<h2>scripts.plot_precip_quantile_map module<a class="headerlink" href="#scripts-plot-precip-quantile-map-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-sealevel-map-module">
+<h2>scripts.plot_sealevel_map module<a class="headerlink" href="#scripts-plot-sealevel-map-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-plot-sealevel-trend-map-module">
+<h2>scripts.plot_sealevel_trend_map module<a class="headerlink" href="#scripts-plot-sealevel-trend-map-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-pseudo-world-module">
+<h2>scripts.pseudo_world module<a class="headerlink" href="#scripts-pseudo-world-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-quick-nc-viewer-module">
+<h2>scripts.quick_nc_viewer module<a class="headerlink" href="#scripts-quick-nc-viewer-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-sealevel-trend-mean-wmo-module">
+<h2>scripts.sealevel_trend_mean_WMO module<a class="headerlink" href="#scripts-sealevel-trend-mean-wmo-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-snow-plot-module">
+<h2>scripts.snow_plot module<a class="headerlink" href="#scripts-snow-plot-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-thirty-year-changes-module">
+<h2>scripts.thirty_year_changes module<a class="headerlink" href="#scripts-thirty-year-changes-module" title="Link to this heading"></a></h2>
+</section>
+<section id="scripts-thresholds-module">
+<h2>scripts.thresholds module<a class="headerlink" href="#scripts-thresholds-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

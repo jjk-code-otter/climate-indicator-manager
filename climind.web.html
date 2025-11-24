@@ -1,20 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>climind.web package &mdash; Climind 1.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>climind.web package &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -25,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Climind
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Climind
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -39,8 +44,45 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">climind.web package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-climind.web.dashboard">climind.web.dashboard module</a></li>
-<li><a class="reference internal" href="#module-climind.web.extract_from_word">climind.web.extract_from_word module</a></li>
+<li><a class="reference internal" href="#module-climind.web.dashboard">climind.web.dashboard module</a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.Card"><code class="docutils literal notranslate"><span class="pre">Card</span></code></a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.Card.make_csv_files"><code class="docutils literal notranslate"><span class="pre">Card.make_csv_files()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Card.make_zip_file"><code class="docutils literal notranslate"><span class="pre">Card.make_zip_file()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Card.plot"><code class="docutils literal notranslate"><span class="pre">Card.plot()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Card.process_card"><code class="docutils literal notranslate"><span class="pre">Card.process_card()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Card.process_datasets"><code class="docutils literal notranslate"><span class="pre">Card.process_datasets()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#climind.web.dashboard.Dashboard"><code class="docutils literal notranslate"><span class="pre">Dashboard</span></code></a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.Dashboard.build"><code class="docutils literal notranslate"><span class="pre">Dashboard.build()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Dashboard.from_json"><code class="docutils literal notranslate"><span class="pre">Dashboard.from_json()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#climind.web.dashboard.Page"><code class="docutils literal notranslate"><span class="pre">Page</span></code></a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.Page.build"><code class="docutils literal notranslate"><span class="pre">Page.build()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#climind.web.dashboard.Paragraph"><code class="docutils literal notranslate"><span class="pre">Paragraph</span></code></a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.Paragraph.process_datasets"><code class="docutils literal notranslate"><span class="pre">Paragraph.process_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Paragraph.process_paragraph"><code class="docutils literal notranslate"><span class="pre">Paragraph.process_paragraph()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.Paragraph.render"><code class="docutils literal notranslate"><span class="pre">Paragraph.render()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#climind.web.dashboard.WebComponent"><code class="docutils literal notranslate"><span class="pre">WebComponent</span></code></a><ul>
+<li><a class="reference internal" href="#climind.web.dashboard.WebComponent.process_datasets"><code class="docutils literal notranslate"><span class="pre">WebComponent.process_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.dashboard.WebComponent.select_and_read_data"><code class="docutils literal notranslate"><span class="pre">WebComponent.select_and_read_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#climind.web.dashboard.process_single_dataset"><code class="docutils literal notranslate"><span class="pre">process_single_dataset()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-climind.web.extract_from_word">climind.web.extract_from_word module</a><ul>
+<li><a class="reference internal" href="#climind.web.extract_from_word.GetParagraphText"><code class="docutils literal notranslate"><span class="pre">GetParagraphText()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.extract_from_word.clean_awkward_characters"><code class="docutils literal notranslate"><span class="pre">clean_awkward_characters()</span></code></a></li>
+<li><a class="reference internal" href="#climind.web.extract_from_word.split_document"><code class="docutils literal notranslate"><span class="pre">split_document()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-climind.web">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -58,7 +100,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">climind.web package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/climind.web.rst.txt" rel="nofollow"> View page source</a>
@@ -69,38 +111,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-climind.web">
-<span id="climind-web-package"></span><h1>climind.web package<a class="headerlink" href="#module-climind.web" title="Permalink to this heading"></a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-climind.web.dashboard">
-<span id="climind-web-dashboard-module"></span><h2>climind.web.dashboard module<a class="headerlink" href="#module-climind.web.dashboard" title="Permalink to this heading"></a></h2>
+  <section id="climind-web-package">
+<h1>climind.web package<a class="headerlink" href="#climind-web-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-climind.web.dashboard">
+<span id="climind-web-dashboard-module"></span><h2>climind.web.dashboard module<a class="headerlink" href="#module-climind.web.dashboard" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Card</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Card" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Card</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.web.dashboard.WebComponent" title="climind.web.dashboard.WebComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebComponent</span></code></a></p>
 <p>A card is a single panel in a dashboard web page. The Card class manages the metadata
 associated with the card, and generates the files that are associated with it. These
 include the figure (in multiple formats) and the data files (in a zip archive)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>card_metadata</strong> (<em>dict</em>) – dictionary containing the metadata for the card</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card.make_csv_files">
-<span class="sig-name descname"><span class="pre">make_csv_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.web.dashboard.Card.make_csv_files" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_csv_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card.make_csv_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card.make_csv_files" title="Link to this definition"></a></dt>
 <dd><p>Make a csv file in the standard format for each data set in the Card and return a list of all their names
 of the csv files.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>formatted_data_dir</strong> (<em>Path</em>) – Path of the directory to which the csv files will be written</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List containing a Path for each csv file written</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[Path]</p>
 </dd>
 </dl>
@@ -108,14 +150,14 @@ of the csv files.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card.make_zip_file">
-<span class="sig-name descname"><span class="pre">make_zip_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Card.make_zip_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_zip_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card.make_zip_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card.make_zip_file" title="Link to this definition"></a></dt>
 <dd><p>Create a formatted data file for each data set and zip these into a zip file. Adds a metadata element
 ‘csv_name’ with the names of the zip file once it is created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>formatted_data_dir</strong> (<em>Path</em>) – Path of the directory to which the zip file and data files should be written</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -123,13 +165,13 @@ of the csv files.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Card.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card.plot" title="Link to this definition"></a></dt>
 <dd><p>Plot the figure specified in the card metadata, output to the figure_dir directory</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>figure_dir</strong> (<em>Path</em>) – Path of the directory to which the figure should be written</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -137,10 +179,10 @@ of the csv files.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card.process_card">
-<span class="sig-name descname"><span class="pre">process_card</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Card.process_card" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_card</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatted_data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card.process_card"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card.process_card" title="Link to this definition"></a></dt>
 <dd><p>Process the datasets, plot them and write out the data based on the metadata in the Card</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_dir</strong> (<em>Path</em>) – Path of the directory in which the data are found.</p></li>
 <li><p><strong>figure_dir</strong> (<em>Path</em>) – Path of the directory to which the figures will be written.</p></li>
@@ -148,7 +190,7 @@ of the csv files.</p>
 <li><p><strong>archive</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><em>DataArchive</em></a>) – DataArchive object containing the descriptive metadata.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -156,10 +198,10 @@ of the csv files.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Card.process_datasets">
-<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Card.process_datasets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Card.process_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Card.process_datasets" title="Link to this definition"></a></dt>
 <dd><p>Run the processing specified in the card metadata on each of the data sets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -169,30 +211,30 @@ of the csv files.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.web.dashboard.Dashboard">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Dashboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Dashboard" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Dashboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Dashboard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Dashboard" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Create a dashboard from a set of dashboard metadata</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the dashboard metadata</p></li>
-<li><p><strong>archive</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><em>DataArchive</em></a>) – Data archive that will be used to populate the dashboard</p></li>
+<li><p><strong>archive</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><em>DataArchive</em></a>) – Metadata archive that will be used to populate the dashboard</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Dashboard.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Dashboard.build" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Dashboard.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Dashboard.build" title="Link to this definition"></a></dt>
 <dd><p>Build all the pages in the dashboard. This will create the html, the images,
 the formatted data in a chosen directory</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>build_dir</strong> (<em>Path</em>) – Path of the directory to build the web pages in</p></li>
 <li><p><strong>focus_year</strong> (<em>int</em>) – Year to focus on. Usually, this will be the latest year</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -200,16 +242,16 @@ the formatted data in a chosen directory</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Dashboard.from_json">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Dashboard.from_json" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Dashboard.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Dashboard.from_json" title="Link to this definition"></a></dt>
 <dd><p>Create a Dashboard from a json file and directory containing dataset metadata</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>json_file</strong> (<em>Path</em>) – Path to the json file</p></li>
 <li><p><strong>archive_dir</strong> (<em>Path</em>) – Path of the directory which contains the dataset metadata</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#climind.web.dashboard.Dashboard" title="climind.web.dashboard.Dashboard">Dashboard</a></p>
 </dd>
 </dl>
@@ -219,22 +261,22 @@ the formatted data in a chosen directory</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.web.dashboard.Page">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Page" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Page" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A Page from a dashboard. A page contains multiple Cards, which are used to render a
 jinja2 template.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>metadata</strong> (<em>dict</em>) – Dictionary containing the page metadata</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Page.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menu_items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Page.build" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menu_items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Page.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Page.build" title="Link to this definition"></a></dt>
 <dd><p>Build the Page, processing all the Card and Paragraph objects, then populating the template
 to generate a webpage, figures and formatted data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>build_dir</strong> (<em>Path</em>) – Path of the directory to which the html, figures and data will be written</p></li>
 <li><p><strong>data_dir</strong> (<em>Path</em>) – Path of the directory where the data are to be found.</p></li>
@@ -245,7 +287,7 @@ the first element (which gets a .html extension) and the title of the page as th
 title is used to generate the menu items so should be human readable.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -255,14 +297,14 @@ title is used to generate the menu items so should be human readable.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.web.dashboard.Paragraph">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paragraph_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Paragraph" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">Paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paragraph_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Paragraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Paragraph" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#climind.web.dashboard.WebComponent" title="climind.web.dashboard.WebComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebComponent</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Paragraph.process_datasets">
-<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Paragraph.process_datasets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Paragraph.process_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Paragraph.process_datasets" title="Link to this definition"></a></dt>
 <dd><p>Run the processing specified in the paragraph metadata on each of the data sets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -270,28 +312,31 @@ title is used to generate the menu items so should be human readable.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Paragraph.process_paragraph">
-<span class="sig-name descname"><span class="pre">process_paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Paragraph.process_paragraph" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/climind/web/dashboard.html#Paragraph.process_paragraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Paragraph.process_paragraph" title="Link to this definition"></a></dt>
 <dd><p>Process and ultimately render the Paragraph object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_dir</strong> (<em>Path</em>) – Path of the directory containing the data</p></li>
 <li><p><strong>archive</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><em>DataArchive</em></a>) – DataArchive object with the metadata describing all the datasets</p></li>
 <li><p><strong>focus_year</strong> (<em>int</em>) – Year which the paragraph will focus on, usually the most recent year, though it needn’t be.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.Paragraph.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.Paragraph.render" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2021</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#Paragraph.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.Paragraph.render" title="Link to this definition"></a></dt>
 <dd><p>Render out the text of the paragraph specified in the paragraph metadata.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>year</strong> (<em>int</em>) – Year which is the focus of the paragraph.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -301,33 +346,36 @@ title is used to generate the menu items so should be human readable.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="climind.web.dashboard.WebComponent">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">WebComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.WebComponent" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">WebComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#WebComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.WebComponent" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.WebComponent.process_datasets">
-<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.WebComponent.process_datasets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#WebComponent.process_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.WebComponent.process_datasets" title="Link to this definition"></a></dt>
 <dd><p>Apply the processing steps specified in the ‘processing’ section of the metadata file to
 all the data sets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If any of the processing steps fails to run</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="climind.web.dashboard.WebComponent.select_and_read_data">
-<span class="sig-name descname"><span class="pre">select_and_read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.dashboard.WebComponent.select_and_read_data" title="Permalink to this definition"></a></dt>
-<dd><p>Using the specified data archive, select the appropriate subset of data as specified in the card
-metadata and read in the data sets from the data_dir directory</p>
+<span class="sig-name descname"><span class="pre">select_and_read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><span class="pre">DataArchive</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/dashboard.html#WebComponent.select_and_read_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.WebComponent.select_and_read_data" title="Link to this definition"></a></dt>
+<dd><p>Using the specified DataArchive, select the appropriate subset of data as specified in the Card
+metadata and read in the data sets from the data_dir directory.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_dir</strong> (<em>Path</em>) – Path of the directory in which the data are to be found</p></li>
 <li><p><strong>archive</strong> (<a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive" title="climind.data_manager.processing.DataArchive"><em>DataArchive</em></a>) – Archive of data used to select and populate the data sets</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -337,45 +385,45 @@ metadata and read in the data sets from the data_dir directory</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.web.dashboard.process_single_dataset">
-<span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">process_single_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#climind.web.dashboard.process_single_dataset" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.web.dashboard.</span></span><span class="sig-name descname"><span class="pre">process_single_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><span class="pre">TimeSeriesAnnual</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><span class="pre">TimeSeriesMonthly</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><span class="pre">TimeSeriesIrregular</span></a></span></span><a class="reference internal" href="_modules/climind/web/dashboard.html#process_single_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.dashboard.process_single_dataset" title="Link to this definition"></a></dt>
 <dd><p>Process the input data set using the methods and arguments provided in a list of processing steps.
 Each processing step is a dictionary containing a ‘method’ and an ‘arguments’ entry.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ds</strong> (<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em> or </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a>) – Data set to be processed</p></li>
-<li><p><strong>processing_steps</strong> (<em>list</em>) – list of steps. Each step must be a dictionary containing a ‘method’ entry that corresponds to
+<li><p><strong>ds</strong> (<em>Union</em><em>[</em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual"><em>TimeSeriesAnnual</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly"><em>TimeSeriesMonthly</em></a><em>, </em><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular"><em>TimeSeriesIrregular</em></a><em>]</em>) – Data set to be processed</p></li>
+<li><p><strong>processing_steps</strong> (<em>List</em>) – List of steps. Each step must be a dictionary containing a ‘method’ entry that corresponds to
 the name of a method in the timeseries class and a ‘arguments’ entry which contains a list
 of arguments for that method</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Union[<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a>, <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly">TimeSeriesMonthly</a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Union[<a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual" title="climind.data_types.timeseries.TimeSeriesAnnual">TimeSeriesAnnual</a>, <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly" title="climind.data_types.timeseries.TimeSeriesMonthly">TimeSeriesMonthly</a>, <a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular" title="climind.data_types.timeseries.TimeSeriesIrregular">TimeSeriesIrregular</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-climind.web.extract_from_word">
-<span id="climind-web-extract-from-word-module"></span><h2>climind.web.extract_from_word module<a class="headerlink" href="#module-climind.web.extract_from_word" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-climind.web.extract_from_word">
+<span id="climind-web-extract-from-word-module"></span><h2>climind.web.extract_from_word module<a class="headerlink" href="#module-climind.web.extract_from_word" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.web.extract_from_word.GetParagraphText">
-<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">GetParagraphText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paragraph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.extract_from_word.GetParagraphText" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">GetParagraphText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paragraph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/extract_from_word.html#GetParagraphText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.extract_from_word.GetParagraphText" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.web.extract_from_word.clean_awkward_characters">
-<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">clean_awkward_characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#climind.web.extract_from_word.clean_awkward_characters" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">clean_awkward_characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/climind/web/extract_from_word.html#clean_awkward_characters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.extract_from_word.clean_awkward_characters" title="Link to this definition"></a></dt>
 <dd><p>Clean a string of odd characters or otherwise inelegant combinations that cause problems for jinja and/or
 html.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>in_text</strong> (<em>str</em>) – String to be cleaned</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Cleaned string</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -383,11 +431,14 @@ html.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="climind.web.extract_from_word.split_document">
-<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">split_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#climind.web.extract_from_word.split_document" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">climind.web.extract_from_word.</span></span><span class="sig-name descname"><span class="pre">split_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/climind/web/extract_from_word.html#split_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#climind.web.extract_from_word.split_document" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-</div>
-</div>
+</section>
+<section id="module-climind.web">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-climind.web" title="Link to this heading"></a></h2>
+</section>
+</section>
 
 
            </div>
@@ -397,7 +448,7 @@ html.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, John Kennedy.</p>
+    <p>&#169; Copyright 2025, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

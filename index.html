@@ -1,20 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Climind documentation &mdash; Climind 1.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Climind documentation &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -25,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> Climind
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Climind
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,8 +47,10 @@
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#set-up">Set up</a></li>
 <li><a class="reference internal" href="#downloading-data">Downloading data</a></li>
-<li><a class="reference internal" href="#processing-the-data">Processing the data</a></li>
+<li><a class="reference internal" href="#calculating-the-wmo-composite-global-mean-temperature">Calculating the WMO composite global mean temperature</a></li>
+<li><a class="reference internal" href="#pre-processing-the-data">Pre-processing the data</a></li>
 <li><a class="reference internal" href="#building-the-website">Building the website</a></li>
+<li><a class="reference internal" href="#navigating-the-website">Navigating the website</a></li>
 <li><a class="reference internal" href="#diverse-other-scripts">Diverse other scripts</a></li>
 <li><a class="reference internal" href="#adding-data-sets-for-an-existing-variable">Adding data sets for an existing variable</a></li>
 <li><a class="reference internal" href="#adding-a-new-variable">Adding a new variable</a></li>
@@ -65,7 +72,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a></li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Climind documentation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
@@ -76,13 +83,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-climind">
-<span id="climind-documentation"></span><h1>Climind documentation<a class="headerlink" href="#module-climind" title="Permalink to this heading"></a></h1>
+  <section id="module-climind">
+<span id="climind-documentation"></span><h1>Climind documentation<a class="headerlink" href="#module-climind" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="other-pages">
-<h1>Other pages<a class="headerlink" href="#other-pages" title="Permalink to this heading"></a></h1>
+</section>
+<section id="other-pages">
+<h1>Other pages<a class="headerlink" href="#other-pages" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="user_guide.html#userguide"><span class="std std-ref">User guide</span></a></p></li>
 <li><p><a class="reference internal" href="how_to.html#howto"><span class="std std-ref">Some simple examples</span></a></p></li>
@@ -90,8 +97,8 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 </ul>
 <p>A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
-climate indicators.</p>
-<p>It is built on a collection of metadata files which describe the location and content of individual data collections and
+climate indicators, as well as creating dashboards based on these indicators.</p>
+<p>It is built on a collection of metadata fies which describe the location and content of individual data collections and
 data sets from those collections. For example, a <em>collection</em> might be something like “HadCRUT” and an individual
 <em>dataset</em> would be the file containing the monthly global mean temperatures calculated by the providers of “HadCRUT”.</p>
 <p>The current functionality includes tools to download, read and undertake simple processing of monthly and annual
@@ -105,18 +112,18 @@ timeseries and grids. Currently, simple processing includes:</p>
 associated with particular rankings.</p>
 <p>Each step in processing is logged and added to the metadata for the dataset so that processing steps can be traced
 and reproduced.</p>
-</div>
-<div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<p>Download the code from the repository using your preferred method.</p>
-<p>An environment.yml file contains the details of the necessary conda environment. To
-setup the environment run</p>
-<p><cite>conda env create -f &lt;path_to_yaml_file&gt;</cite></p>
-<p>The environment (called <cite>wmo</cite>) can then be activated by typing</p>
-<p><cite>conda activate wmo</cite></p>
-<p>Navigate to the root directory of the repository and type</p>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>Download the code from the repository using your preferred method. I use</p>
+<p><cite>git clone https://github.com/jjk-code-otter/climate-indicator-manager.git</cite></p>
+<p>Next create a new conda environment using python 3.13 (I called mine <cite>wmo_plus</cite>)
+as the base then activate the environment</p>
+<p><cite>conda create -n “wmo_plus” python=3.13.5</cite></p>
+<p><cite>conda activate wmo_plus</cite></p>
+<p>then install the package using</p>
 <p><cite>pip install .</cite></p>
-<p>This should install the package.</p>
+<p>This should install the necessary dependencies. It might take a while.</p>
 <p>You will need to download a couple of different files if you want to calculate regional
 averages from gridded data. These include</p>
 <ul class="simple">
@@ -125,9 +132,9 @@ I don’t know of an online source for these so you will have to ask a friendly 
 at the WMO.</p></li>
 <li><p>The Natural Earth country files <a class="reference external" href="https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip">https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip</a></p></li>
 </ul>
-</div>
-<div class="section" id="set-up">
-<h1>Set up<a class="headerlink" href="#set-up" title="Permalink to this heading"></a></h1>
+</section>
+<section id="set-up">
+<h1>Set up<a class="headerlink" href="#set-up" title="Link to this heading"></a></h1>
 <p>The managed data will be stored in a directory specified by the environment variable DATADIR. This is easy to set in
 linux. In windows, do the following:</p>
 <ol class="arabic simple">
@@ -136,9 +143,13 @@ linux. In windows, do the following:</p>
 <li><p>Click on “Environment Variables…”</p></li>
 <li><p>Under “User variables for Username” click “New…”</p></li>
 <li><p>For “Variable name” type DATADIR</p></li>
-<li><p>For “Variable value” type the pathname for the directory you want the data to go in.</p></li>
+<li><p>For “Variable value” type the pathname for the directory you want the data to go in or navigate to the approriate directory using browse.</p></li>
+<li><p>Make sure that the directory exists.</p></li>
 </ol>
-<p>In addition, if you want to download JRA-55 data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
+<p>In the <cite>DATADIR</cite> create a directory called <cite>Natural_Earth</cite> and put the Natural Earth shape files in there.
+In <cite>DATADIR</cite> again, create a directory called <cite>Shape_Files</cite> and put the WMO RA shape files and
+subregion files in it.</p>
+<p>In addition, if you want to download JRA-3Q data from UCAR, CMEMS data or data from the NASA PODAAC, you will need a
 valid username and password combo for each of these services. These values should be stored in a file called .env in
 the <cite>fetchers</cite> directory of the repository. It should contain two lines for each of the data services:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UCAR_EMAIL</span><span class="o">=</span><span class="n">youremail</span><span class="nd">@domain</span><span class="o">.</span><span class="n">com</span>
@@ -149,53 +160,110 @@ the <cite>fetchers</cite> directory of the repository. It should contain two lin
 <span class="n">CMEMS_PSWD</span><span class="o">=</span><span class="n">yetanotherpassword</span>
 </pre></div>
 </div>
-<p>All three of these services are free to register, but you will have to set up the credentials online.</p>
-</div>
-<div class="section" id="downloading-data">
-<h1>Downloading data<a class="headerlink" href="#downloading-data" title="Permalink to this heading"></a></h1>
-<p>The first thing to do is to download the data. There are two main scripts for downloading data in the scripts
-directory. <cite>get_timeseries.py</cite> will download the data which are in the form of time series. <cite>get_grids.py</cite> will download
-the gridded data.</p>
-<p>The volume of gridded data is considerably larger than the volume of time series data. For some datasets, the whole
-gridded dataset is downloaded each time this is run, but for the reanalyses the full dataset is only downloaded once
-with subsequent runs of the get_grids.py script only downloading months that have not already been downloaded. The
-gridded data are used to calculate custom area averages (such as the WMO Regional Association averages) and for
-plotting maps of the data. The key global indicators are all time series.</p>
-<p>Some datasets are not available online (the JRA-55 global mean temperature for example) so you will have to obtain
-these from somewhere else or remove them from the processing. Any extra files such as these should be
-copied into the <cite>$DATADIR/ManagedData/Data/</cite> directory in an appropriately named subdirectory that corresponds
-to the unique name given to the data set. This can be found in the metadata file for the data set (see below).</p>
-</div>
-<div class="section" id="processing-the-data">
-<h1>Processing the data<a class="headerlink" href="#processing-the-data" title="Permalink to this heading"></a></h1>
-<p>The gridded data need to be pre-processed by running:</p>
+<p>All three of these services are free to register, but you will have to set up the credentials online and then store
+those credentials at some location in your file system.</p>
+<p>Similarly to access the data from the Copernicus Climate Change service, you will need an API key.
+The instructions provided by CDS are very helpful - <a class="reference external" href="https://cds.climate.copernicus.eu/how-to-api">https://cds.climate.copernicus.eu/how-to-api</a></p>
+</section>
+<section id="downloading-data">
+<h1>Downloading data<a class="headerlink" href="#downloading-data" title="Link to this heading"></a></h1>
+<p>The first thing to do is to download the data. There are two main scripts for downloading
+data and both of these are in the <cite>scripts/data_management</cite> directory. <cite>get_timeseries.py</cite> will download individual
+datasets which are in the form of time series. <cite>get_grids.py</cite> will download the gridded data.</p>
+<p>To download a particular dataset, change the <cite>name</cite> of the dataset in the <cite>archive.select</cite> call. Multiple datasets
+can be downloaded at once using a list of names. The “correct” names of the datasets are given in the metadata files.</p>
+<p>A collection of regularly updated timeseries can be downloaded by running
+<cite>get_regular_timeseries.py</cite> and daily timeseries can be downloaded by running <cite>get_daily_timeseries.py</cite>.
+This is great when it works, but typically at least one dataset
+will fail to download in a way that stops the code from running. I temporarily comment out
+problematic datasets and rerun the script.</p>
+<p>The volume of gridded data is considerably larger than the volume of time series data. For
+some datasets, the whole gridded dataset is downloaded each time this is run, but for some of the
+reanalyses the full dataset is only downloaded once with subsequent runs of the <cite>get_grids.py</cite>
+script only downloading months that have not already been downloaded. The gridded data are
+used to calculate custom area averages (such as the WMO Regional Association averages) and
+for plotting maps of the data. The key global indicators are all time series.</p>
+<p>Some datasets are not available online (the JRA-55 and JRA-3Q global mean temperature for example) so
+you will have to obtain these from somewhere else or remove them from the processing. Any
+extra dataset files such as these should be copied into the <cite>$DATADIR/ManagedData/Data/</cite> directory
+in an appropriately named subdirectory that corresponds to the unique name given to the
+data set. This can be found in the metadata file for the data set (see below).</p>
+</section>
+<section id="calculating-the-wmo-composite-global-mean-temperature">
+<h1>Calculating the WMO composite global mean temperature<a class="headerlink" href="#calculating-the-wmo-composite-global-mean-temperature" title="Link to this heading"></a></h1>
+<p>To calculate this, you will first need to download the six datasets used in the composite global mean:
+“HadCRUT5”, “NOAA v6”, “GISTEMP”, “Berkeley Earth Hires”, “ERA5” and “JRA-3Q”. These can be downloaded using
+<cite>get_timeseries.py</cite>.</p>
+<p>Navigate to the <cite>scripts/global_temperature</cite> directory and run</p>
+<p><cite>annual_global_temperature_stats.py</cite></p>
+<p>This generates output in the <cite>DATADIR</cite> in the <cite>ManagedData</cite> subdirectory.
+Principle outputs appear in <cite>Figures</cite> - which holds all the graphs - and
+<cite>reports</cite> which contains the numerical outputs in a digest form.</p>
+</section>
+<section id="pre-processing-the-data">
+<h1>Pre-processing the data<a class="headerlink" href="#pre-processing-the-data" title="Link to this heading"></a></h1>
+<p>For the dashboards, the gridded data need to be pre-processed by running the following from
+the <cite>scripts</cite> directory:</p>
 <p><cite>python regrid_grids.py</cite></p>
-<p>which calculates annual average grids on a consistent 5-degree latitude longitude grid for all the gridded data sets.</p>
-<p>In order to generate area averages from the gridded data for specified sub regions, you will need to navigate to the
-scripts directory and run:</p>
-<p><cite>python make_new_regions.py</cite> (you only need to run this the first time to generate the shape files for subregion)</p>
+<p>which calculates annual average grids on a consistent 5-degree latitude longitude grid for
+all the gridded data sets. This allows them to be combined into a single estimate for mapping.</p>
+<p>In order to generate area averages from the gridded data for specified subregions, you will
+need to navigate to the scripts directory and run:</p>
+<p><cite>python make_new_regions.py</cite></p>
+<p>You only need to run this the first time to generate the shape files for subregion. If you
+happen to rerun it, you will likely encounter permission issues - you can’t write over the
+existing shape files. If you do need to rerun - say because the definitions have changed - then
+you will have to delete (or move) the shapefiles created by the code before running it again.</p>
+<p>Regional area averages are then calculated using:</p>
 <p><cite>python calculate_wmo_ra_averages.py</cite></p>
-<p>This reads in each of the data sets, regrids it to a standard resolution and then calculates the area averages for the
-six WMO Regional Association areas and for the six African sub regions. It can take a while to run because it has to
-load and process a lot of reanalysis data.</p>
-</div>
-<div class="section" id="building-the-website">
-<h1>Building the website<a class="headerlink" href="#building-the-website" title="Permalink to this heading"></a></h1>
-<p>To build the websites, navigate to the scripts directory and run</p>
+<p>You will need to manually specify the end year and which datasets to use in the calculation. The
+regional reports use the main six datasets “HadCRUT5”, “NOAA v6”, “GISTEMP”, “Berkeley Earth”, “ERA5”, and “JRA-3Q”.
+The script reads in each of the gridded data sets, regrids it to a standard (1x1) resolution and then
+calculates the area averages for the six WMO Regional Association areas, the six African
+subregions and other subregions defined by the WMO Regional State of the Climate authors. It can
+take a while to run because it has to load and process a lot of data. The first time
+it runs, it will likely download a shape file of coastlines from natural earth used to identify
+land and ocean areas.</p>
+</section>
+<section id="building-the-website">
+<h1>Building the website<a class="headerlink" href="#building-the-website" title="Link to this heading"></a></h1>
+<p>To build the websites, download all the necessary data then navigate to the scripts directory and run:</p>
 <p><cite>python build_dashboard.py</cite></p>
-<p>This builds all the webpages, produces the figures for each web page and prepares the formatted data sets. These are
-written to the <cite>DATADIR/ManagedData</cite> directory with one directory created for each dashboard. Currently the code is
-set up to generate four dashboards: key indicators to 2021, key indicators to 2022, ocean indicators,
-and regional indicators to 2022.</p>
-<p>To display a dashboard on the web, the files in the appropriate directory will need to be copied to an appropriate
-web server.</p>
-</div>
-<div class="section" id="diverse-other-scripts">
-<h1>Diverse other scripts<a class="headerlink" href="#diverse-other-scripts" title="Permalink to this heading"></a></h1>
+<p>This builds all the webpages, produces the figures for each web page and prepares
+the formatted data sets. These are written to the <cite>DATADIR/ManagedData</cite> directory with
+one directory created for each dashboard. Currently the code is set up to generate four
+dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, and regional
+indicators to 2022.</p>
+<p>To display a dashboard on the web, the files in the appropriate directory will need to be
+copied to an appropriate web server.</p>
+<p>The dashboard code is written in such a way that it will generate any information that doesn’t cause
+an error. The basic dashboards are based on “cards” which are processed one at a time and then used
+to populate the webpages. If a card fails to process a warning will be printed to the screen but it will
+keep running and that card simply won’t appear on the dashboard.</p>
+</section>
+<section id="navigating-the-website">
+<h1>Navigating the website<a class="headerlink" href="#navigating-the-website" title="Link to this heading"></a></h1>
+<p>Each dashboard consists of a set of “cards” at the top of the page. These each contain:</p>
+<ul class="simple">
+<li><p>an image,</p></li>
+<li><p>a set of links to images in different formats (png, svg, and pdf)</p></li>
+<li><p>a link to a zip file of all the datasets in csv format.</p></li>
+<li><p>a link to “References and processing” which takes you to details of:
+- the datasets used and their references
+- the data file and a checksum for assessing data integrity of the download
+- the processing applied to each dataset</p></li>
+</ul>
+<p>In some cases there will also be:</p>
+<ul class="simple">
+<li><p>a caption and a button saying “Copy caption” which will save the caption to your clipboard.</p></li>
+<li><p>a button inviting you to “Click for more indicators”. Clicking such a button will take you to a page with related indicators.</p></li>
+</ul>
+</section>
+<section id="diverse-other-scripts">
+<h1>Diverse other scripts<a class="headerlink" href="#diverse-other-scripts" title="Link to this heading"></a></h1>
 <p>As well as these main scripts, described above, there are others which perform the following tasks:</p>
 <ul class="simple">
-<li><p><cite>annual_global_temperature_stats.py</cite> which generates some annual plots and statistics</p></li>
-<li><p><cite>arctic_sea_ice_plot.py</cite> which generates some sea ice plots</p></li>
+<li><p><cite>arctic_sea_ice_plot.py</cite> which generates some sea ice plots used in the State of the Climate report</p></li>
 <li><p><cite>change_per_month_plots.py</cite> which generates some plots based on monthly global mean temperature as well as some stats.</p></li>
 <li><p><cite>five_year_global_temperature_stats.py</cite> which generates some plots and stats based on 5-year running averages of
 global temperature</p></li>
@@ -203,11 +271,11 @@ global temperature</p></li>
 <li><p><cite>plot_monthly_indicators.py</cite> which generates a set of plots for a range of indicators (not all monthly).</p></li>
 <li><p><cite>plot_monthly_maps.py</cite> which allows for the plotting of monthly temperature anomaly maps.</p></li>
 <li><p><cite>ten_year_global_temperature_stats.py</cite> which generates some plots and stats based on 10-year running averages of
-global temperature</p></li>
+global temperature for use in the decadal state of the climate report.</p></li>
 </ul>
-</div>
-<div class="section" id="adding-data-sets-for-an-existing-variable">
-<h1>Adding data sets for an existing variable<a class="headerlink" href="#adding-data-sets-for-an-existing-variable" title="Permalink to this heading"></a></h1>
+</section>
+<section id="adding-data-sets-for-an-existing-variable">
+<h1>Adding data sets for an existing variable<a class="headerlink" href="#adding-data-sets-for-an-existing-variable" title="Link to this heading"></a></h1>
 <p>To add a dataset for an existing variable, you need to
 * create a new collection file in the <cite>metadata</cite> folder
 * write a reader function in the <cite>readers</cite> directory. This should correspond to the “reader” entry in the collection metadata.
@@ -220,7 +288,7 @@ directories, or by perusal of the schemas in the <cite>data_manager</cite> direc
   <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;5.0.1.0&quot;</span><span class="p">,</span>
   <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;tas&quot;</span><span class="p">,</span>
   <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;degC&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;citation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;citation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Morice, C.P. et al. (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361&quot;</span><span class="p">],</span>
   <span class="s2">&quot;data_citation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
   <span class="s2">&quot;acknowledgement&quot;</span><span class="p">:</span> <span class="s2">&quot;HadCRUT.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/&quot;</span><span class="p">,</span>
   <span class="s2">&quot;colour&quot;</span><span class="p">:</span> <span class="s2">&quot;dimgrey&quot;</span><span class="p">,</span>
@@ -277,9 +345,9 @@ inputs and maintains transparency of the system. The “reader” and “fetcher
 <li><p><cite>reader</cite> - the name of a script in the <cite>climind/readers</cite> directory which will read the data described in the dataset metadata.</p></li>
 <li><p><cite>fetcher</cite> - the name of a script in the <cite>climind/fetchers</cite> direcotry which will download the data described in the dataset metadata.</p></li>
 </ul>
-</div>
-<div class="section" id="adding-a-new-variable">
-<h1>Adding a new variable<a class="headerlink" href="#adding-a-new-variable" title="Permalink to this heading"></a></h1>
+</section>
+<section id="adding-a-new-variable">
+<h1>Adding a new variable<a class="headerlink" href="#adding-a-new-variable" title="Link to this heading"></a></h1>
 <p>It is possible to add new variables. For example, there is currently no snow_cover variable.</p>
 <ol class="arabic simple">
 <li><p>Think of a variable name e.g. <cite>snow_cover</cite></p></li>
@@ -291,9 +359,9 @@ appear towards the end of the document. The short <cite>variable</cite> name sho
 should appear in <cite>normal</cite> style text. These short descriptions appear on the webpages in the section detailing the datasets and their processing.</p></li>
 </ol>
 <p>That should be sufficient.</p>
-</div>
-<div class="section" id="making-a-new-dashboard">
-<h1>Making a new dashboard<a class="headerlink" href="#making-a-new-dashboard" title="Permalink to this heading"></a></h1>
+</section>
+<section id="making-a-new-dashboard">
+<h1>Making a new dashboard<a class="headerlink" href="#making-a-new-dashboard" title="Link to this heading"></a></h1>
 <p>A dashboard is created using a dashboard metadata file. These are located in <cite>climind/web/dashboard_metadata</cite>. Each dashboard is split into Pages, which
 each correspond to an html webpage. Each Page consists of a set of Cards and Paragraphs (the capital letters indicate these are represented as classes
 in the underlying code). For examples, please see the <cite>climind/web/dashboard_metadata</cite> directory.</p>
@@ -320,14 +388,14 @@ for users. More information is provided on topic pages, including e.g. figure ca
 <p>A Card, contains an image, links to the image in other format, links to the data in a standard format and a link to another Page.
 The metadata entries look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;link_to&quot;</span><span class="p">:</span> <span class="s2">&quot;global_mean_temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Global temperature&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;selecting&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;timeseries&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;tas&quot;</span><span class="p">,</span> <span class="s2">&quot;time_resolution&quot;</span><span class="p">:</span> <span class="s2">&quot;monthly&quot;</span><span class="p">},</span>
-  <span class="s2">&quot;processing&quot;</span><span class="p">:</span>  <span class="p">[{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;rebaseline&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1981</span><span class="p">,</span> <span class="mi">2010</span><span class="p">]},</span>
-                  <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;make_annual&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[]},</span>
-                  <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;select_year_range&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="mi">1850</span><span class="p">,</span><span class="mi">2021</span><span class="p">]},</span>
-                  <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;add_offset&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.69</span><span class="p">]},</span>
-                  <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;manually_set_baseline&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1850</span><span class="p">,</span> <span class="mi">1900</span><span class="p">]}],</span>
-  <span class="s2">&quot;plotting&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="s2">&quot;neat_plot&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Global mean temperature&quot;</span><span class="p">}</span>
+<span class="s2">&quot;link_to&quot;</span><span class="p">:</span> <span class="s2">&quot;global_mean_temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Global temperature&quot;</span><span class="p">,</span>
+<span class="s2">&quot;selecting&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;timeseries&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;tas&quot;</span><span class="p">,</span> <span class="s2">&quot;time_resolution&quot;</span><span class="p">:</span> <span class="s2">&quot;monthly&quot;</span><span class="p">},</span>
+<span class="s2">&quot;processing&quot;</span><span class="p">:</span>  <span class="p">[{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;rebaseline&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1981</span><span class="p">,</span> <span class="mi">2010</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;make_annual&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+                <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;select_year_range&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="mi">1850</span><span class="p">,</span><span class="mi">2021</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;add_offset&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.69</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;manually_set_baseline&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1850</span><span class="p">,</span> <span class="mi">1900</span><span class="p">]}],</span>
+<span class="s2">&quot;plotting&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="s2">&quot;neat_plot&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Global mean temperature&quot;</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -361,15 +429,15 @@ are found in <cite>climind/stats/paragraphs.py</cite>.</p>
 </pre></div>
 </div>
 <p>The <cite>json_file</cite> is the dashboard metadata file. The <cite>dash_dir</cite> is the directory where you want to build the dashboard. <cite>dash.build()</cite> builds the dashboard.</p>
-</div>
-<div class="section" id="calculating-regional-averages">
-<h1>Calculating regional averages<a class="headerlink" href="#calculating-regional-averages" title="Permalink to this heading"></a></h1>
+</section>
+<section id="calculating-regional-averages">
+<h1>Calculating regional averages<a class="headerlink" href="#calculating-regional-averages" title="Link to this heading"></a></h1>
 <p>Regional averages are calculated using <cite>calculate_wmo_ra_averages.py</cite>. This generates a large number of files containing regional averages based
 on the gridded temperature data sets. This takes some time to run.</p>
 <p><cite>python calculate_wmo_ra_averages.py</cite></p>
-</div>
-<div class="section" id="descriptive-text">
-<h1>Descriptive text<a class="headerlink" href="#descriptive-text" title="Permalink to this heading"></a></h1>
+</section>
+<section id="descriptive-text">
+<h1>Descriptive text<a class="headerlink" href="#descriptive-text" title="Link to this heading"></a></h1>
 <p>In <cite>climind/web/word_documents</cite> there is a Word document that is used to generate text for the
 web pages. The document is called <cite>key_indicators_texts.docx</cite>. This has descriptive text for
 each page on the key indicators dashboard as well as descriptions for each of the variables.</p>
@@ -383,7 +451,7 @@ sections. Hyperlinks can be added and these will be rendered in the webpages.</p
 <p>Individual variable descriptions can also be added here. The method is similar. A Heading1 style heading which matches
 the <cite>variable</cite> name from the metadata file, followed by <cite>normal</cite> style text. Sub-headings do not work for variables. These
 are intended to be short descriptions of the variables.</p>
-</div>
+</section>
 
 
            </div>
@@ -393,7 +461,7 @@ are intended to be short descriptions of the variables.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, John Kennedy.</p>
+    <p>&#169; Copyright 2025, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

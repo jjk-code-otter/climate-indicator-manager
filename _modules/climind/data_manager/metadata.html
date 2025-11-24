@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.data_manager.metadata &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.data_manager.metadata</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.data_manager.metadata</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These metadata classes contain all the information about the datasets that are manipulated</span>
+<span class="sd">by the packages. The :class:`BaseMetadata` class contains much of the functionality, with</span>
+<span class="sd">:class:`CollectionMetadata` and :class:`.DatasetMetadata` inheriting that functionality and</span>
+<span class="sd">differing chiefly in the schemas used to validate their contents. The :class:`CombinedMetadata`</span>
+<span class="sd">class comprises a :class:`CollectionMetadata` object and a :class:`.DatasetMetadata` object.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">RefResolver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROOT_DIR</span>
+
+
+<div class="viewcode-block" id="list_match">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.list_match">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_match</span><span class="p">(</span><span class="n">list_to_match</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If attribute matches any item in list_to_match return True, otherwise False</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    list_to_match: list</span>
+<span class="sd">        List of metadata to match</span>
+<span class="sd">    attribute: str</span>
+<span class="sd">        attribute to check against</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Set to True if attribute matches element in list_to_match, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">list_to_match</span></div>
+
+
+
+<div class="viewcode-block" id="BaseMetadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.BaseMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple class to store metadata and find matches. Metadata items can be set and recovered using a</span>
+<span class="sd">    dictionary-like syntax:</span>
+
+<span class="sd">    `metadata_object[&#39;key&#39;] = value`</span>
+
+<span class="sd">    `value = metadata_object[&#39;key&#39;]`</span>
+
+<span class="sd">    And testing if a key-value pair exists is also dict-like</span>
+
+<span class="sd">    `key in metadata_object`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`BaseMetadata` object from a dictionary containing the metaadata in key-value pairs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata : dict</span>
+<span class="sd">            Dictionary containing the metadata</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            Contains the metadata information in key value pairs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="n">out_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">out_str</span>
+
+<div class="viewcode-block" id="BaseMetadata.match_metadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.match_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">match_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_to_match</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if metadata match contents of dictionary, metadata_to_match. Only</span>
+<span class="sd">        definite non-matches are rejected. If a key is not found in the</span>
+<span class="sd">        dictionary this is not counted as a non-match.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata_to_match : dict</span>
+<span class="sd">            Key-value or key-list pairs for match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">common_keys</span> <span class="o">=</span> <span class="n">metadata_to_match</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">common_keys</span><span class="p">:</span>
+
+            <span class="n">mtm</span> <span class="o">=</span> <span class="n">metadata_to_match</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">att</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mtm</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">list_match</span><span class="p">(</span><span class="n">mtm</span><span class="p">,</span> <span class="n">att</span><span class="p">):</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mtm</span> <span class="o">!=</span> <span class="n">att</span><span class="p">:</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">match</span></div>
+
+
+<div class="viewcode-block" id="BaseMetadata.fill_string">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.fill_string">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string_to_replace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replacement</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replace string_to_replace with the replacement value in all elements of the metadata.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        string_to_replace: str</span>
+<span class="sd">            string to be replaced in metadata elements</span>
+<span class="sd">        replacement: str</span>
+<span class="sd">            replacement string</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">string_to_replace</span><span class="p">,</span> <span class="n">replacement</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">replacement_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">string_to_replace</span><span class="p">,</span> <span class="n">replacement</span><span class="p">)</span>
+                    <span class="n">replacement_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">replacement_list</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CollectionMetadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.CollectionMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CollectionMetadata</span><span class="p">(</span><span class="n">BaseMetadata</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to store collection-level metadata, containing information that refers to all</span>
+<span class="sd">    data sets in the collection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create :class:`CollectionMetadata` from a dictionary containing metadata. Metadata are</span>
+<span class="sd">        validated using the metadata_schema.json file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            Dictionary containing metadata in key value pairs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;climind&#39;</span> <span class="o">/</span> <span class="s1">&#39;data_manager&#39;</span> <span class="o">/</span> <span class="s1">&#39;metadata_schema.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">RefResolver</span><span class="p">(</span><span class="n">schema_path</span><span class="o">.</span><span class="n">as_uri</span><span class="p">(),</span> <span class="n">metadata_schema</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">metadata_schema</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="n">resolver</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DatasetMetadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.DatasetMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DatasetMetadata</span><span class="p">(</span><span class="n">BaseMetadata</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to store dataset-level metadata, containing information that refers specifically</span>
+<span class="sd">    to a single data set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create :class:`DatasetMetadata` from a dictionary containing metadata. Metadata are</span>
+<span class="sd">        validated using the dataset_schema.json file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            Dictionary containing metadata in key value pairs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;climind&#39;</span> <span class="o">/</span> <span class="s1">&#39;data_manager&#39;</span> <span class="o">/</span> <span class="s1">&#39;dataset_schema.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">metadata_schema</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DatasetMetadata.creation_message">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.DatasetMetadata.creation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">creation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add creation message to the history.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">download_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Data set created from file </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                           <span class="sa">f</span><span class="s2">&quot;downloaded from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                           <span class="sa">f</span><span class="s2">&quot;at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;last_modified&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">download_message</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CombinedMetadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CombinedMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :class:`CombinedMetadata` combines :class:`DatasetMetadata` and :class:`CollectionMetadata` in one single</span>
+<span class="sd">    object so that both sets of metadata elements are available in one container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetMetadata</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">CollectionMetadata</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">outstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">outstr</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span>
+        <span class="n">outstr</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">outstr</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">outstr</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">outstr</span>
+
+<div class="viewcode-block" id="CombinedMetadata.match_metadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.match_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">match_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_to_match</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test to see if metadata matches metadata to match. Returns True unless there is a mismatch</span>
+<span class="sd">        between the required metadata_to_match and the metadata.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata_to_match: dict</span>
+<span class="sd">            Dictionary of metadata terms to match</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Return True unless an element in metadata_to_match conflicts with an entry in the metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">test1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">)</span>
+        <span class="n">test2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">match_metadata</span><span class="p">(</span><span class="n">metadata_to_match</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">test1</span> <span class="ow">and</span> <span class="n">test2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CombinedMetadata.write_metadata">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.write_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write out the metadata in json format to a file specified by filename</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: Path</span>
+<span class="sd">            Path of filename to be created</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rebuilt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="n">rebuilt</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span><span class="p">]</span>
+
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;climind&#39;</span> <span class="o">/</span> <span class="s1">&#39;data_manager&#39;</span> <span class="o">/</span> <span class="s1">&#39;metadata_schema.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">RefResolver</span><span class="p">(</span><span class="n">schema_path</span><span class="o">.</span><span class="n">as_uri</span><span class="p">(),</span> <span class="n">metadata_schema</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">rebuilt</span><span class="p">,</span> <span class="n">metadata_schema</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="n">resolver</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_json</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rebuilt</span><span class="p">,</span> <span class="n">out_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CombinedMetadata.creation_message">
+<a class="viewcode-back" href="../../../climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.creation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">creation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a creation message to the dataset history and populate the wildcards in the metadata,</span>
+<span class="sd">        such as AAAA (last modified/download time), YYYY (year), VVVV (version number).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">creation_message</span><span class="p">()</span>
+        <span class="n">last_modified</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;last_modified&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;AAAA&#39;</span><span class="p">,</span> <span class="n">last_modified</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;AAAA&#39;</span><span class="p">,</span> <span class="n">last_modified</span><span class="p">)</span>
+
+        <span class="n">last_year</span> <span class="o">=</span> <span class="n">last_modified</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;YYYY&#39;</span><span class="p">,</span> <span class="n">last_year</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;YYYY&#39;</span><span class="p">,</span> <span class="n">last_year</span><span class="p">)</span>
+
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;VVVV&#39;</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">fill_string</span><span class="p">(</span><span class="s1">&#39;VVVV&#39;</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

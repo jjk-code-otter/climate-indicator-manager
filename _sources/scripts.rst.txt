@@ -1,0 +1,258 @@
+scripts package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   scripts.data_management
+   scripts.external_scripts
+   scripts.fact_sheet
+   scripts.global_temperature
+   scripts.precipitation
+   scripts.sea_ice
+
+Submodules
+----------
+
+scripts.carbon\_budget module
+-----------------------------
+
+.. automodule:: scripts.carbon_budget
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.cherry module
+---------------------
+
+.. automodule:: scripts.cherry
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.compare\_nino\_years module
+-----------------------------------
+
+.. automodule:: scripts.compare_nino_years
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.daily\_global\_temp module
+----------------------------------
+
+.. automodule:: scripts.daily_global_temp
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_to\_range module
+------------------------------
+
+.. automodule:: scripts.data_to_range
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.generate\_summary\_file\_with\_metadata module
+------------------------------------------------------
+
+.. automodule:: scripts.generate_summary_file_with_metadata
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.gmst\_enso module
+-------------------------
+
+.. automodule:: scripts.gmst_enso
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.greenhouse\_gases module
+--------------------------------
+
+.. automodule:: scripts.greenhouse_gases
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.interactives module
+---------------------------
+
+.. automodule:: scripts.interactives
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.ipcc\_update module
+---------------------------
+
+.. automodule:: scripts.ipcc_update
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.jra3q\_daily module
+---------------------------
+
+.. automodule:: scripts.jra3q_daily
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.jra55\_daily module
+---------------------------
+
+.. automodule:: scripts.jra55_daily
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.marine\_heatwave\_plot module
+-------------------------------------
+
+.. automodule:: scripts.marine_heatwave_plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.model\_paris module
+---------------------------
+
+.. automodule:: scripts.model_paris
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.multi\_indicator module
+-------------------------------
+
+.. automodule:: scripts.multi_indicator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.nino\_stacks module
+---------------------------
+
+.. automodule:: scripts.nino_stacks
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.ohc\_trends module
+--------------------------
+
+.. automodule:: scripts.ohc_trends
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_monthly\_indicators module
+----------------------------------------
+
+.. automodule:: scripts.plot_monthly_indicators
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_monthly\_maps module
+----------------------------------
+
+.. automodule:: scripts.plot_monthly_maps
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_precip\_map module
+--------------------------------
+
+.. automodule:: scripts.plot_precip_map
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_precip\_quantile\_map module
+------------------------------------------
+
+.. automodule:: scripts.plot_precip_quantile_map
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_sealevel\_map module
+----------------------------------
+
+.. automodule:: scripts.plot_sealevel_map
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.plot\_sealevel\_trend\_map module
+-----------------------------------------
+
+.. automodule:: scripts.plot_sealevel_trend_map
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.pseudo\_world module
+----------------------------
+
+.. automodule:: scripts.pseudo_world
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.quick\_nc\_viewer module
+--------------------------------
+
+.. automodule:: scripts.quick_nc_viewer
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sealevel\_trend\_mean\_WMO module
+-----------------------------------------
+
+.. automodule:: scripts.sealevel_trend_mean_WMO
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.snow\_plot module
+-------------------------
+
+.. automodule:: scripts.snow_plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.thirty\_year\_changes module
+------------------------------------
+
+.. automodule:: scripts.thirty_year_changes
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.thresholds module
+-------------------------
+
+.. automodule:: scripts.thresholds
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.plotters.plot_utils &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.plotters.plot_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.plotters.plot_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">climind.stats.paragraphs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_types.timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_types.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridAnnual</span>
+
+
+<div class="viewcode-block" id="calculate_trends">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.calculate_trends">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_trends</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">trend_start_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">trend_end_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+    <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    given a set of data sets, return the mean, min and max trends from the data sets calculated</span>
+<span class="sd">    using OLS between the chosen years.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets : List[TimeSeriesAnnual]</span>
+<span class="sd">        list of :class:`.TimeSeriesAnnual` data sets</span>
+<span class="sd">    trend_start_year : int</span>
+<span class="sd">        first year for trend</span>
+<span class="sd">    trend_end_year : int</span>
+<span class="sd">        last year for trend</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[float, float, float]</span>
+<span class="sd">        returns the mean trend, minimum trend and maximum trend from the input datasets in units/decade</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_trends</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">trend_start_year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">trend_end_year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">())]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">25</span><span class="p">:</span>
+            <span class="n">trends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">subset</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">subset</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">all_trends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">10.</span><span class="p">)</span>
+
+    <span class="c1"># calculate the mean trend and max and min trends</span>
+    <span class="n">mean_trend</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_trends</span><span class="p">))</span>
+    <span class="n">max_trend</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_trends</span><span class="p">))</span>
+    <span class="n">min_trend</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_trends</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">mean_trend</span><span class="p">,</span> <span class="n">min_trend</span><span class="p">,</span> <span class="n">max_trend</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_ranks">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.calculate_ranks">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_ranks</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    given a set of data sets, return the min and max ranks from the data sets for a given year.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets : list</span>
+<span class="sd">        list of data sets</span>
+<span class="sd">    year : int</span>
+<span class="sd">        year to calculate ranks for</span>
+<span class="sd">    ascending: bool</span>
+<span class="sd">        Set to true to rank low (1st) to high (nth) rather than high (1st) to low (nth)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[float, float]</span>
+<span class="sd">        Return the minimum and maximum rank for the specified year in all data sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_ranks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">ranked</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+        <span class="n">subrank</span> <span class="o">=</span> <span class="n">ranked</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subrank</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">subrank</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">all_ranks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_ranks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> not found in any data sets of </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># calculate the mean trend and max and min trends</span>
+    <span class="n">max_rank</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_ranks</span><span class="p">)</span>
+    <span class="n">min_rank</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_ranks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_rank</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_rank</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_values">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.calculate_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    given a set of data sets, return the mean min and max values from the data sets for specified year.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets : list</span>
+<span class="sd">        list of :class:`.TimeSeriesAnnual` data sets</span>
+<span class="sd">    year : int</span>
+<span class="sd">        year to calculate values for</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[float, float, float]</span>
+<span class="sd">        Return the mean, min and max values for the chosen year from all_datasets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># calculate the mean trend and max and min trends</span>
+    <span class="n">mean_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_values</span><span class="p">))</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_values</span><span class="p">))</span>
+    <span class="n">min_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_values</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">mean_value</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_values_ipcc_style">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.calculate_values_ipcc_style">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_values_ipcc_style</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    given a set of data sets, return the mean min and max values from the data sets for specified year.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets : list</span>
+<span class="sd">        list of :class:`.TimeSeriesAnnual` data sets</span>
+<span class="sd">    year : int</span>
+<span class="sd">        year to calculate values for</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[float, float, float]</span>
+<span class="sd">        Return the mean, min and max values for the chosen year from all_datasets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># calculate the mean trend and max and min trends</span>
+    <span class="n">mean_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_values</span><span class="p">))</span>
+    <span class="n">stdev_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">all_values</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.645</span>
+    <span class="n">stdev_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">stdev_value</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.24</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">max_value</span> <span class="o">=</span> <span class="n">mean_value</span> <span class="o">+</span> <span class="n">stdev_value</span>
+    <span class="n">min_value</span> <span class="o">=</span> <span class="n">mean_value</span> <span class="o">-</span> <span class="n">stdev_value</span>
+
+    <span class="k">return</span> <span class="n">mean_value</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_highest_year_and_values">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.calculate_highest_year_and_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_highest_year_and_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From the list of :class:`.TimeSeriesAnnual` get the year that ranks first in each data set. Then, for</span>
+<span class="sd">    each of those years get the highest and lowest data value from all of the data sets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesAnnual]</span>
+<span class="sd">        List of :class:`.TimeSeriesAnnual` data sets</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[List[int], List[List[float]]]</span>
+<span class="sd">        The first returned element is a list of years that rank first in the data sets. The second element is</span>
+<span class="sd">        a list with the same length as the first. Each element in the list is two-element list holding the</span>
+<span class="sd">        lowest and highest values found in any of the datasets for the corresponding year in the first list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_highest_years</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_highest_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">highest_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_year_from_rank</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">highest_year</span><span class="p">:</span>
+            <span class="n">all_highest_years</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+
+    <span class="c1"># Get the unique highest years</span>
+    <span class="n">unique_highest_years</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_highest_years</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">high_year</span> <span class="ow">in</span> <span class="n">unique_highest_years</span><span class="p">:</span>
+        <span class="n">mean_anomaly</span><span class="p">,</span> <span class="n">min_anomaly</span><span class="p">,</span> <span class="n">max_anomaly</span> <span class="o">=</span> <span class="n">calculate_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">high_year</span><span class="p">)</span>
+        <span class="n">all_highest_values</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">min_anomaly</span><span class="p">,</span> <span class="n">max_anomaly</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">unique_highest_years</span><span class="p">,</span> <span class="n">all_highest_values</span></div>
+
+
+
+<div class="viewcode-block" id="set_lo_hi_ticks">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.set_lo_hi_ticks">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_lo_hi_ticks</span><span class="p">(</span><span class="n">limits</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given axis limits and a preferred spacing, calculate new high and low values and a set of ticks</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    limits: list</span>
+<span class="sd">        the lower and upper limits of the current axis</span>
+<span class="sd">    spacing: float</span>
+<span class="sd">        The preferred tick spacing</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lo</span> <span class="o">=</span> <span class="n">spacing</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">spacing</span><span class="p">))</span>
+    <span class="n">hi</span> <span class="o">=</span> <span class="n">spacing</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">spacing</span><span class="p">))</span>
+    <span class="n">ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">spacing</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">ticks</span></div>
+
+
+
+<div class="viewcode-block" id="get_first_and_last_years">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.get_first_and_last_years">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_first_and_last_years</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract the first and last years from a list of data sets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]])</span>
+<span class="sd">        List containing the data sets for which we want the first and last years</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[int, int]</span>
+<span class="sd">        First and last years</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">first_years</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">last_years</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">first_years</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">last_years</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">first_year</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">first_years</span><span class="p">)</span>
+    <span class="n">last_year</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">last_years</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span></div>
+
+
+
+<div class="viewcode-block" id="caption_builder">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.caption_builder">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">caption_builder</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a caption for the standard time series plots.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]</span>
+<span class="sd">        List of datasets used in the plot</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Caption for the collection of data sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_first_and_last_years</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">number_to_word</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span> <span class="s1">&#39;five&#39;</span><span class="p">,</span> <span class="s1">&#39;six&#39;</span><span class="p">,</span> <span class="s1">&#39;seven&#39;</span><span class="p">,</span> <span class="s1">&#39;eight&#39;</span><span class="p">,</span> <span class="s1">&#39;nine&#39;</span><span class="p">,</span> <span class="s1">&#39;ten&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;eleven&#39;</span><span class="p">,</span> <span class="s1">&#39;twelve&#39;</span><span class="p">,</span> <span class="s1">&#39;thirteen&#39;</span><span class="p">,</span> <span class="s1">&#39;fourteen&#39;</span><span class="p">,</span> <span class="s1">&#39;fifteen&#39;</span><span class="p">,</span> <span class="s1">&#39;sixteen&#39;</span><span class="p">]</span>
+
+    <span class="n">fancy_units</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">fancy_html_units</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">caption</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;time_resolution&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">fancy_units</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, difference from the </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_start&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_end&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> average&quot;</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s2">&quot;) &quot;</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; from </span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s2">. &quot;</span>
+    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">17</span><span class="p">:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Data are from the following </span><span class="si">{</span><span class="n">number_to_word</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)]</span><span class="si">}</span><span class="s2"> data sets: &quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Data are from &quot;</span>
+
+    <span class="n">dataset_names_for_caption</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">dataset_names_for_caption</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_names_for_caption</span><span class="p">)</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span>
+
+    <span class="k">return</span> <span class="n">caption</span></div>
+
+
+
+<div class="viewcode-block" id="map_caption_builder">
+<a class="viewcode-back" href="../../../climind.plotters.html#climind.plotters.plot_utils.map_caption_builder">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">map_caption_builder</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">GridAnnual</span><span class="p">]],</span> <span class="n">grid_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a caption for the standard map plots.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[Union[GridAnnual]]</span>
+<span class="sd">        List of datasets used in the plot</span>
+<span class="sd">    grid_type: str</span>
+<span class="sd">        Type is one of &#39;mean&#39;, &#39;rank&#39; or &#39;unc&#39;.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Caption for the collection of data sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">number_to_word</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span> <span class="s1">&#39;five&#39;</span><span class="p">,</span> <span class="s1">&#39;six&#39;</span><span class="p">,</span> <span class="s1">&#39;seven&#39;</span><span class="p">,</span> <span class="s1">&#39;eight&#39;</span><span class="p">,</span> <span class="s1">&#39;nine&#39;</span><span class="p">,</span> <span class="s1">&#39;ten&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;eleven&#39;</span><span class="p">,</span> <span class="s1">&#39;twelve&#39;</span><span class="p">,</span> <span class="s1">&#39;thirteen&#39;</span><span class="p">,</span> <span class="s1">&#39;fourteen&#39;</span><span class="p">,</span> <span class="s1">&#39;fifteen&#39;</span><span class="p">,</span> <span class="s1">&#39;sixteen&#39;</span><span class="p">]</span>
+
+    <span class="n">fancy_units</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">fancy_html_units</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">caption</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;time_resolution&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;unc&#39;</span><span class="p">:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="s2">&quot; uncertainty&quot;</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="s1">&#39;half-range&#39;</span>
+    <span class="k">elif</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;rank&#39;</span><span class="p">:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="s2">&quot; rank&quot;</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="s1">&#39;median rank&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="s2">&quot; anomaly&quot;</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="s1">&#39;median&#39;</span>
+
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">fancy_units</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">grid_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;unc&#39;</span><span class="p">,</span> <span class="s1">&#39;rank&#39;</span><span class="p">]:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, difference from the </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_start&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_end&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> average&quot;</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s2">&quot;) &quot;</span>
+
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; for 2024. &quot;</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Data shown are the </span><span class="si">{</span><span class="n">calculation</span><span class="si">}</span><span class="s2"> of the following </span><span class="si">{</span><span class="n">number_to_word</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)]</span><span class="si">}</span><span class="s2"> data sets: &quot;</span>
+
+    <span class="n">dataset_names_for_caption</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">dataset_names_for_caption</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_names_for_caption</span><span class="p">)</span>
+    <span class="n">caption</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span>
+
+    <span class="k">if</span> <span class="s1">&#39;precip&#39;</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]:</span>
+        <span class="n">caption</span> <span class="o">+=</span> <span class="s1">&#39; White areas indicate where there were too few data to reliably estimate the percentiles.&#39;</span>
+
+    <span class="k">return</span> <span class="n">caption</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

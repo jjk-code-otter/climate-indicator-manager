@@ -1,0 +1,1108 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.stats.paragraphs &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.stats.paragraphs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.stats.paragraphs</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">climind.plotters.plot_utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_types.timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">,</span> \
+    <span class="n">get_start_and_end_year</span><span class="p">,</span> <span class="n">AveragesCollection</span>
+
+<span class="n">ordinal</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%d%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s2">&quot;tsnrhtdd&quot;</span><span class="p">[(</span><span class="n">n</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">10</span><span class="p">::</span><span class="mi">4</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="get_last_month">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.get_last_month">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_last_month</span><span class="p">(</span><span class="n">in_str</span><span class="p">):</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">in_str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">in_str</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span></div>
+
+
+
+<div class="viewcode-block" id="rank_ranges">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.rank_ranges">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rank_ranges</span><span class="p">(</span><span class="n">low</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an upper and lower limit on the rank, return a string which describes the range. e.g. &#39;the 2nd&#39; or</span>
+<span class="sd">    &#39;between the 4th and 8th&#39;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    low: int</span>
+<span class="sd">        Lower of the two ranks.</span>
+<span class="sd">    high: int</span>
+<span class="sd">        Higher of the two ranks.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Short string which describes the range. e.g. &#39;the 2nd&#39; or &#39;between the 4th and 8th&#39; or similar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">low</span> <span class="o">==</span> <span class="n">high</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;the </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">low</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;between the </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">low</span><span class="p">)</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">high</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;between the </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">high</span><span class="p">)</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">low</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="nice_list">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.nice_list">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nice_list</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">name_list</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">name_list</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name_list</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">, and </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">name_list</span></div>
+
+
+
+<div class="viewcode-block" id="dataset_name_list">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.dataset_name_list">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_name_list</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">]],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a list of dataset, return a comma-and-and separated list of the names.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]]</span>
+<span class="sd">        List of data sets whose names you want in a list</span>
+<span class="sd">    year: int</span>
+<span class="sd">        If year is specified, the name list will specify to what month data are available if the year is incomplete.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        A list of the dataset names separated by commas and, where appropriate, &#39;and&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">str_month</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Jan&#39;</span><span class="p">,</span> <span class="s1">&#39;Feb&#39;</span><span class="p">,</span> <span class="s1">&#39;Mar&#39;</span><span class="p">,</span> <span class="s1">&#39;Apr&#39;</span><span class="p">,</span> <span class="s1">&#39;May&#39;</span><span class="p">,</span> <span class="s1">&#39;Jun&#39;</span><span class="p">,</span> <span class="s1">&#39;Jul&#39;</span><span class="p">,</span> <span class="s1">&#39;Aug&#39;</span><span class="p">,</span> <span class="s1">&#39;Sep&#39;</span><span class="p">,</span> <span class="s1">&#39;Oct&#39;</span><span class="p">,</span> <span class="s1">&#39;Nov&#39;</span><span class="p">]</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;last_month&#39;</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="n">lyear</span><span class="p">,</span> <span class="n">lmonth</span> <span class="o">=</span> <span class="n">get_last_month</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;last_month&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">lmonth</span> <span class="o">!=</span> <span class="mi">12</span> <span class="ow">and</span> <span class="n">year</span> <span class="o">==</span> <span class="n">lyear</span><span class="p">:</span>
+                <span class="n">entry</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (to </span><span class="si">{</span><span class="n">str_month</span><span class="p">[</span><span class="n">lmonth</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nice_list</span><span class="p">(</span><span class="n">names</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fancy_html_units">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.fancy_html_units">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fancy_html_units</span><span class="p">(</span><span class="n">units</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert plain text units into html fancy units, which use subscripts and special characters to render.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    units: str</span>
+<span class="sd">        Units to be rendered into fancy units</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Units in fancy html form, or unchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">equivalence</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;degC&quot;</span><span class="p">:</span> <span class="s2">&quot;&amp;deg;C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;millionkm2&quot;</span><span class="p">:</span> <span class="s2">&quot;million km&lt;sup&gt;2&lt;/sup&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ph&quot;</span><span class="p">:</span> <span class="s2">&quot;pH&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mwe&quot;</span><span class="p">:</span> <span class="s2">&quot;m w.e.&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">units</span> <span class="ow">in</span> <span class="n">equivalence</span><span class="p">:</span>
+        <span class="n">fancy</span> <span class="o">=</span> <span class="n">equivalence</span><span class="p">[</span><span class="n">units</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fancy</span> <span class="o">=</span> <span class="n">units</span>
+
+    <span class="k">return</span> <span class="n">fancy</span></div>
+
+
+
+<div class="viewcode-block" id="superlative">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.superlative">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">superlative</span><span class="p">(</span><span class="n">variable</span><span class="p">):</span>
+    <span class="n">lookup</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;tas&#39;</span><span class="p">:</span> <span class="s1">&#39;warmest&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">lookup</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="s1">&#39;highest&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="basic_anomaly_and_rank">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.basic_anomaly_and_rank">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">basic_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No datasets provided&quot;</span><span class="p">)</span>
+
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="n">variable</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span>
+    <span class="n">super_text</span> <span class="o">=</span> <span class="n">superlative</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_year</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The most recent available year is </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s1">. &#39;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">last_year</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_rank</span><span class="p">,</span> <span class="n">max_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;No data for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="n">mean_anomaly</span><span class="p">,</span> <span class="n">min_anomaly</span><span class="p">,</span> <span class="n">max_anomaly</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;The year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was ranked </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">super_text</span><span class="si">}</span><span class="s1"> &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;on record. The mean value for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">mean_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1"> &#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]:</span>
+        <span class="n">clim_start</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_start&#39;</span><span class="p">]</span>
+        <span class="n">clim_end</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_end&#39;</span><span class="p">]</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;relative to the </span><span class="si">{</span><span class="n">clim_start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">clim_end</span><span class="si">}</span><span class="s2"> average &quot;</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">min_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">max_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1"> depending on the data set used). &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span><span class="si">}</span><span class="s1"> data sets were used in this assessment: </span><span class="si">{</span><span class="n">dataset_name_list</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span><span class="w"> </span><span class="n">year</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="compare_to_highest_anomaly_and_rank">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.compare_to_highest_anomaly_and_rank">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_to_highest_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No datasets provided&quot;</span><span class="p">)</span>
+
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="n">variable</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span>
+    <span class="n">super_text</span> <span class="o">=</span> <span class="n">superlative</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_year</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The most recent available year is </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s1">. &#39;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">last_year</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_rank</span><span class="p">,</span> <span class="n">max_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;No data for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="c1"># If this is the highest year in all data sets, leave the text as is</span>
+    <span class="k">if</span> <span class="n">max_rank</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">min_rank</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out_text</span>
+
+    <span class="c1"># if this is highest year in some data sets, but not all</span>
+    <span class="k">elif</span> <span class="n">min_rank</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">max_rank</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">highest_years</span><span class="p">,</span> <span class="n">highest_values</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_highest_year_and_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+        <span class="n">highest_years</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">highest_years</span><span class="p">]</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> is joint </span><span class="si">{</span><span class="n">super_text</span><span class="si">}</span><span class="s1"> on record together with </span><span class="si">{</span><span class="n">nice_list</span><span class="p">(</span><span class="n">highest_years</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="c1"># if this is highest year in no data sets</span>
+    <span class="k">elif</span> <span class="n">min_rank</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">highest_years</span><span class="p">,</span> <span class="n">highest_values</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_highest_year_and_values</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">highest_years</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;The </span><span class="si">{</span><span class="n">super_text</span><span class="si">}</span><span class="s1"> year on record was </span><span class="si">{</span><span class="n">highest_years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> with a value &#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;between </span><span class="si">{</span><span class="n">highest_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="n">highest_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s1">.&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">highest_years</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">highest_year_entry</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">high_year</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">highest_years</span><span class="p">):</span>
+                <span class="n">highest_year_entry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">high_year</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">highest_values</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">highest_values</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;The </span><span class="si">{</span><span class="n">super_text</span><span class="si">}</span><span class="s1"> year on record was one of </span><span class="si">{</span><span class="n">nice_list</span><span class="p">(</span><span class="n">highest_year_entry</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="global_anomaly_and_rank">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.global_anomaly_and_rank">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">global_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets</span>
+<span class="sd">    year</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No datasets provided&quot;</span><span class="p">)</span>
+
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="n">variable</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span>
+    <span class="n">super_text</span> <span class="o">=</span> <span class="n">superlative</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_year</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The most recent available year is </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s1">. &#39;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">last_year</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_rank</span><span class="p">,</span> <span class="n">max_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;No data for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">mean_anomaly</span><span class="p">,</span> <span class="n">min_anomaly</span><span class="p">,</span> <span class="n">max_anomaly</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values_ipcc_style</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;The year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was ranked </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">super_text</span><span class="si">}</span><span class="s1"> &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;on record. The anomaly for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">mean_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> [</span><span class="si">{</span><span class="n">min_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">max_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">]</span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s1"> &#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]:</span>
+        <span class="n">clim_start</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_start&#39;</span><span class="p">]</span>
+        <span class="n">clim_end</span> <span class="o">=</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_end&#39;</span><span class="p">]</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;relative to the </span><span class="si">{</span><span class="n">clim_start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">clim_end</span><span class="si">}</span><span class="s2"> average &quot;</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span><span class="si">}</span><span class="s1"> data sets were used in this assessment: </span><span class="si">{</span><span class="n">dataset_name_list</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span><span class="w"> </span><span class="n">year</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="anomaly_and_rank">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.anomaly_and_rank">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,</span>
+<span class="sd">    as well as saying how many data sets and which datasets were used.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesAnnual]</span>
+<span class="sd">        List of datasets to be used to derive the ranks and values</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Year for which the paragraph should be generated.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out_text</span> <span class="o">=</span> <span class="n">basic_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="n">compare_to_highest_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/p&gt;&lt;p&gt;&quot;</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="n">basic_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="pre_industrial_estimate">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.pre_industrial_estimate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pre_industrial_estimate</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a short paragraph estimating the difference between the modern baseline and</span>
+<span class="sd">    1850 to 1900.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesAnnual]</span>
+<span class="sd">        List of all the data sets to be analysed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Returns a paragraph of text stating an estimate of the pre-industrial temperature</span>
+<span class="sd">        from these data sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">holder</span> <span class="o">=</span> <span class="n">AveragesCollection</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="n">the_mean</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">best_estimate</span><span class="p">()</span>
+    <span class="n">the_range</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">range</span><span class="p">()</span>
+    <span class="n">lower</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">lower_range</span><span class="p">()</span>
+    <span class="n">upper</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">upper_range</span><span class="p">()</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;The mean: </span><span class="si">{</span><span class="n">the_mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> and the range </span><span class="si">{</span><span class="n">the_range</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                <span class="sa">f</span><span class="s2">&quot;from </span><span class="si">{</span><span class="n">lower</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">upper</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">. Using </span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">}</span><span class="s2"> datasets.&quot;</span>
+
+    <span class="n">holder</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Narrow expanded range is </span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">lower_range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">upper_range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">] or &quot;</span>
+
+    <span class="n">holder</span><span class="o">.</span><span class="n">widest</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Wide expanded range is </span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">lower_range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">holder</span><span class="o">.</span><span class="n">upper_range</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">] or &quot;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="anomaly_and_rank_plus_new_base">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.anomaly_and_rank_plus_new_base">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">anomaly_and_rank_plus_new_base</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,</span>
+<span class="sd">    as well as saying how many data sets and which datasets were used. Then it adds the anomalies relative to</span>
+<span class="sd">    the 1961-1990 baseline, with information about the number of datasets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesAnnual]</span>
+<span class="sd">        List of datasets to be used to derive the ranks and values</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Year for which the paragraph should be generated.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out_text</span> <span class="o">=</span> <span class="n">basic_anomaly_and_rank</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+    <span class="n">processed_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_first_and_last_year</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">first_year</span> <span class="o">&lt;=</span> <span class="mi">1961</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">rebaseline</span><span class="p">(</span><span class="mi">1961</span><span class="p">,</span> <span class="mi">1990</span><span class="p">)</span>
+            <span class="n">processed_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+    <span class="c1"># min_rank, max_rank = pu.calculate_ranks(processed_data, year)</span>
+    <span class="n">mean_anomaly</span><span class="p">,</span> <span class="n">min_anomaly</span><span class="p">,</span> <span class="n">max_anomaly</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">processed_data</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; Relative to a 1961-1990 baseline, the mean value for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">mean_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1"> &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">min_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">max_anomaly</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1"> depending on the data set used). &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span><span class="si">}</span><span class="s1"> data sets were used in the assessment relative to 1961-1990.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="max_monthly_value">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.max_monthly_value">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">max_monthly_value</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the highest monthly data value within the chosen year and return a paragraph, as a string, which gives the</span>
+<span class="sd">    value and rank for that month.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesMonthly]</span>
+<span class="sd">        List of datasets to be used in the evaluation</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Year to be analysed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Short paragraph of text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No datasets provided&quot;</span><span class="p">)</span>
+
+    <span class="n">all_ranks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_ranks_months</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">min_rank</span> <span class="o">=</span> <span class="mi">9999</span>
+        <span class="n">min_rank_month</span> <span class="o">=</span> <span class="mi">99</span>
+        <span class="n">min_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">99</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_rank_from_year_and_month</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">versus_all_months</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">&lt;</span> <span class="n">min_rank</span><span class="p">:</span>
+                <span class="n">min_rank</span> <span class="o">=</span> <span class="n">rank</span>
+                <span class="n">min_rank_month</span> <span class="o">=</span> <span class="n">month</span>
+                <span class="n">min_value</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">min_rank</span> <span class="o">!=</span> <span class="mi">9999</span><span class="p">:</span>
+            <span class="n">all_ranks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">min_rank</span><span class="p">)</span>
+            <span class="n">all_ranks_months</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">min_rank_month</span><span class="p">)</span>
+            <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">min_value</span><span class="p">)</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">month_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;January&#39;</span><span class="p">,</span> <span class="s1">&#39;February&#39;</span><span class="p">,</span> <span class="s1">&#39;March&#39;</span><span class="p">,</span> <span class="s1">&#39;April&#39;</span><span class="p">,</span> <span class="s1">&#39;May&#39;</span><span class="p">,</span> <span class="s1">&#39;June&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;July&#39;</span><span class="p">,</span> <span class="s1">&#39;August&#39;</span><span class="p">,</span> <span class="s1">&#39;September&#39;</span><span class="p">,</span> <span class="s1">&#39;October&#39;</span><span class="p">,</span> <span class="s1">&#39;November&#39;</span><span class="p">,</span> <span class="s1">&#39;December&#39;</span><span class="p">]</span>
+    <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The monthly value for </span><span class="si">{</span><span class="n">month_names</span><span class="p">[</span><span class="n">all_ranks_months</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was the &#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">all_ranks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1"> highest on record at </span><span class="si">{</span><span class="n">all_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="arctic_ice_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.arctic_ice_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">arctic_ice_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a paragraph of some standard stats for the Arctic sea ice: rank and value for max and min extents in the</span>
+<span class="sd">    year (March and September).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesMonthly]</span>
+<span class="sd">        List of datasets on which the assessment will be based</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Chosen year to focus on</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Paragraph of text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No datasets provided&#39;</span><span class="p">)</span>
+
+    <span class="n">march</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">september</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">march</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">make_annual_by_selecting_month</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">september</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">make_annual_by_selecting_month</span><span class="p">(</span><span class="mi">9</span><span class="p">))</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_march_rank</span><span class="p">,</span> <span class="n">max_march_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">march</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean_march_value</span><span class="p">,</span> <span class="n">min_march_value</span><span class="p">,</span> <span class="n">max_march_value</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">march</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Arctic sea ice extent in March </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was between </span><span class="si">{</span><span class="n">min_march_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> and &#39;</span> \
+                   <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">max_march_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">. &#39;</span> \
+                   <span class="sa">f</span><span class="s1">&#39;This was </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_march_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_march_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> lowest extent on record. &#39;</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;March data are not yet available for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_september_rank</span><span class="p">,</span> <span class="n">max_september_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">september</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean_september_value</span><span class="p">,</span> <span class="n">min_september_value</span><span class="p">,</span> <span class="n">max_september_value</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">september</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;In September the extent was between </span><span class="si">{</span><span class="n">min_september_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> and &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">max_september_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">. &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;This was </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_september_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_september_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> lowest extent on record. &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;Data sets used were: </span><span class="si">{</span><span class="n">dataset_name_list</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;September data are not yet available for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="antarctic_ice_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.antarctic_ice_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">antarctic_ice_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a paragraph of some standard stats for the Antarctic sea ice: rank and value for max and min extents in the</span>
+<span class="sd">    year (Feb and September).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesMonthly]</span>
+<span class="sd">        List of datasets on which the assessment will be based</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Chosen year to focus on</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Paragraph of text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No datasets provided&#39;</span><span class="p">)</span>
+
+    <span class="n">march</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">september</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">march</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">make_annual_by_selecting_month</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">september</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">make_annual_by_selecting_month</span><span class="p">(</span><span class="mi">9</span><span class="p">))</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_february_rank</span><span class="p">,</span> <span class="n">max_february_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">march</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean_february_value</span><span class="p">,</span> <span class="n">min_february_value</span><span class="p">,</span> <span class="n">max_february_value</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">march</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s1">&#39;No data available yet for February. &#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;Antarctic sea ice extent in February </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1"> was between </span><span class="si">{</span><span class="n">min_february_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> and &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">max_february_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">. &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;This was </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_february_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_february_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> lowest extent on record. &#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">min_september_rank</span><span class="p">,</span> <span class="n">max_september_rank</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_ranks</span><span class="p">(</span><span class="n">september</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean_september_value</span><span class="p">,</span> <span class="n">min_september_value</span><span class="p">,</span> <span class="n">max_september_value</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">september</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s1">&#39;No data available yet for September. &#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;In September the extent was between </span><span class="si">{</span><span class="n">min_september_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> and &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">max_september_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">. &#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;This was </span><span class="si">{</span><span class="n">rank_ranges</span><span class="p">(</span><span class="n">min_september_rank</span><span class="p">,</span><span class="w"> </span><span class="n">max_september_rank</span><span class="p">)</span><span class="si">}</span><span class="s1"> lowest extent on record. &#39;</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;Data sets used were: </span><span class="si">{</span><span class="n">dataset_name_list</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="glacier_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.glacier_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">glacier_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">]],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write the glacier paragraph</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: list[Union[TimeSeriesMonthly, TimeSeriesAnnual]]</span>
+<span class="sd">        list of data sets to be processed</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Year for which to do the evaluation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No datasets provided&#39;</span><span class="p">)</span>
+
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_year</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The most recent available year is </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s1">. &#39;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">last_year</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">last_positive</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">first_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">check_year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">value1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">check_year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">value2</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">check_year</span><span class="p">)</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">value2</span> <span class="o">-</span> <span class="n">value1</span>
+            <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">last_positive</span> <span class="o">=</span> <span class="n">check_year</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;This was the </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span><span class="si">}</span><span class="s1"> consecutive year of negative mass balance &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;since </span><span class="si">{</span><span class="n">last_positive</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">. &#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;Cumulative glacier loss since 1970 is </span><span class="si">{</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}{</span><span class="n">units</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="co2_paragraph_update">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.co2_paragraph_update">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">co2_paragraph_update</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">co2_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="co2_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.co2_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">co2_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a paragraph of some standard stats for greenhouse gases</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesAnnual]</span>
+<span class="sd">        List of datasets on which the assessment will be based</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Chosen year to focus on</span>
+<span class="sd">    update: bool</span>
+<span class="sd">        If set to True treat this as an update</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Paragraph of text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No datasets provided&#39;</span><span class="p">)</span>
+
+    <span class="n">tb</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># pre-industrual values</span>
+    <span class="n">cl</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;co2&#39;</span><span class="p">:</span> <span class="mf">278.3</span><span class="p">,</span> <span class="s1">&#39;ch4&#39;</span><span class="p">:</span> <span class="mf">729.2</span><span class="p">,</span> <span class="s1">&#39;n2o&#39;</span><span class="p">:</span> <span class="mf">270.1</span><span class="p">}</span>
+
+    <span class="n">last_year</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span>
+
+    <span class="n">matcher</span> <span class="o">=</span> <span class="s1">&#39;WDCGG&#39;</span>
+    <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+        <span class="n">matcher</span> <span class="o">=</span> <span class="s1">&#39;WDCGG update&#39;</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">matcher</span><span class="p">:</span>
+            <span class="n">variable</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span>
+            <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_first_and_last_year</span><span class="p">()</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_rank_from_year</span><span class="p">(</span><span class="n">last_year</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">last_year</span><span class="p">)</span>
+            <span class="n">uncertainty</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_uncertainty_from_year</span><span class="p">(</span><span class="n">last_year</span><span class="p">)</span>
+            <span class="n">tb</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">rank</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">last_year</span> <span class="o">==</span> <span class="o">-</span><span class="mi">9999</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No greenhouse gas data sets found&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s2">, greenhouse gas mole fractions reached new highs, &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;with globally averaged surface mole fractions of &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;carbon dioxide (CO&lt;sub&gt;2&lt;/sub&gt;) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> parts per million (ppm), &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;methane (CH&lt;sub&gt;4&lt;/sub&gt;) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> parts per billion (ppb) and &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;nitrous oxide (N&lt;sub&gt;2&lt;/sub&gt;O) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> ppb, respectively &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">%, &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% and &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% of pre-industrial (1750) levels.&quot;</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s2">, globally averaged greenhouse gas mole fractions were: &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;carbon dioxide (CO&lt;sub&gt;2&lt;/sub&gt;) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> parts per million (ppm), &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> highest on record, &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;methane (CH&lt;sub&gt;4&lt;/sub&gt;) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> parts per billion (ppb),&quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> highest on record, and &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;nitrous oxide (N&lt;sub&gt;2&lt;/sub&gt;O) at </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;&amp;plusmn; </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> ppb, &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> highest on record, respectively &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;co2&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">%, &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;ch4&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% and &quot;</span> \
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;n2o&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% of pre-industrial (1750) levels&quot;</span>
+
+    <span class="k">if</span> <span class="n">last_year</span> <span class="o">&lt;</span> <span class="n">year</span><span class="p">:</span>
+
+        <span class="n">all_highest</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">upupup</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;WDCGG&#39;</span> <span class="ow">and</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;WDCGG CO2 update&#39;</span><span class="p">:</span>
+                <span class="n">rank</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_rank_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">upupup</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">-</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">last_year</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">rank</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">all_highest</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">upupup</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">upupup</span> <span class="ow">and</span> <span class="n">all_highest</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">=</span> <span class="n">out_text</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; Real-time data from specific locations, including Mauna Loa (Hawaii) and &#39;</span> \
+                                  <span class="sa">f</span><span class="s1">&#39;Kennaook/Cape Grim (Tasmania) indicate that levels of &#39;</span> \
+                                  <span class="sa">f</span><span class="s1">&#39;CO&lt;sub&gt;2&lt;/sub&gt;, CH&lt;sub&gt;4&lt;/sub&gt; and N&lt;sub&gt;2&lt;/sub&gt;O continued to &#39;</span> \
+                                  <span class="sa">f</span><span class="s1">&#39;increase in </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="marine_heatwave_and_cold_spell_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.marine_heatwave_and_cold_spell_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">marine_heatwave_and_cold_spell_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_year</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The most recent available year is </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s1">. &#39;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">last_year</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">mhw_area</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mhw_rank</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mhw_max_area</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mhw_max_year</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mcs_area</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mcs_rank</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mcs_max_area</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mcs_max_year</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">mhw_check</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mcs_check</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="c1"># get the % area of marine heatwaves</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;mhw&#39;</span><span class="p">:</span>
+            <span class="n">mhw_check</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">mhw_area</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">mhw_rank</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_rank_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">mhw_max_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_year_from_rank</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mhw_max_area</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">mhw_max_year</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;mcs&#39;</span><span class="p">:</span>
+            <span class="n">mcs_check</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">mcs_area</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">mcs_rank</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_rank_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">mcs_max_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_year_from_rank</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mcs_max_area</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">mcs_max_year</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mhw_check</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mhw_area</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% of the ocean was affected by at least one marine heatwave. &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">mhw_rank</span><span class="p">)</span><span class="si">}</span><span class="s2"> highest on record. &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;The highest ocean area affected in any year was </span><span class="si">{</span><span class="n">mhw_max_area</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% in </span><span class="si">{</span><span class="n">mhw_max_year</span><span class="si">}</span><span class="s2">. &quot;</span>
+    <span class="k">if</span> <span class="n">mcs_check</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;The area of the ocean affected by at least one marine cold spells was </span><span class="si">{</span><span class="n">mcs_area</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%. &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">ordinal</span><span class="p">(</span><span class="n">mcs_rank</span><span class="p">)</span><span class="si">}</span><span class="s2"> highest on record. &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;The highest area affected in any year by marine cold spells &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;was </span><span class="si">{</span><span class="n">mcs_max_area</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% in </span><span class="si">{</span><span class="n">mcs_max_year</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mcs_check</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">mhw_check</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;One of MHW or MCS data not found in the data set list&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="greenland_ice_sheet_monthly">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.greenland_ice_sheet_monthly">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">greenland_ice_sheet_monthly</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">this_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">last_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">this_difference</span> <span class="o">=</span> <span class="n">this_year</span> <span class="o">-</span> <span class="n">last_year</span>
+            <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+            <span class="n">subset</span> <span class="o">=</span> <span class="n">ds_copy</span><span class="o">.</span><span class="n">select_year_range</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">comparison_set</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2006</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+                <span class="n">temp_this_year</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="n">temp_last_year</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="c1"># need to catch nones because of the gap in GRACE/GRACE-FO</span>
+                <span class="k">if</span> <span class="n">temp_this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">temp_last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_difference</span> <span class="o">=</span> <span class="n">temp_this_year</span> <span class="o">-</span> <span class="n">temp_last_year</span>
+                    <span class="n">comparison_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_difference</span><span class="p">)</span>
+
+            <span class="n">mean_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">comparison_set</span><span class="p">)</span>
+            <span class="n">summary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">],</span> <span class="n">this_difference</span><span class="p">,</span> <span class="n">mean_change</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;In the </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> data set, the mass change between September </span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> and &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;August </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> was </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt, which is &quot;</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; a greater loss than the average for 2005-</span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt. &quot;</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; a smaller loss than the average for 2005-</span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt. &quot;</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; equal to the average loss for 2005-</span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">. &quot;</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="ice_sheet_monthly_sm_grace_version">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.ice_sheet_monthly_sm_grace_version">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ice_sheet_monthly_sm_grace_version</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the method used by Shawn Marshall to deal with the GRACE approx mid-month values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[TimeSeriesMonthly]</span>
+<span class="sd">        List of datasets to be processed.</span>
+<span class="sd">    year: int</span>
+<span class="sd">        Year of focus</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">this_year</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">last_year</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">this_difference</span> <span class="o">=</span> <span class="n">this_year</span> <span class="o">-</span> <span class="n">last_year</span>
+            <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+            <span class="n">subset</span> <span class="o">=</span> <span class="n">ds_copy</span><span class="o">.</span><span class="n">select_year_range</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">comparison_set</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2006</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+                <span class="c1"># Average the august and september values</span>
+                <span class="n">temp_this_year</span> <span class="o">=</span> <span class="p">(</span><span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">temp_last_year</span> <span class="o">=</span> <span class="p">(</span><span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="c1"># need to catch nones because of the gap in GRACE/GRACE-FO</span>
+                <span class="k">if</span> <span class="n">temp_this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">temp_last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_difference</span> <span class="o">=</span> <span class="n">temp_this_year</span> <span class="o">-</span> <span class="n">temp_last_year</span>
+                    <span class="n">comparison_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_difference</span><span class="p">)</span>
+
+            <span class="n">mean_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">comparison_set</span><span class="p">)</span>
+            <span class="n">summary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">],</span> <span class="n">this_difference</span><span class="p">,</span> <span class="n">mean_change</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;In the </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> data set of </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, the mass change between September </span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> and &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;August </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> was </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">Gt.&quot;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="greenland_ice_sheet">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.greenland_ice_sheet">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">greenland_ice_sheet</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">this_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">last_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">this_difference</span> <span class="o">=</span> <span class="n">this_year</span> <span class="o">-</span> <span class="n">last_year</span>
+            <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+            <span class="n">subset</span> <span class="o">=</span> <span class="n">ds_copy</span><span class="o">.</span><span class="n">select_year_range</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">comparison_set</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2006</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+                <span class="n">temp_this_year</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">temp_last_year</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">get_value_from_year</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># need to catch nones because of the gap in GRACE/GRACE-FO</span>
+                <span class="k">if</span> <span class="n">temp_this_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">temp_last_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_difference</span> <span class="o">=</span> <span class="n">temp_this_year</span> <span class="o">-</span> <span class="n">temp_last_year</span>
+                    <span class="n">comparison_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_difference</span><span class="p">)</span>
+
+            <span class="n">mean_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">comparison_set</span><span class="p">)</span>
+            <span class="n">summary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">],</span> <span class="n">this_difference</span><span class="p">,</span> <span class="n">mean_change</span><span class="p">])</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span><span class="si">}</span><span class="s2"> data sets of Greenland mass balance. &quot;</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;In the </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> data set, the mass change between </span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> and &quot;</span> \
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> was </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt, which is &quot;</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; a greater loss than the average for 2005-</span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt/year. &quot;</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; a smaller loss than the average for 2005-</span><span class="si">{</span><span class="n">year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">Gt/year. &quot;</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> saw an increase in the mass of Greenland ice.&quot;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="long_term_trend_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.long_term_trend_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_term_trend_paragraph</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeSeriesMonthly</span><span class="p">],</span> <span class="n">year</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">all_trends</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_initial_trends</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_recent_trends</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_semi_recent_trends</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trend1</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">all_trends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trend1</span><span class="p">)</span>
+
+        <span class="n">selection</span> <span class="o">=</span> <span class="n">times</span> <span class="o">&lt;</span> <span class="mi">2003</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trend2</span><span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">all_initial_trends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trend2</span><span class="p">)</span>
+
+        <span class="n">selection</span> <span class="o">=</span> <span class="n">times</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">9</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trend3</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">all_recent_trends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trend3</span><span class="p">)</span>
+
+        <span class="n">selection</span> <span class="o">=</span> <span class="p">(</span><span class="n">times</span> <span class="o">&gt;=</span> <span class="mi">2015</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">times</span> <span class="o">&lt;</span> <span class="mi">2025</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">selection</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trend4</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">all_semi_recent_trends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trend4</span><span class="p">)</span>
+
+        <span class="n">first_year</span><span class="p">,</span> <span class="n">last_year</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_first_and_last_year</span><span class="p">()</span>
+
+        <span class="n">units</span> <span class="o">=</span> <span class="n">fancy_html_units</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The rate of change in the </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> data set is </span><span class="si">{</span><span class="n">trend1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s2">/yr &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;between </span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">last_year</span><span class="si">}</span><span class="s2">. The rate of change in the past decade </span><span class="si">{</span><span class="n">year</span><span class="o">-</span><span class="mi">9</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> is &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">trend3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s2">/yr which is higher than the trend for the first decade of the satellite &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;record 1993-2002 which was </span><span class="si">{</span><span class="n">trend2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s2">/yr. The trend for 2015-2014 was </span><span class="si">{</span><span class="n">trend4</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">units</span><span class="si">}</span><span class="s2">/yr.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="precip_paragraph">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.precip_paragraph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">precip_paragraph</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2023</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s2">&quot;Accumulated precipitation totals in 2023 were above the long-term average in East and Central Asia &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;and parts of northern Asia; the western Indian summer monsoon region; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;parts of the Maritime Continent; northern New Zealand; parts of West, Central, &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;Southern and East Africa; West, Central and Southeast Europe; southern Scandinavia; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;the western Middle East; northwest, southwest and southeast North America; Greater Antilles; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;and parts of southeast South America.&quot;</span>
+
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;Regions with a marked rainfall deficit included: southeast South America, the Amazon Basin, and &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;much of Central America; southern Canada; the western Mediterranean region and Southwest Europe; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;parts of northwest, central, and southern Africa; parts of central Asia; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;the eastern Indian Monsoon region; parts of southeast Asia and the Maritime Continent; &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;southwest and coastal north Australia; and many of the Pacific Islands.&quot;</span>
+
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;The onset of the West African Monsoon was around normal. The start of the Gu rain season &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;(April to June) in the Greater Horn of Africa brought unusually large rainfalls &quot;</span>
+        <span class="n">out_text</span> <span class="o">+=</span> <span class="s2">&quot;amounts in some areas.&quot;</span>
+    <span class="k">elif</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2024</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;Nothing to see here yet.&#39;</span>
+    <span class="k">elif</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2025</span><span class="p">:</span>
+        <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;Nothing to see here yet&#39;</span>
+
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+
+
+<div class="viewcode-block" id="convert_to_percentages">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.convert_to_percentages">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_percentages</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">min_screen</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">max_screen</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+    <span class="n">n_years</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">years</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">get_year_axis</span><span class="p">())</span>
+    <span class="n">datas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">year0</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">yearz</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">max_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">datas</span><span class="p">)</span>
+    <span class="n">min_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">datas</span><span class="p">)</span>
+
+    <span class="n">outstr</span> <span class="o">=</span> <span class="s1">&#39;100,0 0, 0&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_years</span><span class="p">):</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">years</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">year0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">yearz</span> <span class="o">-</span> <span class="n">year0</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">min_screen</span> <span class="o">+</span> <span class="p">(</span><span class="n">max_screen</span> <span class="o">-</span> <span class="n">min_screen</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">datas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_data</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_data</span> <span class="o">-</span> <span class="n">min_data</span><span class="p">)</span>
+
+        <span class="n">outstr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">year</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">data</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">outstr</span></div>
+
+
+
+<div class="viewcode-block" id="svg_background">
+<a class="viewcode-back" href="../../../climind.stats.html#climind.stats.paragraphs.svg_background">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">svg_background</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+    <span class="n">out_text</span> <span class="o">=</span> <span class="s1">&#39;&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot; preserveAspectRatio=&quot;none&quot; style=&quot;background-color:var(--dashblue);&quot;&gt;&#39;</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="s1">&#39;&lt;polygon points=&quot;&#39;</span><span class="o">+</span><span class="n">convert_to_percentages</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;&quot;  style=&quot;fill:var(--dashorange);stroke:var(--dashwhite);stroke-width:0&quot; /&gt;&#39;</span>
+    <span class="n">out_text</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/svg&gt;&#39;</span>
+    <span class="k">return</span> <span class="n">out_text</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

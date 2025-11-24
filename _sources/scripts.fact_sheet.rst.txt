@@ -1,0 +1,61 @@
+scripts.fact\_sheet package
+===========================
+
+Submodules
+----------
+
+scripts.fact\_sheet.effect\_of\_infilling module
+------------------------------------------------
+
+.. automodule:: scripts.fact_sheet.effect_of_infilling
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.fact\_sheet.land\_ocean module
+--------------------------------------
+
+.. automodule:: scripts.fact_sheet.land_ocean
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.fact\_sheet.observed\_and\_anthro module
+------------------------------------------------
+
+.. automodule:: scripts.fact_sheet.observed_and_anthro
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.fact\_sheet.pdf\_factsheet module
+-----------------------------------------
+
+.. automodule:: scripts.fact_sheet.pdf_factsheet
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.fact\_sheet.plot\_pages\_2k module
+------------------------------------------
+
+.. automodule:: scripts.fact_sheet.plot_pages_2k
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.fact\_sheet.temperature\_map module
+-------------------------------------------
+
+.. automodule:: scripts.fact_sheet.temperature_map
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts.fact_sheet
+   :members:
+   :show-inheritance:
+   :undoc-members:

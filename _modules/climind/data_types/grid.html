@@ -1,0 +1,1023 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.data_types.grid &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.data_types.grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.data_types.grid</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pkg_resources</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xa</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">regionmask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_manager.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CombinedMetadata</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">climind.data_types.timeseries</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ts</span>
+
+
+<div class="viewcode-block" id="get_1d_transfer">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.get_1d_transfer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_1d_transfer</span><span class="p">(</span><span class="n">zero_point_original</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">grid_space_original</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                    <span class="n">zero_point_target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">grid_space_target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">index_in_original</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the overlapping grid spacings for a new grid based on an index in the old grid</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    zero_point_original: float</span>
+<span class="sd">        longitude or latitude of the zero-indexed grid cell</span>
+<span class="sd">    grid_space_original: float</span>
+<span class="sd">        grid spacing in degrees</span>
+<span class="sd">    zero_point_target: float</span>
+<span class="sd">        longitude or latitude of the zero-indexed grid cells in the targe grid</span>
+<span class="sd">    grid_space_target: float</span>
+<span class="sd">        grid spacing in degrees of the target grid</span>
+<span class="sd">    index_in_original: int</span>
+<span class="sd">        index of the gridcell in the original grid</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Returns, the longitude of the first grid cell in the new grid, the number of steps,</span>
+<span class="sd">        and the first and last indices on the new grid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">llon</span> <span class="o">=</span> <span class="n">zero_point_target</span> <span class="o">+</span> <span class="n">index_in_original</span> <span class="o">*</span> <span class="n">grid_space_target</span>
+    <span class="n">hlon</span> <span class="o">=</span> <span class="n">zero_point_target</span> <span class="o">+</span> <span class="p">(</span><span class="n">index_in_original</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">grid_space_target</span>
+
+    <span class="n">mlon_lo</span> <span class="o">=</span> <span class="p">(</span><span class="n">llon</span> <span class="o">-</span> <span class="n">zero_point_original</span><span class="p">)</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+    <span class="n">mlon_hi</span> <span class="o">=</span> <span class="p">(</span><span class="n">hlon</span> <span class="o">-</span> <span class="n">zero_point_original</span><span class="p">)</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+
+    <span class="n">lonindexlo</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mlon_lo</span><span class="p">))</span>
+    <span class="n">lonindexhi</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mlon_hi</span><span class="p">))</span>
+
+    <span class="n">final_cell</span> <span class="o">=</span> <span class="p">(</span><span class="n">hlon</span> <span class="o">-</span> <span class="p">(</span><span class="n">zero_point_original</span> <span class="o">+</span> <span class="n">lonindexhi</span> <span class="o">*</span> <span class="n">grid_space_original</span><span class="p">))</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+
+    <span class="k">if</span> <span class="n">final_cell</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">lonindexhi</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">final_cell</span> <span class="o">=</span> <span class="p">(</span><span class="n">hlon</span> <span class="o">-</span> <span class="p">(</span><span class="n">zero_point_original</span> <span class="o">+</span> <span class="n">lonindexhi</span> <span class="o">*</span> <span class="n">grid_space_original</span><span class="p">))</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+
+    <span class="n">nlonsteps</span> <span class="o">=</span> <span class="n">lonindexhi</span> <span class="o">-</span> <span class="n">lonindexlo</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">transfer_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nlonsteps</span><span class="p">))</span> <span class="o">+</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="n">nlonsteps</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">transfer_lon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_space_target</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">transfer_lon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">zero_point_original</span> <span class="o">+</span> <span class="p">(</span><span class="n">lonindexlo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">grid_space_original</span><span class="p">)</span> <span class="o">-</span> <span class="n">llon</span><span class="p">)</span> <span class="o">/</span> <span class="n">grid_space_original</span>
+        <span class="n">transfer_lon</span><span class="p">[</span><span class="n">nlonsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_cell</span>
+
+    <span class="k">return</span> <span class="n">transfer_lon</span><span class="p">,</span> <span class="n">nlonsteps</span><span class="p">,</span> <span class="n">lonindexlo</span><span class="p">,</span> <span class="n">lonindexhi</span></div>
+
+
+
+<div class="viewcode-block" id="simple_regrid">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.simple_regrid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_regrid</span><span class="p">(</span><span class="n">ingrid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">lon0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lat0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">target_dy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a simple regridding, using a simple average of grid cells from the original grid</span>
+<span class="sd">    that fall within the target grid cell.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ingrid: np.ndarray</span>
+<span class="sd">        Starting grid which we want to regrid</span>
+<span class="sd">    lon0: float</span>
+<span class="sd">        Longitude of zero-indexed grid cell in longitudinal direction</span>
+<span class="sd">    lat0: float</span>
+<span class="sd">        Latitude of zero-indexed grid cell in latitudinal direction</span>
+<span class="sd">    dx: float</span>
+<span class="sd">        Grid spacing in degrees</span>
+<span class="sd">    target_dy: float</span>
+<span class="sd">        Target grid spacing</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Returns regridded array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nlat</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">180</span> <span class="o">/</span> <span class="n">target_dy</span><span class="p">)</span>
+    <span class="n">nlon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">360</span> <span class="o">/</span> <span class="n">target_dy</span><span class="p">)</span>
+    <span class="n">outgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nlat</span><span class="p">,</span> <span class="n">nlon</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">xlon</span><span class="p">,</span> <span class="n">ylat</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nlon</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlat</span><span class="p">)):</span>
+        <span class="c1"># Longitudes</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">180.0</span>
+        <span class="n">transfer_lon</span><span class="p">,</span> <span class="n">nlonsteps</span><span class="p">,</span> <span class="n">lolon</span><span class="p">,</span> <span class="n">hilon</span> <span class="o">=</span> <span class="n">get_1d_transfer</span><span class="p">(</span><span class="n">lon0</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">target_dy</span><span class="p">,</span> <span class="n">xlon</span><span class="p">)</span>
+        <span class="c1"># Latitudes</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">90.0</span>
+        <span class="n">transfer_lat</span><span class="p">,</span> <span class="n">nlatsteps</span><span class="p">,</span> <span class="n">lolat</span><span class="p">,</span> <span class="n">hilat</span> <span class="o">=</span> <span class="n">get_1d_transfer</span><span class="p">(</span><span class="n">lat0</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">target_dy</span><span class="p">,</span> <span class="n">ylat</span><span class="p">)</span>
+
+        <span class="n">transfer_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">transfer_lon</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nlonsteps</span><span class="p">)),</span> <span class="n">nlatsteps</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">transfer_lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">transfer_lat</span><span class="p">,</span> <span class="p">(</span><span class="n">nlatsteps</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">nlonsteps</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_lat</span> <span class="o">*</span> <span class="n">transfer_lon</span>
+
+        <span class="n">outgrid</span><span class="p">[</span><span class="n">ylat</span><span class="p">,</span> <span class="n">xlon</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ingrid</span><span class="p">[</span><span class="n">lolat</span><span class="p">:</span><span class="n">hilat</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lolon</span><span class="p">:</span><span class="n">hilon</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">transfer</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">transfer</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">outgrid</span></div>
+
+
+
+<div class="viewcode-block" id="make_xarray">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.make_xarray">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_xarray</span><span class="p">(</span><span class="n">target_grid</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">latitudes</span><span class="p">,</span> <span class="n">longitudes</span><span class="p">,</span> <span class="n">variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;tas_mean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xa</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a xarray Dataset for a regular lat-lon grid from a numpy grid (ntime, nlat, nlon),</span>
+<span class="sd">    and arrays of time (ntime), latitude (nlat) and longitude (nlon).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_grid: np.ndarray</span>
+<span class="sd">        numpy array of shape (ntime, nlat, nlon)</span>
+<span class="sd">    times: np.ndarray</span>
+<span class="sd">        Array of times, shape (ntime)</span>
+<span class="sd">    latitudes: np.ndarray</span>
+<span class="sd">        Array of latitudes, shape (nlat)</span>
+<span class="sd">    longitudes: np.ndarray</span>
+<span class="sd">        Array of longitudes, shape (nlon)</span>
+<span class="sd">    variable: str</span>
+<span class="sd">        Variable name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xa.Dataset</span>
+<span class="sd">        Dataset built from the input components</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">xa</span><span class="o">.</span><span class="n">Dataset</span><span class="p">({</span>
+        <span class="n">variable</span><span class="p">:</span> <span class="n">xa</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">target_grid</span><span class="p">,</span>
+            <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;longitude&#39;</span><span class="p">],</span>
+            <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">times</span><span class="p">,</span> <span class="s1">&#39;latitude&#39;</span><span class="p">:</span> <span class="n">latitudes</span><span class="p">,</span> <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="n">longitudes</span><span class="p">},</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;2m air temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;K&#39;</span><span class="p">}</span>
+        <span class="p">)</span>
+    <span class="p">},</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;project&#39;</span><span class="p">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ds</span></div>
+
+
+
+<div class="viewcode-block" id="make_standard_grid">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.make_standard_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_standard_grid</span><span class="p">(</span><span class="n">out_grid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">number_of_times</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xa</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make the standard 5x5 grid from a numpy array, start date, temporal frequency and</span>
+<span class="sd">    number of time steps.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    out_grid: np.ndarray</span>
+<span class="sd">        Numpy array containing the data. Shape should be (number_of_times, 36, 72)</span>
+<span class="sd">    start_date: datetime</span>
+<span class="sd">        Date of the first time step</span>
+<span class="sd">    freq: str</span>
+<span class="sd">        Temporal frequency</span>
+<span class="sd">    number_of_times: int</span>
+<span class="sd">        Number of time steps, should match the first dimension of the out_grid</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xa.Dataset</span>
+<span class="sd">        xarray Dataset containing the data in out_grid with the specified temporal</span>
+<span class="sd">        frequency and number of time steps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="n">number_of_times</span><span class="p">)</span>
+    <span class="n">latitudes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">87.5</span><span class="p">,</span> <span class="mf">87.5</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+    <span class="n">longitudes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">177.5</span><span class="p">,</span> <span class="mf">177.5</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">make_xarray</span><span class="p">(</span><span class="n">out_grid</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">latitudes</span><span class="p">,</span> <span class="n">longitudes</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<div class="viewcode-block" id="rank_array">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.rank_array">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rank_array</span><span class="p">(</span><span class="n">in_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rank array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_array: np.ndarray</span>
+<span class="sd">        Array to be ranked</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">in_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">in_array</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">9999.9999</span>
+
+    <span class="n">ntime</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_array</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">in_array</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">ranks</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ntime</span><span class="p">)</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">ntime</span> <span class="o">-</span> <span class="n">ranks</span>
+    <span class="k">return</span> <span class="n">rank</span></div>
+
+
+
+<div class="viewcode-block" id="GridMonthly">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GridMonthly</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`GridMonthly` combines an xarray Dataset with a</span>
+<span class="sd">    :class:`.CombinedMetadata` to bring together data and</span>
+<span class="sd">    metadata in one object. It represents monthly averages of data on a regular grid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">xa</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">CombinedMetadata</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:&#39;.GridMonthly` object from an xarray</span>
+<span class="sd">        Dataset and a :class:`.CombinedMetadata` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_data: xa.Dataset</span>
+<span class="sd">            xarray dataset</span>
+<span class="sd">        metadata: CombinedMetadata</span>
+<span class="sd">            CombinedMetadata object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">input_data</span>
+
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;last_month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_last_month</span><span class="p">())</span>
+
+<div class="viewcode-block" id="GridMonthly.get_last_month">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.get_last_month">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_last_month</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the date of the last month in the dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        datetime</span>
+<span class="sd">            Date of the last month in the dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">last_month</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">last_month</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.get_start_year">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.get_start_year">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the first year in the dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            First year in the dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">start_year</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.get_end_year">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.get_end_year">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_end_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the last year in the dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Last year in the dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">start_year</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.rebaseline">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.rebaseline">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rebaseline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">final_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xa</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the baseline of the data to the period between first_year and final_year by</span>
+<span class="sd">        subtracting the average of the available data between those two years (inclusive).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        first_year: int</span>
+<span class="sd">            First year of climatology period</span>
+<span class="sd">        final_year: int</span>
+<span class="sd">            Final year of climatology period</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xa.Dataset</span>
+<span class="sd">            Changes the dataset in place, but also returns the dataset if needed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s1">-01-01&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">final_year</span><span class="si">}</span><span class="s1">-12-31&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="n">gb</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+        <span class="n">anom</span> <span class="o">=</span> <span class="n">dsg</span> <span class="o">-</span> <span class="n">clim</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">anom</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;climatology_end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;derived&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Rebaselined to </span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">final_year</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.make_annual">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.make_annual">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_annual</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate an annual average from a monthly grid by taking the arithmetic mean of</span>
+<span class="sd">        available monthly anomalies.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridAnnual</span>
+<span class="sd">            Return annual average of the grid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.year&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+        <span class="n">annual</span> <span class="o">=</span> <span class="n">GridAnnual</span><span class="p">(</span><span class="n">dsg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">annual</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="s1">&#39;Calculated annual average&#39;</span><span class="p">)</span>
+        <span class="n">annual</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;time_resolution&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;annual&#39;</span>
+        <span class="n">annual</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;derived&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">annual</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.select_year_and_month">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.select_year_and_month">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_year_and_month</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">month</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a particular month from the data set and throw away the rest.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        year: int</span>
+<span class="sd">            Year of selection</span>
+<span class="sd">        month: int</span>
+<span class="sd">            Month of selection</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridMonthly</span>
+<span class="sd">            Returns a :class:`GridMonthly` containing only data within the specified year range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-01&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-28&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Selected single month </span><span class="si">{</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.select_period">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.select_period">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start_month</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a period from the grid specifed by start year and month and end year and month, inclusive.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_year: int</span>
+<span class="sd">            Year of start date</span>
+<span class="sd">        start_month: int</span>
+<span class="sd">            Month of start date</span>
+<span class="sd">        end_year: int</span>
+<span class="sd">            Year of end date</span>
+<span class="sd">        end_month: int</span>
+<span class="sd">            Month of end date</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridMonthly</span>
+<span class="sd">            Returns a :class:`GridMonthly` containing only data within the specified date range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">start_year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">start_month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-01&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">end_year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">end_month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-28&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Selected period from </span><span class="si">{</span><span class="n">start_month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">start_year</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">end_month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">end_year</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.calculate_time_mean">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_time_mean">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_time_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the time mean of the map</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridMonthly</span>
+<span class="sd">            Returns a :class:`GridMonthly` containing the time mean of the data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cumulative</span><span class="p">:</span>
+            <span class="n">time_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">time_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">main_variable_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_mean</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">main_variable_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Cant take time mean of xarray dataset with more than one variable&#39;</span><span class="p">)</span>
+        <span class="n">main_variable</span> <span class="o">=</span> <span class="n">main_variable_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># save the start time and create a time axis (time meaning destroys this)</span>
+        <span class="n">start_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">start_month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">start_year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">start_month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-01&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;1MS&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Extract dimensions and the main variable</span>
+        <span class="n">latitudes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">longitudes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">target_grid</span> <span class="o">=</span> <span class="n">time_mean</span><span class="p">[</span><span class="n">main_variable</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="c1"># Make the output grid and update the metadata</span>
+        <span class="n">out_array</span> <span class="o">=</span> <span class="n">make_xarray</span><span class="p">(</span><span class="n">target_grid</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">latitudes</span><span class="p">,</span> <span class="n">longitudes</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">main_variable</span><span class="p">)</span>
+        <span class="n">output_grid</span> <span class="o">=</span> <span class="n">GridMonthly</span><span class="p">(</span><span class="n">out_array</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">))</span>
+        <span class="n">output_grid</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="s1">&#39;Calculated time mean&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output_grid</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.calculate_regional_average">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_regional_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regions</span><span class="p">,</span> <span class="n">region_number</span><span class="p">,</span> <span class="n">land_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeriesMonthly</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate a regional average from the grid. The region is specified by a geopandas</span>
+<span class="sd">        Geodataframe and the index (region_number) of the chosen shape. By default, the output</span>
+<span class="sd">        is masked to land areas only, this can be switched off by setting land_only to False.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        regions: Geodataframe</span>
+<span class="sd">            geopandas Geodataframe specifying the region to be average over</span>
+<span class="sd">        region_number: int</span>
+<span class="sd">            the index of the particular region in the Geodataframe</span>
+<span class="sd">        land_only: bool</span>
+<span class="sd">            By defauly output is masked to land areas only, to calculate a full area average set</span>
+<span class="sd">            land_only to False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ts.TimeSeriesMonthly</span>
+<span class="sd">            Returns time series of area averages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">regionmask</span><span class="o">.</span><span class="n">mask_3D_geopandas</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region_number</span><span class="p">)</span>
+        <span class="n">selected_variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">tas_mean</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">land_only</span><span class="p">:</span>
+            <span class="n">land_110</span> <span class="o">=</span> <span class="n">regionmask</span><span class="o">.</span><span class="n">defined_regions</span><span class="o">.</span><span class="n">natural_earth_v5_0_0</span><span class="o">.</span><span class="n">land_110</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_110</span><span class="o">.</span><span class="n">mask_3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">selected_variable</span> <span class="o">=</span> <span class="n">selected_variable</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">land_mask</span><span class="p">)</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">selected_variable</span><span class="o">.</span><span class="n">latitude</span><span class="p">))</span>
+        <span class="n">regional_ts</span> <span class="o">=</span> <span class="n">selected_variable</span><span class="o">.</span><span class="n">weighted</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">))</span>
+
+        <span class="c1"># It&#39;s such a struggle extracting time information from these blasted xarrays</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">timeseries_metadata</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">timeseries_metadata</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;timeseries&#39;</span>
+        <span class="n">timeseries_metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Calculated area-average&#39;</span><span class="p">)</span>
+        <span class="n">out_series</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeriesMonthly</span><span class="p">(</span><span class="n">years</span><span class="p">,</span> <span class="n">months</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">timeseries_metadata</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_series</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.calculate_regional_average_missing">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average_missing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_regional_average_missing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regions</span><span class="p">,</span> <span class="n">region_number</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                                           <span class="n">land_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ocean_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeriesMonthly</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate a regional average from the grid. The region is specified by a geopandas</span>
+<span class="sd">        Geodataframe and the index (region_number) of the chosen shape. By default, the output</span>
+<span class="sd">        is masked to land areas only, this can be switched off by setting land_only to False.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        regions: Geodataframe</span>
+<span class="sd">            geopandas Geodataframe specifying the region to be average over</span>
+<span class="sd">        region_number: int</span>
+<span class="sd">            the index of the particular region in the Geodataframe</span>
+<span class="sd">        threshold: float</span>
+<span class="sd">            If the area covered by data in the region drops below this threshold then NaN is returned.</span>
+<span class="sd">        land_only: bool</span>
+<span class="sd">            By defauly output is masked to land areas only, to calculate a full area average set</span>
+<span class="sd">            land_only to False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ts.TimeSeriesMonthly</span>
+<span class="sd">            Returns time series of area averages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">land_only</span> <span class="ow">and</span> <span class="n">ocean_only</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Selected both land_only and ocean_only. This combination is not allowed.&#39;</span><span class="p">)</span>
+
+        <span class="n">main_variable_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">main_variable</span> <span class="o">=</span> <span class="n">main_variable_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">regionmask</span><span class="o">.</span><span class="n">mask_3D_geopandas</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region_number</span><span class="p">)</span>
+        <span class="n">selected_variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">main_variable</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
+
+        <span class="c1"># copy the variable array, set values to one and missing data to zero then mask that</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">main_variable</span><span class="p">])</span>
+        <span class="n">replacer</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">missing</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">replacer</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">land_only</span><span class="p">:</span>
+            <span class="n">land_110</span> <span class="o">=</span> <span class="n">regionmask</span><span class="o">.</span><span class="n">defined_regions</span><span class="o">.</span><span class="n">natural_earth_v5_0_0</span><span class="o">.</span><span class="n">land_110</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_110</span><span class="o">.</span><span class="n">mask_3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">selected_variable</span> <span class="o">=</span> <span class="n">selected_variable</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">land_mask</span><span class="p">)</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">land_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ocean_only</span><span class="p">:</span>
+            <span class="n">land_110</span> <span class="o">=</span> <span class="n">regionmask</span><span class="o">.</span><span class="n">defined_regions</span><span class="o">.</span><span class="n">natural_earth_v5_0_0</span><span class="o">.</span><span class="n">land_110</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_110</span><span class="o">.</span><span class="n">mask_3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
+            <span class="n">land_mask</span> <span class="o">=</span> <span class="n">land_mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">land_mask</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="o">~</span><span class="n">land_mask</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">selected_variable</span> <span class="o">=</span> <span class="n">selected_variable</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">land_mask</span><span class="p">)</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">land_mask</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the area weighted average</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">selected_variable</span><span class="o">.</span><span class="n">latitude</span><span class="p">))</span>
+        <span class="n">regional_ts</span> <span class="o">=</span> <span class="n">selected_variable</span><span class="o">.</span><span class="n">weighted</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">))</span>
+        <span class="n">missing_ts</span> <span class="o">=</span> <span class="n">missing</span><span class="o">.</span><span class="n">weighted</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">))</span>
+        <span class="n">regional_ts</span><span class="p">[</span><span class="n">missing_ts</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># It&#39;s such a struggle extracting time information from these blasted xarrays</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">regional_ts</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">timeseries_metadata</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">timeseries_metadata</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;timeseries&#39;</span>
+        <span class="n">timeseries_metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Calculated area-average&#39;</span><span class="p">)</span>
+        <span class="n">out_series</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeriesMonthly</span><span class="p">(</span><span class="n">years</span><span class="p">,</span> <span class="n">months</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">timeseries_metadata</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_series</span></div>
+
+
+<div class="viewcode-block" id="GridMonthly.update_history">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridMonthly.update_history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the history metadata with a message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            Message to be added to history</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GridAnnual">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GridAnnual</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`GridAnnual` combines an xarray Dataset with a</span>
+<span class="sd">    :class:`.CombinedMetadata` to bring together data and</span>
+<span class="sd">    metadata in one object. It represents annual averages of data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">CombinedMetadata</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an annual gridded data set from an xarray Dataset and</span>
+<span class="sd">        :class:`.CombinedMetadata` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_data: xa.Dataset</span>
+<span class="sd">            xarray dataset</span>
+<span class="sd">        metadata: CombinedMetadata</span>
+<span class="sd">            CombinedMetadata object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">input_data</span>
+
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+<div class="viewcode-block" id="GridAnnual.update_history">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.update_history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the history metadata</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            Message to be added to history</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.write_grid">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.write_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the grid to file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: Path</span>
+<span class="sd">            Filename to write grid to</span>
+<span class="sd">        metadata_filename: Path</span>
+<span class="sd">            Filename to write metadata to</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Optional name to give the data set being written. Note that names should be unique in any</span>
+<span class="sd">            data archive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">metadata_filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;reader&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;reader_standard_grid&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;fetcher&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fetcher_no_url&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote to file </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">write_metadata</span><span class="p">(</span><span class="n">metadata_filename</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.select_year_range">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.select_year_range">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_year_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a particular range of consecutive years from the data set and throw away the rest.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_year: int</span>
+<span class="sd">            First year of selection</span>
+<span class="sd">        end_year: int</span>
+<span class="sd">            Final year of selction</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridAnnual</span>
+<span class="sd">            Returns a :class:`GridAnnual` containing only data within the specified year range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">start_year</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;=</span> <span class="n">end_year</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Selected year range </span><span class="si">{</span><span class="n">start_year</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">end_year</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.get_year_range">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.get_year_range">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_year_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a range of consecutive years from the data set.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_year: int</span>
+<span class="sd">            start year</span>
+<span class="sd">        end_year: int</span>
+<span class="sd">            end year</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridAnnual</span>
+<span class="sd">            Returns a :class:`GridAnnual` containing only data within the specified year range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">out</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">start_year</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;=</span> <span class="n">end_year</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Selected year range </span><span class="si">{</span><span class="n">start_year</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">end_year</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.rank">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a data set where the values are the ranks of each grid cell value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridAnnual</span>
+<span class="sd">            Return a :class:`GridAnnual` containing the values as ranks from highest (1) to lowest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">out_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">72</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">36</span><span class="p">)):</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">]</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">rank_array</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+            <span class="n">out_grid</span><span class="p">[:,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">]</span> <span class="o">=</span> <span class="n">rank</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">out_grid</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.get_start_year">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.get_start_year">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the first year in the dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            First year in the dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">start_date</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.get_end_year">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.get_end_year">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_end_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the last year in the dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Last year in the data set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">end_date</span></div>
+
+
+<div class="viewcode-block" id="GridAnnual.running_average">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.GridAnnual.running_average">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">running_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate an n_year running average of the data in the dataset</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_year: int</span>
+<span class="sd">            Number of years for which the running average is calculated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GridAnnual</span>
+<span class="sd">            Annual gridded dataset which contains the running averages</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">n_year</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_history</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Calculate rolling </span><span class="si">{</span><span class="n">n_year</span><span class="si">}</span><span class="s1">-year average&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_start_and_end_year">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.get_start_and_end_year">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GridAnnual</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a list of :class:`GridAnnual` datasets, find the earliest start year and the latest end year</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[GridAnnual]</span>
+<span class="sd">        List of datasets for which we want to find the first and last year</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[int, int]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_dates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">end_dates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">all_datasets</span><span class="p">:</span>
+        <span class="n">start_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_start_year</span><span class="p">())</span>
+        <span class="n">end_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_end_year</span><span class="p">())</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_dates</span><span class="p">)</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">end_dates</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span></div>
+
+
+
+<div class="viewcode-block" id="process_datasets">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.process_datasets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_datasets</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GridAnnual</span><span class="p">],</span> <span class="n">grid_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GridAnnual</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the median or range (depending on selected type) of a list of :class:`GridAnnual` data sets.</span>
+<span class="sd">    Medians are calculated on a grid cell by grid cell basis based on all available data in the</span>
+<span class="sd">    list of data sets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[GridAnnual]</span>
+<span class="sd">        list of GridAnnual data sets</span>
+<span class="sd">    grid_type: str</span>
+<span class="sd">        Either &#39;median&#39; or &#39;range&#39;</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    GridAnnual</span>
+<span class="sd">        Data set containing the median (or half-range) values from all the data sets supplied</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">get_start_and_end_year</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+    <span class="n">number_of_years</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">start_date</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># create a dataset from the earliest start date to the latest end date</span>
+    <span class="n">out_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">number_of_years</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">72</span><span class="p">))</span>
+
+    <span class="c1"># for each time step calculate the median of available data sets.</span>
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">number_of_years</span><span class="p">):</span>
+        <span class="n">n_data_sets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">)</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_data_sets</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">72</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">):</span>
+            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_year_range</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tas_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">for</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">72</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">36</span><span class="p">)):</span>
+            <span class="n">select</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[:,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
+                <span class="n">out_grid</span><span class="p">[</span><span class="n">year</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">select</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">select</span><span class="p">)])</span>
+            <span class="k">elif</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span>
+                <span class="n">full_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">select</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">select</span><span class="p">)])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">select</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">select</span><span class="p">)])</span>
+                <span class="n">out_grid</span><span class="p">[</span><span class="n">year</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">]</span> <span class="o">=</span> <span class="n">full_range</span> <span class="o">/</span> <span class="mf">2.</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">make_standard_grid</span><span class="p">(</span><span class="n">out_grid</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_date</span><span class="p">),</span> <span class="s1">&#39;1YS&#39;</span><span class="p">,</span> <span class="n">number_of_years</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.year&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">GridAnnual</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">all_datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<div class="viewcode-block" id="median_of_datasets">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.median_of_datasets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">median_of_datasets</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GridAnnual</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GridAnnual</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the median of a list of :class:`GridAnnual` data sets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[GridAnnual]</span>
+<span class="sd">        List of :class:`GridAnnual` datasets from which the medians will be calculated.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    GridAnnual</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">process_datasets</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="range_of_datasets">
+<a class="viewcode-back" href="../../../climind.data_types.html#climind.data_types.grid.range_of_datasets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">range_of_datasets</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GridAnnual</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GridAnnual</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the half-range of a list of :class:`GridAnnual` data sets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_datasets: List[GridAnnual]</span>
+<span class="sd">        List of :class:`GridAnnual` datasets from which the ranges will be calculated.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    GridAnnual</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">process_datasets</span><span class="p">(</span><span class="n">all_datasets</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

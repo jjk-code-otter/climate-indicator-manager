@@ -1,0 +1,61 @@
+scripts.sea\_ice package
+========================
+
+Submodules
+----------
+
+scripts.sea\_ice.arctic\_sea\_ice\_plot module
+----------------------------------------------
+
+.. automodule:: scripts.sea_ice.arctic_sea_ice_plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sea\_ice.climate\_service\_pies module
+----------------------------------------------
+
+.. automodule:: scripts.sea_ice.climate_service_pies
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sea\_ice.combined\_arctic\_antarctic module
+---------------------------------------------------
+
+.. automodule:: scripts.sea_ice.combined_arctic_antarctic
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sea\_ice.compare\_actual\_anomaly\_ice module
+-----------------------------------------------------
+
+.. automodule:: scripts.sea_ice.compare_actual_anomaly_ice
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sea\_ice.compare\_nsidc\_osisaf module
+----------------------------------------------
+
+.. automodule:: scripts.sea_ice.compare_nsidc_osisaf
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.sea\_ice.daily\_sea\_ice module
+---------------------------------------
+
+.. automodule:: scripts.sea_ice.daily_sea_ice
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts.sea_ice
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.fetchers.fetcher_jra55_grid &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.fetchers.fetcher_jra55_grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.fetchers.fetcher_jra55_grid</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Set of scripts to download the JRA-55 gridded data. Adapted from the scripts</span>
+<span class="sd">provided by UCAR. Data are stored by year up till a certain point and by</span>
+<span class="sd">month for near-real time data thereafter. Credentials are needed (see fetch function)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_opener</span>
+
+
+<div class="viewcode-block" id="make_realtime_file_list">
+<a class="viewcode-back" href="../../../climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.make_realtime_file_list">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_realtime_file_list</span><span class="p">(</span><span class="n">first_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">final_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a list of monthly real-time filenames between the two specified years.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    first_year: int</span>
+<span class="sd">        Year to start generation</span>
+<span class="sd">    final_year: int</span>
+<span class="sd">        Year to end generation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[str]</span>
+<span class="sd">        List of filenames for real-time data between the specified years</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filelist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">first_year</span><span class="p">,</span> <span class="n">final_year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)):</span>
+        <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;anl_surf125/</span><span class="si">{</span><span class="n">year</span><span class="si">}{</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">/anl_surf125.</span><span class="si">{</span><span class="n">year</span><span class="si">}{</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filelist</span></div>
+
+
+
+<div class="viewcode-block" id="make_file_list">
+<a class="viewcode-back" href="../../../climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.make_file_list">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_file_list</span><span class="p">(</span><span class="n">first_year</span><span class="p">,</span> <span class="n">final_year</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a list of annual archived filenames between the two specified years.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    first_year: int</span>
+<span class="sd">        Year to start generation</span>
+<span class="sd">    final_year: int</span>
+<span class="sd">        Year to end generation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[str]</span>
+<span class="sd">        List of filenames for archived data between the specified years</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filelist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_year</span><span class="p">,</span> <span class="n">final_year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;anl_surf125/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">/anl_surf125.011_tmp.</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">12&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filelist</span></div>
+
+
+
+<div class="viewcode-block" id="download_file">
+<a class="viewcode-back" href="../../../climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.download_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_base</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+<span class="sd">        URL of the file to be downloaded</span>
+<span class="sd">    file_base: str</span>
+<span class="sd">        Name of the output file to which the data will be written</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">opener</span> <span class="o">=</span> <span class="n">build_opener</span><span class="p">()</span>
+    <span class="n">ofile</span> <span class="o">=</span> <span class="n">file_base</span>
+    <span class="n">infile</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">infile</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_files">
+<a class="viewcode-back" href="../../../climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.get_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">web_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For each file in a file list, check if it already exists on the system and if it does</span>
+<span class="sd">    not, attempt to download it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filelist: List[str]</span>
+<span class="sd">        List of files to be downloaded</span>
+<span class="sd">    web_path: str</span>
+<span class="sd">        URL of the directory that contains the files.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">web_path</span> <span class="o">+</span> <span class="n">file</span>
+        <span class="n">file_base</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;ManagedData&quot;</span> <span class="o">/</span> <span class="s2">&quot;Data&quot;</span> <span class="o">/</span> <span class="s2">&quot;JRA-55&quot;</span> <span class="o">/</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">file_base</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File already downloaded&quot;</span><span class="p">,</span> <span class="n">file_base</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Downloading&#39;</span><span class="p">,</span> <span class="n">file_base</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">file_base</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to download&#39;</span><span class="p">,</span> <span class="n">file_base</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fetch">
+<a class="viewcode-back" href="../../../climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.fetch">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">_filename</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get JRA-55 files from UCAR. Requires the credentials:</span>
+
+<span class="sd">    * username, specified by entry in .env UCAR_USER</span>
+<span class="sd">    * password, specified by entry in .env UCAR_PSWD</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _:</span>
+<span class="sd">        dummy input to match interface.</span>
+<span class="sd">    out_dir: Path</span>
+<span class="sd">        Path of the directory to which the output will be written.</span>
+<span class="sd">    _filename: str</span>
+<span class="sd">        Unused filename argument</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Real time</span>
+    <span class="n">web_path</span> <span class="o">=</span> <span class="s1">&#39;https://data.rda.ucar.edu/ds628.9/&#39;</span>
+    <span class="n">filelist</span> <span class="o">=</span> <span class="n">make_realtime_file_list</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">2023</span><span class="p">)</span>
+    <span class="n">get_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">web_path</span><span class="p">)</span>
+
+    <span class="c1"># Archive</span>
+    <span class="n">web_path</span> <span class="o">=</span> <span class="s1">&#39;https://data.rda.ucar.edu/ds628.1/&#39;</span>
+    <span class="n">filelist</span> <span class="o">=</span> <span class="n">make_file_list</span><span class="p">(</span><span class="mi">1958</span><span class="p">,</span> <span class="mi">2020</span><span class="p">)</span>
+    <span class="n">get_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">web_path</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,20 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>climind package &mdash; Climind 1.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>climind package &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -25,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Climind
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Climind
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -41,6 +46,7 @@
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-climind.definitions">climind.definitions module</a></li>
+<li><a class="reference internal" href="#module-climind">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -58,7 +64,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">climind package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/climind.rst.txt" rel="nofollow"> View page source</a>
@@ -69,116 +75,959 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-climind">
-<span id="climind-package"></span><h1>climind package<a class="headerlink" href="#module-climind" title="Permalink to this heading"></a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+  <section id="climind-package">
+<h1>climind package<a class="headerlink" href="#climind-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="climind.config.html">climind.config package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.config.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.config.html#module-climind.config.config">climind.config.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.config.html#module-climind.config.config">climind.config.config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.config.html#climind.config.config.check_setup"><code class="docutils literal notranslate"><span class="pre">check_setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.config.html#module-climind.config">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.data_manager.html">climind.data_manager package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#module-climind.data_manager.metadata">climind.data_manager.metadata module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#module-climind.data_manager.processing">climind.data_manager.processing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#module-climind.data_manager.metadata">climind.data_manager.metadata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata"><code class="docutils literal notranslate"><span class="pre">BaseMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.metadata"><code class="docutils literal notranslate"><span class="pre">BaseMetadata.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.fill_string"><code class="docutils literal notranslate"><span class="pre">BaseMetadata.fill_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.BaseMetadata.match_metadata"><code class="docutils literal notranslate"><span class="pre">BaseMetadata.match_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CollectionMetadata"><code class="docutils literal notranslate"><span class="pre">CollectionMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata"><code class="docutils literal notranslate"><span class="pre">CombinedMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.creation_message"><code class="docutils literal notranslate"><span class="pre">CombinedMetadata.creation_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.match_metadata"><code class="docutils literal notranslate"><span class="pre">CombinedMetadata.match_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.CombinedMetadata.write_metadata"><code class="docutils literal notranslate"><span class="pre">CombinedMetadata.write_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.DatasetMetadata"><code class="docutils literal notranslate"><span class="pre">DatasetMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.DatasetMetadata.creation_message"><code class="docutils literal notranslate"><span class="pre">DatasetMetadata.creation_message()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.metadata.list_match"><code class="docutils literal notranslate"><span class="pre">list_match()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#module-climind.data_manager.processing">climind.data_manager.processing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive"><code class="docutils literal notranslate"><span class="pre">DataArchive</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.collections"><code class="docutils literal notranslate"><span class="pre">DataArchive.collections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.add_collection"><code class="docutils literal notranslate"><span class="pre">DataArchive.add_collection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.download"><code class="docutils literal notranslate"><span class="pre">DataArchive.download()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.from_directory"><code class="docutils literal notranslate"><span class="pre">DataArchive.from_directory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.read_datasets"><code class="docutils literal notranslate"><span class="pre">DataArchive.read_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataArchive.select"><code class="docutils literal notranslate"><span class="pre">DataArchive.select()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection"><code class="docutils literal notranslate"><span class="pre">DataCollection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.global_attributes"><code class="docutils literal notranslate"><span class="pre">DataCollection.global_attributes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.datasets"><code class="docutils literal notranslate"><span class="pre">DataCollection.datasets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.add_dataset"><code class="docutils literal notranslate"><span class="pre">DataCollection.add_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.download"><code class="docutils literal notranslate"><span class="pre">DataCollection.download()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.from_file"><code class="docutils literal notranslate"><span class="pre">DataCollection.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.get_collection_dir"><code class="docutils literal notranslate"><span class="pre">DataCollection.get_collection_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.match_metadata"><code class="docutils literal notranslate"><span class="pre">DataCollection.match_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.read_datasets"><code class="docutils literal notranslate"><span class="pre">DataCollection.read_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataCollection.to_file"><code class="docutils literal notranslate"><span class="pre">DataCollection.to_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet"><code class="docutils literal notranslate"><span class="pre">DataSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.name"><code class="docutils literal notranslate"><span class="pre">DataSet.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.metadata"><code class="docutils literal notranslate"><span class="pre">DataSet.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.global_metadata"><code class="docutils literal notranslate"><span class="pre">DataSet.global_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.download"><code class="docutils literal notranslate"><span class="pre">DataSet.download()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.match_metadata"><code class="docutils literal notranslate"><span class="pre">DataSet.match_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.DataSet.read_dataset"><code class="docutils literal notranslate"><span class="pre">DataSet.read_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_manager.html#climind.data_manager.processing.get_function"><code class="docutils literal notranslate"><span class="pre">get_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_manager.html#module-climind.data_manager">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.data_types.html">climind.data_types package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#module-climind.data_types.grid">climind.data_types.grid module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#module-climind.data_types.timeseries">climind.data_types.timeseries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#module-climind.data_types.grid">climind.data_types.grid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual"><code class="docutils literal notranslate"><span class="pre">GridAnnual</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.get_end_year"><code class="docutils literal notranslate"><span class="pre">GridAnnual.get_end_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.get_start_year"><code class="docutils literal notranslate"><span class="pre">GridAnnual.get_start_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.get_year_range"><code class="docutils literal notranslate"><span class="pre">GridAnnual.get_year_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.rank"><code class="docutils literal notranslate"><span class="pre">GridAnnual.rank()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.running_average"><code class="docutils literal notranslate"><span class="pre">GridAnnual.running_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.select_year_range"><code class="docutils literal notranslate"><span class="pre">GridAnnual.select_year_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.update_history"><code class="docutils literal notranslate"><span class="pre">GridAnnual.update_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridAnnual.write_grid"><code class="docutils literal notranslate"><span class="pre">GridAnnual.write_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly"><code class="docutils literal notranslate"><span class="pre">GridMonthly</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average"><code class="docutils literal notranslate"><span class="pre">GridMonthly.calculate_regional_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_regional_average_missing"><code class="docutils literal notranslate"><span class="pre">GridMonthly.calculate_regional_average_missing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.calculate_time_mean"><code class="docutils literal notranslate"><span class="pre">GridMonthly.calculate_time_mean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.get_end_year"><code class="docutils literal notranslate"><span class="pre">GridMonthly.get_end_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.get_last_month"><code class="docutils literal notranslate"><span class="pre">GridMonthly.get_last_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.get_start_year"><code class="docutils literal notranslate"><span class="pre">GridMonthly.get_start_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.make_annual"><code class="docutils literal notranslate"><span class="pre">GridMonthly.make_annual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.rebaseline"><code class="docutils literal notranslate"><span class="pre">GridMonthly.rebaseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.select_period"><code class="docutils literal notranslate"><span class="pre">GridMonthly.select_period()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.select_year_and_month"><code class="docutils literal notranslate"><span class="pre">GridMonthly.select_year_and_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.GridMonthly.update_history"><code class="docutils literal notranslate"><span class="pre">GridMonthly.update_history()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.get_1d_transfer"><code class="docutils literal notranslate"><span class="pre">get_1d_transfer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.get_start_and_end_year"><code class="docutils literal notranslate"><span class="pre">get_start_and_end_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.make_standard_grid"><code class="docutils literal notranslate"><span class="pre">make_standard_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.make_xarray"><code class="docutils literal notranslate"><span class="pre">make_xarray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.median_of_datasets"><code class="docutils literal notranslate"><span class="pre">median_of_datasets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.process_datasets"><code class="docutils literal notranslate"><span class="pre">process_datasets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.range_of_datasets"><code class="docutils literal notranslate"><span class="pre">range_of_datasets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.rank_array"><code class="docutils literal notranslate"><span class="pre">rank_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.grid.simple_regrid"><code class="docutils literal notranslate"><span class="pre">simple_regrid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#module-climind.data_types.timeseries">climind.data_types.timeseries module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection"><code class="docutils literal notranslate"><span class="pre">AveragesCollection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.best_estimate"><code class="docutils literal notranslate"><span class="pre">AveragesCollection.best_estimate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.count"><code class="docutils literal notranslate"><span class="pre">AveragesCollection.count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.lower_range"><code class="docutils literal notranslate"><span class="pre">AveragesCollection.lower_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.range"><code class="docutils literal notranslate"><span class="pre">AveragesCollection.range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.AveragesCollection.upper_range"><code class="docutils literal notranslate"><span class="pre">AveragesCollection.upper_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries"><code class="docutils literal notranslate"><span class="pre">TimeSeries</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.add_offset"><code class="docutils literal notranslate"><span class="pre">TimeSeries.add_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.get_first_and_last_year"><code class="docutils literal notranslate"><span class="pre">TimeSeries.get_first_and_last_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.get_string_date_range"><code class="docutils literal notranslate"><span class="pre">TimeSeries.get_string_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.manually_set_baseline"><code class="docutils literal notranslate"><span class="pre">TimeSeries.manually_set_baseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.select_year_range"><code class="docutils literal notranslate"><span class="pre">TimeSeries.select_year_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.update_history"><code class="docutils literal notranslate"><span class="pre">TimeSeries.update_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeries.write_generic_csv"><code class="docutils literal notranslate"><span class="pre">TimeSeries.write_generic_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.df"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.metadata"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.add_year"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.add_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.generate_dates"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.generate_dates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_rank_from_year"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_rank_from_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_string_date_range"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_string_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_uncertainty_from_year"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_uncertainty_from_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_value_from_year"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_value_from_year()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_year_axis"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_year_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.get_year_from_rank"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.get_year_from_rank()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.lowess"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.lowess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.make_from_df"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.make_from_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.rebaseline"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.rebaseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.record_margins"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.record_margins()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_lowess"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.running_lowess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_mean"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.running_mean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_stdev"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.running_stdev()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.running_trend"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.running_trend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.select_decade"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.select_decade()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.time_average"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.time_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.write_csv"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.write_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesAnnual.write_simple_csv"><code class="docutils literal notranslate"><span class="pre">TimeSeriesAnnual.write_simple_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.fill_daily"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.fill_daily()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.generate_dates"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.generate_dates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.get_climatology"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.get_climatology()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.get_start_and_end_dates"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.get_start_and_end_dates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.get_string_date_range"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.get_string_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.get_year_axis"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.get_year_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.make_monthly"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.make_monthly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.rebaseline"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.rebaseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesIrregular.write_csv"><code class="docutils literal notranslate"><span class="pre">TimeSeriesIrregular.write_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.df"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.metadata"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.calculate_climatology"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.calculate_climatology()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.generate_dates"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.generate_dates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_rank_from_year_and_month"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_rank_from_year_and_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_start_and_end_dates"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_start_and_end_dates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_string_date_range"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_string_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_uncertainty"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_uncertainty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_value"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.get_year_axis"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.get_year_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.lowess"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.lowess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.make_annual"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.make_annual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.make_annual_by_selecting_month"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.make_annual_by_selecting_month()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.make_from_df"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.make_from_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.rebaseline"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.rebaseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.running_mean"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.running_mean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.write_csv"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.write_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.TimeSeriesMonthly.zero_on_month"><code class="docutils literal notranslate"><span class="pre">TimeSeriesMonthly.zero_on_month()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.create_common_dataframe"><code class="docutils literal notranslate"><span class="pre">create_common_dataframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.equalise_datasets"><code class="docutils literal notranslate"><span class="pre">equalise_datasets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.get_list_of_unique_variables"><code class="docutils literal notranslate"><span class="pre">get_list_of_unique_variables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.get_start_and_end_year"><code class="docutils literal notranslate"><span class="pre">get_start_and_end_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.log_activity"><code class="docutils literal notranslate"><span class="pre">log_activity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.make_combined_series"><code class="docutils literal notranslate"><span class="pre">make_combined_series()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.superset_dataset_list"><code class="docutils literal notranslate"><span class="pre">superset_dataset_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.write_dataset_summary_file"><code class="docutils literal notranslate"><span class="pre">write_dataset_summary_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.data_types.html#climind.data_types.timeseries.write_dataset_summary_file_with_metadata"><code class="docutils literal notranslate"><span class="pre">write_dataset_summary_file_with_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.data_types.html#module-climind.data_types">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.fetchers.html">climind.fetchers package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_cds">climind.fetchers.fetcher_cds module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_cmems_ftp">climind.fetchers.fetcher_cmems_ftp module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_ersst">climind.fetchers.fetcher_ersst module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_ftp">climind.fetchers.fetcher_ftp module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_grace">climind.fetchers.fetcher_grace module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_jra55_grid">climind.fetchers.fetcher_jra55_grid module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_no_url">climind.fetchers.fetcher_no_url module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_noaaglobaltemp">climind.fetchers.fetcher_noaaglobaltemp module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_promice">climind.fetchers.fetcher_promice module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_standard_url">climind.fetchers.fetcher_standard_url module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_url_with_backsearch">climind.fetchers.fetcher_url_with_backsearch module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_utils">climind.fetchers.fetcher_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_cds">climind.fetchers.fetcher_cds module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cds.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cds.fetch_to_year"><code class="docutils literal notranslate"><span class="pre">fetch_to_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cds.pick_months"><code class="docutils literal notranslate"><span class="pre">pick_months()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_cds_ensemble">climind.fetchers.fetcher_cds_ensemble module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cds_ensemble.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cds_ensemble.fetch_year"><code class="docutils literal notranslate"><span class="pre">fetch_year()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_cmems_ftp">climind.fetchers.fetcher_cmems_ftp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_cmems_ftp.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_ersst">climind.fetchers.fetcher_ersst module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_ersst.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_ftp">climind.fetchers.fetcher_ftp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_ftp.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_gpcc">climind.fetchers.fetcher_gpcc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_gpcc.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_gpcc.fetch_year"><code class="docutils literal notranslate"><span class="pre">fetch_year()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_gpcc_quantile">climind.fetchers.fetcher_gpcc_quantile module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_gpcc_quantile.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_gpcc_quantile.get_file"><code class="docutils literal notranslate"><span class="pre">get_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_gpcc_quantile.get_time_span"><code class="docutils literal notranslate"><span class="pre">get_time_span()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_grace">climind.fetchers.fetcher_grace module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_grace.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_grace_aws">climind.fetchers.fetcher_grace_aws module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_jaxa">climind.fetchers.fetcher_jaxa module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jaxa.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_jra3q_grid">climind.fetchers.fetcher_jra3q_grid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.download_file"><code class="docutils literal notranslate"><span class="pre">download_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.get_files"><code class="docutils literal notranslate"><span class="pre">get_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.make_file_list"><code class="docutils literal notranslate"><span class="pre">make_file_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.make_realtime_file_list"><code class="docutils literal notranslate"><span class="pre">make_realtime_file_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra3q_grid.process_file"><code class="docutils literal notranslate"><span class="pre">process_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_jra55_grid">climind.fetchers.fetcher_jra55_grid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.download_file"><code class="docutils literal notranslate"><span class="pre">download_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.get_files"><code class="docutils literal notranslate"><span class="pre">get_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.make_file_list"><code class="docutils literal notranslate"><span class="pre">make_file_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_jra55_grid.make_realtime_file_list"><code class="docutils literal notranslate"><span class="pre">make_realtime_file_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_no_url">climind.fetchers.fetcher_no_url module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_no_url.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_noaaglobaltemp">climind.fetchers.fetcher_noaaglobaltemp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_noaaglobaltemp.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_promice">climind.fetchers.fetcher_promice module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_promice.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_standard_url">climind.fetchers.fetcher_standard_url module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_standard_url.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_standard_url_with_rename">climind.fetchers.fetcher_standard_url_with_rename module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_standard_url_with_rename.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_url_with_backsearch">climind.fetchers.fetcher_url_with_backsearch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_url_with_backsearch.fetch"><code class="docutils literal notranslate"><span class="pre">fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_url_with_backsearch.filename_from_url"><code class="docutils literal notranslate"><span class="pre">filename_from_url()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers.fetcher_utils">climind.fetchers.fetcher_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.dir_and_filename_from_url"><code class="docutils literal notranslate"><span class="pre">dir_and_filename_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.filename_from_url"><code class="docutils literal notranslate"><span class="pre">filename_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.fill_year_month"><code class="docutils literal notranslate"><span class="pre">fill_year_month()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.get_ftp_host_and_directory_from_url"><code class="docutils literal notranslate"><span class="pre">get_ftp_host_and_directory_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.get_n_months_back"><code class="docutils literal notranslate"><span class="pre">get_n_months_back()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.time_tag_string"><code class="docutils literal notranslate"><span class="pre">time_tag_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.fetchers.html#climind.fetchers.fetcher_utils.url_from_filename"><code class="docutils literal notranslate"><span class="pre">url_from_filename()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.fetchers.html#module-climind.fetchers">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.plotters.html">climind.plotters package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#module-climind.plotters.plot_types">climind.plotters.plot_types module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#module-climind.plotters.plot_utils">climind.plotters.plot_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#module-climind.plotters.plot_types">climind.plotters.plot_types module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.accumulate"><code class="docutils literal notranslate"><span class="pre">accumulate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.add_data_sets"><code class="docutils literal notranslate"><span class="pre">add_data_sets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.add_labels"><code class="docutils literal notranslate"><span class="pre">add_labels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.after_plot"><code class="docutils literal notranslate"><span class="pre">after_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.animated_plot"><code class="docutils literal notranslate"><span class="pre">animated_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.antarctic_sea_ice_plot"><code class="docutils literal notranslate"><span class="pre">antarctic_sea_ice_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.arctic_sea_ice_plot"><code class="docutils literal notranslate"><span class="pre">arctic_sea_ice_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.cherry_plot"><code class="docutils literal notranslate"><span class="pre">cherry_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.daily_sea_ice_plot"><code class="docutils literal notranslate"><span class="pre">daily_sea_ice_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dark_plot"><code class="docutils literal notranslate"><span class="pre">dark_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_map"><code class="docutils literal notranslate"><span class="pre">dashboard_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_generic"><code class="docutils literal notranslate"><span class="pre">dashboard_map_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_pastel"><code class="docutils literal notranslate"><span class="pre">dashboard_map_pastel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_simplified"><code class="docutils literal notranslate"><span class="pre">dashboard_map_simplified()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_map_single"><code class="docutils literal notranslate"><span class="pre">dashboard_map_single()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_rank_map"><code class="docutils literal notranslate"><span class="pre">dashboard_rank_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.dashboard_uncertainty_map"><code class="docutils literal notranslate"><span class="pre">dashboard_uncertainty_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.decade_plot"><code class="docutils literal notranslate"><span class="pre">decade_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.equivalence"><code class="docutils literal notranslate"><span class="pre">equivalence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.get_levels_and_palette"><code class="docutils literal notranslate"><span class="pre">get_levels_and_palette()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.marine_heatwave_plot"><code class="docutils literal notranslate"><span class="pre">marine_heatwave_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.monthly_plot"><code class="docutils literal notranslate"><span class="pre">monthly_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.neat_plot"><code class="docutils literal notranslate"><span class="pre">neat_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.nice_map"><code class="docutils literal notranslate"><span class="pre">nice_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.plot_map_by_year_and_month"><code class="docutils literal notranslate"><span class="pre">plot_map_by_year_and_month()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.preindustrial_summary_plot"><code class="docutils literal notranslate"><span class="pre">preindustrial_summary_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.quick_and_dirty_map"><code class="docutils literal notranslate"><span class="pre">quick_and_dirty_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.rank_by_dataset"><code class="docutils literal notranslate"><span class="pre">rank_by_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.records_plot"><code class="docutils literal notranslate"><span class="pre">records_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.regional_dashboard_map"><code class="docutils literal notranslate"><span class="pre">regional_dashboard_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.regional_dashboard_map_single"><code class="docutils literal notranslate"><span class="pre">regional_dashboard_map_single()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.regional_dashboard_uncertainty_map"><code class="docutils literal notranslate"><span class="pre">regional_dashboard_uncertainty_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.rising_tide_multiple_plot"><code class="docutils literal notranslate"><span class="pre">rising_tide_multiple_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.rising_tide_plot"><code class="docutils literal notranslate"><span class="pre">rising_tide_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.set_xaxis"><code class="docutils literal notranslate"><span class="pre">set_xaxis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.set_yaxis"><code class="docutils literal notranslate"><span class="pre">set_yaxis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.show_premade_image"><code class="docutils literal notranslate"><span class="pre">show_premade_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.simplified_line"><code class="docutils literal notranslate"><span class="pre">simplified_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.spark_line"><code class="docutils literal notranslate"><span class="pre">spark_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.trends_plot"><code class="docutils literal notranslate"><span class="pre">trends_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.wave_multiple_plot"><code class="docutils literal notranslate"><span class="pre">wave_multiple_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.wave_plot"><code class="docutils literal notranslate"><span class="pre">wave_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.wmo_monthly_plot"><code class="docutils literal notranslate"><span class="pre">wmo_monthly_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_types.wmo_plot"><code class="docutils literal notranslate"><span class="pre">wmo_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#module-climind.plotters.plot_utils">climind.plotters.plot_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.calculate_highest_year_and_values"><code class="docutils literal notranslate"><span class="pre">calculate_highest_year_and_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.calculate_ranks"><code class="docutils literal notranslate"><span class="pre">calculate_ranks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.calculate_trends"><code class="docutils literal notranslate"><span class="pre">calculate_trends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.calculate_values"><code class="docutils literal notranslate"><span class="pre">calculate_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.calculate_values_ipcc_style"><code class="docutils literal notranslate"><span class="pre">calculate_values_ipcc_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.caption_builder"><code class="docutils literal notranslate"><span class="pre">caption_builder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.get_first_and_last_years"><code class="docutils literal notranslate"><span class="pre">get_first_and_last_years()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.map_caption_builder"><code class="docutils literal notranslate"><span class="pre">map_caption_builder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.plotters.html#climind.plotters.plot_utils.set_lo_hi_ticks"><code class="docutils literal notranslate"><span class="pre">set_lo_hi_ticks()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.plotters.html#module-climind.plotters">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.readers.html">climind.readers package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.readers.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.generic_reader">climind.readers.generic_reader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_aviso">climind.readers.reader_aviso module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_aviso_ftp">climind.readers.reader_aviso_ftp module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_badc_csv">climind.readers.reader_badc_csv module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_berkeley">climind.readers.reader_berkeley module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_berkeley_ts">climind.readers.reader_berkeley_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cheng">climind.readers.reader_cheng module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_clsat">climind.readers.reader_clsat module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cmems_ph">climind.readers.reader_cmems_ph module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_era5">climind.readers.reader_era5 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gcos">climind.readers.reader_gcos module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gistemp_ts">climind.readers.reader_gistemp_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gml">climind.readers.reader_gml module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_grace">climind.readers.reader_grace module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gsfc">climind.readers.reader_gsfc module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_hadcrut_ts">climind.readers.reader_hadcrut_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_hadsst_ts">climind.readers.reader_hadsst_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie">climind.readers.reader_imbie module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie_2021_antarctica">climind.readers.reader_imbie_2021_antarctica module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie_antarctica">climind.readers.reader_imbie_antarctica module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_ipcc_ts">climind.readers.reader_ipcc_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_ishii">climind.readers.reader_ishii module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_jra55">climind.readers.reader_jra55 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_kennaook">climind.readers.reader_kennaook module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_levitus">climind.readers.reader_levitus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_mauna_loa">climind.readers.reader_mauna_loa module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_mhw_ts">climind.readers.reader_mhw_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_interim_ts">climind.readers.reader_noaa_interim_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_ts">climind.readers.reader_noaa_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaaglobaltemp">climind.readers.reader_noaaglobaltemp module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_nsidc">climind.readers.reader_nsidc module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_osisaf">climind.readers.reader_osisaf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_promice">climind.readers.reader_promice module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_standard_grid">climind.readers.reader_standard_grid module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_test">climind.readers.reader_test module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_rate_ts">climind.readers.reader_wdcgg_rate_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_ts">climind.readers.reader_wdcgg_ts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_ts_update">climind.readers.reader_wdcgg_ts_update module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wgms">climind.readers.reader_wgms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.generic_reader">climind.readers.generic_reader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader.get_last_modified_time"><code class="docutils literal notranslate"><span class="pre">get_last_modified_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader.get_module"><code class="docutils literal notranslate"><span class="pre">get_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader.get_reader_script_name"><code class="docutils literal notranslate"><span class="pre">get_reader_script_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.generic_reader_utils">climind.readers.generic_reader_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader_utils.find_latest"><code class="docutils literal notranslate"><span class="pre">find_latest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.generic_reader_utils.get_latest_filename_and_url"><code class="docutils literal notranslate"><span class="pre">get_latest_filename_and_url()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_aviso">climind.readers.reader_aviso module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_aviso.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_aviso_ftp">climind.readers.reader_aviso_ftp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_aviso_ftp.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_aviso_ll">climind.readers.reader_aviso_ll module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_aviso_ll.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_badc_csv">climind.readers.reader_badc_csv module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_badc_csv.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_badc_csv.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_berkeley">climind.readers.reader_berkeley module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_berkeley_hires">climind.readers.reader_berkeley_hires module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_hires.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_hires.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_berkeley_ts">climind.readers.reader_berkeley_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_berkeley_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_blair_berkeley">climind.readers.reader_blair_berkeley module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_blair_berkeley.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_calvert">climind.readers.reader_calvert module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_calvert.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_calvert.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_calvert.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_calvert.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_calvert.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cds_sea_level">climind.readers.reader_cds_sea_level module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cds_sea_level.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cds_sea_level.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cds_sea_level.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cheng">climind.readers.reader_cheng module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cheng.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cheng.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cheng_update">climind.readers.reader_cheng_update module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cheng_update.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cherry">climind.readers.reader_cherry module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cherry.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_climate_reanalyzer">climind.readers.reader_climate_reanalyzer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_climate_reanalyzer.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_climtrace_ts">climind.readers.reader_climtrace_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_climtrace_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_clsat">climind.readers.reader_clsat module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_clsat.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_clsat.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cmems_ph">climind.readers.reader_cmems_ph module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_ph.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_ph.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cmems_sealevel">climind.readers.reader_cmems_sealevel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_sealevel.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cmems_trend">climind.readers.reader_cmems_trend module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_trend.gread_ts"><code class="docutils literal notranslate"><span class="pre">gread_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_trend.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmems_trend.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cmst">climind.readers.reader_cmst module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmst.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmst.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmst.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmst.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cmst.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cobe_stemp_ts">climind.readers.reader_cobe_stemp_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cobe_stemp_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_collab_ts">climind.readers.reader_collab_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_collab_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_colorado_sealevel">climind.readers.reader_colorado_sealevel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_colorado_sealevel.convert_partial_year"><code class="docutils literal notranslate"><span class="pre">convert_partial_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_colorado_sealevel.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cowtan_and_way_ts">climind.readers.reader_cowtan_and_way_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cowtan_and_way_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cowtan_and_way_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_cpc">climind.readers.reader_cpc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_cpc.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_csiro_sealevel">climind.readers.reader_csiro_sealevel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_csiro_sealevel.convert_partial_year"><code class="docutils literal notranslate"><span class="pre">convert_partial_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_csiro_sealevel.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_dcent_ts">climind.readers.reader_dcent_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_dcent_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_dcent_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_dcent_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_dcent_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_dcent_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_era5">climind.readers.reader_era5 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.find_latest"><code class="docutils literal notranslate"><span class="pre">find_latest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.get_latest_filename_and_url"><code class="docutils literal notranslate"><span class="pre">get_latest_filename_and_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_era5_ensemble">climind.readers.reader_era5_ensemble module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.find_latest"><code class="docutils literal notranslate"><span class="pre">find_latest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.get_latest_filename_and_url"><code class="docutils literal notranslate"><span class="pre">get_latest_filename_and_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_era5_ensemble.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gcos">climind.readers.reader_gcos module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gcos.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gcos.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gcos_temp">climind.readers.reader_gcos_temp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gcos_temp.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gcos_temp.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_getquocs_ts">climind.readers.reader_getquocs_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_getquocs_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_getquocs_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_getquocs_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_getquocs_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_giss_aod">climind.readers.reader_giss_aod module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_giss_aod.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gistemp_ts">climind.readers.reader_gistemp_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.build_transfer"><code class="docutils literal notranslate"><span class="pre">build_transfer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gistemp_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gml">climind.readers.reader_gml module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gml.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gpcc">climind.readers.reader_gpcc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gpcc.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gpcc.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gpcc_quantile">climind.readers.reader_gpcc_quantile module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gpcc_quantile.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gpcc_quantile.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_grace">climind.readers.reader_grace module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_grace.find_latest"><code class="docutils literal notranslate"><span class="pre">find_latest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_grace.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_grace.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_grace.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_gsfc">climind.readers.reader_gsfc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_gsfc.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_hadcrut4_ts">climind.readers.reader_hadcrut4_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut4_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut4_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut4_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut4_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut4_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_hadcrut_ts">climind.readers.reader_hadcrut_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadcrut_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_hadsst_ts">climind.readers.reader_hadsst_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadsst_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_hadsst_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie">climind.readers.reader_imbie module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie_2021_antarctica">climind.readers.reader_imbie_2021_antarctica module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie_2021_antarctica.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie_2021_antarctica.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_imbie_antarctica">climind.readers.reader_imbie_antarctica module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie_antarctica.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_imbie_antarctica.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_ipcc_ts">climind.readers.reader_ipcc_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_ipcc_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_ishii">climind.readers.reader_ishii module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_ishii.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_jaxa">climind.readers.reader_jaxa module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jaxa.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jaxa.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_jra3q">climind.readers.reader_jra3q module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra3q.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_jra55">climind.readers.reader_jra55 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_grid"><code class="docutils literal notranslate"><span class="pre">read_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_jra55.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_kadow_ts">climind.readers.reader_kadow_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kadow_ts.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_kennaook">climind.readers.reader_kennaook module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_kennaook.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_knmi_gmt">climind.readers.reader_knmi_gmt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_knmi_gmt.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_knmi_gmt.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_law_dome">climind.readers.reader_law_dome module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_law_dome.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_law_dome.read_chunk"><code class="docutils literal notranslate"><span class="pre">read_chunk()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_levitus">climind.readers.reader_levitus module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_levitus.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_levitus.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_mauna_loa">climind.readers.reader_mauna_loa module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_mauna_loa.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_mauna_loa.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_mcculloch">climind.readers.reader_mcculloch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_mcculloch.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_mhw_ts">climind.readers.reader_mhw_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_mhw_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_nasa_sealevel">climind.readers.reader_nasa_sealevel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_nasa_sealevel.convert_partial_year"><code class="docutils literal notranslate"><span class="pre">convert_partial_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_nasa_sealevel.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_index">climind.readers.reader_noaa_index module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_index.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_index.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_interim_ts">climind.readers.reader_noaa_interim_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_interim_ts.read_one_month"><code class="docutils literal notranslate"><span class="pre">read_one_month()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_sealevel">climind.readers.reader_noaa_sealevel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_sealevel.convert_partial_year"><code class="docutils literal notranslate"><span class="pre">convert_partial_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_sealevel.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaa_ts">climind.readers.reader_noaa_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_ts.find_latest"><code class="docutils literal notranslate"><span class="pre">find_latest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaa_ts.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_noaaglobaltemp">climind.readers.reader_noaaglobaltemp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_noaaglobaltemp.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_nsidc">climind.readers.reader_nsidc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_nsidc.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_nsidc.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_osisaf">climind.readers.reader_osisaf module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_osisaf.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_osisaf.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_osmc">climind.readers.reader_osmc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_osmc.read_irregular_ts"><code class="docutils literal notranslate"><span class="pre">read_irregular_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_osmc.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_osmc.read_ts"><code class="docutils literal notranslate"><span class="pre">read_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_ozone_watch">climind.readers.reader_ozone_watch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_ozone_watch.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_promice">climind.readers.reader_promice module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_promice.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_promice.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_psl">climind.readers.reader_psl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_psl.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_psl.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_roni">climind.readers.reader_roni module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_roni.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_rss">climind.readers.reader_rss module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_rss.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_rss.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_rutgers">climind.readers.reader_rutgers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_rutgers.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_rutgers.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_standard_grid">climind.readers.reader_standard_grid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_standard_grid.read_annual_grid"><code class="docutils literal notranslate"><span class="pre">read_annual_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_star">climind.readers.reader_star module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_star.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_star.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_test">climind.readers.reader_test module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_test.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_test.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_test.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_test.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_uah">climind.readers.reader_uah module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_uah.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_uah.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_vaccaro_ts">climind.readers.reader_vaccaro_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_vaccaro_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_vaccaro_ts.read_monthly_1x1_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_1x1_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_vaccaro_ts.read_monthly_5x5_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_5x5_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_vaccaro_ts.read_monthly_grid"><code class="docutils literal notranslate"><span class="pre">read_monthly_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_vaccaro_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_velicogna">climind.readers.reader_velicogna module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_velicogna.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_rate_ts">climind.readers.reader_wdcgg_rate_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_rate_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_rate_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_ts">climind.readers.reader_wdcgg_ts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_ts.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_ts.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wdcgg_ts_update">climind.readers.reader_wdcgg_ts_update module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_ts_update.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wdcgg_ts_update.read_monthly_ts"><code class="docutils literal notranslate"><span class="pre">read_monthly_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers.reader_wgms">climind.readers.reader_wgms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.readers.html#climind.readers.reader_wgms.read_annual_ts"><code class="docutils literal notranslate"><span class="pre">read_annual_ts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.readers.html#module-climind.readers">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.stats.html">climind.stats package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.stats.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.stats.html#module-climind.stats.paragraphs">climind.stats.paragraphs module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.stats.html#module-climind.stats.utils">climind.stats.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.stats.html#module-climind.stats.paragraphs">climind.stats.paragraphs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.anomaly_and_rank"><code class="docutils literal notranslate"><span class="pre">anomaly_and_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.anomaly_and_rank_plus_new_base"><code class="docutils literal notranslate"><span class="pre">anomaly_and_rank_plus_new_base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.antarctic_ice_paragraph"><code class="docutils literal notranslate"><span class="pre">antarctic_ice_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.arctic_ice_paragraph"><code class="docutils literal notranslate"><span class="pre">arctic_ice_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.basic_anomaly_and_rank"><code class="docutils literal notranslate"><span class="pre">basic_anomaly_and_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.co2_paragraph"><code class="docutils literal notranslate"><span class="pre">co2_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.co2_paragraph_update"><code class="docutils literal notranslate"><span class="pre">co2_paragraph_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.compare_to_highest_anomaly_and_rank"><code class="docutils literal notranslate"><span class="pre">compare_to_highest_anomaly_and_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.convert_to_percentages"><code class="docutils literal notranslate"><span class="pre">convert_to_percentages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.dataset_name_list"><code class="docutils literal notranslate"><span class="pre">dataset_name_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.fancy_html_units"><code class="docutils literal notranslate"><span class="pre">fancy_html_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.get_last_month"><code class="docutils literal notranslate"><span class="pre">get_last_month()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.glacier_paragraph"><code class="docutils literal notranslate"><span class="pre">glacier_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.global_anomaly_and_rank"><code class="docutils literal notranslate"><span class="pre">global_anomaly_and_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.greenland_ice_sheet"><code class="docutils literal notranslate"><span class="pre">greenland_ice_sheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.greenland_ice_sheet_monthly"><code class="docutils literal notranslate"><span class="pre">greenland_ice_sheet_monthly()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.ice_sheet_monthly_sm_grace_version"><code class="docutils literal notranslate"><span class="pre">ice_sheet_monthly_sm_grace_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.long_term_trend_paragraph"><code class="docutils literal notranslate"><span class="pre">long_term_trend_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.marine_heatwave_and_cold_spell_paragraph"><code class="docutils literal notranslate"><span class="pre">marine_heatwave_and_cold_spell_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.max_monthly_value"><code class="docutils literal notranslate"><span class="pre">max_monthly_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.nice_list"><code class="docutils literal notranslate"><span class="pre">nice_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.ordinal"><code class="docutils literal notranslate"><span class="pre">ordinal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.pre_industrial_estimate"><code class="docutils literal notranslate"><span class="pre">pre_industrial_estimate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.precip_paragraph"><code class="docutils literal notranslate"><span class="pre">precip_paragraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.rank_ranges"><code class="docutils literal notranslate"><span class="pre">rank_ranges()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.superlative"><code class="docutils literal notranslate"><span class="pre">superlative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.paragraphs.svg_background"><code class="docutils literal notranslate"><span class="pre">svg_background()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.stats.html#module-climind.stats.utils">climind.stats.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.get_latitudes"><code class="docutils literal notranslate"><span class="pre">get_latitudes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.get_n_years_from_n_months"><code class="docutils literal notranslate"><span class="pre">get_n_years_from_n_months()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.get_ranks"><code class="docutils literal notranslate"><span class="pre">get_ranks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.get_values"><code class="docutils literal notranslate"><span class="pre">get_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.monthly_to_annual_array"><code class="docutils literal notranslate"><span class="pre">monthly_to_annual_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.record_margin_table_by_year"><code class="docutils literal notranslate"><span class="pre">record_margin_table_by_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.record_margins"><code class="docutils literal notranslate"><span class="pre">record_margins()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.rolling_average"><code class="docutils literal notranslate"><span class="pre">rolling_average()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.run_the_numbers"><code class="docutils literal notranslate"><span class="pre">run_the_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.stats.html#climind.stats.utils.table_by_year"><code class="docutils literal notranslate"><span class="pre">table_by_year()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.stats.html#module-climind.stats">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="climind.web.html">climind.web package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="climind.web.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.web.html#module-climind.web.dashboard">climind.web.dashboard module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="climind.web.html#module-climind.web.extract_from_word">climind.web.extract_from_word module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="climind.web.html#module-climind.web.dashboard">climind.web.dashboard module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card"><code class="docutils literal notranslate"><span class="pre">Card</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card.make_csv_files"><code class="docutils literal notranslate"><span class="pre">Card.make_csv_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card.make_zip_file"><code class="docutils literal notranslate"><span class="pre">Card.make_zip_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card.plot"><code class="docutils literal notranslate"><span class="pre">Card.plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card.process_card"><code class="docutils literal notranslate"><span class="pre">Card.process_card()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Card.process_datasets"><code class="docutils literal notranslate"><span class="pre">Card.process_datasets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Dashboard"><code class="docutils literal notranslate"><span class="pre">Dashboard</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Dashboard.build"><code class="docutils literal notranslate"><span class="pre">Dashboard.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Dashboard.from_json"><code class="docutils literal notranslate"><span class="pre">Dashboard.from_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Page"><code class="docutils literal notranslate"><span class="pre">Page</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Page.build"><code class="docutils literal notranslate"><span class="pre">Page.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Paragraph"><code class="docutils literal notranslate"><span class="pre">Paragraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Paragraph.process_datasets"><code class="docutils literal notranslate"><span class="pre">Paragraph.process_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Paragraph.process_paragraph"><code class="docutils literal notranslate"><span class="pre">Paragraph.process_paragraph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.Paragraph.render"><code class="docutils literal notranslate"><span class="pre">Paragraph.render()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.WebComponent"><code class="docutils literal notranslate"><span class="pre">WebComponent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.WebComponent.process_datasets"><code class="docutils literal notranslate"><span class="pre">WebComponent.process_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="climind.web.html#climind.web.dashboard.WebComponent.select_and_read_data"><code class="docutils literal notranslate"><span class="pre">WebComponent.select_and_read_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.dashboard.process_single_dataset"><code class="docutils literal notranslate"><span class="pre">process_single_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.web.html#module-climind.web.extract_from_word">climind.web.extract_from_word module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.extract_from_word.GetParagraphText"><code class="docutils literal notranslate"><span class="pre">GetParagraphText()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.extract_from_word.clean_awkward_characters"><code class="docutils literal notranslate"><span class="pre">clean_awkward_characters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="climind.web.html#climind.web.extract_from_word.split_document"><code class="docutils literal notranslate"><span class="pre">split_document()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="climind.web.html#module-climind.web">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-climind.definitions">
-<span id="climind-definitions-module"></span><h2>climind.definitions module<a class="headerlink" href="#module-climind.definitions" title="Permalink to this heading"></a></h2>
-</div>
-</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-climind.definitions">
+<span id="climind-definitions-module"></span><h2>climind.definitions module<a class="headerlink" href="#module-climind.definitions" title="Link to this heading"></a></h2>
+</section>
+<section id="module-climind">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-climind" title="Link to this heading"></a></h2>
+</section>
+</section>
 
 
            </div>
@@ -188,7 +1037,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, John Kennedy.</p>
+    <p>&#169; Copyright 2025, John Kennedy.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,0 +1,125 @@
+scripts.data\_management package
+================================
+
+Submodules
+----------
+
+scripts.data\_management.build\_dashboard module
+------------------------------------------------
+
+.. automodule:: scripts.data_management.build_dashboard
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.calculate\_sea\_level\_time\_series module
+-------------------------------------------------------------------
+
+.. automodule:: scripts.data_management.calculate_sea_level_time_series
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.calculate\_sea\_level\_trend\_regional\_averages module
+--------------------------------------------------------------------------------
+
+.. automodule:: scripts.data_management.calculate_sea_level_trend_regional_averages
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.calculate\_wmo\_ra\_averages module
+------------------------------------------------------------
+
+.. automodule:: scripts.data_management.calculate_wmo_ra_averages
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.get\_daily\_timeseries module
+------------------------------------------------------
+
+.. automodule:: scripts.data_management.get_daily_timeseries
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.get\_grids module
+------------------------------------------
+
+.. automodule:: scripts.data_management.get_grids
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.get\_regular\_timeseries module
+--------------------------------------------------------
+
+.. automodule:: scripts.data_management.get_regular_timeseries
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.get\_timeseries module
+-----------------------------------------------
+
+.. automodule:: scripts.data_management.get_timeseries
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.gui module
+-----------------------------------
+
+.. automodule:: scripts.data_management.gui
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.make\_new\_regions module
+--------------------------------------------------
+
+.. automodule:: scripts.data_management.make_new_regions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.make\_qr\_codes module
+-----------------------------------------------
+
+.. automodule:: scripts.data_management.make_qr_codes
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.make\_sea\_level\_regions module
+---------------------------------------------------------
+
+.. automodule:: scripts.data_management.make_sea_level_regions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.map\_wmo\_regions module
+-------------------------------------------------
+
+.. automodule:: scripts.data_management.map_wmo_regions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.data\_management.regrid\_grids module
+---------------------------------------------
+
+.. automodule:: scripts.data_management.regrid_grids
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts.data_management
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>climind.web.dashboard &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">climind.web.dashboard</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for climind.web.dashboard</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Climate indicator manager - a package for managing and building climate indicator dashboards.</span>
+<span class="c1">#  Copyright (c) 2022 John Kennedy</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pkg_resources</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span><span class="p">,</span> <span class="n">select_autoescape</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_types.timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">,</span> <span class="n">TimeSeriesIrregular</span><span class="p">,</span> \
+    <span class="n">write_dataset_summary_file_with_metadata</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">climind.plotters.plot_types</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">climind.stats.paragraphs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pa</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.data_manager.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROOT_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">climind.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;ManagedData&quot;</span> <span class="o">/</span> <span class="s2">&quot;Data&quot;</span>
+
+
+<div class="viewcode-block" id="process_single_dataset">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.process_single_dataset">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_single_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">,</span> <span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesIrregular</span><span class="p">],</span>
+                           <span class="n">processing_steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TimeSeriesAnnual</span><span class="p">,</span> <span class="n">TimeSeriesMonthly</span><span class="p">,</span> <span class="n">TimeSeriesIrregular</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Process the input data set using the methods and arguments provided in a list of processing steps.</span>
+<span class="sd">    Each processing step is a dictionary containing a &#39;method&#39; and an &#39;arguments&#39; entry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]</span>
+<span class="sd">        Data set to be processed</span>
+<span class="sd">    processing_steps: List</span>
+<span class="sd">        List of steps. Each step must be a dictionary containing a &#39;method&#39; entry that corresponds to</span>
+<span class="sd">        the name of a method in the timeseries class and a &#39;arguments&#39; entry which contains a list</span>
+<span class="sd">        of arguments for that method</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">processing_steps</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Apply the method for the object and give it the unrolled arguments</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">output</span>
+
+    <span class="k">return</span> <span class="n">ds</span></div>
+
+
+
+<div class="viewcode-block" id="WebComponent">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.WebComponent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WebComponent</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">component_metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="WebComponent.select_and_read_data">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.WebComponent.select_and_read_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_and_read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the specified DataArchive, select the appropriate subset of data as specified in the Card</span>
+<span class="sd">        metadata and read in the data sets from the data_dir directory.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory in which the data are to be found</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            Archive of data used to select and populate the data sets</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selection_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;selecting&#39;</span><span class="p">]</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selection_metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">selected</span><span class="o">.</span><span class="n">read_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WebComponent.process_datasets">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.WebComponent.process_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the processing steps specified in the &#39;processing&#39; section of the metadata file to</span>
+<span class="sd">        all the data sets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If any of the processing steps fails to run</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processed_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">process_single_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;processing&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to process </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with error </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">processed_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">processed_datasets</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Paragraph">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Paragraph">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Paragraph</span><span class="p">(</span><span class="n">WebComponent</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paragraph_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraph_metadata</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Paragraph.process_paragraph">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Paragraph.process_paragraph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_paragraph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">,</span> <span class="n">focus_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2021</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process and ultimately render the Paragraph object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory containing the data</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            DataArchive object with the metadata describing all the datasets</span>
+<span class="sd">        focus_year: int</span>
+<span class="sd">            Year which the paragraph will focus on, usually the most recent year, though it needn&#39;t be.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select_and_read_data</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_datasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">focus_year</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Paragraph.process_datasets">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Paragraph.process_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the processing specified in the paragraph metadata on each of the data sets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_datasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;dataset_metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span></div>
+
+
+<div class="viewcode-block" id="Paragraph.render">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Paragraph.render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2021</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render out the text of the paragraph specified in the paragraph metadata.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        year: int</span>
+<span class="sd">            Year which is the focus of the paragraph.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Plot the output and add figure name to card</span>
+        <span class="n">paragraph_function</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;writing&#39;</span><span class="p">][</span><span class="s1">&#39;function&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kwargs&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;writing&#39;</span><span class="p">]:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;writing&#39;</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+            <span class="n">paragraph_text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="n">paragraph_function</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paragraph_text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="n">paragraph_function</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">paragraph_text</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;updated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">now</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>  <span class="c1"># Don&#39;t need precise time</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Card">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Card</span><span class="p">(</span><span class="n">WebComponent</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A card is a single panel in a dashboard web page. The Card class manages the metadata</span>
+<span class="sd">        associated with the card, and generates the files that are associated with it. These</span>
+<span class="sd">        include the figure (in multiple formats) and the data files (in a zip archive)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        card_metadata: dict</span>
+<span class="sd">            dictionary containing the metadata for the card</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">card_metadata</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Card.process_card">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card.process_card">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_card</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">figure_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">formatted_data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process the datasets, plot them and write out the data based on the metadata in the Card</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory in which the data are found.</span>
+<span class="sd">        figure_dir: Path</span>
+<span class="sd">            Path of the directory to which the figures will be written.</span>
+<span class="sd">        formatted_data_dir: Path</span>
+<span class="sd">            Path of the directory to which the formatted data will be written.</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            DataArchive object containing the descriptive metadata.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select_and_read_data</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_datasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figure_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_zip_file</span><span class="p">(</span><span class="n">formatted_data_dir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Card.process_datasets">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card.process_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the processing specified in the card metadata on each of the data sets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_datasets</span><span class="p">()</span>
+        <span class="n">pro_metadata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="n">pro_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;citation&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;citation&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;citation_url&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;citation_url&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;data_citation&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;data_citation&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;acknowledgement&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;acknowledgement&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;notes&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;dataset_metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pro_metadata</span></div>
+
+
+<div class="viewcode-block" id="Card.plot">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card.plot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figure_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the figure specified in the card metadata, output to the figure_dir directory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        figure_dir: Path</span>
+<span class="sd">            Path of the directory to which the figure should be written</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Plot the output and add figure name to card</span>
+        <span class="n">figure_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="n">plot_function</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;plotting&#39;</span><span class="p">][</span><span class="s1">&#39;function&#39;</span><span class="p">]</span>
+        <span class="n">plot_title</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;plotting&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kwargs&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;plotting&#39;</span><span class="p">]:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;plotting&#39;</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+            <span class="n">caption</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">plot_function</span><span class="p">)(</span><span class="n">figure_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">figure_name</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">caption</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">plot_function</span><span class="p">)(</span><span class="n">figure_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">figure_name</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;figure_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">figure_name</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;caption&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">caption</span></div>
+
+
+<div class="viewcode-block" id="Card.make_csv_files">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card.make_csv_files">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_csv_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">formatted_data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a csv file in the standard format for each data set in the Card and return a list of all their names</span>
+<span class="sd">        of the csv files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        formatted_data_dir: Path</span>
+<span class="sd">            Path of the directory to which the csv files will be written</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Path]</span>
+<span class="sd">            List containing a Path for each csv file written</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">csv_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">TimeSeriesMonthly</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">TimeSeriesAnnual</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">TimeSeriesIrregular</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">csv_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+                <span class="n">csv_path</span> <span class="o">=</span> <span class="n">formatted_data_dir</span> <span class="o">/</span> <span class="n">csv_filename</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">write_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+                <span class="n">csv_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">(</span><span class="n">TimeSeriesAnnual</span><span class="p">,</span> <span class="n">TimeSeriesMonthly</span><span class="p">)):</span>
+            <span class="n">csv_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;variable&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_summary.csv&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="n">csv_path</span> <span class="o">=</span> <span class="n">formatted_data_dir</span> <span class="o">/</span> <span class="n">csv_filename</span>
+            <span class="n">write_dataset_summary_file_with_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">csv_path</span><span class="p">)</span>
+            <span class="n">csv_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">csv_paths</span></div>
+
+
+<div class="viewcode-block" id="Card.make_zip_file">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Card.make_zip_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_zip_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">formatted_data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a formatted data file for each data set and zip these into a zip file. Adds a metadata element</span>
+<span class="sd">        &#39;csv_name&#39; with the names of the zip file once it is created.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        formatted_data_dir: Path</span>
+<span class="sd">            Path of the directory to which the zip file and data files should be written</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">csv_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_csv_files</span><span class="p">(</span><span class="n">formatted_data_dir</span><span class="p">)</span>
+
+        <span class="n">zipfile_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_data_files.zip&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">formatted_data_dir</span> <span class="o">/</span> <span class="n">zipfile_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_archive</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">csv_path</span> <span class="ow">in</span> <span class="n">csv_paths</span><span class="p">:</span>
+                <span class="n">csv_filename</span> <span class="o">=</span> <span class="n">csv_path</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">zip_archive</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="n">csv_filename</span><span class="p">)</span>
+                <span class="n">csv_path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">formatted_data_dir</span> <span class="o">/</span> <span class="n">zipfile_name</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">gobbled_bytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># read file as bytes</span>
+            <span class="n">checksum</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">gobbled_bytes</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;csv_checksum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">checksum</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;csv_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zipfile_name</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Page">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Page">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Page</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A Page from a dashboard. A page contains multiple Cards, which are used to render a</span>
+<span class="sd">        jinja2 template.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            Dictionary containing the page metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_cards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">figure_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+                       <span class="n">formatted_data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Card</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process each of the cards on the page</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory containing the data</span>
+<span class="sd">        figure_dir: Path</span>
+<span class="sd">            Path of directory to which figures will be written</span>
+<span class="sd">        formatted_data_dir: Path</span>
+<span class="sd">            Path of directory to which formatted data will be written</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            Archive which contains all the metadata for this selection</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Card]</span>
+<span class="sd">            List of the processed Cards</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processed_cards</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">card_metadata</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;cards&#39;</span><span class="p">]:</span>
+            <span class="n">this_card</span> <span class="o">=</span> <span class="n">Card</span><span class="p">(</span><span class="n">card_metadata</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">this_card</span><span class="o">.</span><span class="n">process_card</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">figure_dir</span><span class="p">,</span> <span class="n">formatted_data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Card processing failed </span><span class="si">{</span><span class="n">this_card</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with error </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;hidden&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">card_metadata</span><span class="p">:</span>
+                    <span class="n">processed_cards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this_card</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">processed_cards</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_paragraphs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">,</span> <span class="n">focus_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2021</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Paragraph</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process each of the paragraphs on the page</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory containing the data</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            Archive which contains all the metadata for this selection</span>
+<span class="sd">        focus_year: int</span>
+<span class="sd">            Year to focus on</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Paragraph]</span>
+<span class="sd">            List of the processed Cards</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processed_paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">paragraph_metadata</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;paragraphs&#39;</span><span class="p">]:</span>
+            <span class="n">this_paragraph</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span><span class="n">paragraph_metadata</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">this_paragraph</span><span class="o">.</span><span class="n">process_paragraph</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">,</span> <span class="n">focus_year</span><span class="o">=</span><span class="n">focus_year</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Paragraph processing failed with error </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">processed_paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this_paragraph</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">processed_paragraphs</span>
+
+<div class="viewcode-block" id="Page.build">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Page.build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">,</span>
+              <span class="n">focus_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2021</span><span class="p">,</span> <span class="n">menu_items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the Page, processing all the Card and Paragraph objects, then populating the template</span>
+<span class="sd">        to generate a webpage, figures and formatted data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        build_dir: Path</span>
+<span class="sd">            Path of the directory to which the html, figures and data will be written</span>
+<span class="sd">        data_dir: Path</span>
+<span class="sd">            Path of the directory where the data are to be found.</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            DataArchive containing the metadata for the datasets</span>
+<span class="sd">        focus_year: int</span>
+<span class="sd">            Year to focus on. Usually, this will be the latest year</span>
+<span class="sd">        menu_items: List[List[str]]</span>
+<span class="sd">            List of items to display in the menu. Each item is a two element list, with the name of the webpage as</span>
+<span class="sd">            the first element (which gets a .html extension) and the title of the page as the second elements. The</span>
+<span class="sd">            title is used to generate the menu items so should be human readable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">figure_dir</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s1">&#39;figures&#39;</span>
+        <span class="n">figure_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">formatted_data_dir</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">/</span> <span class="s1">&#39;formatted_data&#39;</span>
+        <span class="n">formatted_data_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> using template </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;template&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">processed_cards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_cards</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">figure_dir</span><span class="p">,</span> <span class="n">formatted_data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
+        <span class="n">processed_paragraphs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_paragraphs</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">archive</span><span class="p">,</span> <span class="n">focus_year</span><span class="o">=</span><span class="n">focus_year</span><span class="p">)</span>
+
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+        <span class="n">climind_version</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="s2">&quot;climind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">now</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">now</span><span class="o">.</span><span class="n">month</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">now</span><span class="o">.</span><span class="n">day</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;code_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;climind v</span><span class="si">{</span><span class="n">climind_version</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="c1"># populate template to make webpage</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span>
+            <span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">ROOT_DIR</span> <span class="o">/</span> <span class="s2">&quot;climind&quot;</span> <span class="o">/</span> <span class="s2">&quot;web&quot;</span> <span class="o">/</span> <span class="s2">&quot;jinja_templates&quot;</span><span class="p">),</span>
+            <span class="n">autoescape</span><span class="o">=</span><span class="n">select_autoescape</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;template&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.html.jinja&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">build_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.html&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">cards</span><span class="o">=</span><span class="n">processed_cards</span><span class="p">,</span>
+                                           <span class="n">paragraphs</span><span class="o">=</span><span class="n">processed_paragraphs</span><span class="p">,</span>
+                                           <span class="n">page_meta</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                                           <span class="n">menu_items</span><span class="o">=</span><span class="n">menu_items</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Dashboard">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Dashboard">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Dashboard</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="n">DataArchive</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a dashboard from a set of dashboard metadata</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            Dictionary containing the dashboard metadata</span>
+<span class="sd">        archive: DataArchive</span>
+<span class="sd">            Metadata archive that will be used to populate the dashboard</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">archive</span> <span class="o">=</span> <span class="n">archive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">DATA_DIR</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pages</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">page_metadata</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;pages&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Page</span><span class="p">(</span><span class="n">page_metadata</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Dashboard.from_json">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Dashboard.from_json">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="n">json_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">archive_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Dashboard from a json file and directory containing dataset metadata</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        json_file: Path</span>
+<span class="sd">            Path to the json file</span>
+<span class="sd">        archive_dir: Path</span>
+<span class="sd">            Path of the directory which contains the dataset metadata</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dashboard</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">archive</span> <span class="o">=</span> <span class="n">DataArchive</span><span class="o">.</span><span class="n">from_directory</span><span class="p">(</span><span class="n">archive_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Dashboard</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dashboard.build">
+<a class="viewcode-back" href="../../../climind.web.html#climind.web.dashboard.Dashboard.build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">focus_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2021</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build all the pages in the dashboard. This will create the html, the images,</span>
+<span class="sd">        the formatted data in a chosen directory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        build_dir: Path</span>
+<span class="sd">            Path of the directory to build the web pages in</span>
+<span class="sd">        focus_year: int</span>
+<span class="sd">            Year to focus on. Usually, this will be the latest year</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">:</span>
+            <span class="n">page_ids</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">page</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">page</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
+
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">:</span>
+            <span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">build_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive</span><span class="p">,</span>
+                       <span class="n">focus_year</span><span class="o">=</span><span class="n">focus_year</span><span class="p">,</span>
+                       <span class="n">menu_items</span><span class="o">=</span><span class="n">page_ids</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

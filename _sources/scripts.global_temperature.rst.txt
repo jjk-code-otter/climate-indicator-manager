@@ -1,0 +1,141 @@
+scripts.global\_temperature package
+===================================
+
+Submodules
+----------
+
+scripts.global\_temperature.animated\_plot module
+-------------------------------------------------
+
+.. automodule:: scripts.global_temperature.animated_plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.annual\_global\_own\_baselines module
+-----------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.annual_global_own_baselines
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.annual\_global\_temperature\_stats module
+---------------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.annual_global_temperature_stats
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.change\_per\_month\_plots module
+------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.change_per_month_plots
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.climatology\_difference module
+----------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.climatology_difference
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.compare\_preindustrial module
+---------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.compare_preindustrial
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.coral module
+----------------------------------------
+
+.. automodule:: scripts.global_temperature.coral
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.decadal\_report\_stats\_and\_figures module
+-----------------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.decadal_report_stats_and_figures
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.five\_year\_global\_temperature\_stats module
+-------------------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.five_year_global_temperature_stats
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.global\_temperature\_stats module
+-------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.global_temperature_stats
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.hierarchical\_merge module
+------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.hierarchical_merge
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.ipcc\_style\_averages module
+--------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.ipcc_style_averages
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.nature\_news\_and\_views module
+-----------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.nature_news_and_views
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.prediction\_partial\_year module
+------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.prediction_partial_year
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.rank\_by\_dataset\_plot module
+----------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.rank_by_dataset_plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+scripts.global\_temperature.ten\_year\_global\_temperature\_stats module
+------------------------------------------------------------------------
+
+.. automodule:: scripts.global_temperature.ten_year_global_temperature_stats
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts.global_temperature
+   :members:
+   :show-inheritance:
+   :undoc-members:

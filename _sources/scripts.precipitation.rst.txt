@@ -1,0 +1,21 @@
+scripts.precipitation package
+=============================
+
+Submodules
+----------
+
+scripts.precipitation.el\_nino\_composite module
+------------------------------------------------
+
+.. automodule:: scripts.precipitation.el_nino_composite
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: scripts.precipitation
+   :members:
+   :show-inheritance:
+   :undoc-members:

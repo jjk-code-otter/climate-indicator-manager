@@ -1,0 +1,101 @@
+tests package
+=============
+
+Submodules
+----------
+
+tests.test\_cds module
+----------------------
+
+.. automodule:: tests.test_cds
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_dashboard module
+----------------------------
+
+.. automodule:: tests.test_dashboard
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_fetcher\_utils module
+---------------------------------
+
+.. automodule:: tests.test_fetcher_utils
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_generic\_reader module
+----------------------------------
+
+.. automodule:: tests.test_generic_reader
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_grid module
+-----------------------
+
+.. automodule:: tests.test_grid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_metadata module
+---------------------------
+
+.. automodule:: tests.test_metadata
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_paragraphs module
+-----------------------------
+
+.. automodule:: tests.test_paragraphs
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_plot\_types module
+------------------------------
+
+.. automodule:: tests.test_plot_types
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_processing module
+-----------------------------
+
+.. automodule:: tests.test_processing
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_stats\_utils module
+-------------------------------
+
+.. automodule:: tests.test_stats_utils
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.test\_timeseries module
+-----------------------------
+
+.. automodule:: tests.test_timeseries
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: tests
+   :members:
+   :show-inheritance:
+   :undoc-members:
