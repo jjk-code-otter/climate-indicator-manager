@@ -21,6 +21,7 @@ Other pages
 
 * :ref:`userguide`
 * :ref:`howto`
+* :ref:`regional_averages`
 * :ref:`genindex`
 * :ref:`modindex`
 
