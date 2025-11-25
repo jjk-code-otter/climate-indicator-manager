@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculating regional averages &mdash; Climind 1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c55cb9cb"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Climind
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Calculating regional averages</a></li>
+<li><a class="reference internal" href="#get-a-cds-api-key">1. Get a CDS API key</a></li>
+<li><a class="reference internal" href="#download-the-data">2. Download the data</a></li>
+<li><a class="reference internal" href="#get-the-shape-files">3. Get the shape files</a></li>
+<li><a class="reference internal" href="#create-additional-shape-files">4. Create additional shape files</a></li>
+<li><a class="reference internal" href="#calculate-the-regional-averages">5. Calculate the regional averages</a></li>
+<li><a class="reference internal" href="#checking-it-worked">Checking it worked</a></li>
+<li><a class="reference internal" href="#what-can-go-wrong-and-what-to-do-about-it">What can go wrong and what to do about it</a></li>
+<li><a class="reference internal" href="#what-does-the-code-actually-do">What does the code actually do?</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Climind</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calculating regional averages</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/regional_averages.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calculating-regional-averages">
+<span id="regional-averages"></span><h1>Calculating regional averages<a class="headerlink" href="#calculating-regional-averages" title="Link to this heading"></a></h1>
+<p>Assuming you have installed the package and set up your DATADIR environment variable. To calculate the WMO
+regional association averages, it is necessary to do the following things:</p>
+<ol class="arabic simple">
+<li><p>Get a CDS API key</p></li>
+<li><p>Download the data</p></li>
+<li><p>Get the shape files</p></li>
+<li><p>Create additional shape files</p></li>
+<li><p>Calculate the regional averages</p></li>
+</ol>
+</section>
+<section id="get-a-cds-api-key">
+<h1>1. Get a CDS API key<a class="headerlink" href="#get-a-cds-api-key" title="Link to this heading"></a></h1>
+<p>Follow the instructions provided by C3S to get a Climate Data Store API key. You will need this to download the
+ERA5 data.</p>
+<p><a class="reference external" href="https://cds.climate.copernicus.eu/how-to-api">https://cds.climate.copernicus.eu/how-to-api</a></p>
+</section>
+<section id="download-the-data">
+<h1>2. Download the data<a class="headerlink" href="#download-the-data" title="Link to this heading"></a></h1>
+<p>There are six datasets needed to calculate all the regional series: “HadCRUT5”, “NOAA v6”, “GISTEMP”,
+“Berkeley Earth”, “ERA5”, “JRA-3Q”.</p>
+<p>To download the gridded data, use <cite>get_grids.py</cite> in <cite>scripts/data_management</cite> and modify the <cite>archive.select</cite>
+method like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ts_archive</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">select</span><span class="p">({</span>
+  <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;gridded&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;HadCRUT5&#39;</span><span class="p">,</span> <span class="s1">&#39;NOAA v6&#39;</span><span class="p">,</span> <span class="s1">&#39;GISTEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;Berkeley Earth&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;JRA-3Q&#39;</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>and then run the script. It will take a while to download everything. Sometimes, it won’t download a file
+first go, or will only download some of the required files. The output of the script lists what has
+failed to download. In particular, the JRA-3Q download is quite intermittent. Look in the corresponding data
+directory (<cite>DATADIR/ManagedData/Data/JRA-3Q</cite> for JRA-3Q) and remove any files with zero size, then rerun
+<cite>get_grids.py</cite> with only JRA-3Q selected:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ts_archive</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">select</span><span class="p">({</span>
+  <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;gridded&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;JRA-3Q&#39;</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Repeat this process until you have all the files. This process can take a while.</p>
+<p>In the case that a file doesn’t download at all try the following:</p>
+<ol class="arabic simple">
+<li><p>Check in the relevant metadata file and copy-paste the URL for the required file into a web browser. If the file
+downloads this way, you can copy it into the relevant directory in DATADIR.</p></li>
+<li><p>Sometimes, all that is needed is to wait a while and try again.</p></li>
+<li><p>Check to see if there is a newer version of that particular dataset.</p></li>
+<li><p>Check to see if the file name or file location have changed.</p></li>
+</ol>
+</section>
+<section id="get-the-shape-files">
+<h1>3. Get the shape files<a class="headerlink" href="#get-the-shape-files" title="Link to this heading"></a></h1>
+<p>Calculating the WMO Regional Associatin averages requires the WMO Regional Association shape files as
+well as the Africa subregion shape files. These should all be copied into <cite>DATADIR/ManagedData/Shape_Files</cite>. I
+don’t know of an online source of these, but anyone doing this calculation will, with high probability, know
+someone at WMO who can provide them.</p>
+<p>The Natural Earth country files <a class="reference external" href="https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip">https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip</a> should
+be copied to <cite>DATADIR/Natural_Earth</cite> and unzipped.</p>
+</section>
+<section id="create-additional-shape-files">
+<h1>4. Create additional shape files<a class="headerlink" href="#create-additional-shape-files" title="Link to this heading"></a></h1>
+<p>In order to generate area averages from the gridded data for all the specified subregions, it is necessary to first
+generate some of the subregions. These are built up as composites of individual countries based on the Natural
+Earth definitions. The build these shape files navigate to the scripts directory and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">make_new_regions</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The script only needs to be run once to generate the shape files for subregion. If it is necessary to rerun it
+because there is a change in definitions, there will likely be permission issues as it is not possible to overwrite
+the existing shape files. If a rerun is required, first delete (or move) the shapefiles previously created by the code
+before running it again.</p>
+</section>
+<section id="calculate-the-regional-averages">
+<h1>5. Calculate the regional averages<a class="headerlink" href="#calculate-the-regional-averages" title="Link to this heading"></a></h1>
+<p>The regional averages are calculated by modifying and then running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">calculate_wmo_ra_averages</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>There are two modes that the script can be run in “test” mode and “regular” mode. In most cases, <cite>test</cite> should be
+set to False. In normal running, the parameters should look something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">start_year</span> <span class="o">=</span> <span class="mi">1900</span>
+      <span class="n">output_data_dir</span> <span class="o">=</span> <span class="s2">&quot;RegionalData&quot;</span>
+      <span class="n">output_metadata_dir</span> <span class="o">=</span> <span class="s2">&quot;RegionalMetadata&quot;</span>
+      <span class="n">datasets_to_use</span> <span class="o">=</span> <span class="p">[</span>
+          <span class="s1">&#39;HadCRUT5&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;GISTEMP&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;NOAA v6&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;Berkeley Earth&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;JRA-3Q&#39;</span>
+      <span class="p">]</span>
+
+<span class="n">final_year</span> <span class="o">=</span> <span class="mi">2025</span>
+</pre></div>
+</div>
+<p><cite>final_year</cite> should be set to the final year of data you want to calculate the timeseries for assuming you have the
+data to do it. The code is set up to run all six datasets in one go (see <cite>datasets_to_use</cite>) but it can be better to
+comment out all but one of them at a time, starting with one of the smaller datasets like “HadCRUT5” or “NOAA v6”.
+That way, if the code is going to fail, it will fail faster. Once everything is working, running all six at once and
+then going for a cup of tea and a biscuit is my preferred configuration.</p>
+</section>
+<section id="checking-it-worked">
+<h1>Checking it worked<a class="headerlink" href="#checking-it-worked" title="Link to this heading"></a></h1>
+<p>When the regional average code runs successfully for a dataset, it creates a new metadata file in
+<cite>DATADIR/ManagedData/RegionalMetadata</cite> and a data file in a subdirectory of <cite>DATADIR/ManagedData/RegionalData</cite>.
+The subdirectory is tagged with the (sub)region name and the dataset name. Output is in the BADC .csv format.</p>
+<p>The metadata file contains the processing history and other dataset details. Some of those details are also in
+the data file as metadata in the long header.</p>
+<p>I usually plot the six data series for a region together and then compare them to what was previously in the reports.</p>
+</section>
+<section id="what-can-go-wrong-and-what-to-do-about-it">
+<h1>What can go wrong and what to do about it<a class="headerlink" href="#what-can-go-wrong-and-what-to-do-about-it" title="Link to this heading"></a></h1>
+<p>In principle this section could be infinite in length and still not cover all eventualities.</p>
+<p>The most common problems are</p>
+<ol class="arabic simple">
+<li><p>The data files move</p></li>
+<li><p>The data format changes</p></li>
+<li><p>A package update breaks the code</p></li>
+</ol>
+<p>1 is more likely than 2 and both are far more likely than 3. However, all of these have been an issue at one point
+or another. 1 and 2 occur in the general running of things, but 3 is more likely to occur if the code has recently
+been updated.</p>
+<p>If the data files have moved, then you will have to go and find them. The starting point for that process is to
+look in the metadata file for the dataset that’s causing problems. Most metadata files have a URL and that can be
+copied and pasted into your web browser. Note that some URLs have placeholders in them. YYYY should be replaced with
+the year and MMMM with the month for the file you are after. Sometime this involves a little guesswork because
+the most recent file won’t always be immediately obvious.</p>
+<p>For metadata files without a URL, you can look at the dataset “fetcher”. This is also listed in the metadata file under
+<cite>fetcher</cite>. This specifies which fetcher function from the <cite>fetchers</cite> directory should be used to download the data.
+If the “fetcher” is listed as “fetcher_no_url” then there is no way I know of to automatically download the data. In
+that case, the URL might provide a clue. Some datasets are available online but require you to click on a particular
+button in a way that can’t be automated. In some cases you might just have to email the lead author for the dataset.</p>
+<p>If the data format changes, then you will have to debug the code. Usually, changes relate to how the data are stored
+in a netcdf file, so check that the dimension and variable names haven’t changed and that the file still contains
+the same number of dimensions. Fixing the bugs is up to you. Note that changing the code might affect its ability
+to read data you had previously downloaded and processed so don’t forget to test any changes on all the data.</p>
+<p>If a package update breaks the code then you will have to debug that too. In the past xarray and pandas have changed
+how they manage and collapse dimensions. They’re more mature now, so it’s less likely to be a problem but you never
+know.</p>
+</section>
+<section id="what-does-the-code-actually-do">
+<h1>What does the code actually do?<a class="headerlink" href="#what-does-the-code-actually-do" title="Link to this heading"></a></h1>
+<p>The calculation of a regional average is relatively simple:</p>
+<ol class="arabic simple">
+<li><p>Read in a dataset monthly gridded dataset.</p></li>
+<li><p>Regrid the datasets to 1-degree lat-lon resolution either by averaging together all the gridboxes that fall
+into that 1-degree gridbox (if the gridboxes are smaller than 1-degree or don’t neatly fit into a 1-degree grid),
+or copying the value from a larger grid box into all the 1-degree gridboxes that fall inside it (if the gridboxes
+are larger than 1-degree).</p></li>
+<li><p>Mask out any 1-degree grid cells that fall outside the shapefile for the chosen region</p></li>
+<li><p>Optionally mask out ocean areas in the same way.</p></li>
+<li><p>Calculate the area average of the non-masked gridboxes.</p></li>
+</ol>
+<p>The calculation is done at a monthly time scale and the monthly regional averages are then averaged to annual
+giving each month an equal weight.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Kennedy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
