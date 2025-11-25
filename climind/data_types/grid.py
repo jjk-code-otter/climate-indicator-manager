@@ -32,8 +32,13 @@ from climind.data_manager.metadata import CombinedMetadata
 import climind.data_types.timeseries as ts
 
 
-def get_1d_transfer(zero_point_original: float, grid_space_original: float,
-                    zero_point_target: float, grid_space_target: float, index_in_original: int) -> tuple:
+def get_1d_transfer(
+        zero_point_original: float,
+        grid_space_original: float,
+        zero_point_target: float,
+        grid_space_target: float,
+        index_in_original: int
+) -> tuple:
     """
     Find the overlapping grid spacings for a new grid based on an index in the old grid
     
@@ -202,6 +207,7 @@ def rank_array(in_array: np.ndarray) -> int:
     ----------
     in_array: np.ndarray
         Array to be ranked
+
     Returns
     -------
     int
