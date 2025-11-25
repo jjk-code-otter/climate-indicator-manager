@@ -21,6 +21,8 @@ associated with particular rankings.
 Each step in processing is logged and added to the metadata for the dataset so that processing steps can be traced 
 and reproduced.
 
+Detailed documentation is here: https://jjk-code-otter.github.io/climate-indicator-manager/index.html
+
 
 Installation
 ============

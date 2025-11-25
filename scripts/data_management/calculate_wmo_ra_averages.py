@@ -105,11 +105,11 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            #'HadCRUT5',
-            #'GISTEMP',
-            #'NOAA v6',
-            #'Berkeley Earth',
-            #'ERA5',
+            'HadCRUT5',
+            'GISTEMP',
+            'NOAA v6',
+            'Berkeley Earth',
+            'ERA5',
             'JRA-3Q'
         ]
 
