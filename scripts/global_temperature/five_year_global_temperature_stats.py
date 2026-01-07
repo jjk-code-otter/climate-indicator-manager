@@ -27,7 +27,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
                                  'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6',
-                                          'Berkeley Earth', 'ERA5', 'JRA-3Q']})
+                                          'Berkeley Earth Hires', 'ERA5', 'JRA-3Q']})
 
     nice_archive = archive.select({'variable': 'arctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'})
     sice_archive = archive.select({'variable': 'antarctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'})
@@ -134,6 +134,12 @@ if __name__ == "__main__":
 
     pt.neat_plot(figure_dir, fives, 'five.png', r'5-year Global Mean Temperature Difference ($\degree$C)')
 
+    threes = []
+    for ds in anns:
+        threes.append(ds.running_mean(3))
+
+    pt.neat_plot(figure_dir, threes, 'three.png', r'3-year Global Mean Temperature Difference ($\degree$C)')
+
     pt.neat_plot(figure_dir, nice_anns_3, 'five_nice3.png', '5-year Arctic sea ice March')
     pt.neat_plot(figure_dir, nice_anns_9, 'five_nice9.png', '5-year Arctic sea ice September')
     pt.neat_plot(figure_dir, sice_anns_2, 'five_sice2.png', '5-year Antarctic sea ice February')
@@ -144,3 +150,4 @@ if __name__ == "__main__":
     print()
     print("Five-year stats")
     utils.run_the_numbers(fives, final_year, 'fiveyear_stats', report_dir)
+    utils.run_the_numbers(threes, final_year, 'threeyear_stats', report_dir)

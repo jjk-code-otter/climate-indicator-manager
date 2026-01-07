@@ -56,20 +56,16 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
     elif metadata['variable'] == 'ohc2k':
         if metadata['name'] == 'Miniere':
             mask = ~np.isnan(df['ohc_Miniere_et_al_2023'].values)
-            years = df.time_monthly.dt.year.data[mask].tolist()
-            months = df.time_monthly.dt.month.data[mask].tolist()
+            years = df.time_histo.dt.year.data[mask].tolist()
             data = (df['ohc_Miniere_et_al_2023'] * conversion).values[mask].tolist()
             uncertainty = (df['ohc_uncertainty_Miniere_et_al_2023'] * conversion).data[mask].tolist()
-            out_ts = ts.TimeSeriesMonthly(years, months, data, metadata=metadata, uncertainty=uncertainty)
-            out_ts = out_ts.make_annual()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
         elif metadata['name'] == 'Cheng TEMP':
-            mask = ~np.isnan(df['ohc_Cheng_et_al_2024'].values)
-            years = df.time_monthly.dt.year.data[mask].tolist()
-            months = df.time_monthly.dt.month.data[mask].tolist()
-            data = (df['ohc_Cheng_et_al_2024'] * conversion).values[mask].tolist()
-            uncertainty = (df['ohc_uncertainty_Cheng_et_al_2024'] * conversion).data[mask].tolist()
-            out_ts = ts.TimeSeriesMonthly(years, months, data, metadata=metadata, uncertainty=uncertainty)
-            out_ts = out_ts.make_annual()
+            mask = ~np.isnan(df['ohc_iap'].values)
+            years = df.time_histo.dt.year.data[mask].tolist()
+            data = (df['ohc_iap'] * conversion).values[mask].tolist()
+            #uncertainty = (df['ohc_uncertainty_Cheng_et_al_2024'] * conversion).data[mask].tolist()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata)
         elif metadata['name'] == 'JMA TEMP':
             mask = ~np.isnan(df['ohc_JMA_Ishii_et_al_2017'].values)
             years = df.time_2023.dt.year.data[mask].tolist()
@@ -82,7 +78,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             uncertainty = (df['ohc_uncertainty_von_Schuckmann_et_al_2023'] * conversion).data[mask].tolist()
         elif metadata['name'] == 'Copernicus_OHC':
             mask = ~np.isnan(df['ohc_copernicus'].values)
-            years = df.time_yearly.dt.year.data[mask].tolist()
+            years = df.time.dt.year.data[mask].tolist()
             data = (df['ohc_copernicus'] * conversion).values[mask].tolist()
             uncertainty = (df['ohc_uncertainty_copernicus'] * conversion).data[mask].tolist()
             out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)

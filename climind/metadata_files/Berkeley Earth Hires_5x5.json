@@ -1,6 +1,6 @@
 {
     "name": "Berkeley Earth Hires_5x5",
-    "display_name": "Berkeley Earth",
+    "display_name": "Berkeley Earth Hires",
     "version": "",
     "variable": "tas",
     "units": "degC",
@@ -35,7 +35,7 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['Global_TAVG_Gridded_1deg.nc'] downloaded from ['https://storage.googleapis.com/berkeley-earth-temperature-hr/global/gridded/Global_TAVG_Gridded_1deg.nc'] at ['2025-10-29 10:50:48']",
+                "Data set created from file ['Global_TAVG_Gridded_1deg.nc'] downloaded from ['https://storage.googleapis.com/berkeley-earth-temperature-hr/global/gridded/Global_TAVG_Gridded_1deg.nc'] at ['2026-01-01 12:28:02']",
                 "Regridded to 5 degree latitude-longitude resolution",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
@@ -44,9 +44,9 @@
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2025-10-29 10:50:48"
+                "2026-01-01 12:28:02"
             ],
-            "last_month": "2025-09-01 00:00:00"
+            "last_month": "2025-11-01 00:00:00"
         }
     ]
 }

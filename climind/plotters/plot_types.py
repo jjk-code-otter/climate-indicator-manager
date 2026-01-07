@@ -2275,7 +2275,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     elif grid_type == 'rank':
         wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
         wmo_cols = list(reversed(wmo_cols))
-        wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
+        wmo_levels = [0.5, 1.51, 3.51, 5.51, 10.51, 20.51]
 
     if main_variable == 'sealeveltrend':
         wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

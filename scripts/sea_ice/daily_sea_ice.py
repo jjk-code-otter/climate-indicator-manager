@@ -64,6 +64,7 @@ def read_nsidc_daily(sea_ice_file, final_year):
     df.columns = df.columns.str.replace(' ', '')
     df['date'] = pd.to_datetime(dict(year=df['Year'], month=df['Month'], day=df['Day']))
     df = df.set_index('date')
+    df = df.drop(columns=['SourceData'])
 
     # Ensure there is an entry for every day from the start to the end
     t_index = pd.DatetimeIndex(pd.date_range(start='1979-01-01', end=f'{final_year}-12-31', freq='D'))
@@ -549,9 +550,9 @@ def plot_simplified_annual_cycle_nh_grey(df, project_dir, image_filename, nh=Fal
 project_dir = DATA_DIR / "ManagedData"
 data_dir = project_dir / "Data"
 
-sea_ice_file = data_dir / "NSIDC SH" / "S_seaice_extent_daily_v3.0.csv"
+sea_ice_file = data_dir / "NSIDC v4 SH" / "S_seaice_extent_daily_v4.0.csv"
 
-final_year = 2024
+final_year = 2025
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)
@@ -601,9 +602,9 @@ plt.plot(bins, y, '--')
 plt.savefig(project_dir / 'Figures' / 'antarctic_sea_ice_histogram')
 plt.close()
 
-sea_ice_file = data_dir / "NSIDC" / "N_seaice_extent_daily_v3.0.csv"
+sea_ice_file = data_dir / "NSIDC v4" / "N_seaice_extent_daily_v4.0.csv"
 
-final_year = 2024
+final_year = 2025
 
 df = read_nsidc_daily(sea_ice_file, final_year)
 climatology, climatology_stdev = calculate_climatology(1991, 2020, df)

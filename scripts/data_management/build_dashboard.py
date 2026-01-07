@@ -42,7 +42,7 @@ if __name__ == "__main__":
     interactive = False
 
     minimal = False
-    dash2025 = False
+    dash2025 = True
     dash2024 = False
     dash2023 = False
     dash2022 = False
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         dash = Dashboard.from_json(json_file, METADATA_DIR)
         dash_dir = DATA_DIR / 'ManagedData' / 'MonthlyDashboard'
         dash_dir.mkdir(exist_ok=True)
-        dash.build(Path(dash_dir), focus_year=2023)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if dash2025 or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2025.json'

@@ -90,9 +90,9 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 10]}
+            {"method": "select_year_and_month", "args": [2025, 11]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "October 2025 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "November 2025 Temperature Anomaly"}
         },
         {
           "link_to": null,
@@ -101,10 +101,10 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2025, 6, 2025, 8]},
+            {"method": "select_period", "args": [2025, 9, 2025, 11]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Summer 2025 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2025 temperature anomaly"}
         },
         {
           "link_to": null,
@@ -113,10 +113,10 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 11, 2025, 10]},
+            {"method": "select_period", "args": [2024, 12, 2025, 11]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average November 2024 - October 2025 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average December 2024 - November 2025 temperature anomaly"}
         },
         {
           "link_to": null,
@@ -125,9 +125,9 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 10]}
+            {"method": "select_year_and_month", "args": [2025, 11]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "October 2025 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "November 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -136,10 +136,10 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2025, 6, 2025, 8]},
+            {"method": "select_period", "args": [2025, 9, 2025, 11]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Summer 2025 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "Autumn 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -148,10 +148,10 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 11, 2025, 10]},
+            {"method": "select_period", "args": [2024, 12, 2025, 11]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average November 2024 - October 2025 precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average December 2024 - November 2025 precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -170,13 +170,13 @@
         },
         {
           "link_to": null, "title": "Arctic sea ice",
-          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
           "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "wmo_plot", "title": "Arctic sea-ice extent"}
         },
         {
           "link_to": null, "title": "Antarctic sea ice",
-          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
           "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "wmo_plot", "title": "Antarctic sea-ice extent"}
         },
@@ -197,6 +197,12 @@
           "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
+        },
+        {
+          "link_to":  null, "title": "Antarctic ice sheet",
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
+          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
+          "plotting": {"function": "wmo_plot", "title": "Antarctic ice sheet cumulative mass balance"}
         },
         {
           "link_to": null,
