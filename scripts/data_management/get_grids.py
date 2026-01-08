@@ -29,6 +29,6 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
-    ts_archive = archive.select({'type': 'gridded', 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires', 'JRA-3Q']})
+    ts_archive = archive.select({'type': 'gridded', 'name': ['GPCC quantiles 12month']})
 
     ts_archive.download(data_dir)

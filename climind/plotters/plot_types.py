@@ -23,7 +23,9 @@ import xarray
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from matplotlib.colors import BoundaryNorm
 from matplotlib.transforms import Bbox
+from matplotlib.colors import BoundaryNorm, ListedColormap
 import seaborn as sns
 import numpy as np
 from typing import List, Union, Tuple
@@ -2133,7 +2135,14 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if grid_type in ['mean', 'rank', 'single']:
+    if 'precip_quantiles' in main_variable:
+        p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                        transform=ccrs.PlateCarree(),
+                        cmap=ListedColormap(wmo_cols),
+                        norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
+                        shading='auto'
+                        )
+    elif grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,

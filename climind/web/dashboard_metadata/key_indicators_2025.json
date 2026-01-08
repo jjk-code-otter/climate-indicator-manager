@@ -83,10 +83,10 @@
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2025, 9]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Nine-month precipitation categories Jan-Sep 2025"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2025, 12]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Annual precipitation categories 2025"}
         },
         {
           "link_to": "short_term_climate_drivers", "title":"Short-term Climate Drivers",
@@ -687,20 +687,20 @@
       "cards": [
          {
           "link_to":  null, "title": "Precipitation",
-          "selecting": {"type": "gridded", "variable": "precip_quantiles_9month", "time_resolution": "monthly",
-            "name": ["GPCC quantiles 9month"]},
-          "processing":  [{"method":  "select_year_and_month", "args": [2025, 9]}],
-          "plotting": {"function": "dashboard_map_single", "title": "Nine-month precipitation categories Jan-Sep 2025"}
+          "selecting": {"type": "gridded", "variable": "precip_quantiles_12month", "time_resolution": "monthly",
+            "name": ["GPCC quantiles 12month"]},
+          "processing":  [{"method":  "select_year_and_month", "args": [2025, 12]}],
+          "plotting": {"function": "dashboard_map_single", "title": "Annual precipitation categories 2025"}
          },
          {
           "link_to": null,
-          "title": "Jan-Sep precipitation anomalies",
+          "title": "Annual precipitation anomalies",
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
-            {"method": "select_period", "args": [2025, 1, 2025, 9]},
+            {"method": "select_period", "args": [2025, 1, 2025, 12]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "Jan-Sep 2025 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "2025 Precipitation anomaly"}
          }
       ],
       "paragraphs": [

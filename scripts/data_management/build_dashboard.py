@@ -48,7 +48,7 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
 

@@ -1,0 +1,35 @@
+{
+  "name": "tempDCENT",
+  "display_name": "DCENT-I",
+  "version": "",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [
+    "Chan, D., Gebbie, G., Huybers, P. & Kent, E. C. DCENT: Dynamically Consistent ENsemble of Temperature at the Earth Surface. https://doi.org/10.7910/DVN/NU4UGW (2024).",
+    "Chan, D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. https://doi.org/10.7910/DVN/ZY0WM8 (2025)."
+  ],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#A5B309",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [],
+      "filename": ["Global Temperatures Collab.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_spreadsheet",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}
