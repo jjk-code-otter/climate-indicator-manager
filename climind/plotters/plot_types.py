@@ -2135,7 +2135,7 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if 'precip_quantiles' in main_variable:
+    if 'precip_quantiles' in main_variable or 'precip' in main_variable:
         p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         cmap=ListedColormap(wmo_cols),

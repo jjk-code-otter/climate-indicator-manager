@@ -90,9 +90,9 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 11]}
+            {"method": "select_year_and_month", "args": [2025, 12]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "November 2025 Temperature Anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "December 2025 Temperature Anomaly"}
         },
         {
           "link_to": null,
@@ -113,10 +113,10 @@
           "selecting": {"type":  "gridded", "variable": "tas", "time_resolution": "monthly", "name": "ERA5"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 12, 2025, 11]},
+            {"method": "select_period", "args": [2025, 1, 2025, 12]},
             {"method": "calculate_time_mean", "args":  []}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average December 2024 - November 2025 temperature anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average January-December 2025 temperature anomaly"}
         },
         {
           "link_to": null,
@@ -125,9 +125,9 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_year_and_month", "args": [2025, 11]}
+            {"method": "select_year_and_month", "args": [2025, 12]}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "November 2025 Precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "December 2025 Precipitation anomaly"}
         },
         {
           "link_to": null,
@@ -148,10 +148,10 @@
           "selecting": {"type":  "gridded", "variable": "precip", "time_resolution": "monthly"},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
-            {"method": "select_period", "args": [2024, 12, 2025, 11]},
+            {"method": "select_period", "args": [2025, 1, 2025, 12]},
             {"method": "calculate_time_mean", "args":  [], "kwargs":  {"cumulative":  true}}
           ],
-          "plotting": {"function": "dashboard_map_single", "title": "12-month average December 2024 - November 2025 precipitation anomaly"}
+          "plotting": {"function": "dashboard_map_single", "title": "12-month average January-December 2025 precipitation anomaly"}
         },
         {
           "link_to": null,

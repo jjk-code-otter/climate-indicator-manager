@@ -37,10 +37,10 @@ if __name__ == "__main__":
             'name': [#'GETQUOCS'#, 'CMST', 'Vaccaro',
                      #'Kadow CMIP', 'Kadow',
                      #'Kadow',
-                     'NOAA v6',
-                     'HadCRUT5',
-                     'Berkeley Earth Hires',
-                     'GISTEMP',
+                     #'NOAA v6',
+                     #'HadCRUT5',
+                     #'Berkeley Earth Hires',
+                     #'GISTEMP',
                      'JRA-3Q',
                      'ERA5'
             ]

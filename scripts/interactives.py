@@ -44,7 +44,8 @@ if __name__ == "__main__":
     ohc = False
     sea_level = False
     sea_ice = False
-    glaciers = True
+    glaciers = False
+    oceanph = True
 
     if gmst:
         # some global temperature data sets are annual only, others are monthly so need to read these separately
@@ -248,3 +249,38 @@ if __name__ == "__main__":
         print(chart.chart_id)
         print(iframe_code)
         print(png_url)
+
+    if oceanph:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'ph',
+                                     'type': 'timeseries',
+                                     'name': ["CMEMS new"],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Ocean pH',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[8.02, 8.14],
+            y_grid_format='0.00',
+            tooltip_number_format="000.00",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+        )
+
+        chart.create().publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+        chb = dw.get_chart(chart.chart_id)
+
+        print()

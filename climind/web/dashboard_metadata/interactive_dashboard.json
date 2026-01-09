@@ -47,6 +47,12 @@
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
           "processing": [],
           "plotting": {"function": "interactive_widget", "title": "Glacier cumulative mass balance", "kwargs": {"id":  "akAo7"}}
+        },
+        {
+          "link_to": null, "title":"Ocean pH",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Ocean pH", "kwargs": {"id":  "FM5b1"}}
         }
       ],
       "paragraphs": []

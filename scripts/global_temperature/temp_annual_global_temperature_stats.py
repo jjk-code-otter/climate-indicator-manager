@@ -54,19 +54,20 @@ if __name__ == "__main__":
     ann_archive = archive.select({'variable': 'tas',
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
-                                  'name': [ #'CMST v3'
-                                      #'ClimTraceGMST' # 'NOAA Interim',
+                                  'name': [  # 'CMST v3'
+                                      # 'ClimTraceGMST' # 'NOAA Interim',
                                       # 'Kadow IPCC',
                                       # 'Berkeley IPCC',
                                       # 'NOAA Interim IPCC'
                                       # 'GETQUOCS'
                                   ]})
 
-    ts_archive = archive.select({'variable': 'tas',
-                                 'type': 'timeseries',
-                                 'name': ['tempNOAA', 'tempGISTEMP', 'tempERA5', 'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5', 'tempDCENT', 'CMST v3'],
-                                 'time_resolution': 'monthly'})
-
+    ts_archive = archive.select({
+        'variable': 'tas',
+        'type': 'timeseries',
+        'name': ['tempNOAA', 'tempGISTEMP', 'tempERA5', 'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5', 'tempDCENT', 'tempCMST', 'CMA_GMST'],
+        'time_resolution': 'monthly'
+    })
 
     all_datasets = ts_archive.read_datasets(data_dir)
     ann_datasets = ann_archive.read_datasets(data_dir)
@@ -75,8 +76,8 @@ if __name__ == "__main__":
     all_8110_datasets = []
     all_annual_datasets = []
     for ds in all_datasets:
-        #ds.change_end_month(2025, 8)
-        print(ds.get_start_and_end_dates())
+        # ds.change_end_month(2025, 8)
+        #print(ds.get_start_and_end_dates())
 
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"temp_wave_{ds.metadata['name']}.png")
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         all_8110_datasets.append(annual8110)
         a = annual8110.time_average(1850, 1900)
         b = annual8110.time_average(2025, 2025)
-        print(f"{annual8110.metadata['display_name']} {a - b:.2f}")
+        print(f"{annual8110.metadata['display_name']} 2025: {a - b:.2f}")
 
         annual = ds.make_annual()
         annual.add_offset(0.69)
@@ -94,7 +95,6 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
-
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_8110_monthly = []
@@ -145,7 +145,6 @@ if __name__ == "__main__":
         ds.select_year_range(1850, final_year)
         all_annual_datasets.append(ds)
         ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")
-
 
     pt.wmo_plot(figure_dir, all_annual_datasets, 'temp_annual.png', r'Global Mean Temperature Difference ($\degree$C)')
 

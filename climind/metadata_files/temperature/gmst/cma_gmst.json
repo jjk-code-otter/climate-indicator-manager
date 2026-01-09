@@ -1,0 +1,32 @@
+{
+  "name": "CMA_GMST",
+  "display_name": "CMA-GMST",
+  "version": "1.0",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Chen, L., Xu, W., Zhou, Z. et al. A new global land–ocean merged surface temperature dataset since the 1850s: the CMA-GMST dataset. Clim Dyn 63, 187 (2025). https://doi.org/10.1007/s00382-025-07614-x"],
+  "citation_url": ["https://doi.org/10.1007/s00382-025-07614-x"],
+  "data_citation": ["https://data.cma.cn/en/#/Visualization/Visualization-detail?id=16"],
+  "acknowledgement": "",
+  "colour": "#000077",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [],
+      "filename": ["Global_Mean.csv"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_cma_gmst",
+      "fetcher": "fetcher_no_url"
+    }
+  ]
+}
