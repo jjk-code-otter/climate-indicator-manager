@@ -48,11 +48,14 @@ from climind.stats.paragraphs import get_last_month
 from matplotlib.patches import Polygon
 import matplotlib.dates as mdates
 
-FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
-               "zJ": "zJ",
-               "millionkm2": "million km$^2$",
-               "ph": "pH",
-               "mwe": "metres water equivalent"}
+FANCY_UNITS = {
+    "degC": r"$\!^\circ\!$C",
+    "zJ": "zJ",
+    "millionkm2": "million km$^2$",
+    "ph": "pH",
+    "mwe": "metres water equivalent",
+    "wm2": "Wm$^{-2}$"
+}
 
 STANDARD_PARAMETER_SET = {
     'axes.axisbelow': False,
@@ -429,6 +432,9 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
         if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
             loc = "upper right"
             bbox_to_anchor = (0.96, 0.96)
+        if ds.metadata['variable'] in ['eei']:
+            loc = "lower right"
+            bbox_to_anchor = (0.96, 0.06)
         ncol = 1
         if len(handles) > 6:
             ncol = 2
@@ -1711,7 +1717,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     fig = plt.figure(figsize=[16, 6])
 
-    #n_months = 36
+    # n_months = 36
 
     n_time_x = len(all_datasets[1].df.data)
 
@@ -2140,11 +2146,11 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
     if 'precip_quantiles' in main_variable or 'precip' in main_variable:
         p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
-                        transform=ccrs.PlateCarree(),
-                        cmap=ListedColormap(wmo_cols),
-                        norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
-                        shading='auto'
-                        )
+                          transform=ccrs.PlateCarree(),
+                          cmap=ListedColormap(wmo_cols),
+                          norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
+                          shading='auto'
+                          )
     elif grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
@@ -2285,7 +2291,7 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     elif grid_type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     elif grid_type == 'rank':
-        wmo_cols = ["#08519c", "#6baed6","#bdd7e7","#eff3ff",
+        wmo_cols = ["#08519c", "#6baed6", "#bdd7e7", "#eff3ff",
                     "#ffffff",
                     "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
         wmo_cols = list(reversed(wmo_cols))
@@ -2310,11 +2316,11 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
     if 'precip_quantiles' in main_variable or 'precip' in main_variable:
         p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
-                        transform=ccrs.PlateCarree(),
-                        cmap=ListedColormap(wmo_cols),
-                        norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
-                        shading='auto'
-                        )
+                          transform=ccrs.PlateCarree(),
+                          cmap=ListedColormap(wmo_cols),
+                          norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
+                          shading='auto'
+                          )
     elif grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
@@ -2331,8 +2337,6 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
                         )
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
-
-
 
     if grid_type == 'rank':
         cbar.ax.tick_params(labelsize=12)
@@ -2868,6 +2872,7 @@ def interactive_widget(
     caption = [iframe_code, png_url]
 
     return caption
+
 
 def interactive_widget_uncertainty(
         out_dir: Path,

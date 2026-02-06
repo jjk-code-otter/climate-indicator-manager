@@ -27,7 +27,7 @@
         "1","degC", "zJ", "hPa", "quantile",
         "ppm", "ppm/year", "ppb", "ppb/year",
         "mm", "mm/year", "%", "millionkm2",
-        "Gt", "ph", "mwe", "diy", "aod", "DU"
+        "Gt", "ph", "mwe", "diy", "aod", "DU", "wm2"
       ]
     },
     "citation": {

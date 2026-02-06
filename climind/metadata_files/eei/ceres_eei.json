@@ -1,0 +1,32 @@
+{
+  "name": "CERES EEI",
+  "display_name": "CERES",
+  "version": "",
+  "variable": "eei",
+  "units": "wm2",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["EEI_timeseries.csv"],
+	  "type": "timeseries",
+      "long_name": "Earths Energy Imbalance",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_eei",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

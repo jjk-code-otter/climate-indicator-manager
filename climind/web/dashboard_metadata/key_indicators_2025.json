@@ -14,6 +14,14 @@
           "plotting": {"function": "wmo_monthly_plot", "title": "Atmospheric carbon dioxide concentration"}
         },
         {
+          "link_to": null, "title": "Earths Energy Imbalance",
+          "selecting": {"type": "timeseries", "variable": "eei", "time_resolution": "annual", "name": [
+            "Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"
+          ]},
+          "processing": [],
+          "plotting": {"function": "wmo_plot", "title": "Earths Energy Imbalance"}
+        },
+        {
           "link_to": "global_mean_temperature", "title": "Global temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
           "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
