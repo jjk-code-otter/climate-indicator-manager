@@ -43,6 +43,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     days = df.time.dt.day.data.tolist()
 
     metadata.creation_message()
+    metadata['history'].append("Filtered with a 9-point Savgol filter of order 1")
     outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, uncertainty=uncertainty, metadata=metadata)
 
     return outseries
