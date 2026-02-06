@@ -14,6 +14,14 @@
           "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "LpDOm"}}
         },
         {
+          "link_to": null, "title": "Earths Energy Imbalance",
+          "selecting": {"type": "timeseries", "variable": "eei", "time_resolution": "annual", "name": [
+            "Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"
+          ]},
+          "processing": [],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Earths Energy Imbalance", "kwargs": {"id":  "v0K6k"}}
+        },
+        {
           "link_to": null, "title": "Global temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
           "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5", "DCENT_I", "CMST v3", "CMA_GMST"]},
@@ -26,7 +34,7 @@
         },
         {
           "link_to": null, "title": "Ocean Indicators",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Levitus2k"]},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "r8dK2"}}
         },
@@ -34,7 +42,7 @@
           "link_to": null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
           "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
-          "plotting": {"function": "interactive_widget", "title": "Global mean sea level", "kwargs": {"id":  "DHI0W"}}
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DHI0W"}}
         },
         {
           "link_to": null, "title": "Sea ice",

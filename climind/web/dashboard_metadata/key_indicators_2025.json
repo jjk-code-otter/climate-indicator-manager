@@ -705,7 +705,7 @@
           "selecting": {"type":  "timeseries", "variable": "pdo", "time_resolution": "monthly"},
           "processing": [
             {"method":  "lowess", "args":  []},
-            {"method": "select_year_range", "args": [1950, 2025]}
+            {"method": "select_year_range", "args": [1850, 2025]}
           ],
           "plotting": {"function": "wmo_plot", "title": "Pacific Decadal Oscillation"}
         },

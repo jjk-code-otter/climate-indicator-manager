@@ -45,7 +45,8 @@ if __name__ == "__main__":
     sea_level = False
     sea_ice = False
     glaciers = False
-    oceanph = True
+    oceanph = False
+    eei = True
 
     if gmst:
         # some global temperature data sets are annual only, others are monthly so need to read these separately
@@ -268,6 +269,41 @@ if __name__ == "__main__":
             custom_range_y=[8.02, 8.14],
             y_grid_format='0.00',
             tooltip_number_format="000.00",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+        )
+
+        chart.create().publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+        chb = dw.get_chart(chart.chart_id)
+
+        print()
+
+    if eei:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'eei',
+                                     'type': 'timeseries',
+                                     'name': ["Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Earths Energy Imbalance',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-1.1, 1.6],
+            y_grid_format='0.00',
+            tooltip_number_format=".00",
             tooltip_x_format="YYYY",
             plot_height_ratio=0.5,
             plot_height_mode='ratio',
