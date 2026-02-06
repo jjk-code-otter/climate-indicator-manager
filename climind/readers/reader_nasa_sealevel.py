@@ -16,6 +16,8 @@
 
 from pathlib import Path
 from typing import List
+
+import numpy as np
 import xarray as xa
 import climind.data_types.timeseries as ts
 
@@ -51,6 +53,34 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             years.append(converted_date.year)
             months.append(converted_date.month)
             days.append(converted_date.day)
+
+    metadata.creation_message()
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)
+
+    return outseries
+
+def read_new_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+    anomalies = []
+    years = []
+    months = []
+    days = []
+
+    with open(filename[0], 'r') as f:
+        for i in range(42):
+            f.readline()
+
+        for line in f:
+            columns = line.split()
+
+            converted_date = convert_partial_year(float(columns[0]))
+            anomalies.append(float(columns[1]) * 10) # convert to mm from cm
+            years.append(converted_date.year)
+            months.append(converted_date.month)
+            days.append(converted_date.day)
+
+    anomalies = np.array(anomalies)
+    anomalies = anomalies - anomalies[0]
+    anomalies = anomalies.tolist()
 
     metadata.creation_message()
     outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)

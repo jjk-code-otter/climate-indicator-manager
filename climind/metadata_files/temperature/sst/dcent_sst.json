@@ -8,7 +8,7 @@
   "citation_url": [""],
   "data_citation": ["Chan, Duo; Gebbie, Geoffrey; Huybers, Peter; Kent, Elizabeth, 2024, DCENT: Dynamically Consistent ENsemble of Temperature at the earth surface, https://doi.org/10.7910/DVN/NU4UGW, Harvard Dataverse, V1"],
   "acknowledgement": "",
-  "colour": "purple",
+  "colour": "#9f6bcf",
   "zpos": 99,
   "origin": "obs",
   "notes": "",

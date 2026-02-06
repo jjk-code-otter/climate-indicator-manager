@@ -48,9 +48,11 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
+
+    justmaps = False
 
     halloween = False
 
@@ -61,6 +63,13 @@ if __name__ == "__main__":
     regional_test = False
 
     run_all = False
+
+    if justmaps:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "maps.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Maps"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if interactive:
         json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "interactive_dashboard.json"
@@ -154,7 +163,7 @@ if __name__ == "__main__":
 
         dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
         dash_dir.mkdir(exist_ok=True)
-        dash.build(Path(dash_dir), focus_year=2024)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if regional_multiyear or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_multiyear.json'

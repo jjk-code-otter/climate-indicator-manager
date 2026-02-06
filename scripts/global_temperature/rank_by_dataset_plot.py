@@ -37,14 +37,24 @@ if __name__ == "__main__":
     report_dir.mkdir(exist_ok=True)
 
     archive = dm.DataArchive.from_directory(metadata_dir)
-    ts_archive = archive.select({'variable': 'tas',
-                                 'type': 'timeseries',
-                                 'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires','JRA-3Q']})
+    ts_archive = archive.select({
+        'variable': 'tas',
+        'type': 'timeseries',
+        'time_resolution': 'monthly',
+        #'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires', 'JRA-3Q']
+        'name': [
+            'tempNOAA', 'tempGISTEMP', 'tempERA5',
+            'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5',
+            'tempDCENT', 'tempCMST',
+            'CMA_GMST',
+            #            'COBE-STEMP3', 'Kadow', 'GloSAT', 'Calvert 2024'
+        ],
+    })
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
     for ds in all_datasets:
-        ds.select_year_range(1970,2025)
+        ds.select_year_range(1970, 2025)
 
     pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True)
+    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset_long.png', '', overlay=False, n_months=252)

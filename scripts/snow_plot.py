@@ -68,7 +68,7 @@ STANDARD_PARAMETER_SET = {
 
 if __name__ == "__main__":
 
-    final_year = 2023
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
@@ -114,14 +114,14 @@ if __name__ == "__main__":
     col_nam = '#00b9bf'
 
     plt.plot(nh.df.year, nh.df.data, linewidth=3, color=col_nh)
-    plt.plot([1967,2023], [nh_clim.df.data[2020-1967],nh_clim.df.data[2020-1967]],
+    plt.plot([1967,final_year], [nh_clim.df.data[2020-1967],nh_clim.df.data[2020-1967]],
              linewidth=1, color=col_nh, linestyle=':')
 
     plt.plot(nam.df.year, nam.df.data, linewidth=3, color=col_nam)
-    plt.plot([1967, 2023], [nam_clim.df.data[2020 - 1967], nam_clim.df.data[2020 - 1967]],
+    plt.plot([1967, final_year], [nam_clim.df.data[2020 - 1967], nam_clim.df.data[2020 - 1967]],
              linewidth=1, color=col_nam, linestyle=':')
 
-    plt.gca().set_title('May Snow Cover Extent 1967-2023 (million km$^2$)', pad=35,
+    plt.gca().set_title(f'May Snow Cover Extent 1967-{final_year} (million km$^2$)', pad=35,
                         fontdict={'fontsize': 35},
                         loc='left')
     plt.gca().set_xlabel('Date')

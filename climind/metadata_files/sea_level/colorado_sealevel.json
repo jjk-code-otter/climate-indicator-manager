@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["https://sealevel.colorado.edu/files/2023_rel2/gmsl_2023rel2_seasons_rmvd.txt"],
-      "filename": ["gmsl_2023rel2_seasons_rmvd.txt"],
+      "url": ["https://sealevel.colorado.edu/files/2025_rel1/gmsl_2025rel1_seasons_rmvd.txt"],
+      "filename": ["gmsl_2025rel1_seasons_rmvd.txt"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

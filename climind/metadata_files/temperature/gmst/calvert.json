@@ -6,7 +6,7 @@
   "units": "degC",
   "citation": ["Calvert, B.T.T.. (2024) Improving global temperature datasets to better account for non-uniform warming. Quarterly Journal of the Royal Meteorological Society, 1–31. Available from: https://doi.org/10.1002/qj.4791"],
   "citation_url": ["https://doi.org/10.1002/qj.4791"],
-  "data_citation": ["Calvert, Bruce (2024). Maximum Likelihood Estimates of Temperatures using Data from the Hadley Centre and the Climate Research Unit (Version 1.2). World Data Center for Climate (WDCC) at DKRZ. https://doi.org/10.26050/WDCC/HadCRU_MLE_v1.2"],
+  "data_citation": ["Calvert, Bruce (2025). Maximum Likelihood Estimates of Temperatures using Data from the Hadley Centre and the Climate Research Unit (Version 1.3). World Data Center for Climate (WDCC) at DKRZ. https://doi.org/10.26050/WDCC/HadCRU_MLE_v1.3"],
   "acknowledgement": "Data provided under a Creative Commons Attribution 4.0 International (CC BY 4.0) license https://creativecommons.org/licenses/by/4.0/. Data have been additionally processed",
   "colour": "#79cca7",
   "zpos": 10,
@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_no_url"
     },
 	{
-      "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.2"],
-      "filename": ["HadCRU_MLE_v1.2_timeseries_monthly_summary.txt"],
+      "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.3"],
+      "filename": ["HadCRU_MLE_v1.3_timeseries_monthly_summary.txt"],
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
@@ -44,8 +44,8 @@
 	  "fetcher": "fetcher_no_url"
     },
     {
-      "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.2"],
-      "filename": ["HadCRU_MLE_v1.2_timeseries_annual_summary.txt"],
+      "url": ["https://www.wdc-climate.de/ui/entry?acronym=HadCRU_MLE_TimSerTxt_v1.3"],
+      "filename": ["HadCRU_MLE_v1.3_timeseries_annual_summary.txt"],
       "type": "timeseries",
       "long_name": "Near surface temperature",
 	  "time_resolution": "annual",

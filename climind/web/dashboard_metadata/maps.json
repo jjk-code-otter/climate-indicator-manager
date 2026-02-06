@@ -1,0 +1,100 @@
+{
+  "name": "Maps",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Maps",
+      "descriptor": "key_indicator.html",
+      "template": "front_page",
+      "cards": [
+        {
+          "link_to":  null, "title": "Temperature anomaly map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly rank map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1850, 2025]},
+                          {"method":  "rank", "args": []},
+                          {"method":  "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2025"}
+        },
+        {
+          "link_to":  null, "title": "HadCRUT5",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "HadCRUT5 Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "NOAAGlobalTemp",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["NOAA v6_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "NOAAGlobalTemp Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "GISTEMP",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["GISTEMP_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "GISTEMP Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "Berkeley Earth",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["Berkeley Earth Hires_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "Berkeley Earth Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "ERA5",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["ERA5_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "ERA5 Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "JRA-3Q",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["JRA-3Q_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "JRA-3Q Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "CMST v3",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["CMST v3_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "CMST v3 Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "DCENT-I",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["DCENT_I_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "DCENT-I Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "CMA-GMST",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["CMA_GMST_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "CMA-GMST Annual Temperature Anomalies 2025"}
+        }
+      ],
+      "paragraphs": []
+    }
+  ]
+}

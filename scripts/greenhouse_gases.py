@@ -29,7 +29,7 @@ from climind.data_types.timeseries import make_combined_series
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
-final_year = 2023
+final_year = 2024
 
 project_dir = DATA_DIR / "ManagedData"
 ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))

@@ -45,7 +45,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
         raise NotImplementedError
 
 
-def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+def read_annual_ts_2024(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     df = xa.open_dataset(filename)
 
     conversion = 3.1e-7 # Confirmed by Mercator
@@ -81,6 +81,55 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             years = df.time.dt.year.data[mask].tolist()
             data = (df['ohc_copernicus'] * conversion).values[mask].tolist()
             uncertainty = (df['ohc_uncertainty_copernicus'] * conversion).data[mask].tolist()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
+    else:
+        raise ValueError(f"Variable {metadata['variable']} unrecognised")
+
+    metadata.creation_message()
+
+    return out_ts
+
+def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    df = xa.open_dataset(filename)
+
+    conversion = 3.3e14/1e21 # Provided by Mercator to go from J/m^2 to ZJ
+
+    # Double uncertainties to get 95% range
+    if metadata['variable'] == 'ohc':
+        raise Exception
+    elif metadata['variable'] == 'ohc2k':
+        if metadata['name'] == 'Miniere':
+            mask = ~np.isnan(df['Minere_et_al_2023'].values)
+            years = df.time.dt.year.data[mask].tolist()
+            data = (df['Minere_et_al_2023'] * conversion).values[mask].tolist()
+            uncertainty = (df['Minere_et_al_2023_Uncertainty'] * conversion).data[mask].tolist()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
+
+        elif metadata['name'] == 'Cheng TEMP':
+            mask = ~np.isnan(df['IAP_Cheng_et_al_2024'].values)
+            years = df.time.dt.year.data[mask].tolist()
+            data = (df['IAP_Cheng_et_al_2024'] * conversion).values[mask].tolist()
+            uncertainty = (df['IAP_Cheng_et_al_2024_Uncertainty'] * conversion).data[mask].tolist()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
+
+        elif metadata['name'] == 'JMA TEMP':
+            mask = ~np.isnan(df['ohc_JMA_Ishii_et_al_2017'].values)
+            years = df.time.dt.year.data[mask].tolist()
+            data = (df['ohc_JMA_Ishii_et_al_2017'] * conversion).values[mask].tolist()
+            uncertainty = (df['ohc_uncertainty_JMA_Ishii_et_al_2017'] * conversion).data[mask].tolist()
+
+        elif metadata['name'] == 'GCOS2k TEMP':
+            mask = ~np.isnan(df['von_schuckmann_et_al_2023'].values)
+            years = df.time.dt.year.data[mask].tolist()
+            data = (df['von_schuckmann_et_al_2023'] * conversion).values[mask].tolist()
+            uncertainty = (df['von_schuckmann_et_al_2023_Uncertainty'] * conversion).data[mask].tolist()
+            out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
+
+        elif metadata['name'] == 'Copernicus_OHC':
+            mask = ~np.isnan(df['Copernicus_Marine'].values)
+            years = df.time.dt.year.data[mask].tolist()
+            data = (df['Copernicus_Marine'] * conversion).values[mask].tolist()
+            uncertainty = (df['Copernicus_Marine_Uncertainty'] * conversion).data[mask].tolist()
             out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
     else:
         raise ValueError(f"Variable {metadata['variable']} unrecognised")

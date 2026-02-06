@@ -61,7 +61,7 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeS
             years.append(int(year))
             if columns[1] != '':
                 anomalies.append(10*float(columns[1]))
-                uncertainty.append(10*float(columns[2]))
+                uncertainty.append(1.96 * 10 * float(columns[2]))
             else:
                 anomalies.append(np.nan)
                 uncertainty.append(np.nan)

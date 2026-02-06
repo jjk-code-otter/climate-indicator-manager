@@ -12,14 +12,14 @@
   "citation_url": [""],
   "data_citation": [""],
   "acknowledgement": "",
-  "colour": "#A5B309",
+  "colour": "#b7bf49",
   "zpos": 99,
   "origin": "obs",
   "notes": "",
   "datasets": [
     {
       "url": ["https://dataverse.harvard.edu/api/access/datafile/11910224"],
-	  "filename": ["DCENT_I_1.0.0.0_mean_spread.nc"],
+	  "filename": ["DCENT_I_1.1.0.0_mean_spread_tas.nc"],
       "type": "gridded",
       "long_name": "Near surface temperature",
 	  "time_resolution": "monthly",
@@ -29,17 +29,15 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_dcenti_ts",
-	  "fetcher": "fetcher_standard_url"
+      "reader": "reader_dcenti",
+	  "fetcher": "fetcher_no_url"
     },
     {
       "url": [
-        "https://www.dropbox.com/scl/fi/7swmbcuq1u7igieyttums/DCENT_DCENT-I_annual_statistics.nc?rlkey=z5poco9ofqxttv0jl0j5q866p&st=96fwa885&dl=1",
-        "https://www.dropbox.com/scl/fi/c8ohkby3kbq98jyx7c7i1/DCENT_DCENT_I_GMST_annual_statistics.txt?rlkey=wt7436fexkijiqfltnvt43681&st=px7uqc2n&dl=1"
+        "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT-I_annual_statistics.nc",
-        "DCENT_DCENT_I_GMST_annual_statistics.txt"
+        "DCENT_DCENT_I_GMST_monthly_statistics_embargo.txt"
       ],
       "type": "timeseries",
       "long_name": "Near surface temperature",
@@ -50,8 +48,27 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_dcenti_ts",
-	  "fetcher": "fetcher_standard_url"
+      "reader": "reader_dcenti",
+	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [
+        "https://dcent-i.github.io/"
+      ],
+	  "filename": [
+        "DCENT_DCENT_I_GMST_monthly_statistics_embargo.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 99,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dcenti",
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

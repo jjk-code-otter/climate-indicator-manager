@@ -1,0 +1,53 @@
+{
+    "name": "DCENT_I_5x5",
+    "display_name": "DCENT-I",
+    "version": "",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Chan, D., Gebbie, G., Huybers, P. & Kent, E. C. DCENT: Dynamically Consistent ENsemble of Temperature at the Earth Surface. https://doi.org/10.7910/DVN/NU4UGW (2024).",
+        "Chan, D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. https://doi.org/10.7910/DVN/ZY0WM8 (2025).",
+        "Chan D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. (2025). DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. Geoscience Data Journal."
+    ],
+    "citation_url": [
+        ""
+    ],
+    "data_citation": [
+        ""
+    ],
+    "acknowledgement": "",
+    "colour": "#A5B309",
+    "zpos": 99,
+    "origin": "obs",
+    "notes": "",
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "DCENT_I_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Near surface temperature",
+            "time_resolution": "annual",
+            "space_resolution": 5.0,
+            "climatology_start": 1991,
+            "climatology_end": 2020,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Gridded dataset created from file ['DCENT_I_1.1.0.0_mean_spread_tas.nc'] downloaded from ['https://dataverse.harvard.edu/api/access/datafile/11910224']",
+                "Rebaselined to 1991-2020",
+                "Calculated annual average",
+                "Wrote to file DCENT_I_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2026-01-15 15:20:21"
+            ],
+            "last_month": "2025-12-01 00:00:00"
+        }
+    ]
+}

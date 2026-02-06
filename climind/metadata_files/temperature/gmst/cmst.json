@@ -2,7 +2,7 @@
   "name": "CMST",
   "display_name": "CMST interim",
   "version": "2.0",
-  "variable": "tas",
+  "variable": "tasIGNORE",
   "units": "degC",
   "citation": ["Sun, W., Yang, Y., Chao, L., Dong, W., Huang, B., Jones, P., and Li, Q.: Description of the China global Merged Surface Temperature version 2.0, Earth Syst. Sci. Data, 14, 1677–1693, https://doi.org/10.5194/essd-14-1677-2022, 2022"],
   "citation_url": ["https://doi.org/10.5194/essd-14-1677-2022"],

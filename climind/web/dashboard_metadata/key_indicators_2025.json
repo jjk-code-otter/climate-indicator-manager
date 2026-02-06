@@ -16,7 +16,7 @@
         {
           "link_to": "global_mean_temperature", "title": "Global temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]},
@@ -27,7 +27,7 @@
         {
           "link_to": "null", "title": "Global temperature modern",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]}],
@@ -37,7 +37,7 @@
         {
           "link_to": "null", "title": "Global temperature monthly",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing":  [
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "select_year_range", "args":  [2023,2025]}
@@ -47,39 +47,50 @@
         },
         {
           "link_to": "ocean_heat_content", "title": "Ocean Indicators",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
-          "processing":  [],
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [
+            {"method": "rebaseline", "args": [2005, 2025]},
+            {"method": "select_year_range", "args": [1960, 2025]}
+          ],
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content 0-2000m"}
         },
         {
           "link_to": "sea_level", "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp", "X NASA Sealevel", "X CMEMS sea level", "X Colorado"]},
+          "processing": [
+            {"method": "select_year_range", "args":  [1993,2025]}
+          ],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
         },
         {
-          "link_to": "sea_ice_extent", "title": "Sea ice",
+          "link_to": "ocean_heat_content", "title": "Ocean pH",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
+          "processing": [],
+          "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
+        },
+        {
+          "link_to": "sea_ice_extent", "title": "Annual Arctic sea ice extent",
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
-          "processing": [{"method": "rebaseline", "args": [1991, 2020]}],
-          "plotting": {"function": "arctic_sea_ice_plot", "title": "Arctic sea-ice extent"}
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Annual Arctic sea-ice extent"}
+        },
+        {
+          "link_to": "sea_ice_extent", "title": "Annual Antarctic sea ice extent",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Annual Antarctic sea-ice extent"}
         },
         {
           "link_to": "glaciers_and_ice_sheets", "title":"Glaciers",
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing": [],
-          "plotting": {"function": "wmo_plot", "title": "Glacier cumulative mass balance"}
-        },
-        {
-          "link_to":  "glaciers_and_ice_sheets", "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
-          "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
-          "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
-        },
-        {
-          "link_to":  "glaciers_and_ice_sheets", "title": "Antarctic ice sheet",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
-          "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
-          "plotting": {"function": "wmo_plot", "title": "Antarctic ice sheet cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Reference glacier cumulative mass balance"}
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
@@ -101,7 +112,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]},
@@ -190,6 +201,12 @@
           "selecting": {"type": "timeseries", "variable": "n2orate", "time_resolution": "annual", "name": "WDCGG N2O growth"},
           "processing": [],
           "plotting": {"function": "wmo_plot", "title": "Nitrous oxide growth rate"}
+        },
+        {
+          "link_to":  null, "title": "Carbon Dioxide single-site series",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": ["Mauna Loa", "Kennaook Cape Grim CO2"]},
+          "processing": [],
+          "plotting": {"function": "wmo_plot", "title": "Atmospheric carbon dioxide concentration"}
         }
       ],
       "paragraphs": [
@@ -209,7 +226,7 @@
         {
           "link_to":  null, "title": "Global mean temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]},
@@ -232,7 +249,7 @@
         {
           "link_to": null, "title": "Global temperature simplified",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]},
@@ -243,14 +260,14 @@
         },
         {
           "link_to":  null, "title": "Land air temperature",
-          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6","CRUTEM5","Berkeley Earth LSAT"]},
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CLSAT21"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2025]}],
           "plotting": {"function": "wmo_plot", "title": "Global land temperature"}
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6"]},
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2025]}],
           "plotting": {"function": "wmo_plot", "title": "Global sea-surface temperature"}
@@ -258,22 +275,22 @@
         {
           "link_to":  null, "title": "Temperature anomaly map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
           "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2025"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly uncertainty map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5"]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
           "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
           "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025"}
         },
         {
           "link_to":  null, "title": "Temperature anomaly rank map",
           "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
-            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5"]},
-          "processing":  [{"method":  "select_year_range", "args": [1850, 2025]},
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1979, 2025]},
                           {"method":  "rank", "args": []},
                           {"method":  "select_year_range", "args": [2025, 2025]}],
           "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2025"}
@@ -282,7 +299,7 @@
       "paragraphs": [
         {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
-          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5"]},
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
           "processing": [{"method": "rebaseline", "args": [1981, 2010]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args":  [1850,2025]},
@@ -291,13 +308,13 @@
           "writing": {"function": "global_anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6"]},
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"]},
           "processing": [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2025]}],
-          "writing": {"function": "anomaly_and_rank"}
+        "writing": {"function": "anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6","CRUTEM5","Berkeley Earth LSAT"]},
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CLSAT21"]},
           "processing": [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "select_year_range", "args": [1850, 2025]}],
           "writing": {"function": "anomaly_and_rank"}
@@ -312,36 +329,46 @@
       "cards": [
         {
           "link_to":  null, "title": "Ocean heat content to 2000m",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
-          "processing":  [],
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [
+            {"method": "rebaseline", "args": [2005, 2025]},
+            {"method": "select_year_range", "args": [1960, 2025]}
+          ],
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content to 2000m"}
         },
         {
           "link_to":  null, "title": "Ocean heat content simplified",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k"]},
           "processing":  [],
           "plotting": {"function": "simplified_line", "title": "Ocean heat content to 2000m", "args":  [], "kwargs":  {"color_override": "#88E032"}},
           "hidden": true
         },
         {
           "link_to": null, "title": "Ocean Indicators spark",
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Miniere"},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": "Cheng et al 2k"},
           "processing":  [],
           "plotting": {"function": "spark_line", "title": "Ocean heat content"},
           "hidden": true
         },
         {
           "link_to":  null, "title": "Ocean pH",
-          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
           "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
         },
         {
           "link_to":  null, "title": "Ocean pH spark",
-          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
           "plotting": {"function": "spark_line", "title": "Ocean pH"},
           "hidden": true
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2025]}],
+          "plotting": {"function": "wmo_plot", "title": "Global sea-surface temperature"}
         },
         {
           "link_to":  null, "title": "Marine heat waves",
@@ -366,7 +393,7 @@
       ],
       "paragraphs": [
         {
-          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual","name": ["Copernicus_OHC", "Miniere", "Cheng TEMP"]},
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual","name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing": [],
           "writing": {"function": "anomaly_and_rank"}
         },
@@ -391,8 +418,10 @@
       "cards": [
         {
           "link_to":  null, "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
-          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp", "X NASA Sealevel", "X CMEMS sea level", "X Colorado"]},
+          "processing": [
+            {"method": "select_year_range", "args":  [1993,2025]}
+          ],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level change"}
         },
         {
@@ -408,6 +437,15 @@
           "processing": [],
           "plotting": {"function": "spark_line", "title": "Global mean sea level change"},
           "hidden":  true
+        },
+        {
+          "link_to":  null, "title": "Ocean heat content to 2000m",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [
+            {"method": "rebaseline", "args": [2005, 2025]},
+            {"method": "select_year_range", "args": [1960, 2025]}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Ocean heat content to 2000m"}
         }
       ],
       "paragraphs": [
@@ -435,6 +473,24 @@
           "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]}],
           "plotting": {"function": "antarctic_sea_ice_plot", "title": "Antarctic sea-ice extent"}
+        },
+        {
+          "link_to": null, "title": "Annual Arctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Annual Arctic sea-ice extent"}
+        },
+        {
+          "link_to": null, "title": "Annual Antarctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "wmo_plot", "title": "Annual Antarctic sea-ice extent"}
         },
         {
           "link_to":  null, "title": "Arctic daily sea ice",
@@ -499,47 +555,53 @@
       "template": "topic_page",
       "cards": [
         {
+          "link_to":  null, "title": "Reference glacier mass balance",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name":  "WGMS"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Reference glacier cumulative mass balance"}
+        },
+        {
           "link_to":  null, "title": "Glacier mass balance",
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name":  "GLAMBIE"},
           "processing":  [],
           "plotting": {"function": "wmo_plot", "title": "Glacier cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Glacier mass balance spark",
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing":  [],
-          "plotting": {"function": "spark_line", "title": "Glacier cumulative mass balance"},
+          "plotting": {"function": "spark_line", "title": "Reference glacier cumulative mass balance"},
           "hidden": true
         },
         {
           "link_to":  null, "title": "Glacier mass balance simplified",
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing":  [],
           "plotting": {"function": "simplified_line", "title": "Glacier cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#862FE0"}},
           "hidden": true
         },
         {
           "link_to":  null, "title": "Greenland ice sheet",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "wmo_plot", "title": "Greenland ice sheet cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Greenland ice sheet simplified",
-          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "Velicogna Greenland", "GRACE Greenland"]},
+          "selecting": {"type": "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": ["PROMICE2", "IMBIE 2021 Greenland", "GRACE Greenland"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 7]}],
           "plotting": {"function": "simplified_line", "title": "Greenland ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#FFC341"}},
           "hidden": true
         },
         {
           "link_to":  null, "title": "Antarctic ice sheet",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "wmo_plot", "title": "Antarctic ice sheet cumulative mass balance"}
         },
         {
           "link_to":  null, "title": "Antarctic ice sheet simplified",
-          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "Velicogna Antarctica", "GRACE Antarctica"]},
+          "selecting": {"type": "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": ["IMBIE 2021 Antarctica", "GRACE Antarctica"]},
           "processing":  [{"method": "zero_on_month", "args": [2005, 6]}],
           "plotting": {"function": "simplified_line", "title": "Antarctic ice sheet cumulative mass balance", "args":  [], "kwargs":  {"color_override": "#88E032"}},
           "hidden": true
@@ -571,12 +633,12 @@
           "writing": {"function": "greenland_ice_sheet_monthly"}
         },
         {
-          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": "Velicogna Greenland"},
+          "selecting": {"type":  "timeseries", "variable": "greenland", "time_resolution": "monthly", "name": "GRACE Greenland"},
           "processing": [],
           "writing": {"function": "ice_sheet_monthly_sm_grace_version"}
         },
         {
-          "selecting": {"type":  "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": "Velicogna Antarctica"},
+          "selecting": {"type":  "timeseries", "variable": "antarctica", "time_resolution": "monthly", "name": "GRACE Antarctica"},
           "processing": [],
           "writing": {"function": "ice_sheet_monthly_sm_grace_version"}
         }

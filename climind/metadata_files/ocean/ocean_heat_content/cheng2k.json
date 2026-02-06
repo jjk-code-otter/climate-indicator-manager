@@ -2,7 +2,7 @@
   "name": "Cheng et al 2k",
   "display_name": "Cheng et al",
   "version": "",
-  "variable": "ohc2k IGNORE",
+  "variable": "ohc2k",
   "units": "zJ",
   "citation": ["Cheng, Lijing, John Abraham, Zeke Hausfather, and Kevin E. Trenberth. 'How fast are the oceans warming?.' Science 363, no. 6423 (2019): 128-129. doi:10.1126/science.aav7619"],
   "citation_url": ["https://doi.org/10.1126/science.aav7619"],
@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
     {
-      "url": ["http://www.ocean.iap.ac.cn/ftp/images_files/IAP_OHC_estimate_update.txt"],
-      "filename": ["IAP_OHC_estimate_update.txt"],
+      "url": ["http://www.ocean.iap.ac.cn/ftp/images_files/IAPv4.2_OHC_estimate_update.txt"],
+      "filename": ["IAPv4.2_OHC_estimate_update.txt"],
 	  "type": "timeseries",
       "long_name": "Global ocean heat content 0-2000m",
 	  "time_resolution": "monthly",
@@ -29,8 +29,8 @@
 	  "fetcher": "fetcher_standard_url"
     },
     {
-      "url": ["http://www.ocean.iap.ac.cn/ftp/images_files/ohc2000m_Cheng_2022.csv"],
-      "filename": ["ohc2000m_Cheng_2022.csv"],
+      "url": ["http://www.ocean.iap.ac.cn/ftp/images_files/IAPv4.2_OHC_estimate_update.txt"],
+      "filename": ["IAPv4.2_OHC_estimate_update.txt"],
 	  "type": "timeseries",
       "long_name": "Global ocean heat content 0-2000m",
 	  "time_resolution": "annual",
@@ -40,7 +40,7 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_cheng_update",
+      "reader": "reader_cheng",
 	  "fetcher": "fetcher_standard_url"
     }
   ]

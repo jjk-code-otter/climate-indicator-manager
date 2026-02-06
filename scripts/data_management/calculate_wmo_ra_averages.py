@@ -68,7 +68,13 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
     for region in range(n_regions):
         monthly_time_series = ds.calculate_regional_average_missing(region_shapes, region, land_only=land_only)
         annual_time_series = monthly_time_series.make_annual()
-        annual_time_series.select_year_range(start_year, final_year)
+
+        if region_names[region] == "Europe" and ds.metadata["name"] == "ERA5":
+            run_start_year = 1950
+        else:
+            run_start_year = start_year
+
+        annual_time_series.select_year_range(run_start_year, final_year)
 
         wmo_ra = region + 1
         annual_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{annual_time_series.metadata['name']}"
@@ -95,7 +101,9 @@ if __name__ == "__main__":
         output_data_dir = "RegionalTestData"
         output_metadata_dir = "RegionalTestMetadata"
         datasets_to_use = [
-            'DCENT_MLE'
+            #'DCENT_MLE'
+            #"DCENT-I",
+            #"CMA_GMST",
             # 'Calvert 2024', 'DCENT', 'GloSAT',
             # 'GETQUOCS', 'CMST', 'Vaccaro', 'Kadow CMIP', 'NOAA Interim', 'Kadow', 'HadCRUT5',
             # 'GISTEMP', 'NOAAGlobalTemp', 'Berkeley Earth', 'ERA5', 'JRA-55', 'JRA-3Q', 'NOAA v6'
@@ -105,12 +113,15 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            'HadCRUT5',
-            'GISTEMP',
-            'NOAA v6',
-            'Berkeley Earth',
+            #"CMST v3",
+            # "DCENT_I",
+            #"CMA_GMST",
+            # 'HadCRUT5',
+            # 'GISTEMP',
+            # 'NOAA v6',
+            # 'Berkeley Earth Hires',
             'ERA5',
-            'JRA-3Q'
+            # 'JRA-3Q'
         ]
 
     final_year = 2025
@@ -133,9 +144,9 @@ if __name__ == "__main__":
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
 
-    script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
-                        filemode='w', level=logging.INFO)
+    # script = Path(__file__).stem
+    # logging.basicConfig(filename=log_dir / f'{script}.log',
+    #                     filemode='w', level=logging.INFO)
 
     # Read in the WMO RA shape file
     continents = gp.read_file(shape_dir / 'WMO_RAs.shp')
@@ -171,6 +182,12 @@ if __name__ == "__main__":
     # start processing
     for ds in all_datasets:
         ds.rebaseline(CLIMATOLOGY[0], CLIMATOLOGY[1])
+
+        if ds.metadata['name'] in ["ERA5", "JRA-3Q"]:
+            start_year = 1979
+        else:
+            start_year = 1900
+
         pt.nice_map(ds.df, figure_dir / f"{ds.metadata['name']}", ds.metadata['name'])
 
         region_names = ['Africa', 'Asia', 'South America',

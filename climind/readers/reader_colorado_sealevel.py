@@ -51,6 +51,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             days.append(converted_date.day)
 
     smoothed = savgol_filter(anomalies, 31, 2)
+    smoothed = smoothed - smoothed[0]
 
     metadata.creation_message()
     outseries = ts.TimeSeriesIrregular(years, months, days, smoothed, metadata=metadata)

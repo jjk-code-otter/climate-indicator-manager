@@ -22,7 +22,11 @@ import climind.data_manager.processing as dm
 import climind.plotters.plot_types as pt
 import climind.stats.utils as utils
 
-from climind.data_types.timeseries import make_combined_series
+from climind.data_types.timeseries import (
+    make_combined_series,
+    write_dataset_summary_file,
+    write_dataset_summary_file_with_metadata,
+)
 
 from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
@@ -65,7 +69,11 @@ if __name__ == "__main__":
     ts_archive = archive.select({
         'variable': 'tas',
         'type': 'timeseries',
-        'name': ['tempNOAA', 'tempGISTEMP', 'tempERA5', 'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5', 'tempDCENT', 'tempCMST', 'CMA_GMST'],
+        'name': [
+            'tempNOAA', 'tempGISTEMP', 'tempERA5', 'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5', 'tempDCENT', 'tempCMST',
+            'CMA_GMST',
+            #            'COBE-STEMP3', 'Kadow', 'GloSAT', 'Calvert 2024'
+        ],
         'time_resolution': 'monthly'
     })
 
@@ -77,7 +85,7 @@ if __name__ == "__main__":
     all_annual_datasets = []
     for ds in all_datasets:
         # ds.change_end_month(2025, 8)
-        #print(ds.get_start_and_end_dates())
+        # print(ds.get_start_and_end_dates())
 
         ds.rebaseline(1981, 2010)
         pt.wave_plot(figure_dir, ds, f"temp_wave_{ds.metadata['name']}.png")
@@ -89,12 +97,20 @@ if __name__ == "__main__":
         b = annual8110.time_average(2025, 2025)
         print(f"{annual8110.metadata['display_name']} 2025: {a - b:.2f}")
 
+        a = annual8110.time_average(1850, 1900)
+        b = annual8110.time_average(1981, 2010)
+        print(f"{annual8110.metadata['display_name']} 1850-1900 - 1981-2010: {b - a:.4f}")
+
         annual = ds.make_annual()
         annual.add_offset(0.69)
         annual.manually_set_baseline(1850, 1900)
         annual.select_year_range(1850, final_year)
         all_annual_datasets.append(annual)
         annual.write_csv(fdata_dir / f"{annual.metadata['name']}_{annual.metadata['variable']}.csv")
+
+    threes = []
+    for ds in all_annual_datasets:
+        threes.append(ds.running_mean(3))
 
     all_datasets_b = ts_archive.read_datasets(data_dir)
     all_8110_monthly = []
@@ -134,9 +150,6 @@ if __name__ == "__main__":
         annual.select_year_range(1850, final_year)
         all_alt_datasets.append(annual)
 
-    # Make the combined series by taking the mean of the series
-    combined = make_combined_series(all_annual_datasets)
-    combined.write_csv(fdata_dir / "temp_combined_global_mean_temperature.csv")
 
     for ds in ann_datasets:
         ds.rebaseline(1981, 2010)
@@ -153,8 +166,16 @@ if __name__ == "__main__":
     print()
     print("Single year statistics")
     utils.run_the_numbers(all_annual_datasets, final_year, 'temp_annual_stats', report_dir)
+    utils.run_the_numbers(threes, final_year, 'temp_threeyear_stats', report_dir)
     utils.run_the_numbers(all_8110_datasets, final_year, 'temp_annual_stats_8110', report_dir, ipcc_unc=False)
     utils.run_the_numbers(all_9120_datasets, final_year, 'temp_annual_stats_9120', report_dir, ipcc_unc=False)
     utils.run_the_numbers(all_6190_datasets, final_year, 'temp_annual_stats_6190', report_dir, ipcc_unc=False)
 
     utils.run_the_numbers(all_alt_datasets, final_year, 'temp_alt_stats', report_dir)
+
+    write_dataset_summary_file(all_annual_datasets, fdata_dir / "temp_gmst.csv")
+    write_dataset_summary_file_with_metadata(all_annual_datasets, fdata_dir / "temp_gmst_meta.csv")
+
+    # Make the combined series by taking the mean of the series
+    combined = make_combined_series(all_annual_datasets)
+    combined.write_csv(fdata_dir / "temp_combined_global_mean_temperature.csv")

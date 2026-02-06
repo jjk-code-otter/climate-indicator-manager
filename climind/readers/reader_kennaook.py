@@ -41,3 +41,8 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     metadata.creation_message()
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    ts = read_monthly_ts(filename, metadata)
+    ts = ts.make_annual()
+    return ts
