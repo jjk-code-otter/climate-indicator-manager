@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ page_meta.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --wmo-blue: #00529c;
+      --wmo-light-blue: #00a9ce;
+      --bg-light: #f7f8fb;
+      --box-grey: #f0f4fa;
+      --text-main: #222;
+      --text-muted: #666;
+      --border-light: #d9dde5;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    /* Top bar */
+    header.top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border-light);
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .top-bar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .title-block .title {
+      font-size: 1.3rem;
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .title-block .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    nav.scope-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--bg-light);
+      padding: 4px;
+      border-radius: 999px;
+    }
+
+    .scope-tab {
+      border: none;
+      background: transparent;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+    }
+
+    .scope-tab.active {
+      background: #ffffff;
+      color: var(--wmo-blue);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .scope-tab:active {
+      transform: translateY(1px);
+    }
+
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .link-button {
+      border: none;
+      background: transparent;
+      color: var(--wmo-blue);
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 4px 2px;
+    }
+
+    /* Region dropdown (for Regional scope) */
+    .region-select-row {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      margin-top: 2px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .region-select-row.active {
+      display: flex;
+    }
+
+    .region-select-row label {
+      font-weight: 500;
+    }
+
+    .region-select-row select {
+      border-radius: 999px;
+      border: 1px solid var(--border-light);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    /* Main layout */
+    main.layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 24px 32px;
+      background-image: radial-gradient(circle, #e6e9f0 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* Left indicator column */
+    aside.indicator-panel {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: var(--radius-lg);
+      padding: 16px 14px 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 88px;
+      max-height: calc(100vh - 110px);
+      overflow: auto;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .panel-title.guidance-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .panel-title.guidance-toggle::after {
+      content: ">";
+      font-size: 0.8rem;
+      color: var(--wmo-blue);
+    }
+
+    .indicator-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .indicator-item {
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .indicator-item:hover {
+      background: var(--bg-light);
+      border-color: var(--border-light);
+    }
+
+    .indicator-item.active {
+      background: rgba(0, 82, 156, 0.08);
+      border-color: rgba(0, 82, 156, 0.4);
+      color: var(--wmo-blue);
+      font-weight: 550;
+    }
+
+    .indicator-item.placeholder {
+      margin-top: 4px;
+      border-style: dashed;
+      font-style: italic;
+    }
+
+    .guidance-section {
+      border-top: 1px solid #eef0f5;
+      padding-top: 10px;
+    }
+
+    .guidance-group-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin: 4px 0;
+    }
+
+    .guidance-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .guidance-item {
+      font-size: 0.82rem;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      line-height: 1.3;
+      cursor: default;
+    }
+
+    .guidance-item span.code {
+      font-weight: 600;
+      color: var(--wmo-blue);
+      margin-left: 4px;
+    }
+
+    .guidance-item:hover {
+      background: var(--bg-light);
+      border-color: var(--border-light);
+    }
+
+    /* Main content side */
+    section.content-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+    .content-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: baseline;
+    }
+
+    .content-header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .content-header .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .meta-line {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Charts + key message layout */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .chart-block {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .chart-placeholder-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .chart-embed {
+      margin-top: 4px;
+    }
+
+    .chart-embed iframe {
+      width: 100%;
+      min-width: 100% !important;
+      border: 0;
+    }
+
+    .ts-placeholder {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 20px 8px;
+    }
+
+    /* Key message block */
+    .key-message-block {
+      background: var(--box-grey);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      gap: 8px;
+    }
+
+    .key-message-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .key-number {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .key-text {
+      font-size: 0.98rem;
+      color: var(--text-main);
+    }
+
+    .key-extra {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .download-line {
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+
+    .download-line a {
+      color: var(--wmo-blue);
+      text-decoration: none;
+    }
+
+    .download-line a:hover {
+      text-decoration: underline;
+    }
+
+    /* About & guidance layouts */
+    .guidance-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .guidance-block-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .guidance-main-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .guidance-main-list li {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .guidance-main-list span.code {
+      font-weight: 600;
+      color: var(--wmo-blue);
+      margin-left: 4px;
+    }
+
+    .about-body p {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin: 4px 0 10px;
+    }
+
+    footer.page-footer {
+      padding: 14px 24px 26px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-light);
+      background: #ffffff;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      main.layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside.indicator-panel {
+        position: static;
+        max-height: none;
+        order: -1;
+      }
+
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .guidance-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top bar with scope & region dropdown -->
+  <header class="top-bar">
+    <div class="top-bar-row">
+      <div class="title-block">
+        <div class="title">{{ page_meta.name }}</div>
+        <div class="subtitle">
+          Explore global and regional climate indicators &amp; extremes
+        </div>
+      </div>
+
+      <div class="top-bar-actions">
+        <nav class="scope-tabs" aria-label="Scope selection">
+          <button class="scope-tab active" data-scope="global">Global</button>
+          <button class="scope-tab" data-scope="regional">Regional</button>
+        </nav>
+
+        <button class="link-button" id="aboutBtn">About</button>
+      </div>
+    </div>
+
+    <!-- Regional dropdown -->
+    <div class="region-select-row" id="regionRow">
+      <label for="regionSelect">Region:</label>
+      <select id="regionSelect">
+        <option value="africa">Africa</option>
+        <option value="asia">Asia</option>
+        <option value="europe">Europe</option>
+        <option value="lac">Latin America &amp; the Caribbean</option>
+        <option value="sw-pacific">South-West Pacific</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Left column: indicators + guidance toggle -->
+    <aside class="indicator-panel">
+      <div>
+        <div class="panel-title">Climate indicators</div>
+        <ul class="indicator-list">
+
+        {% for item in cards %}
+          <li class="indicator-item placeholder" data-indicator="{{ item.link_to }}">
+            {{ item.title }}
+          </li>
+        {% endfor %}
+
+          <li class="indicator-item placeholder" data-indicator="extremes">
+            Extreme events (placeholder)
+          </li>
+        </ul>
+      </div>
+
+      <!-- Guidance for Members -->
+      <div class="guidance-section">
+        <div class="panel-title guidance-toggle" id="guidanceToggle">
+          Guidance for Members
+        </div>
+
+        <div class="guidance-group">
+          <div class="guidance-group-title">Climate data related</div>
+          <ul class="guidance-list">
+            <li class="guidance-item">
+              Guidelines on Homogenisation
+              <span class="code">(WMO&nbsp;No.&nbsp;1245)</span>
+            </li>
+            <li class="guidance-item">
+              WMO Stewardship Maturity Matrix for Climate Data
+              <span class="code">(WMO&nbsp;No.&nbsp;1328)</span>
+            </li>
+            <li class="guidance-item">
+              Climate Data Management System Specifications
+              <span class="code">(WMO&nbsp;No.&nbsp;1131)</span>
+            </li>
+            <li class="guidance-item">
+              Guidelines on the Calculation of Climate Normals
+              <span class="code">(WMO&nbsp;No.&nbsp;1203)</span>
+            </li>
+            <li class="guidance-item">
+              Surface Station Data QC/QA for Climate Applications
+              <span class="code">(WMO&nbsp;No.&nbsp;1269)</span>
+            </li>
+            <li class="guidance-item">
+              Good Practices for Data Rescue
+              <span class="code">(WMO&nbsp;No.&nbsp;1182)</span>
+            </li>
+            <li class="guidance-item">
+              Transition to Automatic Networks for Long-term Records
+              <span class="code">(WMO&nbsp;No.&nbsp;1202)</span>
+            </li>
+            <li class="guidance-item">
+              Submission of World Weather Records 2011+
+              <span class="code">(WMO&nbsp;No.&nbsp;1186)</span>
+            </li>
+            <li class="guidance-item">
+              Guidelines on DAYCLI
+            </li>
+            <li class="guidance-item">
+              CLINO 1991–2020
+            </li>
+          </ul>
+        </div>
+
+        <div class="guidance-group">
+          <div class="guidance-group-title">Climate monitoring related</div>
+          <ul class="guidance-list">
+            <li class="guidance-item">
+              Implementation of Climate Watches
+              <span class="code">(WMO&nbsp;No.&nbsp;1299)</span>
+            </li>
+            <li class="guidance-item">
+              Definition &amp; Characterisation of Extremes
+              <span class="code">(WMO&nbsp;No.&nbsp;1310)</span>
+            </li>
+            <li class="guidance-item">
+              National Climate Monitoring Products
+              <span class="code">(WMO&nbsp;No.&nbsp;1204)</span>
+            </li>
+            <li class="guidance-item">
+              Regional State of the Climate reports
+              <span class="code">(WMO&nbsp;No.&nbsp;1298)</span>
+            </li>
+            <li class="guidance-item">
+              National State of the Climate reports
+            </li>
+            <li class="guidance-item">
+              Quality control of climate records
+            </li>
+            <li class="guidance-item">
+              Baselines &amp; reference periods
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right side: main content -->
+    <section class="content-panel">
+      <!-- Indicator view -->
+      <article class="content-card" id="indicatorView" aria-label="Main indicator view">
+        <div class="content-header">
+          <div>
+            <h1 id="indicator-title">
+              Global mean temperature 1850–2024
+            </h1>
+            <div class="subtitle" id="indicator-subtitle">
+              Difference from 1850–1900 average
+            </div>
+          </div>
+          <div class="meta-line" id="indicator-meta">
+            Data sources: Berkeley Earth, ERA5, GISTEMP, HadCRUT5, JRA-3Q, NOAAGlobalTemp
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <!-- Main time series -->
+          <div class="chart-block">
+            <div class="chart-placeholder-label">
+              Interactive time series (Datawrapper)
+            </div>
+            <div class="chart-embed">
+              <!-- Single Datawrapper iframe, src swapped in JS -->
+              <iframe
+                id="ts-iframe"
+                title="Global mean temperature 1850–2025"
+                aria-label="Line chart"
+                src="https://datawrapper.dwcdn.net/xkCQU/16/"
+                scrolling="no"
+                frameborder="0"
+                data-external="1"></iframe>
+              <div class="ts-placeholder" id="ts-placeholder" style="display:none;">
+                This indicator will be added soon. In the meantime, see the State of the Global Climate report for more information.
+              </div>
+            </div>
+          </div>
+
+          <!-- Key message block -->
+          <div class="key-message-block">
+            <div class="key-message-label">Key message</div>
+            <div class="key-number" id="km-number">1.55C</div>
+            <div class="key-text" id="km-text">
+              Above the 1850–1900 baseline (2024, multi-dataset average)
+            </div>
+            <div class="key-extra" id="km-extra">
+              2024 was around 1.55C warmer than the pre-industrial reference period, based on a combined assessment of six independent datasets.
+            </div>
+			<div class="meta-line" id="indicator-meta2">
+              Data sources: Berkeley Earth, ERA5, GISTEMP, HadCRUT5, JRA-3Q, NOAAGlobalTemp
+            </div>
+            <div class="download-line">
+              Image:
+              <a id="dl-image" href="#" target="_blank">png</a>
+              &nbsp;|&nbsp; Formatted data:
+              <a id="dl-csv" href="#" target="_blank">csv</a>
+              &nbsp;(
+              <a href="https://help.ceda.ac.uk/article/105-badc-csv" target="_blank">format</a>
+              ) &nbsp;|&nbsp;
+              <a id="dl-ref" href="#" target="_blank">References &amp; processing</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guidance view (hidden by default) -->
+      <article class="content-card" id="guidanceView" style="display:none;">
+        <div class="content-header">
+          <div>
+            <h1>Guidance for Members</h1>
+            <div class="subtitle">
+              Key WMO publications on climate data, monitoring, and State of the Climate reporting
+            </div>
+          </div>
+        </div>
+
+        <div class="guidance-layout">
+          <section>
+            <div class="guidance-block-title">Climate data related</div>
+            <ul class="guidance-main-list">
+              <li>
+                <a href="https://library.wmo.int/records/item/57130-guidelines-on-homogenization">Guidelines on Homogenisation
+                <span class="code">(WMO&nbsp;No.&nbsp;1245)</span></a>
+              </li>
+              <li>
+                WMO Stewardship Maturity Matrix for Climate Data
+                <span class="code">(WMO&nbsp;No.&nbsp;1328)</span>
+              </li>
+              <li>
+                Climate Data Management System Specifications
+                <span class="code">(WMO&nbsp;No.&nbsp;1131)</span>
+              </li>
+              <li>
+                Guidelines on the Calculation of Climate Normals
+                <span class="code">(WMO&nbsp;No.&nbsp;1203)</span>
+              </li>
+              <li>
+                Surface Station Data QC/QA for Climate Applications
+                <span class="code">(WMO&nbsp;No.&nbsp;1269)</span>
+              </li>
+              <li>
+                Good Practices for Data Rescue
+                <span class="code">(WMO&nbsp;No.&nbsp;1182)</span>
+              </li>
+              <li>
+                Transition to Automatic Networks for Long-term Records
+                <span class="code">(WMO&nbsp;No.&nbsp;1202)</span>
+              </li>
+              <li>
+                Submission of World Weather Records 2011+
+                <span class="code">(WMO&nbsp;No.&nbsp;1186)</span>
+              </li>
+              <li>Guidelines on DAYCLI</li>
+              <li>CLINO 1991–2020</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="guidance-block-title">Climate monitoring related</div>
+            <ul class="guidance-main-list">
+              <li>
+                Implementation of Climate Watches
+                <span class="code">(WMO&nbsp;No.&nbsp;1299)</span>
+              </li>
+              <li>
+                Definition &amp; Characterisation of Extremes
+                <span class="code">(WMO&nbsp;No.&nbsp;1310)</span>
+              </li>
+              <li>
+                National Climate Monitoring Products
+                <span class="code">(WMO&nbsp;No.&nbsp;1204)</span>
+              </li>
+              <li>
+                Regional State of the Climate reports
+                <span class="code">(WMO&nbsp;No.&nbsp;1298)</span>
+              </li>
+              <li>National State of the Climate reports</li>
+              <li>Quality control of climate records</li>
+              <li>Baselines &amp; reference periods</li>
+            </ul>
+          </section>
+        </div>
+      </article>
+
+      <!-- About view (hidden by default) -->
+      <article class="content-card" id="aboutView" style="display:none;">
+        <div class="content-header">
+          <div>
+            <h1>About the key climate indicators</h1>
+            <div class="subtitle">
+              Draft placeholder – paste the “About” text from your Key Climate Indicators page here.
+            </div>
+          </div>
+        </div>
+
+        <div class="about-body">
+          <p>
+            This hub brings together the headline global and regional climate indicators
+            used in WMO’s State of the Global Climate and related reports. Each indicator
+            is accompanied by an interactive time series and a short key message
+            summarising the latest status.
+          </p>
+          <p>
+            Use the tabs at the top to switch between global and regional views,
+            and the navigation on the left to select individual indicators or
+            access guidance for Members.
+          </p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    Data and figures: WMO State of the Global Climate &amp; Regional State of the
+    Climate reports. This page is a prototype wireframe for the State of the
+    Climate Hub.
+  </footer>
+
+  <!-- Single Datawrapper resize script -->
+  <script>
+    window.addEventListener("message", function (event) {
+      if (event.data["datawrapper-height"] !== undefined) {
+        const iframes = document.querySelectorAll("iframe");
+        for (const chartId in event.data["datawrapper-height"]) {
+          for (let i = 0; i < iframes.length; i++) {
+            if (iframes[i].contentWindow === event.source) {
+              iframes[i].style.height =
+                event.data["datawrapper-height"][chartId] + "px";
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  <!-- Minimal JS: tabs, about, region select, indicators vs guidance view -->
+  <script>
+    const regionRow = document.getElementById("regionRow");
+    const indicatorView = document.getElementById("indicatorView");
+    const guidanceView = document.getElementById("guidanceView");
+    const aboutView = document.getElementById("aboutView");
+    const guidanceToggle = document.getElementById("guidanceToggle");
+    const aboutBtn = document.getElementById("aboutBtn");
+    const tsIframe = document.getElementById("ts-iframe");
+    const tsPlaceholder = document.getElementById("ts-placeholder");
+
+    const indicatorTitle = document.getElementById("indicator-title");
+    const indicatorSubtitle = document.getElementById("indicator-subtitle");
+    const indicatorMeta = document.getElementById("indicator-meta");
+    const indicatorMeta2 = document.getElementById("indicator-meta2");
+
+    const kmNumber = document.getElementById("km-number");
+    const kmText = document.getElementById("km-text");
+    const kmExtra = document.getElementById("km-extra");
+    const dlImage = document.getElementById("dl-image");
+    const dlCsv = document.getElementById("dl-csv");
+    const dlRef = document.getElementById("dl-ref");
+
+    // Configuration for indicators (Datawrapper IDs from the HTML you shared)
+    const INDICATORS = {
+
+    {% for item in cards %}
+      {{ item.link_to }}: {
+        title: "{{ item.title }}",
+        subtitle: "{{ item.subtitle }}",
+        meta:
+          "Data sources: {% for ds in item.dataset_metadata %}{{ ds.display_name }},{% endfor %}",
+        chartId: "{{ item.plotting.kwargs.id }}",
+        chartVersion: "16",
+        headlineValue: "1.43±0.13°C",
+        headlineLabel:
+          "{{ item.subtitle }}",
+        headlineExtra:
+          "{{ paragraphs[loop.index0].text }}",
+        imageHref: "https://datawrapper.dwcdn.net/{{ item.plotting.kwargs.id }}/full.png",
+        csvHref: "formatted_data/{{ item.csv_name }}",
+        refHref: "#"
+      },
+    {% endfor %}
+
+      extremes: {
+        title: "Extreme events",
+        subtitle: "Prototype explorer (placeholder)",
+        meta:
+          "A dedicated extreme events explorer based on Member-reported impacts will be integrated here.",
+        chartId: null,
+        chartVersion: null,
+        headlineValue: "Coming soon",
+        headlineLabel: "Extreme events explorer under development",
+        headlineExtra:
+          "The extreme events component will allow users to interactively explore Member-reported high-impact events by region, hazard type and sectoral impacts.",
+        imageHref: "#",
+        csvHref: "#",
+        refHref: "#"
+      }
+    };
+
+    function showView(which) {
+      // which: 'indicator', 'guidance', 'about'
+      indicatorView.style.display = which === "indicator" ? "block" : "none";
+      guidanceView.style.display = which === "guidance" ? "block" : "none";
+      aboutView.style.display = which === "about" ? "block" : "none";
+    }
+
+    // Scope tabs
+    document.querySelectorAll(".scope-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document
+          .querySelectorAll(".scope-tab")
+          .forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        const scope = tab.dataset.scope;
+        if (scope === "regional") {
+          regionRow.classList.add("active");
+        } else {
+          regionRow.classList.remove("active");
+        }
+
+        showView("indicator");
+      });
+    });
+
+    // About button
+    aboutBtn.addEventListener("click", () => {
+      showView("about");
+      // clear active indicator highlight for clarity
+      document
+        .querySelectorAll(".indicator-item")
+        .forEach((el) => el.classList.remove("active"));
+    });
+
+    // Region select (placeholder for future logic)
+    document.getElementById("regionSelect").addEventListener("change", (e) => {
+      const region = e.target.value;
+      console.log("Region changed to", region);
+      // In a future iteration, switch Datawrapper chart IDs or filters here.
+    });
+
+    // Update indicator view based on configuration
+    function updateIndicator(id) {
+      const cfg = INDICATORS[id] || INDICATORS["temp"];
+
+      indicatorTitle.textContent = cfg.title;
+      indicatorSubtitle.textContent = cfg.subtitle;
+      indicatorMeta.textContent = cfg.meta;
+      indicatorMeta2.textContent = cfg.meta;
+
+      kmNumber.textContent = cfg.headlineValue;
+      kmText.textContent = cfg.headlineLabel;
+      kmExtra.textContent = cfg.headlineExtra;
+
+      dlImage.href = cfg.imageHref || "#";
+      dlCsv.href = cfg.csvHref || "#";
+      dlRef.href = cfg.refHref || "#";
+
+      if (cfg.chartId && cfg.chartVersion) {
+        const src =
+          "https://datawrapper.dwcdn.net/" +
+          cfg.chartId +
+          "/";
+        tsIframe.style.display = "block";
+        tsPlaceholder.style.display = "none";
+        if (tsIframe.src !== src) {
+          tsIframe.src = src;
+        }
+      } else {
+        tsIframe.style.display = "none";
+        tsPlaceholder.style.display = "block";
+      }
+
+      showView("indicator");
+    }
+
+    // Indicator + placeholder list: show indicator view
+    document.querySelectorAll(".indicator-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        document
+          .querySelectorAll(".indicator-item")
+          .forEach((el) => el.classList.remove("active"));
+        item.classList.add("active");
+
+        const id = item.dataset.indicator;
+        updateIndicator(id);
+      });
+    });
+
+    // Guidance toggle: show guidance view
+    guidanceToggle.addEventListener("click", () => {
+      showView("guidance");
+      document
+        .querySelectorAll(".indicator-item")
+        .forEach((el) => el.classList.remove("active"));
+    });
+
+    // Initial state: temperature indicator already set in HTML, but ensure config matches
+    updateIndicator("ghg");
+  </script>
+</body>
+</html>

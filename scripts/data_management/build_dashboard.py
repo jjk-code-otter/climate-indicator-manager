@@ -39,10 +39,11 @@ if __name__ == "__main__":
     ROOT_DIR = (ROOT_DIR / "..").resolve()
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
+    hub = True
     interactive = False
 
     minimal = False
-    dash2025 = True
+    dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False
@@ -63,6 +64,13 @@ if __name__ == "__main__":
     regional_test = False
 
     run_all = False
+
+    if hub:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "hub_dashboard.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Hub"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if justmaps:
         json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "maps.json"

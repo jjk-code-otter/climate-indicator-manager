@@ -1,0 +1,118 @@
+{
+  "name": "State of the Climate Hub",
+  "pages": [
+    {
+      "id": "dashboard",
+      "name": "Key Climate Indicators",
+      "descriptor": "key_indicator.html",
+      "template": "hub",
+      "cards": [
+        {
+          "link_to": "ghg", "title": "Carbon Dioxide", "subtitle": "atmospheric concentration in parts per milion",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "LpDOm"}}
+        },
+        {
+          "link_to": "eei", "title": "Earths Energy Imbalance", "subtitle": "",
+          "selecting": {"type": "timeseries", "variable": "eei", "time_resolution": "annual", "name": [
+            "Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"
+          ]},
+          "processing": [],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Earths Energy Imbalance", "kwargs": {"id":  "v0K6k"}}
+        },
+        {
+          "link_to": "gmst", "title": "Global mean temperature", "subtitle": "Difference from the 1850-1900 average",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5", "DCENT_I", "CMST v3", "CMA_GMST"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2025]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "xkCQU"}}
+        },
+        {
+          "link_to": "ohc", "title": "Ocean Indicators", "subtitle": "Difference from the 2005-2025 average",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "r8dK2"}}
+        },
+        {
+          "link_to": "gmsl", "title": "Global Mean Sea level", "subtitle": "Change since 1993",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DHI0W"}}
+        },
+        {
+          "link_to": "seaice", "title": "Arctic Sea ice", "subtitle": "Difference from 1991-2020 average",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "eM0CH"}}
+        },
+        {
+          "link_to": "glaciers", "title":"Glaciers", "subtitle": "Cumulative mass loss since 1970",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Glacier cumulative mass balance", "kwargs": {"id":  "akAo7"}}
+        },
+        {
+          "link_to": "oceanph", "title":"Ocean pH", "subtitle": "",
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean pH", "kwargs": {"id":  "FM5b1"}}
+        }
+      ],
+      "paragraphs": [
+        {
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
+          "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
+          "writing": {"function": "co2_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "eei", "time_resolution": "annual", "name": ["Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"]},
+          "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
+          "writing": {"function": "global_anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"]},
+          "processing": [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2025]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "writing": {"function": "global_anomaly_and_rank"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual","name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing": [],
+          "writing": {"function": "anomaly_and_rank"}
+        },
+         {
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
+          "processing": [{"method": "select_year_range", "args":  [1850,2025]}],
+          "writing": {"function": "long_term_trend_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
+          "processing": [],
+          "writing": {"function": "arctic_ice_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "processing": [],
+          "writing": {"function": "glacier_paragraph"}
+        },
+        {
+          "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
+          "processing": [],
+          "writing": {"function": "anomaly_and_rank"}
+        }
+      ]
+    }
+  ]
+}

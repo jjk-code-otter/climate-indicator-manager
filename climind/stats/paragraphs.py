@@ -885,7 +885,7 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) 
                      f"between {first_year} and {last_year}. The rate of change in the past decade {year - 9}-{year} is "
                      f"{trend3:.2f} {units}/yr which is higher than the trend for the first decade of the satellite "
                      f"record 1993-2002 which was {trend2:.2f} {units}/yr. The trend for 2015-2014 was {trend4:.2f} "
-                     f"{units}/yr.\n")
+                     f"{units}/yr.")
 
     return out_text
 
