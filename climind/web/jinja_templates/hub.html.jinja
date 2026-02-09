@@ -521,7 +521,7 @@
         <ul class="indicator-list">
 
         {% for item in cards %}
-          <li class="indicator-item placeholder" data-indicator="{{ item.link_to }}">
+          <li class="indicator-item {% if loop.first %}active{% endif %}" data-indicator="{{ item.link_to }}">
             {{ item.title }}
           </li>
         {% endfor %}
@@ -925,9 +925,9 @@
       indicatorMeta.textContent = cfg.meta;
       indicatorMeta2.textContent = cfg.meta;
 
-      kmNumber.textContent = cfg.headlineValue;
-      kmText.textContent = cfg.headlineLabel;
-      kmExtra.textContent = cfg.headlineExtra;
+      kmNumber.innerHTML = cfg.headlineValue;
+      kmText.innerHTML = cfg.headlineLabel;
+      kmExtra.innerHTML = cfg.headlineExtra;
 
       dlImage.href = cfg.imageHref || "#";
       dlCsv.href = cfg.csvHref || "#";
