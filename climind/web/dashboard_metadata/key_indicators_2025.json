@@ -129,7 +129,7 @@
           "writing": {"function": "global_anomaly_and_rank"}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly"},
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [{"method": "select_year_range", "args":  [1850,2025]}],
           "writing": {"function": "long_term_trend_paragraph"}
         },

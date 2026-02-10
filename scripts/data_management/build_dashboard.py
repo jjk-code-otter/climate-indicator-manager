@@ -39,11 +39,11 @@ if __name__ == "__main__":
     ROOT_DIR = (ROOT_DIR / "..").resolve()
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
-    hub = True
+    hub = False
     interactive = False
 
     minimal = False
-    dash2025 = False
+    dash2025 = True
     dash2024 = False
     dash2023 = False
     dash2022 = False
