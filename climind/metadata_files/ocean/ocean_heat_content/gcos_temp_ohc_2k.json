@@ -1,6 +1,6 @@
 {
   "name": "GCOS2k TEMP",
-  "display_name": "GCOS",
+  "display_name": "von Schuckmann et al.",
   "version": "",
   "variable": "ohc2k",
   "units": "zJ",

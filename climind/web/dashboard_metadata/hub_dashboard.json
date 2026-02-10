@@ -33,7 +33,7 @@
           "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "xkCQU"}}
         },
         {
-          "link_to": "ohc", "title": "Ocean Indicators", "subtitle": "Difference from the 2005-2025 average",
+          "link_to": "ohc", "title": "Ocean heat content", "subtitle": "Difference from the 2005-2025 average",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "r8dK2"}}
@@ -70,12 +70,12 @@
         {
           "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
           "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
-          "writing": {"function": "co2_paragraph"}
+          "writing": {"function": "co2_paragraph", "kwargs": {"output_list": true}}
         },
         {
           "selecting": {"type": "timeseries", "variable": "eei", "time_resolution": "annual", "name": ["Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"]},
           "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
-          "writing": {"function": "global_anomaly_and_rank"}
+          "writing": {"function": "global_anomaly_and_rank", "kwargs": {"output_list": true}}
         },
         {
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
@@ -85,32 +85,35 @@
                           {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "writing": {"function": "global_anomaly_and_rank"}
+          "writing": {"function": "global_anomaly_and_rank", "kwargs": {"output_list": true}}
         },
         {
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual","name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing": [],
-          "writing": {"function": "anomaly_and_rank"}
+          "writing": {"function": "anomaly_and_rank", "kwargs": {"output_list": true}}
         },
          {
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": "AVISO ftp"},
           "processing": [{"method": "select_year_range", "args":  [1850,2025]}],
-          "writing": {"function": "long_term_trend_paragraph"}
+          "writing": {"function": "long_term_trend_paragraph", "kwargs": {"output_list": true}}
         },
         {
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
-          "processing": [],
-          "writing": {"function": "arctic_ice_paragraph"}
+          "processing": [
+            {"method": "rebaseline", "args": [1981, 2010]},
+            {"method": "make_annual", "args": []}
+          ],
+          "writing": {"function": "basic_anomaly_and_rank", "kwargs": {"output_list": true}}
         },
         {
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing": [],
-          "writing": {"function": "glacier_paragraph"}
+          "writing": {"function": "glacier_paragraph", "kwargs": {"output_list": true}}
         },
         {
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
-          "writing": {"function": "anomaly_and_rank"}
+          "writing": {"function": "basic_anomaly_and_rank", "kwargs": {"output_list": true}}
         }
       ]
     }

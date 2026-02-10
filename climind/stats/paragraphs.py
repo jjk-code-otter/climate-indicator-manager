@@ -114,7 +114,9 @@ def fancy_html_units(units: str) -> str:
         "degC": "&deg;C",
         "millionkm2": "million km<sup>2</sup>",
         "ph": "pH",
-        "mwe": "m w.e."
+        "mwe": " m w.e.",
+        "wm2": "Wm<sup>-2</sup>",
+        "zJ": "ZJ"
     }
 
     if units in equivalence:
@@ -125,51 +127,107 @@ def fancy_html_units(units: str) -> str:
     return fancy
 
 
-def superlative(variable):
-    lookup = {'tas': 'warmest'}
-    if variable in lookup:
-        return lookup[variable]
+def superlative(variable, highest=True):
+    if highest:
+        lookup = {
+            'tas': 'warmest',
+            'sst': 'warmest',
+            'lsat': 'warmest',
+        }
+        if variable in lookup:
+            return lookup[variable]
 
-    return 'highest'
+        return 'highest'
+    else:
+        lookup = {
+            'tas': 'coldest',
+            'sst': 'coldest',
+            'lsat': 'coldest',
+        }
+        if variable in lookup:
+            return lookup[variable]
+
+        return 'lowest'
 
 
-def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+def basic_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int, output_list = False) -> str:
     if len(all_datasets) == 0:
         raise RuntimeError("No datasets provided")
 
-    first_year, last_year = get_start_and_end_year(all_datasets)
+    selected_datasets = []
+    deselected_datasets = []
+    for ds in all_datasets:
+        _, last_year = ds.get_first_and_last_year()
+        if last_year >= year:
+            selected_datasets.append(ds)
+        else:
+            deselected_datasets.append(ds)
 
-    variable = all_datasets[0].metadata['variable']
-    super_text = superlative(variable)
+    first_year, last_year = get_start_and_end_year(all_datasets)
 
     if year > last_year:
         out_text = f'The most recent available year is {last_year}. '
-        year = last_year
+        if output_list:
+            key_figures, out_text2 = basic_anomaly_and_rank(all_datasets, last_year, output_list=output_list)
+            out_text += out_text2
+            return [key_figures, out_text]
+        return out_text + basic_anomaly_and_rank(all_datasets, last_year)
     else:
         out_text = ''
 
+    variable = selected_datasets[0].metadata['variable']
+    highest = False
+
     try:
-        min_rank, max_rank = pu.calculate_ranks(all_datasets, year)
+        hi_min_rank, hi_max_rank = pu.calculate_ranks(selected_datasets, year)
+        lo_min_rank, lo_max_rank = pu.calculate_ranks(selected_datasets, year, ascending=True)
+        if hi_min_rank < lo_min_rank:
+            highest = True
+            min_rank = hi_min_rank
+            max_rank = hi_max_rank
+        else:
+            min_rank = lo_min_rank
+            max_rank = lo_max_rank
     except ValueError:
         return f"No data for {year}."
 
-    mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(all_datasets, year)
+    super_text = superlative(variable, highest=highest)
 
-    units = fancy_html_units(all_datasets[0].metadata['units'])
+    mean_anomaly, min_anomaly, max_anomaly = pu.calculate_values(selected_datasets, year)
+
+    units = fancy_html_units(selected_datasets[0].metadata['units'])
 
     out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} {super_text} ' \
                 f'on record. The mean value for {year} was ' \
                 f'{mean_anomaly:.2f}{units} '
 
-    if not all_datasets[0].metadata['actual']:
-        clim_start = all_datasets[0].metadata['climatology_start']
-        clim_end = all_datasets[0].metadata['climatology_end']
+
+    if not selected_datasets[0].metadata['actual']:
+        clim_start = selected_datasets[0].metadata['climatology_start']
+        clim_end = selected_datasets[0].metadata['climatology_end']
         out_text += f"relative to the {clim_start}-{clim_end} average "
 
-    out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
-                f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets, year)}.'
+    if len(selected_datasets) > 1:
+        out_text += f'({min_anomaly:.2f}-{max_anomaly:.2f}{units} depending on the data set used). ' \
+                    f'{len(selected_datasets)} data sets were used in this assessment: {dataset_name_list(selected_datasets, year)}.'
 
-    return out_text
+        key_figure = f"{mean_anomaly:.2f} [{min_anomaly:.2f}&mdash;{max_anomaly:.2f}] {units}"
+    else:
+        key_figure = f"{mean_anomaly:.2f}{units}"
+
+    if len(deselected_datasets) == 1:
+        out_text += (f' {len(deselected_datasets)} data set was not used in the assessment '
+                     f'({deselected_datasets[0].metadata['display_name']}) because its last year '
+                     f'is before {year}. ')
+    elif len(deselected_datasets) > 1:
+        out_text += (f' {len(deselected_datasets)} data sets were not used in the assessment '
+                     f'({dataset_name_list(deselected_datasets, year)}) because their last years '
+                     f'are before {year}. ')
+
+    if output_list:
+        return [key_figure, out_text]
+    else:
+        return out_text
 
 
 def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
@@ -218,7 +276,7 @@ def compare_to_highest_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], ye
     return out_text
 
 
-def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int, output_list:bool = False) -> str:
     """
 
     Parameters
@@ -252,6 +310,8 @@ def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> 
 
     units = fancy_html_units(all_datasets[0].metadata['units'])
 
+    key_figure = f'{mean_anomaly:.2f} [{min_anomaly:.2f} to {max_anomaly:.2f}]{units}'
+
     out_text += f'The year {year} was ranked {rank_ranges(min_rank, max_rank)} {super_text} ' \
                 f'on record. The anomaly for {year} was ' \
                 f'{mean_anomaly:.2f} [{min_anomaly:.2f} to {max_anomaly:.2f}]{units} '
@@ -263,10 +323,13 @@ def global_anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> 
 
     out_text += f'{len(all_datasets)} data sets were used in this assessment: {dataset_name_list(all_datasets, year)}.'
 
-    return out_text
+    if output_list:
+        return [key_figure, out_text]
+    else:
+        return out_text
 
 
-def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
+def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int, output_list=False) -> str:
     """
     Write a short paragraph, returned as a string, which gives the rank range and data value for the chosen year,
     as well as saying how many data sets and which datasets were used.
@@ -282,12 +345,15 @@ def anomaly_and_rank(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     str
 
     """
-    out_text = basic_anomaly_and_rank(all_datasets, year)
+    key_message, out_text = basic_anomaly_and_rank(all_datasets, year, output_list=True)
     out_text += compare_to_highest_anomaly_and_rank(all_datasets, year)
     out_text += "</p><p>"
     out_text += basic_anomaly_and_rank(all_datasets, year - 1)
 
-    return out_text
+    if output_list:
+        return [key_message, out_text]
+    else:
+        return out_text
 
 
 def pre_industrial_estimate(all_datasets: List[TimeSeriesAnnual], _) -> str:
@@ -415,7 +481,7 @@ def max_monthly_value(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
     return out_text
 
 
-def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int, output_list = False) -> str:
     """
     Generate a paragraph of some standard stats for the Arctic sea ice: rank and value for max and min extents in the
     year (March and September).
@@ -461,10 +527,15 @@ def arctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> st
                     f'{max_september_value:.2f}{units}. ' \
                     f'This was {rank_ranges(min_september_rank, max_september_rank)} lowest extent on record. ' \
                     f'Data sets used were: {dataset_name_list(all_datasets)}'
+        key_figure = f"{min_september_value:.2f} - {max_september_value:.2f}{units}"
     except:
         out_text += f"September data are not yet available for {year}."
+        key_figure = "-"
 
-    return out_text
+    if output_list:
+        return [key_figure, out_text]
+    else:
+        return out_text
 
 
 def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
@@ -521,7 +592,7 @@ def antarctic_ice_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) ->
     return out_text
 
 
-def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year: int) -> str:
+def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]], year: int, output_list = False) -> str:
     """
     Write the glacier paragraph
     Parameters
@@ -566,14 +637,19 @@ def glacier_paragraph(all_datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnu
                 f'since {last_positive + 1}. ' \
                 f'Cumulative glacier loss since 1970 is {all_datasets[0].get_value_from_year(year):.1f}{units}.'
 
-    return out_text
+    key_figure = f"{all_datasets[0].get_value_from_year(year):.1f}{units}"
+
+    if output_list:
+        return [key_figure, out_text]
+    else:
+        return out_text
 
 
 def co2_paragraph_update(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return co2_paragraph(all_datasets, year, update=True)
 
 
-def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False) -> str:
+def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False, output_list:bool = False) -> str | list:
     """
     Generate a paragraph of some standard stats for greenhouse gases
 
@@ -614,6 +690,8 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
 
     if last_year == -9999:
         raise RuntimeError("No greenhouse gas data sets found")
+
+    key_number = f"{tb['co2'][1]:.1f} &plusmn; {tb['co2'][2]:.1f} parts per million (ppm)"
 
     if tb['co2'][0] == 1 and tb['ch4'][0] == 1 and tb['n2o'][0] == 1:
         out_text = f"In {last_year}, greenhouse gas mole fractions reached new highs, " \
@@ -665,7 +743,10 @@ def co2_paragraph(all_datasets: List[TimeSeriesAnnual], year: int, update=False)
                                   f'CO<sub>2</sub>, CH<sub>4</sub> and N<sub>2</sub>O continued to ' \
                                   f'increase in {year}.'
 
-    return out_text
+    if output_list:
+        return [key_number, out_text]
+    else:
+        return out_text
 
 
 def marine_heatwave_and_cold_spell_paragraph(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
@@ -848,7 +929,7 @@ def greenland_ice_sheet(all_datasets: List[TimeSeriesAnnual], year: int) -> str:
     return out_text
 
 
-def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) -> str:
+def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int, output_list = False) -> str:
     all_trends = []
     all_initial_trends = []
     all_recent_trends = []
@@ -873,7 +954,7 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) 
         trend3 = result[0]
         all_recent_trends.append(trend3)
 
-        selection = (times >= 2015) & (times < 2025)
+        selection = (times >= 2015) & (times < year+1)
         result = np.polyfit(times[selection], data[selection], 1)
         trend4 = result[0]
         all_semi_recent_trends.append(trend4)
@@ -884,10 +965,15 @@ def long_term_trend_paragraph(all_datasets: List[TimeSeriesMonthly], year: int) 
         out_text += (f"The rate of change in the {ds.metadata['display_name']} data set is {trend1:.2f} {units}/yr "
                      f"between {first_year} and {last_year}. The rate of change in the past decade {year - 9}-{year} is "
                      f"{trend3:.2f} {units}/yr which is higher than the trend for the first decade of the satellite "
-                     f"record 1993-2002 which was {trend2:.2f} {units}/yr. The trend for 2015-2014 was {trend4:.2f} "
+                     f"record 1993-2002 which was {trend2:.2f} {units}/yr. The trend for 2015-{year} was {trend4:.2f} "
                      f"{units}/yr.")
 
-    return out_text
+        key_figures = f"{trend1:.2f} {units}/yr"
+
+    if output_list:
+        return [key_figures, out_text]
+    else:
+        return out_text
 
 
 def precip_paragraph(_, year) -> str:

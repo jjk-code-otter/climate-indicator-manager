@@ -50,7 +50,7 @@ import matplotlib.dates as mdates
 
 FANCY_UNITS = {
     "degC": r"$\!^\circ\!$C",
-    "zJ": "zJ",
+    "zJ": "ZJ",
     "millionkm2": "million km$^2$",
     "ph": "pH",
     "mwe": "metres water equivalent",

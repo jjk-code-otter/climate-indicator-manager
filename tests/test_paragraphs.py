@@ -60,6 +60,22 @@ def test_collection_attributes():
 
     return attributes
 
+@pytest.fixture
+def test_collection_attributes_2():
+    attributes = {"name": "GISTEMP",
+                  "display_name": "GISTEMP",
+                  "version": "4",
+                  "variable": "tas",
+                  "units": "degC",
+                  "citation": [
+                      f"Lenssen et al."],
+                  "citation_url": ["utps://thingy"],
+                  "data_citation": [""],
+                  "colour": "#111111",
+                  "zpos": 10}
+
+    return attributes
+
 
 @pytest.fixture
 def simple_monthly(test_dataset_attributes, test_collection_attributes):
@@ -97,6 +113,23 @@ def simple_annual(test_dataset_attributes, test_collection_attributes):
     years = []
     anoms = []
     for y in range(1850, 2023):
+        years.append(y)
+        anoms.append(float(y) / 1000.)
+    return ts.TimeSeriesAnnual(years, anoms, metadata)
+
+@pytest.fixture
+def simple_annual_2(test_dataset_attributes, test_collection_attributes_2):
+    """
+    Produces an annual time series from 1850 to 2022.
+    Returns
+    -------
+
+    """
+    metadata = CombinedMetadata(DatasetMetadata(test_dataset_attributes),
+                                CollectionMetadata(test_collection_attributes_2))
+    years = []
+    anoms = []
+    for y in range(1850, 2022):
         years.append(y)
         anoms.append(float(y) / 1000.)
     return ts.TimeSeriesAnnual(years, anoms, metadata)
@@ -275,6 +308,22 @@ def test_basic_anomaly_and_rank(simple_annual):
     assert 'The mean value for 2022 was 2.02&deg;C' in test_text
     assert '(2.02-2.02&deg;C depending' in test_text
     assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+
+def test_basic_anomaly_and_rank_two_datasets(simple_annual, simple_annual_2):
+    test_text = pg.basic_anomaly_and_rank([simple_annual, simple_annual_2], 2022)
+
+    assert 'The year 2022 was ranked the 1st warmest' in test_text
+    assert 'The mean value for 2022 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '1 data sets were used in this assessment: HadCRUT5' in test_text
+
+    test_text = pg.basic_anomaly_and_rank([simple_annual, simple_annual_2], 2021)
+
+    assert 'The year 2021 was ranked between the 1st and 2nd warmest on record.' in test_text
+    assert 'The mean value for 2021 was 2.02&deg;C' in test_text
+    assert '(2.02-2.02&deg;C depending' in test_text
+    assert '2 data sets were used in this assessment: HadCRUT5 and GISTEMP' in test_text
 
 
 def test_basic_anomaly_and_rank_latest_year_is_not_this_year(simple_annual):

@@ -698,36 +698,36 @@
             <div class="guidance-block-title">Climate data related</div>
             <ul class="guidance-main-list">
               <li>
-                <a href="https://library.wmo.int/records/item/57130-guidelines-on-homogenization">Guidelines on Homogenisation
-                <span class="code">(WMO&nbsp;No.&nbsp;1245)</span></a>
+                Guidelines on Homogenisation
+                <span class="code">(<a href="https://library.wmo.int/records/item/57130-guidelines-on-homogenization">WMO&nbsp;No.&nbsp;1245</a>)</span>
               </li>
               <li>
                 WMO Stewardship Maturity Matrix for Climate Data
-                <span class="code">(WMO&nbsp;No.&nbsp;1328)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/56975-manual-on-the-high-quality-global-data-management-framework-for-climate">WMO&nbsp;No.&nbsp;1328</a>)</span>
               </li>
               <li>
                 Climate Data Management System Specifications
-                <span class="code">(WMO&nbsp;No.&nbsp;1131)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/51447-climate-data-management-system-specifications">WMO&nbsp;No.&nbsp;1131</a>)</span>
               </li>
               <li>
                 Guidelines on the Calculation of Climate Normals
-                <span class="code">(WMO&nbsp;No.&nbsp;1203)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/55797-wmo-guidelines-on-the-calculation-of-climate-normals">WMO&nbsp;No.&nbsp;1203</a>)</span>
               </li>
               <li>
                 Surface Station Data QC/QA for Climate Applications
-                <span class="code">(WMO&nbsp;No.&nbsp;1269)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/57727-guidelines-on-surface-station-data-quality-control-and-quality-assurance-for-climate-applications">WMO&nbsp;No.&nbsp;1269</a>)</span>
               </li>
               <li>
                 Good Practices for Data Rescue
-                <span class="code">(WMO&nbsp;No.&nbsp;1182)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/55395-guidelines-on-good-practices-for-data-rescue">WMO&nbsp;No.&nbsp;1182</a>)</span>
               </li>
               <li>
                 Transition to Automatic Networks for Long-term Records
-                <span class="code">(WMO&nbsp;No.&nbsp;1202)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/55812-challenges-in-the-transition-from-conventional-to-automatic-meteorological-observing-networks-for-long-term-climate-records">WMO&nbsp;No.&nbsp;1202</a>)</span>
               </li>
               <li>
                 Submission of World Weather Records 2011+
-                <span class="code">(WMO&nbsp;No.&nbsp;1186)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/55481-guidelines-for-the-submission-of-the-world-weather-records-2011">WMO&nbsp;No.&nbsp;1186</a>)</span>
               </li>
               <li>Guidelines on DAYCLI</li>
               <li>CLINO 1991–2020</li>
@@ -739,19 +739,19 @@
             <ul class="guidance-main-list">
               <li>
                 Implementation of Climate Watches
-                <span class="code">(WMO&nbsp;No.&nbsp;1299)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/58326-guidelines-on-the-implementation-of-climate-watches">WMO&nbsp;No.&nbsp;1299</a>)</span>
               </li>
               <li>
                 Definition &amp; Characterisation of Extremes
-                <span class="code">(WMO&nbsp;No.&nbsp;1310)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/58396-guidelines-on-the-definition-and-characterization-of-extreme-weather-and-climate-events">WMO&nbsp;No.&nbsp;1310</a>)</span>
               </li>
               <li>
                 National Climate Monitoring Products
-                <span class="code">(WMO&nbsp;No.&nbsp;1204)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/55817-wmo-guidelines-on-generating-a-defined-set-of-national-climate-monitoring-products">WMO&nbsp;No.&nbsp;1204</a>)</span>
               </li>
               <li>
                 Regional State of the Climate reports
-                <span class="code">(WMO&nbsp;No.&nbsp;1298)</span>
+                <span class="code">(<a href="https://library.wmo.int/records/item/66285-step-by-step-guidelines-for-the-elaboration-of-regional-state-of-the-climate-reports">WMO&nbsp;No.&nbsp;1298</a>)</span>
               </li>
               <li>National State of the Climate reports</li>
               <li>Quality control of climate records</li>
@@ -846,11 +846,11 @@
           "Data sources: {% for ds in item.dataset_metadata %}{{ ds.display_name }},{% endfor %}",
         chartId: "{{ item.plotting.kwargs.id }}",
         chartVersion: "16",
-        headlineValue: "1.43&plusmn;0.13&deg;C",
+        headlineValue: "{{ paragraphs[loop.index0].text[0] }}",
         headlineLabel:
           "{{ item.subtitle }}",
         headlineExtra:
-          "{{ paragraphs[loop.index0].text }}",
+          "{{ paragraphs[loop.index0].text[1] }}",
         imageHref: "https://datawrapper.dwcdn.net/{{ item.plotting.kwargs.id }}/full.png",
         csvHref: "formatted_data/{{ item.csv_name }}",
         refHref: "#"
