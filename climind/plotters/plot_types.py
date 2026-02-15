@@ -54,7 +54,8 @@ FANCY_UNITS = {
     "millionkm2": "million km$^2$",
     "ph": "pH",
     "mwe": "metres water equivalent",
-    "wm2": "Wm$^{-2}$"
+    "wm2": "Wm$^{-2}$",
+    "aod": "Aerosol Optical Depth",
 }
 
 STANDARD_PARAMETER_SET = {
@@ -345,7 +346,13 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1.0)
 
-    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole']:
+    if dataset.metadata['variable'] in ['aod']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.05)
+
+    if dataset.metadata['variable'] in ['solar']:
+        ylo, yhi, yticks = set_lo_hi_ticks([1364, 1367], 0.5)
+
+    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole', 'ocean_mass']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
     if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4', 'ozone_minimum', 'min_ozone_minimum']:

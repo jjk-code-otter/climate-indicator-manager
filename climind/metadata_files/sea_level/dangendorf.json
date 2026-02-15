@@ -1,0 +1,32 @@
+{
+  "name": "Dangendorf",
+  "display_name": "Dangendorf et al.",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["kssl_dangendorf.nc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1970,
+	  "climatology_end": 1970,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dangendorf",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Lean Solar",
+  "display_name": "Lean et al.",
+  "version": "",
+  "variable": "solar",
+  "units": "wm2",
+  "citation": [
+    ""
+  ],
+  "citation_url": [
+    ""
+  ],
+  "data_citation": [
+    ""
+  ],
+  "acknowledgement": "",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://www.ncei.noaa.gov/pub/data/paleo/climate_forcing/solar_variability/lean2000_irradiance.txt"
+      ],
+      "filename": [
+        "lean2000_irradiance.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Total solar irradiance",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1950,
+      "climatology_end": 2000,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_lean",
+      "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

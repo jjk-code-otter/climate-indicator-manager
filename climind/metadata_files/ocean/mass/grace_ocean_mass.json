@@ -1,0 +1,42 @@
+{
+  "name": "GRACE ocean mass",
+  "display_name": "GRACE",
+  "version": "",
+  "variable": "ocean_mass",
+  "units": "Gt",
+  "citation": [
+    "WCRP Global Sea Level Budget Group: Global sea-level budget 1993–present, Earth Syst. Sci. Data, 10, 1551–1590, https://doi.org/10.5194/essd-10-1551-2018, 2018."
+  ],
+  "citation_url": [
+    "https://doi.org/10.5194/essd-10-1551-2018"
+  ],
+  "data_citation": [
+    "https://doi.org/10.17882/54854"
+  ],
+  "acknowledgement": "",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://www.seanoe.org/data/00437/54854/data/56341.txt"
+      ],
+      "filename": [
+        "56341.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Ocean mass",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1950,
+      "climatology_end": 2000,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_grace_ocean_mass",
+      "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

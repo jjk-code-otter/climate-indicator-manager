@@ -31,7 +31,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
 
     correction = df.tpa_correction_to_substract.values
     anomalies = df.msl.values - correction
-    anomalies = [x*1000 for x in anomalies]
+    anomalies = [x * 1000 for x in anomalies]
     anomalies = savgol_filter(anomalies, 9, 1)
     anomalies = anomalies - np.mean(anomalies[0:3]) - 2
 
@@ -47,3 +47,10 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, uncertainty=uncertainty, metadata=metadata)
 
     return outseries
+
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    ts = read_monthly_ts(filename, metadata)
+    ts = ts.make_monthly()
+    ts = ts.make_annual()
+    return ts

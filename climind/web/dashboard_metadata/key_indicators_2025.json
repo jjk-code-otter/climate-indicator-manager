@@ -66,7 +66,7 @@
           "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp", "X NASA Sealevel", "X CMEMS sea level", "X Colorado"]},
           "processing": [
-            {"method": "select_year_range", "args":  [1993,2025]}
+            {"method": "select_year_range", "args":  [1900,2025]}
           ],
           "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
         },
@@ -115,6 +115,34 @@
             {"method": "select_year_range", "args": [1950, 2025]}
           ],
           "plotting": {"function": "wmo_plot", "title": "Nino 3.4"}
+        },
+        {
+          "link_to": "null", "title": "Aerosol Optical Depth",
+          "selecting": {"type": "timeseries", "variable": "aod", "time_resolution": "monthly", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Global aerosol optical depth at 550 nm"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Total solar irradiance",
+          "selecting": {"type": "timeseries", "variable": "solar", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Total solar irradiance"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Ocean mass",
+          "selecting": {"type": "timeseries", "variable": "ocean_mass", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Ocean mass"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Terrestrial Water Storage",
+          "selecting": {"type": "timeseries", "variable": "tws", "time_resolution": "monthly", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Terrestrial Water Storage"},
+          "hidden": true
         }
       ],
       "paragraphs": [

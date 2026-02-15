@@ -22,7 +22,7 @@
 	  "space_resolution": 999,
 	  "climatology_start": 1950,
 	  "climatology_end": 2000,
-	  "actual": false,
+	  "actual": true,
 	  "derived": false,
 	  "history": [],
       "reader": "reader_giss_aod",
