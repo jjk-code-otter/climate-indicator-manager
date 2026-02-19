@@ -1,0 +1,42 @@
+{
+  "name": "gcb_atmosphere",
+  "display_name": "Global Carbon Budget",
+  "version": "",
+  "variable": "atmospheric growth rate",
+  "units": "GtC/year",
+  "citation": [
+    " Lan et al. 2025: Trends in atmospheric carbon dioxide, National Oceanic & Atmospheric Administration, Earth System Research Laboratory (NOAA/ESRL), available at http://www.esrl.noaa.gov/gmd/ccgg/trends/global.html"
+  ],
+  "citation_url": [
+    "http://www.esrl.noaa.gov/gmd/ccgg/trends/global.html"
+  ],
+  "data_citation": [
+    "https://doi.org/10.18160/GCP-2025"
+  ],
+  "acknowledgement": "",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://globalcarbonbudget.org/download/2341/?tmstv=1762815901"
+      ],
+      "filename": [
+        "Global_Carbon_Budget_2025_v0.6.xlsx"
+      ],
+      "type": "timeseries",
+      "long_name": "Atmospheric growth rate",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1950,
+      "climatology_end": 2000,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_gcb",
+      "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

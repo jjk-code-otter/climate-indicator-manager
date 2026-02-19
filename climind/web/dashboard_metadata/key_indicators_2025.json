@@ -143,6 +143,48 @@
           "processing":  [],
           "plotting": {"function": "wmo_plot", "title": "Terrestrial Water Storage"},
           "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Fossil fuel emissions",
+          "selecting": {"type": "timeseries", "variable": "fossil emissions", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Fossil fuel emissions"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Atmospheric growth rate",
+          "selecting": {"type": "timeseries", "variable": "atmospheric growth rate", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Atmospheric growth rate"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Land sink",
+          "selecting": {"type": "timeseries", "variable": "land sink", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Land sink"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Ocean sink",
+          "selecting": {"type": "timeseries", "variable": "ocean sink", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Ocean sink"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Land use emissions",
+          "selecting": {"type": "timeseries", "variable": "land use emissions", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Land use emissions"},
+          "hidden": true
+        },
+        {
+          "link_to": "null", "title": "Cement carbonation sink",
+          "selecting": {"type": "timeseries", "variable": "cement sink", "time_resolution": "annual", "origin":  "obs"},
+          "processing":  [],
+          "plotting": {"function": "wmo_plot", "title": "Cement carbonation sink"},
+          "hidden": true
         }
       ],
       "paragraphs": [
