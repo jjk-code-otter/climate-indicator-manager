@@ -281,6 +281,12 @@
           "plotting": {"function": "wmo_plot", "title": "Nitrous oxide growth rate"}
         },
         {
+          "link_to":  null, "title": "Sulphur Hexafluoride",
+          "selecting": {"type": "timeseries", "variable": "sf6", "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "wmo_plot", "title": "Atmospheric sulphur hexafluoride concentration"}
+        },
+        {
           "link_to":  null, "title": "Carbon Dioxide single-site series",
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": ["Mauna Loa", "Kennaook Cape Grim CO2"]},
           "processing": [],

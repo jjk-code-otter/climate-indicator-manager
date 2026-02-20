@@ -28,7 +28,7 @@
         "ppm", "ppm/year", "ppb", "ppb/year",
         "mm", "mm/year", "%", "millionkm2",
         "Gt", "ph", "mwe", "diy", "aod", "DU", "wm2",
-        "GtC/year"
+        "GtC/year", "ppt"
       ]
     },
     "citation": {
