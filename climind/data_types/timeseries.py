@@ -294,7 +294,14 @@ class TimeSeriesIrregular(TimeSeries):
         out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
         return out_str
 
-    def fill_daily(self):
+    def fill_daily(self) -> None:
+        """
+        Ensure that a daily time series has data for every day between the start and end years.
+
+        Returns
+        -------
+        None
+        """
         self.df = self.df.set_index('date')
 
         start_date, end_date = self.get_start_and_end_dates()
@@ -310,6 +317,8 @@ class TimeSeriesIrregular(TimeSeries):
         self.df.year = t_index.year
         self.df.month = t_index.month
         self.df.day = t_index.day
+
+        self.update_history(f"Time series expanded with NaN to include all days between {start_year} and {final_year}")
 
     def get_climatology(self, climatology_start_year, climatology_end_year):
         # Calculate climatology and fill out repeating climatology to full length of series
@@ -456,8 +465,9 @@ class TimeSeriesIrregular(TimeSeries):
 
         min_value = -1 * df2.data.iloc[0]
 
-        self.add_offset(min_value)
+        self.update_history(f"Zeroed at first time step of {baseline_year}.")
 
+        self.add_offset(min_value)
 
     def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
@@ -538,6 +548,7 @@ class TimeSeriesIrregular(TimeSeries):
 
         return moving_average
 
+
 class TimeSeriesMonthly(TimeSeries):
     """
     A :class:`TimeSeriesMonthly` combines a pandas Dataframe with a
@@ -612,7 +623,7 @@ class TimeSeriesMonthly(TimeSeries):
             return TimeSeriesMonthly(years, months, data, metadata)
 
     def change_end_month(self, year, month):
-        self.df = self.df[self.df.year*100+self.df.month < year*100+month+1]
+        self.df = self.df[self.df.year * 100 + self.df.month < year * 100 + month + 1]
         _, end_date = self.get_start_and_end_dates()
         self.metadata.dataset['last_month'] = str(end_date)
 
@@ -1555,7 +1566,8 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual], augmented_uncerta
             for att in list_attributes:
                 metadata[att].extend(ds.metadata[att])
 
-    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'), data_frames,)
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'),
+                       data_frames, )
 
     columns = []
     for col in df_merged.columns:
@@ -1735,7 +1747,7 @@ def create_common_dataframe(
 
 def equalise_datasets(
         all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-        uncertainty:bool = False
+        uncertainty: bool = False
 ) -> pd.DataFrame:
     """
     Given a list of datasets

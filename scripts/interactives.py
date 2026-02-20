@@ -44,9 +44,10 @@ if __name__ == "__main__":
     ohc = False
     sea_level = False
     sea_ice = False
+    antarctic_sea_ice = True
     glaciers = False
     oceanph = False
-    eei = True
+    eei = False
 
     if gmst:
         # some global temperature data sets are annual only, others are monthly so need to read these separately
@@ -207,6 +208,44 @@ if __name__ == "__main__":
             custom_range_y=[-2.5, 2.5],
             y_grid_format='0',
             tooltip_number_format="000.00",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+        )
+
+        chart.create().publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if antarctic_sea_ice:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'antarctic_ice',
+                                     'type': 'timeseries',
+                                     'name': ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"],
+                                     'time_resolution': 'monthly'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        for ds in all_datasets:
+            ds.rebaseline(1991, 2020)
+            ds.make_annual()
+
+        df = equalise_datasets(all_datasets)
+
+        df['year'] = df['time']
+        df = df.drop(columns=['time', 'month'])
+
+        chart = dw.LineChart(
+            title='Antarctic sea-ice extent 1978-2025',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-2.5, 2.5],
+            y_grid_format='0',
+            tooltip_number_format=".00",
             tooltip_x_format="YYYY",
             plot_height_ratio=0.5,
             plot_height_mode='ratio',
