@@ -11,7 +11,7 @@
           "link_to": null, "title": "Greenhouse gases",
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
-          "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "LpDOm"}}
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "5SJBW"}}
         },
         {
           "link_to": null, "title": "Earths Energy Imbalance",
@@ -19,7 +19,7 @@
             "Miniere EEI", "IAP EEI", "Copernicus EEI", "CERES EEI"
           ]},
           "processing": [],
-          "plotting": {"function": "interactive_widget_uncertainty", "title": "Earths Energy Imbalance", "kwargs": {"id":  "v0K6k"}}
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Earths Energy Imbalance", "kwargs": {"id":  "a5AUp"}}
         },
         {
           "link_to": null, "title": "Global temperature",
@@ -30,19 +30,19 @@
                           {"method": "select_year_range", "args":  [1850,2025]},
                           {"method": "add_offset", "args": [0.69]},
                           {"method": "manually_set_baseline", "args": [1850, 1900]}],
-          "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "xkCQU"}}
+          "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "kb7qp"}}
         },
         {
           "link_to": null, "title": "Ocean heat content",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
-          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "r8dK2"}}
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "qp4i7"}}
         },
         {
           "link_to": null, "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
           "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
-          "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DHI0W"}}
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DMCKF"}}
         },
         {
           "link_to": null, "title": "Arctic sea ice",
@@ -51,7 +51,7 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []}
           ],
-          "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "eM0CH"}}
+          "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "raepr"}}
         },
         {
           "link_to": null, "title": "Antarctic sea ice",
@@ -60,19 +60,19 @@
             {"method": "rebaseline", "args": [1991, 2020]},
             {"method": "make_annual", "args": []}
           ],
-          "plotting": {"function": "interactive_widget", "title": "Antarctic sea-ice extent", "kwargs": {"id":  "w4MlD"}}
+          "plotting": {"function": "interactive_widget", "title": "Antarctic sea-ice extent", "kwargs": {"id":  "tPS5E"}}
         },
         {
           "link_to": null, "title":"Glaciers",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
           "processing": [],
-          "plotting": {"function": "interactive_widget", "title": "Glacier cumulative mass balance", "kwargs": {"id":  "akAo7"}}
+          "plotting": {"function": "interactive_widget", "title": "Glacier cumulative mass balance", "kwargs": {"id":  "ZDIKz"}}
         },
         {
           "link_to": null, "title":"Ocean pH",
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
-          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean pH", "kwargs": {"id":  "FM5b1"}}
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean pH", "kwargs": {"id":  "VZt1K"}}
         }
       ],
       "paragraphs": []

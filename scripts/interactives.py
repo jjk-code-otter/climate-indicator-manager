@@ -27,6 +27,12 @@ from climind.config.config import DATA_DIR
 
 if __name__ == "__main__":
 
+    # client = dw.Datawrapper()
+    # ws = client.get_workspaces('SoC 2025')
+    # fd = client.get_folders()
+
+    folder_id = 389606
+
     final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
@@ -41,19 +47,19 @@ if __name__ == "__main__":
 
     gmst = False
     co2 = False
-    ohc = False
-    sea_level = False
-    sea_ice = False
+    ohc = True
+    sea_level = True
+    sea_ice = True
     antarctic_sea_ice = True
-    glaciers = False
-    oceanph = False
-    eei = False
+    glaciers = True
+    oceanph = True
+    eei = True
 
     if gmst:
         # some global temperature data sets are annual only, others are monthly so need to read these separately
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
-                                     'name': ['NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5'],
+                                     'name': ["NOAA v6", "GISTEMP", "ERA5", "JRA-3Q", "Berkeley Earth Hires", "HadCRUT5", "DCENT_I", "CMA_GMST", "CMST v3"],
                                      'time_resolution': 'monthly'})
 
         all_datasets = ts_archive.read_datasets(data_dir)
@@ -79,7 +85,7 @@ if __name__ == "__main__":
             tooltip_x_format="YYYY",
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -108,9 +114,10 @@ if __name__ == "__main__":
             tooltip_x_format="YYYY",
             plot_height_ratio=0.5,
             plot_height_mode='ratio',
+
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -122,7 +129,7 @@ if __name__ == "__main__":
         # some global temperature data sets are annual only, others are monthly so need to read these separately
         ts_archive = archive.select({'variable': 'ohc2k',
                                      'type': 'timeseries',
-                                     'name': ["Copernicus_OHC", "Miniere", "Cheng TEMP"],
+                                     'name': ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"],
                                      'time_resolution': 'annual'})
 
         all_datasets = ts_archive.read_datasets(data_dir)
@@ -141,7 +148,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -176,7 +183,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -213,7 +220,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -251,7 +258,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -282,7 +289,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -294,7 +301,7 @@ if __name__ == "__main__":
         # some global temperature data sets are annual only, others are monthly so need to read these separately
         ts_archive = archive.select({'variable': 'ph',
                                      'type': 'timeseries',
-                                     'name': ["CMEMS new"],
+                                     'name': ["CMEMS 2025"],
                                      'time_resolution': 'annual'})
 
         all_datasets = ts_archive.read_datasets(data_dir)
@@ -313,7 +320,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 
@@ -348,7 +355,7 @@ if __name__ == "__main__":
             plot_height_mode='ratio',
         )
 
-        chart.create().publish()
+        chart.create(folder_id=folder_id).publish()
         iframe_code = chart.get_iframe_code()
         png_url = chart.get_png_url()
 

@@ -40,10 +40,10 @@ if __name__ == "__main__":
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
     hub = False
-    interactive = False
+    interactive = True
 
     minimal = False
-    dash2025 = True
+    dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False

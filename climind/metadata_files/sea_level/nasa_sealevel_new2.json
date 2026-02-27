@@ -1,0 +1,32 @@
+{
+  "name": "NASA Sealevel new2",
+  "display_name": "NASA (new)",
+  "version": "",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Willis, J.K., Hamlington, B.D., and Fournier, S., Global Mean Sea Level Time Series, Trajectory and Extrapolation. Dataset access [YYYY-MM-DD] at 10.5281/zenodo.7702315"],
+  "citation_url": ["https://doi.org/10.5281/zenodo.7702315"],
+  "data_citation": ["Willis, J.K., Hamlington, B.D., and Fournier, S., Global Mean Sea Level Time Series, Trajectory and Extrapolation. Dataset access [YYYY-MM-DD] at 10.5281/zenodo.7702315"],
+  "acknowledgement": "",
+  "colour": "#1f2222",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["GMSL_extrap_1993_2050.2026_02_05.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_nasa_sealevel_new",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

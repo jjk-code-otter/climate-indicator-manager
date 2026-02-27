@@ -63,18 +63,24 @@
           "plotting": {"function": "wmo_plot", "title": "Ocean heat content 0-2000m"}
         },
         {
-          "link_to": "sea_level", "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp", "X NASA Sealevel", "X CMEMS sea level", "X Colorado"]},
+          "link_to":  "sea_level", "title": "Annual mean sea level",
+          "selecting": {
+            "type": "timeseries", "variable": "sealevel", "time_resolution": "monthly",
+            "name": ["AVISO ftp", "CMEMS sea level", "Colorado", "NASA Sealevel new", "NASA Sealevel new2"]
+          },
           "processing": [
-            {"method": "select_year_range", "args":  [1900,2025]}
+            {"method": "zero_on_year", "args": [2000]},
+            {"method": "make_monthly", "args":  []},
+            {"method": "make_annual", "args":  []},
+            {"method": "select_year_range", "args":  [1993,2025]}
           ],
-          "plotting": {"function": "wmo_plot", "title": "Global mean sea level"}
+          "plotting": {"function": "neat_plot", "title": "Annual global mean sea level change"}
         },
         {
-          "link_to": "ocean_heat_content", "title": "Ocean pH",
+          "link_to": "ocean_heat_content", "title": "Ocean surface pH",
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
-          "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
+          "plotting": {"function": "wmo_plot", "title": "Ocean surface pH"}
         },
         {
           "link_to": "sea_ice_extent", "title": "Annual Arctic sea ice extent",
@@ -435,10 +441,10 @@
           "hidden": true
         },
         {
-          "link_to":  null, "title": "Ocean pH",
+          "link_to":  null, "title": "Ocean surface pH",
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
-          "plotting": {"function": "wmo_plot", "title": "Ocean pH"}
+          "plotting": {"function": "wmo_plot", "title": "Ocean surface pH"}
         },
         {
           "link_to":  null, "title": "Ocean pH spark",
@@ -501,12 +507,30 @@
       "template": "topic_page",
       "cards": [
         {
-          "link_to":  null, "title": "Sea level",
-          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp", "X NASA Sealevel", "X CMEMS sea level", "X Colorado"]},
+          "link_to":  null, "title": "Annual mean sea level",
+          "selecting": {
+            "type": "timeseries", "variable": "sealevel", "time_resolution": "monthly",
+            "name": ["AVISO ftp", "CMEMS sea level", "Colorado", "NASA Sealevel new", "NASA Sealevel new2"]
+          },
           "processing": [
+            {"method": "zero_on_year", "args": [2000]},
+            {"method": "make_monthly", "args":  []},
+            {"method": "make_annual", "args":  []},
             {"method": "select_year_range", "args":  [1993,2025]}
           ],
-          "plotting": {"function": "wmo_plot", "title": "Global mean sea level change"}
+          "plotting": {"function": "neat_plot", "title": "Annual global mean sea level change"}
+        },
+        {
+          "link_to":  null, "title": "Sea level",
+          "selecting": {
+            "type": "timeseries", "variable": "sealevel", "time_resolution": "monthly",
+            "name": ["AVISO ftp", "CMEMS sea level", "Colorado", "NASA Sealevel new", "NASA Sealevel new2"]
+          },
+          "processing": [
+            {"method": "zero_on_year", "args": [2000]},
+            {"method": "select_year_range", "args":  [1993,2025]}
+          ],
+          "plotting": {"function": "neat_plot", "title": "Global mean sea level change"}
         },
         {
           "link_to":  null, "title": "Sea level simplified",
