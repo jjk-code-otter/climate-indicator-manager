@@ -8,7 +8,7 @@
       "template": "interactive_front_page",
       "cards": [
         {
-          "link_to": null, "title": "Greenhouse gases",
+          "link_to": "greenhouse_gases", "title": "Greenhouse gases",
           "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
           "processing": [],
           "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "5SJBW"}}
@@ -22,7 +22,7 @@
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Earths Energy Imbalance", "kwargs": {"id":  "a5AUp"}}
         },
         {
-          "link_to": null, "title": "Global temperature",
+          "link_to": "global_mean_temperature", "title": "Global temperature",
           "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
           "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5", "DCENT_I", "CMST v3", "CMA_GMST"]},
           "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
@@ -33,19 +33,19 @@
           "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "kb7qp"}}
         },
         {
-          "link_to": null, "title": "Ocean heat content",
+          "link_to": "ocean_heat_content", "title": "Ocean heat content",
           "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
           "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "qp4i7"}}
         },
         {
-          "link_to": null, "title": "Sea level",
+          "link_to": "sea_level", "title": "Sea level",
           "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
           "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DMCKF"}}
         },
         {
-          "link_to": null, "title": "Arctic sea ice",
+          "link_to": "sea_ice_extent", "title": "Arctic sea ice",
           "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -54,7 +54,7 @@
           "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "raepr"}}
         },
         {
-          "link_to": null, "title": "Antarctic sea ice",
+          "link_to": "sea_ice_extent", "title": "Antarctic sea ice",
           "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
           "processing": [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -73,6 +73,190 @@
           "selecting": {"type": "timeseries", "variable": "ph", "time_resolution": "annual", "name": "CMEMS 2025"},
           "processing": [],
           "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean pH", "kwargs": {"id":  "VZt1K"}}
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "greenhouse_gases",
+      "name": "Greenhouse gases",
+      "descriptor": "greenhouse_gases.html",
+      "template": "interactive_front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Carbon dioxide",
+          "selecting": {"type": "timeseries", "variable": "co2", "time_resolution": "annual", "name": "WDCGG"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric carbon dioxide concentration", "kwargs": {"id":  "5SJBW"}}
+        },
+                {
+          "link_to":  null, "title": "Methane",
+          "selecting": {"type": "timeseries", "variable": "ch4", "time_resolution": "annual", "name": "WDCGG CH4"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric methane concentration", "kwargs": {"id":  "i0FIb"}}
+        },
+        {
+          "link_to":  null, "title": "Nitrous Oxide",
+          "selecting": {"type": "timeseries", "variable": "n2o", "time_resolution": "annual", "name": "WDCGG N2O"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Atmospheric nitrous oxide concentration", "kwargs": {"id":  "6r10l"}}
+        },
+        {
+          "link_to":  null, "title": "Carbon dioxide growth rate",
+          "selecting": {"type": "timeseries", "variable": "co2rate", "time_resolution": "annual", "name": "WDCGG CO2 growth"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Carbon dioxide growth rate", "kwargs": {"id":  "NB18X"}}
+        },
+        {
+          "link_to":  null, "title": "Methane growth rate",
+          "selecting": {"type": "timeseries", "variable": "ch4rate", "time_resolution": "annual", "name": "WDCGG CH4 growth"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Methane growth rate", "kwargs": {"id":  "G8MRa"}}
+        },
+        {
+          "link_to":  null, "title": "Nitrous oxide growth rate",
+          "selecting": {"type": "timeseries", "variable": "n2orate", "time_resolution": "annual", "name": "WDCGG N2O growth"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Nitrous oxide growth rate", "kwargs": {"id":  "qUqG0"}}
+        }
+      ],
+      "paragraphs": [
+         {
+          "selecting": {"type": "timeseries", "variable": ["co2", "ch4", "n2o"], "time_resolution": "annual"},
+          "processing": [{"method": "select_year_range", "args": [1850, 2025]}],
+          "writing": {"function": "co2_paragraph"}
+        }
+      ]
+    },
+    {
+      "id": "global_mean_temperature",
+      "name": "Global mean temperature",
+      "descriptor": "global_temperature.html",
+      "template": "interactive_front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Global temperature",
+          "selecting": {"type": "timeseries", "variable": "tas", "time_resolution": "monthly", "origin":  "obs",
+          "name": ["HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "JRA-3Q", "ERA5", "DCENT_I", "CMST v3", "CMA_GMST"]},
+          "processing":  [{"method": "rebaseline", "args": [1981, 2010]},
+                          {"method": "make_annual", "args": []},
+                          {"method": "select_year_range", "args":  [1850,2025]},
+                          {"method": "add_offset", "args": [0.69]},
+                          {"method": "manually_set_baseline", "args": [1850, 1900]}],
+          "plotting": {"function": "interactive_widget", "title": "Global mean temperature", "kwargs": {"id":  "kb7qp"}}
+        },
+        {
+          "link_to":  null, "title": "Land air temperature",
+          "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "annual", "name":  ["NOAA LSAT v6", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CLSAT21"]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2025]}],
+          "plotting": {"function": "interactive_widget", "title": "Global land temperature", "kwargs": {"id":  "HY3fs"}}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2025]}],
+          "plotting": {"function": "interactive_widget", "title": "Global sea-surface temperature", "kwargs": {"id":  "VTnc0"}}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_map", "title": "Annual Temperature Anomalies 2025"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly uncertainty map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method": "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_uncertainty_map", "title": "Annual Temperature Anomalies Uncertainty 2025"}
+        },
+        {
+          "link_to":  null, "title": "Temperature anomaly rank map",
+          "selecting": {"type": "gridded", "variable": "tas", "time_resolution": "annual", "origin":  "obs",
+            "name": ["HadCRUT5_5x5", "NOAA v6_5x5", "GISTEMP_5x5", "Berkeley Earth Hires_5x5", "ERA5_5x5", "JRA-3Q_5x5", "CMST v3_5x5", "DCENT_I_5x5", "CMA_GMST_5x5"]},
+          "processing":  [{"method":  "select_year_range", "args": [1979, 2025]},
+                          {"method":  "rank", "args": []},
+                          {"method":  "select_year_range", "args": [2025, 2025]}],
+          "plotting": {"function": "dashboard_rank_map", "title": "Annual Temperature Anomalies Ranking 2025"}
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "ocean_heat_content",
+      "name": "Ocean Indicators",
+      "descriptor": "ocean_indicators.html",
+      "template": "interactive_front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Ocean heat content",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "qp4i7"}}
+        },
+        {
+          "link_to":  null, "title": "Sea-surface temperature",
+          "selecting": {"type": "timeseries", "variable": "sst", "time_resolution": "annual", "name": ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"]},
+          "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
+                          {"method": "select_year_range", "args": [1850, 2025]}],
+          "plotting": {"function": "interactive_widget", "title": "Global sea-surface temperature", "kwargs": {"id":  "VTnc0"}}
+        },
+        {
+          "link_to":  null, "title": "Marine heat waves",
+          "selecting": {"type": "timeseries", "variable": ["mhw", "mcs"], "time_resolution": "annual"},
+          "processing": [],
+          "plotting": {"function": "interactive_widget", "title": "Marine heatwaves and cold spells", "kwargs": {"id":  "hPpZE"}}
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "sea_level",
+      "name": "Sea Level",
+      "descriptor": "ocean_indicators.html",
+      "template": "interactive_front_page",
+      "cards": [
+         {
+          "link_to": null, "title": "Sea level",
+          "selecting": {"type": "timeseries", "variable": "sealevel", "time_resolution": "monthly", "name": ["AVISO ftp"]},
+          "processing": [{"method": "select_year_range", "args":  [1993,2025]}],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Global mean sea level", "kwargs": {"id":  "DMCKF"}}
+        },
+        {
+          "link_to": null, "title": "Ocean heat content",
+          "selecting": {"type": "timeseries", "variable": "ohc2k", "time_resolution": "annual", "name": ["Cheng et al 2k", "Miniere", "Copernicus_OHC", "GCOS2k TEMP"]},
+          "processing":  [{"method": "rebaseline", "args": [2005, 2025]}],
+          "plotting": {"function": "interactive_widget_uncertainty", "title": "Ocean heat content 0-2000m", "kwargs": {"id":  "qp4i7"}}
+        }
+      ],
+      "paragraphs": []
+    },
+    {
+      "id": "sea_ice_extent",
+      "name": "Sea ice extent",
+      "descriptor": "sea_ice_extent.html",
+      "template": "interactive_front_page",
+      "cards": [
+        {
+          "link_to": null, "title": "Arctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "arctic_ice", "time_resolution": "monthly", "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "interactive_widget", "title": "Arctic sea-ice extent", "kwargs": {"id":  "raepr"}}
+        },
+        {
+          "link_to": null, "title": "Antarctic sea ice",
+          "selecting": {"type": "timeseries", "variable": "antarctic_ice", "time_resolution": "monthly", "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]},
+          "processing": [
+            {"method": "rebaseline", "args": [1991, 2020]},
+            {"method": "make_annual", "args": []}
+          ],
+          "plotting": {"function": "interactive_widget", "title": "Antarctic sea-ice extent", "kwargs": {"id":  "tPS5E"}}
         }
       ],
       "paragraphs": []

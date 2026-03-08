@@ -2868,7 +2868,18 @@ def interactive_widget(
     if len(cp_all_datasets) == 1:
         df = df.rename(columns={'data': cp_all_datasets[0].metadata['display_name']})
 
+    columns = {}
+    for ds in in_all_datasets:
+        columns[ds.metadata['name']] = ds.metadata['display_name']
+    df.rename(columns=columns, inplace=True)
+
     chart.data = df
+
+    # Turn off direct labelling
+    chart.label_colors = True
+    for line in chart.lines:
+        line.color_key = True
+        line.direct_label = False
 
     chart.update()
     chart.publish()

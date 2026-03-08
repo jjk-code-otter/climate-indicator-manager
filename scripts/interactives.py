@@ -24,6 +24,7 @@ import datawrapper as dw
 import climind.data_manager.processing as dm
 from climind.data_types.timeseries import make_combined_series, equalise_datasets
 from climind.config.config import DATA_DIR
+from scripts.global_temperature.compare_preindustrial import all_annual_datasets
 
 if __name__ == "__main__":
 
@@ -45,15 +46,169 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
+    iod = True
+    enso = True
+
+    mhw = False
+
+    lsat = False
+    sst = False
+
+    ch4 = False
+    n2o = False
+    co2growth = False
+    ch4growth = False
+    n2ogrowth = False
+
     gmst = False
     co2 = False
-    ohc = True
-    sea_level = True
-    sea_ice = True
-    antarctic_sea_ice = True
-    glaciers = True
-    oceanph = True
-    eei = True
+    ohc = False
+    sea_level = False
+    sea_ice =False
+    antarctic_sea_ice = False
+    glaciers = False
+    oceanph = False
+    eei = False
+
+    if iod:
+        ts_archive = archive.select(
+            {
+                'variable': 'lsat',
+                'type': 'timeseries',
+                'name': ["NOAA LSAT v6", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CLSAT21"],
+                'time_resolution': 'annual'
+            }
+        )
+        all_datasets = ts_archive.read_datasets(data_dir)
+        all_annual_datasets = []
+        for ds in all_datasets:
+            ds.rebaseline(1991,2020)
+            ds.select_year_range(1850, 2025)
+            all_annual_datasets.append(ds)
+        df = equalise_datasets(all_annual_datasets)
+
+        chart = dw.LineChart(
+            title='Global land surface air temperature 1850-2025',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-2.3, 1.2],
+            y_grid_format='0.0',
+            tooltip_number_format="00.00",
+            tooltip_x_format="YYYY",
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+
+    if enso:
+        pass
+
+    if mhw:
+        ts_archive = archive.select(
+            {
+                'variable': ['mhw', 'mcs'],
+                'type': 'timeseries',
+                'time_resolution': 'annual'
+            }
+        )
+        all_datasets = ts_archive.read_datasets(data_dir)
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Area affected by marine heatwaves and cold spells',
+            intro='% of ocean area affected, baseline 1982-2021',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[0, 100],
+            y_grid_format='0.0',
+            tooltip_number_format="0.[00]%",
+            tooltip_x_format="YYYY",
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if lsat:
+        ts_archive = archive.select(
+            {
+                'variable': 'lsat',
+                'type': 'timeseries',
+                'name': ["NOAA LSAT v6", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CLSAT21"],
+                'time_resolution': 'annual'
+            }
+        )
+        all_datasets = ts_archive.read_datasets(data_dir)
+        all_annual_datasets = []
+        for ds in all_datasets:
+            ds.rebaseline(1991,2020)
+            ds.select_year_range(1850, 2025)
+            all_annual_datasets.append(ds)
+        df = equalise_datasets(all_annual_datasets)
+
+        chart = dw.LineChart(
+            title='Global land surface air temperature 1850-2025',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-2.3, 1.2],
+            y_grid_format='0.0',
+            tooltip_number_format="00.00",
+            tooltip_x_format="YYYY",
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if sst:
+        ts_archive = archive.select(
+            {
+                'variable': 'sst',
+                'type': 'timeseries',
+                'name': ["HadSST4", "ERSST v6", "DCENT_SST_I", "CMA_SST", "CMEMS_SST"],
+                'time_resolution': 'annual'
+            }
+        )
+        all_datasets = ts_archive.read_datasets(data_dir)
+        all_annual_datasets = []
+        for ds in all_datasets:
+            ds.rebaseline(1991,2020)
+            ds.select_year_range(1850, 2025)
+            all_annual_datasets.append(ds)
+        df = equalise_datasets(all_annual_datasets)
+
+        chart = dw.LineChart(
+            title='Global sea surface air temperature 1850-2025',
+            intro='difference from 1991-2020 average, degC',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-1.5, 0.5],
+            y_grid_format='0.0',
+            tooltip_number_format="00.00",
+            tooltip_x_format="YYYY",
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
 
     if gmst:
         # some global temperature data sets are annual only, others are monthly so need to read these separately
@@ -111,6 +266,166 @@ if __name__ == "__main__":
             custom_range_y=[340, 430],
             y_grid_format='0',
             tooltip_number_format="000.00",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if ch4:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'ch4',
+                                     'type': 'timeseries',
+                                     'name': ['WDCGG CH4'],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Atmospheric methane concentration 1984-2024',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[1650, 1950],
+            y_grid_format='0',
+            tooltip_number_format="00.0",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if n2o:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'n2o',
+                                     'type': 'timeseries',
+                                     'name': ['WDCGG N2O'],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Atmospheric nitrous oxide concentration 1984-2024',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[300, 340],
+            y_grid_format='0',
+            tooltip_number_format="00.0",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if co2growth:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'co2rate',
+                                     'type': 'timeseries',
+                                     'name': ['WDCGG CO2 growth'],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Atmospheric carbon dioxide growth rate 1984-2024',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[0, 3.5],
+            y_grid_format='0',
+            tooltip_number_format="0.0",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if ch4growth:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'ch4rate',
+                                     'type': 'timeseries',
+                                     'name': ['WDCGG CH4 growth'],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Atmospheric methane growth rate 1984-2024',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[-3, 18],
+            y_grid_format='0',
+            tooltip_number_format="0.0",
+            tooltip_x_format="YYYY",
+            plot_height_ratio=0.5,
+            plot_height_mode='ratio',
+
+        )
+
+        chart.create(folder_id=folder_id).publish()
+        iframe_code = chart.get_iframe_code()
+        png_url = chart.get_png_url()
+
+        print(chart.chart_id)
+        print(iframe_code)
+        print(png_url)
+
+    if n2ogrowth:
+        # some global temperature data sets are annual only, others are monthly so need to read these separately
+        ts_archive = archive.select({'variable': 'n2orate',
+                                     'type': 'timeseries',
+                                     'name': ['WDCGG N2O growth'],
+                                     'time_resolution': 'annual'})
+
+        all_datasets = ts_archive.read_datasets(data_dir)
+
+        df = equalise_datasets(all_datasets)
+
+        chart = dw.LineChart(
+            title='Atmospheric nitrous oxide growth rate 1984-2024',
+            source_name='WMO',
+            data=df,
+            custom_range_y=[0, 1.4],
+            y_grid_format='0',
+            tooltip_number_format="0.0",
             tooltip_x_format="YYYY",
             plot_height_ratio=0.5,
             plot_height_mode='ratio',

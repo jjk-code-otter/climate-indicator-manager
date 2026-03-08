@@ -40,7 +40,8 @@ if __name__ == "__main__":
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
     hub = False
-    interactive = True
+    interactive = False
+    regional_interactive = True
 
     minimal = False
     dash2025 = False
@@ -170,6 +171,16 @@ if __name__ == "__main__":
         dash.data_dir = [DATA_DIR / 'ManagedData' / 'RegionalData', DATA_DIR / "ManagedData" / "Data"]
 
         dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
+
+    if regional_interactive or run_all:
+        json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'interactive_regional.json'
+
+        dash = Dashboard.from_json(json_file, [DATA_DIR / 'ManagedData' / 'RegionalMetadata', METADATA_DIR])
+        dash.data_dir = [DATA_DIR / 'ManagedData' / 'RegionalData', DATA_DIR / "ManagedData" / "Data"]
+
+        dash_dir = DATA_DIR / 'ManagedData' / 'InteractiveRegionalDashboard'
         dash_dir.mkdir(exist_ok=True)
         dash.build(Path(dash_dir), focus_year=2025)
 
