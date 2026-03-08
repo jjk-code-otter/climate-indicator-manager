@@ -41,10 +41,10 @@ if __name__ == "__main__":
 
     hub = False
     interactive = False
-    regional_interactive = True
+    regional_interactive = False
 
     minimal = False
-    dash2025 = False
+    dash2025 = True
     dash2024 = False
     dash2023 = False
     dash2022 = False

@@ -1,0 +1,47 @@
+{
+  "name": "ORSA5",
+  "display_name": "ORS5",
+  "version": "",
+  "variable": "ohc2k",
+  "units": "zJ",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://climate.copernicus.eu/sites/default/files/custom-uploads/indicators-2024/ocean-heat-content/fig1/fig1_ocean_heat_indicators_anomalies_heat_content_global_ocean_DATA.zip"],
+      "filename": ["global_ohc2km_2024.csv"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content 0-2000m",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_orsa5",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://climate.copernicus.eu/sites/default/files/custom-uploads/indicators-2024/ocean-heat-content/fig1/fig1_ocean_heat_indicators_anomalies_heat_content_global_ocean_DATA.zip"],
+      "filename": ["global_ohc2km_2024.csv"],
+	  "type": "timeseries",
+      "long_name": "Global ocean heat content 0-2000m",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_orsa5",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
