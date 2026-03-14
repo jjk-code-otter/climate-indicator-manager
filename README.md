@@ -1,7 +1,7 @@
 Climate Indicator Manager
 =========================
 
-A lightweight package for managing, downloading and simple processing of climate data for use in calculating and presenting
+A lightweight package for managing, downloading and processing climate data for use in calculating and presenting
 climate indicators, as well as creating dashboards based on these indicators.
 
 It is built on a collection of metadata fies which describe the location and content of individual data collections and
@@ -20,6 +20,8 @@ associated with particular rankings.
 
 Each step in processing is logged and added to the metadata for the dataset so that processing steps can be traced 
 and reproduced.
+
+Detailed documentation is here: https://jjk-code-otter.github.io/climate-indicator-manager/index.html
 
 
 Installation
@@ -81,7 +83,8 @@ CMEMS_USER=athirdusername
 CMEMS_PSWD=yetanotherpassword
 ```
 
-All three of these services are free to register, but you will have to set up the credentials online.
+All three of these services are free to register, but you will have to set up the credentials online and then store 
+those credentials at some location in your file system.
 
 Similarly to access the data from the Copernicus Climate Change service, you will need an API key. 
 The instructions provided by CDS are very helpful - https://cds.climate.copernicus.eu/how-to-api
@@ -90,47 +93,37 @@ Downloading data
 ================
 
 The first thing to do is to download the data. There are two main scripts for downloading 
-data in the scripts directory. `get_timeseries.py` will download individual datasets which 
-are in the form of time series. `get_grids.py` will download the gridded data.
+data and both of these are in the `scripts/data_management` directory. `get_timeseries.py` will download individual 
+datasets which are in the form of time series. `get_grids.py` will download the gridded data.
 
-To download a particular gridded dataset or datasets you can modify the line in 
-`get_grids.py` that looks like this:
-
-```
-ts_archive = archive.select({'type': 'gridded', 'name': ['JRA-3Q']})
-```
-
-To download a particular dataset, you need to know its name and put it in the 
-list under `name` in the dictionary. If you want to download multiple datasets 
-you can add a list of names. `get_timeseries.py` works similarly. The dataset 
-names are specified in the relevant metadata files.
+To download a particular dataset, change the `name` of the dataset in the `archive.select` call. Multiple datasets 
+can be downloaded at once using a list of names. The "correct" names of the datasets are given in the metadata files. 
 
 A collection of regularly updated timeseries can be downloaded by running 
-`get_regular_timeseries.py`. This is great when it works, but typically at least on dataset
+`get_regular_timeseries.py` and daily timeseries can be downloaded by running `get_daily_timeseries.py`. 
+This is great when it works, but typically at least one dataset
 will fail to download in a way that stops the code from running. I temporarily comment out 
 problematic datasets and rerun the script.
 
 The volume of gridded data is considerably larger than the volume of time series data. For 
-some datasets, the whole gridded dataset is downloaded each time this is run, but for the 
-JRA reanalyses the full dataset is only downloaded once with subsequent runs of the 
-get_grids.py script only downloading months that have not already been downloaded. 
-
-The gridded 
-data are used to calculate custom area averages (such as the WMO Regional Association averages) 
-and for plotting maps of the data. The key global indicators are all time series.
+some datasets, the whole gridded dataset is downloaded each time this is run, but for some of the 
+reanalyses the full dataset is only downloaded once with subsequent runs of the `get_grids.py` 
+script only downloading months that have not already been downloaded. The gridded data are 
+used to calculate custom area averages (such as the WMO Regional Association averages) and 
+for plotting maps of the data. The key global indicators are all time series.
 
 Some datasets are not available online (the JRA-55 and JRA-3Q global mean temperature for example) so 
 you will have to obtain these from somewhere else or remove them from the processing. Any 
-extra files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory 
+extra dataset files such as these should be copied into the `$DATADIR/ManagedData/Data/` directory 
 in an appropriately named subdirectory that corresponds to the unique name given to the 
 data set. This can be found in the metadata file for the data set (see below).
 
 Calculating the WMO composite global mean temperature
 =====================================================
 
-You will first need to download timeseries for the five datasets HadCRUT5, NOAA v6, 
-GISTEMP, Berkeley Earth Hires, and ERA5. You can do this using `get_timeseries.py` (see above). 
-You will have to obtain the JRA-3Q some other way.
+To calculate this, you will first need to download the six datasets used in the composite global mean: 
+"HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth Hires", "ERA5" and "JRA-3Q". These can be downloaded using 
+`get_timeseries.py`.
 
 Navigate to the `scripts/global_temperature` directory and run
 
@@ -143,9 +136,6 @@ Principle outputs appear in `Figures` - which holds all the graphs - and
 Pre-processing the data
 =======================
 
-You will first need to download gridded data for the six datasets "HadCRUT5", "NOAA v6", 
-"GISTEMP", "Berkeley Earth Hires", "JRA-3Q", and "ERA5". You can do this using `get_grids.py` (see above).
-
 For the dashboards, the gridded data need to be pre-processed by running the following from 
 the `scripts` directory:
 
@@ -154,53 +144,56 @@ the `scripts` directory:
 which calculates annual average grids on a consistent 5-degree latitude longitude grid for 
 all the gridded data sets. This allows them to be combined into a single estimate for mapping.
 
-In order to generate area averages from the gridded data for specified sub regions, you will 
+In order to generate area averages from the gridded data for specified subregions, you will 
 need to navigate to the scripts directory and run:
 
 `python make_new_regions.py` 
 
-you only need to run this the first time to generate the shape files for composite (sub)regions. If you 
+You only need to run this the first time to generate the shape files for subregion. If you 
 happen to rerun it, you will likely encounter permission issues - you can't write over the 
 existing shape files. If you do need to rerun - say because the definitions have changed - then 
-you will have to delete or move the shapefiles created by the code before running it again. 
+you will have to delete (or move) the shapefiles created by the code before running it again. 
 
-Regional area averages are calculated using
+Regional area averages are then calculated using:
 
 `python calculate_wmo_ra_averages.py`
 
-You will need to manually specify the end year and which datasets to use in the calculation.
-The script reads in each of the gridded data sets, regrids it to a standard resolution and then 
+You will need to manually specify the end year and which datasets to use in the calculation. The 
+regional reports use the main six datasets "HadCRUT5", "NOAA v6", "GISTEMP", "Berkeley Earth", "ERA5", and "JRA-3Q". 
+The script reads in each of the gridded data sets, regrids it to a standard (1x1) resolution and then 
 calculates the area averages for the six WMO Regional Association areas, the six African 
 subregions and other subregions defined by the WMO Regional State of the Climate authors. It can 
 take a while to run because it has to load and process a lot of data. The first time 
 it runs, it will likely download a shape file of coastlines from natural earth used to identify 
-land and ocean areas. I like to run it one dataset at a time, but if all the datasets are 
-set up then you can run it on all 6 at once (assuming your computer has sufficient memory).
+land and ocean areas.
 
 
 Building the website
 ====================
 
-To build the websites, navigate to the scripts directory and run
+To build the websites, download all the necessary data then navigate to the scripts directory and run:
 
 `python build_dashboard.py`
 
 This builds all the webpages, produces the figures for each web page and prepares 
 the formatted data sets. These are written to the `DATADIR/ManagedData` directory with 
-one directory created for each dashboard. Currently, the code can generate a number of 
-different dashboards. Exactly which ones get run depends on the boolean flags set at the 
-start of the script. If you want to generate a particular dashboard, set its flag to `True`. 
-If you don't want to build a dashboard, set its flag to `False`.
+one directory created for each dashboard. Currently the code is set up to generate four 
+dashboards: key indicators to 2021, key indicators to 2022, ocean indicators, and regional 
+indicators to 2022.
 
 To display a dashboard on the web, the files in the appropriate directory will need to be 
 copied to an appropriate web server.
+
+The dashboard code is written in such a way that it will generate any information that doesn't cause 
+an error. The basic dashboards are based on "cards" which are processed one at a time and then used 
+to populate the webpages. If a card fails to process a warning will be printed to the screen but it will 
+keep running and that card simply won't appear on the dashboard.
 
 
 Navigating the website
 ======================
 
-Each dashboard typically consists of a set of "cards" at the top of the page. These each 
-contain:
+Each dashboard consists of a set of "cards" at the top of the page. These each contain:
 
 - an image, 
 - a set of links to images in different formats (png, svg, and pdf)
@@ -213,8 +206,7 @@ contain:
 In some cases there will also be:
 
 - a caption and a button saying "Copy caption" which will save the caption to your clipboard.
-- a button inviting you to "Click for more indicators". Clicking such a button will take you to a 
-  page with related indicators.
+- a button inviting you to "Click for more indicators". Clicking such a button will take you to a page with related indicators.
 
 
 Diverse other scripts
@@ -237,10 +229,8 @@ Adding data sets for an existing variable
 
 To add a dataset for an existing variable, you need to 
 * create a new collection file in the `metadata` folder
-* write a reader function in the `readers` directory. The name of the function should 
-  correspond to the "reader" entry in the collection metadata.
-* write a fetcher function in the `fetchers` directory. The name of the fetcher function 
-  should correspond to the "fetcher" entry in the collection metadata. This is only necessary if the file(s) can't be downloaded as a simple http(s) or ftp(s) request. For example, some datasets do not have a static URL, or there are a large number of files, or there is an API for accessing the data.
+* write a reader function in the `readers` directory. This should correspond to the "reader" entry in the collection metadata.
+* write a fetcher function in the `fetchers` directory. This should correspond to the "reader" entry in the collection metadata. This is only necessary if the file(s) can't be downloaded as a simple http(s) or ftp(s) request. For example, some datasets do not have a static URL, or there are a large number of files, or there is an API for accessing the data.
 
 The form of these files should be clear from the other files and function in the respective 
 directories, or by perusal of the schemas in the `data_manager` directory. An example metadata file looks like this:

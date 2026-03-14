@@ -1,0 +1,55 @@
+{
+  "name": "CLSAT21",
+  "display_name": "CLSAT",
+  "version": "2.1",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": ["Wei, S., Li, Q., Xu, Q., Li, Z., Zhang, H., and Lin, J.: Updates to C-LSAT 2.1 and the development of high-resolution land surface air temperature and diurnal temperature range datasets, Earth Syst. Sci. Data, 17, 4985–5005, https://doi.org/10.5194/essd-17-4985-2025, 2025."],
+  "citation_url": ["https://doi.org/10.5194/essd-17-4985-2025"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#000077",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        ""
+      ],
+      "filename": [
+        "CMST_GLSAT.csv"
+      ],
+      "type": "timeseries",
+      "long_name": "Global land surface air temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_clsat21",
+      "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [
+        ""
+      ],
+      "filename": [
+        "CMST_GLSAT.csv"
+      ],
+      "type": "timeseries",
+      "long_name": "Global land surface air temperature",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_clsat21",
+      "fetcher": "fetcher_no_url"
+    }
+  ]
+}

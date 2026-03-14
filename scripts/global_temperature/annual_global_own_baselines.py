@@ -30,7 +30,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA Interim', 'Berkeley Earth', 'Kadow', 'NOAA v6', 'Calvert 2024'],
+                                 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v6'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
@@ -83,8 +83,8 @@ if __name__ == "__main__":
         ds.rebaseline(1850,1900)
         all_8110_monthly.append(ds)
 
-    pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "own_rising_multiple.png")
-    pt.wave_multiple_plot(figure_dir, all_8110_monthly, "own_wave_multiple.png")
+    pt.rising_tide_multiple_plot(figure_dir, all_8110_monthly, "own_rising_multiple.png", '')
+    pt.wave_multiple_plot(figure_dir, all_8110_monthly, "own_wave_multiple.png", '')
 
     pt.neat_plot(figure_dir, all_8110_datasets, 'own_annual.png', 'Global mean temperature')
 

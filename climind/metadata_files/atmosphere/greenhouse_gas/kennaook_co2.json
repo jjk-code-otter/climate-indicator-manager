@@ -14,11 +14,30 @@
   "notes": "",
   "datasets": [
     {
+      "url": [
+        "https://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CO2_data_download.csv"
+      ],
+      "filename": [
+        "CapeGrim_CO2_data_download.csv"
+      ],
+      "type": "timeseries",
+      "long_name": "Atmospheric concentration of carbon dioxide",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1961,
+      "climatology_end": 1990,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_kennaook",
+      "fetcher": "fetcher_standard_url"
+    },
+    {
       "url": ["https://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CO2_data_download.csv"],
       "filename": ["CapeGrim_CO2_data_download.csv"],
 	  "type": "timeseries",
       "long_name": "Atmospheric concentration of carbon dioxide",
-	  "time_resolution": "monthly",
+	  "time_resolution": "annual",
 	  "space_resolution": 999,
 	  "climatology_start": 1961,
 	  "climatology_end": 1990,

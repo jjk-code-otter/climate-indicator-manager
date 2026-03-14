@@ -27,7 +27,7 @@ def check_setup(data_dir: Path) -> None:
     Parameters
     ----------
     data_dir: Path
-      Path to the directory which will contain all of the
+      Path to the directory which will contain all of the project data
 
     Returns
     -------

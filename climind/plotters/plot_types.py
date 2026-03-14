@@ -23,7 +23,9 @@ import xarray
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from matplotlib.colors import BoundaryNorm
 from matplotlib.transforms import Bbox
+from matplotlib.colors import BoundaryNorm, ListedColormap
 import seaborn as sns
 import numpy as np
 from typing import List, Union, Tuple
@@ -46,11 +48,15 @@ from climind.stats.paragraphs import get_last_month
 from matplotlib.patches import Polygon
 import matplotlib.dates as mdates
 
-FANCY_UNITS = {"degC": r"$\!^\circ\!$C",
-               "zJ": "zJ",
-               "millionkm2": "million km$^2$",
-               "ph": "pH",
-               "mwe": "metres water equivalent"}
+FANCY_UNITS = {
+    "degC": r"$\!^\circ\!$C",
+    "zJ": "ZJ",
+    "millionkm2": "million km$^2$",
+    "ph": "pH",
+    "mwe": "metres water equivalent",
+    "wm2": "Wm$^{-2}$",
+    "aod": "Aerosol Optical Depth",
+}
 
 STANDARD_PARAMETER_SET = {
     'axes.axisbelow': False,
@@ -209,7 +215,8 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             wmo_standard_colors = [
                 "#204e96",  # Main blue
                 "#f5a729", "#7ab64a", "#23abd1",  # Secondary colours
-                "#008F90", "#00AE4D", "#869519", "#98411E", "#A18972"  # Additional colours (natural shades)
+                "#008F90", "#00AE4D", "#869519", "#98411E", "#A18972",  # Additional colours (natural shades)
+                "#000000", "#000000", "#000000", "#000000", "#000000", "#000000"
             ]
             # wmo_standard_colors[0] = "#fcb679"  # JK Orange
 
@@ -339,7 +346,13 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
     if len(yticks) > 10:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1.0)
 
-    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole']:
+    if dataset.metadata['variable'] in ['aod']:
+        ylo, yhi, yticks = set_lo_hi_ticks(ylims, 0.05)
+
+    if dataset.metadata['variable'] in ['solar']:
+        ylo, yhi, yticks = set_lo_hi_ticks([1364, 1367], 0.5)
+
+    if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole', 'ocean_mass']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
 
     if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4', 'ozone_minimum', 'min_ozone_minimum']:
@@ -426,6 +439,9 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
         if ds.metadata['variable'] in ['greenland', 'antarctica', 'mcs', 'arctic_ice', 'ph', 'glacier']:
             loc = "upper right"
             bbox_to_anchor = (0.96, 0.96)
+        if ds.metadata['variable'] in ['eei']:
+            loc = "lower right"
+            bbox_to_anchor = (0.96, 0.06)
         ncol = 1
         if len(handles) > 6:
             ncol = 2
@@ -1451,7 +1467,7 @@ def trends_plot(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
     str
         Caption for the figure
     """
-    final_year = 2024
+    final_year = 2025
     # print_trends = True
 
     caption = f'Figure shows the trends for four sub-periods (1901-1930, 1931-1960, 1961-1990 and 1991-{final_year}. ' \
@@ -1699,7 +1715,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
 
 def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename: str, title: str,
-                    overlay=True) -> str:
+                    overlay=True, n_months=36) -> str:
     STANDARD_PARAMETER_SET['xtick.bottom'] = False
     STANDARD_PARAMETER_SET['xtick.labelbottom'] = False
     STANDARD_PARAMETER_SET['ytick.left'] = False
@@ -1708,7 +1724,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     fig = plt.figure(figsize=[16, 6])
 
-    n_months = 32
+    # n_months = 36
 
     n_time_x = len(all_datasets[1].df.data)
 
@@ -1749,13 +1765,15 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
             months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
             if j == 1 and overlay:
-                ax.text(i + 0.5, -0.3, months[month - 1], ha='center', va='center', fontsize=24, color='black')
+                ax.text(i + 0.5, -0.4, months[month - 1], ha='center', va='center', fontsize=24, color='black')
 
             if month == 1 and j == 1:
                 if first_year is None:
                     first_year = year
-                plt.plot([i, i], [0, n_datasets], linewidth=2, color='black', zorder=99)
-                ax.text(i + 0.25, 0 - 0.9, f'{year}', fontsize=24, color='black')
+                if n_months <= 60:
+                    plt.plot([i, i], [0, n_datasets], linewidth=2, color='black', zorder=99)
+                if n_months <= 60 or str(year)[-1] in ['0', '5']:
+                    ax.text(i + 0.25, 0 - 1.1, f'{year}', fontsize=24, color='black')
 
         ax.text(n_time_x - (n_months + 0.5), j + 0.5, ds.metadata['display_name'], ha='right', va='center', fontsize=24,
                 color='black')
@@ -2133,7 +2151,14 @@ def dashboard_map_simplified(out_dir: Path, all_datasets: List[GridAnnual], imag
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if grid_type in ['mean', 'rank', 'single']:
+    if 'precip_quantiles' in main_variable or 'precip' in main_variable:
+        p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                          transform=ccrs.PlateCarree(),
+                          cmap=ListedColormap(wmo_cols),
+                          norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
+                          shading='auto'
+                          )
+    elif grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
@@ -2273,9 +2298,11 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
     elif grid_type == 'unc':
         wmo_levels = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     elif grid_type == 'rank':
-        wmo_cols = ["#ffffff", "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
+        wmo_cols = ["#08519c", "#6baed6", "#bdd7e7", "#eff3ff",
+                    "#ffffff",
+                    "#feb24c", "#fd8d3c", "#f03b20", "#bd0026"]
         wmo_cols = list(reversed(wmo_cols))
-        wmo_levels = [0.5, 1.5, 3.5, 5.5, 10.5, 20.5]
+        wmo_levels = [0.5, 1.51, 3.51, 5.51, 10.51, 37.49, 42.49, 44.49, 46.49, 47.5]
 
     if main_variable == 'sealeveltrend':
         wmo_levels = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -2294,7 +2321,14 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(111, projection=proj, aspect='auto')
-    if grid_type in ['mean', 'rank', 'single']:
+    if 'precip_quantiles' in main_variable or 'precip' in main_variable:
+        p = ax.pcolormesh(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
+                          transform=ccrs.PlateCarree(),
+                          cmap=ListedColormap(wmo_cols),
+                          norm=BoundaryNorm(wmo_levels, len(wmo_cols)),
+                          shading='auto'
+                          )
+    elif grid_type in ['mean', 'rank', 'single']:
         p = ax.contourf(wrap_lon, dataset.df.latitude, wrap_data[0, :, :],
                         transform=ccrs.PlateCarree(),
                         levels=wmo_levels,
@@ -2311,21 +2345,26 @@ def dashboard_map_generic(out_dir: Path, all_datasets: List[GridAnnual], image_f
 
     cbar = plt.colorbar(p, orientation='horizontal', fraction=0.06, pad=0.04)
 
-    cbar.ax.tick_params(labelsize=25)
-    cbar.set_ticks(wmo_levels)
-    cbar.set_ticklabels(wmo_levels)
+    if grid_type == 'rank':
+        cbar.ax.tick_params(labelsize=12)
+        cbar.set_ticks([1, 2.5, 4.5, 8, 40, 43.5, 45.5, 47])
+        cbar.set_ticklabels(["HOTTEST", "TOP 3", "TOP 5", "TOP 10", "BOTTOM 10", "BOTTOM 5", "BOTTOM 3", "COLDEST"])
+    else:
+        cbar.ax.tick_params(labelsize=25)
+        cbar.set_ticks(wmo_levels)
+        cbar.set_ticklabels(wmo_levels)
 
     # Add the datasets used and their last months
-    plt.gcf().text(.075, .012, ",".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
+    plt.gcf().text(.075, .012, "\n".join(last_months), bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=10)
 
     # Add a Created tag to let people know when it was created
     current_time = f"Created: {datetime.today()}"
-    plt.gcf().text(.90, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+    plt.gcf().text(.930, .012, current_time[0:28], ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 
     label_text = f"Temperature difference from " \
                  f"{ds.metadata['climatology_start']}-{ds.metadata['climatology_end']} average ($\degree$C)"
     if grid_type == 'rank':
-        label_text = r'Ranking group'
+        label_text = r'Ranking group in period 1979-2025'
     if grid_type == 'unc':
         label_text = r'Temperature anomaly half-range ($\degree$C)'
     if main_variable == 'sealeveltrend':
@@ -2830,6 +2869,94 @@ def interactive_widget(
         df = df.rename(columns={'data': cp_all_datasets[0].metadata['display_name']})
 
     chart.data = df
+
+    chart.update()
+    chart.publish()
+
+    iframe_code = chart.get_iframe_code(responsive=True)
+    png_url = chart.get_png_url()
+
+    caption = [iframe_code, png_url]
+
+    return caption
+
+
+def interactive_widget_uncertainty(
+        out_dir: Path,
+        in_all_datasets: List[Union[TimeSeriesAnnual]],
+        image_filename: str,
+        title: str,
+        id=None
+):
+    if id is None:
+        raise RuntimeError("ID is None")
+
+    cp_all_datasets = copy.deepcopy(in_all_datasets)
+
+    chart = dw.get_chart(id)
+
+    to_drop = ['climatology']
+    for ds in cp_all_datasets:
+        for v in to_drop:
+            if v in ds.df.columns:
+                ds.df = ds.df.drop(columns=[v])
+
+    # For each of the datasets add "display_name_lower" and "display_name_upper" ranges
+    names_with_uncertainties = []
+    for ds in cp_all_datasets:
+        if "uncertainty" in ds.df.columns:
+            display_name = ds.metadata['name']
+            names_with_uncertainties.append(display_name)
+
+    if len(cp_all_datasets) == 1:
+        name = cp_all_datasets[0].metadata['name']
+        df = cp_all_datasets[0].df
+        df.rename(columns={'data': name}, inplace=True)
+        df.rename(columns={'uncertainty': f"{name}_uncertainty"}, inplace=True)
+    else:
+        df = equalise_datasets(cp_all_datasets, uncertainty=True)
+
+    for name in names_with_uncertainties:
+        df[f'{name}_lower'] = df[name] - df[f"{name}_uncertainty"]
+        df[f'{name}_upper'] = df[name] + df[f"{name}_uncertainty"]
+        df = df.drop(columns=[f"{name}_uncertainty"])
+
+    to_drop = ['month', 'day']
+    for v in to_drop:
+        if v in df.columns:
+            df = df.drop(columns=[v])
+
+    if 'date' in df.columns:
+        df['year'] = df['date']
+        df = df.drop(columns=['date'])
+
+    if 'time' in df.columns:
+        df['year'] = df['time']
+        df = df.drop(columns=['time'])
+
+    # if len(cp_all_datasets) == 1:
+    #     df = df.rename(columns={'data': cp_all_datasets[0].metadata['display_name']})
+
+    chart.data = df
+
+    # Add shaded confidence interval area
+    for name in names_with_uncertainties:
+        chart.area_fills.append(
+            dw.AreaFill(
+                from_column=f"{name}_lower",
+                to_column=f"{name}_upper",
+                color="#cccccc",
+                opacity=0.45,
+            )
+        )
+
+    chart.update()
+    chart = dw.get_chart(id)
+
+    # And make the lines bounding the uncertainty range invisible
+    for line in chart.lines:
+        if "upper" in line.column or "lower" in line.column:
+            line.width = dw.LineWidth.INVISIBLE
 
     chart.update()
     chart.publish()

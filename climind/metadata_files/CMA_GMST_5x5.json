@@ -1,0 +1,51 @@
+{
+    "name": "CMA_GMST_5x5",
+    "display_name": "CMA-GMST",
+    "version": "1.0",
+    "variable": "tas",
+    "units": "degC",
+    "citation": [
+        "Chen, L., Xu, W., Zhou, Z. et al. A new global land\u00e2\u20ac\u201cocean merged surface temperature dataset since the 1850s: the CMA-GMST dataset. Clim Dyn 63, 187 (2025). https://doi.org/10.1007/s00382-025-07614-x"
+    ],
+    "citation_url": [
+        "https://doi.org/10.1007/s00382-025-07614-x"
+    ],
+    "data_citation": [
+        "https://data.cma.cn/en/#/Visualization/Visualization-detail?id=16"
+    ],
+    "acknowledgement": "",
+    "colour": "#000077",
+    "zpos": 99,
+    "origin": "obs",
+    "notes": "",
+    "datasets": [
+        {
+            "url": [
+                ""
+            ],
+            "filename": [
+                "CMA_GMST_5x5.nc"
+            ],
+            "type": "gridded",
+            "long_name": "Global mean temperature",
+            "time_resolution": "annual",
+            "space_resolution": 999,
+            "climatology_start": 1991,
+            "climatology_end": 2020,
+            "actual": false,
+            "derived": true,
+            "history": [
+                "Data set created from file ['SURF_CLI_GLB_MST_MON_GRID_2DEG_2026MMMM.nc'] downloaded from [] at ['2026-01-08 17:38:51']",
+                "Rebaselined to 1991-2020",
+                "Calculated annual average",
+                "Wrote to file CMA_GMST_5x5.nc"
+            ],
+            "reader": "reader_standard_grid",
+            "fetcher": "fetcher_no_url",
+            "last_modified": [
+                "2026-01-08 17:38:51"
+            ],
+            "last_month": "2025-12-01 00:00:00"
+        }
+    ]
+}

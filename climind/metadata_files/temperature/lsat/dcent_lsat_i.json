@@ -1,0 +1,59 @@
+{
+  "name": "DCENT_LSAT_I",
+  "display_name": "DCENT-I",
+  "version": "",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": [
+    "Chan, D., Gebbie, G., Huybers, P. & Kent, E. C. DCENT: Dynamically Consistent ENsemble of Temperature at the Earth Surface. https://doi.org/10.7910/DVN/NU4UGW (2024).",
+    "Chan, D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. https://doi.org/10.7910/DVN/ZY0WM8 (2025).",
+    "Chan D., Chan, S. C., Siddons, J. T., Cable, A., Cornes, R. C., Kent, E. C., Gebbie, G., & Huybers, P. (2025). DCENT-I: A Globally Infilled Extension of the Dynamically Consistent ENsemble of Temperature Dataset. Geoscience Data Journal."
+  ],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#b7bf49",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://dcent-i.github.io/"
+      ],
+	  "filename": [
+        "DCENT_DCENT_I_LST_monthly_statistics_embargo.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Sea surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 99,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dcenti",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": [
+        "https://dcent-i.github.io/"
+      ],
+	  "filename": [
+        "DCENT_DCENT_I_LST_annual_statistics_embargo.txt"
+      ],
+      "type": "timeseries",
+      "long_name": "Sea surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 99,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_dcenti",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

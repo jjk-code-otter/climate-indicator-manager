@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": ["https://data.marine.copernicus.eu/product/OMI_CLIMATE_SL_GLOBAL_area_averaged_anomalies/files?path=OMI_CLIMATE_SL_GLOBAL_area_averaged_anomalies%2F&subdataset=omi_climate_sl_global_area_averaged_anomalies_202406"],
-      "filename": ["omi_climate_sl_global_area_averaged_anomalies_19930101_P20240228.nc"],
+      "filename": ["omi_climate_sl_global_area_averaged_anomalies_19990220_P20250729.nc"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

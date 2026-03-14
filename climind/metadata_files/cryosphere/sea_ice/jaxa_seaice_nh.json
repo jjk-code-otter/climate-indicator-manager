@@ -23,6 +23,7 @@
 	  "climatology_start": 1961,
 	  "climatology_end": 1990,
 	  "actual": true,
+
 	  "derived": false,
 	  "history": [],
       "reader": "reader_jaxa",

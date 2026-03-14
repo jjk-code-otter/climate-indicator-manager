@@ -294,7 +294,14 @@ class TimeSeriesIrregular(TimeSeries):
         out_str = f'TimeSeriesIrregular: {self.metadata["name"]}'
         return out_str
 
-    def fill_daily(self):
+    def fill_daily(self) -> None:
+        """
+        Ensure that a daily time series has data for every day between the start and end years.
+
+        Returns
+        -------
+        None
+        """
         self.df = self.df.set_index('date')
 
         start_date, end_date = self.get_start_and_end_dates()
@@ -310,6 +317,8 @@ class TimeSeriesIrregular(TimeSeries):
         self.df.year = t_index.year
         self.df.month = t_index.month
         self.df.day = t_index.day
+
+        self.update_history(f"Time series expanded with NaN to include all days between {start_year} and {final_year}")
 
     def get_climatology(self, climatology_start_year, climatology_end_year):
         # Calculate climatology and fill out repeating climatology to full length of series
@@ -449,6 +458,17 @@ class TimeSeriesIrregular(TimeSeries):
                      f"{end_date.year}.{end_date.month:02d}.{end_date.day:02d}"
         return date_range
 
+    def zero_on_year(self, baseline_year):
+        df_copy = copy.deepcopy(self.df)
+        df_copy = df_copy.set_index('date')
+        df2 = df_copy[df_copy['year'] == baseline_year]
+
+        min_value = -1 * df2.data.iloc[0]
+
+        self.update_history(f"Zeroed at first time step of {baseline_year}.")
+
+        self.add_offset(min_value)
+
     def rebaseline(self, baseline_start_year, baseline_end_year) -> None:
         """
         Shift the time series to a new baseline, specified by start and end years (inclusive).
@@ -492,6 +512,41 @@ class TimeSeriesIrregular(TimeSeries):
             f'arithmetic mean of the data over the baseline period and subtracting the mean from all data values. '
             f'This is done for each month separately (Januarys, Februarys etc).'
         )
+
+    def lowess(self, number_of_points: int = 60):
+        """
+        Lowess smooth the series
+
+        Parameters
+        ----------
+        number_of_points: int
+            Number of points to use in the lowess smoother
+
+        Returns
+        -------
+
+        """
+        moving_average = copy.deepcopy(self)
+
+        snippet = self.df.data[:]
+        time = self.get_year_axis()[:]
+
+        fraction_of_data = number_of_points / len(snippet)
+
+        fit = lowess(snippet, time, fraction_of_data)
+
+        # Smoothing is different at ends of series (effectively extrapolation) so terminate half filter width from ends
+        fit = fit[:, 1]
+        # fit[0: int(number_of_points / 2)] = np.nan
+        # fit[-1 * int(number_of_points / 2):] = np.nan
+
+        moving_average.df.data = fit
+
+        moving_average.update_history(
+            f'Calculated lowess smoothed series with {fraction_of_data} of data used for each fit')
+        moving_average.metadata['derived'] = True
+
+        return moving_average
 
 
 class TimeSeriesMonthly(TimeSeries):
@@ -568,7 +623,7 @@ class TimeSeriesMonthly(TimeSeries):
             return TimeSeriesMonthly(years, months, data, metadata)
 
     def change_end_month(self, year, month):
-        self.df = self.df[self.df.year*100+self.df.month < year*100+month+1]
+        self.df = self.df[self.df.year * 100 + self.df.month < year * 100 + month + 1]
         _, end_date = self.get_start_and_end_dates()
         self.metadata.dataset['last_month'] = str(end_date)
 
@@ -1511,7 +1566,8 @@ def make_combined_series(all_datasets: List[TimeSeriesAnnual], augmented_uncerta
             for att in list_attributes:
                 metadata[att].extend(ds.metadata[att])
 
-    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'), data_frames,)
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=['year'], how='outer', validate='m:m'),
+                       data_frames, )
 
     columns = []
     for col in df_merged.columns:
@@ -1690,7 +1746,8 @@ def create_common_dataframe(
 
 
 def equalise_datasets(
-        all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]]
+        all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
+        uncertainty: bool = False
 ) -> pd.DataFrame:
     """
     Given a list of datasets
@@ -1722,20 +1779,26 @@ def equalise_datasets(
 
     combined_df = create_common_dataframe(dataframes, monthly=monthly, annual=annual, irregular=irregular)
 
+    added_columns = ['data']
+    if uncertainty:
+        added_columns.append('uncertainty')
+
     on_columns = ['year']
     if monthly:
         on_columns = ['year', 'month']
     if irregular:
         on_columns = ['year', 'month', 'day']
-    columns = [*on_columns, 'data']
+    columns = [*on_columns, *added_columns]
 
     # for each dataset in the list, merge it with the combined dataframe, rename the data column and
     # update the combined dataframe
     for ds in all_datasets:
         merged_df = pd.merge(combined_df, ds.df[columns], on=on_columns, how='left', validate='m:m')
         merged_df.rename(columns={'data': ds.metadata['name']}, inplace=True)
+        if uncertainty:
+            merged_df.rename(columns={'uncertainty': f"{ds.metadata['name']}_uncertainty"}, inplace=True)
         combined_df = merged_df
-        columns = [*on_columns, 'data']
+        columns = [*on_columns, *added_columns]
 
     combined_df = combined_df.sort_values(by=on_columns, ascending=True)
     combined_df = combined_df.reset_index(drop=True)

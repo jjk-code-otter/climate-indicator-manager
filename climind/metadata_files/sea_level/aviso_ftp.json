@@ -27,6 +27,21 @@
 	  "history": [],
       "reader": "reader_aviso_ftp",
 	  "fetcher": "fetcher_ftp"
+    },
+    {
+      "url": ["ftp://ftp.aviso.altimetry.fr/pub/oceano/AVISO/indicators/msl/MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m_NRT.nc"],
+      "filename": ["MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m_NRT.nc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_aviso_ftp",
+	  "fetcher": "fetcher_ftp"
     }
   ]
 }

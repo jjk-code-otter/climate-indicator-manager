@@ -1,0 +1,47 @@
+{
+  "name": "NOAA SF6",
+  "display_name": "NOAA",
+  "version": "",
+  "variable": "sf6",
+  "units": "ppt",
+  "citation": ["Lan, X., K.W. Thoning, and E.J. Dlugokencky: Trends in globally-averaged CH4, N2O, and SF6 determined from NOAA Global Monitoring Laboratory measurements. Version 2026-02, https://doi.org/10.15138/P8XG-AA10"],
+  "citation_url": ["https://doi.org/10.15138/P8XG-AA10"],
+  "data_citation": ["https://doi.org/10.15138/P8XG-AA10"],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_mm_gl.txt"],
+      "filename": ["sf6_mm_gl.txt"],
+	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of Sulphur Hexafluoride",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_annmean_gl.txt"],
+      "filename": ["sf6_annmean_gl.txt"],
+	  "type": "timeseries",
+      "long_name": "Atmospheric concentration of methane",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_mauna_loa",
+	  "fetcher": "fetcher_ftp"
+    }
+  ]
+}

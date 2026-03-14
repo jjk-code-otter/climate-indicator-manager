@@ -56,7 +56,7 @@ def split_document(document_name):
 
         paragraph_links = []
         for link in paragraph._element.xpath(".//w:hyperlink"):
-            inner_run = link.xpath("w:r", namespaces=link.nsmap)[0]
+            inner_run = link.xpath("w:r")[0]#, namespaces=link.nsmap)[0]
             link_text = inner_run.text
             rId = link.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
             link_url = document._part.rels[rId]._target

@@ -121,7 +121,7 @@ def run_the_numbers(datasets: List[Union[TimeSeriesMonthly, TimeSeriesAnnual]],
         if len(all_match_values) > 0:
             sd = np.std(all_match_values) * 1.645
             if ipcc_unc:
-                sd = np.sqrt(sd ** 2 + (0.24 / 2) ** 2)
+                sd = np.sqrt((sd ** 2) + ((0.25 / 2) ** 2))
 
             mean_value = np.mean(all_match_values)
             min_value = np.min(all_match_values)

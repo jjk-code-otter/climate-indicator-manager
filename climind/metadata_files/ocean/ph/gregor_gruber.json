@@ -1,0 +1,32 @@
+{
+  "name": "gregor_gruber",
+  "display_name": "Gregor and Gruber",
+  "version": "",
+  "variable": "phIGNORE",
+  "units": "ph",
+  "citation": ["Gregor, L. and Gruber, N.: OceanSODA-ETHZ: a global gridded data set of the surface ocean carbonate system for seasonal to decadal studies of ocean acidification, Earth Syst. Sci. Data, 13, 777–808, https://doi.org/10.5194/essd-13-777-2021, 2021."],
+  "citation_url": ["https://doi.org/10.5194/essd-13-777-2021"],
+  "data_citation": ["https://doi.org/10.3929/ethz-b-000613669"],
+  "acknowledgement": "",
+  "colour": "#cc79a7",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+	{
+      "url": ["https://www.research-collection.ethz.ch/entities/researchdata/76d0b62f-2ee4-4ecf-8797-6c85f877e3b5"],
+      "filename": ["OceanSODA-ETHZ_GRaCER_v2022b_annual_decomp_1982-2021.nc"],
+      "type": "timeseries",
+      "long_name": "Global ocean pH",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_gregor_gruber",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

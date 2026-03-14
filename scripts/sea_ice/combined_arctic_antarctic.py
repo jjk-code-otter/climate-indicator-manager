@@ -79,8 +79,8 @@ if __name__ == "__main__":
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
 
-    arctic_selection = {'variable': 'arctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'}
-    antarctic_selection = {'variable': 'antarctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly'}
+    arctic_selection = {'variable': 'arctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly', "name": ["JAXA NH", "NSIDC v4", "OSI SAF v2p3"]}
+    antarctic_selection = {'variable': 'antarctic_ice', 'type': 'timeseries', 'time_resolution': 'monthly', "name": ["JAXA SH", "NSIDC v4 SH", "OSI SAF SH v2p3"]}
 
     ts_arctic_archive = archive.select(arctic_selection)
     all_arctic = ts_arctic_archive.read_datasets(data_dir)
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     axs[0].legend()
     handles, labels = axs[0].get_legend_handles_labels()
 
-    order=[0,1]
+    order=[0,1,2]
     loc = "upper right"
     bbox_to_anchor = (0.96, 0.96)
 
@@ -144,7 +144,7 @@ if __name__ == "__main__":
                      handlelength=0, handletextpad=0.3, loc=loc, bbox_to_anchor=bbox_to_anchor)
     for line in leg.get_lines():
         line.set_linewidth(3.0)
-    for item in leg.legendHandles:
+    for item in leg.legend_handles:
         item.set_visible(False)
 
 

@@ -1,0 +1,32 @@
+{
+  "name": "GLAMBIE",
+  "display_name": "GLAMBIE",
+  "version": "",
+  "variable": "glacier",
+  "units": "mwe",
+  "citation": ["The GlaMBIE Team. Community estimate of global glacier mass changes from 2000 to 2023. Nature 639, 382–388 (2025). https://doi.org/10.1038/s41586-024-08545-z"],
+  "citation_url": ["https://doi.org/10.1038/s41586-024-08545-z"],
+  "data_citation": ["The GlaMBIE Team (2024): Glacier Mass Balance Intercomparison Exercise (GlaMBIE) Dataset 1.0.0. World Glacier Monitoring Service (WGMS), Zurich, Switzerland. https://doi.org/10.5904/wgms-glambie-2024-07"],
+  "acknowledgement": "",
+  "colour": "#56b4e9",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://doi.org/10.5904/wgms-glambie-2024-07"],
+      "filename": ["0_global.csv"],
+	  "type": "timeseries",
+      "long_name": "Glacier mass balance",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_glambie",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

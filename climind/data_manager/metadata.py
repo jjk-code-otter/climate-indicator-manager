@@ -126,7 +126,9 @@ class BaseMetadata:
 
     def fill_string(self, string_to_replace: str, replacement: str):
         """
-        Replace string_to_replace with the replacement value in all elements of the metadata.
+        Replace string_to_replace with the replacement value in all elements of the metadata. This is
+        used to replace placeholder substrings like "YYYY" with the year, or "MMMM" with the month, or
+        "VVVV" with a version number.
 
         Parameters
         ----------

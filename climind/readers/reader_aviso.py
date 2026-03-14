@@ -17,6 +17,7 @@
 from pathlib import Path
 import pandas as pd
 from typing import List
+from scipy.signal import savgol_filter
 
 import climind.data_types.timeseries as ts
 
@@ -47,6 +48,8 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
                 anom = anom * 1000.
 
             anomalies.append(anom)
+
+    anomalies = savgol_filter(anomalies, 9, 1)
 
     dates = pd.to_datetime(years, format='%Y %j')
     years = dates.year.tolist()

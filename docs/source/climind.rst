@@ -1,11 +1,6 @@
 climind package
 ===============
 
-.. automodule:: climind
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Subpackages
 -----------
 
@@ -29,5 +24,13 @@ climind.definitions module
 
 .. automodule:: climind.definitions
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: climind
+   :members:
+   :show-inheritance:
+   :undoc-members:

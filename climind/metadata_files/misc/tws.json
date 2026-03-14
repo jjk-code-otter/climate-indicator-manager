@@ -1,0 +1,42 @@
+{
+  "name": "tws",
+  "display_name": "Howarth et al",
+  "version": "",
+  "variable": "tws",
+  "units": "mm",
+  "citation": [
+    "Horwath, M., Gutknecht, B. D., Cazenave, A., Palanisamy, H. K., Marti, F., Marzeion, B., Paul, F., Le Bris, R., Hogg, A. E., Otosaka, I., Shepherd, A., Döll, P., Cáceres, D., Müller Schmied, H., Johannessen, J. A., Nilsen, J. E. Ø., Raj, R. P., Forsberg, R., Sandberg Sørensen, L., Barletta, V. R., Simonsen, S. B., Knudsen, P., Andersen, O. B., Ranndal, H., Rose, S. K., Merchant, C. J., Macintosh, C. R., von Schuckmann, K., Novotny, K., Groh, A., Restano, M., and Benveniste, J.: Global sea-level budget and ocean-mass budget, with a focus on advanced data products and uncertainty characterisation, Earth Syst. Sci. Data, 14, 411–447, https://doi.org/10.5194/essd-14-411-2022, 2022."
+  ],
+  "citation_url": [
+    "https://doi.org/10.5194/essd-14-411-2022"
+  ],
+  "data_citation": [
+    "Horwath, M.; Gutknecht, B.D.; Cazenave, A.; Palanisamy, H.K.; Marti, F.; Marzeion, B.; Paul, F.; Le Bris, R.; Hogg, A.E.; Otosaka, I.; Shepherd, A.; Döll, P.; Cáceres, D.; Müller Schmied, H.; Johannessen, J.A.; Nilsen, J.E.Ø.; Raj, R.P.; Forsberg, R.; Sandberg Sørensen, L.; Barletta, V.R.; Simonsen, S.; Knudsen, P.; Andersen, O.B.; Ranndal, H.; Rose, S.K.; Merchant, C.J.; Macintosh, C.R.; von Schuckmann, K.; Novotny, K.; Groh, A.; Restano, M.; Benveniste, J. (2021): ESA Sea Level Budget Closure Climate Change Initiative (SLBC_cci): Time series of global mean sea level budget and ocean mass budget elements (1993-2016, at monthly resolution), version 2.2. NERC EDS Centre for Environmental Data Analysis, 18 November 2021. doi:10.5285/17c2ce31784048de93996275ee976fff. https://dx.doi.org/10.5285/17c2ce31784048de93996275ee976fff"
+  ],
+  "acknowledgement": "",
+  "colour": "#FFFF33",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [
+        "https://dap.ceda.ac.uk/neodc/esacci/sea_level_budget_closure/data/timeseries_slb_elements/v2.2/ESACCI_SLBC_TimeSeriesOfSeaLevelBudgetElements_v2.2.csv?download=1"
+      ],
+      "filename": [
+        "ESACCI_SLBC_TimeSeriesOfSeaLevelBudgetElements_v2.2.csv"
+      ],
+      "type": "timeseries",
+      "long_name": "Terrestrial water storage",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1950,
+      "climatology_end": 2000,
+      "actual": true,
+      "derived": false,
+      "history": [],
+      "reader": "reader_sst_cci_tws",
+      "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

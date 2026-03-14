@@ -17,6 +17,7 @@
 from pathlib import Path
 from typing import List
 import xarray as xa
+import numpy as np
 from scipy.signal import savgol_filter
 
 import climind.data_types.timeseries as ts
@@ -28,16 +29,11 @@ from climind.readers.generic_reader import read_ts
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     df = xa.open_dataset(filename[0])
 
-    correction = xa.open_dataset(filename[0].parent / 'Topex-A_correction.nc')
-    msl_correction = correction.tpa_correction.values.tolist()
-
-    anomalies = df.msl.values.tolist()
-
-    for i in range(len(msl_correction)):
-        anomalies[i] = (anomalies[i] - msl_correction[i])
-
-    anomalies = [x*1000 for x in anomalies]
+    correction = df.tpa_correction_to_substract.values
+    anomalies = df.msl.values - correction
+    anomalies = [x * 1000 for x in anomalies]
     anomalies = savgol_filter(anomalies, 9, 1)
+    anomalies = anomalies - np.mean(anomalies[0:3]) - 2
 
     uncertainty = df.envelop.values.tolist()
     uncertainty = [x * 1000 for x in uncertainty]
@@ -47,6 +43,14 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     days = df.time.dt.day.data.tolist()
 
     metadata.creation_message()
+    metadata['history'].append("Filtered with a 9-point Savgol filter of order 1")
     outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, uncertainty=uncertainty, metadata=metadata)
 
     return outseries
+
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    ts = read_monthly_ts(filename, metadata)
+    ts = ts.make_monthly()
+    ts = ts.make_annual()
+    return ts

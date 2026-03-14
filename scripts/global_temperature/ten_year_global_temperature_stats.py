@@ -61,7 +61,7 @@ if __name__ == "__main__":
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
                                  'time_resolution': 'monthly',
-                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'JRA-3Q', 'Berkeley Earth']})
+                                 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires']})
 
     ipcc_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',

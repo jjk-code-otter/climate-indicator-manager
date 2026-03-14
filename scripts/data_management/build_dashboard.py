@@ -39,7 +39,8 @@ if __name__ == "__main__":
     ROOT_DIR = (ROOT_DIR / "..").resolve()
     METADATA_DIR = ROOT_DIR / "climind" / "metadata_files"
 
-    interactive = False
+    hub = False
+    interactive = True
 
     minimal = False
     dash2025 = False
@@ -48,9 +49,11 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
+
+    justmaps = False
 
     halloween = False
 
@@ -61,6 +64,20 @@ if __name__ == "__main__":
     regional_test = False
 
     run_all = False
+
+    if hub:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "hub_dashboard.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Hub"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
+
+    if justmaps:
+        json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "maps.json"
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / "ManagedData" / "Maps"
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if interactive:
         json_file = ROOT_DIR / "climind" / "web" / "dashboard_metadata" / "interactive_dashboard.json"
@@ -95,7 +112,7 @@ if __name__ == "__main__":
         dash = Dashboard.from_json(json_file, METADATA_DIR)
         dash_dir = DATA_DIR / 'ManagedData' / 'MonthlyDashboard'
         dash_dir.mkdir(exist_ok=True)
-        dash.build(Path(dash_dir), focus_year=2023)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if dash2025 or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2025.json'
@@ -154,7 +171,7 @@ if __name__ == "__main__":
 
         dash_dir = DATA_DIR / 'ManagedData' / 'RegionalDashboard'
         dash_dir.mkdir(exist_ok=True)
-        dash.build(Path(dash_dir), focus_year=2024)
+        dash.build(Path(dash_dir), focus_year=2025)
 
     if regional_multiyear or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'regional_multiyear.json'

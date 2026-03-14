@@ -1,0 +1,47 @@
+{
+  "name": "CMA_GLST",
+  "display_name": "CMA-GLST",
+  "version": "1.0",
+  "variable": "lsat",
+  "units": "degC",
+  "citation": ["Chen, L., Xu, W., Zhou, Z. et al. A new global land–ocean merged surface temperature dataset since the 1850s: the CMA-GMST dataset. Clim Dyn 63, 187 (2025). https://doi.org/10.1007/s00382-025-07614-x"],
+  "citation_url": ["https://doi.org/10.1007/s00382-025-07614-x"],
+  "data_citation": ["https://data.cma.cn/en/#/Visualization/Visualization-detail?id=16"],
+  "acknowledgement": "",
+  "colour": "#ad5bb0",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [],
+      "filename": ["CMA-GLST_Global_Month_Temp_1981_2010.csv"],
+      "type": "timeseries",
+      "long_name": "Global mean land surface air temperature",
+      "time_resolution": "monthly",
+      "space_resolution": 999,
+      "climatology_start": 1981,
+      "climatology_end": 2010,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_cma_gmst",
+      "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [],
+      "filename": ["CMA-GLST_Global_Month_Temp_1981_2010.csv"],
+      "type": "timeseries",
+      "long_name": "Global mean land surface air temperature",
+      "time_resolution": "annual",
+      "space_resolution": 999,
+      "climatology_start": 1981,
+      "climatology_end": 2010,
+      "actual": false,
+      "derived": false,
+      "history": [],
+      "reader": "reader_cma_gmst",
+      "fetcher": "fetcher_no_url"
+    }
+  ]
+}

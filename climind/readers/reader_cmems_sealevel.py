@@ -29,12 +29,13 @@ from scipy.signal import savgol_filter
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     ds = xa.open_dataset(filename[0])
 
-    anomalies = (10 * ds.MSL_filtered_GIA_TPA_corrected_adjusted.values).tolist()
+    anomalies = (10 * ds.MSL_filtered_GIA_corrected_adjusted.values).tolist()
+    uncertainty = (10 * ds.uncertainty_envelop.values).tolist()
     years = ds.time.dt.year.values.tolist()
     months = ds.time.dt.month.values.tolist()
     days = ds.time.dt.day.values.tolist()
 
     metadata.creation_message()
-    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata, uncertainty=uncertainty)
 
     return outseries
