@@ -24,7 +24,7 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-    final_year = 2025
+    final_year = 2026
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -41,20 +41,24 @@ if __name__ == "__main__":
         'variable': 'tas',
         'type': 'timeseries',
         'time_resolution': 'monthly',
-        #'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth Hires', 'JRA-3Q']
         'name': [
-            'tempNOAA', 'tempGISTEMP', 'tempERA5',
-            'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5',
-            'tempDCENT', 'tempCMST',
-            'CMA_GMST',
+            'HadCRUT5', 'GISTEMP', 'NOAA v61',
+            'ERA5', 'Berkeley Earth Hires', 'JRA-3Q',
+            'DCENT_I', 'CMA_GMST', 'CMST v3'
+        ]
+        #'name': [
+        #    'tempNOAA', 'tempGISTEMP', 'tempERA5',
+        #    'tempJRA3Q', 'tempBerkeley', 'tempHadCRUT5',
+        #    'tempDCENT', 'tempCMST',
+        #    'CMA_GMST',
             #            'COBE-STEMP3', 'Kadow', 'GloSAT', 'Calvert 2024'
-        ],
+        #],
     })
 
     all_datasets = ts_archive.read_datasets(data_dir)
 
     for ds in all_datasets:
-        ds.select_year_range(1970, 2025)
+        ds.select_year_range(1970, 2026)
 
-    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True)
+    pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset.png', '', overlay=True, n_months=40)
     pt.rank_by_dataset(figure_dir, all_datasets, 'rank_by_dataset_long.png', '', overlay=False, n_months=252)

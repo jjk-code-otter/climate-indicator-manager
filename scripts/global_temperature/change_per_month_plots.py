@@ -28,7 +28,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2025
+    final_year = 2026
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -54,15 +54,15 @@ if __name__ == "__main__":
         ts_archive = archive.select({'variable': 'tas',
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
-                                     'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'ERA5', 'Berkeley Earth',
-                                              'JRA-3Q','Berkeley Earth Hires']})
+                                     'name': ['HadCRUT5', 'GISTEMP', 'NOAA v61', 'ERA5', 'Berkeley Earth',
+                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3']})
                                      # 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
                                      #          'Kadow', 'JRA-3Q', 'Calvert 2024', 'NOAA Interim']})
 
         long_ts_archive = archive.select({'variable': 'tas',
                                           'type': 'timeseries',
                                           'time_resolution': 'monthly',
-                                          'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
+                                          'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
                                                    'NOAA Interim','Berkeley Earth Hires']})
 
         sst_archive = archive.select({'variable': 'sst',
@@ -141,7 +141,7 @@ if __name__ == "__main__":
             m = []
             for ds in all_datasets:
                 ds.rebaseline(1981, 2010)
-                ds.select_year_range(2014, 2025)
+                ds.select_year_range(2014, 2026)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
 
@@ -149,6 +149,6 @@ if __name__ == "__main__":
             m = []
             for ds in all_datasets:
                 ds.rebaseline(1850, 1900)
-                ds.select_year_range(2014, 2025)
+                ds.select_year_range(2014, 2026)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'own_monthly.png', 'Monthly global mean')

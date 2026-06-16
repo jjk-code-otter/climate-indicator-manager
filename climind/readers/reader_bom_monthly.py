@@ -1,5 +1,5 @@
 #  Climate indicator manager - a package for managing and building climate indicator dashboards.
-#  Copyright (c) 2024 John Kennedy
+#  Copyright (c) 2022 John Kennedy
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,45 @@
 
 from pathlib import Path
 from typing import List
+import xarray as xa
+import numpy as np
+
+from datetime import datetime, timedelta
 
 import climind.data_types.timeseries as ts
-from climind.data_manager.metadata import CombinedMetadata
 
+from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+
     years = []
     months = []
     anomalies = []
-    uncertainties = []
 
-    with open(filename[0], 'r') as f:
-        f.readline()
-        f.readline()
+    with (open(filename[0], 'r') as f):
         for line in f:
-            columns = line.split()
-            year = columns[0]
-            month = columns[1]
-            anom = columns[2]
-            error = columns[3]
+            columns = line.split(',')
 
-            years.append(int(year))
-            months.append(int(month))
-            anomalies.append(float(anom))
-            uncertainties.append(float(error))
+            year = int(columns[0][0:4])
+            month = int(columns[0][4:6])
+
+            anom = float(columns[1])
+            anom = anom / 10.
+
+            years.append(year)
+            months.append(month)
+            anomalies.append(anom)
 
     metadata.creation_message()
+    outseries = ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, uncertainty=uncertainties, metadata=metadata)
+    return outseries
+
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    ts = read_monthly_ts(filename, metadata)
+    ts = ts.make_monthly()
+    ts = ts.make_annual()
+    return ts

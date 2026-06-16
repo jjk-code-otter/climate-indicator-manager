@@ -1,0 +1,51 @@
+{
+  "name": "ERSST v61",
+  "display_name": "ERSST",
+  "version": "v6.1.0",
+  "variable": "sst",
+  "units": "degC",
+  "citation": ["Huang, B., Peter W. Thorne, et. al, 2017: Extended Reconstructed Sea Surface Temperature version 5 (ERSSTv5), Upgrades, validations, and intercomparisons. J. Climate, doi: 10.1175/JCLI-D-16-0836.1"],
+  "citation_url": ["https://doi.org/10.1175/JCLI-D-16-0836.1"],
+  "data_citation": ["Boyin Huang, Peter W. Thorne, Viva F. Banzon, Tim Boyer, Gennady Chepurin, Jay H. Lawrimore, Matthew J. Menne, Thomas M. Smith, Russell S. Vose, and Huai-Min Zhang (2017): NOAA Extended Reconstructed Sea Surface Temperature (ERSST), Version 5. [indicate subset used]. NOAA National Centers for Environmental Information. doi:10.7289/V5T72FNM [AAAA]."],
+  "acknowledgement": "",
+  "colour": "#ad8426",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.mon.ocean.90S.90N.v6.1.0.YYYYMMMM.asc",
+	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.ann.ocean.90S.90N.v6.1.0.YYYYMMMM.asc"],
+      "filename": ["aravg.mon.ocean.90S.90N.v6.1.0.YYYYMMMM.asc",
+	               "aravg.ann.ocean.90S.90N.v6.1.0.YYYYMMMM.asc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaa_ts",
+	  "fetcher": "fetcher_url_with_backsearch"
+    },
+    {
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.mon.ocean.90S.90N.v6.1.0.YYYYMMMM.asc",
+	          "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.ann.ocean.90S.90N.v6.1.0.YYYYMMMM.asc"],
+      "filename": ["aravg.mon.ocean.90S.90N.v6.1.0.YYYYMMMM.asc",
+	               "aravg.ann.ocean.90S.90N.v6.1.0.YYYYMMMM.asc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaa_ts",
+	  "fetcher": "fetcher_url_with_backsearch"
+    }
+  ]
+}

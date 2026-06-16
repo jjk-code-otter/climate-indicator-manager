@@ -66,7 +66,7 @@ STANDARD_PARAMETER_SET = {
 }
 
 if __name__ == "__main__":
-    final_year = 2025
+    final_year = 2026
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
@@ -88,11 +88,11 @@ if __name__ == "__main__":
     gmst = gmst[0]
     gmst.rebaseline(1981, 2010)
     gmst.add_offset(0.69)
-    gmst = gmst.select_year_range(1980, 2025)
+    #gmst = gmst.select_year_range(1980, 2026)
 
-    oni_archive = archive.select({'variable': 'oni', 'time_resolution': 'monthly', 'type': 'timeseries'})
+    oni_archive = archive.select({'variable': 'roni', 'time_resolution': 'monthly', 'type': 'timeseries'})
     oni = oni_archive.read_datasets(data_dir)[0]
-    oni = oni.select_year_range(1980, 2025)
+    #oni = oni.select_year_range(1980, 2026)
 
     aod_archive = archive.select({'variable': 'aod', 'time_resolution': 'monthly', 'type': 'timeseries'})
     aod = aod_archive.read_datasets(data_dir)[0]
@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #axs[1][0].plot(oni_taxis+0.5, oni.df.data * 0.1, linestyle='--', linewidth=3, color='dodgerblue')
     #axs[1][0].plot(aod_taxis, -2 * aod.df.data, linewidth=3, color='purple')
 
-    for y in range(1980,2026):
+    for y in range(1980,2027):
         axs[1].plot([y,y],[-0.5,0.5],linewidth=0.5,color='lightgrey')
 
     plt.subplots_adjust(left=0.1,
@@ -134,12 +134,12 @@ if __name__ == "__main__":
                         wspace=0.1,
                         hspace=0.3)
 
-    axs[0].set_xlim(1980, 2026)
+    axs[0].set_xlim(1980, 2027)
     axs[0].set_ylim(0.1, 1.8)
     axs[0].set_title(f'Global mean temperature ({gmst.metadata["display_name"]})', loc='left', fontsize=24)
     axs[0].set_ylabel('Anomaly')
 
-    axs[1].set_xlim(1980, 2026)
+    axs[1].set_xlim(1980, 2027)
     axs[1].set_ylim(-0.5, 0.5)
     axs[1].set_title('Detrended', loc='left', fontsize=24)
     axs[1].set_ylabel('Anomaly')

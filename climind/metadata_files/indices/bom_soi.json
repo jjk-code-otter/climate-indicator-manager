@@ -1,0 +1,47 @@
+{
+  "name": "BOM SOI",
+  "display_name": "Bureau of Meteorology",
+  "version": "",
+  "variable": "soi",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#e03f67",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://www.bom.gov.au/clim_data/IDCKGSM000/soi.txt"],
+      "filename": ["soi.txt"],
+	  "type": "timeseries",
+      "long_name": "Southern Oscillation Index",
+	  "time_resolution": "irregular",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_bom",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://www.bom.gov.au/clim_data/IDCKGSH000/soi_monthly.txt"],
+      "filename": ["soi_monthly.txt"],
+	  "type": "timeseries",
+      "long_name": "Southern Oscillation Index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_bom_monthly",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

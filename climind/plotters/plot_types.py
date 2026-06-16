@@ -1617,7 +1617,7 @@ def show_premade_image(out_dir: Path, in_all_datasets: List[TimeSeriesAnnual],
 def daily_sea_ice_plot(out_dir: Path,
                        all_datasets: List[TimeSeriesIrregular],
                        image_filename: str, title: str) -> str:
-    final_year = 2025
+    final_year = 2026
 
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
@@ -1639,7 +1639,7 @@ def daily_sea_ice_plot(out_dir: Path,
     df = ds.df
     df['climatology'] = climatology
 
-    for year in range(1979, 2025):
+    for year in range(1979, 2026):
         df2 = df[df['year'] == year]
         df3 = df[df['year'] == final_year]
 
@@ -1681,7 +1681,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
         yloc = ylim[0] + 0.5 * (ylim[1] - ylim[0]) - 1
         xloc = xlim[0] + 0.1 * (xlim[1] - xlim[0])
-        plt.text(xloc, yloc, '2025 extent', color=col_ext, fontdict={'fontsize': 18})  # red
+        plt.text(xloc, yloc, '2026 extent', color=col_ext, fontdict={'fontsize': 18})  # red
 
         yloc = ylim[0] + 0.34 * (ylim[1] - ylim[0])
         xloc = xlim[0] + 0.86 * (xlim[1] - xlim[0])
@@ -1695,7 +1695,7 @@ def daily_sea_ice_plot(out_dir: Path,
 
         yloc = ylim[0] + 0.248 * (ylim[1] - ylim[0])
         xloc = xlim[0] + 0.10 * (xlim[1] - xlim[0])
-        plt.text(xloc, yloc, '2025 extent', color=col_ext, fontdict={'fontsize': 18})  # red
+        plt.text(xloc, yloc, '2026 extent', color=col_ext, fontdict={'fontsize': 18})  # red
 
         yloc = ylim[0] + 0.543 * (ylim[1] - ylim[0])
         xloc = xlim[0] + 0.900 * (xlim[1] - xlim[0])
@@ -1726,7 +1726,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
 
     # n_months = 36
 
-    n_time_x = len(all_datasets[1].df.data)
+    n_time_x = len(all_datasets[4].df.data)
 
     n_datasets = len(all_datasets)
 
@@ -1764,10 +1764,10 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
                 ax.text(i + 0.5, j + 0.5, f'{rank}', ha='center', va='center', color=tcolor, fontsize=24)
 
             months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
-            if j == 1 and overlay:
+            if j == 4 and overlay:
                 ax.text(i + 0.5, -0.4, months[month - 1], ha='center', va='center', fontsize=24, color='black')
 
-            if month == 1 and j == 1:
+            if month == 1 and j == 4:
                 if first_year is None:
                     first_year = year
                 if n_months <= 60:
@@ -1786,7 +1786,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
     )
 
     if overlay:
-        i = n_time_x - (n_months - 1) + 3.5
+        i = n_time_x - (n_months - 1) + 5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#bb0000'
@@ -1796,7 +1796,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '1', ha='center', va='center', color='#ffffff', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 7) + 3.5
+        i = n_time_x - (n_months - 7) + 5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fc6f03'
@@ -1806,7 +1806,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '2', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, '2ND WARMEST', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 15) + 3.5
+        i = n_time_x - (n_months - 15) + 5.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fcd703'
@@ -1816,7 +1816,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '5', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 5', fontsize=24, color='black', va='center', clip_on=False)
 
-        i = n_time_x - (n_months - 19) + 3.5
+        i = n_time_x - (n_months - 19) + 5.5
         j = n_datasets + 0.25
         coords = np.array([[i, j], [i + 1, j], [i + 1, j + 1], [i, j + 1], [i, j]])
         color = '#fff9a3'
@@ -1826,7 +1826,7 @@ def rank_by_dataset(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_
             ax.text(i + 0.5, j + 0.5, '10', ha='center', va='center', color='#000000', fontsize=24, clip_on=False)
         ax.text(i + 1.2, j + 0.5, 'TOP 10', fontsize=24, color='black', va='center', clip_on=False)
 
-    ax.text(n_time_x - (n_months + 8.5), n_datasets + 0.3, f'GLOBALTEMPERATURE\nRANKINGS {first_year}-2025',
+    ax.text(n_time_x - (n_months + 8.5), n_datasets + 0.3, f'GLOBALTEMPERATURE\nRANKINGS {first_year}-2026',
             color='#000000', fontsize=32,
             clip_on=False)
 
@@ -2548,14 +2548,14 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
             if year < last_year and n_months == 12:
                 all_accumulators[:, year - first_year] = accumulator - accumulator[n_months_last_year - 1]
 
-            if year not in [2016, 2023, 2024]:
+            if year not in [2016, 2023, 2024, 2025]:
                 colour = '#aaaaaa'
                 lthk = 1
-            if year in [2016, 2023, 2024]:
+            if year in [2016, 2023, 2024, 2025]:
                 colour = '#41b6c4'
                 lthk = 2
 
-            if year == last_year and year > 2024:
+            if year == last_year and year > 2025:
                 all_accumulators = all_accumulators + accumulator[n_months_last_year - 1]
                 for y2 in range(1950, last_year):
                     colour = 'orange'
@@ -2585,7 +2585,8 @@ def wave_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], ima
     plt.gcf().text(0.87, 0.41, '2016', fontsize=30, color='#41b6c4')
     plt.gcf().text(0.87, 0.58, '2023', fontsize=30, color='#41b6c4')
     plt.gcf().text(0.87, 0.70, '2024', fontsize=30, color='#41b6c4')
-    plt.gcf().text(0.20, 0.82, '2025', fontsize=30, color='darkred')
+    plt.gcf().text(0.87, 0.53, '2025', fontsize=30, color='#41b6c4')
+    plt.gcf().text(0.20, 0.82, '2026', fontsize=30, color='darkred')
 
     plt.gcf().text(0.54, 0.200, 'Other years', fontsize=30, color='#aaaaaa', ha='center', path_effects=[peb])
 
@@ -2724,7 +2725,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
-            if year >= 2025:
+            if year >= 2026:
                 colour = 'darkred'
                 lthk = 3
             # if year == last_year:
@@ -2753,7 +2754,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     plt.gcf().text(0.52, 0.59, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
     plt.gcf().text(0.52, 0.67, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.42, 0.78, '2025', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+    plt.gcf().text(0.42, 0.78, '2026', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
     sources = [x.metadata['display_name'] for x in all_datasets]
     sources = ', '.join(sources)

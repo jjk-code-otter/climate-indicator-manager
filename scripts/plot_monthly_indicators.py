@@ -162,30 +162,11 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'ozone_hole': [
-            {'variable': 'ozone_hole',
+        'dmi': [
+            {'variable': 'iod',
              'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Average ozone hole area'
-        ],
-        'ozone_minimum': [
-            {'variable': 'ozone_minimum',
-             'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Average minimum ozone'
-        ],
-        'max_ozone_hole': [
-            {'variable': 'max_ozone_hole',
-             'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Annual maximum ozone hole area'
-        ],
-        'min_ozone_minimum': [
-            {'variable': 'min_ozone_minimum',
-             'type': 'timeseries',
-             'time_resolution': 'annual'},
-            'Annual minimum ozone'
-        ],
+             'time_resolution': 'monthly'},
+            'DMI']
     }
 
 for combo in holdall:
@@ -200,7 +181,7 @@ for combo in holdall:
 
     m = []
     for ds in all_datasets:
-        # ds.select_year_range(1980, 2022)
+        ds.select_year_range(2010, 2026)
         if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
             ds.rebaseline(1981, 2010)
         if variable in ['ohc', 'ohc2k']:

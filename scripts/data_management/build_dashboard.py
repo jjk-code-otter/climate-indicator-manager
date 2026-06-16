@@ -49,7 +49,7 @@ if __name__ == "__main__":
     dash2022 = False
 
     decadal = False
-    monthly = False
+    monthly = True
     ocean = False
     cryosphere = False
 
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = True
+    regional = False
     regional_multiyear = False
     regional_test = False
 

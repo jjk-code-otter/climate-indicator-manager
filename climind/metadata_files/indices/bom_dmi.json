@@ -1,21 +1,21 @@
 {
-  "name": "DMI",
-  "display_name": "NOAA PSL",
+  "name": "BOM DMI",
+  "display_name": "Bureau of Meteorology",
   "version": "",
-  "variable": "iod ignore",
+  "variable": "iod",
   "units": "degC",
   "citation": [""],
   "citation_url": [""],
   "data_citation": [""],
   "acknowledgement": "",
-  "colour": "#33806b",
+  "colour": "#e03f67",
   "zpos": 10,
   "origin": "obs",
   "notes": "",
   "datasets": [
      {
-      "url": ["https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/dmi.had.long.data"],
-      "filename": ["dmi.had.long.data"],
+      "url": ["https://reg.bom.gov.au/clim_data/IDCK000072/iod_1.txt"],
+      "filename": ["iod_1.txt"],
 	  "type": "timeseries",
       "long_name": "Dipole Mode Index",
 	  "time_resolution": "monthly",
@@ -25,7 +25,7 @@
 	  "actual": false,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_psl",
+      "reader": "reader_bom",
 	  "fetcher": "fetcher_standard_url"
     }
   ]

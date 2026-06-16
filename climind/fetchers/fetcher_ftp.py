@@ -16,7 +16,8 @@
 
 from pathlib import Path
 import urllib.request
-from climind.fetchers.fetcher_utils import filename_from_url
+import shutil
+from climind.fetchers.fetcher_utils import filename_from_url, time_tag_string
 
 
 def fetch(url: str, out_dir: Path, filename: str) -> None:
@@ -39,8 +40,12 @@ def fetch(url: str, out_dir: Path, filename: str) -> None:
     inferred_filename = filename_from_url(url)
     out_path = out_dir / inferred_filename
 
+    time_tagged_out_path = out_dir / time_tag_string(inferred_filename)
+
     with urllib.request.urlopen(url) as r:
         data = r.read()
 
     with open(out_path, 'wb') as f:
         f.write(data)
+
+    shutil.copyfile(out_path, time_tagged_out_path)

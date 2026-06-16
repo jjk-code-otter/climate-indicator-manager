@@ -18,7 +18,8 @@ from pathlib import Path
 from typing import List
 import xarray as xa
 import numpy as np
-from scipy.signal import savgol_filter
+
+from datetime import datetime, timedelta
 
 import climind.data_types.timeseries as ts
 
@@ -27,24 +28,39 @@ from climind.readers.generic_reader import read_ts
 
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
-    df = xa.open_dataset(filename[0])
 
-    correction = df.TPA_correction.values
-    anomalies = df.msl.values - correction
-    anomalies = [x * 1000 for x in anomalies]
-    anomalies = savgol_filter(anomalies, 9, 1)
-    anomalies = anomalies - np.mean(anomalies[0:3]) - 2
+    years = []
+    months = []
+    days = []
+    anomalies = []
 
-    uncertainty = df.uncertainty_envelop.values.tolist()
-    uncertainty = [x * 1000 for x in uncertainty]
+    with (open(filename[0], 'r') as f):
+        for line in f:
+            columns = line.split(',')
 
-    years = df.time.dt.year.data.tolist()
-    months = df.time.dt.month.data.tolist()
-    days = df.time.dt.day.data.tolist()
+            year1 = int(columns[0][0:4])
+            month1 = int(columns[0][4:6])
+            day1 = int(columns[0][6:])
+
+            year2 = int(columns[1][0:4])
+            month2 = int(columns[1][4:6])
+            day2 = int(columns[1][6:])
+
+            dt = datetime(year2, month2, day2) - datetime(year1, month1, day1)
+            midpoint = datetime(year1, month1, day1) + dt/2.
+
+            anom = float(columns[2])
+
+            if metadata['variable'] == 'soi':
+                anom = anom / 10.
+
+            years.append(midpoint.year)
+            months.append(midpoint.month)
+            days.append(midpoint.day)
+            anomalies.append(anom)
 
     metadata.creation_message()
-    metadata['history'].append("Filtered with a 9-point Savgol filter of order 1")
-    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, uncertainty=uncertainty, metadata=metadata)
+    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata).make_monthly()
 
     return outseries
 

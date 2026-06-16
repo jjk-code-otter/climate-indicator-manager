@@ -2,7 +2,7 @@
   "name": "CMEMS_SST",
   "display_name": "CMEMS",
   "version": "",
-  "variable": "sst",
+  "variable": "sstIGNORE",
   "units": "degC",
   "citation": [
     "Mulet S., Nardelli B.B., Good S., Pisano A., Greiner E., Monier M., Autret E., Axell L., Boberg F., Ciliberti S. 2018. Ocean temperature and salinity. In: Copernicus marine service ocean state report, issue 2. J Operat Oceanogr. 11(Sup1):s11–ss4. doi:10.1080/1755876X.2018.1489208.",

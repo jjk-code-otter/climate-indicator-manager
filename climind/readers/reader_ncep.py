@@ -1,5 +1,5 @@
 #  Climate indicator manager - a package for managing and building climate indicator dashboards.
-#  Copyright (c) 2024 John Kennedy
+#  Copyright (c) 2023 John Kennedy
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,33 @@
 
 from pathlib import Path
 from typing import List
-
 import climind.data_types.timeseries as ts
 from climind.data_manager.metadata import CombinedMetadata
-
 from climind.readers.generic_reader import read_ts
+
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     years = []
     months = []
     anomalies = []
-    uncertainties = []
 
     with open(filename[0], 'r') as f:
-        f.readline()
-        f.readline()
+        for i in range(9):
+            f.readline()
+
         for line in f:
             columns = line.split()
-            year = columns[0]
-            month = columns[1]
-            anom = columns[2]
-            error = columns[3]
-
-            years.append(int(year))
-            months.append(int(month))
-            anomalies.append(float(anom))
-            uncertainties.append(float(error))
+            years.append(int(columns[0]))
+            months.append(int(columns[1]))
+            anomalies.append(float(columns[4]))
 
     metadata.creation_message()
 
-    return ts.TimeSeriesMonthly(years, months, anomalies, uncertainty=uncertainties, metadata=metadata)
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
+
+
+def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
+    monthly = read_monthly_ts(filename, metadata)
+    annual = monthly.make_annual()
+
+    return annual

@@ -52,13 +52,16 @@ def read_irregular_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeri
     years = df.TIME.dt.year.data.tolist()
     months = df.TIME.dt.month.data.tolist()
     days = df.TIME.dt.day.data.tolist()
+    uncertainty = df.DMI.values * 0.0 + 0.1921
+    uncertainty = uncertainty.tolist()
 
     metadata.creation_message()
 
-    return ts.TimeSeriesIrregular(years, months, days, data, metadata=metadata)
+    return ts.TimeSeriesIrregular(years, months, days, data, metadata=metadata, uncertainty=uncertainty)
 
 
 def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     df = read_irregular_ts(filename, metadata)
     df = df.make_monthly()
+    df.df["uncertainty"] = df.df["data"] * 0.0 + 0.1921
     return df

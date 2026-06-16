@@ -32,21 +32,21 @@ if __name__ == "__main__":
     # Global mean temperature
     ts_archive = archive.select(
         #{'type': 'timeseries', 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'ERA5']}
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v6', 'Berkeley Earth Hires', 'ERA5']}
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth Hires', 'ERA5']}
     )
     ts_archive.download(data_dir)
 
     # LSAT
     ts_archive = archive.select(
         #{'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5']}
-        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v6', 'Berkeley Earth Hires LSAT']}
+        {'type': 'timeseries', 'name': ['Berkeley Earth LSAT', 'CRUTEM5', 'NOAA LSAT v61', 'Berkeley Earth Hires LSAT']}
     )
     ts_archive.download(data_dir)
 
     # SST
     ts_archive = archive.select(
         #{'type': 'timeseries', 'name': ['HadSST4']}
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v6']}
+        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v61']}
     )
     ts_archive.download(data_dir)
 

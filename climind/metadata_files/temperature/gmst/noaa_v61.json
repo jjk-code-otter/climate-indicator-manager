@@ -1,0 +1,63 @@
+{
+  "name": "NOAA v61",
+  "display_name": "NOAAGlobalTemp v6.1",
+  "version": "v6.1.0",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Yin, X., and Coauthors, 2024: NOAAGlobalTemp Version 6: An AI-Based Global Surface Temperature Dataset. Bull. Amer. Meteor. Soc., 105, E2184–E2193, https://doi.org/10.1175/BAMS-D-24-0012.1."],
+  "citation_url": ["https://doi.org/10.1175/BAMS-D-24-0012.1"],
+  "data_citation": ["Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed AAAA."],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/gridded/NOAAGlobalTemp_v.*.nc"],
+	  "filename": ["NOAAGlobalTemp_v*.nc"],
+      "type": "gridded",
+      "long_name": "Near surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 5.0,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaaglobaltemp",
+	  "fetcher": "fetcher_noaaglobaltemp"
+    },
+    {
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.mon.land_ocean.90S.90N.*.asc",
+              "https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.ann.land_ocean.90S.90N.*.asc"],
+      "filename": ["aravg.mon.land_ocean.90S.90N.*.asc", "aravg.ann.land_ocean.90S.90N.*.asc"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaaglobaltemp",
+	  "fetcher": "fetcher_noaaglobaltemp"
+    },
+    {
+      "url": ["https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/timeseries/aravg.ann.land_ocean.90S.90N.*.asc"],
+      "filename": ["aravg.ann.land_ocean.90S.90N.*.asc"],
+      "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_noaaglobaltemp",
+	  "fetcher": "fetcher_noaaglobaltemp"
+    }
+  ]
+}
