@@ -1,0 +1,47 @@
+{
+  "name": "ESA CCI",
+  "display_name": "ESA CCI",
+  "version": "2.0",
+  "variable": "sealevel",
+  "units": "mm",
+  "citation": ["Ablain, M., Cazenave, A., Larnicol, G., Balmaseda, M., Cipollini, P., Faugère, Y., Fernandes, M. J., Henry, O., Johannessen, J. A., Knudsen, P., Andersen, O., Legeais, J., Meyssignac, B., Picot, N., Roca, M., Rudenko, S., Scharffenberg, M. G., Stammer, D., Timms, G., and Benveniste, J.: Improved sea level record over the satellite altimetry era (1993–2010) from the Climate Change Initiative project, Ocean Sci., 11, 67-82, doi:10.5194/os-11-67-2015, 2015."],
+  "citation_url": ["https://doi.org/10.5194/os-11-67-2015"],
+  "data_citation": ["ESA Sea Level CCI project team (2017): ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes, Version 2.0. Centre for Environmental Data Analysis, AAAA. https://catalogue.ceda.ac.uk/uuid/3ac333b828b54e3495c7749f5bce2fe3"],
+  "acknowledgement": "",
+  "colour": "#e31a1c",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://dap.ceda.ac.uk/neodc/esacci/sea_level/data/IND/v2.0/MSL/ESACCI-SEALEVEL-IND-MSL-MERGED-20161202000000-fv02.nc?download=1"],
+      "filename": ["ESACCI-SEALEVEL-IND-MSL-MERGED-20161202000000-fv02.nc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cci_sealevel",
+	  "fetcher": "fetcher_standard_url"
+    },
+    {
+      "url": ["https://dap.ceda.ac.uk/neodc/esacci/sea_level/data/IND/v2.0/MSL/ESACCI-SEALEVEL-IND-MSL-MERGED-20161202000000-fv02.nc?download=1"],
+      "filename": ["ESACCI-SEALEVEL-IND-MSL-MERGED-20161202000000-fv02.nc"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea level",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1993,
+	  "climatology_end": 1993,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cci_sealevel",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

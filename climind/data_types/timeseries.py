@@ -649,7 +649,7 @@ class TimeSeriesMonthly(TimeSeries):
                 grouped = self.df.groupby(['year'])[['data', 'uncertainty']].mean().reset_index()
             else:
                 grouped = self.df.groupby(['year'])['data'].mean().reset_index()
-        annual_series = TimeSeriesAnnual.make_from_df(grouped, self.metadata)
+        annual_series = TimeSeriesAnnual.make_from_df(grouped, copy.deepcopy(self.metadata))
 
         if cumulative:
             annual_series.update_history('Calculated annual value from monthly values by summing')
@@ -1014,6 +1014,15 @@ class TimeSeriesMonthly(TimeSeries):
         moving_average.metadata['derived'] = True
         return moving_average
 
+    def zero_on_year(self, baseline_year):
+        df_copy = copy.deepcopy(self.df)
+        df2 = df_copy[df_copy['year'] == baseline_year]
+
+        min_value = -1 * df2.data.iloc[0]
+
+        self.update_history(f"Zeroed at first time step of {baseline_year}.")
+
+        self.add_offset(min_value)
 
 class TimeSeriesAnnual(TimeSeries):
     """

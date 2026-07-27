@@ -36,6 +36,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     years = []
     months = []
     days = []
+    time = []
 
     with open(filename[0], 'r') as f:
         for i in range(6):
@@ -58,7 +59,19 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             months.append(converted_date.month)
             days.append(converted_date.day)
 
+            dt = datetime(converted_date.year, converted_date.month, converted_date.day)
+            dt2 = datetime(converted_date.year,12, 31)
+            tt = dt.timetuple().tm_yday
+            tt2 = dt2.timetuple().tm_yday
+            time.append(converted_date.year + tt/tt2)
+
+    time = np.array(time)
+    time = time - time[0]
+    glacial_isostatic_adjustment = time * 0.3
+
     smoothed = savgol_filter(anomalies, 31, 2)
+
+    smoothed = smoothed + glacial_isostatic_adjustment
 
     metadata.creation_message()
     outseries = ts.TimeSeriesIrregular(years, months, days, smoothed, metadata=metadata)

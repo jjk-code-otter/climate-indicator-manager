@@ -29,10 +29,24 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
 
+    # Arctic sea ice extent
+    ts_archive = archive.select(
+        #{'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p2', 'OSI SAF v2p3']}
+        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v3p0']}
+    )
+    ts_archive.download(data_dir)
+
+    # Antarctic sea ice extent
+    ts_archive = archive.select(
+        #{'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2', 'OSI SAF SH v2p3']}
+        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v3p0']}
+    )
+    ts_archive.download(data_dir)
+
     # Global mean temperature
     ts_archive = archive.select(
         #{'type': 'timeseries', 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'ERA5']}
-        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth Hires', 'ERA5']}
+        {'type': 'timeseries', 'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth Hires', 'ERA5', 'GISTEMP']}
     )
     ts_archive.download(data_dir)
 
@@ -52,7 +66,7 @@ if __name__ == "__main__":
 
     # Sea level
     ts_archive = archive.select(
-        {'type': 'timeseries', 'name': ['AVISO ftp']}
+        {'type': 'timeseries', 'name': ['AVISO ftp', 'Colorado', 'NOAA sealevel']}
     )
     ts_archive.download(data_dir)
 
@@ -63,19 +77,6 @@ if __name__ == "__main__":
     )
     ts_archive.download(data_dir)
 
-    # Arctic sea ice extent
-    ts_archive = archive.select(
-        #{'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p2', 'OSI SAF v2p3']}
-        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4', 'OSI SAF v2p3']}
-    )
-    ts_archive.download(data_dir)
-
-    # Antarctic sea ice extent
-    ts_archive = archive.select(
-        #{'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p2', 'OSI SAF SH v2p3']}
-        {'type': 'timeseries', 'time_resolution': 'monthly', 'name': ['NSIDC v4 SH', 'OSI SAF SH v2p3']}
-    )
-    ts_archive.download(data_dir)
 
     # Glaciers
     ts_archive = archive.select(

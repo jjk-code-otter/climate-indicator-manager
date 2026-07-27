@@ -108,6 +108,12 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual land temperature", "kwargs":  {"yrange": [-2.1, 1.5]}}
         },
         {
+          "link_to":  null, "title": "WMO RA I Africa monthly",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_1", "time_resolution": "monthly", "origin": "obs"},
+          "processing": [{"method": "select_year_range", "args":  [1980,2026]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA I Africa annual land temperature", "kwargs":  {"yrange": [-2.1, 2.1]}}
+        },
+        {
           "link_to":  null, "title": "North Africa",
           "selecting": {"type": "timeseries", "variable": "africa_subregion_1", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
@@ -260,6 +266,12 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual land temperature"}
         },
         {
+          "link_to":  null, "title": "WMO RA II Asia monthly",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_2", "time_resolution": "monthly", "origin": "obs"},
+          "processing": [{"method": "select_year_range", "args":  [1980,2026]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA II Asia annual land temperature", "kwargs":  {"yrange": [-3.5, 3.5]}}
+        },
+        {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
             "display_name": [
@@ -324,6 +336,12 @@
           "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "annual", "origin": "obs"},
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual land temperature", "kwargs":  {"yrange": [-2.1, 1.2]}}
+        },
+        {
+          "link_to":  null, "title": "WMO RA III South America monthly",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_3", "time_resolution": "monthly", "origin": "obs"},
+          "processing": [{"method": "select_year_range", "args":  [1980,2026]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA III South America annual land temperature", "kwargs":  {"yrange": [-2.1, 2.1]}}
         },
         {
           "link_to":  null, "title": "Caribbean",
@@ -510,6 +528,12 @@
           "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean", "kwargs":  {"yrange": [-1.6, 0.8]}}
         },
         {
+          "link_to":  null, "title": "WMO RA V Southwest Pacific (land and ocean) monthly",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_land_ocean_5", "time_resolution": "monthly", "origin": "obs"},
+          "processing": [{"method": "select_year_range", "args":  [1980,2026]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA V SW Pacific land and ocean", "kwargs":  {"yrange": [-1.6, 0.8]}}
+        },
+        {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",
             "display_name": [
@@ -580,6 +604,13 @@
           "processing": [],
           "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual land temperature"}
         },
+        {
+          "link_to":  null, "title": "WMO RA VI Europe monthly",
+          "selecting": {"type": "timeseries", "variable": "wmo_ra_6", "time_resolution": "monthly", "origin": "obs"},
+          "processing": [{"method": "select_year_range", "args":  [1980,2026]}],
+          "plotting": {"function": "neat_plot", "title": "WMO RA VI Europe annual land temperature", "kwargs":  {"yrange": [-3.7, 3.7]}}
+        },
+
         {
           "link_to":  null, "title": "Continental trends",
           "selecting": {"type": "timeseries", "variable": ["wmo_ra_1","wmo_ra_2","wmo_ra_3","wmo_ra_4","wmo_ra_5","wmo_ra_6","tas"], "time_resolution": "annual", "origin": "obs",

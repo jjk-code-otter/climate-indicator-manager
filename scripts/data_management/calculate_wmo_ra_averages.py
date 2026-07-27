@@ -75,12 +75,16 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
             run_start_year = start_year
 
         annual_time_series.select_year_range(run_start_year, final_year)
+        monthly_time_series.select_year_range(run_start_year, final_year)
 
         wmo_ra = region + 1
         annual_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{annual_time_series.metadata['name']}"
+        monthly_time_series.metadata['name'] = f"{stub}_{wmo_ra}_{monthly_time_series.metadata['name']}_monthly"
         dataset_name = annual_time_series.metadata['name']
+        monthly_dataset_name = monthly_time_series.metadata['name']
 
         (regional_data_dir / dataset_name).mkdir(exist_ok=True)
+        (regional_data_dir / monthly_dataset_name).mkdir(exist_ok=True)
 
         filename = f"{dataset_name}.csv"
         metadata_filename = f"{dataset_name}.json"
@@ -89,6 +93,15 @@ def process_regions(region_names, region_shapes, regional_data_dir, ds, stub, st
         annual_time_series.metadata['long_name'] = long_names[region]
 
         annual_time_series.write_csv(regional_data_dir / dataset_name / filename,
+                                     metadata_filename=regional_metadata_dir / metadata_filename)
+
+        filename = f"{monthly_dataset_name}.csv"
+        metadata_filename = f"{monthly_dataset_name}.json"
+
+        monthly_time_series.metadata['variable'] = f'{stub}_{wmo_ra}'
+        monthly_time_series.metadata['long_name'] = long_names[region]
+
+        monthly_time_series.write_csv(regional_data_dir / monthly_dataset_name / filename,
                                      metadata_filename=regional_metadata_dir / metadata_filename)
 
 
@@ -113,15 +126,15 @@ if __name__ == "__main__":
         output_data_dir = "RegionalData"
         output_metadata_dir = "RegionalMetadata"
         datasets_to_use = [
-            #"CMST v3",
+            # "CMST v3",
             # "DCENT_I",
-            #"CMA_GMST",
-            # 'HadCRUT5',
-            # 'GISTEMP',
-            # 'NOAA v6',
-            # 'Berkeley Earth Hires',
-            'ERA5',
-            # 'JRA-3Q'
+            # "CMA_GMST",
+            # "HadCRUT5",
+            # "NOAA v6",
+            # "GISTEMP",
+            #"Berkeley Earth Hires",
+            # "ERA5",
+             "JRA-3Q"
         ]
 
     final_year = 2025

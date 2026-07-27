@@ -30,7 +30,7 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2025
+    final_year = 2026
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v6'],
+                                 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v61'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)
