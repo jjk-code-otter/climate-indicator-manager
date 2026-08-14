@@ -378,7 +378,8 @@ def read_irregular_ts(filenames: List[Path], metadata: CombinedMetadata) -> ts.T
             years.append(year)
             months.append(month)
             days.append(day)
-            extents.append(float(columns[1]) - clim[month-1, day-1])
+            #extents.append(float(columns[1]) - clim[month-1, day-1])
+            extents.append(float(columns[3]))
 
     metadata.creation_message()
 

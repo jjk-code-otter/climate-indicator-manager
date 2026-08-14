@@ -1004,8 +1004,8 @@ class TimeSeriesMonthly(TimeSeries):
 
         # Smoothing is different at ends of series (effectively extrapolation) so terminate half filter width from ends
         fit = fit[:, 1]
-        # fit[0: int(number_of_points / 2)] = np.nan
-        # fit[-1 * int(number_of_points / 2):] = np.nan
+        fit[0: int(number_of_points / 2)] = np.nan
+        fit[-1 * int(number_of_points / 2):] = np.nan
 
         moving_average.df.data = fit
 

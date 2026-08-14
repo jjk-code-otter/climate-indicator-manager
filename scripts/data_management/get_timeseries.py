@@ -29,6 +29,6 @@ if __name__ == "__main__":
 
     archive = dm.DataArchive.from_directory(METADATA_DIR)
     
-    ts_archive = archive.select({'type': 'timeseries', 'name': ["ESA CCI"]})
+    ts_archive = archive.select({'type': 'timeseries', 'name': ["MIAMI RONI"]})
 
     ts_archive.download(data_dir)

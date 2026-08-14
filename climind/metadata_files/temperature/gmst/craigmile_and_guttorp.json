@@ -1,0 +1,32 @@
+{
+  "name": "Craigmile and Guttorp",
+  "display_name": "Craigmile and Guttorp",
+  "version": "2",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Craigmile, P. F., & Guttorp, P. (2023). Comparing CMIP6 climate model simulations of annual global mean temperatures to a new combined data product. Earth and Space Science, 10, e2022EA002468. https://doi.org/10.1029/2022EA002468"],
+  "citation_url": ["https://doi.org/10.1029/2022EA002468"],
+  "data_citation": ["https://doi.org/10.5281/zenodo.8347095"],
+  "acknowledgement": "",
+  "colour": "dimgrey",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": ["https://zenodo.org/records/8347096/files/petercraigmile/ComparingCMIP6toData-v.1.0.0.zip?download=1"],
+      "filename": ["data_products.RData"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_craigmile_and_guttorp_ts",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

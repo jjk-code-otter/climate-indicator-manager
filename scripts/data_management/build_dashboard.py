@@ -43,13 +43,14 @@ if __name__ == "__main__":
     interactive = False
 
     minimal = False
+    dash2026 = False
     dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False
 
     decadal = False
-    monthly = False
+    monthly = True
     ocean = False
     cryosphere = False
 
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
     comprehensive = False
 
-    regional = True
+    regional = False
     regional_multiyear = False
     regional_test = False
 
@@ -113,6 +114,13 @@ if __name__ == "__main__":
         dash_dir = DATA_DIR / 'ManagedData' / 'MonthlyDashboard'
         dash_dir.mkdir(exist_ok=True)
         dash.build(Path(dash_dir), focus_year=2025)
+
+    if dash2026 or run_all:
+        json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2026.json'
+        dash = Dashboard.from_json(json_file, METADATA_DIR)
+        dash_dir = DATA_DIR / 'ManagedData' / 'Dashboard2026'
+        dash_dir.mkdir(exist_ok=True)
+        dash.build(Path(dash_dir), focus_year=2026)
 
     if dash2025 or run_all:
         json_file = ROOT_DIR / 'climind' / 'web' / 'dashboard_metadata' / 'key_indicators_2025.json'

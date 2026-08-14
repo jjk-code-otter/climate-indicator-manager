@@ -55,7 +55,7 @@ if __name__ == "__main__":
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
                                      'name': ['HadCRUT5', 'GISTEMP', 'NOAA v61', 'ERA5', 'Berkeley Earth',
-                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3']})
+                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3','DCENT_I']})
                                      # 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
                                      #          'Kadow', 'JRA-3Q', 'Calvert 2024', 'NOAA Interim']})
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
                                           'type': 'timeseries',
                                           'time_resolution': 'monthly',
                                           'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
-                                                   'NOAA Interim','Berkeley Earth Hires']})
+                                                   'NOAA Interim','Berkeley Earth Hires','DCENT_I']})
 
         sst_archive = archive.select({'variable': 'sst',
                                       'type': 'timeseries',

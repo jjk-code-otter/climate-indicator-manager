@@ -91,7 +91,7 @@ if __name__ == "__main__":
     #gmst = gmst.select_year_range(1980, 2026)
 
     oni_archive = archive.select({'variable': 'roni', 'time_resolution': 'monthly', 'type': 'timeseries'})
-    oni = oni_archive.read_datasets(data_dir)[0]
+    oni = oni_archive.read_datasets(data_dir)[1]
     #oni = oni.select_year_range(1980, 2026)
 
     aod_archive = archive.select({'variable': 'aod', 'time_resolution': 'monthly', 'type': 'timeseries'})

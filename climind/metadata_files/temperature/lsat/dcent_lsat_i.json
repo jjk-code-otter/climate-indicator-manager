@@ -22,7 +22,7 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_LST_monthly_statistics_embargo.txt"
+        "DCENT_DCENT_I_LST_monthly_statistics_live.txt"
       ],
       "type": "timeseries",
       "long_name": "Sea surface temperature",
@@ -41,7 +41,7 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_LST_annual_statistics_embargo.txt"
+        "DCENT_DCENT_I_LST_annual_statistics_live.txt"
       ],
       "type": "timeseries",
       "long_name": "Sea surface temperature",

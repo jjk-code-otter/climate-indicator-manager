@@ -1,7 +1,7 @@
 {
   "name": "DCENT_I",
   "display_name": "DCENT-I",
-  "version": "",
+  "version": "v1.1.1.0",
   "variable": "tas",
   "units": "degC",
   "citation": [
@@ -37,7 +37,7 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_GMST_monthly_statistics_embargo.txt"
+        "DCENT_DCENT_I_GMST_annual_statistics_live.txt"
       ],
       "type": "timeseries",
       "long_name": "Near surface temperature",
@@ -56,7 +56,7 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_GMST_monthly_statistics_embargo.txt"
+        "DCENT_DCENT_I_GMST_monthly_statistics_live.txt"
       ],
       "type": "timeseries",
       "long_name": "Near surface temperature",

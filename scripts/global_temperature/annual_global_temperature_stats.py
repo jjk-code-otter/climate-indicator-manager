@@ -54,7 +54,8 @@ if __name__ == "__main__":
     ann_archive = archive.select({'variable': 'tas',
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
-                                  'name': [  #'ClimTraceGMST' # 'NOAA Interim',
+                                  'name': [ #"Craigmile and Guttorp",
+                                      #'ClimTraceGMST' # 'NOAA Interim',
                                       # 'Kadow IPCC',
                                       # 'Berkeley IPCC',
                                       # 'NOAA Interim IPCC'
@@ -75,12 +76,12 @@ if __name__ == "__main__":
     sst_archive = archive.select({'variable': 'sst',
                                   'type': 'timeseries',
                                   'time_resolution': 'monthly',
-                                  'name': ['HadSST4', 'ERSST v61']})
+                                  'name': ['HadSST4', 'ERSST v61', 'DCENT_SST_I']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly',
-                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v6']})
+                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v6', 'DCENT_LSAT_I']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',

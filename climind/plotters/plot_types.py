@@ -1619,6 +1619,8 @@ def daily_sea_ice_plot(out_dir: Path,
                        image_filename: str, title: str) -> str:
     final_year = 2026
 
+    variable = all_datasets[0].metadata['variable']
+
     sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 
     # Plot annual cycle plot
@@ -1632,7 +1634,8 @@ def daily_sea_ice_plot(out_dir: Path,
 
     ds = all_datasets[0]
     ds.fill_daily()
-    ds.df.data = ds.df.data.rolling(5, center=True, min_periods=1).mean()
+    if variable != "tas":
+        ds.df.data = ds.df.data.rolling(5, center=True, min_periods=1).mean()
     climatology, _ = ds.get_climatology(1991, 2020)
 
     md = ds.metadata
@@ -1659,17 +1662,27 @@ def daily_sea_ice_plot(out_dir: Path,
     plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=1))
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 
-    plt.gca().set_yticks([0, 5, 10, 15, 20, 25])
+    if variable != "tas":
+        plt.gca().set_yticks([0, 5, 10, 15, 20, 25])
+        plt.gca().set_ylabel('million km$^2$')
+    else:
+        plt.gca().set_yticks([-1.5, -1, -0.5, 0.0, 0.5, 1.0, 1.5])
+        plt.gca().set_ylabel('degC')
 
-    plt.gca().set_ylabel('million km$^2$')
 
     if md['variable'] == 'arctic_ice':
         inclusion = 'Arctic'
     else:
         inclusion = 'Antarctic'
-    plt.gca().set_title(f'Daily {inclusion} sea-ice extent through the year {start_date.year}-{end_date.year}', pad=35,
-                        fontdict={'fontsize': 35},
-                        loc='left')
+
+    if variable != "tas":
+        plt.gca().set_title(f'Daily {inclusion} sea-ice extent through the year {start_date.year}-{end_date.year}', pad=35,
+                            fontdict={'fontsize': 35},
+                            loc='left')
+    else:
+        plt.gca().set_title(f'Daily surface air temperature anomalies {start_date.year}-{end_date.year}', pad=35,
+                            fontdict={'fontsize': 35},
+                            loc='left')
 
     ylim = plt.gca().get_ylim()
     xlim = plt.gca().get_xlim()
@@ -1688,7 +1701,7 @@ def daily_sea_ice_plot(out_dir: Path,
         plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})  # red
 
         plt.gca().set_ylim(-0.5, 17.5)
-    else:
+    elif md['variable'] == 'antarctic_ice':
         yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0]) - 0.5
         xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
         plt.text(xloc, yloc, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
@@ -1702,6 +1715,20 @@ def daily_sea_ice_plot(out_dir: Path,
         plt.text(xloc, yloc, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18})  # red
 
         plt.gca().set_ylim(-0.5, 22)
+    elif md['variable'] == 'tas':
+        yloc = ylim[0] + 0.268 * (ylim[1] - ylim[0]) - 0.5
+        xloc = xlim[0] + 0.96 * (xlim[1] - xlim[0])
+        plt.text(xloc, 0, '1991-2020\naverage', color=col_clim, fontdict={'fontsize': 18}, ha='left')
+
+        yloc = ylim[0] + 0.248 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.50 * (xlim[1] - xlim[0])
+        plt.text(xloc, 0.9, '2026', color=col_ext, fontdict={'fontsize': 18})  # red
+
+        yloc = ylim[0] + 0.543 * (ylim[1] - ylim[0])
+        xloc = xlim[0] + 0.960 * (xlim[1] - xlim[0])
+        plt.text(xloc, 0.75, 'All other years', color=col_all, alpha=0.5, fontdict={'fontsize': 18}, ha='left')  # red
+
+        plt.gca().set_ylim(-1.0, 1.25)
 
     plt.savefig(out_dir / image_filename)
     plt.savefig(out_dir / image_filename.replace('.png', '.svg'))
@@ -1710,6 +1737,11 @@ def daily_sea_ice_plot(out_dir: Path,
     caption = (f'Daily {inclusion} sea ice extent throughout the year, {start_date.year}-{end_date.year}. Grey lines '
                f'show individual years. {end_date.year} is highlighted in blue and the 1991-2020 average in black. Data '
                f'are from {md["display_name"]}')
+
+    if md['variable'] == 'tas':
+        caption = (f'Daily global mean surface temperature throughout the year, {start_date.year}-{end_date.year}. Grey lines '
+                   f'show individual years. {end_date.year} is highlighted in blue and the 1991-2020 average in black. Data '
+                   f'are from {md["display_name"]}')
 
     return caption
 
@@ -2725,9 +2757,12 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
+            if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
+                colour = 'lightgrey'
+                lthk = 1
             if year >= 2026:
                 colour = 'darkred'
-                lthk = 3
+                lthk = 6
             # if year == last_year:
             #     colour = 'darkred'
             #     lthk = 3
@@ -2735,26 +2770,37 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=year)
 
     plt.gca().set_xlabel('Month')
-    plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
-    plt.gca().set_ylim(-1.5, 1.4)
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni"]:
+        plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
+
+    if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
+        plt.gca().set_ylim(-2.5, 3.0)
+    else:
+        plt.gca().set_ylim(-1.5, 1.4)
+
     plt.xticks(np.arange(1, 13, 1),
                ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'])
-    plt.title('Monthly Global Temperature Anomalies 1850-2025', fontsize=25, y=0.95)
+    if all_datasets[0].metadata['variable'] == "roni":
+        plt.title('Monthly Relative Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
+    elif all_datasets[0].metadata['variable'] == "oni":
+        plt.title('Monthly Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
+    else:
+        plt.title('Monthly Global Temperature Anomalies 1850-2026', fontsize=25, y=0.95)
 
     import matplotlib.patheffects as PathEffects
 
     pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
     peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni"]:
+        plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.50, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.55, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
+        plt.gcf().text(0.52, 0.59, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
+        plt.gcf().text(0.52, 0.67, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
 
-    plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.50, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
-    plt.gcf().text(0.52, 0.55, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
-    plt.gcf().text(0.52, 0.59, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
-    plt.gcf().text(0.52, 0.67, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
-
-    plt.gcf().text(0.42, 0.78, '2026', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+        plt.gcf().text(0.42, 0.78, '2026', color='darkred', fontsize=30, ha='center', path_effects=[pew])
 
     sources = [x.metadata['display_name'] for x in all_datasets]
     sources = ', '.join(sources)

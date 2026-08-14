@@ -86,13 +86,14 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             columns = line.split(',')
             year = columns[0]
             for month in range(1,13):
-                anom = float(columns[month])
+                if "NaN" not in columns[month]:
+                    anom = float(columns[month])
 
-                years.append(int(year))
-                months.append(int(month))
-                anomalies.append(anom)
+                    years.append(int(year))
+                    months.append(int(month))
+                    anomalies.append(anom)
 
-            if year == '2025':
+            if year == '2026':
                 break
 
     metadata.creation_message()

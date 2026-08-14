@@ -1,0 +1,32 @@
+{
+  "name": "MIAMI RONI",
+  "display_name": "University of Miami",
+  "version": "",
+  "variable": "roni",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#bdc429",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://bmcnoldy.earth.miami.edu/tropics/roni/RONI_NINO34_v6.txt"],
+      "filename": ["RONI_NINO34_v6.txt"],
+	  "type": "timeseries",
+      "long_name": "Relative Oceanic Nino Index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_miami",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}
