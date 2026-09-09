@@ -118,7 +118,7 @@ def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeS
             anomalies.append(anom)
             uncs.append(unc)
 
-            if year == '2025':
+            if year == '2026':
                 break
 
     metadata.creation_message()

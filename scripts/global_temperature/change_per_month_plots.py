@@ -55,7 +55,7 @@ if __name__ == "__main__":
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
                                      'name': ['HadCRUT5', 'GISTEMP', 'NOAA v61', 'ERA5', 'Berkeley Earth',
-                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3','DCENT_I']})
+                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3','DCENT_I', 'CMST v3']})
                                      # 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
                                      #          'Kadow', 'JRA-3Q', 'Calvert 2024', 'NOAA Interim']})
 
@@ -65,9 +65,10 @@ if __name__ == "__main__":
                                           'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
                                                    'NOAA Interim','Berkeley Earth Hires','DCENT_I']})
 
-        sst_archive = archive.select({'variable': 'sst',
+        sst_archive = archive.select({'variable': 'sst6060',
                                       'type': 'timeseries',
-                                      'time_resolution': 'monthly'})
+                                      'time_resolution': 'monthly',
+                                      'name': ['HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060', 'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060']})
 
         lsat_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',
@@ -144,6 +145,14 @@ if __name__ == "__main__":
                 ds.select_year_range(2014, 2026)
                 m.append(ds)
             pt.monthly_plot(figure_dir, m, f'monthly.png', 'Monthly global mean')
+
+            all_datasets = sst_archive.read_datasets(data_dir)
+            m = []
+            for ds in all_datasets:
+                ds.rebaseline(1981, 2010)
+                ds.select_year_range(2014, 2026)
+                m.append(ds)
+            pt.monthly_plot(figure_dir, m, f'sst_monthly.png', 'Monthly global mean SST')
 
             all_datasets = long_ts_archive.read_datasets(data_dir)
             m = []

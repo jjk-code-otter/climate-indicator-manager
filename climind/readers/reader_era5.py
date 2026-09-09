@@ -310,7 +310,13 @@ def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeries
     anomalies = []
 
     with open(filled_fname, 'r') as f:
-        for _ in range(12):
+        header_length = 12
+        if metadata['variable'] == 'sst':
+            header_length = 10
+        if metadata['variable'] == 'lsat':
+            header_length = 9
+
+        for _ in range(header_length):
             f.readline()
 
         for line in f:

@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": [""],
-      "filename": ["NASA_SSH_GMSL_INDICATOR.txt"],
+      "filename": ["NASA_SSH_GMSL_INDICATOR.txt", "MSL_Serie_MERGED_Global_AVISO_GIA_Adjust_Filter2m_NRT.nc"],
 	  "type": "timeseries",
       "long_name": "Global mean sea level",
 	  "time_resolution": "monthly",

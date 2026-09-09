@@ -32,9 +32,10 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
 
         for line in f:
             columns = line.split()
-            years.append(int(columns[0]))
-            months.append(int(columns[1]))
-            anomalies.append(float(columns[4]))
+            if "*" not in line:
+                years.append(int(columns[0]))
+                months.append(int(columns[1]))
+                anomalies.append(float(columns[4]))
 
     metadata.creation_message()
 

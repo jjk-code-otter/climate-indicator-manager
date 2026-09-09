@@ -40,12 +40,12 @@ if __name__ == "__main__":
                      #'DCENT_I',
                      #'CMST v3',
                      #'Kadow',
-                     #'NOAA v6',
-                     #'HadCRUT5',
-                     'Berkeley Earth Hires',
-                     #'GISTEMP',
-                     #'JRA-3Q',
-                     #'ERA5'
+                     'NOAA v61',
+                     # 'HadCRUT5',
+                     # 'Berkeley Earth Hires',
+                     # 'GISTEMP',
+                     # 'JRA-3Q',
+                     # 'ERA5'
             ]
         }
     )

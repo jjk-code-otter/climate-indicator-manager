@@ -31,15 +31,18 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     with open(filename[0], 'r') as f:
         f.readline()
         for line in f:
+            line = line.rstrip()
             columns = line.split(',')
-            for i in range(1, 13):
-                years.append(int(columns[0]))
-                months.append(int(i))
-                anomalies.append(float(columns[i]))
+            line_length = len(columns)
+            for i in range(1, line_length):
+                if columns[i] != '':
+                    years.append(int(float(columns[0])))
+                    months.append(int(i))
+                    anomalies.append(float(columns[i]))
 
     metadata.creation_message()
 
-    metadata.dataset['last_month'] = '2025 12'
+    metadata.dataset['last_month'] = '2026 8'
 
     return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)
 

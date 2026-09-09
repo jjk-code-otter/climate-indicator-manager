@@ -26,7 +26,7 @@ from datetime import timedelta, datetime
 from scipy.signal import savgol_filter
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+def read_irregular_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     ds = xa.open_dataset(filename[0])
 
     anomalies = (10 * ds.MSL_filtered_GIA_corrected_adjusted.values).tolist()
@@ -39,3 +39,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata, uncertainty=uncertainty)
 
     return outseries
+
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    ts = read_irregular_ts(filename, metadata)
+    return ts.make_monthly()

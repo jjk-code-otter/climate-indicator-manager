@@ -1,0 +1,32 @@
+{
+  "name": "ERA5 SST 6060",
+  "display_name": "ERA5",
+  "version": "",
+  "variable": "sst6060",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "orange",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["timeseries_era5_monthly_sst_60S-60N_ocean_allmonths.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_era5",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

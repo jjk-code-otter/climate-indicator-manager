@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['NOAA v61', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5', 'DCENT_I', 'CMA_GMST', 'CMST v3', 'COBE-STEMP3'],
+                                 'name': ['NOAA v61', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires', 'HadCRUT5', 'DCENT_I', 'CMA_GMST', 'CMST v3'],
                                  # ,'COBE-STEMP3', 'NOAA Interim', 'JRA-55', 'Kadow', 'Calvert 2024','DCENT','Vaccaro','Cowtan and Way', 'CMST','Kadow CMIP'],
                                  'time_resolution': 'monthly'})
 
@@ -73,15 +73,15 @@ if __name__ == "__main__":
                                   'time_resolution': 'monthly',
                                   'name': ['RSS', 'UAH']})
 
-    sst_archive = archive.select({'variable': 'sst',
+    sst_archive = archive.select({'variable': 'sst6060',
                                   'type': 'timeseries',
                                   'time_resolution': 'monthly',
-                                  'name': ['HadSST4', 'ERSST v61', 'DCENT_SST_I']})
+                                  'name': ['HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060', 'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly',
-                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v6', 'DCENT_LSAT_I']})
+                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v61', 'DCENT_LSAT_I', 'CMST v3 LSAT', 'ERA5 LSAT']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',

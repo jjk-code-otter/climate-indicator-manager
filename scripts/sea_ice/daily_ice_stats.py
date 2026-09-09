@@ -31,6 +31,8 @@ def consolidate(inarr):
 def calc_stats(ts_archive, data_dir):
     all_datasets = ts_archive.read_datasets(data_dir)
 
+    final_year = 2026
+
     print(all_datasets)
 
     mins25 = []
@@ -49,7 +51,7 @@ def calc_stats(ts_archive, data_dir):
         annual_maxs = []
         annual_means = []
 
-        for year in range(1979, 2026):
+        for year in range(1979, final_year+1):
             ds_extract = copy.deepcopy(ds)
             ds_extract = ds_extract.select_year_range(year, year)
 
@@ -58,7 +60,7 @@ def calc_stats(ts_archive, data_dir):
             annual_maxs.append(np.max(ds_extract.df.data))
             annual_means.append(np.mean(ds_extract.df.data))
 
-            if year == 2025:
+            if year == final_year:
                 print(f"{years[-1]}, {annual_mins[-1]:.2f}, {annual_maxs[-1]:.2f}, {annual_means[-1]:.2f}")
                 min_date = ds_extract.df[ds_extract.df.data == annual_mins[-1]]
                 print(f"Min on {min_date.year.values[0]}-{min_date.month.values[0]:02d}-{min_date.day.values[0]:02d}")
@@ -110,9 +112,9 @@ def calc_stats(ts_archive, data_dir):
     consolidated_clim_max, consolidated_clim_max_unc = consolidate(climmax)
 
     print("Consolidated numbers")
-    print(f"2025 annual mean = {consolidated_mean:.2f} +- {consolidated_mean_unc:.2f} (91-20 mean = {consolidated_clim_mean:.2f} +- {consolidated_clim_mean_unc:.2f})")
-    print(f"2025 annual min = {consolidated_min:.2f} +- {consolidated_min_unc:.2f} (91-20 mean = {consolidated_clim_min:.2f} +- {consolidated_clim_min_unc:.2f})")
-    print(f"2025 annual max = {consolidated_max:.2f} +- {consolidated_max_unc:.2f} (91-20 mean = {consolidated_clim_max:.2f} +- {consolidated_clim_max_unc:.2f})")
+    print(f"{final_year} annual mean = {consolidated_mean:.2f} +- {consolidated_mean_unc:.2f} (91-20 mean = {consolidated_clim_mean:.2f} +- {consolidated_clim_mean_unc:.2f})")
+    print(f"{final_year} annual min = {consolidated_min:.2f} +- {consolidated_min_unc:.2f} (91-20 mean = {consolidated_clim_min:.2f} +- {consolidated_clim_min_unc:.2f})")
+    print(f"{final_year} annual max = {consolidated_max:.2f} +- {consolidated_max_unc:.2f} (91-20 mean = {consolidated_clim_max:.2f} +- {consolidated_clim_max_unc:.2f})")
 
 project_dir = DATA_DIR / "ManagedData"
 data_dir = project_dir / "Data"
@@ -128,7 +130,7 @@ ts_archive = archive.select(
         'type': 'timeseries',
         'variable': 'arctic_ice',
         'time_resolution': 'irregular',
-        'name': ['NSIDC v4', 'JAXA NH', 'OSI SAF v2p3']
+        'name': ['NSIDC v4', 'JAXA NH', 'OSI SAF v3p0']
     }
 )
 
@@ -140,7 +142,7 @@ ts_archive = archive.select(
         'type': 'timeseries',
         'variable': 'antarctic_ice',
         'time_resolution': 'irregular',
-        'name': ['NSIDC v4 SH', 'JAXA SH', 'OSI SAF SH v2p3']
+        'name': ['NSIDC v4 SH', 'JAXA SH', 'OSI SAF SH v3p0']
     }
 )
 

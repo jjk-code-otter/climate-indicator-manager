@@ -1,0 +1,51 @@
+{
+  "name": "ESA CCI v3 6060",
+  "display_name": "ESA SST CCI v3",
+  "version": "",
+  "variable": "sst6060",
+  "units": "degC",
+  "citation": [
+    ""
+  ],
+  "citation_url": [
+    ""
+  ],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#cc79a7",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+	{
+      "url": [""],
+      "filename": ["ESACCI3.0_global_sst_timeseries.nc"],
+      "type": "timeseries",
+      "long_name": "Global sea-surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cci_sst",
+	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [""],
+      "filename": ["ESACCI3.0_global_sst_timeseries.nc"],
+      "type": "timeseries",
+      "long_name": "Global sea-surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cci_sst",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

@@ -43,14 +43,14 @@ if __name__ == "__main__":
     interactive = False
 
     minimal = False
-    dash2026 = False
+    dash2026 = True
     dash2025 = False
     dash2024 = False
     dash2023 = False
     dash2022 = False
 
     decadal = False
-    monthly = True
+    monthly = False
     ocean = False
     cryosphere = False
 

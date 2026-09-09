@@ -108,7 +108,7 @@ sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
 plt.figure(figsize=[16, 9])
 
 for i, ds in enumerate(all_datasets_nh):
-    ds = ds.select_year_range(1979,2025)
+    ds = ds.select_year_range(1979,2026)
     df = ds.df
     annual_mean = df.groupby(['year'])['data'].mean()
     annual_min = df.groupby(['year'])['data'].min()
@@ -134,7 +134,7 @@ plt.close('all')
 plt.figure(figsize=[16, 9])
 
 for i, ds in enumerate(all_datasets_sh):
-    ds = ds.select_year_range(1979,2025)
+    ds = ds.select_year_range(1979,2026)
     df = ds.df
     annual_mean = df.groupby(['year'])['data'].mean()
     annual_min = df.groupby(['year'])['data'].min()

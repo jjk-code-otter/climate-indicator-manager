@@ -26,7 +26,7 @@ from climind.data_manager.metadata import CombinedMetadata
 from climind.readers.generic_reader import read_ts
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+def read_irregular_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     df = xa.open_dataset(filename[0])
 
     correction = df.TPA_correction.values
@@ -48,9 +48,12 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
 
     return outseries
 
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    outseries = read_irregular_ts(filename, metadata)
+    return outseries.make_monthly()
+
 
 def read_annual_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesAnnual:
     ts = read_monthly_ts(filename, metadata)
-    ts = ts.make_monthly()
     ts = ts.make_annual()
     return ts

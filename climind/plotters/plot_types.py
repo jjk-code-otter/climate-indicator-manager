@@ -2775,6 +2775,8 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
         plt.gca().set_ylim(-2.5, 3.0)
+    elif all_datasets[0].metadata['variable'] in ["sst"]:
+        plt.gca().set_ylim(-0.2, 0.9)
     else:
         plt.gca().set_ylim(-1.5, 1.4)
 
@@ -2784,6 +2786,8 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
         plt.title('Monthly Relative Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
     elif all_datasets[0].metadata['variable'] == "oni":
         plt.title('Monthly Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
+    elif all_datasets[0].metadata['variable'] == "sst":
+        plt.title('Monthly Global SST Anomalies 1850-2026', fontsize=25, y=0.95)
     else:
         plt.title('Monthly Global Temperature Anomalies 1850-2026', fontsize=25, y=0.95)
 
@@ -2791,7 +2795,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
     peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
-    if all_datasets[0].metadata['variable'] not in ["oni", "roni"]:
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "sst"]:
         plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
         plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
         plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])

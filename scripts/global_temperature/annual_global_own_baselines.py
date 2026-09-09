@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v61'],
+                                 'name': ['HadCRUT5', 'Berkeley Earth Hires', 'NOAA v61', 'DCENT_I', 'CMA_GMST', 'CMST v3'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)

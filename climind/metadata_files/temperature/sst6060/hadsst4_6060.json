@@ -1,0 +1,32 @@
+{
+  "name": "HadSST4_6060",
+  "display_name": "HadSST4 6060",
+  "version": "4.2.0.0",
+  "variable": "sst6060",
+  "units": "degC",
+  "citation": ["Kennedy, J. J., Rayner, N. A., Atkinson, C. P., and Killick, R. E. (2019). An ensemble data set of sea-surface temperature change from 1850: the Met Office Hadley Centre HadSST.4.0.0.0 data set. Journal of Geophysical Research: Atmospheres, 124. https://doi.org/10.1029/2018JD029867"],
+  "citation_url": ["https://doi.org/10.1029/2018JD029867"],
+  "data_citation": [""],
+  "acknowledgement": "HadSST.VVVV data were obtained from http://www.metoffice.gov.uk/hadobs/hadsst4 on AAAA and are © British Crown Copyright, Met Office YYYY, provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "colour": "dimgrey",
+  "zpos": 99,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [],
+      "filename": ["HadSST.4.2_monthly_6060.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea-surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1961,
+	  "climatology_end": 1990,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_hadsst_ts",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

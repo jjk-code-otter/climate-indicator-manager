@@ -181,7 +181,7 @@ def fetch(_, out_dir: Path, _filename) -> None:
     # Real time
     web_path = 'https://data-osdf.rda.ucar.edu/ncar/rda/d640003/'
     new_web_path = "https://osdf-director.osg-htc.org/ncar/gdex/d640003/"
-    filelist = make_realtime_file_list(2022, 2025)
+    filelist = make_realtime_file_list(2022, 2026)
     get_files(filelist, new_web_path, process=False)  # These are already monthly, so don't process
 
     # Archive

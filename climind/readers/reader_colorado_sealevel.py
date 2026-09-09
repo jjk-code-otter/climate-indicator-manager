@@ -34,7 +34,7 @@ def convert_partial_year(number):
     return date
 
 
-def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
+def read_irregular_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
     anomalies = []
     years = []
     months = []
@@ -69,3 +69,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     outseries = ts.TimeSeriesIrregular(years, months, days, smoothed, metadata=metadata)
 
     return outseries
+
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    ts = read_irregular_ts(filename, metadata)
+    return ts.make_monthly()

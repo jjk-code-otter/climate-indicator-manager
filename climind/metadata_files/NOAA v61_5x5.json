@@ -1,7 +1,7 @@
 {
-    "name": "NOAA v6_5x5",
-    "display_name": "NOAAGlobalTemp v6",
-    "version": "v6.0.0",
+    "name": "NOAA v61_5x5",
+    "display_name": "NOAAGlobalTemp v6.1",
+    "version": "v6.1.0",
     "variable": "tas",
     "units": "degC",
     "citation": [
@@ -11,7 +11,7 @@
         "https://doi.org/10.1175/BAMS-D-24-0012.1"
     ],
     "data_citation": [
-        "Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed 2026-01-15 22:33:36."
+        "Huang, Boyin; Yin, Xungang; Menne, Matthew J.; Vose, Russell S.; and Zhang, Huai-Min. 2024. NOAA Global Surface Temperature Dataset (NOAAGlobalTemp), Version 6.0.. NOAA National Centers for Environmental Information. https://doi.org/10.25921/rzxg-p717. Accessed 2026-09-09 09:53:39."
     ],
     "acknowledgement": "",
     "colour": "#e69f00",
@@ -24,7 +24,7 @@
                 ""
             ],
             "filename": [
-                "NOAA v6_5x5.nc"
+                "NOAA v61_5x5.nc"
             ],
             "type": "gridded",
             "long_name": "Near surface temperature",
@@ -35,17 +35,17 @@
             "actual": false,
             "derived": true,
             "history": [
-                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2026-01-15 22:33:36']",
+                "Data set created from file ['NOAAGlobalTemp_v*.nc'] downloaded from ['https://www.ncei.noaa.gov/data/noaa-global-surface-temperature/v6.1/access/gridded/NOAAGlobalTemp_v.*.nc'] at ['2026-09-09 09:53:39']",
                 "Rebaselined to 1991-2020",
                 "Calculated annual average",
-                "Wrote to file NOAA v6_5x5.nc"
+                "Wrote to file NOAA v61_5x5.nc"
             ],
             "reader": "reader_standard_grid",
             "fetcher": "fetcher_no_url",
             "last_modified": [
-                "2026-01-15 22:33:36"
+                "2026-09-09 09:53:39"
             ],
-            "last_month": "2025-12-01 00:00:00"
+            "last_month": "2026-07-01 00:00:00"
         }
     ]
 }

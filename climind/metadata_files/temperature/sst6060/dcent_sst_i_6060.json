@@ -1,8 +1,8 @@
 {
-  "name": "DCENT_LSAT_I",
+  "name": "DCENT_SST_I 6060",
   "display_name": "DCENT-I",
   "version": "",
-  "variable": "lsat",
+  "variable": "sst6060",
   "units": "degC",
   "citation": [
     "Chan, D., Gebbie, G., Huybers, P. & Kent, E. C. DCENT: Dynamically Consistent ENsemble of Temperature at the Earth Surface. https://doi.org/10.7910/DVN/NU4UGW (2024).",
@@ -22,10 +22,10 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_LST_monthly_statistics_live.txt"
+        "DCENT_DCENT_I_OST_monthly_statistics_live.txt"
       ],
       "type": "timeseries",
-      "long_name": "Land surface air temperature",
+      "long_name": "Sea surface temperature",
 	  "time_resolution": "monthly",
 	  "space_resolution": 99,
 	  "climatology_start": 1961,
@@ -41,7 +41,7 @@
         "https://dcent-i.github.io/"
       ],
 	  "filename": [
-        "DCENT_DCENT_I_LST_annual_statistics_live.txt"
+        "DCENT_DCENT_I_OST_annual_statistics_live.txt"
       ],
       "type": "timeseries",
       "long_name": "Sea surface temperature",
