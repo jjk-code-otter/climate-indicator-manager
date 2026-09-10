@@ -1,6 +1,6 @@
 {
   "name": "NASA Sealevel new",
-  "display_name": "NASA (old)",
+  "display_name": "NASA",
   "version": "",
   "variable": "sealevel",
   "units": "mm",

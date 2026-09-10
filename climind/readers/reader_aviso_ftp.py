@@ -32,7 +32,7 @@ def read_irregular_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Ti
     correction = df.TPA_correction.values
     anomalies = df.msl.values - correction
     anomalies = [x * 1000 for x in anomalies]
-    anomalies = savgol_filter(anomalies, 9, 1)
+    # anomalies = savgol_filter(anomalies, 9, 1)
     anomalies = anomalies - np.mean(anomalies[0:3]) - 2
 
     uncertainty = df.uncertainty_envelop.values.tolist()

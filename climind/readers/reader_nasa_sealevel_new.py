@@ -30,6 +30,7 @@ from climind.readers.generic_reader import read_ts
 
 from datetime import timedelta, datetime
 
+
 def parse_spaced_txt(gmsl: pl.DataFrame, column_names: list):
     parsed = (
         gmsl.with_row_index("id")
@@ -54,6 +55,7 @@ def convert_partial_year(number):
     day_one = datetime(year, 1, 1)
     date = d + day_one
     return date
+
 
 def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
     aviso_gmsl = xa.open_dataset(filename[1])
@@ -122,64 +124,3 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     data = nasa_gmsl["GMSL_filt_2m_gia_tpa_ds"].to_numpy() * 10
 
     return ts.TimeSeriesMonthly(years, months, data, metadata=metadata)
-
-
-def read_monthly_ts_old(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesIrregular:
-    anomalies = []
-    years = []
-    months = []
-    days = []
-    time = []
-
-    header_length = 42
-    data_column = 2
-    if metadata["name"] == "NASA Sealevel new2":
-        header_length = 47
-        data_column = 1
-
-    with open(filename[0], 'r') as f:
-        for i in range(header_length):
-            f.readline()
-
-        for line in f:
-            columns = line.split()
-
-            time.append(float(columns[0]))
-
-            converted_date = convert_partial_year(float(columns[0]))
-            anomalies.append(float(columns[data_column]) * 10) # convert to mm from cm
-            years.append(converted_date.year)
-            months.append(converted_date.month)
-            days.append(converted_date.day)
-
-    time = np.array(time)
-    time = time - time[0]
-
-    anomalies = np.array(anomalies)
-    anomalies = anomalies - anomalies[0]
-    anomalies = savgol_filter(anomalies, 9, 1)
-
-    #deseasonalise
-    X = np.column_stack([
-        np.ones_like(time),  # constant term
-        np.sin(2 * np.pi * time),  # annual sine
-        np.cos(2 * np.pi * time),  # annual cosine
-        np.sin(4 * np.pi * time),  # semi-annual sine
-        np.cos(4 * np.pi * time)  # semi-annual cosine
-    ])
-    # Least-squares fit
-    coeffs, _, _, _ = np.linalg.lstsq(X, anomalies, rcond=None)
-    # Seasonal component (exclude constant so mean is preserved)
-    seasonal = X[:, 1:] @ coeffs[1:]
-    # Deseasonalised series
-    anomalies = anomalies - seasonal
-
-    anomalies = anomalies.tolist()
-
-    # Glacial isostatic adjustment of 0.3 mm per year
-    anomalies = anomalies + 0.3 * time
-
-    metadata.creation_message()
-    outseries = ts.TimeSeriesIrregular(years, months, days, anomalies, metadata=metadata)
-
-    return outseries
