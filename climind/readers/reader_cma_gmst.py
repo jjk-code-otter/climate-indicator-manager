@@ -143,9 +143,10 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             columns = line.rstrip().split(',')
             year = int(columns[0])
             for month in range(1,13):
-                years.append(year)
-                months.append(int(month))
-                anomalies.append(float(columns[month]))
+                if columns[month] != "":
+                    years.append(year)
+                    months.append(int(month))
+                    anomalies.append(float(columns[month]))
 
     metadata.creation_message()
 

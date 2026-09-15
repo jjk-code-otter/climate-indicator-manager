@@ -55,7 +55,7 @@ if __name__ == "__main__":
                                      'type': 'timeseries',
                                      'time_resolution': 'monthly',
                                      'name': ['HadCRUT5', 'GISTEMP', 'NOAA v61', 'ERA5', 'Berkeley Earth',
-                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3','DCENT_I', 'CMST v3']})
+                                              'JRA-3Q','Berkeley Earth Hires', 'COBE-STEMP3','DCENT_I', 'CMST v3', 'CMA_GMST']})
                                      # 'name': ['HadCRUT5', 'GISTEMP', 'NOAA v6', 'JRA-55', 'ERA5', 'Berkeley Earth',
                                      #          'Kadow', 'JRA-3Q', 'Calvert 2024', 'NOAA Interim']})
 
@@ -63,12 +63,16 @@ if __name__ == "__main__":
                                           'type': 'timeseries',
                                           'time_resolution': 'monthly',
                                           'name': ['HadCRUT5', 'NOAA v61', 'Berkeley Earth', 'Kadow', 'Calvert 2024',
-                                                   'NOAA Interim','Berkeley Earth Hires','DCENT_I']})
+                                                   'NOAA Interim','Berkeley Earth Hires','DCENT_I', 'CMST v3', 'CMA_GMST']})
 
         sst_archive = archive.select({'variable': 'sst6060',
                                       'type': 'timeseries',
                                       'time_resolution': 'monthly',
-                                      'name': ['HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060', 'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060']})
+                                      'name': [
+                                          'HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060',
+                                          'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060',
+                                          'CMA_SST6060', 'JRA-3Q_SST'
+                                      ]})
 
         lsat_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',

@@ -56,6 +56,7 @@ FANCY_UNITS = {
     "mwe": "metres water equivalent",
     "wm2": "Wm$^{-2}$",
     "aod": "Aerosol Optical Depth",
+    "Gt": "Gigatonnes",
 }
 
 STANDARD_PARAMETER_SET = {
@@ -354,6 +355,8 @@ def set_yaxis(axis, dataset: Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeri
 
     if dataset.metadata['variable'] in ['glacier', 'n2o', 'ch4rate', 'ozone_hole', 'max_ozone_hole', 'ocean_mass']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 5.0)
+        if dataset.metadata['units'] == 'Gt':
+            ylo, yhi, yticks = set_lo_hi_ticks(ylims, 1000.0)
 
     if dataset.metadata['variable'] in ['ohc', 'ohc2k', 'ch4', 'ozone_minimum', 'min_ozone_minimum']:
         ylo, yhi, yticks = set_lo_hi_ticks(ylims, 50.0)
@@ -470,6 +473,7 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
         current_time = f"Created: {datetime.today()}"
         plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                        bbox={'facecolor': 'w', 'edgecolor': None})
+
 
     first_year, last_year = get_start_and_end_year(all_datasets)
 

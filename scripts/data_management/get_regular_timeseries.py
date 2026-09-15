@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # SST
     ts_archive = archive.select(
         #{'type': 'timeseries', 'name': ['HadSST4']}
-        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v61']}
+        {'type': 'timeseries', 'name': ['HadSST4', 'ERSST v61', 'ERSST v61 6060']}
     )
     ts_archive.download(data_dir)
 

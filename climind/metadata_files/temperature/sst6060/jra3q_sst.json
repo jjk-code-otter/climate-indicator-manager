@@ -1,0 +1,47 @@
+{
+  "name": "JRA-3Q_SST",
+  "display_name": "JRA-3Q",
+  "version": "",
+  "variable": "sst6060",
+  "units": "degC",
+  "citation": ["Kosaka, Y.; Kobayashi, S.; Harada, Y.; Kobayashi, C.; Naoe, H.; Yoshimoto, K.; Harada, M.; Goto, N.; Chiba, J.; Miyaoka, K.; Sekiguchi, R.; Deushi, M.; Kamahori, H.; Nakaegawa, T.; Tanaka, T. Y.; Tokuhiro, T.; Sato, Y.; Matsushita, Y.; Onogi, K. The JRA-3Q Reanalysis. J. Meteorol. Soc. Jpn. Ser II 2024, 102 (1), 49–109. https://doi.org/10.2151/jmsj.2024-004"],
+  "citation_url": ["https://doi.org/10.2151/jmsj.2024-004"],
+  "data_citation": ["Japan Meteorological Agency. 2023, updated monthly. Japanese Reanalysis for Three Quarters of a Century (JRA-3Q). Research Data Archive at the National Center for Atmospheric Research, Computational and Information Systems Laboratory. https://doi.org/10.5065/AVTZ-1H78. Accessed AAAA."],
+  "acknowledgement": "",
+  "colour": "#d55e00",
+  "zpos": 1,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+	  "filename": ["JRA-3Q_tmp2m_globalocean_ts_125_Clim9120_60S-60N.txt"],
+      "type": "timeseries",
+      "long_name": "Global mean sea surface temperature",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jra55",
+	  "fetcher": "fetcher_no_url"
+    },
+    {
+      "url": [""],
+      "filename": ["JRA-3Q_tmp2m_globalocean_ts_125_Clim9120_60S-60N.txt"],
+	  "type": "timeseries",
+      "long_name": "Global mean sea surface temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1991,
+	  "climatology_end": 2020,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_jra55",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

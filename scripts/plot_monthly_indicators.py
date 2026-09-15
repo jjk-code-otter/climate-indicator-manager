@@ -25,7 +25,7 @@ from climind.config.config import DATA_DIR
 from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
-    final_year = 2024
+    final_year = 2025
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
@@ -162,11 +162,12 @@ if __name__ == "__main__":
     }
 
     holdall = {
-        'dmi': [
-            {'variable': 'iod',
+        'glacier': [
+            {'variable': 'glacier',
              'type': 'timeseries',
-             'time_resolution': 'monthly'},
-            'DMI']
+             'time_resolution': 'annual',
+             'name': 'WGMSplus'},
+            'WGMSplus']
     }
 
 for combo in holdall:
@@ -181,7 +182,7 @@ for combo in holdall:
 
     m = []
     for ds in all_datasets:
-        ds.select_year_range(2010, 2026)
+        ds.select_year_range(1975, 2026)
         if variable in ['arctic_ice', 'antarctic_ice', 'ohc', 'ohc2k', 'nino34', 'snow', 'tlt']:
             ds.rebaseline(1981, 2010)
         if variable in ['ohc', 'ohc2k']:

@@ -45,7 +45,7 @@ def read_ts(out_dir: Path, metadata: CombinedMetadata, **kwargs):
 
 
 def read_monthly_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
-    df = xa.open_dataset(filename)
+    df = xa.open_dataset(filename, decode_timedelta=True)
 
     data = df.sst.values.tolist()
     years = df.time.dt.year.data.tolist()

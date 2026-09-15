@@ -76,12 +76,12 @@ if __name__ == "__main__":
     sst_archive = archive.select({'variable': 'sst6060',
                                   'type': 'timeseries',
                                   'time_resolution': 'monthly',
-                                  'name': ['HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060', 'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060']})
+                                  'name': ['HadSST4_6060', 'ERSST v61 6060', 'DCENT_SST_I 6060', 'ESA CCI v3 6060', 'ERA5 SST 6060', 'CMST v3 6060', 'CMA_SST6060','JRA-3Q_SST']})
 
     lsat_archive = archive.select({'variable': 'lsat',
                                    'type': 'timeseries',
                                    'time_resolution': 'monthly',
-                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v61', 'DCENT_LSAT_I', 'CMST v3 LSAT', 'ERA5 LSAT']})
+                                   'name': ['CRUTEM5', 'Berkeley Earth Hires LSAT', 'NOAA LSAT v61', 'DCENT_LSAT_I', 'CMST v3 LSAT', 'ERA5 LSAT', 'CMA_GLST', 'JRA-3Q_LSAT']})
 
     lsat_ann_archive = archive.select({'variable': 'lsat',
                                        'type': 'timeseries',

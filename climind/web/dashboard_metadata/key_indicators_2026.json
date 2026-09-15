@@ -80,9 +80,9 @@
         },
         {
           "link_to": "glaciers_and_ice_sheets", "title":"Glaciers",
-          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMS"},
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMSplus"},
           "processing": [],
-          "plotting": {"function": "wmo_plot", "title": "Reference glacier cumulative mass balance"}
+          "plotting": {"function": "wmo_plot", "title": "Global cumulative glacier mass change"}
         },
         {
           "link_to":  "precipitation", "title": "Precipitation",
@@ -208,7 +208,7 @@
           "link_to":  null, "title": "Land air temperature",
           "selecting": {"type": "timeseries", "variable": "lsat", "time_resolution": "monthly",
             "name":  [
-              "NOAA LSAT v61", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CMST v3 LSAT", "ERA5 LSAT"
+              "NOAA LSAT v61", "CRUTEM5", "Berkeley Earth Hires LSAT", "DCENT_LSAT_I", "CMA_GLST", "CMST v3 LSAT", "ERA5 LSAT", "JRA-3Q_LSAT"
             ]},
           "processing":  [
             {"method": "rebaseline", "args": [1991, 2020]},
@@ -219,7 +219,7 @@
         },
         {
           "link_to":  null, "title": "Sea-surface temperature",
-          "selecting": {"type": "timeseries", "variable": "sst6060", "time_resolution": "monthly", "name": ["HadSST4_6060", "ERSST v61 6060", "DCENT_SST_I 6060", "ESA CCI v3 6060", "ERA5 SST 6060", "CMST v3 6060"]},
+          "selecting": {"type": "timeseries", "variable": "sst6060", "time_resolution": "monthly", "name": ["HadSST4_6060", "ERSST v61 6060", "DCENT_SST_I 6060", "ESA CCI v3 6060", "ERA5 SST 6060", "CMST v3 6060", "JRA-3Q_SST"]},
           "processing":  [{"method": "rebaseline", "args": [1991, 2020]},
                           {"method": "make_annual", "args": []},
                           {"method": "select_year_range", "args": [1850, 2026]}],
@@ -446,6 +446,12 @@
       "descriptor": "glaciers_and_ice_sheets.html",
       "template": "topic_page",
       "cards": [
+        {
+          "link_to": null, "title":"Glaciers",
+          "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name": "WGMSplus"},
+          "processing": [],
+          "plotting": {"function": "wmo_plot", "title": "Global cumulative glacier mass change"}
+        },
         {
           "link_to":  null, "title": "Reference glacier mass balance",
           "selecting": {"type": "timeseries", "variable": "glacier", "time_resolution": "annual", "name":  "WGMS"},

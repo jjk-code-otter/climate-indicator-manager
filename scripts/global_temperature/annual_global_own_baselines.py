@@ -45,7 +45,8 @@ if __name__ == "__main__":
     report_dir.mkdir(exist_ok=True)
 
     script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
+    logging.basicConfig(filename=log_dir / f'{script}.lo'
+                                           f'g',
                         filemode='w', level=logging.INFO)
 
     # Read in the whole archive then select the various subsets needed here

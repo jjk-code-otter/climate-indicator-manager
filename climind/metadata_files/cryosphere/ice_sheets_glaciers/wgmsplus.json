@@ -1,0 +1,32 @@
+{
+  "name": "WGMSplus",
+  "display_name": "WGMS",
+  "version": "",
+  "variable": "glacier",
+  "units": "Gt",
+  "citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
+  "citation_url": ["https://doi.org/10.5904/wgms-fog-2018-11"],
+  "data_citation": ["WGMS (2017, updated, and earlier reports): Global Glacier Change Bulletin No. 2 (2014-2015). Zemp, M., Nussbaumer, S. U., Gärtner-Roer, I., Huber, J., Machguth, H., Paul, F., and Hoelzle, M. (eds.), ICSU(WDS)/IUGG(IACS)/UNEP/UNESCO/WMO, World Glacier Monitoring Service, Zurich, Switzerland, 244 pp., based on database version: doi:10.5904/wgms-fog-2018-11."],
+  "acknowledgement": "",
+  "colour": "#e69f00",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["global.csv"],
+	  "type": "timeseries",
+      "long_name": "Mountain glacier cumulative mass balance",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1975,
+	  "climatology_end": 1975,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_wgms_plus",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}
