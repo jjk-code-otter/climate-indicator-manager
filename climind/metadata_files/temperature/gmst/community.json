@@ -1,0 +1,32 @@
+{
+  "name": "Community",
+  "display_name": "Community",
+  "version": "1",
+  "variable": "tas",
+  "units": "degC",
+  "citation": ["Thorne, P. W., Nicklas, J. M., Kennedy, J. J., Calvert, B., Fox-Kemper, B., Richardson, M. T., Simmons, A., Hawkins, E., Rhode, R., Cowtan, K., Abram, N. J., Andersson, A., Noone, S., Marbaix, P., Lenssen, N., Olonscheck, D., Walsh, T., Outten, S., Bethke, I., Samset, B. H., Smith, C., Pirani, A., Fuglestvedt, J., Rajamani, L., Betts, R. A., Kent, E. C., Trewin, B., Morice, C., Osborn, T., Burgess, S. N., Geden, O., Parnell, A., Forster, P. M., Hewitt, C., Hausfather, Z., Masson-Delmotte, V., Marotzke, J., Gillett, N., Seneviratne, S. I., Schmidt, G. A., Chan, D., Brönnimann, S., Reisinger, A., Menne, M., Rojas Corradi, M., Kadow, C., Huybers, P., Stephenson, D. B., Wallis, E., Rogelj, J., Schurer, A., McKinnon, K., Zhai, P., Driouech, F., Moufouma Okia, W., Vazifehkhah, S., Szopa, S., Merchant, C. J., Hirahara, S., Ishii, M., Engelbrecht, F. A., Li, Q., Lee, J.-Y., Cannon, A. J., Cassou, C., von Schuckmann, K., Delju, A. H., and Murtagh, E.: How well can we quantify when 1.5 °C of global warming has been exceeded?, Earth Syst. Sci. Data Discuss. [preprint], https://doi.org/10.5194/essd-2025-825, in review, 2026."],
+  "citation_url": ["https://doi.org/10.5194/essd-2025-82"],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "teal",
+  "zpos": 299,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["sst_pseudo_summary.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1850,
+	  "climatology_end": 1900,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_community_ts",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

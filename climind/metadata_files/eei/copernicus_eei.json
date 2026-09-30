@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": [""],
-      "filename": ["EEI_timeseries.csv"],
+      "filename": ["15HR_Time_Series_19602026_yearly_wm2_P20260918.nc"],
 	  "type": "timeseries",
       "long_name": "Earths Energy Imbalance",
 	  "time_resolution": "annual",
@@ -25,7 +25,7 @@
 	  "actual": true,
 	  "derived": false,
 	  "history": [],
-      "reader": "reader_eei",
+      "reader": "reader_eei_temp",
 	  "fetcher": "fetcher_no_url"
     }
   ]

@@ -31,7 +31,7 @@ def consolidate(inarr):
 def calc_stats(ts_archive, data_dir):
     all_datasets = ts_archive.read_datasets(data_dir)
 
-    final_year = 2026
+    final_year = 2025
 
     print(all_datasets)
 

@@ -15,7 +15,7 @@
   "datasets": [
     {
       "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2025/co2_monthly_20251016.csv"],
-      "filename": ["co2_monthly_20251016.csv"],
+      "filename": ["co2_monthly.csv"],
 	  "type": "timeseries",
       "long_name": "Growth rate of of carbon dioxide concentration",
 	  "time_resolution": "monthly",
@@ -26,11 +26,11 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_wdcgg_rate_ts",
-	  "fetcher": "fetcher_standard_url"
+	  "fetcher": "fetcher_no_url"
     },
     {
       "url": ["https://gaw.kishou.go.jp/static/publications/global_mean_mole_fractions/2025/co2_annual_20251016.csv"],
-      "filename": ["co2_annual_20251016.csv"],
+      "filename": ["co2_annual.csv"],
 	  "type": "timeseries",
       "long_name": "Growth rate of of carbon dioxide concentration",
 	  "time_resolution": "annual",
@@ -41,7 +41,7 @@
 	  "derived": false,
 	  "history": [],
       "reader": "reader_wdcgg_rate_ts",
-	  "fetcher": "fetcher_standard_url"
+	  "fetcher": "fetcher_no_url"
     }
   ]
 }

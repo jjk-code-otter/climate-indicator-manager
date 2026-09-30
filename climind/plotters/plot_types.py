@@ -189,7 +189,8 @@ def equivalence(key):
 
 
 def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-                  dark: bool = False, marker=False, wmo=False, uncertainty=True, subrange=None) -> List[int]:
+                  dark: bool = False, marker=False, wmo=False, uncertainty=True, subrange=None, dot_year=None) -> List[
+    int]:
     """
     Given a list of data sets, plot each one on the provided axis.
 
@@ -254,6 +255,13 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
 
         if marker:
             axis.plot(x_values, ds.df['data'], label=label, color=col, zorder=zord, linewidth=linewidth, marker='o')
+        elif dot_year is not None:
+            selection = x_values < dot_year
+            selection2 = x_values >= dot_year
+            axis.plot(x_values[selection], ds.df['data'][selection], label=label, color=col, zorder=zord,
+                      linewidth=linewidth)
+            axis.plot(x_values[selection2], ds.df['data'][selection2], label=None, color=col, zorder=zord,
+                      linewidth=linewidth, marker='o')
         elif subrange is not None:
             axis.plot(x_values, ds.df['data'], label=None, color=None, zorder=zord, linewidth=None, alpha=0.0)
             selection = ((x_values >= subrange[0]) & (x_values <= subrange[1]))
@@ -266,12 +274,32 @@ def add_data_sets(axis, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMon
             axis.plot(x_values, ds.df['data'], label=label, color=col, zorder=zord, linewidth=linewidth)
 
         if 'uncertainty' in ds.df.columns and uncertainty:
-            axis.fill_between(
-                x_values,
-                ds.df['data'] + ds.df['uncertainty'],
-                ds.df['data'] - ds.df['uncertainty'],
-                color=col, alpha=0.3
-            )
+            if dot_year is not None:
+                selection = x_values < dot_year
+                selection2 = x_values >= dot_year
+                axis.fill_between(
+                    x_values[selection],
+                    ds.df['data'][selection] + ds.df['uncertainty'][selection],
+                    ds.df['data'][selection] - ds.df['uncertainty'][selection],
+                    color=col, alpha=0.3
+                )
+                plt.plot(
+                    [
+                        x_values[selection2], x_values[selection2]
+                    ],
+                    [
+                        ds.df['data'][selection2] + ds.df['uncertainty'][selection2],
+                        ds.df['data'][selection2] - ds.df['uncertainty'][selection2]
+                    ],
+                    color=col, marker='_'
+                )
+            else:
+                axis.fill_between(
+                    x_values,
+                    ds.df['data'] + ds.df['uncertainty'],
+                    ds.df['data'] - ds.df['uncertainty'],
+                    color=col, alpha=0.3
+                )
 
     return zords
 
@@ -460,6 +488,19 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
     ylim = plt.gca().get_ylim()
     yloc = ylim[1] + 0.005 * (ylim[1] - ylim[0])
 
+    # Add second y axis (sort of) to Gt graphs
+    if ds.metadata['units'] == 'Gt':
+        plt.gca().get_legend().remove()
+        xlim = plt.gca().get_xlim()
+        plt.text(xlim[1], 0, "0 mm", horizontalalignment='left', verticalalignment='center', fontsize=23)
+        plt.text(xlim[1], -3620, "10 mm", horizontalalignment='left', verticalalignment='center', fontsize=23)
+        plt.text(xlim[1], -3620 * 2, "20 mm", horizontalalignment='left', verticalalignment='center', fontsize=23)
+        plt.text(xlim[1], -3620 * 3, "30 mm", horizontalalignment='left', verticalalignment='center', fontsize=23)
+
+        plt.text(2023, -3620 / 2, "3620 Gigatonnes of\nof ice loss is equivalent\nto 10mm of sea level rise",
+                 horizontalalignment='right', verticalalignment='center', fontsize=23)
+        plt.plot([2024.5, 2023.5, 2023.5, 2024.5], [0, 0, -3620, -3620], color='dimgrey', linewidth=2)
+
     if ds.metadata['actual']:
         subtitle = ''
     else:
@@ -473,7 +514,6 @@ def after_plot(zords: List[int], all_datasets: List[Union[TimeSeriesAnnual, Time
         current_time = f"Created: {datetime.today()}"
         plt.gcf().text(.90, .012, current_time[0:28], ha='right',
                        bbox={'facecolor': 'w', 'edgecolor': None})
-
 
     first_year, last_year = get_start_and_end_year(all_datasets)
 
@@ -790,7 +830,7 @@ def animated_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, Time
 
 
 def wmo_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSeriesMonthly, TimeSeriesIrregular]],
-             image_filename: str, title: str, dark: bool = False, yrange: List[float] = None) -> str:
+             image_filename: str, title: str, dark: bool = False, dot_year=None, yrange: List[float] = None) -> str:
     """
     Create the standard annual plot
 
@@ -819,9 +859,9 @@ def wmo_plot(out_dir: Path, all_datasets: List[Union[TimeSeriesAnnual, TimeSerie
     plt.figure(figsize=[16, 9])
 
     if all_datasets[0].metadata['variable'] == 'tas':
-        zords = add_data_sets(plt.gca(), all_datasets, wmo=True, uncertainty=False)
+        zords = add_data_sets(plt.gca(), all_datasets, wmo=True, uncertainty=False, dot_year=dot_year)
     else:
-        zords = add_data_sets(plt.gca(), all_datasets, wmo=True)
+        zords = add_data_sets(plt.gca(), all_datasets, wmo=True, dot_year=dot_year)
 
     ds = all_datasets[-1]
 
@@ -1673,14 +1713,14 @@ def daily_sea_ice_plot(out_dir: Path,
         plt.gca().set_yticks([-1.5, -1, -0.5, 0.0, 0.5, 1.0, 1.5])
         plt.gca().set_ylabel('degC')
 
-
     if md['variable'] == 'arctic_ice':
         inclusion = 'Arctic'
     else:
         inclusion = 'Antarctic'
 
     if variable != "tas":
-        plt.gca().set_title(f'Daily {inclusion} sea-ice extent through the year {start_date.year}-{end_date.year}', pad=35,
+        plt.gca().set_title(f'Daily {inclusion} sea-ice extent through the year {start_date.year}-{end_date.year}',
+                            pad=35,
                             fontdict={'fontsize': 35},
                             loc='left')
     else:
@@ -1743,9 +1783,10 @@ def daily_sea_ice_plot(out_dir: Path,
                f'are from {md["display_name"]}')
 
     if md['variable'] == 'tas':
-        caption = (f'Daily global mean surface temperature throughout the year, {start_date.year}-{end_date.year}. Grey lines '
-                   f'show individual years. {end_date.year} is highlighted in blue and the 1991-2020 average in black. Data '
-                   f'are from {md["display_name"]}')
+        caption = (
+            f'Daily global mean surface temperature throughout the year, {start_date.year}-{end_date.year}. Grey lines '
+            f'show individual years. {end_date.year} is highlighted in blue and the 1991-2020 average in black. Data '
+            f'are from {md["display_name"]}')
 
     return caption
 
@@ -2761,7 +2802,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
             colour = colours[cindex]
 
             lthk = 1
-            if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
+            if all_datasets[0].metadata['variable'] in ["oni", "roni", "nino34"]:
                 colour = 'lightgrey'
                 lthk = 1
             if year >= 2026:
@@ -2773,12 +2814,40 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
             plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=year)
 
+    if all_datasets[0].metadata['variable'] == "nino34":
+        # Month, Beijing, CMCC, ECMWF, Exeter, Melbourne, Montreal, Offenbach, Pune, Seoul, Tokyo, Toulouse, Washington, MME
+        all_forecasts = np.array(
+            [
+                [3.601, 3.431, 3.564, 3.192, 3.840, 3.461, 3.558, 4.023, 3.256, 3.279, 3.540, 2.813, 3.463],
+                [3.905, 3.962, 3.836, 3.365, 4.087, 3.829, 3.807, 4.587, 3.391, 3.635, 3.819, 3.315, 3.795],
+                [3.958, 4.354, 3.961, 3.324, 4.020, 3.911, 4.055, 4.811, 3.365, 3.724, 3.730, 2.943, 3.846],
+                [3.781, 4.495, 3.877, 3.177, 3.582, 3.657, 3.996, 4.429, 3.075, 3.705, 3.351, 2.363, 3.624],
+                [3.711, 4.222, 3.666, 2.708, 3.011, 3.190, 3.834, 3.966, 2.503, 3.533, 2.531, 1.899, 3.231],
+                [3.505, np.nan, np.nan, np.nan, np.nan, 2.592, np.nan, 3.171, 1.958, 3.065, np.nan, 1.371, 2.610]
+            ]
+        )
+        for i in range(13):
+            flwd = 0.75
+            falf = 0.5
+            if i == 12:
+                flwd = 4
+                falf = 1
+            plt.plot(np.arange(10, 16), all_forecasts[:, i], color='royalblue', linewidth=flwd, alpha=falf)
+
+        plt.fill_between([10, 11, 12], [3.5 - 0.6, 3.8 - 0.6, 3.9 - 1.0], [3.5 + 0.6, 3.8 + 0.6, 3.9 + 1.0],
+                         color='royalblue', alpha=0.5, edgecolor=None)
+        plt.fill_between([10, 11, 12], [3.5 - 0.3, 3.8 - 0.3, 3.9 - 0.5], [3.5 + 0.3, 3.8 + 0.3, 3.9 + 0.5],
+                         color='royalblue', alpha=0.5, edgecolor=None)
+        # plt.plot([10, 11, 12], [3.5, 3.8, 3.9], color='royalblue', linewidth=4)
+
     plt.gca().set_xlabel('Month')
-    if all_datasets[0].metadata['variable'] not in ["oni", "roni"]:
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "nino34"]:
         plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
 
     if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
         plt.gca().set_ylim(-2.5, 3.0)
+    elif all_datasets[0].metadata['variable'] in ["nino34"]:
+        plt.gca().set_ylim(-2.5, 5.1)
     elif all_datasets[0].metadata['variable'] in ["sst"]:
         plt.gca().set_ylim(-0.2, 0.9)
     else:
@@ -2790,6 +2859,8 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
         plt.title('Monthly Relative Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
     elif all_datasets[0].metadata['variable'] == "oni":
         plt.title('Monthly Oceanic Nino Index 1950-2026', fontsize=25, y=0.95)
+    elif all_datasets[0].metadata['variable'] == "nino34":
+        plt.title('Monthly Nino 3.4 Index 1850-2026', fontsize=35, y=1.05, loc='left')
     elif all_datasets[0].metadata['variable'] == "sst":
         plt.title('Monthly Global SST Anomalies 1850-2026', fontsize=25, y=0.95)
     else:
@@ -2799,7 +2870,7 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
 
     pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
     peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
-    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "sst"]:
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "sst", "nino34"]:
         plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
         plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
         plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
@@ -2814,6 +2885,174 @@ def rising_tide_multiple_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthl
     sources = ', '.join(sources)
 
     plt.gcf().text(.075, .012, f"With {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=8)
+
+    # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
+
+    plt.savefig(out_dir / image_filename, bbox_inches='tight', pad_inches=0.2)
+    plt.savefig(out_dir / image_filename.replace('.png', '.svg'), bbox_inches='tight', pad_inches=0.2)
+    plt.close('all')
+
+    return ''
+
+
+def rising_tide_forecast_plot(out_dir: Path, all_datasets: List[TimeSeriesMonthly], image_filename, title) -> None:
+    """
+    Rising tide plot with month on the x-axis from January to December and each year shown as a separate line
+    showing the monthly averages that year.
+
+    Parameters
+    ----------
+    out_dir: Path
+        Path to the directory to which the image will be written.
+    dataset: TimeSeriesMonthly
+        :class:`.TimeSeriesMonthly` to plot.
+    image_filename: str
+        Name of the image file to be written.
+
+    Returns
+    -------
+    None
+    """
+
+    sns.set(font='Franklin Gothic Book', rc=STANDARD_PARAMETER_SET)
+
+    plt.figure(figsize=[16, 9])
+
+    for dataset in all_datasets:
+        first_year, last_year = dataset.get_first_and_last_year()
+        for year in range(first_year, last_year + 1):
+            df = copy.deepcopy(dataset.df)
+            df = df[df['year'] >= year]
+            df = df[df['year'] <= year + 1]
+            df = df.reset_index()
+
+            accumulator = df['data']
+            n_months = len(df)
+
+            colours = ['#ffffcc', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#0c2c84']
+
+            if year < 1970:
+                cindex = 0
+            if year >= 1970 and year < 1980:
+                cindex = 1
+            if year >= 1980 and year < 1990:
+                cindex = 2
+            if year >= 1990 and year < 2000:
+                cindex = 3
+            if year >= 2000 and year < 2010:
+                cindex = 4
+            if year >= 2010 and year < 2020:
+                cindex = 5
+            if year >= 2020:
+                cindex = 6
+
+            colour = colours[cindex]
+
+            lthk = 1
+            zord = 1
+            if all_datasets[0].metadata['variable'] in ["oni", "roni", "nino34"]:
+                colour = 'lightgrey'
+                lthk = 1
+            if year >= 2026:
+                colour = 'darkred'
+                lthk = 6
+                zord = 99
+                plt.text(6.5, accumulator.values[-1], "Observed\n2026", color=colour, fontsize=30, ha='center',
+                         va='bottom')
+            if year == 1997:
+                colour = '#1b9e77'  # greeny
+                lthk = 3
+                zord = 99
+                plt.text(24.25, accumulator.values[-1], "1997-1998", color=colour, fontsize=20, ha='left', va='center')
+            if year == 2015:
+                colour = '#d95f02'  # reddy
+                lthk = 3
+                zord = 99
+                plt.text(24.25, accumulator.values[-1], "2015-2016", color=colour, fontsize=20, ha='left', va='center')
+            if year == 1982:
+                colour = '#7570b3'  # purpley
+                lthk = 3
+                zord = 99
+                plt.text(24.25, accumulator.values[-1], "1982-1983", color=colour, fontsize=20, ha='left', va='center')
+            if year == 1877:
+                colour = '#33a02c'
+                lthk = 3
+                zord = 99
+
+            if n_months != 12:
+                plt.plot(range(1, n_months + 1), accumulator, color=colour, linewidth=lthk, zorder=zord)
+
+    if all_datasets[0].metadata['variable'] == "nino34":
+        # Month, Beijing, CMCC, ECMWF, Exeter, Melbourne, Montreal, Offenbach, Pune, Seoul, Tokyo, Toulouse, Washington, MME
+        all_forecasts = np.array(
+            [
+                [3.601, 3.431, 3.564, 3.192, 3.840, 3.461, 3.558, 4.023, 3.256, 3.279, 3.540, 2.813, 3.463],
+                [3.905, 3.962, 3.836, 3.365, 4.087, 3.829, 3.807, 4.587, 3.391, 3.635, 3.819, 3.315, 3.795],
+                [3.958, 4.354, 3.961, 3.324, 4.020, 3.911, 4.055, 4.811, 3.365, 3.724, 3.730, 2.943, 3.846],
+                [3.781, 4.495, 3.877, 3.177, 3.582, 3.657, 3.996, 4.429, 3.075, 3.705, 3.351, 2.363, 3.624],
+                [3.711, 4.222, 3.666, 2.708, 3.011, 3.190, 3.834, 3.966, 2.503, 3.533, 2.531, 1.899, 3.231],
+                [3.505, np.nan, np.nan, np.nan, np.nan, 2.592, np.nan, 3.171, 1.958, 3.065, np.nan, 1.371, 2.610]
+            ]
+        )
+        for i in range(13):
+            flwd = 2
+            falf = 0.5
+            if i == 12:
+                flwd = 6
+                falf = 1
+            plt.plot(np.arange(10, 16), all_forecasts[:, i], color='royalblue', linewidth=flwd, alpha=falf)
+        plt.text(14, 4.610, "Forecasts\n2026/27", color='royalblue', fontsize=30, ha='left', va='center')
+        plt.text(21, 3.10, f"Observed\n{first_year}-2025", color='lightgrey', fontsize=30, ha='center', va='center')
+
+        # plt.fill_between([10, 11, 12], [3.5 - 0.6, 3.8 - 0.6, 3.9 - 1.0], [3.5 + 0.6, 3.8 + 0.6, 3.9 + 1.0],
+        #                  color='royalblue', alpha=0.5, edgecolor=None)
+        # plt.fill_between([10, 11, 12], [3.5 - 0.3, 3.8 - 0.3, 3.9 - 0.5], [3.5 + 0.3, 3.8 + 0.3, 3.9 + 0.5],
+        #                  color='royalblue', alpha=0.5, edgecolor=None)
+        # plt.plot([10, 11, 12], [3.5, 3.8, 3.9], color='royalblue', linewidth=4)
+
+    plt.gca().set_xlabel('Month')
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "nino34"]:
+        plt.gca().set_ylabel(f"{FANCY_UNITS['degC']} difference from 1981-2010")
+
+    if all_datasets[0].metadata['variable'] in ["oni", "roni"]:
+        plt.gca().set_ylim(-2.5, 3.0)
+    elif all_datasets[0].metadata['variable'] in ["nino34"]:
+        plt.gca().set_ylim(-2.5, 5.1)
+    elif all_datasets[0].metadata['variable'] in ["sst"]:
+        plt.gca().set_ylim(-0.2, 0.9)
+    else:
+        plt.gca().set_ylim(-1.5, 1.4)
+
+    plt.xticks(np.arange(1, 25, 1),
+               [
+                   'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D',
+                   'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'
+               ]
+               )
+
+    plt.title('Sea-surface temperature in key El Niño region\nforecast to be warmest on record', fontsize=40, y=1.09,
+              loc='left')
+    plt.text(0, 5.43, "Temperature difference from 1993-2009 average", fontsize=22, ha='left', color='dimgrey')
+
+    import matplotlib.patheffects as PathEffects
+
+    pew = PathEffects.withStroke(linewidth=1.5, foreground="w")
+    peb = PathEffects.withStroke(linewidth=1.5, foreground="b")
+    if all_datasets[0].metadata['variable'] not in ["oni", "roni", "sst", "nino34"]:
+        plt.gcf().text(0.52, 0.31, '1850-1969', color=colours[0], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.40, '1970s', color=colours[1], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.46, '1980s', color=colours[2], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.50, '1990s', color=colours[3], fontsize=30, ha='center', path_effects=[peb])
+        plt.gcf().text(0.52, 0.55, '2000s', color=colours[4], fontsize=30, ha='center', path_effects=[pew])
+        plt.gcf().text(0.52, 0.59, '2010s', color=colours[5], fontsize=30, ha='center', path_effects=[pew])
+        plt.gcf().text(0.52, 0.67, '2020s', color=colours[6], fontsize=30, ha='center', path_effects=[pew])
+
+        plt.gcf().text(0.42, 0.78, '2026', color='darkred', fontsize=30, ha='center', path_effects=[pew])
+
+    sources = [x.metadata['display_name'] for x in all_datasets]
+    sources = ', '.join(sources)
+
+    plt.gcf().text(.075, .012, f"Source: {sources}", bbox={'facecolor': 'w', 'edgecolor': None}, fontsize=15)
 
     # plt.gcf().text(.90, .012, 'by @micefearboggis', ha='right', bbox={'facecolor': 'w', 'edgecolor': None})
 

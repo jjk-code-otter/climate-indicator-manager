@@ -1,0 +1,32 @@
+{
+  "name": "IGCC",
+  "display_name": "IGCC",
+  "version": "1",
+  "variable": "tas",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "teal",
+  "zpos": 299,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+    {
+      "url": [""],
+      "filename": ["annual_averages.csv"],
+	  "type": "timeseries",
+      "long_name": "Global mean temperature",
+	  "time_resolution": "annual",
+	  "space_resolution": 999,
+	  "climatology_start": 1850,
+	  "climatology_end": 1900,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_igcc",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

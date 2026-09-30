@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": [""],
-      "filename": ["gohc_wmo_state_climate_17122025_Jm2.nc"],
+      "filename": ["OHC_Time_Series_GLO_19602026_lat60-60_0-2000_R20052024_yearly_j_P20260918.nc"],
 	  "type": "timeseries",
       "long_name": "Global ocean heat content",
 	  "time_resolution": "annual",

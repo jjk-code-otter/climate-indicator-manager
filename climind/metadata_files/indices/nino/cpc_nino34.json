@@ -1,0 +1,32 @@
+{
+  "name": "CPC Nino34",
+  "display_name": "NOAA CPC",
+  "version": "",
+  "variable": "nino34",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": ["https://www.cpc.ncep.noaa.gov/data/indices/detrend.nino34.ascii.txt"],
+      "filename": ["detrend.nino34.ascii.txt"],
+	  "type": "timeseries",
+      "long_name": "Nino 3.4 index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_cpc_nino34",
+	  "fetcher": "fetcher_standard_url"
+    }
+  ]
+}

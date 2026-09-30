@@ -1,0 +1,32 @@
+{
+  "name": "KNMI Nino34",
+  "display_name": "ERSSTv6 (from KNMI data explorer)",
+  "version": "",
+  "variable": "nino34",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": [""],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["iersstv5_-170--120E_-5-5N_firstyear-lastyear_n_19912020a.txt"],
+	  "type": "timeseries",
+      "long_name": "Nino 3.4 index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": false,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_knmi",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

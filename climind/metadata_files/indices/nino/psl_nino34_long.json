@@ -14,8 +14,8 @@
   "notes": "",
   "datasets": [
      {
-      "url": ["https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/nino34.long.data"],
-      "filename": ["nino34.long.data"],
+      "url": ["https://psl.noaa.gov/data/timeseries/month/data/nino34.long.anom.data"],
+      "filename": ["nino34.long.anom.data"],
 	  "type": "timeseries",
       "long_name": "Nino 3.4 index",
 	  "time_resolution": "monthly",

@@ -30,10 +30,10 @@ from climind.definitions import METADATA_DIR
 
 if __name__ == "__main__":
 
-    final_year = 2025
-    holdouts = ['NOAA v6']  # Datasets which haven't been updated from month 1 to month 2 yet
-    month2 = 9
-    month1 = 8
+    final_year = 2026
+    holdouts = ['HadCRUT5']  # Datasets which haven't been updated from month 1 to month 2 yet
+    month2 = 8
+    month1 = 7
 
     project_dir = DATA_DIR / "ManagedData"
     ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -43,13 +43,8 @@ if __name__ == "__main__":
     data_dir = project_dir / "Data"
     fdata_dir = project_dir / "Formatted_Data"
     figure_dir = project_dir / 'Figures'
-    log_dir = project_dir / 'Logs'
     report_dir = project_dir / 'Reports'
     report_dir.mkdir(exist_ok=True)
-
-    script = Path(__file__).stem
-    logging.basicConfig(filename=log_dir / f'{script}.log',
-                        filemode='w', level=logging.INFO)
 
     # Read in the whole archive then select the various subsets needed here
     archive = dm.DataArchive.from_directory(metadata_dir)
@@ -58,7 +53,7 @@ if __name__ == "__main__":
 
     ts_archive = archive.select({'variable': 'tas',
                                  'type': 'timeseries',
-                                 'name': ['HadCRUT5', 'NOAA v6', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth'],
+                                 'name': ['HadCRUT5', 'NOAA v61', 'GISTEMP', 'ERA5', 'JRA-3Q', 'Berkeley Earth Hires'],
                                  'time_resolution': 'monthly'})
 
     all_datasets = ts_archive.read_datasets(data_dir)

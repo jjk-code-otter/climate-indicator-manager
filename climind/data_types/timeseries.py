@@ -351,6 +351,10 @@ class TimeSeriesIrregular(TimeSeries):
         grouped_years = self.df.groupby(['yearmonth'])['year'].mean().reset_index()
         grouped_months = self.df.groupby(['yearmonth'])['month'].mean().reset_index()
 
+        if 'uncertainty' in self.df.columns:
+            grouped_uncertainty = self.df.groupby(['yearmonth'])['uncertainty'].mean().reset_index()
+            grouped_uncertainty = grouped_uncertainty['uncertainty'].tolist()
+
         grouped_months = grouped_months['month'].tolist()
         grouped_data = grouped_data['data'].tolist()
         grouped_years = grouped_years['year'].tolist()
@@ -358,7 +362,12 @@ class TimeSeriesIrregular(TimeSeries):
         grouped_months = list(map(int, grouped_months))
         grouped_years = list(map(int, grouped_years))
 
-        monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
+        if 'uncertainty' in self.df.columns:
+            monthly_series = TimeSeriesMonthly(
+                grouped_years, grouped_months, grouped_data, uncertainty=grouped_uncertainty, metadata=self.metadata
+            )
+        else:
+            monthly_series = TimeSeriesMonthly(grouped_years, grouped_months, grouped_data, self.metadata)
 
         monthly_series.update_history('Calculated monthly average from values using arithmetic mean '
                                       'of all dates that fall within each month')

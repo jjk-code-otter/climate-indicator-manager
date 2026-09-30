@@ -43,6 +43,7 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
             f.readline()
 
         for line in f:
+            print(line)
             line = line.strip()
             columns = line.split(',')
 
@@ -76,4 +77,4 @@ def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.Time
     metadata.creation_message()
     outseries = ts.TimeSeriesIrregular(years, months, days, smoothed, metadata=metadata)
 
-    return outseries
+    return outseries.make_monthly()

@@ -1,5 +1,5 @@
 #  Climate indicator manager - a package for managing and building climate indicator dashboards.
-#  Copyright (c) 2022 John Kennedy
+#  Copyright (c) 2023 John Kennedy
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -14,21 +14,26 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import climind.data_manager.processing as dm
-from climind.config.config import DATA_DIR
-from climind.definitions import METADATA_DIR
 from pathlib import Path
-import os
+from typing import List
+import climind.data_types.timeseries as ts
+from climind.data_manager.metadata import CombinedMetadata
+from climind.readers.generic_reader import read_ts
 
-if __name__ == "__main__":
-    project_dir = DATA_DIR / "ManagedData"
-    data_dir = project_dir / "Data"
 
-    ROOT_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    METADATA_DIR = (ROOT_DIR / "..").resolve() / "climind" / "metadata_files"
+def read_monthly_ts(filename: List[Path], metadata: CombinedMetadata) -> ts.TimeSeriesMonthly:
+    years = []
+    months = []
+    anomalies = []
 
-    archive = dm.DataArchive.from_directory(METADATA_DIR)
-    
-    ts_archive = archive.select({'type': 'timeseries', 'name': ['GSCU Nino34']})
+    with open(filename[0], 'r') as f:
+        f.readline()
+        for line in f:
+            columns = line.split()
+            years.append(int(columns[0]))
+            months.append(int(columns[1]))
+            anomalies.append(float(columns[2]))
 
-    ts_archive.download(data_dir)
+    metadata.creation_message()
+
+    return ts.TimeSeriesMonthly(years, months, anomalies, metadata=metadata)

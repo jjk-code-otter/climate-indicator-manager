@@ -1,0 +1,32 @@
+{
+  "name": "Chan ESA Nino34",
+  "display_name": "BAMS ESA",
+  "version": "",
+  "variable": "nino34",
+  "units": "degC",
+  "citation": [""],
+  "citation_url": [""],
+  "data_citation": ["CHAN, DUO; Kent, Elizabeth; Lenssen, Nathan; Deser, Clara; Merchant, Christopher; Ishii, Masayoshi; Sandford, Caroline; Huang, Boyin; Yin, Xungang; Kennedy, John; Cornes, Richard; Huybers, Peter; Gebbie, Geoffrey, 2026, \"Replication Code and Data for: Choosing the Right Sea Surface Temperature Datasets: Benchmarking and Guidance for Climate Applications\", https://doi.org/10.7910/DVN/WBBJT2, Harvard Dataverse, V1"],
+  "acknowledgement": "",
+  "colour": "#009e73",
+  "zpos": 10,
+  "origin": "obs",
+  "notes": "",
+  "datasets": [
+     {
+      "url": [""],
+      "filename": ["Nino34_mon.nc"],
+	  "type": "timeseries",
+      "long_name": "Nino 3.4 index",
+	  "time_resolution": "monthly",
+	  "space_resolution": 999,
+	  "climatology_start": 1950,
+	  "climatology_end": 2000,
+	  "actual": true,
+	  "derived": false,
+	  "history": [],
+      "reader": "reader_chan",
+	  "fetcher": "fetcher_no_url"
+    }
+  ]
+}

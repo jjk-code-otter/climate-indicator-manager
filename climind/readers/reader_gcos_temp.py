@@ -99,6 +99,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
         raise Exception
     elif metadata['variable'] == 'ohc2k':
         if metadata['name'] == 'Miniere':
+            conversion=1.0/1e21
             mask = ~np.isnan(df['Minere_et_al_2023'].values)
             years = df.time.dt.year.data[mask].tolist()
             data = (df['Minere_et_al_2023'] * conversion).values[mask].tolist()
@@ -106,6 +107,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
 
         elif metadata['name'] == 'Cheng TEMP':
+            conversion=1.0/1e21
             mask = ~np.isnan(df['IAP_Cheng_et_al_2024'].values)
             years = df.time.dt.year.data[mask].tolist()
             data = (df['IAP_Cheng_et_al_2024'] * conversion).values[mask].tolist()
@@ -119,6 +121,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             uncertainty = (df['ohc_uncertainty_JMA_Ishii_et_al_2017'] * conversion).data[mask].tolist()
 
         elif metadata['name'] == 'GCOS2k TEMP':
+            conversion=1.0/1e21
             mask = ~np.isnan(df['von_schuckmann_et_al_2023'].values)
             years = df.time.dt.year.data[mask].tolist()
             data = (df['von_schuckmann_et_al_2023'] * conversion).values[mask].tolist()
@@ -126,6 +129,7 @@ def read_annual_ts(filename: Path, metadata: CombinedMetadata) -> ts.TimeSeriesA
             out_ts = ts.TimeSeriesAnnual(years, data, metadata=metadata, uncertainty=uncertainty)
 
         elif metadata['name'] == 'Copernicus_OHC':
+            conversion=1.0/1e21
             mask = ~np.isnan(df['Copernicus_Marine'].values)
             years = df.time.dt.year.data[mask].tolist()
             data = (df['Copernicus_Marine'] * conversion).values[mask].tolist()

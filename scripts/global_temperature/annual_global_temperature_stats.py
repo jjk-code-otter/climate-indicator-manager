@@ -54,7 +54,8 @@ if __name__ == "__main__":
     ann_archive = archive.select({'variable': 'tas',
                                   'type': 'timeseries',
                                   'time_resolution': 'annual',
-                                  'name': [ #"Craigmile and Guttorp",
+                                  'name': [ "Community", "IGCC"
+                                      #"Craigmile and Guttorp",
                                       #'ClimTraceGMST' # 'NOAA Interim',
                                       # 'Kadow IPCC',
                                       # 'Berkeley IPCC',
@@ -172,9 +173,9 @@ if __name__ == "__main__":
     combined.write_csv(fdata_dir / "combined_global_mean_temperature.csv")
 
     for ds in ann_datasets:
-        ds.rebaseline(1981, 2010)
-        ds.add_offset(0.69)
-        ds.manually_set_baseline(1850, 1900)
+        # ds.rebaseline(1981, 2010)
+        # ds.add_offset(0.69)
+        # ds.manually_set_baseline(1850, 1900)
         ds.select_year_range(1850, final_year)
         all_annual_datasets.append(ds)
         ds.write_csv(fdata_dir / f"{ds.metadata['name']}_{ds.metadata['variable']}.csv")

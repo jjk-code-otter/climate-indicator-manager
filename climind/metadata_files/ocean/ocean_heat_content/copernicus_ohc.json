@@ -15,7 +15,7 @@
   "datasets": [
      {
       "url": [""],
-      "filename": ["OHC_area_averaged_anomalies_wmo_glo_19602025_lat60-60_0-2000_R20052024_yearly_jm2_P20260203_new.nc"],
+      "filename": ["OHC_Time_Series_GLO_19602026_lat60-60_0-2000_R20052024_yearly_j_P20260918.nc"],
 	  "type": "timeseries",
       "long_name": "Global ocean heat content",
 	  "time_resolution": "annual",
